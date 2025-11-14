@@ -1285,4 +1285,3 @@ msgstr "Espace dynamique conçu pour des expériences mémorables"
 #: components/site-header.tsx
 msgid "rwrkYn"
 msgstr "Maisons partagées"
-
