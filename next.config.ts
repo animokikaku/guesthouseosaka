@@ -1,3 +1,4 @@
+import { env } from '@/lib/env'
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
@@ -19,10 +20,8 @@ const withNextIntl = createNextIntlPlugin({
   }
 })
 
-const isProduction = process.env.NODE_ENV === 'production'
-
 const nextConfig: NextConfig = {
-  reactCompiler: isProduction ? true : false,
+  reactCompiler: env.NODE_ENV === 'production' ? true : false,
   experimental: {
     turbopackFileSystemCacheForDev: true
   },

@@ -12,6 +12,7 @@ import { SiteHeader } from '@/components/site-header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { META_THEME_COLORS } from '@/lib/config'
+import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
 import { cn } from '@/lib/utils'
 import { type Metadata } from 'next'
@@ -32,11 +33,7 @@ export async function generateMetadata(
     'Founded in 1991. We have 3 share houses in the city of Osaka.'
   )
   const creator = 'melkir'
-  const baseUrl = new URL(
-    locale,
-    process.env.NEXT_PUBLIC_APP_URL ??
-      `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  )
+  const baseUrl = new URL(locale, env.NEXT_PUBLIC_APP_URL)
 
   const images = [
     {

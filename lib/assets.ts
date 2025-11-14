@@ -1,8 +1,4 @@
-import { blobUrl } from './utils/blob-storage'
-
-const url = (path: string) => {
-  return blobUrl(path)
-}
+import { url } from './utils/blob-storage'
 
 export const assets = {
   apple: {

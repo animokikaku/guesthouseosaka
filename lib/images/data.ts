@@ -1,4 +1,4 @@
-import { blobUrl } from '@/lib/utils/blob-storage'
+import { url } from '@/lib/utils/blob-storage'
 
 /**
  * Image data with paths (URLs are constructed using blobUrl)
@@ -1626,5 +1626,5 @@ const imageDataRaw = [
  */
 export const imageData = imageDataRaw.map((img) => ({
   ...img,
-  src: blobUrl(img.src)
+  src: url(img.src)
 }))
