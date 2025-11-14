@@ -6,14 +6,14 @@ msgstr ""
 "X-Generator: next-intl\n"
 "X-Crowdin-SourceKey: msgstr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Crowdin-Project: guesthouseosaka\n"
-"X-Crowdin-Project-ID: 839060\n"
+"X-Crowdin-Project: guesthouseosakacom\n"
+"X-Crowdin-Project-ID: 846376\n"
 "X-Crowdin-Language: fr\n"
 "X-Crowdin-File: /messages/en.po\n"
-"X-Crowdin-File-ID: 19\n"
-"Project-Id-Version: guesthouseosaka\n"
+"X-Crowdin-File-ID: 4\n"
+"Project-Id-Version: guesthouseosakacom\n"
 "Language-Team: French\n"
-"PO-Revision-Date: 2025-11-13 17:10\n"
+"PO-Revision-Date: 2025-11-14 07:36\n"
 
 #: app/[locale]/[house]/@modal/(.)gallery/page.tsx
 #: app/[locale]/[house]/gallery/page.tsx
@@ -1285,3 +1285,4 @@ msgstr "Espace dynamique conçu pour des expériences mémorables"
 #: components/site-header.tsx
 msgid "rwrkYn"
 msgstr "Maisons partagées"
+
