@@ -1,0 +1,1287 @@
+msgid ""
+msgstr ""
+"Language: ja\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: next-intl\n"
+"X-Crowdin-SourceKey: msgstr\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: guesthouseosaka\n"
+"X-Crowdin-Project-ID: 839060\n"
+"X-Crowdin-Language: ja\n"
+"X-Crowdin-File: /messages/en.po\n"
+"X-Crowdin-File-ID: 19\n"
+"Project-Id-Version: guesthouseosaka\n"
+"Language-Team: Japanese\n"
+"PO-Revision-Date: 2025-11-13 17:10\n"
+
+#: app/[locale]/[house]/@modal/(.)gallery/page.tsx
+#: components/gallery/gallery-modal.tsx
+msgid "SFBc57"
+msgstr "{title}の写真を見る"
+
+#: app/[locale]/[house]/@modal/(.)gallery/page.tsx
+#: app/[locale]/[house]/layout.tsx
+#: app/[locale]/[house]/page.tsx
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+#: components/collection.tsx
+#: components/forms/index.tsx
+#: components/gallery/gallery-modal.tsx
+#: components/house-switcher.tsx
+#: components/houses-nav.tsx
+#: components/site-header.tsx
+msgid "3/TpVv"
+msgstr "アップルハウス"
+
+#: app/[locale]/[house]/@modal/(.)gallery/page.tsx
+#: app/[locale]/[house]/layout.tsx
+#: app/[locale]/[house]/page.tsx
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+#: components/collection.tsx
+#: components/forms/index.tsx
+#: components/gallery/gallery-modal.tsx
+#: components/house-switcher.tsx
+#: components/houses-nav.tsx
+#: components/site-header.tsx
+msgid "snhgxZ"
+msgstr "オレンジハウス"
+
+#: app/[locale]/[house]/@modal/(.)gallery/page.tsx
+#: app/[locale]/[house]/gallery/page.tsx
+#: components/gallery/gallery-modal.tsx
+msgid "/q2ubh"
+msgstr "ギャラリーを閉じる"
+
+#: app/[locale]/[house]/@modal/(.)gallery/page.tsx
+msgid "zffsPo"
+msgstr "ハウスギャラリー"
+
+#: app/[locale]/[house]/@modal/(.)gallery/page.tsx
+#: app/[locale]/[house]/layout.tsx
+#: app/[locale]/[house]/page.tsx
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+#: components/collection.tsx
+#: components/forms/index.tsx
+#: components/gallery/gallery-modal.tsx
+#: components/house-switcher.tsx
+#: components/houses-nav.tsx
+#: components/site-header.tsx
+msgid "X0JOAH"
+msgstr "レモンハウス"
+
+#: app/[locale]/[house]/layout.tsx
+#: app/[locale]/[house]/page.tsx
+#: components/collection.tsx
+#: components/site-header.tsx
+msgid "pMmbWq"
+msgstr "ゆったり広々とした和風ラウンジ"
+
+#: app/[locale]/[house]/layout.tsx
+#: app/[locale]/[house]/page.tsx
+#: components/collection.tsx
+#: components/site-header.tsx
+msgid "eFdQ0R"
+msgstr "設備が整った個室と贅沢なラウンジ"
+
+#: app/[locale]/[house]/layout.tsx
+#: app/[locale]/[house]/page.tsx
+#: components/collection.tsx
+#: components/site-header.tsx
+msgid "JupLXZ"
+msgstr "難波駅から徒歩8分のシェアハウス"
+
+#: app/[locale]/contact/layout.tsx
+#: components/site-header.tsx
+msgid "zFegDD"
+msgstr "お問い合わせ"
+
+#: app/[locale]/contact/layout.tsx
+msgid "krEziQ"
+msgstr "お問い合わせください"
+
+#: app/[locale]/contact/layout.tsx
+msgid "36rV9W"
+msgstr "ご不明点やご質問がございましたら、お気軽にお問い合わせください。"
+
+#: app/[locale]/contact/layout.tsx
+#: app/[locale]/faq/layout.tsx
+#: components/site-header.tsx
+msgid "W8nHSd"
+msgstr "よくある質問"
+
+#: app/[locale]/contact/layout.tsx
+msgid "BqT5Bd"
+msgstr "私たちがお手伝いします。お問い合わせ内容に最も近い項目を選択していただければ、できるだけ早くご連絡いたします。"
+
+#: app/[locale]/contact/layout.tsx
+#: app/[locale]/faq/layout.tsx
+#: components/forms/index.tsx
+msgid "O95R3Z"
+msgstr "電話"
+
+#: app/[locale]/contact/page.tsx
+#: components/forms/tour-form.tsx
+msgid "vgbFX9"
+msgstr "シェアハウスを見学して、私たちが提供する暮らしを体感してください。"
+
+#: app/[locale]/contact/page.tsx
+#: components/contact-nav.tsx
+#: components/forms/contact-form.tsx
+msgid "VUkT7P"
+msgstr "一般的なお問い合わせ"
+
+#: app/[locale]/contact/page.tsx
+msgid "He0GeF"
+msgstr "入居の準備はできましたか？ご希望やスケジュールを教えてください。"
+
+#: app/[locale]/contact/page.tsx
+#: components/contact-nav.tsx
+#: components/forms/move-in-form.tsx
+msgid "dEvazg"
+msgstr "入居リクエスト"
+
+#: app/[locale]/contact/page.tsx
+#: components/contact-nav.tsx
+#: components/forms/tour-form.tsx
+msgid "Xe65P1"
+msgstr "見学のご依頼"
+
+#: app/[locale]/contact/page.tsx
+msgid "aOtoLb"
+msgstr "部屋や料金、空室状況についてのご質問はありますか？お気軽にお問い合わせください。"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "P4yatU"
+msgstr "{floors}階建て、{rooms}室。"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "VXpROl"
+msgstr "<strong>オレンジハウス</strong>には常駐管理人がいますが、<strong>レモンハウス</strong>と<strong>アップルハウス</strong>にはいません。"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "IdlCLc"
+msgstr "<strong>オレンジハウス</strong>の家賃は毎月10日までにお支払いください。<strong>レモンハウス</strong>と<strong>アップルハウス</strong>は入居日と同じ日付が毎月の支払期日になります。例えば23日に入居した場合、毎月23日が支払日です。"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "paGHj8"
+msgstr "1部屋に何人まで滞在できますか？"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "Skm805"
+msgstr "すべてのハウスで1部屋につき最大2名まで滞在できます。"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "8BPp0e"
+msgstr "どのハウスにも門限はありません。早朝や深夜は静かにお過ごしください。"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "nyl2Xd"
+msgstr "フロア数と部屋数は？"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "GULwvy"
+msgstr "入居時に必要なものは？"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "o8Ep4e"
+msgstr "各ハウスでは消耗品と有効な身分証明書をご持参ください。"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "Gy5gcN"
+msgstr "家賃以外にどんな費用がありますか？"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "XZiy0+"
+msgstr "毎月いつ家賃を支払えばいいですか？"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "SMO7FS"
+msgstr "管理人は常駐していますか？"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "tX1+3W"
+msgstr "門限はありますか？"
+
+#: app/[locale]/faq/(components)/faq-card.tsx
+msgid "JJU4Pf"
+msgstr "ご質問やサポートが必要ですか？私たちのチームがお手伝いします！"
+
+#: app/[locale]/faq/(components)/faq-card.tsx
+msgid "0AHnYX"
+msgstr "まだ疑問がありますか？"
+
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+msgid "RcPfOK"
+msgstr "+81-6-6131-6677"
+
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+msgid "vtbcUE"
+msgstr "06-6131-6677"
+
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+msgid "i1vZ6j"
+msgstr "06-6627-0790"
+
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+msgid "/bGZlf"
+msgstr "日本国内"
+
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+msgid "D+lsYf"
+msgstr "海外から"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "QKK0sU"
+msgstr "–"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "oqpkvs"
+msgstr "¥{price}/{minutes}分"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "b8FiWb"
+msgstr "¥{price}/月"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "QKFeMq"
+msgstr "インターネット"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "fnt0gq"
+msgstr "コインランドリー"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "dIgBOz"
+msgstr "デポジット"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "NnT5Qk"
+msgstr "乾燥機"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "7pPZTi"
+msgstr "光熱費"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "zhr5r8"
+msgstr "共益費"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "Q2U/ZP"
+msgstr "各部屋に専用の洗濯機があります。"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "E/DHKT"
+msgstr "夏・冬：¥{min}～¥{max}"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "QBxEGG"
+msgstr "春・秋：¥{min}～¥{max}"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "bILlKo"
+msgstr "水道代"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "tf1lIh"
+msgstr "無料"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+#: components/house/house-amenities.tsx
+msgid "cdkxIP"
+msgstr "無料Wi-Fi"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "jCNUwv"
+msgstr "無料Wi-Fi/LAN"
+
+#: app/[locale]/faq/layout.tsx
+msgid "r67llZ"
+msgstr "シェアハウスに関するよくある質問への回答をご覧ください。"
+
+#: app/[locale]/faq/layout.tsx
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+msgid "sy+pv5"
+msgstr "メール"
+
+#: app/[locale]/faq/layout.tsx
+msgid "7Rm1x6"
+msgstr "よくある質問"
+
+#: app/[locale]/faq/layout.tsx
+msgid "5C7IgN"
+msgstr "滞在を最大限に楽しむための重要な情報をまとめました。ここにない内容は、お電話またはメールでお問い合わせください。"
+
+#: app/[locale]/layout.tsx
+msgid "yZ+nWx"
+msgstr "1991年創業。大阪市内に3つのシェアハウスがあります。"
+
+#: app/[locale]/layout.tsx
+#: app/manifest.ts
+#: components/site-header.tsx
+msgid "8FQpM9"
+msgstr "シェアハウス大阪"
+
+#: app/[locale]/page.tsx
+msgid "WnQ/AZ"
+msgstr "お問い合わせ"
+
+#: app/[locale]/page.tsx
+msgid "oVIUb0"
+msgstr "モダンな共用生活を美しくデザインされた空間で体験。個室でのプライベート時間と共有スペースでのつながりを楽しめます。"
+
+#: app/[locale]/page.tsx
+msgid "CIXEgz"
+msgstr "大阪の中心で快適さとつながり、スタイルを届ける3つの個性的な住まい。"
+
+#: app/[locale]/page.tsx
+msgid "2FvSoa"
+msgstr "活気ある<block>シェアハウス</block>コミュニティ"
+
+#: app/[locale]/page.tsx
+msgid "eVPFdZ"
+msgstr "私たちのシェアハウス"
+
+#: app/manifest.ts
+msgid "2Urru8"
+msgstr "SHO"
+
+#: components/forms/components/reset-button.tsx
+msgid "jm/spn"
+msgstr "リセット"
+
+#: components/forms/components/submit-button.tsx
+msgid "wSZR47"
+msgstr "送信"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+msgid "HAlOn1"
+msgstr "お名前"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+msgid "DX9QSt"
+msgstr "お名前を入力してください"
+
+#: components/forms/contact-form.tsx
+msgid "ttbGvm"
+msgstr "サービスや料金などについてご質問がありますか？私たちがお手伝いします。"
+
+#: components/forms/contact-form.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "mF27aJ"
+msgstr "フォームを送信すると、<link>プライバシーポリシー、利用規約、免責事項</link>に同意したものとみなされます。"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+msgid "5MDGuM"
+msgstr "メールアドレスを入力してください"
+
+#: components/forms/contact-form.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "T7Ry38"
+msgstr "メッセージ"
+
+#: components/forms/contact-form.tsx
+msgid "vi98ug"
+msgstr "メッセージは{max}文字以内で入力してください。"
+
+#: components/forms/contact-form.tsx
+msgid "DrcOOR"
+msgstr "メッセージは{min}文字以上で入力してください。"
+
+#: components/forms/contact-form.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "pZGF0Z"
+msgstr "自宅住所やクレジットカード番号などの機密情報は入力しないでください。"
+
+#: components/forms/contact-form.tsx
+#: components/forms/tour-form.tsx
+msgid "6uhpBF"
+msgstr "補足情報やご質問があればお知らせください。"
+
+#: components/forms/fields/message-field.tsx
+msgid "TctHNm"
+msgstr "{count} / {max} 文字"
+
+#: components/forms/fields/message-field.tsx
+msgid "V4KNjk"
+msgstr "任意"
+
+#: components/forms/index.tsx
+msgid "d1OgED"
+msgstr "（任意）"
+
+#: components/forms/index.tsx
+msgid "WNx7jR"
+msgstr "070-1234-5678"
+
+#: components/forms/index.tsx
+msgid "MgGE60"
+msgstr "どのようにお呼びすればよいですか？"
+
+#: components/forms/index.tsx
+msgid "4FsZv8"
+msgstr "国籍"
+
+#: components/forms/index.tsx
+msgid "7uSszV"
+msgstr "国籍を教えてください。"
+
+#: components/forms/index.tsx
+msgid "74BYXL"
+msgstr "女性"
+
+#: components/forms/index.tsx
+msgid "9oNQSC"
+msgstr "年齢"
+
+#: components/forms/index.tsx
+msgid "THjKDn"
+msgstr "年齢を入力してください"
+
+#: components/forms/index.tsx
+msgid "7u8GJU"
+msgstr "年齢を教えてください"
+
+#: components/forms/index.tsx
+msgid "m8/n8c"
+msgstr "性別"
+
+#: components/forms/index.tsx
+msgid "ZJd1Zi"
+msgstr "性別を教えてください。"
+
+#: components/forms/index.tsx
+msgid "//7Vxj"
+msgstr "性別を選択してください"
+
+#: components/forms/index.tsx
+msgid "W3t7Ob"
+msgstr "日本人"
+
+#: components/forms/index.tsx
+msgid "jIbAky"
+msgstr "男性"
+
+#: components/forms/index.tsx
+msgid "FnDJgK"
+msgstr "見学当日にご連絡する場合があります。"
+
+#: components/forms/index.tsx
+msgid "RcT6iF"
+msgstr "詳細をご案内するためにこのメールアドレスを使用します。"
+
+#: components/forms/move-in-form.tsx
+msgid "gONomg"
+msgstr "1か月以上"
+
+#: components/forms/move-in-form.tsx
+msgid "B/+Qpg"
+msgstr "3か月以上"
+
+#: components/forms/move-in-form.tsx
+msgid "HXwvaE"
+msgstr "いつ入居を希望されますか？"
+
+#: components/forms/move-in-form.tsx
+msgid "WW6ryD"
+msgstr "どのくらい滞在したいですか？"
+
+#: components/forms/move-in-form.tsx
+msgid "CUIzCd"
+msgstr "どの物件に入居を希望しますか？"
+
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "0Gme/N"
+msgstr "以下の内容を送信しました："
+
+#: components/forms/move-in-form.tsx
+msgid "d6fKVG"
+msgstr "入居にあたっての特別なご要望やご質問があればお知らせください。"
+
+#: components/forms/move-in-form.tsx
+msgid "6TytT+"
+msgstr "入居をご希望ですか？ご希望の条件とスケジュールをお知らせください。"
+
+#: components/forms/move-in-form.tsx
+msgid "v5Q9UE"
+msgstr "入居希望日"
+
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "QQInFS"
+msgstr "場所"
+
+#: components/forms/move-in-form.tsx
+msgid "7etk18"
+msgstr "期間を選択してください"
+
+#: components/forms/move-in-form.tsx
+msgid "iYdfhX"
+msgstr "滞在期間"
+
+#: components/forms/move-in-form.tsx
+msgid "3B9akn"
+msgstr "長期"
+
+#: components/forms/tour-form.tsx
+msgid "+l9/4s"
+msgstr "いつ見学をご希望ですか？"
+
+#: components/forms/tour-form.tsx
+msgid "K9zlhY"
+msgstr "どの物件を見学したいですか？"
+
+#: components/forms/tour-form.tsx
+msgid "fyyJ1u"
+msgstr "営業時間は10:00〜20:00です。"
+
+#: components/forms/tour-form.tsx
+msgid "neEJEK"
+msgstr "見学日"
+
+#: components/forms/tour-form.tsx
+msgid "6dV8cs"
+msgstr "見学時間"
+
+#: components/gallery/gallery-modal.tsx
+msgid "5n7kbM"
+msgstr "ホームギャラリー"
+
+#: components/gallery/house-gallery-client.tsx
+msgid "0LUdoh"
+msgstr "共用スペース"
+
+#: components/gallery/house-gallery-client.tsx
+#: components/house/house-location-modal.tsx
+msgid "IZlYSx"
+msgstr "周辺環境"
+
+#: components/gallery/house-gallery-client.tsx
+msgid "EFWGgA"
+msgstr "地図"
+
+#: components/gallery/house-gallery-client.tsx
+msgid "XPDhJW"
+msgstr "建物の特徴"
+
+#: components/gallery/house-gallery-client.tsx
+msgid "Z/P45E"
+msgstr "設備"
+
+#: components/gallery/house-gallery-client.tsx
+msgid "2Ml/7i"
+msgstr "部屋"
+
+#: components/gallery/house-gallery-client.tsx
+msgid "7ruLSs"
+msgstr "間取り図"
+
+#: components/house/house-about.tsx
+msgid "WS/qHO"
+msgstr "アップルハウスは大国町駅まで徒歩1分、難波へもすぐにアクセスできます。すべての個室にバスルームとキッチンが備わり、中長期滞在でもマンションのような快適さを提供します。"
+
+#: components/house/house-about.tsx
+msgid "0682K0"
+msgstr "あべのハルカスを望む伝統的な屋上ラウンジ（100㎡）"
+
+#: components/house/house-about.tsx
+msgid "+6Rg8T"
+msgstr "オレンジハウスは大阪市中心部のそばにある全室個室の宿泊施設です。和の趣と日常の利便性を兼ね備え、阿倍野エリアでの長期滞在に最適な静かな拠点になります。"
+
+#: components/house/house-about.tsx
+msgid "CXXKk+"
+msgstr "キッチンとバスルーム付きの個室（11㎡）"
+
+#: components/house/house-about.tsx
+msgid "vQeYIu"
+msgstr "キッチンとバスルーム付き個室（19㎡）"
+
+#: components/house/house-about.tsx
+msgid "trsdpu"
+msgstr "キッチン付き個室（12㎡）"
+
+#: components/house/house-about.tsx
+msgid "lcEouh"
+msgstr "この場所について"
+
+#: components/house/house-about.tsx
+msgid "aWpBzj"
+msgstr "もっと見る"
+
+#: components/house/house-about.tsx
+msgid "FTgbV4"
+msgstr "レモンハウスは難波の中心からすぐの場所に、個室と一部ドミトリーを備えています。コンパクトな建物ながら、短期・長期の滞在に必要な設備がそろっています。"
+
+#: components/house/house-about.tsx
+msgid "PuqmX5"
+msgstr "大阪の中心でコミュニティと国際交流を楽しむ暮らし"
+
+#: components/house/house-about.tsx
+msgid "Ru8Kgx"
+msgstr "広々とした客室でカップルや友人に最適"
+
+#: components/house/house-about.tsx
+msgid "JMovh6"
+msgstr "美しく充実したキッチンを備えたラウンジ"
+
+#: components/house/house-about.tsx
+msgid "5rfphS"
+msgstr "長期滞在割引あり"
+
+#: components/house/house-about.tsx
+msgid "d3oIA3"
+msgstr "難波まで徒歩14分"
+
+#: components/house/house-amenities.tsx
+msgid "xUDFXd"
+msgstr "{count}件の設備をすべて表示"
+
+#: components/house/house-amenities.tsx
+msgid "OF5SMY"
+msgstr "Netflix・Blu-ray・ケーブル対応テレビ"
+
+#: components/house/house-amenities.tsx
+msgid "UXyQQq"
+msgstr "インターネット＆空調"
+
+#: components/house/house-amenities.tsx
+msgid "FXD7sf"
+msgstr "エレベーター"
+
+#: components/house/house-amenities.tsx
+msgid "N+Pe3p"
+msgstr "オーブン付きラウンジキッチン"
+
+#: components/house/house-amenities.tsx
+msgid "uwVj77"
+msgstr "キッチン"
+
+#: components/house/house-amenities.tsx
+msgid "0hixvX"
+msgstr "キッチン＆ダイニング"
+
+#: components/house/house-amenities.tsx
+msgid "mRQJ/r"
+msgstr "コーヒー＆ティーコーナー"
+
+#: components/house/house-amenities.tsx
+msgid "B0hPmc"
+msgstr "コイン"
+
+#: components/house/house-amenities.tsx
+msgid "eYevCG"
+msgstr "シャワー"
+
+#: components/house/house-amenities.tsx
+msgid "TYfnJi"
+msgstr "シャワー・バスタブ付きバスルーム"
+
+#: components/house/house-amenities.tsx
+msgid "Ul7I0/"
+msgstr "セキュリティ付きエントランス"
+
+#: components/house/house-amenities.tsx
+msgid "9euxfQ"
+msgstr "バスルーム"
+
+#: components/house/house-amenities.tsx
+msgid "YV+jwf"
+msgstr "ラウンジ"
+
+#: components/house/house-amenities.tsx
+msgid "IXB/3I"
+msgstr "ランドリー"
+
+#: components/house/house-amenities.tsx
+msgid "CiPFk9"
+msgstr "ルーフトップラウンジ（100㎡）"
+
+#: components/house/house-amenities.tsx
+msgid "ndZhOs"
+msgstr "乾燥機"
+
+#: components/house/house-amenities.tsx
+msgid "viXE32"
+msgstr "個室"
+
+#: components/house/house-amenities.tsx
+msgid "kWI6zX"
+msgstr "共用"
+
+#: components/house/house-amenities.tsx
+msgid "vCAGz0"
+msgstr "共用エリア"
+
+#: components/house/house-amenities.tsx
+msgid "3E120V"
+msgstr "冷暖房"
+
+#: components/house/house-amenities.tsx
+msgid "YrrLhl"
+msgstr "冷蔵冷凍庫"
+
+#: components/house/house-amenities.tsx
+msgid "GCejuO"
+msgstr "冷蔵庫"
+
+#: components/house/house-amenities.tsx
+msgid "Tr8PEg"
+msgstr "大型冷蔵庫"
+
+#: components/house/house-amenities.tsx
+msgid "TeepuU"
+msgstr "家具付き個室（{size}㎡）"
+
+#: components/house/house-amenities.tsx
+msgid "ttNkgQ"
+msgstr "家電（掃除機・アイロン）"
+
+#: components/house/house-amenities.tsx
+msgid "/scXB/"
+msgstr "宿泊設備"
+
+#: components/house/house-amenities.tsx
+msgid "e7KKoF"
+msgstr "広々とした客室（19㎡）"
+
+#: components/house/house-amenities.tsx
+msgid "sKvUcr"
+msgstr "建物・アクセス"
+
+#: components/house/house-amenities.tsx
+msgid "l8yhdJ"
+msgstr "月例パーティー"
+
+#: components/house/house-amenities.tsx
+msgid "a5dENK"
+msgstr "洗濯機"
+
+#: components/house/house-amenities.tsx
+msgid "wB7Mb3"
+msgstr "温水洗浄便座"
+
+#: components/house/house-amenities.tsx
+msgid "c6RKmB"
+msgstr "物干しスペース"
+
+#: components/house/house-amenities.tsx
+msgid "ivHXJ+"
+msgstr "設備・サービス"
+
+#: components/house/house-amenities.tsx
+msgid "2/NFiJ"
+msgstr "郵便受け"
+
+#: components/house/house-amenities.tsx
+msgid "n/Sbdn"
+msgstr "電子レンジ・トースター・炊飯器"
+
+#: components/house/house-amenities.tsx
+msgid "I5jAHq"
+msgstr "電子レンジ＆トースター"
+
+#: components/house/house-amenities.tsx
+msgid "3UWUcz"
+msgstr "食器類"
+
+#: components/house/house-amenities.tsx
+msgid "b9a4ul"
+msgstr "駐輪場"
+
+#: components/house/house-building.tsx
+msgid "cNXJJO"
+msgstr "最低賃料"
+
+#: components/house/house-building.tsx
+msgid "xIHOhT"
+msgstr "部屋数"
+
+#: components/house/house-building.tsx
+msgid "QOn+ti"
+msgstr "階数"
+
+#: components/house/house-location-modal.tsx
+msgid "9tsQ3v"
+msgstr "ゲストハウスのすぐ隣に24時間営業のスーパーがあり、徒歩約1分の場所にも大型スーパーがあります。"
+
+#: components/house/house-location-modal.tsx
+msgid "kSjahm"
+msgstr "コンビニと郵便局まで徒歩約3分"
+
+#: components/house/house-location-modal.tsx
+msgid "qOE+t4"
+msgstr "今宮駅／今宮戎駅まで徒歩約7分"
+
+#: components/house/house-location-modal.tsx
+msgid "vnTpcm"
+msgstr "南海難波駅（南出口）まで徒歩約8分"
+
+#: components/house/house-location-modal.tsx
+msgid "XCwRZx"
+msgstr "周辺スポット"
+
+#: components/house/house-location-modal.tsx
+msgid "E5RUex"
+msgstr "周辺情報"
+
+#: components/house/house-location-modal.tsx
+msgid "Vw97e8"
+msgstr "回転寿司店まで徒歩約3分"
+
+#: components/house/house-location-modal.tsx
+msgid "1W6VRj"
+msgstr "地下鉄御堂筋線・四つ橋線の大国町駅まで徒歩1分。24時間営業のスーパーがすぐそば。創業200年以上の木津市場や岩盤浴付きの大浴場も近くにあります。難波まで徒歩圏内なので、終電を気にせず夜の街を楽しめます。"
+
+#: components/house/house-location-modal.tsx
+msgid "sryQnS"
+msgstr "大国町駅（地下鉄御堂筋線・四つ橋線）2番出口から徒歩約1分"
+
+#: components/house/house-location-modal.tsx
+msgid "jqIfGe"
+msgstr "大国町駅そばの100円ショップ"
+
+#: components/house/house-location-modal.tsx
+msgid "2dEHSh"
+msgstr "天王寺／阿倍野橋まで徒歩約15分"
+
+#: components/house/house-location-modal.tsx
+msgid "+0NiKB"
+msgstr "徒歩約2分・4分・6分の場所にスーパーがあります"
+
+#: components/house/house-location-modal.tsx
+msgid "iRBg5W"
+msgstr "徒歩約5分の場所にディスカウントストアがあり、ほかのコンビニも徒歩圏内にあります。"
+
+#: components/house/house-location-modal.tsx
+msgid "8fnMlK"
+msgstr "徒歩約5分圏内にスーパーがあります"
+
+#: components/house/house-location-modal.tsx
+msgid "UJuYGX"
+msgstr "恵美須町駅まで徒歩約11分"
+
+#: components/house/house-location-modal.tsx
+msgid "K0XAtn"
+msgstr "文の里駅（地下鉄谷町線）6番出口から徒歩約3分"
+
+#: components/house/house-location-modal.tsx
+msgid "GtNLSe"
+msgstr "日本橋駅（地下鉄堺筋線）10番出口まで徒歩約8分"
+
+#: components/house/house-location-modal.tsx
+msgid "js8anW"
+msgstr "昭和町駅（地下鉄御堂筋線）2番出口まで徒歩約7分"
+
+#: components/house/house-location-modal.tsx
+msgid "a7VuWb"
+msgstr "昭和町駅のスーパー"
+
+#: components/house/house-location-modal.tsx
+msgid "reJlTE"
+msgstr "郵便局まで徒歩約2分"
+
+#: components/house/house-location-modal.tsx
+msgid "DkazeT"
+msgstr "阿倍野ハルカスまで徒歩約15分／あべのキューズモールまで徒歩約12分"
+
+#: components/house/house-location-modal.tsx
+msgid "BSkyJV"
+msgstr "難波まで徒歩8分！終電を気にせず夜を満喫できる好立地。大阪の各エリアへもアクセス抜群。観光にも長期滞在にも最適。門限はありません。"
+
+#: components/house/house-location-modal.tsx
+msgid "VLf3bw"
+msgstr "難波駅（地下鉄御堂筋線）4番出口まで徒歩約10分"
+
+#: components/house/house-location-modal.tsx
+msgid "RdETMb"
+msgstr "難波駅各線まで徒歩約15分"
+
+#: components/house/house-location-modal.tsx
+msgid "x89m8i"
+msgstr "高さ300m！日本一高いビル「阿倍野ハルカス」まで徒歩15分。大阪城、水族館海遊館、ユニバーサル・スタジオ・ジャパン、通天閣など人気スポットへのアクセスも良好。最寄り駅までは徒歩数分。徒歩圏内にスーパー、コンビニ、100円ショップ、フィットネス、サイクルショップ、区役所があります。"
+
+#: components/house/house-location.tsx
+msgid "dHDFQ1"
+msgstr "周辺地図"
+
+#: components/house/house-location.tsx
+msgid "lPIz84"
+msgstr "地下鉄御堂筋線で大阪市内のどこへでもスムーズにアクセスできます。"
+
+#: components/house/house-location.tsx
+msgid "qPVf+/"
+msgstr "難波は徒歩圏内、大国町駅へは歩いて1分です。"
+
+#: components/house/house-pricing.tsx
+msgid "OMlFe/"
+msgstr "2か月目：¥1,000割引"
+
+#: components/house/house-pricing.tsx
+msgid "GhFyTt"
+msgstr "2人目は月額+¥5,000"
+
+#: components/house/house-pricing.tsx
+msgid "3NQHep"
+msgstr "3か月・6か月滞在で割引あり。"
+
+#: components/house/house-pricing.tsx
+msgid "6Szle7"
+msgstr "3か月未満の滞在：すべての費用込み。"
+
+#: components/house/house-pricing.tsx
+msgid "N/lD1K"
+msgstr "3か月目：¥2,000割引"
+
+#: components/house/house-pricing.tsx
+msgid "FZ2Tto"
+msgstr "6か月以降：毎月¥5,000割引"
+
+#: components/house/house-pricing.tsx
+msgid "WXykaR"
+msgstr "サービス料：月額¥10,000"
+
+#: components/house/house-pricing.tsx
+msgid "C5HBqG"
+msgstr "サービス料：月額¥12,000"
+
+#: components/house/house-pricing.tsx
+msgid "w1Dv+W"
+msgstr "その他の費用"
+
+#: components/house/house-pricing.tsx
+msgid "Xf6xpu"
+msgstr "デポジット：¥30,000（退去時に損傷がなければ返金）"
+
+#: components/house/house-pricing.tsx
+msgid "WCvSi9"
+msgstr "ドミトリープラン"
+
+#: components/house/house-pricing.tsx
+msgid "94l3rL"
+msgstr "乾燥機：¥100"
+
+#: components/house/house-pricing.tsx
+msgid "QKRGVN"
+msgstr "乾燥機：20分ごとに¥100"
+
+#: components/house/house-pricing.tsx
+msgid "k/nd32"
+msgstr "光熱費：月額約¥3,000（使用量に応じてお支払い）"
+
+#: components/house/house-pricing.tsx
+msgid "tqgc7W"
+msgstr "光熱費：月額約¥3,000～¥4,000（使用量に応じてお支払い）"
+
+#: components/house/house-pricing.tsx
+msgid "/3p+Wq"
+msgstr "最低滞在期間：1か月"
+
+#: components/house/house-pricing.tsx
+msgid "tmmKme"
+msgstr "家賃"
+
+#: components/house/house-pricing.tsx
+msgid "5Wwopw"
+msgstr "料金"
+
+#: components/house/house-pricing.tsx
+msgid "R548nu"
+msgstr "月額¥40,000～¥48,000（1名）"
+
+#: components/house/house-pricing.tsx
+msgid "3UUUTR"
+msgstr "月額¥45,000（光熱費・サービス料込）"
+
+#: components/house/house-pricing.tsx
+msgid "YrHExQ"
+msgstr "月額¥50,000～¥70,000（1部屋2名まで）"
+
+#: components/house/house-pricing.tsx
+msgid "KNvfvd"
+msgstr "月額¥80,000～¥95,000"
+
+#: components/house/house-pricing.tsx
+msgid "NjihB4"
+msgstr "洗濯機：無料"
+
+#: components/house/house-pricing.tsx
+msgid "aWLxDr"
+msgstr "洗濯機：無料（屋上）"
+
+#: components/house/house-pricing.tsx
+msgid "3ppfk2"
+msgstr "男女混合・1部屋3ベッド・バスルームとキッチンは共用です。"
+
+#: components/house/house-pricing.tsx
+msgid "dxl4bp"
+msgstr "短期滞在"
+
+#: components/house/house-pricing.tsx
+msgid "WqjGOA"
+msgstr "長期滞在割引"
+
+#: components/house/mobile-hero-image.tsx
+msgid "YeS7ph"
+msgstr "画像が見つかりません"
+
+#: components/image-block-gallery.tsx
+msgid "DaOEHy"
+msgstr "すべての写真を表示"
+
+#: components/language-switcher.tsx
+msgid "GsBRWL"
+msgstr "言語"
+
+#: components/language-switcher.tsx
+msgid "eVlu1R"
+msgstr "言語を選択"
+
+#: components/legal-notice-dialog.tsx
+msgid "nTvfXr"
+msgstr "（該当する場合）同意の撤回を求める"
+
+#: components/legal-notice-dialog.tsx
+msgid "Zxigpu"
+msgstr "👤 代表取締役：久本健司"
+
+#: components/legal-notice-dialog.tsx
+msgid "n733ik"
+msgstr "📧 orange@guesthouseosaka.com"
+
+#: components/legal-notice-dialog.tsx
+msgid "bYEHu4"
+msgstr "1. 収集する情報"
+
+#: components/legal-notice-dialog.tsx
+msgid "i2t87R"
+msgstr "2. 情報の利用方法"
+
+#: components/legal-notice-dialog.tsx
+msgid "Vtzi8Y"
+msgstr "3. 保存期間"
+
+#: components/legal-notice-dialog.tsx
+msgid "XxsxMQ"
+msgstr "4. 共有と国際間移転"
+
+#: components/legal-notice-dialog.tsx
+msgid "UD3tNX"
+msgstr "5. お客さまの権利"
+
+#: components/legal-notice-dialog.tsx
+msgid "I4bgEZ"
+msgstr "6. セキュリティ対策"
+
+#: components/legal-notice-dialog.tsx
+msgid "LNXNUg"
+msgstr "7. お問い合わせ"
+
+#: components/legal-notice-dialog.tsx
+msgid "f2d7W1"
+msgstr "8. 本ポリシーの変更"
+
+#: components/legal-notice-dialog.tsx
+msgid "9+AIxW"
+msgstr "お問い合わせやリクエストへの対応"
+
+#: components/legal-notice-dialog.tsx
+msgid "SiViRn"
+msgstr "お問い合わせ内容：メッセージ、質問、フォーム送信情報"
+
+#: components/legal-notice-dialog.tsx
+msgid "ttPbRs"
+msgstr "お客様の同意なく日本国外へデータを移転することはありません。ただし、法令に基づく場合や個人情報保護法などに基づき権利保護が必要な場合を除きます。"
+
+#: components/legal-notice-dialog.tsx
+msgid "Hb/s3I"
+msgstr "お客様の明示的な同意なしに、マーケティング目的で情報を利用することはありません。"
+
+#: components/legal-notice-dialog.tsx
+msgid "9gDo87"
+msgstr "お客様は次の権利を有します。"
+
+#: components/legal-notice-dialog.tsx
+msgid "6U8vHi"
+msgstr "この期間を過ぎると、情報は安全に削除または匿名化されます。"
+
+#: components/legal-notice-dialog.tsx
+msgid "4ad/hu"
+msgstr "これらの情報は、フォームの送信やご連絡を通じてお客様から直接取得します。"
+
+#: components/legal-notice-dialog.tsx
+msgid "v5+yV0"
+msgstr "サービスに関する情報提供・更新・サポート"
+
+#: components/legal-notice-dialog.tsx
+msgid "vx0nkZ"
+msgstr "プライバシーポリシー"
+
+#: components/legal-notice-dialog.tsx
+msgid "9FEUJQ"
+msgstr "不正確または古い情報の訂正・追加・削除を求める"
+
+#: components/legal-notice-dialog.tsx
+msgid "bESWzA"
+msgstr "事業運営および法令遵守に必要な社内記録の維持"
+
+#: components/legal-notice-dialog.tsx
+msgid "Q40ygb"
+msgstr "保有する個人情報へのアクセスを請求する"
+
+#: components/legal-notice-dialog.tsx
+msgid "VzHNnL"
+msgstr "個人データへのアクセスは権限を持つ担当者のみに制限されています。"
+
+#: components/legal-notice-dialog.tsx
+msgid "AHx4JS"
+msgstr "個人情報は上記の目的を達成するために必要な期間のみ保管します。"
+
+#: components/legal-notice-dialog.tsx
+msgid "fxZ/kI"
+msgstr "最終更新日：2025年11月"
+
+#: components/legal-notice-dialog.tsx
+msgid "4KyabI"
+msgstr "基本情報：氏名、年齢、性別、国籍、メールアドレス、（任意で）電話番号"
+
+#: components/legal-notice-dialog.tsx
+msgid "2YT4Bx"
+msgstr "宿泊情報：希望する見学日・入居日・希望物件"
+
+#: components/legal-notice-dialog.tsx
+msgid "ZEozlh"
+msgstr "当社は個人情報を第三者と共有・販売することはありません。"
+
+#: components/legal-notice-dialog.tsx
+msgid "oIwcGP"
+msgstr "当社は次の正当な事業目的のためにのみ個人情報を利用します。"
+
+#: components/legal-notice-dialog.tsx
+msgid "r5fMvQ"
+msgstr "当社は適切な技術的・組織的措置を講じ、個人情報を不正アクセスや紛失、悪用、改ざん、漏えいから保護します。"
+
+#: components/legal-notice-dialog.tsx
+msgid "EQqXZB"
+msgstr "日本のプライバシー法に基づき、正当なご請求には迅速かつ透明に対応します。"
+
+#: components/legal-notice-dialog.tsx
+msgid "eYpuFD"
+msgstr "日本国大阪市阿倍野区阪南町1-21-21"
+
+#: components/legal-notice-dialog.tsx
+msgid "a4i3J/"
+msgstr "本サービスを通じてお問い合わせいただく際、次の個人情報を取得する場合があります。"
+
+#: components/legal-notice-dialog.tsx
+msgid "Qo45RA"
+msgstr "本プライバシーポリシーは、本ウェブサイト（以下「本サービス」）の問い合わせフォームなどを通じて提供いただく情報の収集・利用・保存・保護方法について説明します。"
+
+#: components/legal-notice-dialog.tsx
+msgid "CLtY4G"
+msgstr "本プライバシーポリシーは随時更新される場合があります。"
+
+#: components/legal-notice-dialog.tsx
+msgid "hH3xr4"
+msgstr "本プライバシーポリシーやデータ取り扱いについてご質問・ご不明点がありましたら、以下までお問い合わせください。"
+
+#: components/legal-notice-dialog.tsx
+msgid "UexJmX"
+msgstr "株式会社アニモ企画"
+
+#: components/legal-notice-dialog.tsx
+msgid "kxO1o9"
+msgstr "株式会社アニモ企画（以下「当社」）はお客様のプライバシーを尊重し、個人情報の保護に取り組んでいます。"
+
+#: components/legal-notice-dialog.tsx
+msgid "GNrmPy"
+msgstr "物件見学の手配と入居手続きの管理"
+
+#: components/legal-notice-dialog.tsx
+msgid "bLWG90"
+msgstr "通常は、お取引終了後最大10年間保管します。"
+
+#: components/legal-notice-dialog.tsx
+msgid "n9XaN1"
+msgstr "重要な変更がある場合は、このページで更新日とともにお知らせします。"
+
+#: components/legal-notice-dialog.tsx
+msgid "rbrahO"
+msgstr "閉じる"
+
+#: components/mobile-nav.tsx
+msgid "ejEGdx"
+msgstr "ホーム"
+
+#: components/mobile-nav.tsx
+msgid "tKMlOc"
+msgstr "メニュー"
+
+#: components/mobile-nav.tsx
+msgid "R059Ya"
+msgstr "メニューを切り替え"
+
+#: components/next-intl/not-found-page.tsx
+msgid "DJBZ4A"
+msgstr "ブラウザのアドレスバーをご確認いただくか、メニューから既知のページへ移動してください。"
+
+#: components/next-intl/not-found-page.tsx
+msgid "QRccCM"
+msgstr "ページが見つかりません"
+
+#: components/next-intl/page-layout.tsx
+msgid "X6JDFK"
+msgstr "https://github.com/amannn/next-intl/tree/main/examples/example-app-router"
+
+#: components/next-intl/page-layout.tsx
+msgid "2A9FEc"
+msgstr "https://next-intl.dev"
+
+#: components/next-intl/page-layout.tsx
+msgid "Fmbx3l"
+msgstr "next-intl の公式ドキュメントで詳しく学ぶ"
+
+#: components/next-intl/page-layout.tsx
+msgid "L00nDd"
+msgstr "このサンプルのソースコードをGitHubで閲覧する"
+
+#: components/next-intl/page-layout.tsx
+msgid "GAUX9p"
+msgstr "ソースコード"
+
+#: components/next-intl/page-layout.tsx
+msgid "/6/sPX"
+msgstr "ドキュメント"
+
+#: components/site-footer.tsx
+msgid "pZLKMO"
+msgstr "株式会社アニモプランニング"
+
+#: components/site-header.tsx
+msgid "rwrkYn"
+msgstr "シェアハウス"
+
+#: components/site-header.tsx
+msgid "q8NSxM"
+msgstr "思い出に残る体験を生む活気ある空間"
+
+#: components/site-header.tsx
+msgid "hhDM+/"
+msgstr "明るく爽やかな滞在でリフレッシュ"
+
+#: components/site-header.tsx
+msgid "G9lpeY"
+msgstr "温かさと快適さをモダンな設備とともに体験"

@@ -1,0 +1,82 @@
+import { Collection } from '@/components/collection'
+import { GalleryWall } from '@/components/gallery-wall'
+import {
+  PageActions,
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading
+} from '@/components/page-header'
+import { Button } from '@/components/ui/button'
+import { Link } from '@/i18n/navigation'
+import { routing } from '@/i18n/routing'
+import { getExtracted, setRequestLocale } from 'next-intl/server'
+import z from 'zod'
+
+const ParamsSchema = z.object({
+  locale: z.enum(routing.locales)
+})
+
+export default async function RootPage(props: PageProps<'/[locale]'>) {
+  const { locale } = ParamsSchema.parse(await props.params)
+
+  // Enable static rendering
+  setRequestLocale(locale)
+  const t = await getExtracted()
+
+  return (
+    <div className="section-soft flex flex-col gap-18 md:gap-0">
+      <section className="relative flex snap-none items-center justify-center py-8 md:min-h-[calc(100dvh-var(--header-height))] md:snap-end md:py-0">
+        <div className="container-wrapper w-full max-w-7xl">
+          <div className="grid items-center gap-12 md:grid-cols-3">
+            {/* Text content */}
+            <PageHeader className="md:items-start md:text-left">
+              <PageHeaderHeading className="md:text-left">
+                {t.rich('Vibrant <block>share house</block> community', {
+                  block: (chunks) => (
+                    <>
+                      <br />
+                      {chunks}
+                      <br />
+                    </>
+                  )
+                })}
+              </PageHeaderHeading>
+              <PageHeaderDescription className="md:text-left">
+                {t(
+                  'Experience modern co-living in beautifully designed spaces. Connect with like-minded individuals while enjoying your own private room and shared common areas.'
+                )}
+              </PageHeaderDescription>
+              <PageActions className="md:justify-start">
+                <Button asChild size="lg">
+                  <Link href="/contact">{t('Contact us')}</Link>
+                </Button>
+              </PageActions>
+            </PageHeader>
+
+            {/* Instagram feed */}
+            <div className="flex justify-center md:col-span-2 md:justify-end">
+              <div className="w-full">
+                <GalleryWall locale={locale} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="snap:none container-wrapper relative flex max-w-7xl flex-1 flex-col items-center justify-center md:min-h-[calc(100dvh-var(--header-height)-var(--footer-height))] md:snap-start">
+        <PageHeader>
+          <PageHeaderHeading className="self-start text-2xl xl:text-4xl">
+            {t('Our share houses')}
+          </PageHeaderHeading>
+          <PageHeaderDescription className="max-w-none self-start text-start text-wrap">
+            {t(
+              'Three unique homes crafted for comfort, connection, and style in the heart of Osaka.'
+            )}
+          </PageHeaderDescription>
+          <PageActions>
+            <Collection className="w-full pt-4" />
+          </PageActions>
+        </PageHeader>
+      </section>
+    </div>
+  )
+}

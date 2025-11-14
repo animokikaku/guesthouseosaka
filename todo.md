@@ -1,0 +1,12 @@
+- [] Integrate with resend to send emails
+- [] Create/re-use accounts (Google, NextJS, Github?) for management
+- [x] Add a gallery for photos
+- [x] Add carousel for mobile
+- [] Migrate the domain
+- [x] Update pricing and texts with the latest information provided by Kaz
+- [x] Update the privacy policy with the latest information provided by Kaz
+- [x] Translate the texts
+- [x] Move down the data to each components if possible
+- [] Focus on error field and disable browser validation on dates for mobile?
+- [x] Add the correct images on the home screen
+- [] Add a viewer for the home screen images

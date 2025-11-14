@@ -1,0 +1,33 @@
+{
+  "i18n-ally.localesPaths": ["./messages"],
+  "i18n-ally.keystyle": "nested",
+  "explorer.sortOrder": "filesFirst",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "tailwindCSS.classFunctions": ["cva", "cn"],
+  "vitest.debugExclude": [
+    "<node_internals>/**",
+    "**/node_modules/**",
+    "**/fixtures/**"
+  ],
+  "files.watcherExclude": {
+    "bun.lock": true
+  },
+  "search.exclude": {
+    "bun.lock": true
+  },
+  "files.readonlyInclude": {
+    "bun.lock": true
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "typescript.preferences.autoImportSpecifierExcludeRegexes": [
+    // useRouter should be imported from `next/navigation` instead of `next/router`
+    "next/router",
+    // give priority for Link to next/link instead of lucide-react
+    // "lucide-react",
+    // give priority for internal components rather than radix-ui
+    "@radix-ui",
+    "react-day-picker"
+  ],
+}
