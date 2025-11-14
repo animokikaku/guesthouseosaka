@@ -2,7 +2,7 @@
 - [x] Create/re-use accounts (Google, NextJS, Github?) for management
 - [x] Add a gallery for photos
 - [x] Add carousel for mobile
-- [] Migrate the domain
+- [x] Migrate the domain
 - [x] Update pricing and texts with the latest information provided by Kaz
 - [x] Update the privacy policy with the latest information provided by Kaz
 - [x] Translate the texts
