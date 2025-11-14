@@ -7,6 +7,12 @@ msgstr ""
 "X-Crowdin-SourceKey: msgstr\n"
 
 #: app/[locale]/[house]/@modal/(.)gallery/page.tsx
+#: app/[locale]/[house]/gallery/page.tsx
+#: components/gallery/gallery-modal.tsx
+msgid "/q2ubh"
+msgstr "Close gallery"
+
+#: app/[locale]/[house]/@modal/(.)gallery/page.tsx
 #: app/[locale]/[house]/layout.tsx
 #: app/[locale]/[house]/page.tsx
 #: app/[locale]/faq/(components)/faq-accordion.tsx
@@ -22,19 +28,24 @@ msgid "3/TpVv"
 msgstr "Apple House"
 
 #: app/[locale]/[house]/@modal/(.)gallery/page.tsx
-#: app/[locale]/[house]/gallery/page.tsx
-#: components/gallery/gallery-modal.tsx
-msgid "/q2ubh"
-msgstr "Close gallery"
-
-#: app/[locale]/[house]/@modal/(.)gallery/page.tsx
 #: components/gallery/gallery-modal.tsx
 msgid "SFBc57"
 msgstr "Explore photos of {title}"
 
 #: app/[locale]/[house]/@modal/(.)gallery/page.tsx
-msgid "zffsPo"
-msgstr "House Gallery"
+#: app/[locale]/[house]/layout.tsx
+#: app/[locale]/[house]/page.tsx
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+#: components/collection.tsx
+#: components/forms/index.tsx
+#: components/gallery/gallery-modal.tsx
+#: components/house-switcher.tsx
+#: components/houses-nav.tsx
+#: components/site-header.tsx
+msgid "snhgxZ"
+msgstr "Orange House"
 
 #: app/[locale]/[house]/@modal/(.)gallery/page.tsx
 #: app/[locale]/[house]/layout.tsx
@@ -52,26 +63,15 @@ msgid "X0JOAH"
 msgstr "Lemon House"
 
 #: app/[locale]/[house]/@modal/(.)gallery/page.tsx
-#: app/[locale]/[house]/layout.tsx
-#: app/[locale]/[house]/page.tsx
-#: app/[locale]/faq/(components)/faq-accordion.tsx
-#: app/[locale]/faq/(components)/faq-contact-table.tsx
-#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-#: components/collection.tsx
-#: components/forms/index.tsx
-#: components/gallery/gallery-modal.tsx
-#: components/house-switcher.tsx
-#: components/houses-nav.tsx
-#: components/site-header.tsx
-msgid "snhgxZ"
-msgstr "Orange House"
+msgid "zffsPo"
+msgstr "House Gallery"
 
 #: app/[locale]/[house]/layout.tsx
 #: app/[locale]/[house]/page.tsx
 #: components/collection.tsx
 #: components/site-header.tsx
-msgid "pMmbWq"
-msgstr "Relaxed spacious Japanese-style lounge"
+msgid "eFdQ0R"
+msgstr "Well-equipped private rooms and a luxurious lounge"
 
 #: app/[locale]/[house]/layout.tsx
 #: app/[locale]/[house]/page.tsx
@@ -84,27 +84,20 @@ msgstr "Share house 8 minutes walk from Namba Station"
 #: app/[locale]/[house]/page.tsx
 #: components/collection.tsx
 #: components/site-header.tsx
-msgid "eFdQ0R"
-msgstr "Well-equipped private rooms and a luxurious lounge"
-
-#: app/[locale]/contact/layout.tsx
-#: components/site-header.tsx
-msgid "zFegDD"
-msgstr "Contact"
-
-#: app/[locale]/contact/layout.tsx
-#: app/[locale]/faq/layout.tsx
-#: components/site-header.tsx
-msgid "W8nHSd"
-msgstr "FAQ"
-
-#: app/[locale]/contact/layout.tsx
-msgid "krEziQ"
-msgstr "Get in touch"
+msgid "pMmbWq"
+msgstr "Relaxed spacious Japanese-style lounge"
 
 #: app/[locale]/contact/layout.tsx
 msgid "36rV9W"
 msgstr "Get in touch with us for any inquiries or questions."
+
+#: app/[locale]/contact/layout.tsx
+msgid "BqT5Bd"
+msgstr "We're here to help! Choose the option that best describes your inquiry and we'll get back to you as soon as possible."
+
+#: app/[locale]/contact/layout.tsx
+msgid "krEziQ"
+msgstr "Get in touch"
 
 #: app/[locale]/contact/layout.tsx
 #: app/[locale]/faq/layout.tsx
@@ -113,24 +106,25 @@ msgid "O95R3Z"
 msgstr "Phone"
 
 #: app/[locale]/contact/layout.tsx
-msgid "BqT5Bd"
-msgstr "We're here to help! Choose the option that best describes your inquiry and we'll get back to you as soon as possible."
+#: app/[locale]/faq/layout.tsx
+#: components/site-header.tsx
+msgid "W8nHSd"
+msgstr "FAQ"
+
+#: app/[locale]/contact/layout.tsx
+#: components/site-header.tsx
+msgid "zFegDD"
+msgstr "Contact"
 
 #: app/[locale]/contact/page.tsx
-#: components/contact-nav.tsx
-#: components/forms/contact-form.tsx
-msgid "VUkT7P"
-msgstr "General inquiry"
+msgid "aOtoLb"
+msgstr "Questions about rooms, pricing, or availability? We’re happy to help."
 
 #: app/[locale]/contact/page.tsx
 #: components/contact-nav.tsx
 #: components/forms/move-in-form.tsx
 msgid "dEvazg"
 msgstr "Move in request"
-
-#: app/[locale]/contact/page.tsx
-msgid "aOtoLb"
-msgstr "Questions about rooms, pricing, or availability? We’re happy to help."
 
 #: app/[locale]/contact/page.tsx
 msgid "He0GeF"
@@ -143,49 +137,19 @@ msgstr "Schedule a visit to see our share houses and get a feel for what we offe
 
 #: app/[locale]/contact/page.tsx
 #: components/contact-nav.tsx
+#: components/forms/contact-form.tsx
+msgid "VUkT7P"
+msgstr "General inquiry"
+
+#: app/[locale]/contact/page.tsx
+#: components/contact-nav.tsx
 #: components/forms/tour-form.tsx
 msgid "Xe65P1"
 msgstr "Tour request"
 
 #: app/[locale]/faq/(components)/faq-accordion.tsx
-msgid "P4yatU"
-msgstr "{floors}-story building with {rooms} rooms."
-
-#: app/[locale]/faq/(components)/faq-accordion.tsx
-msgid "VXpROl"
-msgstr "<strong>Orange House</strong> has an on-site manager, while <strong>Lemon House</strong> and <strong>Apple House</strong> do not."
-
-#: app/[locale]/faq/(components)/faq-accordion.tsx
-msgid "IdlCLc"
-msgstr "<strong>Orange House</strong> rent is due by the 10th of each month, while <strong>Lemon House</strong> and <strong>Apple House</strong> pay on the calendar day that matches their move-in date. For example, if you move in on the 23rd, rent is due every 23rd."
-
-#: app/[locale]/faq/(components)/faq-accordion.tsx
-msgid "Skm805"
-msgstr "All houses accommodate up to 2 guests per room."
-
-#: app/[locale]/faq/(components)/faq-accordion.tsx
-msgid "o8Ep4e"
-msgstr "Each house requires you to bring consumables and a valid ID."
-
-#: app/[locale]/faq/(components)/faq-accordion.tsx
-msgid "nyl2Xd"
-msgstr "How many floors and rooms?"
-
-#: app/[locale]/faq/(components)/faq-accordion.tsx
-msgid "tX1+3W"
-msgstr "Is there a curfew?"
-
-#: app/[locale]/faq/(components)/faq-accordion.tsx
-msgid "SMO7FS"
-msgstr "Is there a manager in residence?"
-
-#: app/[locale]/faq/(components)/faq-accordion.tsx
 msgid "8BPp0e"
 msgstr "There is no curfew in any house; please keep noise low in the early mornings and late evenings."
-
-#: app/[locale]/faq/(components)/faq-accordion.tsx
-msgid "paGHj8"
-msgstr "Up to how many people can stay in a room?"
 
 #: app/[locale]/faq/(components)/faq-accordion.tsx
 msgid "GULwvy"
@@ -196,16 +160,64 @@ msgid "Gy5gcN"
 msgstr "What extra costs are there besides rent?"
 
 #: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "IdlCLc"
+msgstr "<strong>Orange House</strong> rent is due by the 10th of each month, while <strong>Lemon House</strong> and <strong>Apple House</strong> pay on the calendar day that matches their move-in date. For example, if you move in on the 23rd, rent is due every 23rd."
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "nyl2Xd"
+msgstr "How many floors and rooms?"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "o8Ep4e"
+msgstr "Each house requires you to bring consumables and a valid ID."
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "P4yatU"
+msgstr "{floors}-story building with {rooms} rooms."
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "paGHj8"
+msgstr "Up to how many people can stay in a room?"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "Skm805"
+msgstr "All houses accommodate up to 2 guests per room."
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "SMO7FS"
+msgstr "Is there a manager in residence?"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "tX1+3W"
+msgstr "Is there a curfew?"
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
+msgid "VXpROl"
+msgstr "<strong>Orange House</strong> has an on-site manager, while <strong>Lemon House</strong> and <strong>Apple House</strong> do not."
+
+#: app/[locale]/faq/(components)/faq-accordion.tsx
 msgid "XZiy0+"
 msgstr "When do I need to pay the rent every month?"
+
+#: app/[locale]/faq/(components)/faq-card.tsx
+msgid "0AHnYX"
+msgstr "Still have questions?"
 
 #: app/[locale]/faq/(components)/faq-card.tsx
 msgid "JJU4Pf"
 msgstr "Have questions or need assistance? Our team is here to help!"
 
-#: app/[locale]/faq/(components)/faq-card.tsx
-msgid "0AHnYX"
-msgstr "Still have questions?"
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+msgid "/bGZlf"
+msgstr "Within Japan"
+
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+msgid "D+lsYf"
+msgstr "From overseas"
+
+#: app/[locale]/faq/(components)/faq-contact-table.tsx
+msgid "i1vZ6j"
+msgstr "06-6627-0790"
 
 #: app/[locale]/faq/(components)/faq-contact-table.tsx
 msgid "RcPfOK"
@@ -215,49 +227,17 @@ msgstr "+81-6-6131-6677"
 msgid "vtbcUE"
 msgstr "06-6131-6677"
 
-#: app/[locale]/faq/(components)/faq-contact-table.tsx
-msgid "i1vZ6j"
-msgstr "06-6627-0790"
-
-#: app/[locale]/faq/(components)/faq-contact-table.tsx
-msgid "D+lsYf"
-msgstr "From overseas"
-
-#: app/[locale]/faq/(components)/faq-contact-table.tsx
-msgid "/bGZlf"
-msgstr "Within Japan"
-
 #: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "QKK0sU"
-msgstr "–"
-
-#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "oqpkvs"
-msgstr "¥{price}/{minutes}min"
+msgid "7pPZTi"
+msgstr "Utility fees"
 
 #: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
 msgid "b8FiWb"
 msgstr "¥{price}/month"
 
 #: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "zhr5r8"
-msgstr "Common fees"
-
-#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "dIgBOz"
-msgstr "Deposit"
-
-#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "NnT5Qk"
-msgstr "Drying machine"
-
-#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "Q2U/ZP"
-msgstr "Each room has a private washing machine."
-
-#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "tf1lIh"
-msgstr "Free"
+msgid "bILlKo"
+msgstr "Water bill"
 
 #: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
 #: components/house/house-amenities.tsx
@@ -265,32 +245,64 @@ msgid "cdkxIP"
 msgstr "Free Wi-Fi"
 
 #: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "jCNUwv"
-msgstr "Free Wi-Fi/LAN"
-
-#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "QKFeMq"
-msgstr "Internet"
-
-#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "fnt0gq"
-msgstr "Laundromat"
-
-#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "QBxEGG"
-msgstr "Spring/Autumn: ¥{min}-¥{max}"
+msgid "dIgBOz"
+msgstr "Deposit"
 
 #: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
 msgid "E/DHKT"
 msgstr "Summer/Winter: ¥{min}-¥{max}"
 
 #: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "7pPZTi"
-msgstr "Utility fees"
+msgid "fnt0gq"
+msgstr "Laundromat"
 
 #: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
-msgid "bILlKo"
-msgstr "Water bill"
+msgid "jCNUwv"
+msgstr "Free Wi-Fi/LAN"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "NnT5Qk"
+msgstr "Drying machine"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "oqpkvs"
+msgstr "¥{price}/{minutes}min"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "Q2U/ZP"
+msgstr "Each room has a private washing machine."
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "QBxEGG"
+msgstr "Spring/Autumn: ¥{min}-¥{max}"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "QKFeMq"
+msgstr "Internet"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "QKK0sU"
+msgstr "–"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "tf1lIh"
+msgstr "Free"
+
+#: app/[locale]/faq/(components)/faq-extra-costs-table.tsx
+msgid "zhr5r8"
+msgstr "Common fees"
+
+#: app/[locale]/faq/layout.tsx
+msgid "5C7IgN"
+msgstr "Here you'll find the key information to make the most of your stay. If you don't see your question here, please contact us by phone or email."
+
+#: app/[locale]/faq/layout.tsx
+msgid "7Rm1x6"
+msgstr "Frequently asked questions"
+
+#: app/[locale]/faq/layout.tsx
+msgid "r67llZ"
+msgstr "Find answers to common questions about our share houses."
 
 #: app/[locale]/faq/layout.tsx
 #: components/forms/contact-form.tsx
@@ -298,47 +310,35 @@ msgstr "Water bill"
 msgid "sy+pv5"
 msgstr "Email"
 
-#: app/[locale]/faq/layout.tsx
-msgid "r67llZ"
-msgstr "Find answers to common questions about our share houses."
-
-#: app/[locale]/faq/layout.tsx
-msgid "7Rm1x6"
-msgstr "Frequently asked questions"
-
-#: app/[locale]/faq/layout.tsx
-msgid "5C7IgN"
-msgstr "Here you'll find the key information to make the most of your stay. If you don't see your question here, please contact us by phone or email."
-
-#: app/[locale]/layout.tsx
-msgid "yZ+nWx"
-msgstr "Founded in 1991. We have 3 share houses in the city of Osaka."
-
 #: app/[locale]/layout.tsx
 #: app/manifest.ts
 #: components/site-header.tsx
 msgid "8FQpM9"
 msgstr "Share House Osaka"
 
-#: app/[locale]/page.tsx
-msgid "WnQ/AZ"
-msgstr "Contact us"
+#: app/[locale]/layout.tsx
+msgid "yZ+nWx"
+msgstr "Founded in 1991. We have 3 share houses in the city of Osaka."
 
 #: app/[locale]/page.tsx
-msgid "oVIUb0"
-msgstr "Experience modern co-living in beautifully designed spaces. Connect with like-minded individuals while enjoying your own private room and shared common areas."
-
-#: app/[locale]/page.tsx
-msgid "eVPFdZ"
-msgstr "Our share houses"
+msgid "2FvSoa"
+msgstr "Vibrant <block>share house</block> community"
 
 #: app/[locale]/page.tsx
 msgid "CIXEgz"
 msgstr "Three unique homes crafted for comfort, connection, and style in the heart of Osaka."
 
 #: app/[locale]/page.tsx
-msgid "2FvSoa"
-msgstr "Vibrant <block>share house</block> community"
+msgid "eVPFdZ"
+msgstr "Our share houses"
+
+#: app/[locale]/page.tsx
+msgid "oVIUb0"
+msgstr "Experience modern co-living in beautifully designed spaces. Connect with like-minded individuals while enjoying your own private room and shared common areas."
+
+#: app/[locale]/page.tsx
+msgid "WnQ/AZ"
+msgstr "Contact us"
 
 #: app/manifest.ts
 msgid "2Urru8"
@@ -353,6 +353,30 @@ msgid "wSZR47"
 msgstr "Submit"
 
 #: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+msgid "5MDGuM"
+msgstr "Enter your email"
+
+#: components/forms/contact-form.tsx
+#: components/forms/tour-form.tsx
+msgid "6uhpBF"
+msgstr "Let us know any additional information or questions."
+
+#: components/forms/contact-form.tsx
+msgid "DrcOOR"
+msgstr "Message must be at least {min} characters."
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+msgid "DX9QSt"
+msgstr "Enter your name"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+msgid "HAlOn1"
+msgstr "Name"
+
+#: components/forms/contact-form.tsx
 #: components/forms/move-in-form.tsx
 #: components/forms/tour-form.tsx
 msgid "mF27aJ"
@@ -365,42 +389,18 @@ msgid "pZGF0Z"
 msgstr "Do not include sensitive information such as your home address or credit card number."
 
 #: components/forms/contact-form.tsx
-#: components/forms/index.tsx
-msgid "5MDGuM"
-msgstr "Enter your email"
-
-#: components/forms/contact-form.tsx
-#: components/forms/index.tsx
-msgid "DX9QSt"
-msgstr "Enter your name"
-
-#: components/forms/contact-form.tsx
-msgid "ttbGvm"
-msgstr "Have questions about our services, pricing, or anything else? We're here to help."
-
-#: components/forms/contact-form.tsx
-#: components/forms/tour-form.tsx
-msgid "6uhpBF"
-msgstr "Let us know any additional information or questions."
-
-#: components/forms/contact-form.tsx
 #: components/forms/move-in-form.tsx
 #: components/forms/tour-form.tsx
 msgid "T7Ry38"
 msgstr "Message"
 
 #: components/forms/contact-form.tsx
-msgid "DrcOOR"
-msgstr "Message must be at least {min} characters."
+msgid "ttbGvm"
+msgstr "Have questions about our services, pricing, or anything else? We're here to help."
 
 #: components/forms/contact-form.tsx
 msgid "vi98ug"
 msgstr "Message must be at most {max} characters."
-
-#: components/forms/contact-form.tsx
-#: components/forms/index.tsx
-msgid "HAlOn1"
-msgstr "Name"
 
 #: components/forms/fields/message-field.tsx
 msgid "TctHNm"
@@ -411,96 +411,109 @@ msgid "V4KNjk"
 msgstr "optional"
 
 #: components/forms/index.tsx
-msgid "d1OgED"
-msgstr "(optional)"
-
-#: components/forms/index.tsx
-msgid "WNx7jR"
-msgstr "070-1234-5678"
-
-#: components/forms/index.tsx
-msgid "9oNQSC"
-msgstr "Age"
-
-#: components/forms/index.tsx
-msgid "THjKDn"
-msgstr "Enter your age"
-
-#: components/forms/index.tsx
-msgid "74BYXL"
-msgstr "Female"
-
-#: components/forms/index.tsx
-msgid "m8/n8c"
-msgstr "Gender"
-
-#: components/forms/index.tsx
-msgid "7u8GJU"
-msgstr "How old are you?"
-
-#: components/forms/index.tsx
-msgid "MgGE60"
-msgstr "How should we address you?"
-
-#: components/forms/index.tsx
-msgid "W3t7Ob"
-msgstr "Japanese"
-
-#: components/forms/index.tsx
-msgid "7uSszV"
-msgstr "Let us know your nationality."
-
-#: components/forms/index.tsx
-msgid "jIbAky"
-msgstr "Male"
+msgid "//7Vxj"
+msgstr "Select your gender"
 
 #: components/forms/index.tsx
 msgid "4FsZv8"
 msgstr "Nationality"
 
 #: components/forms/index.tsx
-msgid "//7Vxj"
-msgstr "Select your gender"
+msgid "74BYXL"
+msgstr "Female"
+
+#: components/forms/index.tsx
+msgid "7u8GJU"
+msgstr "How old are you?"
+
+#: components/forms/index.tsx
+msgid "7uSszV"
+msgstr "Let us know your nationality."
+
+#: components/forms/index.tsx
+msgid "9oNQSC"
+msgstr "Age"
+
+#: components/forms/index.tsx
+msgid "d1OgED"
+msgstr "(optional)"
 
 #: components/forms/index.tsx
 msgid "FnDJgK"
 msgstr "We may use this number to contact you on the visit day."
 
 #: components/forms/index.tsx
+msgid "jIbAky"
+msgstr "Male"
+
+#: components/forms/index.tsx
+msgid "m8/n8c"
+msgstr "Gender"
+
+#: components/forms/index.tsx
+msgid "MgGE60"
+msgstr "How should we address you?"
+
+#: components/forms/index.tsx
 msgid "RcT6iF"
 msgstr "We'll use this email to share with you more details."
+
+#: components/forms/index.tsx
+msgid "THjKDn"
+msgstr "Enter your age"
+
+#: components/forms/index.tsx
+msgid "W3t7Ob"
+msgstr "Japanese"
+
+#: components/forms/index.tsx
+msgid "WNx7jR"
+msgstr "070-1234-5678"
 
 #: components/forms/index.tsx
 msgid "ZJd1Zi"
 msgstr "What is your gender?"
 
 #: components/forms/move-in-form.tsx
-msgid "gONomg"
-msgstr "1 month or more"
-
-#: components/forms/move-in-form.tsx
-msgid "B/+Qpg"
-msgstr "3 months or more"
-
-#: components/forms/move-in-form.tsx
-msgid "7etk18"
-msgstr "Choose a duration"
-
-#: components/forms/move-in-form.tsx
-msgid "WW6ryD"
-msgstr "How long would you like to stay?"
-
-#: components/forms/move-in-form.tsx
-msgid "iYdfhX"
-msgstr "Length of stay"
+#: components/forms/tour-form.tsx
+msgid "0Gme/N"
+msgstr "You submitted the following values:"
 
 #: components/forms/move-in-form.tsx
 msgid "3B9akn"
 msgstr "Long term"
 
 #: components/forms/move-in-form.tsx
-msgid "v5Q9UE"
-msgstr "Move-in date"
+msgid "6TytT+"
+msgstr "Ready to become a resident? Let us know your preferences and timeline."
+
+#: components/forms/move-in-form.tsx
+msgid "7etk18"
+msgstr "Choose a duration"
+
+#: components/forms/move-in-form.tsx
+msgid "B/+Qpg"
+msgstr "3 months or more"
+
+#: components/forms/move-in-form.tsx
+msgid "CUIzCd"
+msgstr "Which places would you like to move in?"
+
+#: components/forms/move-in-form.tsx
+msgid "d6fKVG"
+msgstr "Share any special requirements for your move-in or questions you might have."
+
+#: components/forms/move-in-form.tsx
+msgid "gONomg"
+msgstr "1 month or more"
+
+#: components/forms/move-in-form.tsx
+msgid "HXwvaE"
+msgstr "When would you like to move in?"
+
+#: components/forms/move-in-form.tsx
+msgid "iYdfhX"
+msgstr "Length of stay"
 
 #: components/forms/move-in-form.tsx
 #: components/forms/tour-form.tsx
@@ -508,61 +521,44 @@ msgid "QQInFS"
 msgstr "Places"
 
 #: components/forms/move-in-form.tsx
-msgid "6TytT+"
-msgstr "Ready to become a resident? Let us know your preferences and timeline."
+msgid "v5Q9UE"
+msgstr "Move-in date"
 
 #: components/forms/move-in-form.tsx
-msgid "d6fKVG"
-msgstr "Share any special requirements for your move-in or questions you might have."
-
-#: components/forms/move-in-form.tsx
-msgid "HXwvaE"
-msgstr "When would you like to move in?"
-
-#: components/forms/move-in-form.tsx
-msgid "CUIzCd"
-msgstr "Which places would you like to move in?"
-
-#: components/forms/move-in-form.tsx
-#: components/forms/tour-form.tsx
-msgid "0Gme/N"
-msgstr "You submitted the following values:"
-
-#: components/forms/tour-form.tsx
-msgid "fyyJ1u"
-msgstr "Our operating hours are from 10AM to 8PM."
-
-#: components/forms/tour-form.tsx
-msgid "neEJEK"
-msgstr "Tour date"
-
-#: components/forms/tour-form.tsx
-msgid "6dV8cs"
-msgstr "Tour hour"
+msgid "WW6ryD"
+msgstr "How long would you like to stay?"
 
 #: components/forms/tour-form.tsx
 msgid "+l9/4s"
 msgstr "When would you like to get a tour?"
 
 #: components/forms/tour-form.tsx
+msgid "6dV8cs"
+msgstr "Tour hour"
+
+#: components/forms/tour-form.tsx
+msgid "fyyJ1u"
+msgstr "Our operating hours are from 10AM to 8PM."
+
+#: components/forms/tour-form.tsx
 msgid "K9zlhY"
 msgstr "Which places would you like to get a tour?"
+
+#: components/forms/tour-form.tsx
+msgid "neEJEK"
+msgstr "Tour date"
 
 #: components/gallery/gallery-modal.tsx
 msgid "5n7kbM"
 msgstr "Home Gallery"
 
 #: components/gallery/house-gallery-client.tsx
-msgid "XPDhJW"
-msgstr "Building Features"
-
-#: components/gallery/house-gallery-client.tsx
 msgid "0LUdoh"
 msgstr "Common Spaces"
 
 #: components/gallery/house-gallery-client.tsx
-msgid "Z/P45E"
-msgstr "Facilities"
+msgid "2Ml/7i"
+msgstr "Room"
 
 #: components/gallery/house-gallery-client.tsx
 msgid "7ruLSs"
@@ -578,332 +574,340 @@ msgid "IZlYSx"
 msgstr "Neighborhood"
 
 #: components/gallery/house-gallery-client.tsx
-msgid "2Ml/7i"
-msgstr "Room"
+msgid "XPDhJW"
+msgstr "Building Features"
 
-#: components/house/house-about.tsx
-msgid "d3oIA3"
-msgstr "14 minutes walk to Namba"
-
-#: components/house/house-about.tsx
-msgid "lcEouh"
-msgstr "About this place"
-
-#: components/house/house-about.tsx
-msgid "WS/qHO"
-msgstr "Apple House places residents within a one-minute walk of Daikokucho Station while keeping Namba in easy reach. Every private room includes a full bathroom and kitchen, delivering condo-like comfort for medium and long stays."
-
-#: components/house/house-about.tsx
-msgid "PuqmX5"
-msgstr "Community life and international mingle in the center of Osaka"
-
-#: components/house/house-about.tsx
-msgid "FTgbV4"
-msgstr "Lemon House offers private rooms and select dormitory options just moments from the heart of Namba. The compact building keeps an intimate feel while delivering everything needed for short and long-term stays."
-
-#: components/house/house-about.tsx
-msgid "5rfphS"
-msgstr "Long‑stay discounts available"
-
-#: components/house/house-about.tsx
-msgid "JMovh6"
-msgstr "Lounge with a beautiful, fully equipped kitchen"
+#: components/gallery/house-gallery-client.tsx
+msgid "Z/P45E"
+msgstr "Facilities"
 
 #: components/house/house-about.tsx
 msgid "+6Rg8T"
 msgstr "Orange House is a private room accommodation located beside the Osaka city center. The house combines traditional Japanese styling with everyday conveniences, making it a calm base for longer stays in the Abeno area."
 
 #: components/house/house-about.tsx
-msgid "trsdpu"
-msgstr "Private rooms with kitchen (12 m²)"
+msgid "0682K0"
+msgstr "Traditional rooftop lounge (100 m²) with Abeno Harukas views"
 
 #: components/house/house-about.tsx
-msgid "CXXKk+"
-msgstr "Private rooms with kitchen and bathroom (11 m²)"
-
-#: components/house/house-about.tsx
-msgid "vQeYIu"
-msgstr "Private rooms with kitchens and bathrooms (19 m²)"
+msgid "5rfphS"
+msgstr "Long‑stay discounts available"
 
 #: components/house/house-about.tsx
 msgid "aWpBzj"
 msgstr "Show more"
 
 #: components/house/house-about.tsx
+msgid "CXXKk+"
+msgstr "Private rooms with kitchen and bathroom (11 m²)"
+
+#: components/house/house-about.tsx
+msgid "d3oIA3"
+msgstr "14 minutes walk to Namba"
+
+#: components/house/house-about.tsx
+msgid "FTgbV4"
+msgstr "Lemon House offers private rooms and select dormitory options just moments from the heart of Namba. The compact building keeps an intimate feel while delivering everything needed for short and long-term stays."
+
+#: components/house/house-about.tsx
+msgid "JMovh6"
+msgstr "Lounge with a beautiful, fully equipped kitchen"
+
+#: components/house/house-about.tsx
+msgid "lcEouh"
+msgstr "About this place"
+
+#: components/house/house-about.tsx
+msgid "PuqmX5"
+msgstr "Community life and international mingle in the center of Osaka"
+
+#: components/house/house-about.tsx
 msgid "Ru8Kgx"
 msgstr "Spacious rooms, great for couples and friends"
 
 #: components/house/house-about.tsx
-msgid "0682K0"
-msgstr "Traditional rooftop lounge (100 m²) with Abeno Harukas views"
+msgid "trsdpu"
+msgstr "Private rooms with kitchen (12 m²)"
+
+#: components/house/house-about.tsx
+msgid "vQeYIu"
+msgstr "Private rooms with kitchens and bathrooms (19 m²)"
+
+#: components/house/house-about.tsx
+msgid "WS/qHO"
+msgstr "Apple House places residents within a one-minute walk of Daikokucho Station while keeping Namba in easy reach. Every private room includes a full bathroom and kitchen, delivering condo-like comfort for medium and long stays."
 
 #: components/house/house-amenities.tsx
 msgid "/scXB/"
 msgstr "Accommodation"
 
 #: components/house/house-amenities.tsx
-msgid "3E120V"
-msgstr "Air conditioning & heating"
-
-#: components/house/house-amenities.tsx
-msgid "ttNkgQ"
-msgstr "Appliances (vacuum, iron)"
-
-#: components/house/house-amenities.tsx
-msgid "9euxfQ"
-msgstr "Bathroom"
-
-#: components/house/house-amenities.tsx
-msgid "TYfnJi"
-msgstr "Bathroom with shower & bathtub"
-
-#: components/house/house-amenities.tsx
-msgid "b9a4ul"
-msgstr "Bicycle parking"
-
-#: components/house/house-amenities.tsx
-msgid "sKvUcr"
-msgstr "Building & access"
-
-#: components/house/house-amenities.tsx
-msgid "mRQJ/r"
-msgstr "Coffee & tea corner"
-
-#: components/house/house-amenities.tsx
-msgid "B0hPmc"
-msgstr "Coin"
-
-#: components/house/house-amenities.tsx
-msgid "vCAGz0"
-msgstr "Common areas"
-
-#: components/house/house-amenities.tsx
-msgid "ndZhOs"
-msgstr "Dryer"
-
-#: components/house/house-amenities.tsx
-msgid "c6RKmB"
-msgstr "Drying space"
-
-#: components/house/house-amenities.tsx
-msgid "FXD7sf"
-msgstr "Elevator"
-
-#: components/house/house-amenities.tsx
-msgid "TeepuU"
-msgstr "Fully furnished rooms ({size} m²)"
-
-#: components/house/house-amenities.tsx
-msgid "UXyQQq"
-msgstr "Internet & climate"
-
-#: components/house/house-amenities.tsx
-msgid "uwVj77"
-msgstr "Kitchen"
-
-#: components/house/house-amenities.tsx
 msgid "0hixvX"
 msgstr "Kitchen & dining"
-
-#: components/house/house-amenities.tsx
-msgid "Tr8PEg"
-msgstr "Large refrigerator"
-
-#: components/house/house-amenities.tsx
-msgid "IXB/3I"
-msgstr "Laundry"
-
-#: components/house/house-amenities.tsx
-msgid "YV+jwf"
-msgstr "Lounge"
-
-#: components/house/house-amenities.tsx
-msgid "N+Pe3p"
-msgstr "Lounge kitchen with oven"
 
 #: components/house/house-amenities.tsx
 msgid "2/NFiJ"
 msgstr "Mailbox"
 
 #: components/house/house-amenities.tsx
-msgid "I5jAHq"
-msgstr "Microwave & toaster"
-
-#: components/house/house-amenities.tsx
-msgid "n/Sbdn"
-msgstr "Microwave, toaster & rice cooker"
-
-#: components/house/house-amenities.tsx
-msgid "l8yhdJ"
-msgstr "Monthly parties"
-
-#: components/house/house-amenities.tsx
-msgid "viXE32"
-msgstr "Private"
-
-#: components/house/house-amenities.tsx
-msgid "GCejuO"
-msgstr "Refrigerator"
-
-#: components/house/house-amenities.tsx
-msgid "YrrLhl"
-msgstr "Refrigerator & freezer"
-
-#: components/house/house-amenities.tsx
-msgid "CiPFk9"
-msgstr "Rooftop lounge (100 m²)"
-
-#: components/house/house-amenities.tsx
-msgid "Ul7I0/"
-msgstr "Secure entry"
-
-#: components/house/house-amenities.tsx
-msgid "kWI6zX"
-msgstr "Shared"
-
-#: components/house/house-amenities.tsx
-msgid "xUDFXd"
-msgstr "Show all {count} amenities"
-
-#: components/house/house-amenities.tsx
-msgid "eYevCG"
-msgstr "Shower"
-
-#: components/house/house-amenities.tsx
-msgid "e7KKoF"
-msgstr "Spacious rooms (19 m²)"
+msgid "3E120V"
+msgstr "Air conditioning & heating"
 
 #: components/house/house-amenities.tsx
 msgid "3UWUcz"
 msgstr "Tableware"
 
 #: components/house/house-amenities.tsx
-msgid "OF5SMY"
-msgstr "TV with Netflix, Blu-ray, cable"
+msgid "9euxfQ"
+msgstr "Bathroom"
 
 #: components/house/house-amenities.tsx
 msgid "a5dENK"
 msgstr "Washing machine"
 
 #: components/house/house-amenities.tsx
-msgid "wB7Mb3"
-msgstr "Washlet toilet"
+msgid "B0hPmc"
+msgstr "Coin"
+
+#: components/house/house-amenities.tsx
+msgid "b9a4ul"
+msgstr "Bicycle parking"
+
+#: components/house/house-amenities.tsx
+msgid "c6RKmB"
+msgstr "Drying space"
+
+#: components/house/house-amenities.tsx
+msgid "CiPFk9"
+msgstr "Rooftop lounge (100 m²)"
+
+#: components/house/house-amenities.tsx
+msgid "e7KKoF"
+msgstr "Spacious rooms (19 m²)"
+
+#: components/house/house-amenities.tsx
+msgid "eYevCG"
+msgstr "Shower"
+
+#: components/house/house-amenities.tsx
+msgid "FXD7sf"
+msgstr "Elevator"
+
+#: components/house/house-amenities.tsx
+msgid "GCejuO"
+msgstr "Refrigerator"
+
+#: components/house/house-amenities.tsx
+msgid "I5jAHq"
+msgstr "Microwave & toaster"
 
 #: components/house/house-amenities.tsx
 msgid "ivHXJ+"
 msgstr "What this place offers"
 
-#: components/house/house-building.tsx
-msgid "QOn+ti"
-msgstr "Floors"
+#: components/house/house-amenities.tsx
+msgid "IXB/3I"
+msgstr "Laundry"
+
+#: components/house/house-amenities.tsx
+msgid "kWI6zX"
+msgstr "Shared"
+
+#: components/house/house-amenities.tsx
+msgid "l8yhdJ"
+msgstr "Monthly parties"
+
+#: components/house/house-amenities.tsx
+msgid "mRQJ/r"
+msgstr "Coffee & tea corner"
+
+#: components/house/house-amenities.tsx
+msgid "n/Sbdn"
+msgstr "Microwave, toaster & rice cooker"
+
+#: components/house/house-amenities.tsx
+msgid "N+Pe3p"
+msgstr "Lounge kitchen with oven"
+
+#: components/house/house-amenities.tsx
+msgid "ndZhOs"
+msgstr "Dryer"
+
+#: components/house/house-amenities.tsx
+msgid "OF5SMY"
+msgstr "TV with Netflix, Blu-ray, cable"
+
+#: components/house/house-amenities.tsx
+msgid "sKvUcr"
+msgstr "Building & access"
+
+#: components/house/house-amenities.tsx
+msgid "TeepuU"
+msgstr "Fully furnished rooms ({size} m²)"
+
+#: components/house/house-amenities.tsx
+msgid "Tr8PEg"
+msgstr "Large refrigerator"
+
+#: components/house/house-amenities.tsx
+msgid "ttNkgQ"
+msgstr "Appliances (vacuum, iron)"
+
+#: components/house/house-amenities.tsx
+msgid "TYfnJi"
+msgstr "Bathroom with shower & bathtub"
+
+#: components/house/house-amenities.tsx
+msgid "Ul7I0/"
+msgstr "Secure entry"
+
+#: components/house/house-amenities.tsx
+msgid "uwVj77"
+msgstr "Kitchen"
+
+#: components/house/house-amenities.tsx
+msgid "UXyQQq"
+msgstr "Internet & climate"
+
+#: components/house/house-amenities.tsx
+msgid "vCAGz0"
+msgstr "Common areas"
+
+#: components/house/house-amenities.tsx
+msgid "viXE32"
+msgstr "Private"
+
+#: components/house/house-amenities.tsx
+msgid "wB7Mb3"
+msgstr "Washlet toilet"
+
+#: components/house/house-amenities.tsx
+msgid "xUDFXd"
+msgstr "Show all {count} amenities"
+
+#: components/house/house-amenities.tsx
+msgid "YrrLhl"
+msgstr "Refrigerator & freezer"
+
+#: components/house/house-amenities.tsx
+msgid "YV+jwf"
+msgstr "Lounge"
 
 #: components/house/house-building.tsx
 msgid "cNXJJO"
 msgstr "Min Rent"
 
 #: components/house/house-building.tsx
+msgid "QOn+ti"
+msgstr "Floors"
+
+#: components/house/house-building.tsx
 msgid "xIHOhT"
 msgstr "Rooms"
-
-#: components/house/house-location-modal.tsx
-msgid "jqIfGe"
-msgstr "¥100 shop by Daikokucho Station"
-
-#: components/house/house-location-modal.tsx
-msgid "9tsQ3v"
-msgstr "24-hour supermarket right next to the guest house and another large supermarket about 1 minute away"
-
-#: components/house/house-location-modal.tsx
-msgid "x89m8i"
-msgstr "300m height! Only 15 minutes walk to the highest building in Japan “Abeno Harukas” Located near popular city attractions, with great public transportation to places like Osaka Castle, Osaka Aquarium Kaiyukan, Universal Studios Japan, Tsūtenkaku Tower. Only a few minutes walk to the nearest stations. Within walking distance, there are supermarkets, convenience stores, ¥100 shops, fitness center, bicycle shop and the ward office."
-
-#: components/house/house-location-modal.tsx
-msgid "DkazeT"
-msgstr "Abeno Harukas about 15 minutes on foot; Qs Mall about 12 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "kSjahm"
-msgstr "Convenience store and post office about 3 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "Vw97e8"
-msgstr "Conveyor belt sushi restaurant about 3 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "sryQnS"
-msgstr "Daikokucho Station (Subway Midosuji and Yotsubashi Lines), Exit 2 — about 1 minute on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "iRBg5W"
-msgstr "Discount shop about 5 minutes on foot plus additional convenience stores within walking distance"
-
-#: components/house/house-location-modal.tsx
-msgid "UJuYGX"
-msgstr "Ebisucho Station — about 11 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "K0XAtn"
-msgstr "Fuminosato Station (Subway Tanimachi Line), Exit 6 — about 3 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "E5RUex"
-msgstr "Getting around"
-
-#: components/house/house-location-modal.tsx
-msgid "qOE+t4"
-msgstr "Imamiya Station / Imamiya-Ebisu — about 7 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "VLf3bw"
-msgstr "Namba Station (Subway Midosuji Line), Exit 4 — about 10 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "RdETMb"
-msgstr "Namba Stations (various lines) — about 15 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "vnTpcm"
-msgstr "Nankai Namba Station (South Exit) — about 8 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "GtNLSe"
-msgstr "Nihonbashi Station (Subway Sakaisuji Line), Exit 10 — about 8 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "1W6VRj"
-msgstr "Only 1 minute walk from Daikokucho Station (Subway Midosuji Line, Yotsubashi Line). Just by a 24 hour open supermarket. Near 200 year old Kizu Market, and large public bath with hot stone spa. Walking distance from Namba, so you can enjoy the night life without worrying the last trains."
-
-#: components/house/house-location-modal.tsx
-msgid "BSkyJV"
-msgstr "Only 8 minutes walk to Namba! Great location, enjoy night life without worrying the last trains. Great access to anywhere in Osaka. Perfect for sightseeing or longer stay. No curfew."
-
-#: components/house/house-location-modal.tsx
-msgid "reJlTE"
-msgstr "Post office about 2 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "js8anW"
-msgstr "Showacho Station (Subway Midosuji Line), Exit 2 — about 7 minutes on foot"
-
-#: components/house/house-location-modal.tsx
-msgid "a7VuWb"
-msgstr "Supermarket at Showacho Station"
 
 #: components/house/house-location-modal.tsx
 msgid "+0NiKB"
 msgstr "Supermarkets nearby at roughly 2, 4, and 6 minutes on foot"
 
 #: components/house/house-location-modal.tsx
-msgid "8fnMlK"
-msgstr "Supermarkets within about 5 minutes on foot"
+msgid "1W6VRj"
+msgstr "Only 1 minute walk from Daikokucho Station (Subway Midosuji Line, Yotsubashi Line). Just by a 24 hour open supermarket. Near 200 year old Kizu Market, and large public bath with hot stone spa. Walking distance from Namba, so you can enjoy the night life without worrying the last trains."
 
 #: components/house/house-location-modal.tsx
 msgid "2dEHSh"
 msgstr "Tennoji / Abenobashi — about 15 minutes on foot"
 
 #: components/house/house-location-modal.tsx
+msgid "8fnMlK"
+msgstr "Supermarkets within about 5 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "9tsQ3v"
+msgstr "24-hour supermarket right next to the guest house and another large supermarket about 1 minute away"
+
+#: components/house/house-location-modal.tsx
+msgid "a7VuWb"
+msgstr "Supermarket at Showacho Station"
+
+#: components/house/house-location-modal.tsx
+msgid "BSkyJV"
+msgstr "Only 8 minutes walk to Namba! Great location, enjoy night life without worrying the last trains. Great access to anywhere in Osaka. Perfect for sightseeing or longer stay. No curfew."
+
+#: components/house/house-location-modal.tsx
+msgid "DkazeT"
+msgstr "Abeno Harukas about 15 minutes on foot; Qs Mall about 12 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "E5RUex"
+msgstr "Getting around"
+
+#: components/house/house-location-modal.tsx
+msgid "GtNLSe"
+msgstr "Nihonbashi Station (Subway Sakaisuji Line), Exit 10 — about 8 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "iRBg5W"
+msgstr "Discount shop about 5 minutes on foot plus additional convenience stores within walking distance"
+
+#: components/house/house-location-modal.tsx
+msgid "jqIfGe"
+msgstr "¥100 shop by Daikokucho Station"
+
+#: components/house/house-location-modal.tsx
+msgid "js8anW"
+msgstr "Showacho Station (Subway Midosuji Line), Exit 2 — about 7 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "K0XAtn"
+msgstr "Fuminosato Station (Subway Tanimachi Line), Exit 6 — about 3 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "kSjahm"
+msgstr "Convenience store and post office about 3 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "qOE+t4"
+msgstr "Imamiya Station / Imamiya-Ebisu — about 7 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "RdETMb"
+msgstr "Namba Stations (various lines) — about 15 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "reJlTE"
+msgstr "Post office about 2 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "sryQnS"
+msgstr "Daikokucho Station (Subway Midosuji and Yotsubashi Lines), Exit 2 — about 1 minute on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "UJuYGX"
+msgstr "Ebisucho Station — about 11 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "VLf3bw"
+msgstr "Namba Station (Subway Midosuji Line), Exit 4 — about 10 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "vnTpcm"
+msgstr "Nankai Namba Station (South Exit) — about 8 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "Vw97e8"
+msgstr "Conveyor belt sushi restaurant about 3 minutes on foot"
+
+#: components/house/house-location-modal.tsx
+msgid "x89m8i"
+msgstr "300m height! Only 15 minutes walk to the highest building in Japan “Abeno Harukas” Located near popular city attractions, with great public transportation to places like Osaka Castle, Osaka Aquarium Kaiyukan, Universal Studios Japan, Tsūtenkaku Tower. Only a few minutes walk to the nearest stations. Within walking distance, there are supermarkets, convenience stores, ¥100 shops, fitness center, bicycle shop and the ward office."
+
+#: components/house/house-location-modal.tsx
 msgid "XCwRZx"
 msgstr "What's nearby"
+
+#: components/house/house-location.tsx
+msgid "dHDFQ1"
+msgstr "Where you'll be"
 
 #: components/house/house-location.tsx
 msgid "lPIz84"
@@ -913,89 +917,37 @@ msgstr "Excellent access on the Subway Midosuji Line keeps you connected across 
 msgid "qPVf+/"
 msgstr "Walking distance to Namba and reach Daikokucho Station in just one minute."
 
-#: components/house/house-location.tsx
-msgid "dHDFQ1"
-msgstr "Where you'll be"
-
 #: components/house/house-pricing.tsx
-msgid "GhFyTt"
-msgstr "+¥5,000 per month for second person"
-
-#: components/house/house-pricing.tsx
-msgid "R548nu"
-msgstr "¥40,000 ~ ¥48,000 per month (1 person)"
-
-#: components/house/house-pricing.tsx
-msgid "3UUUTR"
-msgstr "¥45,000 per month (includes utilities and service fee)"
-
-#: components/house/house-pricing.tsx
-msgid "YrHExQ"
-msgstr "¥50,000 ~ ¥70,000 per month (up to 2 people per room)"
-
-#: components/house/house-pricing.tsx
-msgid "KNvfvd"
-msgstr "¥80,000 ~ ¥95,000 per month."
-
-#: components/house/house-pricing.tsx
-msgid "OMlFe/"
-msgstr "2nd month: Save ¥1,000"
-
-#: components/house/house-pricing.tsx
-msgid "N/lD1K"
-msgstr "3rd month: Save ¥2,000"
-
-#: components/house/house-pricing.tsx
-msgid "FZ2Tto"
-msgstr "After 6 months: Save ¥5,000 every month"
-
-#: components/house/house-pricing.tsx
-msgid "3ppfk2"
-msgstr "Co-ed, 3 beds per room, shared bathroom and kitchen."
-
-#: components/house/house-pricing.tsx
-msgid "Xf6xpu"
-msgstr "Deposit: ¥30,000 (returned when you leave, if no damage)"
+msgid "/3p+Wq"
+msgstr "Minimum stay: 1 month."
 
 #: components/house/house-pricing.tsx
 msgid "3NQHep"
 msgstr "Discounts for 3-month and 6-month stays."
 
 #: components/house/house-pricing.tsx
-msgid "WCvSi9"
-msgstr "Dormitory Plan"
+msgid "3ppfk2"
+msgstr "Co-ed, 3 beds per room, shared bathroom and kitchen."
 
 #: components/house/house-pricing.tsx
-msgid "94l3rL"
-msgstr "Dryer: ¥100"
-
-#: components/house/house-pricing.tsx
-msgid "QKRGVN"
-msgstr "Dryer: ¥100 per 20 minutes"
-
-#: components/house/house-pricing.tsx
-msgid "WqjGOA"
-msgstr "Long Stay Discount"
-
-#: components/house/house-pricing.tsx
-msgid "/3p+Wq"
-msgstr "Minimum stay: 1 month."
-
-#: components/house/house-pricing.tsx
-msgid "w1Dv+W"
-msgstr "Other Fees"
+msgid "3UUUTR"
+msgstr "¥45,000 per month (includes utilities and service fee)"
 
 #: components/house/house-pricing.tsx
 msgid "5Wwopw"
 msgstr "Pricing"
 
 #: components/house/house-pricing.tsx
-msgid "tmmKme"
-msgstr "Rent"
+msgid "6Szle7"
+msgstr "Stays under 3 months: All fees included."
 
 #: components/house/house-pricing.tsx
-msgid "WXykaR"
-msgstr "Service fee: ¥10,000 per month"
+msgid "94l3rL"
+msgstr "Dryer: ¥100"
+
+#: components/house/house-pricing.tsx
+msgid "aWLxDr"
+msgstr "Washing machine: Free (on rooftop)"
 
 #: components/house/house-pricing.tsx
 msgid "C5HBqG"
@@ -1006,24 +958,72 @@ msgid "dxl4bp"
 msgstr "Short Stay"
 
 #: components/house/house-pricing.tsx
-msgid "6Szle7"
-msgstr "Stays under 3 months: All fees included."
+msgid "FZ2Tto"
+msgstr "After 6 months: Save ¥5,000 every month"
 
 #: components/house/house-pricing.tsx
-msgid "tqgc7W"
-msgstr "Utilities: About ¥3,000 ~ ¥4,000 per month (you pay what you use)"
+msgid "GhFyTt"
+msgstr "+¥5,000 per month for second person"
 
 #: components/house/house-pricing.tsx
 msgid "k/nd32"
 msgstr "Utilities: About ¥3,000 per month (you pay what you use)"
 
 #: components/house/house-pricing.tsx
+msgid "KNvfvd"
+msgstr "¥80,000 ~ ¥95,000 per month."
+
+#: components/house/house-pricing.tsx
+msgid "N/lD1K"
+msgstr "3rd month: Save ¥2,000"
+
+#: components/house/house-pricing.tsx
 msgid "NjihB4"
 msgstr "Washing machine: Free"
 
 #: components/house/house-pricing.tsx
-msgid "aWLxDr"
-msgstr "Washing machine: Free (on rooftop)"
+msgid "OMlFe/"
+msgstr "2nd month: Save ¥1,000"
+
+#: components/house/house-pricing.tsx
+msgid "QKRGVN"
+msgstr "Dryer: ¥100 per 20 minutes"
+
+#: components/house/house-pricing.tsx
+msgid "R548nu"
+msgstr "¥40,000 ~ ¥48,000 per month (1 person)"
+
+#: components/house/house-pricing.tsx
+msgid "tmmKme"
+msgstr "Rent"
+
+#: components/house/house-pricing.tsx
+msgid "tqgc7W"
+msgstr "Utilities: About ¥3,000 ~ ¥4,000 per month (you pay what you use)"
+
+#: components/house/house-pricing.tsx
+msgid "w1Dv+W"
+msgstr "Other Fees"
+
+#: components/house/house-pricing.tsx
+msgid "WCvSi9"
+msgstr "Dormitory Plan"
+
+#: components/house/house-pricing.tsx
+msgid "WqjGOA"
+msgstr "Long Stay Discount"
+
+#: components/house/house-pricing.tsx
+msgid "WXykaR"
+msgstr "Service fee: ¥10,000 per month"
+
+#: components/house/house-pricing.tsx
+msgid "Xf6xpu"
+msgstr "Deposit: ¥30,000 (returned when you leave, if no damage)"
+
+#: components/house/house-pricing.tsx
+msgid "YrHExQ"
+msgstr "¥50,000 ~ ¥70,000 per month (up to 2 people per room)"
 
 #: components/house/mobile-hero-image.tsx
 msgid "YeS7ph"
@@ -1034,216 +1034,208 @@ msgid "DaOEHy"
 msgstr "Show all photos"
 
 #: components/language-switcher.tsx
-msgid "GsBRWL"
-msgstr "Languages"
-
-#: components/language-switcher.tsx
 msgid "eVlu1R"
 msgstr "Select language"
 
-#: components/legal-notice-dialog.tsx
-msgid "Zxigpu"
-msgstr "👤 Representative Director: Kenji Hisamoto"
-
-#: components/legal-notice-dialog.tsx
-msgid "n733ik"
-msgstr "📧 orange@guesthouseosaka.com"
-
-#: components/legal-notice-dialog.tsx
-msgid "eYpuFD"
-msgstr "1-21-21 Hannancho, Abeno-ku, Osaka, Japan"
-
-#: components/legal-notice-dialog.tsx
-msgid "bYEHu4"
-msgstr "1. Information We Collect"
-
-#: components/legal-notice-dialog.tsx
-msgid "i2t87R"
-msgstr "2. How We Use Your Information"
-
-#: components/legal-notice-dialog.tsx
-msgid "Vtzi8Y"
-msgstr "3. Retention Period"
-
-#: components/legal-notice-dialog.tsx
-msgid "XxsxMQ"
-msgstr "4. Sharing and International Transfers"
-
-#: components/legal-notice-dialog.tsx
-msgid "UD3tNX"
-msgstr "5. Your Rights"
-
-#: components/legal-notice-dialog.tsx
-msgid "I4bgEZ"
-msgstr "6. Security Measures"
-
-#: components/legal-notice-dialog.tsx
-msgid "LNXNUg"
-msgstr "7. Contact Us"
-
-#: components/legal-notice-dialog.tsx
-msgid "f2d7W1"
-msgstr "8. Changes to This Policy"
-
-#: components/legal-notice-dialog.tsx
-msgid "VzHNnL"
-msgstr "Access to personal data is restricted to authorized personnel only."
+#: components/language-switcher.tsx
+msgid "GsBRWL"
+msgstr "Languages"
 
 #: components/legal-notice-dialog.tsx
 msgid "2YT4Bx"
 msgstr "Accommodation details: preferred tour dates, move-in dates, and housing preferences"
 
 #: components/legal-notice-dialog.tsx
-msgid "6U8vHi"
-msgstr "After this period, the information will be securely deleted or anonymized."
-
-#: components/legal-notice-dialog.tsx
-msgid "UexJmX"
-msgstr "Animo Kikaku Co., Ltd."
-
-#: components/legal-notice-dialog.tsx
-msgid "kxO1o9"
-msgstr "Animo Kikaku Co., Ltd. (“the Company”, “we”, “our”, or “us”) respects your privacy and is committed to protecting your personal information."
-
-#: components/legal-notice-dialog.tsx
-msgid "n9XaN1"
-msgstr "Any significant changes will be announced on this page, with the updated date clearly indicated."
-
-#: components/legal-notice-dialog.tsx
-msgid "GNrmPy"
-msgstr "Arranging property tours and managing move-in procedures"
+msgid "4ad/hu"
+msgstr "We collect this information directly from you when you submit a form or communicate with us."
 
 #: components/legal-notice-dialog.tsx
 msgid "4KyabI"
 msgstr "Basic details: your name, age, gender, nationality, email address, and (optionally) telephone number"
 
 #: components/legal-notice-dialog.tsx
-msgid "rbrahO"
-msgstr "Close"
-
-#: components/legal-notice-dialog.tsx
-msgid "bLWG90"
-msgstr "Generally, this means up to 10 years after your business relationship with us ends."
-
-#: components/legal-notice-dialog.tsx
-msgid "hH3xr4"
-msgstr "If you have any questions, concerns, or requests regarding this Privacy Policy or our data handling practices, please contact us at:"
-
-#: components/legal-notice-dialog.tsx
-msgid "SiViRn"
-msgstr "Inquiry details: message content, questions, and form submission data"
-
-#: components/legal-notice-dialog.tsx
-msgid "fxZ/kI"
-msgstr "Last updated: November 2025"
-
-#: components/legal-notice-dialog.tsx
-msgid "bESWzA"
-msgstr "Maintaining internal records necessary for business operations and compliance"
-
-#: components/legal-notice-dialog.tsx
-msgid "vx0nkZ"
-msgstr "Privacy Policy"
-
-#: components/legal-notice-dialog.tsx
-msgid "v5+yV0"
-msgstr "Providing information, updates, and support related to the Service"
-
-#: components/legal-notice-dialog.tsx
-msgid "Q40ygb"
-msgstr "Request access to the personal information we hold about you"
-
-#: components/legal-notice-dialog.tsx
-msgid "9FEUJQ"
-msgstr "Request correction, addition, or deletion of inaccurate or outdated information"
+msgid "6U8vHi"
+msgstr "After this period, the information will be securely deleted or anonymized."
 
 #: components/legal-notice-dialog.tsx
 msgid "9+AIxW"
 msgstr "Responding to your inquiries or requests"
 
 #: components/legal-notice-dialog.tsx
-msgid "Qo45RA"
-msgstr "This Privacy Policy explains how we collect, use, store, and protect the information you provide through the contact forms and other features on this website (“the Service”)."
-
-#: components/legal-notice-dialog.tsx
-msgid "4ad/hu"
-msgstr "We collect this information directly from you when you submit a form or communicate with us."
-
-#: components/legal-notice-dialog.tsx
-msgid "ZEozlh"
-msgstr "We do not share or sell your personal information to third parties."
-
-#: components/legal-notice-dialog.tsx
-msgid "Hb/s3I"
-msgstr "We do not use your information for marketing purposes without your explicit consent."
-
-#: components/legal-notice-dialog.tsx
-msgid "CLtY4G"
-msgstr "We may update this Privacy Policy from time to time."
-
-#: components/legal-notice-dialog.tsx
-msgid "AHx4JS"
-msgstr "We retain your personal information only as long as necessary to fulfill the purposes described above."
-
-#: components/legal-notice-dialog.tsx
-msgid "r5fMvQ"
-msgstr "We take appropriate technical and organizational measures to protect your personal information against unauthorized access, loss, misuse, alteration, or disclosure."
-
-#: components/legal-notice-dialog.tsx
-msgid "oIwcGP"
-msgstr "We use your personal information only for legitimate business purposes, including:"
-
-#: components/legal-notice-dialog.tsx
-msgid "EQqXZB"
-msgstr "We will respond promptly and transparently to all legitimate requests in accordance with Japanese privacy law."
-
-#: components/legal-notice-dialog.tsx
-msgid "a4i3J/"
-msgstr "When you contact us through the Service, we may collect the following personal information:"
-
-#: components/legal-notice-dialog.tsx
-msgid "nTvfXr"
-msgstr "Withdraw your consent to the processing of your information (where applicable)"
+msgid "9FEUJQ"
+msgstr "Request correction, addition, or deletion of inaccurate or outdated information"
 
 #: components/legal-notice-dialog.tsx
 msgid "9gDo87"
 msgstr "You have the right to:"
 
 #: components/legal-notice-dialog.tsx
+msgid "a4i3J/"
+msgstr "When you contact us through the Service, we may collect the following personal information:"
+
+#: components/legal-notice-dialog.tsx
+msgid "AHx4JS"
+msgstr "We retain your personal information only as long as necessary to fulfill the purposes described above."
+
+#: components/legal-notice-dialog.tsx
+msgid "bESWzA"
+msgstr "Maintaining internal records necessary for business operations and compliance"
+
+#: components/legal-notice-dialog.tsx
+msgid "bLWG90"
+msgstr "Generally, this means up to 10 years after your business relationship with us ends."
+
+#: components/legal-notice-dialog.tsx
+msgid "bYEHu4"
+msgstr "1. Information We Collect"
+
+#: components/legal-notice-dialog.tsx
+msgid "CLtY4G"
+msgstr "We may update this Privacy Policy from time to time."
+
+#: components/legal-notice-dialog.tsx
+msgid "EQqXZB"
+msgstr "We will respond promptly and transparently to all legitimate requests in accordance with Japanese privacy law."
+
+#: components/legal-notice-dialog.tsx
+msgid "eYpuFD"
+msgstr "1-21-21 Hannancho, Abeno-ku, Osaka, Japan"
+
+#: components/legal-notice-dialog.tsx
+msgid "f2d7W1"
+msgstr "8. Changes to This Policy"
+
+#: components/legal-notice-dialog.tsx
+msgid "fxZ/kI"
+msgstr "Last updated: November 2025"
+
+#: components/legal-notice-dialog.tsx
+msgid "GNrmPy"
+msgstr "Arranging property tours and managing move-in procedures"
+
+#: components/legal-notice-dialog.tsx
+msgid "Hb/s3I"
+msgstr "We do not use your information for marketing purposes without your explicit consent."
+
+#: components/legal-notice-dialog.tsx
+msgid "hH3xr4"
+msgstr "If you have any questions, concerns, or requests regarding this Privacy Policy or our data handling practices, please contact us at:"
+
+#: components/legal-notice-dialog.tsx
+msgid "i2t87R"
+msgstr "2. How We Use Your Information"
+
+#: components/legal-notice-dialog.tsx
+msgid "I4bgEZ"
+msgstr "6. Security Measures"
+
+#: components/legal-notice-dialog.tsx
+msgid "kxO1o9"
+msgstr "Animo Kikaku Co., Ltd. (“the Company”, “we”, “our”, or “us”) respects your privacy and is committed to protecting your personal information."
+
+#: components/legal-notice-dialog.tsx
+msgid "LNXNUg"
+msgstr "7. Contact Us"
+
+#: components/legal-notice-dialog.tsx
+msgid "n733ik"
+msgstr "📧 orange@guesthouseosaka.com"
+
+#: components/legal-notice-dialog.tsx
+msgid "n9XaN1"
+msgstr "Any significant changes will be announced on this page, with the updated date clearly indicated."
+
+#: components/legal-notice-dialog.tsx
+msgid "nTvfXr"
+msgstr "Withdraw your consent to the processing of your information (where applicable)"
+
+#: components/legal-notice-dialog.tsx
+msgid "oIwcGP"
+msgstr "We use your personal information only for legitimate business purposes, including:"
+
+#: components/legal-notice-dialog.tsx
+msgid "Q40ygb"
+msgstr "Request access to the personal information we hold about you"
+
+#: components/legal-notice-dialog.tsx
+msgid "Qo45RA"
+msgstr "This Privacy Policy explains how we collect, use, store, and protect the information you provide through the contact forms and other features on this website (“the Service”)."
+
+#: components/legal-notice-dialog.tsx
+msgid "r5fMvQ"
+msgstr "We take appropriate technical and organizational measures to protect your personal information against unauthorized access, loss, misuse, alteration, or disclosure."
+
+#: components/legal-notice-dialog.tsx
+msgid "rbrahO"
+msgstr "Close"
+
+#: components/legal-notice-dialog.tsx
+msgid "SiViRn"
+msgstr "Inquiry details: message content, questions, and form submission data"
+
+#: components/legal-notice-dialog.tsx
 msgid "ttPbRs"
 msgstr "Your data will not be transferred outside Japan without your consent, unless required by law or necessary to protect legal rights in accordance with the Act on the Protection of Personal Information (APPI) and other applicable regulations."
+
+#: components/legal-notice-dialog.tsx
+msgid "UD3tNX"
+msgstr "5. Your Rights"
+
+#: components/legal-notice-dialog.tsx
+msgid "UexJmX"
+msgstr "Animo Kikaku Co., Ltd."
+
+#: components/legal-notice-dialog.tsx
+msgid "v5+yV0"
+msgstr "Providing information, updates, and support related to the Service"
+
+#: components/legal-notice-dialog.tsx
+msgid "Vtzi8Y"
+msgstr "3. Retention Period"
+
+#: components/legal-notice-dialog.tsx
+msgid "vx0nkZ"
+msgstr "Privacy Policy"
+
+#: components/legal-notice-dialog.tsx
+msgid "VzHNnL"
+msgstr "Access to personal data is restricted to authorized personnel only."
+
+#: components/legal-notice-dialog.tsx
+msgid "XxsxMQ"
+msgstr "4. Sharing and International Transfers"
+
+#: components/legal-notice-dialog.tsx
+msgid "ZEozlh"
+msgstr "We do not share or sell your personal information to third parties."
+
+#: components/legal-notice-dialog.tsx
+msgid "Zxigpu"
+msgstr "👤 Representative Director: Kenji Hisamoto"
 
 #: components/mobile-nav.tsx
 msgid "ejEGdx"
 msgstr "Home"
 
 #: components/mobile-nav.tsx
-msgid "tKMlOc"
-msgstr "Menu"
-
-#: components/mobile-nav.tsx
 msgid "R059Ya"
 msgstr "Toggle Menu"
 
-#: components/next-intl/not-found-page.tsx
-msgid "QRccCM"
-msgstr "Page not found"
+#: components/mobile-nav.tsx
+msgid "tKMlOc"
+msgstr "Menu"
 
 #: components/next-intl/not-found-page.tsx
 msgid "DJBZ4A"
 msgstr "Please double-check the browser address bar or use the navigation to go to a known page."
 
-#: components/next-intl/page-layout.tsx
-msgid "L00nDd"
-msgstr "Browse the source code of this example on GitHub."
+#: components/next-intl/not-found-page.tsx
+msgid "QRccCM"
+msgstr "Page not found"
 
 #: components/next-intl/page-layout.tsx
 msgid "/6/sPX"
 msgstr "Docs"
-
-#: components/next-intl/page-layout.tsx
-msgid "X6JDFK"
-msgstr "https://github.com/amannn/next-intl/tree/main/examples/example-app-router"
 
 #: components/next-intl/page-layout.tsx
 msgid "2A9FEc"
@@ -1257,22 +1249,30 @@ msgstr "Learn more about next-intl in the official docs."
 msgid "GAUX9p"
 msgstr "Source code"
 
+#: components/next-intl/page-layout.tsx
+msgid "L00nDd"
+msgstr "Browse the source code of this example on GitHub."
+
+#: components/next-intl/page-layout.tsx
+msgid "X6JDFK"
+msgstr "https://github.com/amannn/next-intl/tree/main/examples/example-app-router"
+
 #: components/site-footer.tsx
 msgid "pZLKMO"
 msgstr "Animo Planning Co., Ltd."
-
-#: components/site-header.tsx
-msgid "hhDM+/"
-msgstr "Bright and cheerful accommodation perfect for a refreshing stay"
 
 #: components/site-header.tsx
 msgid "G9lpeY"
 msgstr "Experience the warmth and comfort with modern amenities"
 
 #: components/site-header.tsx
-msgid "rwrkYn"
-msgstr "Share Houses"
+msgid "hhDM+/"
+msgstr "Bright and cheerful accommodation perfect for a refreshing stay"
 
 #: components/site-header.tsx
 msgid "q8NSxM"
 msgstr "Vibrant space designed for memorable experiences"
+
+#: components/site-header.tsx
+msgid "rwrkYn"
+msgstr "Share Houses"

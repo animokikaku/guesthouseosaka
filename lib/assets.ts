@@ -1,7 +1,7 @@
-const BASE_URL = 'https://9rqvquf6lfmqng5h.public.blob.vercel-storage.com'
+import { blobUrl } from './utils/blob-storage'
 
 const url = (path: string) => {
-  return new URL(path, BASE_URL).toString()
+  return blobUrl(path)
 }
 
 export const assets = {

@@ -2,7 +2,7 @@ import { routing } from '@/i18n/routing'
 import { HouseIdentifier } from '@/lib/types'
 import { Locale } from 'next-intl'
 import { ImageProps } from 'next/image'
-import imageData from './data.json' with { type: 'json' }
+import { imageData } from './data'
 
 /**
  * Fixed order of image categories as they should appear in the gallery
@@ -215,7 +215,7 @@ const houseStorageRegistry = new Map<
 /**
  * Get or create a HouseImageStorage instance for a specific house
  *
- * SSR-compatible: The JSON file is imported statically at build time,
+ * SSR-compatible: The image data is imported statically at build time,
  * and filtering happens synchronously in the constructor.
  */
 export function storage({
