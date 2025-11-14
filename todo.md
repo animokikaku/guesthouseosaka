@@ -1,5 +1,5 @@
 - [] Integrate with resend to send emails
-- [] Create/re-use accounts (Google, NextJS, Github?) for management
+- [x] Create/re-use accounts (Google, NextJS, Github?) for management
 - [x] Add a gallery for photos
 - [x] Add carousel for mobile
 - [] Migrate the domain
