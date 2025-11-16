@@ -22,8 +22,10 @@ const withNextIntl = createNextIntlPlugin({
 
 const nextConfig: NextConfig = {
   reactCompiler: env.NODE_ENV === 'production' ? true : false,
+  typedRoutes: true,
   experimental: {
-    turbopackFileSystemCacheForDev: true
+    turbopackFileSystemCacheForDev: true,
+    typedEnv: true
   },
   images: {
     qualities: [75, 90],
