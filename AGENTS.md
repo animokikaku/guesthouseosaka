@@ -1,32 +1,19 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `app/` drives the Next.js App Router; page-level logic lives in locale folders under `app/[locale]` and shared layout in `app/layout.tsx`.
-- `components/` contains reusable UI (including `components/ui` for primitives) plus navigation shells; update `lib/config.ts` for site metadata consumed here.
-- `hooks/` and `lib/` hold client utilities, types, and config; keep shared logic here rather than inside route files.
-- `messages/` and `i18n/` power localization; each locale JSON mirrors the keys used in `messages/en.json`, and assets belong in `public/`.
+Use the Next.js App Router under `app/[locale]` for all page logic, keeping shared wrappers inside `app/layout.tsx`. Reusable UI, layout shells, and primitives live in `components/` (with atoms in `components/ui`). Place shared hooks, configs, and helpers inside `hooks/` and `lib/`, and keep locale JSON plus translation helpers inside `messages/` and `i18n/`. Static assets belong strictly in `public/`. Co-locate any new tests beside their feature files or under `__tests__/` to match the surrounding code.
 
 ## Build, Test, and Development Commands
-- `bun install` installs dependencies (Bun lockfile is canonical); if you need npm, run `npm install` but commit no new lockfile.
-- `bun dev` starts the local server on http://localhost:3000.
-- `bun lint` runs ESLint via `eslint.config.mjs`; fix issues with `bun lint --fix`.
-- `bun run build` produces a production build; `bun start` serves the compiled app.
+Install dependencies with `bun install` (the Bun lockfile is canonical; avoid adding an npm lock). Run `bun dev` to serve the app on http://localhost:3000, and keep `bun run build` handy for production-style checks before a PR. Execute `bun lint` to run ESLint via `eslint.config.mjs`; apply fixes with `bun lint --fix`. `bun start` boots the already-built output. When adding scripts or manual QA steps, document the workflow in `README.md`.
 
 ## Coding Style & Naming Conventions
-- TypeScript is required; keep `.tsx` for components and prefer named exports for shared utilities.
-- Prettier enforces single quotes, no semicolons, and Tailwind class sorting; run `bunx prettier --write .` before large patches.
-- Use 2-space indentation, camelCase for variables/functions, PascalCase for React components, and kebab-case route segments.
+All application code is TypeScript; use `.tsx` for components and prefer named exports for anything reusable. Follow 2-space indentation, camelCase for variables/functions, PascalCase for React components, and kebab-case for route folders. Prettier enforces single quotes, no semicolons, and Tailwind class sorting—run `bunx prettier --write .` before sending larger patches. Keep logic inside shared modules instead of embedding utilities inside route files.
 
 ## Testing Guidelines
-- No automated suite exists yet; add tests alongside features using Jest or Testing Library under `__tests__/` or `*.test.tsx`.
-- For manual QA, verify locale switches (`messages/*`) and responsive states by exercising the navigation (mobile + desktop) in `bun dev`.
-- Document any new test command in `package.json` and update this guide when adopting it.
+There is no global test suite yet, so add Jest or Testing Library specs under `__tests__/` or `*.test.tsx` near the feature you touch. Manual QA should always cover locale switching (`messages/*`) and responsive navigation states via `bun dev`. If you introduce a new testing tool or npm script, record it in `package.json` and note it here for the next contributor.
 
 ## Commit & Pull Request Guidelines
-- Follow Conventional Commits (`feat:`, `fix:`, `chore:`) as seen in history; scope optional but encouraged.
-- One logical change per commit; include updated screenshots or GIFs for UI tweaks in PR descriptions.
-- Pull requests should link tracking issues, summarize locale/domain shifts, and note any config or content updates in `lib/config.ts` or `messages/*`.
+Use Conventional Commits such as `feat: booking widget` or `fix: locale switch`. Keep commits focused on one logical change. Pull requests must link the relevant issue, summarize any locale or content shifts, and call out updates to `lib/config.ts` or translation files. Include screenshots or GIFs whenever UI changes impact layout, navigation, or localization behavior, and mention any manual verification performed.
 
-## Localization & Content Updates
-- Keep locale JSON keys consistent; regenerate derived `*.d.json.ts` files when adding translations.
-- When adjusting external links or SEO fields, update `lib/config.ts` and re-check social previews via `bun run build`.
+## Localization & Content Notes
+Translation IDs are extracted from the source code and auto-generated, so keep user-facing copy inline and avoid manually editing IDs in `messages/*`. Ensure every locale file mirrors `messages/en.json`, and regenerate derived `*.d.json.ts` assets when translation keys change. When editing SEO fields or external links, update `lib/config.ts` and verify previews with `bun run build`.
