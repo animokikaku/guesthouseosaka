@@ -1,4 +1,4 @@
-- [] Integrate with resend to send emails
+- [x] Integrate with resend to send emails
 - [x] Create/re-use accounts (Google, NextJS, Github?) for management
 - [x] Add a gallery for photos
 - [x] Add carousel for mobile
