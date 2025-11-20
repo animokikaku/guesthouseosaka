@@ -62,3 +62,36 @@ export const ContactFormSchema = z.object({
 })
 
 export type ContactFormFields = z.infer<typeof ContactFormSchema>
+
+// --- Specific Schemas ---
+
+export const TourFormSchema = ContactFormSchema.pick({
+  places: true,
+  date: true,
+  hour: true,
+  account: true,
+  message: true,
+  privacyPolicy: true
+})
+
+export type TourFormFields = z.infer<typeof TourFormSchema>
+
+export const MoveInFormSchema = ContactFormSchema.pick({
+  places: true,
+  date: true,
+  stayDuration: true,
+  account: true,
+  message: true,
+  privacyPolicy: true
+})
+
+export type MoveInFormFields = z.infer<typeof MoveInFormSchema>
+
+export const GeneralInquirySchema = ContactFormSchema.pick({
+  privacyPolicy: true
+}).extend({
+  account: AccountSchema.pick({ name: true, email: true }),
+  message: z.string().min(5).max(3000)
+})
+
+export type GeneralInquiryFields = z.infer<typeof GeneralInquirySchema>

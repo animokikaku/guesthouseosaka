@@ -363,6 +363,13 @@ msgstr "Envoyer"
 
 #: components/forms/contact-form.tsx
 #: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "24XeD4"
+msgstr "Merci de nous avoir contactés {name}. Nous vous répondrons sous peu."
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
 msgid "5MDGuM"
 msgstr "Saisissez votre e-mail"
 
@@ -370,6 +377,12 @@ msgstr "Saisissez votre e-mail"
 #: components/forms/tour-form.tsx
 msgid "6uhpBF"
 msgstr "Faites-nous part de toute information ou question complémentaire."
+
+#: components/forms/contact-form.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "B8ytd5"
+msgstr "En soumettant ce formulaire, vous acceptez la <link>Politique de confidentialité</link>."
 
 #: components/forms/contact-form.tsx
 msgid "DrcOOR"
@@ -386,10 +399,25 @@ msgid "HAlOn1"
 msgstr "Nom"
 
 #: components/forms/contact-form.tsx
+#: components/forms/index.tsx
 #: components/forms/move-in-form.tsx
 #: components/forms/tour-form.tsx
-msgid "mF27aJ"
-msgstr "En soumettant ce formulaire, vous acceptez la <link>Politique de confidentialité, les Conditions d'utilisation et la Décharge de responsabilité</link>."
+msgid "KlhlQn"
+msgstr "Échec de l'envoi du message."
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "lF7/IV"
+msgstr "Message envoyé avec succès !"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "m1YOjg"
+msgstr "Veuillez réessayer plus tard ou contactez-nous directement à {email}."
 
 #: components/forms/contact-form.tsx
 #: components/forms/move-in-form.tsx
@@ -410,6 +438,13 @@ msgstr "Des questions sur nos services, nos tarifs ou autre chose ? Nous sommes 
 #: components/forms/contact-form.tsx
 msgid "vi98ug"
 msgstr "Le message doit contenir au maximum {max} caractères."
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "X4MFsp"
+msgstr "Envoi du message..."
 
 #: components/forms/fields/message-field.tsx
 msgid "TctHNm"
@@ -482,11 +517,6 @@ msgstr "070-1234-5678"
 #: components/forms/index.tsx
 msgid "ZJd1Zi"
 msgstr "Quel est votre sexe ?"
-
-#: components/forms/move-in-form.tsx
-#: components/forms/tour-form.tsx
-msgid "0Gme/N"
-msgstr "Vous avez soumis les valeurs suivantes :"
 
 #: components/forms/move-in-form.tsx
 msgid "3B9akn"

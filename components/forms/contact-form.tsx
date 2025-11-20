@@ -1,11 +1,9 @@
 /* eslint-disable react/no-children-prop */
 'use client'
 
-import * as React from 'react'
-import { toast } from 'sonner'
-
+import { submitContactForm } from '@/app/actions/contact'
 import { contactFormDefaultValues, useAppForm } from '@/components/forms'
-import { AccountSchema, ContactFormSchema } from '@/components/forms/schema'
+import { GeneralInquirySchema } from '@/components/forms/schema'
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import {
   Card,
@@ -16,8 +14,10 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
+import { useRouter } from '@/i18n/navigation'
 import { MailIcon, UserIcon } from 'lucide-react'
 import { useExtracted } from 'next-intl'
+import { toast } from 'sonner'
 import z from 'zod'
 
 const MIN_MESSAGE_LENGTH = 5
@@ -25,12 +25,17 @@ const MAX_MESSAGE_LENGTH = 3000
 
 export function ContactForm() {
   const t = useExtracted()
+  const router = useRouter()
   const { message, privacyPolicy, account } = contactFormDefaultValues
 
-  const formSchema = React.useMemo(
-    () =>
-      ContactFormSchema.pick({ privacyPolicy: true }).extend({
-        account: AccountSchema.pick({ name: true, email: true }),
+  const form = useAppForm({
+    defaultValues: {
+      message,
+      privacyPolicy,
+      account: { name: account.name, email: account.email }
+    },
+    validators: {
+      onSubmit: GeneralInquirySchema.extend({
         message: z
           .string()
           .min(
@@ -45,33 +50,32 @@ export function ContactForm() {
               max: `${MAX_MESSAGE_LENGTH}`
             })
           )
-      }),
-    [t]
-  )
-
-  const form = useAppForm({
-    defaultValues: {
-      message,
-      privacyPolicy,
-      account: { name: account.name, email: account.email }
-    },
-    validators: {
-      onSubmit: formSchema
+      })
     },
     onSubmit: async ({ value }) => {
-      toast('You submitted the following values:', {
-        description: (
-          <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-            <code>{JSON.stringify(value, null, 2)}</code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2'
+      const promise = submitContactForm({ type: 'other', data: value })
+
+      toast.promise(promise, {
+        loading: t('Sending message...'),
+        success: () => {
+          router.push('/contact')
+          return {
+            message: t('Message sent successfully!'),
+            description: t(
+              'Thank you for contacting us {name}. We will get back to you shortly.',
+              { name: value.account.name }
+            )
+          }
         },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)'
-        } as React.CSSProperties
+        error: (error) => {
+          return {
+            message: error.message || t('Failed to send message.'),
+            description: t(
+              'Please try again later or contact us directly at {email}.',
+              { email: 'info@guesthouseosaka.com' }
+            )
+          }
+        }
       })
     }
   })
@@ -145,7 +149,7 @@ export function ContactForm() {
                   label={
                     <p className="text-muted-foreground">
                       {t.rich(
-                        'By submitting this form, you agree to the <link>Privacy Policy, Terms of Use, and Disclaimer</link>.',
+                        'By submitting this form, you agree to the <link>Privacy Policy</link>.',
                         {
                           link: (chunks) => (
                             <LegalNoticeDialog>{chunks}</LegalNoticeDialog>

@@ -354,6 +354,13 @@ msgstr "Submit"
 
 #: components/forms/contact-form.tsx
 #: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "24XeD4"
+msgstr "Thank you for contacting us {name}. We will get back to you shortly."
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
 msgid "5MDGuM"
 msgstr "Enter your email"
 
@@ -361,6 +368,12 @@ msgstr "Enter your email"
 #: components/forms/tour-form.tsx
 msgid "6uhpBF"
 msgstr "Let us know any additional information or questions."
+
+#: components/forms/contact-form.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "B8ytd5"
+msgstr "By submitting this form, you agree to the <link>Privacy Policy</link>."
 
 #: components/forms/contact-form.tsx
 msgid "DrcOOR"
@@ -377,10 +390,25 @@ msgid "HAlOn1"
 msgstr "Name"
 
 #: components/forms/contact-form.tsx
+#: components/forms/index.tsx
 #: components/forms/move-in-form.tsx
 #: components/forms/tour-form.tsx
-msgid "mF27aJ"
-msgstr "By submitting this form, you agree to the <link>Privacy Policy, Terms of Use, and Disclaimer</link>."
+msgid "KlhlQn"
+msgstr "Failed to send message."
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "lF7/IV"
+msgstr "Message sent successfully!"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "m1YOjg"
+msgstr "Please try again later or contact us directly at {email}."
 
 #: components/forms/contact-form.tsx
 #: components/forms/move-in-form.tsx
@@ -401,6 +429,13 @@ msgstr "Have questions about our services, pricing, or anything else? We're here
 #: components/forms/contact-form.tsx
 msgid "vi98ug"
 msgstr "Message must be at most {max} characters."
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "X4MFsp"
+msgstr "Sending message..."
 
 #: components/forms/fields/message-field.tsx
 msgid "TctHNm"
@@ -473,11 +508,6 @@ msgstr "070-1234-5678"
 #: components/forms/index.tsx
 msgid "ZJd1Zi"
 msgstr "What is your gender?"
-
-#: components/forms/move-in-form.tsx
-#: components/forms/tour-form.tsx
-msgid "0Gme/N"
-msgstr "You submitted the following values:"
 
 #: components/forms/move-in-form.tsx
 msgid "3B9akn"

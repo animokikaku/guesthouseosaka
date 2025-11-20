@@ -363,6 +363,13 @@ msgstr "送信"
 
 #: components/forms/contact-form.tsx
 #: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "24XeD4"
+msgstr "メッセージ送信が成功しました。"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
 msgid "5MDGuM"
 msgstr "メールアドレスを入力してください"
 
@@ -370,6 +377,12 @@ msgstr "メールアドレスを入力してください"
 #: components/forms/tour-form.tsx
 msgid "6uhpBF"
 msgstr "補足情報やご質問があればお知らせください。"
+
+#: components/forms/contact-form.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "B8ytd5"
+msgstr "このフォームを送信することで、<link>プライバシーポリシー</link>に同意することになります。"
 
 #: components/forms/contact-form.tsx
 msgid "DrcOOR"
@@ -386,10 +399,25 @@ msgid "HAlOn1"
 msgstr "お名前"
 
 #: components/forms/contact-form.tsx
+#: components/forms/index.tsx
 #: components/forms/move-in-form.tsx
 #: components/forms/tour-form.tsx
-msgid "mF27aJ"
-msgstr "フォームを送信すると、<link>プライバシーポリシー、利用規約、免責事項</link>に同意したものとみなされます。"
+msgid "KlhlQn"
+msgstr "メッセージ送信に失敗しました。"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "lF7/IV"
+msgstr "メッセージ送信が成功しました。"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "m1YOjg"
+msgstr "メッセージ送信に失敗しました。"
 
 #: components/forms/contact-form.tsx
 #: components/forms/move-in-form.tsx
@@ -410,6 +438,13 @@ msgstr "サービスや料金などについてご質問がありますか？私
 #: components/forms/contact-form.tsx
 msgid "vi98ug"
 msgstr "メッセージは{max}文字以内で入力してください。"
+
+#: components/forms/contact-form.tsx
+#: components/forms/index.tsx
+#: components/forms/move-in-form.tsx
+#: components/forms/tour-form.tsx
+msgid "X4MFsp"
+msgstr "メッセージ送信中..."
 
 #: components/forms/fields/message-field.tsx
 msgid "TctHNm"
@@ -482,11 +517,6 @@ msgstr "070-1234-5678"
 #: components/forms/index.tsx
 msgid "ZJd1Zi"
 msgstr "性別を教えてください。"
-
-#: components/forms/move-in-form.tsx
-#: components/forms/tour-form.tsx
-msgid "0Gme/N"
-msgstr "以下の内容を送信しました："
 
 #: components/forms/move-in-form.tsx
 msgid "3B9akn"

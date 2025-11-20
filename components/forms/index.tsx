@@ -23,6 +23,8 @@ import {
   UserIcon
 } from 'lucide-react'
 import { useExtracted } from 'next-intl'
+import router from 'next/dist/client/router'
+import { toast } from 'sonner'
 
 export { ContactForm } from './contact-form'
 export { MoveInForm } from './move-in-form'
@@ -242,3 +244,30 @@ export const contactFormDefaultValues = {
   stayDuration: '' as ContactFormFields['stayDuration'],
   hour: ''
 } satisfies ContactFormFields
+
+export function useSubmitToast(promise: Promise<unknown>, name: string) {
+  const t = useExtracted()
+
+  toast.promise(promise, {
+    loading: t('Sending message...'),
+    success: () => {
+      router.push('/contact')
+      return {
+        message: t('Message sent successfully!'),
+        description: t(
+          'Thank you for contacting us {name}. We will get back to you shortly.',
+          { name }
+        )
+      }
+    },
+    error: (error) => {
+      return {
+        message: error.message || t('Failed to send message.'),
+        description: t(
+          'Please try again later or contact us directly at {email}.',
+          { email: 'info@guesthouseosaka.com' }
+        )
+      }
+    }
+  })
+}

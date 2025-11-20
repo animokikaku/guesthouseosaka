@@ -12,7 +12,7 @@ export async function POST() {
       from: 'ORANGE HOUSE <orange@guesthouseosaka.com>',
       to: ['melkir13@gmail.com'],
       subject: 'Hello world',
-      react: <EmailTemplate firstName="Thibault" />
+      react: <EmailTemplate data={{ account: { name: 'Thibault', email: 'test@example.com' }, message: 'Hello world' }} type="other" />
     })
 
     if (error) {

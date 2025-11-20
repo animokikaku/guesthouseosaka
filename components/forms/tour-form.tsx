@@ -1,16 +1,15 @@
 /* eslint-disable react/no-children-prop */
 'use client'
 
-import * as React from 'react'
 import { toast } from 'sonner'
 
+import { submitContactForm } from '@/app/actions/contact'
 import {
   contactFormDefaultValues,
   FieldGroupPlaces,
   FieldGroupUserAccount,
   useAppForm
 } from '@/components/forms'
-import { ContactFormSchema } from '@/components/forms/schema'
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import {
   Card,
@@ -21,41 +20,45 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
+import { useRouter } from '@/i18n/navigation'
 import { useExtracted } from 'next-intl'
-
-const formSchema = ContactFormSchema.pick({
-  places: true,
-  date: true,
-  hour: true,
-  account: true,
-  message: true,
-  privacyPolicy: true
-})
+import { TourFormSchema } from './schema'
 
 export function TourForm() {
   const t = useExtracted()
+  const router = useRouter()
   const { places, account, message, date, hour, privacyPolicy } =
     contactFormDefaultValues
 
   const form = useAppForm({
     defaultValues: { places, account, message, date, hour, privacyPolicy },
     validators: {
-      onSubmit: formSchema
+      onSubmit: TourFormSchema
     },
     onSubmit: async ({ value }) => {
-      toast(t('You submitted the following values:'), {
-        description: (
-          <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-            <code>{JSON.stringify(value, null, 2)}</code>
-          </pre>
-        ),
-        position: 'bottom-right',
-        classNames: {
-          content: 'flex flex-col gap-2'
+      const promise = submitContactForm({ type: 'tour', data: value })
+
+      toast.promise(promise, {
+        loading: t('Sending message...'),
+        success: () => {
+          router.push('/contact')
+          return {
+            message: t('Message sent successfully!'),
+            description: t(
+              'Thank you for contacting us {name}. We will get back to you shortly.',
+              { name: value.account.name }
+            )
+          }
         },
-        style: {
-          '--border-radius': 'calc(var(--radius)  + 4px)'
-        } as React.CSSProperties
+        error: (error) => {
+          return {
+            message: error.message || t('Failed to send message.'),
+            description: t(
+              'Please try again later or contact us directly at {email}.',
+              { email: 'info@guesthouseosaka.com' }
+            )
+          }
+        }
       })
     }
   })
@@ -137,7 +140,7 @@ export function TourForm() {
                   label={
                     <p className="text-muted-foreground">
                       {t.rich(
-                        'By submitting this form, you agree to the <link>Privacy Policy, Terms of Use, and Disclaimer</link>.',
+                        'By submitting this form, you agree to the <link>Privacy Policy</link>.',
                         {
                           link: (chunks) => (
                             <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
