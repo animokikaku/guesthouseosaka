@@ -19,7 +19,7 @@ export function SiteFooter() {
               icon={<Icons.facebook className="size-5" />}
             />
             <SocialLink
-              href="https://www.instagram.com/animo.planning/"
+              href="https://www.instagram.com/guesthouseosaka"
               icon={<Icons.instagram className="size-5" />}
             />
           </div>
