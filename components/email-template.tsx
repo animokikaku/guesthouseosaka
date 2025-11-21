@@ -1,4 +1,5 @@
 import { ContactFormFields } from '@/components/forms/schema'
+import { HouseIdentifier } from '@/lib/types'
 import {
   Body,
   Container,
@@ -18,6 +19,15 @@ const formatDate = (date: string | Date) => {
     month: 'long',
     day: 'numeric'
   })
+}
+
+const formatPlaces = (places: HouseIdentifier[]) => {
+  const placeNames: Record<HouseIdentifier, string> = {
+    apple: 'アップルハウス',
+    lemon: 'レモンハウス',
+    orange: 'オレンジハウス'
+  }
+  return places.map((place) => placeNames[place]).join(', ')
 }
 
 // --- Tour Request Email ---
@@ -42,7 +52,7 @@ export function TourRequestEmail({ data }: TourRequestEmailProps) {
           <AccountDetails account={account} />
           <Hr style={hr} />
           <Text style={text}>
-            <strong>希望物件:</strong> {places.join(', ')}
+            <strong>希望物件:</strong> {formatPlaces(places)}
           </Text>
           <Text style={text}>
             <strong>希望日時:</strong> {formatDate(date)} {hour}
@@ -83,7 +93,7 @@ export function MoveInRequestEmail({ data }: MoveInRequestEmailProps) {
           <AccountDetails account={account} />
           <Hr style={hr} />
           <Text style={text}>
-            <strong>希望物件:</strong> {places.join(', ')}
+            <strong>希望物件:</strong> {formatPlaces(places)}
           </Text>
           <Text style={text}>
             <strong>希望日:</strong> {formatDate(date)}

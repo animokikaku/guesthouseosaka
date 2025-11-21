@@ -17,7 +17,7 @@ import { Resend } from 'resend'
 const { emails } = new Resend(env.RESEND_API_KEY)
 
 const DEFAULT_CONTACT = {
-  from: 'Guesthouse Osaka <info@guesthouseosaka.com>',
+  from: 'Guesthouse Osaka <noreply@guesthouseosaka.com>',
   to: (places?: HouseIdentifier[]) => {
     if (env.NODE_ENV === 'development') {
       return 'dev@guesthouseosaka.com'
@@ -25,7 +25,7 @@ const DEFAULT_CONTACT = {
     if (places?.length === 1) {
       return `${places[0]}@guesthouseosaka.com`
     }
-    return 'info@guesthouseosaka.com'
+    return 'noreply@guesthouseosaka.com'
   }
 }
 

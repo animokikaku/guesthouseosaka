@@ -55,7 +55,7 @@ export function TourForm() {
             message: error.message || t('Failed to send message.'),
             description: t(
               'Please try again later or contact us directly at {email}.',
-              { email: 'info@guesthouseosaka.com' }
+              { email: 'noreply@guesthouseosaka.com' }
             )
           }
         }
