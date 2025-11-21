@@ -111,11 +111,11 @@ export function GalleryWall({
           const topPercent = (desktop.y / BASE_HEIGHT) * 100
 
           return (
-            <button
+            <div
               key={id}
-              type="button"
-              aria-label={alt}
-              className="group bg-muted focus-visible:ring-offset-background focus-visible:ring-primary absolute overflow-hidden rounded-[18%] shadow-sm transition-shadow hover:shadow-xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+              role="presentation"
+              aria-hidden
+              className="group bg-muted absolute overflow-hidden rounded-[18%] shadow-sm transition-shadow hover:shadow-xl"
               style={{
                 width: `${widthPercent}%`,
                 height: `${heightPercent}%`,
@@ -139,7 +139,7 @@ export function GalleryWall({
                 />
               ) : null}
               <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/0 via-black/10 to-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            </button>
+            </div>
           )
         })}
       </div>
