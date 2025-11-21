@@ -7,6 +7,6 @@
 - [x] Update the privacy policy with the latest information provided by Kaz
 - [x] Translate the texts
 - [x] Move down the data to each components if possible
-- [] Focus on error field and disable browser validation on dates for mobile?
+- [x] Focus on error field and disable browser validation for time
 - [x] Add the correct images on the home screen
 - [] Add a viewer for the home screen images

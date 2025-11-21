@@ -46,6 +46,12 @@ export function MoveInForm() {
     validators: {
       onSubmit: schema
     },
+    onSubmitInvalid: () => {
+      const firstErrorInput = document.querySelector(
+        '[aria-invalid="true"]'
+      ) as HTMLElement | null
+      firstErrorInput?.focus()
+    },
     onSubmit: async ({ value }) => {
       const promise = submitContactForm({ type: 'move-in', data: value })
 

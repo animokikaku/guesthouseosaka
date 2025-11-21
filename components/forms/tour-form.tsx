@@ -36,6 +36,12 @@ export function TourForm() {
     validators: {
       onSubmit: schema
     },
+    onSubmitInvalid: () => {
+      const firstErrorInput = document.querySelector(
+        '[aria-invalid="true"]'
+      ) as HTMLElement | null
+      firstErrorInput?.focus()
+    },
     onSubmit: async ({ value }) => {
       const promise = submitContactForm({ type: 'tour', data: value })
 
@@ -109,8 +115,6 @@ export function TourForm() {
                   orientation="responsive"
                   className="sm:min-w-[220px]"
                   type="time"
-                  min="10:00"
-                  max="20:00"
                 />
               )}
             />

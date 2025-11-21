@@ -34,6 +34,12 @@ export function ContactForm() {
     validators: {
       onSubmit: schema
     },
+    onSubmitInvalid: () => {
+      const firstErrorInput = document.querySelector(
+        '[aria-invalid="true"]'
+      ) as HTMLElement | null
+      firstErrorInput?.focus()
+    },
     onSubmit: async ({ value }) => {
       const promise = submitContactForm({ type: 'other', data: value })
 
@@ -86,6 +92,7 @@ export function ContactForm() {
               children={(field) => (
                 <field.InputGroupField
                   required
+                  type="text"
                   label={t('Name')}
                   placeholder={t('Enter your name')}
                   icon={<UserIcon />}
@@ -98,6 +105,7 @@ export function ContactForm() {
               children={(field) => (
                 <field.InputGroupField
                   required
+                  type="email"
                   label={t('Email')}
                   placeholder={t('Enter your email')}
                   icon={<MailIcon />}
