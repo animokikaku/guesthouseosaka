@@ -3,7 +3,7 @@
 
 import { submitContactForm } from '@/app/actions/contact'
 import { contactFormDefaultValues, useAppForm } from '@/components/forms'
-import { GeneralInquirySchema } from '@/components/forms/schema'
+import { useGeneralInquirySchema } from '@/components/forms/schema'
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import {
   Card,
@@ -18,14 +18,11 @@ import { useRouter } from '@/i18n/navigation'
 import { MailIcon, UserIcon } from 'lucide-react'
 import { useExtracted } from 'next-intl'
 import { toast } from 'sonner'
-import z from 'zod'
-
-const MIN_MESSAGE_LENGTH = 5
-const MAX_MESSAGE_LENGTH = 3000
 
 export function ContactForm() {
   const t = useExtracted()
   const router = useRouter()
+  const schema = useGeneralInquirySchema()
   const { message, privacyPolicy, account } = contactFormDefaultValues
 
   const form = useAppForm({
@@ -35,22 +32,7 @@ export function ContactForm() {
       account: { name: account.name, email: account.email }
     },
     validators: {
-      onSubmit: GeneralInquirySchema.extend({
-        message: z
-          .string()
-          .min(
-            MIN_MESSAGE_LENGTH,
-            t('Message must be at least {min} characters.', {
-              min: `${MIN_MESSAGE_LENGTH}`
-            })
-          )
-          .max(
-            MAX_MESSAGE_LENGTH,
-            t('Message must be at most {max} characters.', {
-              max: `${MAX_MESSAGE_LENGTH}`
-            })
-          )
-      })
+      onSubmit: schema
     },
     onSubmit: async ({ value }) => {
       const promise = submitContactForm({ type: 'other', data: value })

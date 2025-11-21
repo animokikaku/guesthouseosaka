@@ -385,10 +385,6 @@ msgid "B8ytd5"
 msgstr "En soumettant ce formulaire, vous acceptez la <link>Politique de confidentialité</link>."
 
 #: components/forms/contact-form.tsx
-msgid "DrcOOR"
-msgstr "Le message doit contenir au moins {min} caractères."
-
-#: components/forms/contact-form.tsx
 #: components/forms/index.tsx
 msgid "DX9QSt"
 msgstr "Saisissez votre nom"
@@ -434,10 +430,6 @@ msgstr "Message"
 #: components/forms/contact-form.tsx
 msgid "ttbGvm"
 msgstr "Des questions sur nos services, nos tarifs ou autre chose ? Nous sommes là pour vous aider."
-
-#: components/forms/contact-form.tsx
-msgid "vi98ug"
-msgstr "Le message doit contenir au maximum {max} caractères."
 
 #: components/forms/contact-form.tsx
 #: components/forms/index.tsx
@@ -566,6 +558,81 @@ msgstr "Date d'emménagement"
 #: components/forms/move-in-form.tsx
 msgid "WW6ryD"
 msgstr "Combien de temps souhaitez-vous rester ?"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "0qkrp9"
+msgstr "Le message doit contenir au moins 5 caractères."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "cpZU48"
+msgstr "Adresse e-mail invalide."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "EpQ7yr"
+msgstr "Veuillez sélectionner votre genre."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "Gm3Ppk"
+msgstr "Le message doit contenir au maximum 3000 caractères."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "HhjmvS"
+msgstr "Numéro de téléphone invalide."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "hmVAfC"
+msgstr "La nationalité doit comporter au maximum 100 caractères."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "i9gXUw"
+msgstr "Veuillez saisir votre nationalité."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "jMgU5A"
+msgstr "L'âge doit être un nombre positif."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "L0jNRb"
+msgstr "La date doit être aujourd'hui ou plus tard."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "OoMm+2"
+msgstr "L'heure doit être comprise entre 10h00 et 20h00."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "pcvoJI"
+msgstr "Le nom doit contenir au moins 2 caractères."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "Pir8Nd"
+msgstr "Veuillez sélectionner votre durée de séjour minimale souhaitée."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "qUJo8R"
+msgstr "Veuillez sélectionner au moins une share house."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "RZp2fn"
+msgstr "Vous pouvez sélectionner jusqu'à 3 share houses."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "zFBo43"
+msgstr "Vous devez accepter la politique de confidentialité."
 
 #: components/forms/tour-form.tsx
 msgid "+l9/4s"

@@ -376,10 +376,6 @@ msgid "B8ytd5"
 msgstr "By submitting this form, you agree to the <link>Privacy Policy</link>."
 
 #: components/forms/contact-form.tsx
-msgid "DrcOOR"
-msgstr "Message must be at least {min} characters."
-
-#: components/forms/contact-form.tsx
 #: components/forms/index.tsx
 msgid "DX9QSt"
 msgstr "Enter your name"
@@ -425,10 +421,6 @@ msgstr "Message"
 #: components/forms/contact-form.tsx
 msgid "ttbGvm"
 msgstr "Have questions about our services, pricing, or anything else? We're here to help."
-
-#: components/forms/contact-form.tsx
-msgid "vi98ug"
-msgstr "Message must be at most {max} characters."
 
 #: components/forms/contact-form.tsx
 #: components/forms/index.tsx
@@ -557,6 +549,81 @@ msgstr "Move-in date"
 #: components/forms/move-in-form.tsx
 msgid "WW6ryD"
 msgstr "How long would you like to stay?"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "0qkrp9"
+msgstr "Message must be at least 5 characters long."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "cpZU48"
+msgstr "Invalid email address."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "EpQ7yr"
+msgstr "Please select your gender."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "Gm3Ppk"
+msgstr "Message must be at most 3000 characters."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "HhjmvS"
+msgstr "Invalid phone number"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "hmVAfC"
+msgstr "Nationality must be at most 100 characters."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "i9gXUw"
+msgstr "Please enter your nationality."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "jMgU5A"
+msgstr "Age must be a positive number."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "L0jNRb"
+msgstr "Date must be today or later."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "OoMm+2"
+msgstr "Time must be between 10:00 and 20:00."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "pcvoJI"
+msgstr "Name must be at least 2 characters long."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "Pir8Nd"
+msgstr "Please select your desired minimum stay."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "qUJo8R"
+msgstr "Please select at least one share house."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "RZp2fn"
+msgstr "You can select up to 3 share houses."
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "zFBo43"
+msgstr "You must agree to the privacy policy."
 
 #: components/forms/tour-form.tsx
 msgid "+l9/4s"

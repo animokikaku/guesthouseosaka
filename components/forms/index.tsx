@@ -11,7 +11,7 @@ import {
   SelectField,
   ToggleGroupField
 } from '@/components/forms/fields'
-import { AccountFields, ContactFormFields } from '@/components/forms/schema'
+import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
 import { HouseIdentifier } from '@/lib/types'
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
@@ -58,7 +58,7 @@ export const userAccountDefaultValues = {
   nationality: '',
   email: '',
   phone: ''
-} satisfies AccountFields
+} satisfies ContactFormFields['account']
 
 export const FieldGroupUserAccount = withFieldGroup({
   defaultValues: userAccountDefaultValues,

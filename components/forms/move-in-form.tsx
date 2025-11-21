@@ -10,7 +10,10 @@ import {
   FieldGroupUserAccount,
   useAppForm
 } from '@/components/forms'
-import { ContactFormFields, MoveInFormSchema } from '@/components/forms/schema'
+import {
+  ContactFormFields,
+  useMoveInFormSchema
+} from '@/components/forms/schema'
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import {
   Card,
@@ -27,6 +30,7 @@ import { useExtracted } from 'next-intl'
 export function MoveInForm() {
   const t = useExtracted()
   const router = useRouter()
+  const schema = useMoveInFormSchema()
   const { places, date, stayDuration, account, message, privacyPolicy } =
     contactFormDefaultValues
 
@@ -40,7 +44,7 @@ export function MoveInForm() {
       privacyPolicy
     },
     validators: {
-      onSubmit: MoveInFormSchema
+      onSubmit: schema
     },
     onSubmit: async ({ value }) => {
       const promise = submitContactForm({ type: 'move-in', data: value })

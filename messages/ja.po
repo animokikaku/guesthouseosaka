@@ -385,10 +385,6 @@ msgid "B8ytd5"
 msgstr "このフォームを送信することで、<link>プライバシーポリシー</link>に同意することになります。"
 
 #: components/forms/contact-form.tsx
-msgid "DrcOOR"
-msgstr "メッセージは{min}文字以上で入力してください。"
-
-#: components/forms/contact-form.tsx
 #: components/forms/index.tsx
 msgid "DX9QSt"
 msgstr "お名前を入力してください"
@@ -434,10 +430,6 @@ msgstr "メッセージ"
 #: components/forms/contact-form.tsx
 msgid "ttbGvm"
 msgstr "サービスや料金などについてご質問がありますか？私たちがお手伝いします。"
-
-#: components/forms/contact-form.tsx
-msgid "vi98ug"
-msgstr "メッセージは{max}文字以内で入力してください。"
 
 #: components/forms/contact-form.tsx
 #: components/forms/index.tsx
@@ -566,6 +558,81 @@ msgstr "入居希望日"
 #: components/forms/move-in-form.tsx
 msgid "WW6ryD"
 msgstr "どのくらい滞在したいですか？"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "0qkrp9"
+msgstr "メッセージは5文字以上で入力してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "cpZU48"
+msgstr "メールアドレスの形式が正しくありません。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "EpQ7yr"
+msgstr "性別を選択してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "Gm3Ppk"
+msgstr "メッセージは3000文字以内で入力してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "HhjmvS"
+msgstr "電話番号の形式が正しくありません。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "hmVAfC"
+msgstr "国籍は100文字以内で入力してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "i9gXUw"
+msgstr "国籍を入力してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "jMgU5A"
+msgstr "年齢は正の数で入力してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "L0jNRb"
+msgstr "日付は本日以降の日付を選択してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "OoMm+2"
+msgstr "時間は10:00から20:00の間で入力してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "pcvoJI"
+msgstr "名前は2文字以上で入力してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "Pir8Nd"
+msgstr "希望する最短滞在期間を選択してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "qUJo8R"
+msgstr "シェアハウスを1件以上選択してください。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "RZp2fn"
+msgstr "最大3件までシェアハウスを選択できます。"
+
+#: components/forms/schema.tsx
+msgctxt "ContactForm"
+msgid "zFBo43"
+msgstr "プライバシーポリシーに同意してください。"
 
 #: components/forms/tour-form.tsx
 msgid "+l9/4s"

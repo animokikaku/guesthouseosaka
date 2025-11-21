@@ -10,6 +10,7 @@ import {
   FieldGroupUserAccount,
   useAppForm
 } from '@/components/forms'
+import { useTourFormSchema } from '@/components/forms/schema'
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import {
   Card,
@@ -22,18 +23,18 @@ import {
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useRouter } from '@/i18n/navigation'
 import { useExtracted } from 'next-intl'
-import { TourFormSchema } from './schema'
 
 export function TourForm() {
   const t = useExtracted()
   const router = useRouter()
+  const schema = useTourFormSchema()
   const { places, account, message, date, hour, privacyPolicy } =
     contactFormDefaultValues
 
   const form = useAppForm({
     defaultValues: { places, account, message, date, hour, privacyPolicy },
     validators: {
-      onSubmit: TourFormSchema
+      onSubmit: schema
     },
     onSubmit: async ({ value }) => {
       const promise = submitContactForm({ type: 'tour', data: value })
