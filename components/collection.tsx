@@ -58,6 +58,7 @@ export function Collection({ className }: { className?: string }) {
         <Item
           key={name}
           variant="default"
+          role="listitem"
           className="h-full flex-col items-start p-0"
         >
           <Link href={href} className="group block w-full">
