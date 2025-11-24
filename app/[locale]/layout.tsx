@@ -34,14 +34,7 @@ export async function generateMetadata(
   )
   const creator = 'melkir'
   const baseUrl = new URL(locale, env.NEXT_PUBLIC_APP_URL)
-
-  const images = [
-    {
-      url: `/og?title=${encodeURIComponent(
-        siteName
-      )}&description=${encodeURIComponent(description)}`
-    }
-  ]
+  const images = [{ url: '/og' }]
 
   return {
     title: {
