@@ -73,7 +73,7 @@ export async function generateMetadata(
       title: t('Share House Osaka'),
       description,
       images,
-      creator
+      creator: '@melkir_thib'
     },
     icons: {
       icon: '/favicon.ico',
