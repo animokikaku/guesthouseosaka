@@ -329,6 +329,22 @@ msgstr "シェアハウス大阪"
 msgid "yZ+nWx"
 msgstr "1991年創業。大阪市内に3つのシェアハウスがあります。"
 
+#: app/[locale]/not-found.tsx
+msgid "4DrmpC"
+msgstr "お探しのページが見つかりません。ホームに戻ってください。"
+
+#: app/[locale]/not-found.tsx
+msgid "BEbOqj"
+msgstr "おっと！"
+
+#: app/[locale]/not-found.tsx
+msgid "ke4T8u"
+msgstr "お困りですか？<link>サポートにお問い合わせください</link>。"
+
+#: app/[locale]/not-found.tsx
+msgid "Xvo/7M"
+msgstr "ホームに戻る"
+
 #: app/[locale]/page.tsx
 msgid "2FvSoa"
 msgstr "活気ある<block>シェアハウス</block>コミュニティ"
@@ -1330,38 +1346,6 @@ msgstr "メニューを切り替え"
 #: components/mobile-nav.tsx
 msgid "tKMlOc"
 msgstr "メニュー"
-
-#: components/next-intl/not-found-page.tsx
-msgid "DJBZ4A"
-msgstr "ブラウザのアドレスバーをご確認いただくか、メニューから既知のページへ移動してください。"
-
-#: components/next-intl/not-found-page.tsx
-msgid "QRccCM"
-msgstr "ページが見つかりません"
-
-#: components/next-intl/page-layout.tsx
-msgid "/6/sPX"
-msgstr "ドキュメント"
-
-#: components/next-intl/page-layout.tsx
-msgid "2A9FEc"
-msgstr "https://next-intl.dev"
-
-#: components/next-intl/page-layout.tsx
-msgid "Fmbx3l"
-msgstr "next-intl の公式ドキュメントで詳しく学ぶ"
-
-#: components/next-intl/page-layout.tsx
-msgid "GAUX9p"
-msgstr "ソースコード"
-
-#: components/next-intl/page-layout.tsx
-msgid "L00nDd"
-msgstr "このサンプルのソースコードをGitHubで閲覧する"
-
-#: components/next-intl/page-layout.tsx
-msgid "X6JDFK"
-msgstr "https://github.com/amannn/next-intl/tree/main/examples/example-app-router"
 
 #: components/site-footer.tsx
 msgid "pZLKMO"
