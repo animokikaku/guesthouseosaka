@@ -8,20 +8,16 @@ import {
 } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
-import { routing } from '@/i18n/routing'
-import { getExtracted, setRequestLocale } from 'next-intl/server'
-import z from 'zod'
+import { Locale, useExtracted } from 'next-intl'
+import { setRequestLocale } from 'next-intl/server'
+import { use } from 'react'
 
-const ParamsSchema = z.object({
-  locale: z.enum(routing.locales)
-})
-
-export default async function RootPage(props: PageProps<'/[locale]'>) {
-  const { locale } = ParamsSchema.parse(await props.params)
+export default function RootPage({ params }: PageProps<'/[locale]'>) {
+  const { locale } = use(params)
 
   // Enable static rendering
-  setRequestLocale(locale)
-  const t = await getExtracted()
+  setRequestLocale(locale as Locale)
+  const t = useExtracted()
 
   return (
     <div className="section-soft flex flex-col gap-18 md:gap-0">
@@ -56,7 +52,7 @@ export default async function RootPage(props: PageProps<'/[locale]'>) {
             {/* Instagram feed */}
             <div className="flex justify-center md:col-span-2 md:justify-end">
               <div className="w-full">
-                <GalleryWall locale={locale} />
+                <GalleryWall locale={locale as Locale} />
               </div>
             </div>
           </div>
