@@ -311,7 +311,6 @@ msgid "sy+pv5"
 msgstr "Email"
 
 #: app/[locale]/layout.tsx
-#: app/[locale]/opengraph-image.tsx
 #: app/manifest.ts
 #: components/site-header.tsx
 msgid "8FQpM9"
