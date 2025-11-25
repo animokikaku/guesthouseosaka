@@ -34,7 +34,6 @@ export async function generateMetadata(
   )
   const creator = 'melkir'
   const baseUrl = new URL(locale, env.NEXT_PUBLIC_APP_URL)
-  const images = [{ url: '/og' }]
 
   return {
     title: {
@@ -69,14 +68,12 @@ export async function generateMetadata(
       url: baseUrl,
       title: siteName,
       description,
-      siteName,
-      images
+      siteName
     },
     twitter: {
       card: 'summary_large_image',
       title: t('Share House Osaka'),
       description,
-      images,
       creator: '@melkir_thib'
     },
     icons: {
