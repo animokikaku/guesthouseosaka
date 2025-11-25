@@ -33,14 +33,13 @@ export async function generateMetadata(
     'Founded in 1991. We have 3 share houses in the city of Osaka.'
   )
   const creator = 'melkir'
-  const baseUrl = new URL(locale, env.NEXT_PUBLIC_APP_URL)
 
   return {
     title: {
       default: siteName,
       template: `%s - ${siteName}`
     },
-    metadataBase: baseUrl,
+    metadataBase: env.NEXT_PUBLIC_APP_URL,
     description,
     keywords: [
       'Guest House Osaka',
@@ -65,7 +64,6 @@ export async function generateMetadata(
       type: 'website',
       locale: 'en_US',
       alternateLocale: ['ja_JP', 'fr_FR'],
-      url: baseUrl,
       title: siteName,
       description,
       siteName
