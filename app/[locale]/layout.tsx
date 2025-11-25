@@ -43,7 +43,18 @@ export async function generateMetadata(
     },
     metadataBase: baseUrl,
     description,
-    keywords: ['Share House', 'Osaka', 'Japan'],
+    keywords: [
+      'Guest House Osaka',
+      'Osaka Guest House',
+      'Osaka Share House',
+      'Share House Osaka',
+      'International Share House',
+      'Long-term stay Osaka',
+      'Room for rent Osaka',
+      'Accommodation Osaka',
+      'Share House Japan',
+      'Foreigners housing Osaka'
+    ],
     authors: [
       {
         name: creator,
