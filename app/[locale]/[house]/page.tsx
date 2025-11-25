@@ -1,14 +1,19 @@
-import { validateParams } from '@/app/[locale]/[house]/layout'
+import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
-import { getExtracted, setRequestLocale } from 'next-intl/server'
+import { Locale, useExtracted } from 'next-intl'
+import { setRequestLocale } from 'next-intl/server'
+import { notFound } from 'next/navigation'
+import { use } from 'react'
 
-export default async function HousePage({
-  params
-}: PageProps<'/[locale]/[house]'>) {
-  const { locale, house } = await validateParams(params)
-  setRequestLocale(locale)
+export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
+  const { locale, house } = use(params)
+  setRequestLocale(locale as Locale)
 
-  const t = await getExtracted()
+  if (!hasHouse(house)) {
+    notFound()
+  }
+
+  const t = useExtracted()
 
   const { title, description } = {
     orange: {

@@ -1,16 +1,18 @@
-import { validateParams } from '@/app/[locale]/[house]/layout'
 import { HouseGallery } from '@/components/gallery/house-gallery'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
+import { HouseIdentifier } from '@/lib/types'
 import { ArrowLeftIcon } from 'lucide-react'
-import { getExtracted, setRequestLocale } from 'next-intl/server'
+import { Locale, useExtracted } from 'next-intl'
+import { setRequestLocale } from 'next-intl/server'
+import { use } from 'react'
 
-export default async function GalleryPage({
+export default function GalleryPage({
   params
 }: PageProps<'/[locale]/[house]/gallery'>) {
-  const { locale, house } = await validateParams(params)
-  setRequestLocale(locale)
-  const t = await getExtracted()
+  const { locale, house } = use(params)
+  setRequestLocale(locale as Locale)
+  const t = useExtracted()
 
   return (
     <div className="bg-background text-foreground fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden">
@@ -28,7 +30,7 @@ export default async function GalleryPage({
         <div className="flex-1 overflow-y-auto scroll-smooth">
           <div className="container-wrapper">
             <div className="container py-8 md:py-12">
-              <HouseGallery house={house} />
+              <HouseGallery house={house as HouseIdentifier} />
             </div>
           </div>
         </div>

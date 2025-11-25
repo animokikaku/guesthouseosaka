@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from 'lucide-react'
-import { Locale } from 'next-intl'
+import { Locale, useExtracted } from 'next-intl'
 
 import {
   Item,
@@ -9,14 +9,15 @@ import {
   ItemTitle
 } from '@/components/ui/item'
 import { Link } from '@/i18n/navigation'
-import { getExtracted, setRequestLocale } from 'next-intl/server'
+import { setRequestLocale } from 'next-intl/server'
+import { use } from 'react'
 
-export default async function ContactPage({
+export default function ContactPage({
   params
 }: PageProps<'/[locale]/contact'>) {
-  const { locale } = await params
+  const { locale } = use(params)
   setRequestLocale(locale as Locale)
-  const t = await getExtracted()
+  const t = useExtracted()
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4">

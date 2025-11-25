@@ -1,15 +1,9 @@
 import { routing } from '@/i18n/routing'
-import { HouseIdentifierSchema } from '@/lib/types'
+import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
 import { Metadata } from 'next'
+import { Locale } from 'next-intl'
 import { getExtracted } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import React from 'react'
-import z from 'zod'
-
-const ParamsSchema = z.object({
-  locale: z.enum(routing.locales),
-  house: HouseIdentifierSchema
-})
 
 export function generateStaticParams() {
   const houses = HouseIdentifierSchema.options
@@ -18,21 +12,17 @@ export function generateStaticParams() {
   )
 }
 
-export async function validateParams(params: Promise<unknown>) {
-  const { success, data } = ParamsSchema.safeParse(await params)
-  if (!success) {
-    notFound()
-  }
-  return data
+export function hasHouse(house: string): house is HouseIdentifier {
+  return HouseIdentifierSchema.safeParse(house).success
 }
 
 export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/[house]'>, 'children'>
 ): Promise<Metadata> {
-  const { locale, house } = await validateParams(props.params)
-  const t = await getExtracted({ locale })
+  const { locale, house } = await props.params
+  const t = await getExtracted({ locale: locale as Locale })
 
-  switch (house) {
+  switch (house as HouseIdentifier) {
     case 'orange':
       return {
         title: t('Orange House'),
@@ -51,12 +41,17 @@ export async function generateMetadata(
   }
 }
 
-export default function HouseLayout({
+export default async function HouseLayout({
   children,
-  modal
-}: LayoutProps<'/[locale]/[house]'> & {
-  modal: React.ReactNode
-}) {
+  modal,
+  params
+}: LayoutProps<'/[locale]/[house]'>) {
+  // Ensure that the incoming `house` is valid
+  const { house } = await params
+  if (!hasHouse(house)) {
+    notFound()
+  }
+
   return (
     <>
       {children}
