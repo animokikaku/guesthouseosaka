@@ -11,16 +11,19 @@ import {
   EmptyTitle
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
+import { assets } from '@/lib/assets'
 import { useExtracted } from 'next-intl'
 import Image from 'next/image'
 
 export default function NotFound() {
   const t = useExtracted()
+  const { notFound } = assets
+
   return (
     <Empty>
       <EmptyHeader>
         <EmptyMedia>
-          <Image src="/404.svg" alt="Not found" width={750} height={500} />
+          <Image priority {...notFound} alt={notFound.alt} />
         </EmptyMedia>
         <EmptyTitle className="text-2xl font-bold tracking-tight sm:text-4xl">
           {t('Oops!')}

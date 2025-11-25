@@ -1,6 +1,24 @@
 import { url } from './utils/blob-storage'
 
 export const assets = {
+  notFound: {
+    src: url('404.svg'),
+    width: 750,
+    height: 500,
+    alt: 'Not found'
+  },
+  og: {
+    src: url('og-image.jpg'),
+    width: 1200,
+    height: 630,
+    alt: 'Share House Osaka'
+  },
+  logo: {
+    src: url('logo.png'),
+    width: 322,
+    height: 209,
+    alt: 'Share House Osaka logo'
+  },
   apple: {
     background: {
       src: url('bg_apple.webp'),
