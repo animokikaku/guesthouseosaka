@@ -4,19 +4,7 @@ import createNextIntlPlugin from 'next-intl/plugin'
 
 const withNextIntl = createNextIntlPlugin({
   experimental: {
-    srcPath: ['./app', './components'],
-    extract: {
-      sourceLocale: 'en'
-    },
-    messages: {
-      // Relative path to the directory
-      path: './messages',
-      // Either 'json' or 'po'
-      format: 'po',
-      // Either 'infer' to automatically detect locales based on
-      // matching files in `path` or an explicit array of locales
-      locales: 'infer'
-    }
+    createMessagesDeclaration: './messages/en.json'
   }
 })
 
