@@ -21,7 +21,6 @@
     "optional": "facultatif",
     "submit": "Envoyer",
     "reset": "Réinitialiser",
-    "backToHome": "Retour à la page d'accueil",
     "close": "Fermer",
     "showMore": "En savoir plus",
     "showAllPhotos": "Afficher toutes les photos",
@@ -93,7 +92,7 @@
     "details": {
       "apple": {
         "stations": {
-          "daikokucho": "Station Daikokucho (métro lignes Midosuji et Yotsubashi), sortie 2 — environ 1 minute à pied",
+          "daikokucho": "Station Daikokucho (métro Midosuji et Yotsubashi), sortie 2 — environ 1 minute à pied",
           "namba": "Stations Namba (diverses lignes) — environ 15 minutes à pied",
           "ebisucho": "Station Ebisucho — environ 11 minutes à pied",
           "imamiya": "Station Imamiya / Imamiya-Ebisu — environ 7 minutes à pied"
@@ -377,7 +376,7 @@
       "name": {
         "label": "Nom",
         "placeholder": "Saisissez votre nom",
-        "description": "Comment devons-nous nous adresser à vous?"
+        "description": "Comment devons-nous nous adresser à vous ?"
       },
       "age": {
         "label": "Âge",
@@ -437,7 +436,7 @@
       "tourDateLabel": "Date de visite",
       "tourDateDescription": "Quand souhaitez-vous organiser une visite ?",
       "tourHourLabel": "Heure de visite",
-      "tourHourDescription": "Nos heures d'ouverture sont de 10h00 à 20h00."
+      "tourHourDescription": "Nos heures d'ouverture sont de 10:00 à 20:00."
     },
     "validation": {
       "placesMin": "Veuillez sélectionner au moins une share house.",
@@ -453,7 +452,7 @@
       "dateFuture": "La date doit être aujourd'hui ou plus tard.",
       "privacyPolicy": "Vous devez accepter la politique de confidentialité.",
       "stayDuration": "Veuillez sélectionner votre durée de séjour minimale souhaitée.",
-      "timeRange": "L'heure doit être comprise entre 10h00 et 20h00.",
+      "timeRange": "L'heure doit être comprise entre 10:00 et 20:00.",
       "messageMin": "Le message doit contenir au moins 5 caractères."
     }
   },
@@ -461,7 +460,8 @@
     "notFound": {
       "title": "Oups !",
       "description": "La page que vous cherchez est introuvable, nous vous suggérons de revenir à l'accueil.",
-      "contactSupport": "Besoin d'aide ? <link>Contactez le support</link>."
+      "contactSupport": "Besoin d'aide ? <link>Contactez le support</link>.",
+      "backToHome": "Retour à la page d'accueil"
     }
   },
   "legal": {
@@ -515,7 +515,9 @@
         },
         "rights": {
           "title": "5. Vos droits",
-          "paragraphs": ["Vous bénéficiez des droits suivants :"],
+          "paragraphs": [
+            "Vous bénéficiez des droits suivants :"
+          ],
           "list": [
             "Demander l'accès aux informations personnelles que nous détenons à votre sujet",
             "Demander la correction, l'ajout ou la suppression d'informations inexactes ou obsolètes",
