@@ -43,6 +43,7 @@ export async function generateMetadata(
       template: `%s - ${siteName}`
     },
     metadataBase: env.NEXT_PUBLIC_APP_URL,
+    authors: [{ name: 'Thibault Vieux', url: 'https://thibaultvieux.com' }],
     description: t('siteDescription'),
     keywords: [
       'Guest House Osaka',
