@@ -364,8 +364,8 @@
       "sending": "メッセージ送信中...",
       "success": "メッセージ送信が成功しました。",
       "failure": "メッセージ送信に失敗しました。",
-      "successDescription": "メッセージ送信が成功しました。",
-      "errorDescription": "メッセージ送信に失敗しました。"
+      "successDescription": "{name}様、お問い合わせありがとうございます。追ってご連絡いたします。",
+      "errorDescription": "恐れ入りますが、しばらく時間をおいて再度お試しいただくか、{email}まで直接ご連絡ください。"
     },
     "fields": {
       "gender": {
