@@ -22,7 +22,7 @@ import {
   PhoneIcon,
   UserIcon
 } from 'lucide-react'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import router from 'next/dist/client/router'
 import { toast } from 'sonner'
 
@@ -63,7 +63,7 @@ export const userAccountDefaultValues = {
 export const FieldGroupUserAccount = withFieldGroup({
   defaultValues: userAccountDefaultValues,
   render: function Render({ group }) {
-    const t = useExtracted()
+    const t = useTranslations()
 
     return (
       <>
@@ -73,12 +73,12 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.SelectField
               required
               orientation="responsive"
-              label={t('Gender')}
-              placeholder={t('Select your gender')}
-              description={t('What is your gender?')}
+              label={t('forms.fields.gender.label')}
+              placeholder={t('forms.fields.gender.placeholder')}
+              description={t('forms.fields.gender.description')}
               options={[
-                { label: t('Male'), value: 'male' },
-                { label: t('Female'), value: 'female' }
+                { label: t('forms.fields.gender.male'), value: 'male' },
+                { label: t('forms.fields.gender.female'), value: 'female' }
               ]}
             />
           )}
@@ -88,10 +88,10 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               required
-              placeholder={t('Enter your name')}
+              placeholder={t('forms.fields.name.placeholder')}
               orientation="responsive"
-              description={t('How should we address you?')}
-              label={t('Name')}
+              description={t('forms.fields.name.description')}
+              label={t('forms.fields.name.label')}
               icon={<UserIcon />}
               type="text"
               autoComplete="name"
@@ -103,11 +103,11 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               required
-              description={t('How old are you?')}
+              description={t('forms.fields.age.description')}
               icon={<CakeIcon />}
               orientation="responsive"
-              placeholder={t('Enter your age')}
-              label={t('Age')}
+              placeholder={t('forms.fields.age.placeholder')}
+              label={t('forms.fields.age.label')}
               type="number"
               min={1}
               autoComplete="age"
@@ -120,11 +120,11 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.InputGroupField
               required
               orientation="responsive"
-              label={t('Nationality')}
-              description={t('Let us know your nationality.')}
+              label={t('forms.fields.nationality.label')}
+              description={t('forms.fields.nationality.description')}
               icon={<GlobeIcon />}
               type="text"
-              placeholder={t('Japanese')}
+              placeholder={t('forms.fields.nationality.placeholder')}
             />
           )}
         />
@@ -134,12 +134,10 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.InputGroupField
               required
               orientation="responsive"
-              placeholder={t('Enter your email')}
-              description={t(
-                "We'll use this email to share with you more details."
-              )}
+              placeholder={t('forms.fields.email.placeholder')}
+              description={t('forms.fields.email.description')}
               type="email"
-              label={t('Email')}
+              label={t('forms.fields.email.label')}
               icon={<MailIcon />}
               autoComplete="email"
             />
@@ -150,16 +148,14 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               orientation="responsive"
-              placeholder={t('070-1234-5678')}
+              placeholder={t('forms.fields.phone.placeholder')}
               type="tel"
-              description={t(
-                'We may use this number to contact you on the visit day.'
-              )}
+              description={t('forms.fields.phone.description')}
               label={
                 <div>
-                  {t('Phone')}{' '}
+                  {t('forms.fields.phone.label')}{' '}
                   <span className="text-muted-foreground text-xs">
-                    {t('(optional)')}
+                    {t('forms.fields.phone.optional')}
                   </span>
                 </div>
               }
@@ -182,7 +178,7 @@ export const FieldGroupPlaces = withFieldGroup({
     description: ''
   },
   render: function Render({ group, description, label }) {
-    const t = useExtracted()
+    const t = useTranslations()
 
     const placeOptions = [
       {
@@ -190,7 +186,7 @@ export const FieldGroupPlaces = withFieldGroup({
         label: (
           <>
             <HouseIcon name="orange" />
-            {t('Orange House')}
+            {t('houses.orange.name')}
           </>
         ),
         className:
@@ -201,7 +197,7 @@ export const FieldGroupPlaces = withFieldGroup({
         label: (
           <>
             <HouseIcon name="apple" />
-            {t('Apple House')}
+            {t('houses.apple.name')}
           </>
         ),
         className:
@@ -212,7 +208,7 @@ export const FieldGroupPlaces = withFieldGroup({
         label: (
           <>
             <HouseIcon name="lemon" />
-            {t('Lemon House')}
+            {t('houses.lemon.name')}
           </>
         ),
         className:
@@ -246,27 +242,23 @@ export const contactFormDefaultValues = {
 } satisfies ContactFormFields
 
 export function useSubmitToast(promise: Promise<unknown>, name: string) {
-  const t = useExtracted()
+  const t = useTranslations('forms')
 
   toast.promise(promise, {
-    loading: t('Sending message...'),
+    loading: t('status.sending'),
     success: () => {
       router.push('/contact')
       return {
-        message: t('Message sent successfully!'),
-        description: t(
-          'Thank you for contacting us {name}. We will get back to you shortly.',
-          { name }
-        )
+        message: t('status.success'),
+        description: t('status.successDescription', { name })
       }
     },
     error: (error) => {
       return {
-        message: error.message || t('Failed to send message.'),
-        description: t(
-          'Please try again later or contact us directly at {email}.',
-          { email: 'info@guesthouseosaka.com' }
-        )
+        message: error.message || t('status.failure'),
+        description: t('status.errorDescription', {
+          email: 'info@guesthouseosaka.com'
+        })
       }
     }
   })

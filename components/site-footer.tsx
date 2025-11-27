@@ -1,9 +1,9 @@
 import { Icons } from '@/components/icons'
 import { Link } from '@/i18n/navigation'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export function SiteFooter() {
-  const t = useExtracted()
+  const t = useTranslations()
   const year = new Date().getFullYear()
 
   return (
@@ -11,8 +11,8 @@ export function SiteFooter() {
       <div className="container-wrapper px-4 xl:px-6">
         <div className="flex min-h-(--footer-height) flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:flex-nowrap">
           <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">
-            <span className="sr-only">Guest House Osaka</span>
-            © {year} {t('Animo Planning Co., Ltd.')}
+            <span className="sr-only">{t('meta.siteName')}</span>
+            © {year} {t('footer.company')}
           </div>
           <div className="flex shrink-0 items-center gap-3">
             <SocialLink

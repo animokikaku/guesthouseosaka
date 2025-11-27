@@ -10,13 +10,13 @@ import { Empty, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { storage } from '@/lib/images'
 import { HouseIdentifier } from '@/lib/types'
-import { useExtracted, useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 export function MobileHeroImage({ house }: { house: HouseIdentifier }) {
   const locale = useLocale()
-  const t = useExtracted()
+  const t = useTranslations('gallery')
   const [api, setApi] = useState<CarouselApi>()
   const [currentIndex, setCurrentIndex] = useState(1)
 
@@ -42,7 +42,7 @@ export function MobileHeroImage({ house }: { house: HouseIdentifier }) {
   if (images.length === 0) {
     return (
       <Empty className="min-h-96 w-full">
-        <EmptyTitle>{t('No images found')}</EmptyTitle>
+        <EmptyTitle>{t('noImages')}</EmptyTitle>
       </Empty>
     )
   }

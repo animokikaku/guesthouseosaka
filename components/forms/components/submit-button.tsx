@@ -1,7 +1,7 @@
 import { useFormContext } from '@/components/forms'
 import { Button } from '@/components/ui/button'
 import { useStore } from '@tanstack/react-form'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 type FormSubmitButtonProps = Omit<
   React.ComponentProps<typeof Button>,
@@ -10,7 +10,7 @@ type FormSubmitButtonProps = Omit<
 
 export const SubmitButton = (props: FormSubmitButtonProps) => {
   const form = useFormContext()
-  const t = useExtracted()
+  const t = useTranslations()
 
   const [isSubmitting, canSubmit] = useStore(form.store, (state) => [
     state.isSubmitting,
@@ -19,7 +19,7 @@ export const SubmitButton = (props: FormSubmitButtonProps) => {
 
   return (
     <Button type="submit" disabled={isSubmitting || !canSubmit} {...props}>
-      {t('Submit')}
+      {t('common.submit')}
     </Button>
   )
 }

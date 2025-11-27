@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from 'lucide-react'
-import { Locale, useExtracted } from 'next-intl'
+import { Locale, useTranslations } from 'next-intl'
 
 import {
   Item,
@@ -17,30 +17,24 @@ export default function ContactPage({
 }: PageProps<'/[locale]/contact'>) {
   const { locale } = use(params)
   setRequestLocale(locale as Locale)
-  const t = useExtracted()
+  const t = useTranslations('contact')
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4">
       <ContactLink
         href="/contact/tour#tabs"
-        title={t('Tour request')}
-        description={t(
-          'Schedule a visit to see our share houses and get a feel for what we offer.'
-        )}
+        title={t('nav.tour')}
+        description={t('cards.tourDescription')}
       />
       <ContactLink
         href="/contact/move-in#tabs"
-        title={t('Move in request')}
-        description={t(
-          'Ready to move in? Share your preferences and timeline.'
-        )}
+        title={t('nav.moveIn')}
+        description={t('cards.moveInDescription')}
       />
       <ContactLink
         href="/contact/other#tabs"
-        title={t('General inquiry')}
-        description={t(
-          'Questions about rooms, pricing, or availability? We’re happy to help.'
-        )}
+        title={t('nav.general')}
+        description={t('cards.generalDescription')}
       />
     </div>
   )

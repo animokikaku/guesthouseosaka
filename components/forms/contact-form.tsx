@@ -16,11 +16,11 @@ import {
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useRouter } from '@/i18n/navigation'
 import { MailIcon, UserIcon } from 'lucide-react'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 
 export function ContactForm() {
-  const t = useExtracted()
+  const t = useTranslations('forms')
   const router = useRouter()
   const schema = useGeneralInquirySchema()
   const { message, privacyPolicy, account } = contactFormDefaultValues
@@ -44,24 +44,22 @@ export function ContactForm() {
       const promise = submitContactForm({ type: 'other', data: value })
 
       toast.promise(promise, {
-        loading: t('Sending message...'),
+        loading: t('status.sending'),
         success: () => {
           router.push('/contact')
           return {
-            message: t('Message sent successfully!'),
-            description: t(
-              'Thank you for contacting us {name}. We will get back to you shortly.',
-              { name: value.account.name }
-            )
+            message: t('status.success'),
+            description: t('status.successDescription', {
+              name: value.account.name
+            })
           }
         },
         error: (error) => {
           return {
-            message: error.message || t('Failed to send message.'),
-            description: t(
-              'Please try again later or contact us directly at {email}.',
-              { email: 'info@guesthouseosaka.com' }
-            )
+            message: error.message || t('status.failure'),
+            description: t('status.errorDescription', {
+              email: 'info@guesthouseosaka.com'
+            })
           }
         }
       })
@@ -71,12 +69,8 @@ export function ContactForm() {
   return (
     <Card className="mx-auto w-full max-w-2xl">
       <CardHeader>
-        <CardTitle>{t('General inquiry')}</CardTitle>
-        <CardDescription>
-          {t(
-            "Have questions about our services, pricing, or anything else? We're here to help."
-          )}
-        </CardDescription>
+        <CardTitle>{t('contactForm.title')}</CardTitle>
+        <CardDescription>{t('contactForm.description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -93,8 +87,8 @@ export function ContactForm() {
                 <field.InputGroupField
                   required
                   type="text"
-                  label={t('Name')}
-                  placeholder={t('Enter your name')}
+                  label={t('fields.name.label')}
+                  placeholder={t('fields.name.placeholder')}
                   icon={<UserIcon />}
                   autoComplete="name"
                 />
@@ -106,8 +100,8 @@ export function ContactForm() {
                 <field.InputGroupField
                   required
                   type="email"
-                  label={t('Email')}
-                  placeholder={t('Enter your email')}
+                  label={t('fields.email.label')}
+                  placeholder={t('fields.email.placeholder')}
                   icon={<MailIcon />}
                   autoComplete="email"
                 />
@@ -119,15 +113,11 @@ export function ContactForm() {
               children={(field) => (
                 <field.MessageField
                   required
-                  label={t('Message')}
+                  label={t('fields.message.label')}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={t(
-                    'Let us know any additional information or questions.'
-                  )}
-                  description={t(
-                    'Do not include sensitive information such as your home address or credit card number.'
-                  )}
+                  placeholder={t('fields.message.contactPlaceholder')}
+                  description={t('fields.message.description')}
                 />
               )}
             />
@@ -138,14 +128,11 @@ export function ContactForm() {
                   required
                   label={
                     <p className="text-muted-foreground">
-                      {t.rich(
-                        'By submitting this form, you agree to the <link>Privacy Policy</link>.',
-                        {
-                          link: (chunks) => (
-                            <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
-                          )
-                        }
-                      )}
+                      {t.rich('fields.privacyPolicyAgreement', {
+                        link: (chunks) => (
+                          <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
+                        )
+                      })}
                     </p>
                   }
                 />

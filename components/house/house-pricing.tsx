@@ -1,5 +1,5 @@
 import { HouseIdentifier } from '@/lib/types'
-import { getExtracted } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 
 type PricingValue = string | string[]
 
@@ -16,35 +16,42 @@ const renderValue = (value: PricingValue) => {
 }
 
 export async function HousePricing({ id }: { id: HouseIdentifier }) {
-  const t = await getExtracted()
+  const t = await getTranslations('pricing')
+  const labels = {
+    rent: t('labels.rent'),
+    shortStay: t('labels.shortStay'),
+    dormitoryPlan: t('labels.dormitoryPlan'),
+    otherFees: t('labels.otherFees'),
+    longStay: t('labels.longStay')
+  }
 
   const { rows, notes } = {
     apple: {
       rows: [
         {
-          label: t('Rent'),
-          value: t('¥50,000 ~ ¥70,000 per month (up to 2 people per room)')
+          label: labels.rent,
+          value: t('apple.rent')
         },
         {
-          label: t('Short Stay'),
+          label: labels.shortStay,
           value: [
-            t('¥80,000 ~ ¥95,000 per month.'),
-            t('Stays under 3 months: All fees included.'),
-            t('Minimum stay: 1 month.')
+            t('apple.shortStay.rate'),
+            t('apple.shortStay.allFees'),
+            t('apple.shortStay.minimum')
           ]
         }
       ],
       notes: [
         {
-          title: t('Long Stay Discount'),
-          items: [t('Discounts for 3-month and 6-month stays.')]
+          title: labels.longStay,
+          items: [t('apple.longStay')]
         },
         {
-          title: t('Other Fees'),
+          title: labels.otherFees,
           items: [
-            t('Service fee: ¥10,000 per month'),
-            t('Utilities: About ¥3,000 per month (you pay what you use)'),
-            t('Deposit: ¥30,000 (returned when you leave, if no damage)')
+            t('apple.otherFees.serviceFee'),
+            t('apple.otherFees.utilities'),
+            t('apple.otherFees.deposit')
           ]
         }
       ]
@@ -52,39 +59,39 @@ export async function HousePricing({ id }: { id: HouseIdentifier }) {
     lemon: {
       rows: [
         {
-          label: t('Rent'),
-          value: t('¥50,000 ~ ¥70,000 per month (up to 2 people per room)')
+          label: labels.rent,
+          value: t('lemon.rent')
         },
         {
-          label: t('Short Stay'),
+          label: labels.shortStay,
           value: [
-            t('¥80,000 ~ ¥95,000 per month.'),
-            t('Stays under 3 months: All fees included.'),
-            t('Minimum stay: 1 month.')
+            t('lemon.shortStay.rate'),
+            t('lemon.shortStay.allFees'),
+            t('lemon.shortStay.minimum')
           ]
         },
         {
-          label: t('Dormitory Plan'),
+          label: labels.dormitoryPlan,
           value: [
-            t('¥45,000 per month (includes utilities and service fee)'),
-            t('Co-ed, 3 beds per room, shared bathroom and kitchen.'),
-            t('Minimum stay: 1 month.')
+            t('lemon.dormitory.rate'),
+            t('lemon.dormitory.details'),
+            t('lemon.dormitory.minimum')
           ]
         }
       ],
       notes: [
         {
-          title: t('Long Stay Discount'),
-          items: [t('Discounts for 3-month and 6-month stays.')]
+          title: labels.longStay,
+          items: [t('lemon.longStay')]
         },
         {
-          title: t('Other Fees'),
+          title: labels.otherFees,
           items: [
-            t('Service fee: ¥10,000 per month'),
-            t('Utilities: About ¥3,000 per month (you pay what you use)'),
-            t('Deposit: ¥30,000 (returned when you leave, if no damage)'),
-            t('Washing machine: Free (on rooftop)'),
-            t('Dryer: ¥100 per 20 minutes')
+            t('lemon.otherFees.serviceFee'),
+            t('lemon.otherFees.utilities'),
+            t('lemon.otherFees.deposit'),
+            t('lemon.otherFees.washingMachine'),
+            t('lemon.otherFees.dryer')
           ]
         }
       ]
@@ -92,32 +99,27 @@ export async function HousePricing({ id }: { id: HouseIdentifier }) {
     orange: {
       rows: [
         {
-          label: t('Rent'),
-          value: [
-            t('¥40,000 ~ ¥48,000 per month (1 person)'),
-            t('+¥5,000 per month for second person')
-          ]
+          label: labels.rent,
+          value: [t('orange.rent.base'), t('orange.rent.secondPerson')]
         }
       ],
       notes: [
         {
-          title: t('Long Stay Discount'),
+          title: labels.longStay,
           items: [
-            t('2nd month: Save ¥1,000'),
-            t('3rd month: Save ¥2,000'),
-            t('After 6 months: Save ¥5,000 every month')
+            t('orange.longStay.secondMonth'),
+            t('orange.longStay.thirdMonth'),
+            t('orange.longStay.afterSixMonths')
           ]
         },
         {
-          title: t('Other Fees'),
+          title: labels.otherFees,
           items: [
-            t('Service fee: ¥12,000 per month'),
-            t(
-              'Utilities: About ¥3,000 ~ ¥4,000 per month (you pay what you use)'
-            ),
-            t('Washing machine: Free'),
-            t('Dryer: ¥100'),
-            t('Deposit: ¥30,000 (returned when you leave, if no damage)')
+            t('orange.otherFees.serviceFee'),
+            t('orange.otherFees.utilities'),
+            t('orange.otherFees.washingMachine'),
+            t('orange.otherFees.dryer'),
+            t('orange.otherFees.deposit')
           ]
         }
       ]
@@ -126,7 +128,7 @@ export async function HousePricing({ id }: { id: HouseIdentifier }) {
 
   return (
     <section className="pb-8" id="pricing">
-      <h2 className="mb-6 text-2xl font-semibold">{t('Pricing')}</h2>
+      <h2 className="mb-6 text-2xl font-semibold">{t('heading')}</h2>
       <div className="border-border overflow-x-auto rounded-lg border">
         <table className="w-full">
           <tbody>

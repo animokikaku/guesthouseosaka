@@ -1,6 +1,6 @@
 import { useFormContext } from '@/components/forms'
 import { Button } from '@/components/ui/button'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 type FormResetButton = Omit<
   React.ComponentProps<typeof Button>,
@@ -9,7 +9,7 @@ type FormResetButton = Omit<
 
 export const ResetButton = (props: FormResetButton) => {
   const form = useFormContext()
-  const t = useExtracted()
+  const t = useTranslations()
 
   return (
     <Button
@@ -21,7 +21,7 @@ export const ResetButton = (props: FormResetButton) => {
       }}
       {...props}
     >
-      {t('Reset')}
+      {t('common.reset')}
     </Button>
   )
 }

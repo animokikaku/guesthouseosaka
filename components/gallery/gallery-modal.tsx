@@ -15,18 +15,18 @@ import { HouseIdentifier } from '@/lib/types'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useStore } from '@tanstack/react-form'
 import { ArrowLeftIcon } from 'lucide-react'
-import { useExtracted, useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 
 export function GalleryModal({ house }: { house: HouseIdentifier }) {
   const photoId = useStore(store, (state) => state.photoId)
-  const t = useExtracted()
+  const t = useTranslations()
 
   const { title } = {
-    orange: { title: t('Orange House') },
-    apple: { title: t('Apple House') },
-    lemon: { title: t('Lemon House') }
+    orange: { title: t('houses.orange.name') },
+    apple: { title: t('houses.apple.name') },
+    lemon: { title: t('houses.lemon.name') }
   }[house]
 
   return (
@@ -41,9 +41,11 @@ export function GalleryModal({ house }: { house: HouseIdentifier }) {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-30" />
         <Dialog.Content className="dark text-foreground bg-background sm:bg-background/50 fixed inset-0 z-40 max-w-none translate-x-0 translate-y-0 rounded-none border-0 p-0 shadow-none backdrop-blur-2xl">
-          <Dialog.Title className="sr-only">{t('Home Gallery')}</Dialog.Title>
+          <Dialog.Title className="sr-only">
+            {t('gallery.modalTitle')}
+          </Dialog.Title>
           <Dialog.Description className="sr-only">
-            {t('Explore photos of {title}', { title })}
+            {t('gallery.explorePhotos', { title })}
           </Dialog.Description>
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <GalleryModalCarousel house={house} />
@@ -54,7 +56,7 @@ export function GalleryModal({ house }: { house: HouseIdentifier }) {
                 className="absolute top-0 left-0 m-4 rounded-full"
               >
                 <ArrowLeftIcon className="size-6" />
-                <span className="sr-only">{t('Close gallery')}</span>
+                <span className="sr-only">{t('gallery.close')}</span>
               </Button>
             </Dialog.Close>
           </div>

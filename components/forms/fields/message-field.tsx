@@ -12,7 +12,7 @@ import {
   InputGroupText,
   InputGroupTextarea
 } from '@/components/ui/input-group'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 type InputGroupTextareaFormProps = Omit<
   React.ComponentProps<typeof InputGroupTextarea>,
@@ -37,7 +37,7 @@ export function MessageField({
 }: MessageFieldProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
-  const t = useExtracted()
+  const t = useTranslations()
 
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
@@ -50,7 +50,7 @@ export function MessageField({
             {label}
             {!required && (
               <span className="text-muted-foreground text-xs">
-                ({t('optional')})
+                ({t('common.optional')})
               </span>
             )}
           </FieldLabel>
@@ -68,7 +68,7 @@ export function MessageField({
         />
         <InputGroupAddon align="block-end">
           <InputGroupText className="tabular-nums">
-            {t('{count} / {max} characters', {
+            {t('common.charactersCounter', {
               count: `${field.state.value.length}`,
               max: `${MAX_LENGTH}`
             })}

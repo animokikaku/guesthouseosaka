@@ -10,7 +10,7 @@ import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { Routes } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { default as Image, ImageProps } from 'next/image'
 
 interface HouseItem {
@@ -23,28 +23,28 @@ interface HouseItem {
 }
 
 export function Collection({ className }: { className?: string }) {
-  const t = useExtracted()
+  const t = useTranslations('houses')
 
   const items: HouseItem[] = [
     {
-      name: t('Orange House'),
-      description: t('Relaxed spacious Japanese-style lounge'),
+      name: t('orange.name'),
+      description: t('orange.summary'),
       accentClass: 'bg-orange-600/50',
       href: '/orange',
       icon: assets.orange.icon,
       image: assets.orange.background
     },
     {
-      name: t('Apple House'),
-      description: t('Share house 8 minutes walk from Namba Station'),
+      name: t('apple.name'),
+      description: t('apple.summary'),
       accentClass: 'bg-red-600/50',
       href: '/apple',
       icon: assets.apple.icon,
       image: assets.apple.background
     },
     {
-      name: t('Lemon House'),
-      description: t('Well-equipped private rooms and a luxurious lounge'),
+      name: t('lemon.name'),
+      description: t('lemon.summary'),
       accentClass: 'bg-yellow-600/50',
       href: '/lemon',
       icon: assets.lemon.icon,

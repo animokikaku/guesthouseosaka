@@ -4,14 +4,14 @@ import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { Apple, Circle, Citrus } from 'lucide-react'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { useSelectedLayoutSegment } from 'next/navigation'
 
 export function HouseSwitcher() {
   const selectedLayoutSegment = useSelectedLayoutSegment()
   const pathname = selectedLayoutSegment ? `/${selectedLayoutSegment}` : '/'
   const toggle = (href: string) => (href === pathname ? '/' : href)
-  const t = useExtracted()
+  const t = useTranslations('houses')
 
   return (
     <div className="border-border inline-flex items-center rounded-full border p-1">
@@ -28,7 +28,7 @@ export function HouseSwitcher() {
         )}
       >
         <Link href={toggle('/orange')}>
-          <span className="sr-only">{t('Orange House')}</span>
+          <span className="sr-only">{t('orange.name')}</span>
           <Circle />
         </Link>
       </Button>
@@ -44,7 +44,7 @@ export function HouseSwitcher() {
         )}
       >
         <Link href={toggle('/apple')}>
-          <span className="sr-only">{t('Apple House')}</span>
+          <span className="sr-only">{t('apple.name')}</span>
           <Apple />
         </Link>
       </Button>
@@ -60,7 +60,7 @@ export function HouseSwitcher() {
         )}
       >
         <Link href={toggle('/lemon')}>
-          <span className="sr-only">{t('Lemon House')}</span>
+          <span className="sr-only">{t('lemon.name')}</span>
           <Citrus />
         </Link>
       </Button>

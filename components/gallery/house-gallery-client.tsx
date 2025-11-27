@@ -5,23 +5,23 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { storage } from '@/lib/images'
 import { store } from '@/lib/store'
 import { HouseIdentifier } from '@/lib/types'
-import { useExtracted, useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { default as Image } from 'next/image'
 import { GalleryImageButton } from './gallery-image-button'
 
 export function HouseGalleryClient({ house }: { house: HouseIdentifier }) {
   const locale = useLocale()
-  const t = useExtracted()
+  const t = useTranslations('gallery')
   const categories = storage({ house, locale }).categories()
 
   const categoryMap = {
-    room: t('Room'),
-    'common-spaces': t('Common Spaces'),
-    facilities: t('Facilities'),
-    'building-features': t('Building Features'),
-    neighborhood: t('Neighborhood'),
-    'floor-plan': t('Floor Plan'),
-    maps: t('Maps')
+    room: t('categories.room'),
+    'common-spaces': t('categories.commonSpaces'),
+    facilities: t('categories.facilities'),
+    'building-features': t('categories.buildingFeatures'),
+    neighborhood: t('categories.neighborhood'),
+    'floor-plan': t('categories.floorPlan'),
+    maps: t('categories.maps')
   }
 
   return (

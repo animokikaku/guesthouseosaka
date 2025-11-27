@@ -1,6 +1,6 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
-import { Locale, useExtracted } from 'next-intl'
+import { Locale, useTranslations } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { use } from 'react'
@@ -13,20 +13,20 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
     notFound()
   }
 
-  const t = useExtracted()
+  const t = useTranslations('houses')
 
   const { title, description } = {
     orange: {
-      title: t('Orange House'),
-      description: t('Relaxed spacious Japanese-style lounge')
+      title: t('orange.name'),
+      description: t('orange.summary')
     },
     apple: {
-      title: t('Apple House'),
-      description: t('Share house 8 minutes walk from Namba Station')
+      title: t('apple.name'),
+      description: t('apple.summary')
     },
     lemon: {
-      title: t('Lemon House'),
-      description: t('Well-equipped private rooms and a luxurious lounge')
+      title: t('lemon.name'),
+      description: t('lemon.summary')
     }
   }[house]
 

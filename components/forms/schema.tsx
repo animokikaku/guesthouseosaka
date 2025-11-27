@@ -1,39 +1,39 @@
 import { HouseIdentifierSchema } from '@/lib/types'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { isMobilePhone } from 'validator'
 import z from 'zod'
 
 function useContactFormSchema() {
-  const t = useExtracted('ContactForm')
+  const t = useTranslations('forms.validation')
   return z.object({
     places: z
       .array(HouseIdentifierSchema)
-      .min(1, t('Please select at least one share house.'))
-      .max(3, t('You can select up to 3 share houses.')),
+      .min(1, t('placesMin'))
+      .max(3, t('placesMax')),
     account: z.object({
-      name: z.string().min(2, t('Name must be at least 2 characters long.')),
+      name: z.string().min(2, t('nameMin')),
       age: z.string().refine(
         (v) => {
           const age = Number(v)
           return !isNaN(age) && age > 0
         },
-        { message: t('Age must be a positive number.') }
+        { message: t('agePositive') }
       ),
       gender: z.enum(['male', 'female'], {
-        error: t('Please select your gender.')
+        error: t('genderRequired')
       }),
       nationality: z
         .string()
-        .min(1, t('Please enter your nationality.'))
-        .max(100, t('Nationality must be at most 100 characters.')),
-      email: z.email(t('Invalid email address.')),
+        .min(1, t('nationalityRequired'))
+        .max(100, t('nationalityMax')),
+      email: z.email(t('email')),
       phone: z.string().refine((v) => (v ? isMobilePhone(v, 'any') : true), {
-        message: t('Invalid phone number')
+        message: t('phone')
       })
     }),
     message: z
       .string()
-      .max(3000, t('Message must be at most 3000 characters.')),
+      .max(3000, t('messageMax')),
     date: z.iso.date().refine(
       (val) => {
         const inputDate = new Date(val)
@@ -42,13 +42,13 @@ function useContactFormSchema() {
         inputDate.setHours(0, 0, 0, 0)
         return inputDate >= today
       },
-      { message: t('Date must be today or later.') }
+      { message: t('dateFuture') }
     ),
     privacyPolicy: z.literal(true, {
-      error: t('You must agree to the privacy policy.')
+      error: t('privacyPolicy')
     }),
     stayDuration: z.enum(['1-month', '3-months', 'long-term'], {
-      error: t('Please select your desired minimum stay.')
+      error: t('stayDuration')
     }),
     hour: z.iso.time().refine(
       (val) => {
@@ -58,7 +58,7 @@ function useContactFormSchema() {
         const end = 20 * 60
         return totalMinutes >= start && totalMinutes <= end
       },
-      { message: t('Time must be between 10:00 and 20:00.') }
+      { message: t('timeRange') }
     )
   })
 }
@@ -96,7 +96,7 @@ export function useMoveInFormSchema() {
 export type MoveInFormFields = z.infer<ReturnType<typeof useMoveInFormSchema>>
 
 export function useGeneralInquirySchema() {
-  const t = useExtracted('ContactForm')
+  const t = useTranslations('forms.validation')
   const schema = useContactFormSchema()
   return schema
     .pick({
@@ -108,7 +108,7 @@ export function useGeneralInquirySchema() {
         email: true
       }),
       message: schema.shape.message.refine((val) => val.length >= 5, {
-        message: t('Message must be at least 5 characters long.')
+        message: t('messageMin')
       })
     })
 }

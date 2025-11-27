@@ -12,11 +12,11 @@ import {
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 export default function NotFound() {
-  const t = useExtracted()
+  const t = useTranslations('errors.notFound')
   const { notFound } = assets
 
   return (
@@ -26,20 +26,18 @@ export default function NotFound() {
           <Image priority {...notFound} alt={notFound.alt} />
         </EmptyMedia>
         <EmptyTitle className="text-2xl font-bold tracking-tight sm:text-4xl">
-          {t('Oops!')}
+          {t('title')}
         </EmptyTitle>
         <EmptyDescription className="text-base">
-          {t(
-            "The page you're looking for isn't found, we suggest you back to home."
-          )}
+          {t('description')}
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <Button asChild variant="outline" size="lg">
-          <Link href="/">{t('Back to home page')}</Link>
+          <Link href="/">{t('backToHome')}</Link>
         </Button>
         <EmptyDescription>
-          {t.rich('Need help? <link>Contact support</link>.', {
+          {t.rich('contactSupport', {
             link: (chunks) => <Link href="/contact/other#tabs">{chunks}</Link>
           })}
         </EmptyDescription>

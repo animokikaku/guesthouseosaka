@@ -10,3 +10,4 @@
 - [x] Focus on error field and disable browser validation for time
 - [x] Add the correct images on the home screen
 - [] Add a viewer for the home screen images
+- [] different og image per house

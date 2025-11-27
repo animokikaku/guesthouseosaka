@@ -2,7 +2,7 @@
 
 import { Skeleton } from '@/components/ui/skeleton'
 import { HouseIdentifier } from '@/lib/types'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
 
 const HouseMap = dynamic(
@@ -36,22 +36,16 @@ const HouseMap = dynamic(
 )
 
 export function HouseLocation({ id }: { id: HouseIdentifier }) {
-  const t = useExtracted()
+  const t = useTranslations('houseLocation')
   const highlight = {
-    orange: t(
-      'Excellent access on the Subway Midosuji Line keeps you connected across Osaka.'
-    ),
-    apple: t(
-      'Walking distance to Namba and reach Daikokucho Station in just one minute.'
-    ),
-    lemon: t(
-      'Excellent access on the Subway Midosuji Line keeps you connected across Osaka.'
-    )
+    orange: t('highlights.orange'),
+    apple: t('highlights.apple'),
+    lemon: t('highlights.lemon')
   }[id]
 
   return (
     <section>
-      <h2 className="mb-6 text-2xl font-semibold">{t("Where you'll be")}</h2>
+      <h2 className="mb-6 text-2xl font-semibold">{t('heading')}</h2>
 
       <p className="text-foreground mb-6 text-base leading-relaxed">
         {highlight}

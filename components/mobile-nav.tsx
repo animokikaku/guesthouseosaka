@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/popover'
 import { NavItem, NavItems, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 
 export function MobileNav({
@@ -22,7 +22,7 @@ export function MobileNav({
   className?: string
 }) {
   const [open, setOpen] = useState(false)
-  const t = useExtracted()
+  const t = useTranslations('navigation')
 
   const { mobileItems, mobileListItems } = useMemo(() => {
     return items.reduce(
@@ -60,10 +60,10 @@ export function MobileNav({
                 )}
               />
             </div>
-            <span className="sr-only">{t('Toggle Menu')}</span>
+            <span className="sr-only">{t('toggleMenu')}</span>
           </div>
           <span className="flex h-8 items-center text-lg leading-none font-medium">
-            {t('Menu')}
+            {t('menu')}
           </span>
         </Button>
       </PopoverTrigger>
@@ -75,11 +75,11 @@ export function MobileNav({
         <div className="flex flex-col gap-12 overflow-auto px-6 py-6">
           <div className="flex flex-col gap-4">
             <div className="text-muted-foreground text-sm font-medium">
-              {t('Menu')}
+              {t('menu')}
             </div>
             <div className="flex flex-col gap-3">
               <MobileLink href="/" onOpenChange={setOpen}>
-                {t('Home')}
+                {t('home')}
               </MobileLink>
               {mobileItems.map((item, index) => (
                 <MobileLink key={index} href={item.href} onOpenChange={setOpen}>

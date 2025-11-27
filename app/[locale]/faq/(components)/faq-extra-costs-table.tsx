@@ -7,7 +7,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { HouseIdentifier } from '@/lib/types'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 type AnswerValue = string | string[]
 
@@ -26,7 +26,7 @@ const renderAnswer = (value: AnswerValue) => {
 }
 
 export function FAQExtraCostsTable() {
-  const t = useExtracted()
+  const t = useTranslations()
 
   const rows: {
     id: string
@@ -35,7 +35,7 @@ export function FAQExtraCostsTable() {
   }[] = [
     {
       id: 'deposit',
-      label: t('Deposit'),
+      label: t('faq.costs.deposit'),
       answers: {
         orange: '¥30,000',
         lemon: '¥30,000',
@@ -44,71 +44,89 @@ export function FAQExtraCostsTable() {
     },
     {
       id: 'service-fees',
-      label: t('Common fees'),
+      label: t('faq.costs.commonFees'),
       answers: {
-        orange: t('¥{price}/month', { price: '12000' }),
-        lemon: t('¥{price}/month', { price: '10000' }),
-        apple: t('¥{price}/month', { price: '10000' })
+        orange: t('faq.costs.pricePerMonth', { price: '12000' }),
+        lemon: t('faq.costs.pricePerMonth', { price: '10000' }),
+        apple: t('faq.costs.pricePerMonth', { price: '10000' })
       }
     },
     {
       id: 'utility-fees',
-      label: t('Utility fees'),
+      label: t('faq.costs.utilityFees'),
       answers: {
         orange: [
-          t('Summer/Winter: ¥{min}-¥{max}', { min: '3000', max: '6000' }),
-          t('Spring/Autumn: ¥{min}-¥{max}', { min: '2000', max: '3000' })
+          t('faq.costs.seasonalRates.summerWinter', {
+            min: '3000',
+            max: '6000'
+          }),
+          t('faq.costs.seasonalRates.springAutumn', {
+            min: '2000',
+            max: '3000'
+          })
         ],
         lemon: [
-          t('Summer/Winter: ¥{min}-¥{max}', { min: '3000', max: '7000' }),
-          t('Spring/Autumn: ¥{min}-¥{max}', { min: '2000', max: '4000' })
+          t('faq.costs.seasonalRates.summerWinter', {
+            min: '3000',
+            max: '7000'
+          }),
+          t('faq.costs.seasonalRates.springAutumn', {
+            min: '2000',
+            max: '4000'
+          })
         ],
         apple: [
-          t('Summer/Winter: ¥{min}-¥{max}', { min: '3000', max: '7000' }),
-          t('Spring/Autumn: ¥{min}-¥{max}', { min: '2000', max: '4000' })
+          t('faq.costs.seasonalRates.summerWinter', {
+            min: '3000',
+            max: '7000'
+          }),
+          t('faq.costs.seasonalRates.springAutumn', {
+            min: '2000',
+            max: '4000'
+          })
         ]
       }
     },
     {
       id: 'water-bill',
-      label: t('Water bill'),
+      label: t('faq.costs.waterBill'),
       answers: {
-        orange: t('Free'),
-        lemon: t('Free'),
-        apple: t('Free')
+        orange: t('faq.costs.free'),
+        lemon: t('faq.costs.free'),
+        apple: t('faq.costs.free')
       }
     },
     {
       id: 'laundromat',
-      label: t('Laundromat'),
+      label: t('faq.costs.laundromat'),
       answers: {
-        orange: t('Free'),
-        lemon: t('Free'),
-        apple: t('Each room has a private washing machine.')
+        orange: t('faq.costs.free'),
+        lemon: t('faq.costs.free'),
+        apple: t('faq.costs.privateWasher')
       }
     },
     {
       id: 'drying-machine',
-      label: t('Drying machine'),
+      label: t('faq.costs.dryingMachine'),
       answers: {
-        orange: t('¥{price}/{minutes}min', {
+        orange: t('faq.costs.pricePerMinutes', {
           price: '100',
           minutes: '30'
         }),
-        lemon: t('¥{price}/{minutes}min', {
+        lemon: t('faq.costs.pricePerMinutes', {
           price: '100',
           minutes: '20'
         }),
-        apple: t('–')
+        apple: t('faq.costs.dash')
       }
     },
     {
       id: 'internet',
-      label: t('Internet'),
+      label: t('faq.costs.internet'),
       answers: {
-        orange: t('Free Wi-Fi/LAN'),
-        lemon: t('Free Wi-Fi'),
-        apple: t('Free Wi-Fi')
+        orange: t('faq.costs.freeWifiLan'),
+        lemon: t('faq.costs.freeWifi'),
+        apple: t('faq.costs.freeWifi')
       }
     }
   ]
@@ -124,19 +142,19 @@ export function FAQExtraCostsTable() {
                 key="orange"
                 className="bg-secondary font-semibold text-orange-600 capitalize"
               >
-                {t('Orange House')}
+                {t('houses.orange.name')}
               </TableHead>
               <TableHead
                 key="apple"
                 className="bg-secondary font-semibold text-red-600 capitalize"
               >
-                {t('Apple House')}
+                {t('houses.apple.name')}
               </TableHead>
               <TableHead
                 key="lemon"
                 className="bg-secondary font-semibold text-yellow-600 capitalize"
               >
-                {t('Lemon House')}
+                {t('houses.lemon.name')}
               </TableHead>
             </TableRow>
           </TableHeader>

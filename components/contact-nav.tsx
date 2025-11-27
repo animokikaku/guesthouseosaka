@@ -4,27 +4,27 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export function ContactNav({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const t = useExtracted()
+  const t = useTranslations('contact')
   const pathname = usePathname()
   const isMobile = useIsMobile()
 
   const links = [
     {
-      name: t('Tour request'),
+      name: t('nav.tour'),
       href: '/contact/tour#tabs'
     },
     {
-      name: t('Move in request'),
+      name: t('nav.moveIn'),
       href: '/contact/move-in#tabs'
     },
     {
-      name: t('General inquiry'),
+      name: t('nav.general'),
       href: '/contact/other#tabs'
     }
   ]

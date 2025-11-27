@@ -42,7 +42,7 @@ import {
   WashingMachine,
   Wifi
 } from 'lucide-react'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 type Amenity = {
@@ -138,388 +138,388 @@ function AmenitiesDialog({ amenities, trigger, title }: AmenitiesDialogProps) {
 
 export function HouseAmenities({ id }: HouseAmenitiesProps) {
   const isMobile = useIsMobile()
-  const t = useExtracted()
+  const t = useTranslations('amenities')
   const maxTopAmenities = isMobile ? 5 : 10
 
   const amenities: AmenityCategory[] = (() => {
     const data: Record<HouseIdentifier, AmenityCategory[]> = {
       apple: [
         {
-          category: t('Internet & climate'),
+          category: t('categories.internetClimate'),
           items: [
             {
-              title: t('Free Wi-Fi'),
+              title: t('items.freeWifi'),
               icon: Wifi,
               featured: true
             },
             {
-              title: t('Air conditioning & heating'),
+              title: t('items.airConditioningHeating'),
               icon: ThermometerSnowflake,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             }
           ]
         },
         {
-          category: t('Kitchen & dining'),
+          category: t('categories.kitchenDining'),
           items: [
             {
-              title: t('Kitchen'),
+              title: t('items.kitchen'),
               icon: Utensils,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             },
             {
-              title: t('Refrigerator'),
+              title: t('items.refrigerator'),
               icon: Refrigerator,
-              note: t('Private')
+              note: t('notes.private')
             },
             {
-              title: t('Microwave & toaster'),
+              title: t('items.microwaveToaster'),
               icon: Microwave,
-              note: t('Private')
+              note: t('notes.private')
             },
             {
-              title: t('Lounge kitchen with oven'),
+              title: t('items.loungeKitchenOven'),
               icon: ChefHat,
-              note: t('Shared')
+              note: t('notes.shared')
             },
             {
-              title: t('Large refrigerator'),
+              title: t('items.largeRefrigerator'),
               icon: Refrigerator,
-              note: t('Shared')
+              note: t('notes.shared')
             }
           ]
         },
         {
-          category: t('Bathroom'),
+          category: t('categories.bathroom'),
           items: [
             {
-              title: t('Bathroom with shower & bathtub'),
+              title: t('items.bathroomWithShowerBathtub'),
               icon: ShowerHead,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             },
             {
-              title: t('Washlet toilet'),
+              title: t('items.washletToilet'),
               icon: Toilet,
-              note: t('Private')
+              note: t('notes.private')
             }
           ]
         },
         {
-          category: t('Laundry'),
+          category: t('categories.laundry'),
           items: [
             {
-              title: t('Washing machine'),
+              title: t('items.washingMachine'),
               icon: WashingMachine,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             },
             {
-              title: t('Drying space'),
+              title: t('items.dryingSpace'),
               icon: Sun,
-              note: t('Shared'),
+              note: t('notes.shared'),
               featured: true
             }
           ]
         },
         {
-          category: t('Accommodation'),
+          category: t('categories.accommodation'),
           items: [
             {
-              title: t('Fully furnished rooms ({size} m²)', { size: '11' }),
+              title: t('items.furnishedRooms', { size: '11' }),
               icon: Bed,
               featured: true
             }
           ]
         },
         {
-          category: t('Common areas'),
+          category: t('categories.commonAreas'),
           items: [
             {
-              title: t('Lounge'),
+              title: t('items.lounge'),
               icon: Sofa,
               featured: true
             },
             {
-              title: t('TV with Netflix, Blu-ray, cable'),
+              title: t('items.tvEntertainment'),
               icon: Tv,
               featured: true
             }
           ]
         },
         {
-          category: t('Building & access'),
+          category: t('categories.buildingAccess'),
           items: [
             {
-              title: t('Elevator'),
+              title: t('items.elevator'),
               icon: ArrowUpFromLine,
               featured: true
             },
             {
-              title: t('Mailbox'),
+              title: t('items.mailbox'),
               icon: Mail,
-              note: t('Shared')
+              note: t('notes.shared')
             },
             {
-              title: t('Bicycle parking'),
+              title: t('items.bicycleParking'),
               icon: Bike,
-              note: t('Shared')
+              note: t('notes.shared')
             }
           ]
         }
       ],
       lemon: [
         {
-          category: t('Internet & climate'),
+          category: t('categories.internetClimate'),
           items: [
             {
-              title: t('Free Wi-Fi'),
+              title: t('items.freeWifi'),
               icon: Wifi,
               featured: true
             },
             {
-              title: t('Air conditioning & heating'),
+              title: t('items.airConditioningHeating'),
               icon: ThermometerSnowflake,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             }
           ]
         },
         {
-          category: t('Kitchen & dining'),
+          category: t('categories.kitchenDining'),
           items: [
             {
-              title: t('Kitchen'),
+              title: t('items.kitchen'),
               icon: Utensils,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             },
             {
-              title: t('Refrigerator'),
+              title: t('items.refrigerator'),
               icon: Refrigerator,
-              note: t('Private')
+              note: t('notes.private')
             },
             {
-              title: t('Microwave, toaster & rice cooker'),
+              title: t('items.microwaveToasterRiceCooker'),
               icon: Microwave,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             },
             {
-              title: t('Tableware'),
+              title: t('items.tableware'),
               icon: UtensilsCrossed,
-              note: t('Private')
+              note: t('notes.private')
             }
           ]
         },
         {
-          category: t('Bathroom'),
+          category: t('categories.bathroom'),
           items: [
             {
-              title: t('Bathroom with shower & bathtub'),
+              title: t('items.bathroomWithShowerBathtub'),
               icon: ShowerHead,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             },
             {
-              title: t('Washlet toilet'),
+              title: t('items.washletToilet'),
               icon: Toilet,
-              note: t('Private')
+              note: t('notes.private')
             }
           ]
         },
         {
-          category: t('Laundry'),
+          category: t('categories.laundry'),
           items: [
             {
-              title: t('Washing machine'),
+              title: t('items.washingMachine'),
               icon: WashingMachine,
-              note: t('Shared'),
+              note: t('notes.shared'),
               featured: true
             },
             {
-              title: t('Drying space'),
+              title: t('items.dryingSpace'),
               icon: Sun,
-              note: t('Shared'),
+              note: t('notes.shared'),
               featured: true
             }
           ]
         },
         {
-          category: t('Accommodation'),
+          category: t('categories.accommodation'),
           items: [
             {
-              title: t('Spacious rooms (19 m²)'),
+              title: t('items.spaciousRooms'),
               icon: Bed,
               featured: true
             }
           ]
         },
         {
-          category: t('Common areas'),
+          category: t('categories.commonAreas'),
           items: [
             {
-              title: t('Lounge'),
+              title: t('items.lounge'),
               icon: Sofa,
               featured: true
             }
           ]
         },
         {
-          category: t('Building & access'),
+          category: t('categories.buildingAccess'),
           items: [
             {
-              title: t('Secure entry'),
+              title: t('items.secureEntry'),
               icon: Lock,
               featured: true
             },
             {
-              title: t('Mailbox'),
+              title: t('items.mailbox'),
               icon: Mail,
-              note: t('Shared')
+              note: t('notes.shared')
             },
             {
-              title: t('Bicycle parking'),
+              title: t('items.bicycleParking'),
               icon: Bike,
-              note: t('Shared')
+              note: t('notes.shared')
             }
           ]
         }
       ],
       orange: [
         {
-          category: t('Internet & climate'),
+          category: t('categories.internetClimate'),
           items: [
             {
-              title: t('Free Wi-Fi'),
+              title: t('items.freeWifi'),
               icon: Wifi,
               featured: true
             },
             {
-              title: t('Air conditioning & heating'),
+              title: t('items.airConditioningHeating'),
               icon: ThermometerSnowflake,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             }
           ]
         },
         {
-          category: t('Kitchen & dining'),
+          category: t('categories.kitchenDining'),
           items: [
             {
-              title: t('Kitchen'),
+              title: t('items.kitchen'),
               icon: Utensils,
-              note: t('Private'),
+              note: t('notes.private'),
               featured: true
             },
             {
-              title: t('Refrigerator & freezer'),
+              title: t('items.refrigeratorFreezer'),
               icon: Refrigerator,
-              note: t('Private')
+              note: t('notes.private')
             },
             {
-              title: t('Microwave & toaster'),
+              title: t('items.microwaveToaster'),
               icon: Microwave,
-              note: t('Shared')
+              note: t('notes.shared')
             },
             {
-              title: t('Tableware'),
+              title: t('items.tableware'),
               icon: UtensilsCrossed,
-              note: t('Private')
+              note: t('notes.private')
             }
           ]
         },
         {
-          category: t('Bathroom'),
+          category: t('categories.bathroom'),
           items: [
             {
-              title: t('Shower'),
+              title: t('items.shower'),
               icon: ShowerHead,
-              note: t('Shared'),
+              note: t('notes.shared'),
               featured: true
             },
             {
-              title: t('Washlet toilet'),
+              title: t('items.washletToilet'),
               icon: Toilet,
-              note: t('Shared'),
+              note: t('notes.shared'),
               featured: true
             }
           ]
         },
         {
-          category: t('Laundry'),
+          category: t('categories.laundry'),
           items: [
             {
-              title: t('Washing machine'),
+              title: t('items.washingMachine'),
               icon: WashingMachine,
-              note: t('Shared'),
+              note: t('notes.shared'),
               featured: true
             },
             {
-              title: t('Dryer'),
+              title: t('items.dryer'),
               icon: RotateCcw,
-              note: t('Coin')
+              note: t('notes.coin')
             },
             {
-              title: t('Drying space'),
+              title: t('items.dryingSpace'),
               icon: Sun,
-              note: t('Shared')
+              note: t('notes.shared')
             }
           ]
         },
         {
-          category: t('Accommodation'),
+          category: t('categories.accommodation'),
           items: [
             {
-              title: t('Fully furnished rooms ({size} m²)', { size: '12' }),
+              title: t('items.furnishedRooms', { size: '12' }),
               icon: Bed,
               featured: true
             }
           ]
         },
         {
-          category: t('Common areas'),
+          category: t('categories.commonAreas'),
           items: [
             {
-              title: t('Rooftop lounge (100 m²)'),
+              title: t('items.rooftopLounge'),
               icon: Sofa,
               featured: true
             },
             {
-              title: t('Coffee & tea corner'),
+              title: t('items.coffeeTeaCorner'),
               icon: Coffee,
               featured: true
             },
             {
-              title: t('Monthly parties'),
+              title: t('items.monthlyParties'),
               icon: PartyPopper
             }
           ]
         },
         {
-          category: t('Building & access'),
+          category: t('categories.buildingAccess'),
           items: [
             {
-              title: t('Secure entry'),
+              title: t('items.secureEntry'),
               icon: Lock,
               featured: true
             },
             {
-              title: t('Mailbox'),
+              title: t('items.mailbox'),
               icon: Mail,
-              note: t('Shared')
+              note: t('notes.shared')
             },
             {
-              title: t('Bicycle parking'),
+              title: t('items.bicycleParking'),
               icon: Bike,
-              note: t('Shared')
+              note: t('notes.shared')
             },
             {
-              title: t('Appliances (vacuum, iron)'),
+              title: t('items.appliances'),
               icon: Plug,
-              note: t('Shared')
+              note: t('notes.shared')
             }
           ]
         }
@@ -540,9 +540,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
 
   return (
     <section>
-      <h2 className="mb-6 text-2xl font-semibold">
-        {t('What this place offers')}
-      </h2>
+      <h2 className="mb-6 text-2xl font-semibold">{t('heading')}</h2>
       <div className="space-y-6">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {featuredAmenities.map((amenity, index) => (
@@ -551,11 +549,11 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
         </div>
 
         <AmenitiesDialog
-          title={t('What this place offers')}
+          title={t('heading')}
           amenities={amenities}
           trigger={
             <Button variant="outline">
-              {t('Show all {count} amenities', {
+              {t('showAll', {
                 count: `${totalAmenitiesCount}`
               })}
             </Button>

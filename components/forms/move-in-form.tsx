@@ -25,10 +25,10 @@ import {
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useRouter } from '@/i18n/navigation'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export function MoveInForm() {
-  const t = useExtracted()
+  const t = useTranslations('forms')
   const router = useRouter()
   const schema = useMoveInFormSchema()
   const { places, date, stayDuration, account, message, privacyPolicy } =
@@ -56,24 +56,22 @@ export function MoveInForm() {
       const promise = submitContactForm({ type: 'move-in', data: value })
 
       toast.promise(promise, {
-        loading: t('Sending message...'),
+        loading: t('status.sending'),
         success: () => {
           router.push('/contact')
           return {
-            message: t('Message sent successfully!'),
-            description: t(
-              'Thank you for contacting us {name}. We will get back to you shortly.',
-              { name: value.account.name }
-            )
+            message: t('status.success'),
+            description: t('status.successDescription', {
+              name: value.account.name
+            })
           }
         },
         error: (error) => {
           return {
-            message: error.message || t('Failed to send message.'),
-            description: t(
-              'Please try again later or contact us directly at {email}.',
-              { email: 'info@guesthouseosaka.com' }
-            )
+            message: error.message || t('status.failure'),
+            description: t('status.errorDescription', {
+              email: 'info@guesthouseosaka.com'
+            })
           }
         }
       })
@@ -86,27 +84,23 @@ export function MoveInForm() {
   }[] = [
     {
       value: '1-month',
-      label: t('1 month or more')
+      label: t('moveInForm.durations.oneMonth')
     },
     {
       value: '3-months',
-      label: t('3 months or more')
+      label: t('moveInForm.durations.threeMonths')
     },
     {
       value: 'long-term',
-      label: t('Long term')
+      label: t('moveInForm.durations.longTerm')
     }
   ]
 
   return (
     <Card className="mx-auto w-full sm:max-w-2xl">
       <CardHeader>
-        <CardTitle>{t('Move in request')}</CardTitle>
-        <CardDescription>
-          {t(
-            'Ready to become a resident? Let us know your preferences and timeline.'
-          )}
-        </CardDescription>
+        <CardTitle>{t('moveInForm.title')}</CardTitle>
+        <CardDescription>{t('moveInForm.description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -120,16 +114,16 @@ export function MoveInForm() {
             <FieldGroupPlaces
               fields={{ places: 'places' }}
               form={form}
-              label={t('Places')}
-              description={t('Which places would you like to move in?')}
+              label={t('fields.places.label')}
+              description={t('moveInForm.placesDescription')}
             />
             <form.AppField
               name="date"
               children={(field) => (
                 <field.DateField
                   orientation="responsive"
-                  label={t('Move-in date')}
-                  description={t('When would you like to move in?')}
+                  label={t('moveInForm.moveInDateLabel')}
+                  description={t('moveInForm.moveInDateDescription')}
                 />
               )}
             />
@@ -139,9 +133,9 @@ export function MoveInForm() {
                 <field.SelectField
                   required
                   orientation="responsive"
-                  label={t('Length of stay')}
-                  description={t('How long would you like to stay?')}
-                  placeholder={t('Choose a duration')}
+                  label={t('moveInForm.lengthOfStayLabel')}
+                  description={t('moveInForm.lengthOfStayDescription')}
+                  placeholder={t('moveInForm.lengthOfStayPlaceholder')}
                   options={stayDurationOptions}
                 />
               )}
@@ -153,15 +147,11 @@ export function MoveInForm() {
               name="message"
               children={(field) => (
                 <field.MessageField
-                  label={t('Message')}
+                  label={t('fields.message.label')}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={t(
-                    'Share any special requirements for your move-in or questions you might have.'
-                  )}
-                  description={t(
-                    'Do not include sensitive information such as your home address or credit card number.'
-                  )}
+                  placeholder={t('fields.message.moveInPlaceholder')}
+                  description={t('fields.message.description')}
                 />
               )}
             />
@@ -172,14 +162,11 @@ export function MoveInForm() {
                   required
                   label={
                     <p className="text-muted-foreground">
-                      {t.rich(
-                        'By submitting this form, you agree to the <link>Privacy Policy</link>.',
-                        {
-                          link: (chunks) => (
-                            <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
-                          )
-                        }
-                      )}
+                      {t.rich('fields.privacyPolicyAgreement', {
+                        link: (chunks) => (
+                          <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
+                        )
+                      })}
                     </p>
                   }
                 />

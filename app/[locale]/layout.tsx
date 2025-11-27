@@ -1,7 +1,7 @@
 import { routing } from '@/i18n/routing'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl'
-import { getExtracted, setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 import '@/app/globals.css'
@@ -26,12 +26,13 @@ export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
-  const t = await getExtracted({ locale: locale as Locale })
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: 'meta'
+  })
 
-  const siteName = t('Share House Osaka')
-  const description = t(
-    'Founded in 1991. We have 3 share houses in the city of Osaka.'
-  )
+  const siteName = t('siteName')
+  const description = t('siteDescription')
   const creator = 'melkir'
 
   return {
@@ -70,7 +71,7 @@ export async function generateMetadata(
     },
     twitter: {
       card: 'summary_large_image',
-      title: t('Share House Osaka'),
+      title: siteName,
       description,
       creator: '@melkir_thib'
     },

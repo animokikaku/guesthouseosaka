@@ -8,7 +8,7 @@ import {
 } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
-import { Locale, useExtracted } from 'next-intl'
+import { Locale, useTranslations } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { use } from 'react'
 
@@ -17,7 +17,7 @@ export default function LocalePage({ params }: PageProps<'/[locale]'>) {
 
   // Enable static rendering
   setRequestLocale(locale as Locale)
-  const t = useExtracted()
+  const t = useTranslations()
 
   return (
     <div className="section-soft flex flex-col gap-18 md:gap-0">
@@ -27,7 +27,7 @@ export default function LocalePage({ params }: PageProps<'/[locale]'>) {
             {/* Text content */}
             <PageHeader className="md:items-start md:text-left">
               <PageHeaderHeading className="md:text-left">
-                {t.rich('Vibrant <block>share house</block> community', {
+                {t.rich('home.heroTitle', {
                   block: (chunks) => (
                     <>
                       <br />
@@ -38,13 +38,11 @@ export default function LocalePage({ params }: PageProps<'/[locale]'>) {
                 })}
               </PageHeaderHeading>
               <PageHeaderDescription className="md:text-left">
-                {t(
-                  'Experience modern co-living in beautifully designed spaces. Connect with like-minded individuals while enjoying your own private room and shared common areas.'
-                )}
+                {t('home.heroDescription')}
               </PageHeaderDescription>
               <PageActions className="md:justify-start">
                 <Button asChild size="lg">
-                  <Link href="/contact">{t('Contact us')}</Link>
+                  <Link href="/contact">{t('home.heroCta')}</Link>
                 </Button>
               </PageActions>
             </PageHeader>
@@ -61,12 +59,10 @@ export default function LocalePage({ params }: PageProps<'/[locale]'>) {
       <section className="snap:none container-wrapper relative flex max-w-7xl flex-1 flex-col items-center justify-center md:min-h-[calc(100dvh-var(--header-height)-var(--footer-height))] md:snap-start">
         <PageHeader>
           <PageHeaderHeading className="self-start text-2xl xl:text-4xl">
-            {t('Our share houses')}
+            {t('home.housesTitle')}
           </PageHeaderHeading>
           <PageHeaderDescription className="max-w-none self-start text-start text-wrap">
-            {t(
-              'Three unique homes crafted for comfort, connection, and style in the heart of Osaka.'
-            )}
+            {t('home.housesDescription')}
           </PageHeaderDescription>
           <PageActions>
             <Collection className="w-full pt-4" />

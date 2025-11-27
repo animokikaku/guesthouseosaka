@@ -6,19 +6,19 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export default function FAQCard() {
-  const t = useExtracted()
+  const t = useTranslations('faq')
 
   return (
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">
-          {t('Still have questions?')}
+          {t('card.title')}
         </CardTitle>
         <CardDescription className="text-muted-foreground text-md">
-          {t('Have questions or need assistance? Our team is here to help!')}
+          {t('card.description')}
         </CardDescription>
       </CardHeader>
       <CardContent>

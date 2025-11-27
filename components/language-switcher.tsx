@@ -11,7 +11,7 @@ import {
 import { usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { Languages } from 'lucide-react'
-import { Locale, useExtracted, useLocale } from 'next-intl'
+import { Locale, useLocale, useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 
@@ -92,17 +92,21 @@ function LanguageSwitcherSelect({
   onChange,
   className
 }: LanguageSwitcherSelectProps) {
-  const t = useExtracted()
+  const t = useTranslations('navigation')
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger disabled={disabled} asChild>
         <Button
-          aria-label={t('Select language')}
+          aria-label={t('selectLanguage')}
           size={size}
           className={className}
           variant={variant}
         >
-          {size === 'default' ? (value ? langs[value] : t('Languages')) : null}
+          {size === 'default'
+            ? value
+              ? langs[value]
+              : t('languageSelector')
+            : null}
           <Languages />
         </Button>
       </DropdownMenuTrigger>

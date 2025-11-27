@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 type FaqItem = {
   id: string
@@ -16,21 +16,21 @@ type FaqItem = {
 }
 
 export function FAQAccordion() {
-  const t = useExtracted()
+  const t = useTranslations()
 
   const items: FaqItem[] = [
     {
       id: 'room-occupancy',
-      question: t('Up to how many people can stay in a room?'),
-      body: <p>{t('All houses accommodate up to 2 guests per room.')}</p>
+      question: t('faq.qa.roomOccupancy.question'),
+      body: <p>{t('faq.qa.roomOccupancy.answer')}</p>
     },
     {
       id: 'rent-due-date',
-      question: t('When do I need to pay the rent every month?'),
+      question: t('faq.qa.rentDueDate.question'),
       body: (
         <p>
           {t.rich(
-            '<strong>Orange House</strong> rent is due by the 10th of each month, while <strong>Lemon House</strong> and <strong>Apple House</strong> pay on the calendar day that matches their move-in date. For example, if you move in on the 23rd, rent is due every 23rd.',
+            'faq.qa.rentDueDate.answer',
             {
               strong: (chunks) => <strong>{chunks}</strong>
             }
@@ -40,11 +40,11 @@ export function FAQAccordion() {
     },
     {
       id: 'manager-in-residence',
-      question: t('Is there a manager in residence?'),
+      question: t('faq.qa.managerInResidence.question'),
       body: (
         <p>
           {t.rich(
-            '<strong>Orange House</strong> has an on-site manager, while <strong>Lemon House</strong> and <strong>Apple House</strong> do not.',
+            'faq.qa.managerInResidence.answer',
             {
               strong: (chunks) => <strong>{chunks}</strong>
             }
@@ -54,46 +54,44 @@ export function FAQAccordion() {
     },
     {
       id: 'move-in-requirements',
-      question: t('What do I need when I move in?'),
+      question: t('faq.qa.moveInRequirements.question'),
       body: (
         <p>
-          {t('Each house requires you to bring consumables and a valid ID.')}
+          {t('faq.qa.moveInRequirements.answer')}
         </p>
       )
     },
     {
       id: 'curfew',
-      question: t('Is there a curfew?'),
+      question: t('faq.qa.curfew.question'),
       body: (
         <p>
-          {t(
-            'There is no curfew in any house; please keep noise low in the early mornings and late evenings.'
-          )}
+          {t('faq.qa.curfew.answer')}
         </p>
       )
     },
     {
       id: 'floors-and-rooms',
-      question: t('How many floors and rooms?'),
+      question: t('faq.qa.floorsAndRooms.question'),
       body: (
         <ul className="text-muted-foreground list-disc space-y-2">
           <li>
-            <strong>{t('Orange House')}: </strong>
-            {t('{floors}-story building with {rooms} rooms.', {
+            <strong>{t('houses.orange.name')}: </strong>
+            {t('faq.qa.floorsAndRooms.format', {
               floors: '3',
               rooms: '28'
             })}
           </li>
           <li>
-            <strong>{t('Lemon House')}: </strong>
-            {t('{floors}-story building with {rooms} rooms.', {
+            <strong>{t('houses.lemon.name')}: </strong>
+            {t('faq.qa.floorsAndRooms.format', {
               floors: '7',
               rooms: '12'
             })}
           </li>
           <li>
-            <strong>{t('Apple House')}: </strong>
-            {t('{floors}-story building with {rooms} rooms.', {
+            <strong>{t('houses.apple.name')}: </strong>
+            {t('faq.qa.floorsAndRooms.format', {
               floors: '8',
               rooms: '24'
             })}
@@ -103,7 +101,7 @@ export function FAQAccordion() {
     },
     {
       id: 'extra-costs',
-      question: t('What extra costs are there besides rent?'),
+      question: t('faq.qa.extraCosts.question'),
       body: <FAQExtraCostsTable />
     }
   ]

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { HouseIdentifier } from '@/lib/types'
 import { ArrowLeftIcon } from 'lucide-react'
-import { Locale, useExtracted } from 'next-intl'
+import { Locale, useTranslations } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { use } from 'react'
 
@@ -12,7 +12,7 @@ export default function GalleryPage({
 }: PageProps<'/[locale]/[house]/gallery'>) {
   const { locale, house } = use(params)
   setRequestLocale(locale as Locale)
-  const t = useExtracted()
+  const t = useTranslations('gallery')
 
   return (
     <div className="bg-background text-foreground fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden">
@@ -21,7 +21,7 @@ export default function GalleryPage({
           <Button variant="ghost" size="icon" asChild className="rounded-full">
             <Link href={`/${house}`}>
               <ArrowLeftIcon className="size-6" />
-              <span className="sr-only">{t('Close gallery')}</span>
+              <span className="sr-only">{t('close')}</span>
             </Link>
           </Button>
         </div>

@@ -2,47 +2,43 @@ import { HouseBuilding } from '@/components/house/house-building'
 import { HouseLocationModal } from '@/components/house/house-location-modal'
 import { Button } from '@/components/ui/button'
 import { HouseIdentifier } from '@/lib/types'
-import { getExtracted } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 
 export async function HouseAbout({ id }: { id: HouseIdentifier }) {
-  const t = await getExtracted()
+  const t = await getTranslations()
 
   const { description, specificities } = {
     apple: {
-      description: t(
-        'Apple House places residents within a one-minute walk of Daikokucho Station while keeping Namba in easy reach. Every private room includes a full bathroom and kitchen, delivering condo-like comfort for medium and long stays.'
-      ),
+      description: t('houses.apple.about.description'),
       specificities: [
-        t('Private rooms with kitchen and bathroom (11 m²)'),
-        t('14 minutes walk to Namba'),
-        t('Lounge with a beautiful, fully equipped kitchen')
+        t('houses.apple.about.highlights.privateKitchenBathroom'),
+        t('houses.apple.about.highlights.walkToNamba'),
+        t('houses.apple.about.highlights.loungeKitchen')
       ]
     },
     lemon: {
-      description: t(
-        'Lemon House offers private rooms and select dormitory options just moments from the heart of Namba. The compact building keeps an intimate feel while delivering everything needed for short and long-term stays.'
-      ),
+      description: t('houses.lemon.about.description'),
       specificities: [
-        t('Private rooms with kitchens and bathrooms (19 m²)'),
-        t('Spacious rooms, great for couples and friends'),
-        t('Community life and international mingle in the center of Osaka')
+        t('houses.lemon.about.highlights.privateKitchensBathrooms'),
+        t('houses.lemon.about.highlights.spaciousRooms'),
+        t('houses.lemon.about.highlights.communityLife')
       ]
     },
     orange: {
-      description: t(
-        'Orange House is a private room accommodation located beside the Osaka city center. The house combines traditional Japanese styling with everyday conveniences, making it a calm base for longer stays in the Abeno area.'
-      ),
+      description: t('houses.orange.about.description'),
       specificities: [
-        t('Private rooms with kitchen (12 m²)'),
-        t('Long‑stay discounts available'),
-        t('Traditional rooftop lounge (100 m²) with Abeno Harukas views')
+        t('houses.orange.about.highlights.privateKitchen'),
+        t('houses.orange.about.highlights.longStay'),
+        t('houses.orange.about.highlights.rooftopLounge')
       ]
     }
   }[id]
 
   return (
     <section>
-      <h2 className="mb-6 text-2xl font-semibold">{t('About this place')}</h2>
+      <h2 className="mb-6 text-2xl font-semibold">
+        {t('houseSections.about')}
+      </h2>
       <div className="mb-4">
         <HouseBuilding id={id} />
       </div>
@@ -63,8 +59,8 @@ export async function HouseAbout({ id }: { id: HouseIdentifier }) {
       )}
 
       <div className="mt-6">
-        <HouseLocationModal id={id} title={t('About this place')}>
-          <Button variant="outline">{t('Show more')}</Button>
+        <HouseLocationModal id={id} title={t('houseSections.about')}>
+          <Button variant="outline">{t('common.showMore')}</Button>
         </HouseLocationModal>
       </div>
     </section>

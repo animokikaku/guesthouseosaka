@@ -8,42 +8,40 @@ import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export function SiteHeader() {
-  const t = useExtracted()
+  const t = useTranslations()
 
   const navItems: NavItems = [
     {
-      label: t('Share Houses'),
+      label: t('navigation.shareHouses'),
       key: 'share-houses',
       items: [
         {
           key: 'orange',
           href: '/orange',
-          label: t('Orange House'),
-          description: t('Relaxed spacious Japanese-style lounge'),
-          caption: t('Vibrant space designed for memorable experiences'),
+          label: t('houses.orange.name'),
+          description: t('houses.orange.summary'),
+          caption: t('houses.orange.caption'),
           icon: assets.orange.icon,
           background: assets.orange.background
         },
         {
           key: 'apple',
           href: '/apple',
-          label: t('Apple House'),
-          description: t('Share house 8 minutes walk from Namba Station'),
-          caption: t('Experience the warmth and comfort with modern amenities'),
+          label: t('houses.apple.name'),
+          description: t('houses.apple.summary'),
+          caption: t('houses.apple.caption'),
           icon: assets.apple.icon,
           background: assets.apple.background
         },
         {
           key: 'lemon',
           href: '/lemon',
-          label: t('Lemon House'),
-          description: t('Well-equipped private rooms and a luxurious lounge'),
-          caption: t(
-            'Bright and cheerful accommodation perfect for a refreshing stay'
-          ),
+          label: t('houses.lemon.name'),
+          description: t('houses.lemon.summary'),
+          caption: t('houses.lemon.caption'),
           icon: assets.lemon.icon,
           background: assets.lemon.background
         }
@@ -52,12 +50,12 @@ export function SiteHeader() {
     {
       key: 'faq',
       href: '/faq',
-      label: t('FAQ')
+      label: t('navigation.faq')
     },
     {
       key: 'contact',
       href: '/contact',
-      label: t('Contact')
+      label: t('navigation.contact')
     }
   ]
 
@@ -79,7 +77,7 @@ export function SiteHeader() {
           >
             <Link href="/">
               <Icons.logo className="size-5" />
-              <span className="sr-only">{t('Share House Osaka')}</span>
+              <span className="sr-only">{t('meta.siteName')}</span>
             </Link>
           </Button>
           <MainNav items={navItems} className="hidden lg:flex" />

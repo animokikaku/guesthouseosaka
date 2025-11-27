@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import { Link } from '@/i18n/navigation'
 import { HouseIdentifier } from '@/lib/types'
 import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
-import { getExtracted } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 
 const yenFormatter = new Intl.NumberFormat('ja-JP', {
   currency: 'JPY',
@@ -37,20 +37,20 @@ const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
 
 export async function HouseBuilding({ id }: { id: HouseIdentifier }) {
   const building = BUILDING_DATA[id]
-  const t = await getExtracted()
+  const t = await getTranslations('houseDetails')
   const details = [
     {
-      label: t('Rooms'),
+      label: t('rooms'),
       value: building.bedrooms,
       icon: BedDoubleIcon
     },
     {
-      label: t('Floors'),
+      label: t('floors'),
       value: building.floors,
       icon: LayersIcon
     },
     {
-      label: t('Min Rent'),
+      label: t('minRent'),
       value: yenFormatter.format(building.monthly_price)
     }
   ]

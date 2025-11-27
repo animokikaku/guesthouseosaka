@@ -9,17 +9,17 @@ import { Link } from '@/i18n/navigation'
 import { BookTextIcon, MailIcon, PhoneIcon } from 'lucide-react'
 import { Metadata } from 'next'
 import { Locale } from 'next-intl'
-import { getExtracted, setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/contact'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
-  const t = await getExtracted({ locale: locale as Locale })
+  const t = await getTranslations({ locale: locale as Locale })
 
   return {
-    title: t('Contact'),
-    description: t('Get in touch with us for any inquiries or questions.')
+    title: t('navigation.contact'),
+    description: t('contact.description')
   }
 }
 
@@ -29,34 +29,30 @@ export default async function ContactLayout({
 }: LayoutProps<'/[locale]/contact'>) {
   const { locale } = await params
   setRequestLocale(locale as Locale)
-  const t = await getExtracted()
+  const t = await getTranslations()
 
   return (
     <>
       <PageHeader>
-        <PageHeaderHeading>{t('Get in touch')}</PageHeaderHeading>
-        <PageHeaderDescription>
-          {t(
-            "We're here to help! Choose the option that best describes your inquiry and we'll get back to you as soon as possible."
-          )}
-        </PageHeaderDescription>
+        <PageHeaderHeading>{t('contact.title')}</PageHeaderHeading>
+        <PageHeaderDescription>{t('contact.intro')}</PageHeaderDescription>
         <PageActions>
           <Button asChild size="sm">
             <Link href="/contact">
               <MailIcon />
-              {t('Contact')}
+              {t('navigation.contact')}
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm">
             <Link href="/faq#phone">
               <PhoneIcon />
-              {t('Phone')}
+              {t('forms.fields.phone.label')}
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm">
             <Link href="/faq">
               <BookTextIcon />
-              {t('FAQ')}
+              {t('navigation.faq')}
             </Link>
           </Button>
         </PageActions>

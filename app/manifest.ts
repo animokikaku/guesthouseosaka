@@ -1,6 +1,6 @@
 import { routing } from '@/i18n/routing'
 import { MetadataRoute } from 'next'
-import { getExtracted } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   /*
@@ -8,11 +8,11 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
    * https://next-intl.dev/docs/environments/actions-metadata-route-handlers#manifest
    */
   const locale = routing.defaultLocale
-  const t = await getExtracted({ locale })
+  const t = await getTranslations({ locale, namespace: 'meta' })
 
   return {
-    name: t('Share House Osaka'),
-    short_name: t('SHO'),
+    name: t('siteName'),
+    short_name: t('siteShortName'),
     start_url: '/',
     theme_color: '#101E33',
     icons: [

@@ -1,23 +1,23 @@
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export function FAQContactTable() {
-  const t = useExtracted()
+  const t = useTranslations()
 
   const phones = [
     {
-      title: t('Orange House'),
-      withinJapan: t('06-6627-0790'),
-      overseas: t('+81-6-6131-6677')
+      title: t('houses.orange.name'),
+      withinJapan: t('faq.contact.phones.orange.domestic'),
+      overseas: t('faq.contact.phones.orange.international')
     },
     {
-      title: t('Apple House'),
-      withinJapan: t('06-6131-6677'),
-      overseas: t('+81-6-6131-6677')
+      title: t('houses.apple.name'),
+      withinJapan: t('faq.contact.phones.apple.domestic'),
+      overseas: t('faq.contact.phones.apple.international')
     },
     {
-      title: t('Lemon House'),
-      withinJapan: t('06-6627-0790'),
-      overseas: t('+81-6-6131-6677')
+      title: t('houses.lemon.name'),
+      withinJapan: t('faq.contact.phones.lemon.domestic'),
+      overseas: t('faq.contact.phones.lemon.international')
     }
   ]
 
@@ -27,10 +27,10 @@ export function FAQContactTable() {
         <tr>
           <th className="border-border border-b p-2 text-left"></th>
           <th className="text-muted-foreground border-border border-b p-2 text-center font-medium">
-            {t('Within Japan')}
+            {t('faq.contact.withinJapan')}
           </th>
           <th className="text-muted-foreground border-border border-b p-2 text-center font-medium">
-            {t('From overseas')}
+            {t('faq.contact.fromOverseas')}
           </th>
         </tr>
       </thead>

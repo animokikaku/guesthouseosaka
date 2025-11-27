@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { storage } from '@/lib/images'
 import { HouseIdentifier } from '@/lib/types'
-import { useExtracted, useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 export function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
-  const t = useExtracted()
+  const t = useTranslations('common')
   const locale = useLocale()
   const images = storage({ house: id, locale }).images({
     category: 'room',
@@ -60,7 +60,7 @@ export function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
           >
             <Link href={galleryHref}>
               <Icons.gallery className="h-4 w-4" />
-              <span>{t('Show all photos')}</span>
+              <span>{t('showAllPhotos')}</span>
             </Link>
           </Button>
         </div>

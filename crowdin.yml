@@ -4,5 +4,5 @@ base_path: .
 preserve_hierarchy: true
 
 files:
-  - source: /messages/en.po
-    translation: /messages/%two_letters_code%.po
+  - source: /messages/en.json
+    translation: /messages/%two_letters_code%.json

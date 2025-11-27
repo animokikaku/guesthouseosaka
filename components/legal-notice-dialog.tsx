@@ -10,136 +10,90 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { useExtracted } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
-  const t = useExtracted()
+  const t = useTranslations()
   const intro = [
-    t(
-      'Animo Kikaku Co., Ltd. (“the Company”, “we”, “our”, or “us”) respects your privacy and is committed to protecting your personal information.'
-    ),
-    t(
-      'This Privacy Policy explains how we collect, use, store, and protect the information you provide through the contact forms and other features on this website (“the Service”).'
-    )
+    t('legal.privacy.intro.company'),
+    t('legal.privacy.intro.purpose')
   ]
   const sections = [
     {
-      title: t('1. Information We Collect'),
+      title: t('legal.privacy.sections.informationCollected.title'),
       paragraphs: [
-        t(
-          'When you contact us through the Service, we may collect the following personal information:'
-        )
+        t('legal.privacy.sections.informationCollected.paragraphs.0')
       ],
       list: [
-        t(
-          'Basic details: your name, age, gender, nationality, email address, and (optionally) telephone number'
-        ),
-        t(
-          'Inquiry details: message content, questions, and form submission data'
-        ),
-        t(
-          'Accommodation details: preferred tour dates, move-in dates, and housing preferences'
-        )
+        t('legal.privacy.sections.informationCollected.list.0'),
+        t('legal.privacy.sections.informationCollected.list.1'),
+        t('legal.privacy.sections.informationCollected.list.2')
       ],
-      closing: t(
-        'We collect this information directly from you when you submit a form or communicate with us.'
-      )
+      closing: t('legal.privacy.sections.informationCollected.closing')
     },
     {
-      title: t('2. How We Use Your Information'),
-      paragraphs: [
-        t(
-          'We use your personal information only for legitimate business purposes, including:'
-        )
-      ],
+      title: t('legal.privacy.sections.usage.title'),
+      paragraphs: [t('legal.privacy.sections.usage.paragraphs.0')],
       list: [
-        t('Responding to your inquiries or requests'),
-        t('Arranging property tours and managing move-in procedures'),
-        t('Providing information, updates, and support related to the Service'),
-        t(
-          'Maintaining internal records necessary for business operations and compliance'
-        )
+        t('legal.privacy.sections.usage.list.0'),
+        t('legal.privacy.sections.usage.list.1'),
+        t('legal.privacy.sections.usage.list.2'),
+        t('legal.privacy.sections.usage.list.3')
       ],
-      closing: t(
-        'We do not use your information for marketing purposes without your explicit consent.'
-      )
+      closing: t('legal.privacy.sections.usage.closing')
     },
     {
-      title: t('3. Retention Period'),
+      title: t('legal.privacy.sections.retention.title'),
       paragraphs: [
-        t(
-          'We retain your personal information only as long as necessary to fulfill the purposes described above.'
-        ),
-        t(
-          'Generally, this means up to 10 years after your business relationship with us ends.'
-        ),
-        t(
-          'After this period, the information will be securely deleted or anonymized.'
-        )
+        t('legal.privacy.sections.retention.paragraphs.0'),
+        t('legal.privacy.sections.retention.paragraphs.1'),
+        t('legal.privacy.sections.retention.paragraphs.2')
       ]
     },
     {
-      title: t('4. Sharing and International Transfers'),
+      title: t('legal.privacy.sections.sharing.title'),
       paragraphs: [
-        t(
-          'We do not share or sell your personal information to third parties.'
-        ),
-        t(
-          'Your data will not be transferred outside Japan without your consent, unless required by law or necessary to protect legal rights in accordance with the Act on the Protection of Personal Information (APPI) and other applicable regulations.'
-        )
+        t('legal.privacy.sections.sharing.paragraphs.0'),
+        t('legal.privacy.sections.sharing.paragraphs.1')
       ]
     },
     {
-      title: t('5. Your Rights'),
-      paragraphs: [t('You have the right to:')],
+      title: t('legal.privacy.sections.rights.title'),
+      paragraphs: [t('legal.privacy.sections.rights.paragraphs.0')],
       list: [
-        t('Request access to the personal information we hold about you'),
-        t(
-          'Request correction, addition, or deletion of inaccurate or outdated information'
-        ),
-        t(
-          'Withdraw your consent to the processing of your information (where applicable)'
-        )
+        t('legal.privacy.sections.rights.list.0'),
+        t('legal.privacy.sections.rights.list.1'),
+        t('legal.privacy.sections.rights.list.2')
       ],
-      closing: t(
-        'We will respond promptly and transparently to all legitimate requests in accordance with Japanese privacy law.'
-      )
+      closing: t('legal.privacy.sections.rights.closing')
     },
     {
-      title: t('6. Security Measures'),
+      title: t('legal.privacy.sections.security.title'),
       paragraphs: [
-        t(
-          'We take appropriate technical and organizational measures to protect your personal information against unauthorized access, loss, misuse, alteration, or disclosure.'
-        ),
-        t('Access to personal data is restricted to authorized personnel only.')
+        t('legal.privacy.sections.security.paragraphs.0'),
+        t('legal.privacy.sections.security.paragraphs.1')
       ]
     },
     {
-      title: t('7. Contact Us'),
-      paragraphs: [
-        t(
-          'If you have any questions, concerns, or requests regarding this Privacy Policy or our data handling practices, please contact us at:'
-        )
-      ],
+      title: t('legal.privacy.sections.contact.title'),
+      paragraphs: [t('legal.privacy.sections.contact.paragraphs.0')],
       details: [
-        t('Animo Kikaku Co., Ltd.'),
-        t('1-21-21 Hannancho, Abeno-ku, Osaka, Japan'),
-        t('📧 orange@guesthouseosaka.com'),
-        t('👤 Representative Director: Kenji Hisamoto')
+        t('legal.privacy.sections.contact.details.0'),
+        t('legal.privacy.sections.contact.details.1'),
+        t('legal.privacy.sections.contact.details.2'),
+        t('legal.privacy.sections.contact.details.3')
       ]
     },
     {
-      title: t('8. Changes to This Policy'),
+      title: t('legal.privacy.sections.changes.title'),
       paragraphs: [
-        t('We may update this Privacy Policy from time to time.'),
-        t(
-          'Any significant changes will be announced on this page, with the updated date clearly indicated.'
-        )
+        t('legal.privacy.sections.changes.paragraphs.0'),
+        t('legal.privacy.sections.changes.paragraphs.1')
       ]
     }
   ]
 
-  const lastUpdated = t('Last updated: November 2025')
+  const lastUpdated = t('legal.privacy.lastUpdated')
 
   return (
     <Dialog>
@@ -154,7 +108,7 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
       </DialogTrigger>
       <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{t('Privacy Policy')}</DialogTitle>
+          <DialogTitle>{t('legal.privacy.title')}</DialogTitle>
         </DialogHeader>
         <div className="space-y-6 text-sm leading-6">
           {lastUpdated && (
@@ -193,7 +147,7 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
         </div>
         <DialogFooter className="pt-4">
           <DialogClose asChild>
-            <Button variant="secondary">{t('Close')}</Button>
+            <Button variant="secondary">{t('common.close')}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
