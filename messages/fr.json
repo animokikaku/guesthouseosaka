@@ -462,8 +462,7 @@
     "notFound": {
       "title": "Oups !",
       "description": "La page que vous cherchez est introuvable, nous vous suggérons de revenir à l'accueil.",
-      "contactSupport": "Besoin d'aide ? <link>Contactez le support</link>.",
-      "backToHome": "Retour à la page d'accueil"
+      "contactSupport": "Besoin d'aide ? <link>Contactez le support</link>."
     }
   },
   "legal": {
