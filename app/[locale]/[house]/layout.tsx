@@ -1,10 +1,11 @@
 import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
+import { getLocalBusinessJsonLd, serializeJsonLd } from '@/lib/structured-data'
 import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
 import type { Metadata } from 'next'
-import { type Locale } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
+import { hasLocale, type Locale } from 'next-intl'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 export function generateStaticParams() {
@@ -60,13 +61,28 @@ export default async function HouseLayout({
   params
 }: LayoutProps<'/[locale]/[house]'>) {
   // Ensure that the incoming `house` is valid
-  const { house } = await params
-  if (!hasHouse(house)) {
+  const { house, locale } = await params
+  if (!hasLocale(routing.locales, locale) || !hasHouse(house)) {
     notFound()
   }
 
+  setRequestLocale(locale)
+  const t = await getTranslations({ locale })
+
+  const houseJsonLd = getLocalBusinessJsonLd({
+    house,
+    locale,
+    name: t(`houses.${house}.name`),
+    telephone: t(`faq.contact.phones.${house}.international`),
+    description: t(`houses.${house}.about.description`)
+  })
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(houseJsonLd) }}
+      />
       {children}
       {modal}
     </>
