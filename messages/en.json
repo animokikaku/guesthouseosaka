@@ -22,7 +22,6 @@
     "close": "Close",
     "showMore": "Show more",
     "showAllPhotos": "Show all photos",
-    "showAllAmenities": "Show all {count} amenities",
     "charactersCounter": "{count} / {max} characters"
   },
   "home": {

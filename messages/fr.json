@@ -25,7 +25,6 @@
     "close": "Fermer",
     "showMore": "En savoir plus",
     "showAllPhotos": "Afficher toutes les photos",
-    "showAllAmenities": "Afficher les {count} équipements",
     "charactersCounter": "{count} / {max} caractères"
   },
   "home": {

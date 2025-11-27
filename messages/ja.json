@@ -24,7 +24,6 @@
     "close": "閉じる",
     "showMore": "もっと見る",
     "showAllPhotos": "すべての写真を表示",
-    "showAllAmenities": "{count}件の設備をすべて表示",
     "charactersCounter": "{count} / {max} 文字"
   },
   "home": {
