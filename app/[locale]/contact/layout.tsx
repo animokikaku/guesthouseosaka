@@ -6,9 +6,11 @@ import {
 } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
+import { assets } from '@/lib/assets'
+import { getOpenGraphMetadata } from '@/lib/metadata'
 import { BookTextIcon, MailIcon, PhoneIcon } from 'lucide-react'
-import { Metadata } from 'next'
-import { Locale } from 'next-intl'
+import type { Metadata } from 'next'
+import type { Locale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 export async function generateMetadata(
@@ -17,10 +19,15 @@ export async function generateMetadata(
   const { locale } = await props.params
   const t = await getTranslations({ locale: locale as Locale })
 
-  return {
-    title: t('navigation.contact'),
-    description: t('contact.description')
-  }
+  const { openGraph, twitter } = await getOpenGraphMetadata({
+    locale: locale as Locale,
+    image: assets.openGraph.contact.src
+  })
+
+  const title = t('navigation.contact')
+  const description = t('contact.description')
+
+  return { title, description, openGraph, twitter }
 }
 
 export default async function ContactLayout({

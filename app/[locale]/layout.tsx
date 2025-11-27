@@ -15,6 +15,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { META_THEME_COLORS } from '@/lib/config'
 import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
+import { getOpenGraphMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
 import { type Metadata } from 'next'
 
@@ -32,8 +33,9 @@ export async function generateMetadata(
   })
 
   const siteName = t('siteName')
-  const description = t('siteDescription')
-  const creator = 'melkir'
+  const { openGraph, twitter } = await getOpenGraphMetadata({
+    locale: locale as Locale
+  })
 
   return {
     title: {
@@ -41,7 +43,7 @@ export async function generateMetadata(
       template: `%s - ${siteName}`
     },
     metadataBase: env.NEXT_PUBLIC_APP_URL,
-    description,
+    description: t('siteDescription'),
     keywords: [
       'Guest House Osaka',
       'Osaka Guest House',
@@ -54,27 +56,8 @@ export async function generateMetadata(
       'Share House Japan',
       'Foreigners housing Osaka'
     ],
-    authors: [
-      {
-        name: creator,
-        url: 'https://thibaultvieux.com'
-      }
-    ],
-    creator,
-    openGraph: {
-      type: 'website',
-      locale: 'en_US',
-      alternateLocale: ['ja_JP', 'fr_FR'],
-      title: siteName,
-      description,
-      siteName
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: siteName,
-      description,
-      creator: '@melkir_thib'
-    },
+    openGraph,
+    twitter,
     icons: {
       icon: '/favicon.ico',
       shortcut: '/favicon-16x16.png',

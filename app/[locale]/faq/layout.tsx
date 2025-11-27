@@ -6,9 +6,11 @@ import {
 } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
+import { assets } from '@/lib/assets'
+import { getOpenGraphMetadata } from '@/lib/metadata'
 import { MailIcon, PhoneIcon } from 'lucide-react'
-import { Metadata } from 'next'
-import { Locale } from 'next-intl'
+import type { Metadata } from 'next'
+import type { Locale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 export async function generateMetadata(
@@ -17,10 +19,15 @@ export async function generateMetadata(
   const { locale } = await props.params
   const t = await getTranslations({ locale: locale as Locale })
 
-  return {
-    title: t('faq.title'),
-    description: t('faq.description')
-  }
+  const title = t('faq.title')
+  const description = t('faq.description')
+
+  const { openGraph, twitter } = await getOpenGraphMetadata({
+    locale: locale as Locale,
+    image: assets.openGraph.faq.src
+  })
+
+  return { title, description, openGraph, twitter }
 }
 
 export default async function FAQLayout({
@@ -35,9 +42,7 @@ export default async function FAQLayout({
     <>
       <PageHeader>
         <PageHeaderHeading>{t('faq.heading')}</PageHeaderHeading>
-        <PageHeaderDescription>
-          {t('faq.intro')}
-        </PageHeaderDescription>
+        <PageHeaderDescription>{t('faq.intro')}</PageHeaderDescription>
         <PageActions>
           <Button asChild size="sm">
             <Link href="#phone">

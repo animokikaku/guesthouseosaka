@@ -7,11 +7,43 @@ export const assets = {
     height: 500,
     alt: 'Not found'
   },
-  og: {
-    src: url('og-image.jpg'),
-    width: 1200,
-    height: 630,
-    alt: 'Share House Osaka'
+  openGraph: {
+    home: {
+      src: url('opengraph/home.jpg'),
+      width: 1200,
+      height: 637,
+      alt: 'Share House Osaka'
+    },
+    apple: {
+      src: url('opengraph/apple.jpg'),
+      width: 1200,
+      height: 502,
+      alt: 'Apple House'
+    },
+    orange: {
+      src: url('opengraph/orange.jpg'),
+      width: 1200,
+      height: 502,
+      alt: 'Orange House'
+    },
+    lemon: {
+      src: url('opengraph/lemon.jpg'),
+      width: 1200,
+      height: 502,
+      alt: 'Lemon House'
+    },
+    contact: {
+      src: url('opengraph/contact.jpg'),
+      width: 1200,
+      height: 352,
+      alt: 'Contact Page'
+    },
+    faq: {
+      src: url('opengraph/faq.jpg'),
+      width: 1200,
+      height: 352,
+      alt: 'FAQ Page'
+    }
   },
   logo: {
     src: url('logo.png'),
