@@ -3,6 +3,7 @@ import {
   HOUSE_CENTERS
 } from '@/components/map/location-map-constants'
 import { assets } from '@/lib/assets'
+import { urls } from '@/lib/config'
 import { env } from '@/lib/env'
 import { HouseIdentifier } from '@/lib/types'
 import { Locale } from 'next-intl'
@@ -64,6 +65,7 @@ export function getOrganizationJsonLd({
     image: assets.openGraph.home.src,
     alternateName: siteName,
     address: houseAddresses.orange,
+    sameAs: Object.values(urls.socials),
     url,
     contactPoint: {
       '@type': 'ContactPoint',
