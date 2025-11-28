@@ -16,7 +16,6 @@ import { META_THEME_COLORS } from '@/lib/config'
 import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
-import { getOrganizationJsonLd, serializeJsonLd } from '@/lib/structured-data'
 import { cn } from '@/lib/utils'
 import { type Metadata } from 'next'
 
@@ -80,13 +79,6 @@ export default async function LocaleLayout({
 
   // Enable static rendering
   setRequestLocale(locale)
-  const t = await getTranslations({ locale })
-
-  const organizationJsonLd = getOrganizationJsonLd({
-    siteName: t('meta.siteName'),
-    telephone: t('faq.contact.phones.orange.international'),
-    email: 'info@guesthouseosaka.com'
-  })
 
   return (
     <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
@@ -106,12 +98,6 @@ export default async function LocaleLayout({
           }}
         />
         <meta name="theme-color" content={META_THEME_COLORS.light} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: serializeJsonLd(organizationJsonLd)
-          }}
-        />
       </head>
       <body
         className={cn(
