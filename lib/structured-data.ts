@@ -1,13 +1,10 @@
-import {
-  GOOGLE_MAPS_URLS,
-  HOUSE_CENTERS
-} from '@/components/map/location-map-constants'
 import { assets } from '@/lib/assets'
 import { urls } from '@/lib/config'
 import { env } from '@/lib/env'
 import { HouseIdentifier } from '@/lib/types'
 import { Locale } from 'next-intl'
 import {
+  FAQPage,
   LocalBusiness,
   Organization,
   PostalAddress,
@@ -46,85 +43,97 @@ export function serializeJsonLd(data: unknown) {
 }
 
 export function getOrganizationJsonLd({
-  siteName,
+  name,
   telephone,
-  email
+  alternateName,
+  email,
+  contactName
 }: {
-  siteName: string
+  name: string
+  alternateName: string
   telephone: string
   email: string
+  contactName: string
 }): WithContext<Organization> {
   const url = env.NEXT_PUBLIC_APP_URL
   const logo = createAbsoluteUrl('/android-chrome-512x512.png')
+  const sameAs = Object.values(urls.socials)
 
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${url}/#organization`,
-    name: 'Guest House Osaka',
+    name,
     image: assets.openGraph.home.src,
-    alternateName: siteName,
+    alternateName,
     address: houseAddresses.orange,
-    sameAs: Object.values(urls.socials),
+    sameAs,
     url,
     contactPoint: {
       '@type': 'ContactPoint',
       email,
       telephone,
-      name: 'Kenji Hisamoto'
+      name: contactName
     },
     logo
   } satisfies WithContext<Organization>
 }
 
-export function getLocalBusinessJsonLd({
-  house,
+export function getContactLocalBusinessJsonLd({
   locale,
   name,
   telephone,
-  description
+  description,
+  email
 }: {
-  house: HouseIdentifier
   locale: Locale
   name: string
   telephone: string
   description: string
+  email: string
 }): WithContext<LocalBusiness> {
-  const { lat: latitude, lng: longitude } = HOUSE_CENTERS[house]
-  const { src: image } = assets.openGraph[house]
-  const address = houseAddresses[house]
-  const url = createAbsoluteUrl(`/${locale}/${house}`)
+  const url = createAbsoluteUrl(`/${locale}/contact`)
 
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    '@id': `${url}#${house}`,
+    '@id': `${url}#contact`,
     name,
     description,
     url,
-    image,
+    image: assets.openGraph.contact.src,
     telephone,
-    email: `${house}@guesthouseosaka.com`,
-    address,
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude,
-      longitude
-    },
-    hasMap: GOOGLE_MAPS_URLS[house],
-    openingHoursSpecification: {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday'
-      ],
-      opens: '10:00',
-      closes: '20:00'
-    }
+    email,
+    address: houseAddresses.orange
   } satisfies WithContext<LocalBusiness>
+}
+
+export type FaqItem = {
+  question: string
+  answer: string
+}
+
+export function getFAQPageJsonLd({
+  locale,
+  items
+}: {
+  locale: Locale
+  items: FaqItem[]
+}): WithContext<FAQPage> {
+  const url = createAbsoluteUrl(`/${locale}/faq`)
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    url,
+    mainEntity: items.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: answer
+      }
+    }))
+  } satisfies WithContext<FAQPage>
 }

@@ -1,17 +1,14 @@
-import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
+import { HouseIdentifier } from '@/lib/types'
 import { Locale, useTranslations } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
-import { notFound } from 'next/navigation'
 import { use } from 'react'
 
 export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
   const { locale, house } = use(params)
   setRequestLocale(locale as Locale)
 
-  if (!hasHouse(house)) {
-    notFound()
-  }
+  const houseId = house as HouseIdentifier
 
   const t = useTranslations('houses')
 
@@ -28,9 +25,13 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
       title: t('lemon.name'),
       description: t('lemon.summary')
     }
-  }[house]
+  }[houseId]
 
   return (
-    <HousePageContent houseId={house} title={title} description={description} />
+    <HousePageContent
+      houseId={houseId}
+      title={title}
+      description={description}
+    />
   )
 }
