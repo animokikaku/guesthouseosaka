@@ -20,10 +20,11 @@ export function hasHouse(house: string): house is HouseIdentifier {
 
 export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/[house]'>, 'children'>
-): Promise<Metadata> {
+): Promise<Metadata | undefined> {
   const { locale, house } = await props.params
+
   if (!hasLocale(routing.locales, locale) || !hasHouse(house)) {
-    notFound()
+    return undefined
   }
 
   const t = await getTranslations({ locale, namespace: 'houses' })
