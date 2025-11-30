@@ -4,16 +4,19 @@ import * as z from 'zod'
 export const HouseIdentifierSchema = z.enum(['apple', 'lemon', 'orange'])
 export type HouseIdentifier = z.infer<typeof HouseIdentifierSchema>
 
-export type Routes =
-  | '/'
-  | '/apple'
-  | '/lemon'
-  | '/orange'
-  | '/faq'
-  | '/contact'
-  | '/contact/tour'
-  | '/contact/move-in'
-  | '/contact/other'
+export const routes = [
+  '/',
+  '/orange',
+  '/apple',
+  '/lemon',
+  '/faq',
+  '/contact',
+  '/contact/tour',
+  '/contact/move-in',
+  '/contact/other'
+] as const
+
+export type Routes = (typeof routes)[number]
 
 export type NavItem = {
   key: string
