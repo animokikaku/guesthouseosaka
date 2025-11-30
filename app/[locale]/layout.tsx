@@ -66,7 +66,9 @@ export async function generateMetadata(
       icon: '/favicon.ico',
       shortcut: '/favicon-16x16.png',
       apple: '/apple-touch-icon.png'
-    }
+    },
+    // TODO: Remove this once we deploy the site
+    robots: { index: false, follow: false }
   }
 }
 
