@@ -1,4 +1,29 @@
 import { HouseIdentifier } from '@/lib/types'
+import { PostalAddress } from 'schema-dts'
+
+export const HOUSE_ADDRESS: Record<HouseIdentifier, PostalAddress> = {
+  orange: {
+    '@type': 'PostalAddress',
+    streetAddress: '阪南町１丁目２１−１９',
+    addressLocality: '大阪市阿倍野区',
+    postalCode: '545-0021',
+    addressCountry: 'JP'
+  },
+  apple: {
+    '@type': 'PostalAddress',
+    streetAddress: '敷津西２丁目８−４ クリオコート82',
+    addressLocality: '大阪市浪速区',
+    postalCode: '556-0015',
+    addressCountry: 'JP'
+  },
+  lemon: {
+    '@type': 'PostalAddress',
+    streetAddress: '日本橋東１丁目２−２',
+    addressLocality: '大阪市浪速区',
+    postalCode: '556-0006',
+    addressCountry: 'JP'
+  }
+}
 
 export const DEFAULT_ZOOM = 14
 export const MIN_ZOOM = 10

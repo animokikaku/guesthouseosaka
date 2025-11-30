@@ -11,5 +11,4 @@
 - [x] Add the correct images on the home screen
 - [] Add a viewer for the home screen images
 - [x] Different og image per house
-- [ ] (optional) Add Breadcrumb JSON-LD feature for pages
-- [ ] (optional) Add Article for houses pages
+- [x] Setup JSON-LD

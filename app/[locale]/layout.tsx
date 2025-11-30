@@ -7,17 +7,20 @@ import { notFound } from 'next/navigation'
 import '@/app/globals.css'
 import { ActiveThemeProvider } from '@/components/active-theme'
 import { Analytics } from '@/components/analytics'
+import { HOUSE_ADDRESS } from '@/components/map/location-map-constants'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
-import { META_THEME_COLORS } from '@/lib/config'
+import { assets } from '@/lib/assets'
+import { META_THEME_COLORS, urls } from '@/lib/config'
 import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
 import { type Metadata } from 'next'
+import { Organization, WithContext } from 'schema-dts'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -79,6 +82,23 @@ export default async function LocaleLayout({
 
   // Enable static rendering
   setRequestLocale(locale)
+  const t = await getTranslations({ locale: locale as Locale })
+  const url = env.NEXT_PUBLIC_APP_URL
+
+  const jsonLd: WithContext<Organization> = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${url}/#organization`,
+    url,
+    name: t('footer.company'),
+    alternateName: t('meta.siteName'),
+    telephone: t('faq.contact.phones.orange.international'),
+    email: 'info@guesthouseosaka.com',
+    logo: assets.logo.sho.src,
+    sameAs: Object.values(urls.socials),
+    address: HOUSE_ADDRESS.orange,
+    image: assets.openGraph.home.src
+  }
 
   return (
     <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
@@ -95,6 +115,12 @@ export default async function LocaleLayout({
                 }
               } catch (_) {}
             `
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c')
           }}
         />
         <meta name="theme-color" content={META_THEME_COLORS.light} />

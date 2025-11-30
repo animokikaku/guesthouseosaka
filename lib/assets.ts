@@ -46,10 +46,30 @@ export const assets = {
     }
   },
   logo: {
-    src: url('logo.png'),
-    width: 322,
-    height: 209,
-    alt: 'Share House Osaka logo'
+    sho: {
+      src: url('logo.png'),
+      width: 322,
+      height: 209,
+      alt: 'Share House Osaka logo'
+    },
+    orange: {
+      src: url('logo/orange.png'),
+      width: 326,
+      height: 151,
+      alt: 'Orange House logo'
+    },
+    apple: {
+      src: url('logo/apple.png'),
+      width: 334,
+      height: 166,
+      alt: 'Apple House logo'
+    },
+    lemon: {
+      src: url('logo/lemon.png'),
+      width: 306,
+      height: 200,
+      alt: 'Lemon House logo'
+    }
   },
   apple: {
     background: {
