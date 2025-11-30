@@ -251,7 +251,6 @@
   },
   "gallery": {
     "modalTitle": "Galerie de la maison",
-    "houseTitle": "Galerie de la maison",
     "explorePhotos": "Découvrez les photos de {title}",
     "close": "Fermer la galerie",
     "noImages": "Aucune image trouvée",

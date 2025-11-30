@@ -35,7 +35,7 @@ export default function GalleryModal({
         <Dialog.Overlay className="bg-background fixed inset-0 z-30 backdrop-blur-2xl" />
         <Dialog.Content className="bg-background text-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-40 max-w-none translate-x-0 translate-y-0 rounded-none border-0 p-0 shadow-none">
           <Dialog.Title className="sr-only">
-            {t('gallery.houseTitle')}
+            {t('gallery.modalTitle')}
           </Dialog.Title>
           <Dialog.Description className="sr-only">
             {t('gallery.explorePhotos', { title })}

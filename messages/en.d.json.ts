@@ -246,7 +246,6 @@ declare const messages: {
   },
   "gallery": {
     "modalTitle": "Home Gallery",
-    "houseTitle": "House Gallery",
     "explorePhotos": "Explore photos of {title}",
     "close": "Close gallery",
     "noImages": "No images found",
