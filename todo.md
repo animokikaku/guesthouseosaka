@@ -12,4 +12,4 @@
 - [] Add a viewer for the home screen images
 - [x] Different og image per house
 - [x] Setup JSON-LD
-- [] Enable indexing by removing the meta.robots once production is ready
+- [] Enable indexing (meta.robots and robots.txt) once production is ready
