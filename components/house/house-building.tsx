@@ -17,7 +17,7 @@ type BuildingData = {
   monthly_price: number
 }
 
-const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
+export const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
   apple: {
     bedrooms: 24,
     floors: 8,
@@ -29,9 +29,9 @@ const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
     monthly_price: 50000
   },
   orange: {
-    bedrooms: 30,
+    bedrooms: 28,
     floors: 3,
-    monthly_price: 38000
+    monthly_price: 40000
   }
 }
 

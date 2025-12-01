@@ -25,6 +25,12 @@ export const HOUSE_ADDRESS: Record<HouseIdentifier, PostalAddress> = {
   }
 }
 
+export const NUMBER_OF_ROOMS: Record<HouseIdentifier, number> = {
+  orange: 28,
+  apple: 24,
+  lemon: 12
+}
+
 export const DEFAULT_ZOOM = 14
 export const MIN_ZOOM = 10
 export const BOUNDS = {

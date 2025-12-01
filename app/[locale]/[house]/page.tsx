@@ -1,5 +1,6 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
+import { BUILDING_DATA } from '@/components/house/house-building'
 import {
   GOOGLE_MAPS_URLS,
   HOUSE_ADDRESS,
@@ -8,19 +9,12 @@ import {
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useHousePhones } from '@/hooks/use-house-phones'
 import { assets } from '@/lib/assets'
-import { HouseIdentifier } from '@/lib/types'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { env } from 'process'
 import { use } from 'react'
 import { Accommodation, WithContext } from 'schema-dts'
-
-const NUMBER_OF_ROOMS: Record<HouseIdentifier, number> = {
-  orange: 30,
-  apple: 24,
-  lemon: 20
-}
 
 export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
   const { locale, house } = use(params)
@@ -52,7 +46,7 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
     hasMap: GOOGLE_MAPS_URLS[house],
     logo: assets.logo[house].src,
     address: HOUSE_ADDRESS[house],
-    numberOfRooms: NUMBER_OF_ROOMS[house],
+    numberOfRooms: BUILDING_DATA[house].bedrooms,
     telephone: phones[house].international
   }
 
