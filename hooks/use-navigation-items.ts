@@ -1,5 +1,5 @@
 import { assets } from '@/lib/assets'
-import { HouseIdentifierSchema, NavItems } from '@/lib/types'
+import { HouseIdentifier, NavItems } from '@/lib/types'
 import { useTranslations } from 'next-intl'
 
 import { useHouseLabels } from './use-house-labels'
@@ -7,8 +7,9 @@ import { useHouseLabels } from './use-house-labels'
 export function useNavigationItems(): NavItems {
   const t = useTranslations('useNavigationItems')
   const houses = useHouseLabels()
+  const houseIdentifiers: HouseIdentifier[] = ['orange', 'apple', 'lemon']
 
-  const items = HouseIdentifierSchema.options.map((house) => {
+  const items = houseIdentifiers.map((house) => {
     const { name, summary, caption } = houses[house]
     const { icon, background } = assets[house]
     return {
