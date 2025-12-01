@@ -17,15 +17,18 @@ export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/contact'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
-  const t = await getTranslations({ locale: locale as Locale })
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: 'ContactLayout.meta'
+  })
 
   const { openGraph, twitter } = await getOpenGraphMetadata({
     locale: locale as Locale,
     image: assets.openGraph.contact.src
   })
 
-  const title = t('navigation.contact')
-  const description = t('contact.description')
+  const title = t('title')
+  const description = t('description')
 
   return { title, description, openGraph, twitter }
 }
@@ -36,30 +39,33 @@ export default async function ContactLayout({
 }: LayoutProps<'/[locale]/contact'>) {
   const { locale } = await params
   setRequestLocale(locale as Locale)
-  const t = await getTranslations()
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: 'ContactLayout'
+  })
 
   return (
     <>
       <PageHeader>
-        <PageHeaderHeading>{t('contact.title')}</PageHeaderHeading>
-        <PageHeaderDescription>{t('contact.intro')}</PageHeaderDescription>
+        <PageHeaderHeading>{t('title')}</PageHeaderHeading>
+        <PageHeaderDescription>{t('description')}</PageHeaderDescription>
         <PageActions>
           <Button asChild size="sm">
             <Link href="/contact">
               <MailIcon />
-              {t('navigation.contact')}
+              {t('actions.contact')}
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm">
             <Link href="/faq#phone">
               <PhoneIcon />
-              {t('forms.fields.phone.label')}
+              {t('actions.phone')}
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm">
             <Link href="/faq">
               <BookTextIcon />
-              {t('navigation.faq')}
+              {t('actions.faq')}
             </Link>
           </Button>
         </PageActions>

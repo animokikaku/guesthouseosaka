@@ -10,7 +10,7 @@ type FormSubmitButtonProps = Omit<
 
 export const SubmitButton = (props: FormSubmitButtonProps) => {
   const form = useFormContext()
-  const t = useTranslations()
+  const t = useTranslations('SubmitButton')
 
   const [isSubmitting, canSubmit] = useStore(form.store, (state) => [
     state.isSubmitting,
@@ -19,7 +19,7 @@ export const SubmitButton = (props: FormSubmitButtonProps) => {
 
   return (
     <Button type="submit" disabled={isSubmitting || !canSubmit} {...props}>
-      {t('common.submit')}
+      {t('label')}
     </Button>
   )
 }

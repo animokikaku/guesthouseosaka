@@ -17,6 +17,7 @@ import { assets } from '@/lib/assets'
 import { META_THEME_COLORS, urls } from '@/lib/config'
 import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
+import { getHousePhones } from '@/lib/house-phones'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
 import { type Metadata } from 'next'
@@ -32,10 +33,10 @@ export async function generateMetadata(
   const { locale } = await props.params
   const t = await getTranslations({
     locale: locale as Locale,
-    namespace: 'meta'
+    namespace: 'manifest'
   })
 
-  const siteName = t('siteName')
+  const siteName = t('name')
   const { openGraph, twitter } = await getOpenGraphMetadata({
     locale: locale as Locale
   })
@@ -47,7 +48,7 @@ export async function generateMetadata(
     },
     metadataBase: env.NEXT_PUBLIC_APP_URL,
     authors: [{ name: 'Thibault Vieux', url: 'https://thibaultvieux.com' }],
-    description: t('siteDescription'),
+    description: t('description'),
     keywords: [
       'Guest House Osaka',
       'Osaka Guest House',
@@ -84,7 +85,12 @@ export default async function LocaleLayout({
 
   // Enable static rendering
   setRequestLocale(locale)
-  const t = await getTranslations({ locale: locale as Locale })
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: 'SiteFooter'
+  })
+
+  const phones = await getHousePhones(locale as Locale)
   const url = env.NEXT_PUBLIC_APP_URL
 
   const jsonLd: WithContext<Organization> = {
@@ -92,9 +98,9 @@ export default async function LocaleLayout({
     '@type': 'Organization',
     '@id': `${url}/#organization`,
     url,
-    name: t('footer.company'),
-    alternateName: t('meta.siteName'),
-    telephone: t('faq.contact.phones.orange.international'),
+    name: t('company_name'),
+    alternateName: t('brand_name'),
+    telephone: phones.orange.international,
     email: 'info@guesthouseosaka.com',
     logo: assets.logo.sho.src,
     sameAs: Object.values(urls.socials),

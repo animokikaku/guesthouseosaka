@@ -6,7 +6,9 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { HouseIdentifier } from '@/lib/types'
+import { useHouseLabels } from '@/hooks/use-house-labels'
+import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
+import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 
 type AnswerValue = string | string[]
@@ -25,8 +27,39 @@ const renderAnswer = (value: AnswerValue) => {
   )
 }
 
+const ACCENT_CLASSES = {
+  orange: 'text-orange-600',
+  apple: 'text-red-600',
+  lemon: 'text-yellow-600'
+}
+
+function FAQExtraCostsTableHeader() {
+  const houses = useHouseLabels()
+
+  const headers = HouseIdentifierSchema.options.map((house) => ({
+    name: houses[house].name,
+    accentClass: ACCENT_CLASSES[house]
+  }))
+
+  return (
+    <TableHeader>
+      <TableRow>
+        <TableHead className="bg-secondary text-foreground font-semibold" />
+        {headers.map(({ name, accentClass }) => (
+          <TableHead
+            key={name}
+            className={cn('bg-secondary font-semibold capitalize', accentClass)}
+          >
+            {name}
+          </TableHead>
+        ))}
+      </TableRow>
+    </TableHeader>
+  )
+}
+
 export function FAQExtraCostsTable() {
-  const t = useTranslations()
+  const t = useTranslations('FAQExtraCostsTable')
 
   const rows: {
     id: string
@@ -35,52 +68,52 @@ export function FAQExtraCostsTable() {
   }[] = [
     {
       id: 'deposit',
-      label: t('faq.costs.deposit'),
+      label: t('deposit'),
       answers: {
-        orange: '¥30,000',
-        lemon: '¥30,000',
-        apple: '¥30,000'
+        orange: t('deposit_amount', { amount: '30000' }),
+        lemon: t('deposit_amount', { amount: '30000' }),
+        apple: t('deposit_amount', { amount: '30000' })
       }
     },
     {
       id: 'service-fees',
-      label: t('faq.costs.commonFees'),
+      label: t('common_fees'),
       answers: {
-        orange: t('faq.costs.pricePerMonth', { price: '12000' }),
-        lemon: t('faq.costs.pricePerMonth', { price: '10000' }),
-        apple: t('faq.costs.pricePerMonth', { price: '10000' })
+        orange: t('price_per_month', { price: '12000' }),
+        lemon: t('price_per_month', { price: '10000' }),
+        apple: t('price_per_month', { price: '10000' })
       }
     },
     {
       id: 'utility-fees',
-      label: t('faq.costs.utilityFees'),
+      label: t('utility_fees'),
       answers: {
         orange: [
-          t('faq.costs.seasonalRates.summerWinter', {
+          t('seasonal_rates.summer_winter', {
             min: '3000',
             max: '6000'
           }),
-          t('faq.costs.seasonalRates.springAutumn', {
+          t('seasonal_rates.spring_autumn', {
             min: '2000',
             max: '3000'
           })
         ],
         lemon: [
-          t('faq.costs.seasonalRates.summerWinter', {
+          t('seasonal_rates.summer_winter', {
             min: '3000',
             max: '7000'
           }),
-          t('faq.costs.seasonalRates.springAutumn', {
+          t('seasonal_rates.spring_autumn', {
             min: '2000',
             max: '4000'
           })
         ],
         apple: [
-          t('faq.costs.seasonalRates.summerWinter', {
+          t('seasonal_rates.summer_winter', {
             min: '3000',
             max: '7000'
           }),
-          t('faq.costs.seasonalRates.springAutumn', {
+          t('seasonal_rates.spring_autumn', {
             min: '2000',
             max: '4000'
           })
@@ -89,44 +122,44 @@ export function FAQExtraCostsTable() {
     },
     {
       id: 'water-bill',
-      label: t('faq.costs.waterBill'),
+      label: t('water_bill'),
       answers: {
-        orange: t('faq.costs.free'),
-        lemon: t('faq.costs.free'),
-        apple: t('faq.costs.free')
+        orange: t('free'),
+        lemon: t('free'),
+        apple: t('free')
       }
     },
     {
       id: 'laundromat',
-      label: t('faq.costs.laundromat'),
+      label: t('laundromat'),
       answers: {
-        orange: t('faq.costs.free'),
-        lemon: t('faq.costs.free'),
-        apple: t('faq.costs.privateWasher')
+        orange: t('free'),
+        lemon: t('free'),
+        apple: t('private_washer')
       }
     },
     {
       id: 'drying-machine',
-      label: t('faq.costs.dryingMachine'),
+      label: t('drying_machine'),
       answers: {
-        orange: t('faq.costs.pricePerMinutes', {
+        orange: t('price_per_minutes', {
           price: '100',
           minutes: '30'
         }),
-        lemon: t('faq.costs.pricePerMinutes', {
+        lemon: t('price_per_minutes', {
           price: '100',
           minutes: '20'
         }),
-        apple: t('faq.costs.dash')
+        apple: '–'
       }
     },
     {
       id: 'internet',
-      label: t('faq.costs.internet'),
+      label: t('internet'),
       answers: {
-        orange: t('faq.costs.freeWifiLan'),
-        lemon: t('faq.costs.freeWifi'),
-        apple: t('faq.costs.freeWifi')
+        orange: t('free_wifi_lan'),
+        lemon: t('free_wifi'),
+        apple: t('free_wifi')
       }
     }
   ]
@@ -135,44 +168,18 @@ export function FAQExtraCostsTable() {
     <div className="space-y-2">
       <div className="border-border overflow-hidden rounded-xs border">
         <Table className="w-full">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="bg-secondary text-foreground font-semibold" />
-              <TableHead
-                key="orange"
-                className="bg-secondary font-semibold text-orange-600 capitalize"
-              >
-                {t('houses.orange.name')}
-              </TableHead>
-              <TableHead
-                key="apple"
-                className="bg-secondary font-semibold text-red-600 capitalize"
-              >
-                {t('houses.apple.name')}
-              </TableHead>
-              <TableHead
-                key="lemon"
-                className="bg-secondary font-semibold text-yellow-600 capitalize"
-              >
-                {t('houses.lemon.name')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
+          <FAQExtraCostsTableHeader />
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
                 <TableCell className="text-foreground font-medium">
                   <span>{row.label}</span>
                 </TableCell>
-                <TableCell key="orange">
-                  {renderAnswer(row.answers.orange)}
-                </TableCell>
-                <TableCell key="apple">
-                  {renderAnswer(row.answers.apple)}
-                </TableCell>
-                <TableCell key="lemon">
-                  {renderAnswer(row.answers.lemon)}
-                </TableCell>
+                {HouseIdentifierSchema.options.map((house) => (
+                  <TableCell key={house}>
+                    {renderAnswer(row.answers[house])}
+                  </TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>

@@ -37,7 +37,7 @@ export function MessageField({
 }: MessageFieldProps) {
   const field = useFieldContext<string>()
   const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
-  const t = useTranslations()
+  const t = useTranslations('MessageField')
 
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
@@ -50,7 +50,7 @@ export function MessageField({
             {label}
             {!required && (
               <span className="text-muted-foreground text-xs">
-                ({t('common.optional')})
+                ({t('optional_hint')})
               </span>
             )}
           </FieldLabel>
@@ -68,7 +68,7 @@ export function MessageField({
         />
         <InputGroupAddon align="block-end">
           <InputGroupText className="tabular-nums">
-            {t('common.charactersCounter', {
+            {t('character_counter', {
               count: `${field.state.value.length}`,
               max: `${MAX_LENGTH}`
             })}

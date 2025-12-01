@@ -1,63 +1,19 @@
+'use client'
+
 import { Icons } from '@/components/icons'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { MainNav } from '@/components/main-nav'
 import { MobileNav } from '@/components/mobile-nav'
 import { ModeSwitcher } from '@/components/mode-switcher'
 import { Button } from '@/components/ui/button'
+import { useNavigationItems } from '@/hooks/use-navigation-items'
 import { Link } from '@/i18n/navigation'
-import { assets } from '@/lib/assets'
-import { NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 
 export function SiteHeader() {
-  const t = useTranslations()
-
-  const navItems: NavItems = [
-    {
-      label: t('navigation.shareHouses'),
-      key: 'share-houses',
-      items: [
-        {
-          key: 'orange',
-          href: '/orange',
-          label: t('houses.orange.name'),
-          description: t('houses.orange.summary'),
-          caption: t('houses.orange.caption'),
-          icon: assets.orange.icon,
-          background: assets.orange.background
-        },
-        {
-          key: 'apple',
-          href: '/apple',
-          label: t('houses.apple.name'),
-          description: t('houses.apple.summary'),
-          caption: t('houses.apple.caption'),
-          icon: assets.apple.icon,
-          background: assets.apple.background
-        },
-        {
-          key: 'lemon',
-          href: '/lemon',
-          label: t('houses.lemon.name'),
-          description: t('houses.lemon.summary'),
-          caption: t('houses.lemon.caption'),
-          icon: assets.lemon.icon,
-          background: assets.lemon.background
-        }
-      ]
-    },
-    {
-      key: 'faq',
-      href: '/faq',
-      label: t('navigation.faq')
-    },
-    {
-      key: 'contact',
-      href: '/contact',
-      label: t('navigation.contact')
-    }
-  ]
+  const navItems = useNavigationItems()
+  const t = useTranslations('SiteHeader')
 
   return (
     <header
@@ -77,7 +33,7 @@ export function SiteHeader() {
           >
             <Link href="/">
               <Icons.logo className="size-5" />
-              <span className="sr-only">{t('meta.siteName')}</span>
+              <span className="sr-only">{t('logo_label')}</span>
             </Link>
           </Button>
           <MainNav items={navItems} className="hidden lg:flex" />

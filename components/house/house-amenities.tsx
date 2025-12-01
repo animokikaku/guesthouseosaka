@@ -138,22 +138,22 @@ function AmenitiesDialog({ amenities, trigger, title }: AmenitiesDialogProps) {
 
 export function HouseAmenities({ id }: HouseAmenitiesProps) {
   const isMobile = useIsMobile()
-  const t = useTranslations('amenities')
+  const t = useTranslations('HouseAmenities')
   const maxTopAmenities = isMobile ? 5 : 10
 
   const amenities: AmenityCategory[] = (() => {
     const data: Record<HouseIdentifier, AmenityCategory[]> = {
       apple: [
         {
-          category: t('categories.internetClimate'),
+          category: t('categories.internet_climate'),
           items: [
             {
-              title: t('items.freeWifi'),
+              title: t('items.free_wifi'),
               icon: Wifi,
               featured: true
             },
             {
-              title: t('items.airConditioningHeating'),
+              title: t('items.air_conditioning_heating'),
               icon: ThermometerSnowflake,
               note: t('notes.private'),
               featured: true
@@ -161,7 +161,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           ]
         },
         {
-          category: t('categories.kitchenDining'),
+          category: t('categories.kitchen_dining'),
           items: [
             {
               title: t('items.kitchen'),
@@ -175,17 +175,17 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               note: t('notes.private')
             },
             {
-              title: t('items.microwaveToaster'),
+              title: t('items.microwave_toaster'),
               icon: Microwave,
               note: t('notes.private')
             },
             {
-              title: t('items.loungeKitchenOven'),
+              title: t('items.lounge_kitchen_oven'),
               icon: ChefHat,
               note: t('notes.shared')
             },
             {
-              title: t('items.largeRefrigerator'),
+              title: t('items.large_refrigerator'),
               icon: Refrigerator,
               note: t('notes.shared')
             }
@@ -195,13 +195,13 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.bathroom'),
           items: [
             {
-              title: t('items.bathroomWithShowerBathtub'),
+              title: t('items.bathroom_with_shower_bathtub'),
               icon: ShowerHead,
               note: t('notes.private'),
               featured: true
             },
             {
-              title: t('items.washletToilet'),
+              title: t('items.washlet_toilet'),
               icon: Toilet,
               note: t('notes.private')
             }
@@ -211,13 +211,13 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.laundry'),
           items: [
             {
-              title: t('items.washingMachine'),
+              title: t('items.washing_machine'),
               icon: WashingMachine,
               note: t('notes.private'),
               featured: true
             },
             {
-              title: t('items.dryingSpace'),
+              title: t('items.drying_space'),
               icon: Sun,
               note: t('notes.shared'),
               featured: true
@@ -228,14 +228,14 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.accommodation'),
           items: [
             {
-              title: t('items.furnishedRooms', { size: '11' }),
+              title: t('items.furnished_rooms', { size: '11' }),
               icon: Bed,
               featured: true
             }
           ]
         },
         {
-          category: t('categories.commonAreas'),
+          category: t('categories.common_areas'),
           items: [
             {
               title: t('items.lounge'),
@@ -243,14 +243,14 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               featured: true
             },
             {
-              title: t('items.tvEntertainment'),
+              title: t('items.tv_entertainment'),
               icon: Tv,
               featured: true
             }
           ]
         },
         {
-          category: t('categories.buildingAccess'),
+          category: t('categories.building_access'),
           items: [
             {
               title: t('items.elevator'),
@@ -263,7 +263,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               note: t('notes.shared')
             },
             {
-              title: t('items.bicycleParking'),
+              title: t('items.bicycle_parking'),
               icon: Bike,
               note: t('notes.shared')
             }
@@ -272,15 +272,15 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
       ],
       lemon: [
         {
-          category: t('categories.internetClimate'),
+          category: t('categories.internet_climate'),
           items: [
             {
-              title: t('items.freeWifi'),
+              title: t('items.free_wifi'),
               icon: Wifi,
               featured: true
             },
             {
-              title: t('items.airConditioningHeating'),
+              title: t('items.air_conditioning_heating'),
               icon: ThermometerSnowflake,
               note: t('notes.private'),
               featured: true
@@ -288,7 +288,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           ]
         },
         {
-          category: t('categories.kitchenDining'),
+          category: t('categories.kitchen_dining'),
           items: [
             {
               title: t('items.kitchen'),
@@ -302,7 +302,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               note: t('notes.private')
             },
             {
-              title: t('items.microwaveToasterRiceCooker'),
+              title: t('items.microwave_toaster_rice_cooker'),
               icon: Microwave,
               note: t('notes.private'),
               featured: true
@@ -318,13 +318,13 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.bathroom'),
           items: [
             {
-              title: t('items.bathroomWithShowerBathtub'),
+              title: t('items.bathroom_with_shower_bathtub'),
               icon: ShowerHead,
               note: t('notes.private'),
               featured: true
             },
             {
-              title: t('items.washletToilet'),
+              title: t('items.washlet_toilet'),
               icon: Toilet,
               note: t('notes.private')
             }
@@ -334,13 +334,13 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.laundry'),
           items: [
             {
-              title: t('items.washingMachine'),
+              title: t('items.washing_machine'),
               icon: WashingMachine,
               note: t('notes.shared'),
               featured: true
             },
             {
-              title: t('items.dryingSpace'),
+              title: t('items.drying_space'),
               icon: Sun,
               note: t('notes.shared'),
               featured: true
@@ -351,14 +351,14 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.accommodation'),
           items: [
             {
-              title: t('items.spaciousRooms'),
+              title: t('items.spacious_rooms'),
               icon: Bed,
               featured: true
             }
           ]
         },
         {
-          category: t('categories.commonAreas'),
+          category: t('categories.common_areas'),
           items: [
             {
               title: t('items.lounge'),
@@ -368,10 +368,10 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           ]
         },
         {
-          category: t('categories.buildingAccess'),
+          category: t('categories.building_access'),
           items: [
             {
-              title: t('items.secureEntry'),
+              title: t('items.secure_entry'),
               icon: Lock,
               featured: true
             },
@@ -381,7 +381,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               note: t('notes.shared')
             },
             {
-              title: t('items.bicycleParking'),
+              title: t('items.bicycle_parking'),
               icon: Bike,
               note: t('notes.shared')
             }
@@ -390,15 +390,15 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
       ],
       orange: [
         {
-          category: t('categories.internetClimate'),
+          category: t('categories.internet_climate'),
           items: [
             {
-              title: t('items.freeWifi'),
+              title: t('items.free_wifi'),
               icon: Wifi,
               featured: true
             },
             {
-              title: t('items.airConditioningHeating'),
+              title: t('items.air_conditioning_heating'),
               icon: ThermometerSnowflake,
               note: t('notes.private'),
               featured: true
@@ -406,7 +406,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           ]
         },
         {
-          category: t('categories.kitchenDining'),
+          category: t('categories.kitchen_dining'),
           items: [
             {
               title: t('items.kitchen'),
@@ -415,12 +415,12 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               featured: true
             },
             {
-              title: t('items.refrigeratorFreezer'),
+              title: t('items.refrigerator_freezer'),
               icon: Refrigerator,
               note: t('notes.private')
             },
             {
-              title: t('items.microwaveToaster'),
+              title: t('items.microwave_toaster'),
               icon: Microwave,
               note: t('notes.shared')
             },
@@ -441,7 +441,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               featured: true
             },
             {
-              title: t('items.washletToilet'),
+              title: t('items.washlet_toilet'),
               icon: Toilet,
               note: t('notes.shared'),
               featured: true
@@ -452,7 +452,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.laundry'),
           items: [
             {
-              title: t('items.washingMachine'),
+              title: t('items.washing_machine'),
               icon: WashingMachine,
               note: t('notes.shared'),
               featured: true
@@ -463,7 +463,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               note: t('notes.coin')
             },
             {
-              title: t('items.dryingSpace'),
+              title: t('items.drying_space'),
               icon: Sun,
               note: t('notes.shared')
             }
@@ -473,36 +473,36 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.accommodation'),
           items: [
             {
-              title: t('items.furnishedRooms', { size: '12' }),
+              title: t('items.furnished_rooms', { size: '12' }),
               icon: Bed,
               featured: true
             }
           ]
         },
         {
-          category: t('categories.commonAreas'),
+          category: t('categories.common_areas'),
           items: [
             {
-              title: t('items.rooftopLounge'),
+              title: t('items.rooftop_lounge'),
               icon: Sofa,
               featured: true
             },
             {
-              title: t('items.coffeeTeaCorner'),
+              title: t('items.coffee_tea_corner'),
               icon: Coffee,
               featured: true
             },
             {
-              title: t('items.monthlyParties'),
+              title: t('items.monthly_parties'),
               icon: PartyPopper
             }
           ]
         },
         {
-          category: t('categories.buildingAccess'),
+          category: t('categories.building_access'),
           items: [
             {
-              title: t('items.secureEntry'),
+              title: t('items.secure_entry'),
               icon: Lock,
               featured: true
             },
@@ -512,7 +512,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               note: t('notes.shared')
             },
             {
-              title: t('items.bicycleParking'),
+              title: t('items.bicycle_parking'),
               icon: Bike,
               note: t('notes.shared')
             },
@@ -553,7 +553,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           amenities={amenities}
           trigger={
             <Button variant="outline">
-              {t('showAll', {
+              {t('show_all', {
                 count: `${totalAmenitiesCount}`
               })}
             </Button>

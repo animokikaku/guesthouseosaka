@@ -5,10 +5,12 @@ import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
 import { useMetaColor } from '@/hooks/use-meta-color'
+import { useTranslations } from 'next-intl'
 
 export function ModeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme()
   const { setMetaColor, metaColor } = useMetaColor()
+  const t = useTranslations('ModeSwitcher')
 
   React.useEffect(() => {
     setMetaColor(metaColor)
@@ -24,7 +26,7 @@ export function ModeSwitcher() {
       size="icon"
       className="group/toggle extend-touch-target size-8"
       onClick={toggleTheme}
-      title="Toggle theme"
+      title={t('toggle_theme')}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +47,7 @@ export function ModeSwitcher() {
         <path d="M12 14.3l7.37 -7.37" />
         <path d="M12 19.6l8.85 -8.85" />
       </svg>
-      <span className="sr-only">Toggle theme</span>
+      <span className="sr-only">{t('toggle_theme')}</span>
     </Button>
   )
 }

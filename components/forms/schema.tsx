@@ -8,32 +8,30 @@ function useContactFormSchema() {
   return z.object({
     places: z
       .array(HouseIdentifierSchema)
-      .min(1, t('placesMin'))
-      .max(3, t('placesMax')),
+      .min(1, t('places_min'))
+      .max(3, t('places_max')),
     account: z.object({
-      name: z.string().min(2, t('nameMin')),
+      name: z.string().min(2, t('name_min')),
       age: z.string().refine(
         (v) => {
           const age = Number(v)
           return !isNaN(age) && age > 0
         },
-        { message: t('agePositive') }
+        { message: t('age_positive') }
       ),
       gender: z.enum(['male', 'female'], {
-        error: t('genderRequired')
+        error: t('gender_required')
       }),
       nationality: z
         .string()
-        .min(1, t('nationalityRequired'))
-        .max(100, t('nationalityMax')),
+        .min(1, t('nationality_required'))
+        .max(100, t('nationality_max')),
       email: z.email(t('email')),
       phone: z.string().refine((v) => (v ? isMobilePhone(v, 'any') : true), {
         message: t('phone')
       })
     }),
-    message: z
-      .string()
-      .max(3000, t('messageMax')),
+    message: z.string().max(3000, t('message_max')),
     date: z.iso.date().refine(
       (val) => {
         const inputDate = new Date(val)
@@ -42,13 +40,13 @@ function useContactFormSchema() {
         inputDate.setHours(0, 0, 0, 0)
         return inputDate >= today
       },
-      { message: t('dateFuture') }
+      { message: t('date_future') }
     ),
     privacyPolicy: z.literal(true, {
-      error: t('privacyPolicy')
+      error: t('privacy_policy')
     }),
     stayDuration: z.enum(['1-month', '3-months', 'long-term'], {
-      error: t('stayDuration')
+      error: t('stay_duration')
     }),
     hour: z.iso.time().refine(
       (val) => {
@@ -58,7 +56,7 @@ function useContactFormSchema() {
         const end = 20 * 60
         return totalMinutes >= start && totalMinutes <= end
       },
-      { message: t('timeRange') }
+      { message: t('time_range') }
     )
   })
 }
@@ -108,7 +106,7 @@ export function useGeneralInquirySchema() {
         email: true
       }),
       message: schema.shape.message.refine((val) => val.length >= 5, {
-        message: t('messageMin')
+        message: t('message_min')
       })
     })
 }

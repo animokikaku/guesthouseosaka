@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react'
 
 export function MobileHeroImage({ house }: { house: HouseIdentifier }) {
   const locale = useLocale()
-  const t = useTranslations('gallery')
+  const t = useTranslations('MobileHeroImage')
   const [api, setApi] = useState<CarouselApi>()
   const [currentIndex, setCurrentIndex] = useState(1)
 
@@ -42,7 +42,7 @@ export function MobileHeroImage({ house }: { house: HouseIdentifier }) {
   if (images.length === 0) {
     return (
       <Empty className="min-h-96 w-full">
-        <EmptyTitle>{t('noImages')}</EmptyTitle>
+        <EmptyTitle>{t('empty_title')}</EmptyTitle>
       </Empty>
     )
   }

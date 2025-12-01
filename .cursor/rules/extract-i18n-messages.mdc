@@ -1,0 +1,30 @@
+---
+description: Should be used when extracting hardcoded labels from a component
+alwaysApply: false
+---
+
+# Extract i18n messages
+
+This project is set up with `next-intl` for internationalization.
+
+**Notes**:
+
+- There must not be any hardcoded strings in components.
+- All extracted messages should be put into @en.json.
+- All keys in @en.json must be sorted alphabetically.
+- Components reference messages using `useTranslations('ComponentName')` (or `await getTranslations('ComponentName')` in async components) and call them with `t('key_name')`.
+- Use component names as namespaces for keys.
+- Use descriptive and short names for keys that describe the intent instead of using the literal content (e.g. `title`, `description`).
+- Use PascalCase for namespaces and snake_case for keys.
+- Leave already translated strings as-is.
+- Only touch component code, leave general setup files as-is.
+- You should use the following ICU features to create flexible and user-friendly messages:
+  1. Arguments (e.g. `Hello {firstName}`)
+     - Receive variables that are combined with text as primitive arguments so that translators can integrate them into the grammatical structure of a given language.
+  2. Plurals (e.g. `{count, plural, =0 {No reviews yet.} one {One customer has left a review.} other {# customers have left a review.}}`)
+     - Improve the readability by processing the argument as part of the plural expression.
+       - Wrong: `{count} {count, plural, one {review} other {reviews}}` (argument outside of plural expression)
+       - Correct: `{count, plural, =0 {No reviews yet.} one {One customer has left a review.} other {# customers have left a review.}}`
+  3. Select (e.g. `{gender, select, male {He} female {She} other {They}} has left a review.`)
+  4. Rich text (e.g. `See details in the <link>size guide</link>`).
+     - Extracted rich text must be used with `t.rich` instead of `t`.

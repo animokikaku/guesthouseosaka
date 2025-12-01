@@ -16,12 +16,12 @@ export async function getOpenGraphMetadata({
   image?: string
   locale: Locale
 }) {
-  const t = await getTranslations({ locale, namespace: 'meta' })
+  const t = await getTranslations({ locale, namespace: 'manifest' })
 
   const openGraph = {
     type: 'website',
     images: image,
-    siteName: t('siteName'),
+    siteName: t('name'),
     locale: openGraphLocaleMap[locale],
     alternateLocale: routing.locales
       .filter((currentLocale) => currentLocale !== locale)

@@ -9,16 +9,16 @@ import {
 import { useTranslations } from 'next-intl'
 
 export default function FAQCard() {
-  const t = useTranslations('faq')
+  const t = useTranslations('FAQCard')
 
   return (
     <Card>
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">
-          {t('card.title')}
+          {t('title')}
         </CardTitle>
         <CardDescription className="text-muted-foreground text-md">
-          {t('card.description')}
+          {t('description')}
         </CardDescription>
       </CardHeader>
       <CardContent>

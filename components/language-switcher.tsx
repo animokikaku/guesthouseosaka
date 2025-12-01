@@ -73,7 +73,7 @@ export function LanguageSwitcher({
 
 type LanguageSwitcherSelectProps = {
   languages: Language[]
-  value?: Locale
+  value: Locale
   disabled?: boolean
   align?: 'start' | 'center' | 'end'
   variant?: 'outline' | 'ghost'
@@ -92,21 +92,17 @@ function LanguageSwitcherSelect({
   onChange,
   className
 }: LanguageSwitcherSelectProps) {
-  const t = useTranslations('navigation')
+  const t = useTranslations('LanguageSwitcher')
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger disabled={disabled} asChild>
         <Button
-          aria-label={t('selectLanguage')}
+          aria-label={t('aria_label')}
           size={size}
           className={className}
           variant={variant}
         >
-          {size === 'default'
-            ? value
-              ? langs[value]
-              : t('languageSelector')
-            : null}
+          {size === 'default' ? langs[value] : null}
           <Languages />
         </Button>
       </DropdownMenuTrigger>

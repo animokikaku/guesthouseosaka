@@ -16,13 +16,13 @@ const renderValue = (value: PricingValue) => {
 }
 
 export async function HousePricing({ id }: { id: HouseIdentifier }) {
-  const t = await getTranslations('pricing')
+  const t = await getTranslations('HousePricing')
   const labels = {
     rent: t('labels.rent'),
-    shortStay: t('labels.shortStay'),
-    dormitoryPlan: t('labels.dormitoryPlan'),
-    otherFees: t('labels.otherFees'),
-    longStay: t('labels.longStay')
+    shortStay: t('labels.short_stay'),
+    dormitoryPlan: t('labels.dormitory_plan'),
+    otherFees: t('labels.other_fees'),
+    longStay: t('labels.long_stay')
   }
 
   const { rows, notes } = {
@@ -35,23 +35,23 @@ export async function HousePricing({ id }: { id: HouseIdentifier }) {
         {
           label: labels.shortStay,
           value: [
-            t('apple.shortStay.rate'),
-            t('apple.shortStay.allFees'),
-            t('apple.shortStay.minimum')
+            t('apple.short_stay.rate'),
+            t('apple.short_stay.all_fees'),
+            t('apple.short_stay.minimum')
           ]
         }
       ],
       notes: [
         {
           title: labels.longStay,
-          items: [t('apple.longStay')]
+          items: [t('apple.long_stay')]
         },
         {
           title: labels.otherFees,
           items: [
-            t('apple.otherFees.serviceFee'),
-            t('apple.otherFees.utilities'),
-            t('apple.otherFees.deposit')
+            t('apple.other_fees.service_fee'),
+            t('apple.other_fees.utilities'),
+            t('apple.other_fees.deposit')
           ]
         }
       ]
@@ -65,9 +65,9 @@ export async function HousePricing({ id }: { id: HouseIdentifier }) {
         {
           label: labels.shortStay,
           value: [
-            t('lemon.shortStay.rate'),
-            t('lemon.shortStay.allFees'),
-            t('lemon.shortStay.minimum')
+            t('lemon.short_stay.rate'),
+            t('lemon.short_stay.all_fees'),
+            t('lemon.short_stay.minimum')
           ]
         },
         {
@@ -82,16 +82,16 @@ export async function HousePricing({ id }: { id: HouseIdentifier }) {
       notes: [
         {
           title: labels.longStay,
-          items: [t('lemon.longStay')]
+          items: [t('lemon.long_stay')]
         },
         {
           title: labels.otherFees,
           items: [
-            t('lemon.otherFees.serviceFee'),
-            t('lemon.otherFees.utilities'),
-            t('lemon.otherFees.deposit'),
-            t('lemon.otherFees.washingMachine'),
-            t('lemon.otherFees.dryer')
+            t('lemon.other_fees.service_fee'),
+            t('lemon.other_fees.utilities'),
+            t('lemon.other_fees.deposit'),
+            t('lemon.other_fees.washing_machine'),
+            t('lemon.other_fees.dryer')
           ]
         }
       ]
@@ -100,26 +100,26 @@ export async function HousePricing({ id }: { id: HouseIdentifier }) {
       rows: [
         {
           label: labels.rent,
-          value: [t('orange.rent.base'), t('orange.rent.secondPerson')]
+          value: [t('orange.rent.base'), t('orange.rent.second_person')]
         }
       ],
       notes: [
         {
           title: labels.longStay,
           items: [
-            t('orange.longStay.secondMonth'),
-            t('orange.longStay.thirdMonth'),
-            t('orange.longStay.afterSixMonths')
+            t('orange.long_stay.second_month'),
+            t('orange.long_stay.third_month'),
+            t('orange.long_stay.after_six_months')
           ]
         },
         {
           title: labels.otherFees,
           items: [
-            t('orange.otherFees.serviceFee'),
-            t('orange.otherFees.utilities'),
-            t('orange.otherFees.washingMachine'),
-            t('orange.otherFees.dryer'),
-            t('orange.otherFees.deposit')
+            t('orange.other_fees.service_fee'),
+            t('orange.other_fees.utilities'),
+            t('orange.other_fees.washing_machine'),
+            t('orange.other_fees.dryer'),
+            t('orange.other_fees.deposit')
           ]
         }
       ]

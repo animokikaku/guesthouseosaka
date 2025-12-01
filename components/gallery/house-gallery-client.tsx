@@ -11,16 +11,16 @@ import { GalleryImageButton } from './gallery-image-button'
 
 export function HouseGalleryClient({ house }: { house: HouseIdentifier }) {
   const locale = useLocale()
-  const t = useTranslations('gallery')
+  const t = useTranslations('HouseGalleryClient')
   const categories = storage({ house, locale }).categories()
 
   const categoryMap = {
     room: t('categories.room'),
-    'common-spaces': t('categories.commonSpaces'),
+    'common-spaces': t('categories.common_spaces'),
     facilities: t('categories.facilities'),
-    'building-features': t('categories.buildingFeatures'),
+    'building-features': t('categories.building_features'),
     neighborhood: t('categories.neighborhood'),
-    'floor-plan': t('categories.floorPlan'),
+    'floor-plan': t('categories.floor_plan'),
     maps: t('categories.maps')
   }
 

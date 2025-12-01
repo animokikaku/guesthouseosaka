@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from 'lucide-react'
-import { Locale, useTranslations } from 'next-intl'
+import { Locale } from 'next-intl'
 
 import {
   Item,
@@ -8,6 +8,7 @@ import {
   ItemDescription,
   ItemTitle
 } from '@/components/ui/item'
+import { useContactNavigation } from '@/hooks/use-contact-navigation'
 import { Link } from '@/i18n/navigation'
 import { setRequestLocale } from 'next-intl/server'
 import { use } from 'react'
@@ -16,26 +17,15 @@ export default function ContactPage({
   params
 }: PageProps<'/[locale]/contact'>) {
   const { locale } = use(params)
+
   setRequestLocale(locale as Locale)
-  const t = useTranslations('contact')
+  const nav = useContactNavigation()
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4">
-      <ContactLink
-        href="/contact/tour#tabs"
-        title={t('nav.tour')}
-        description={t('cards.tourDescription')}
-      />
-      <ContactLink
-        href="/contact/move-in#tabs"
-        title={t('nav.moveIn')}
-        description={t('cards.moveInDescription')}
-      />
-      <ContactLink
-        href="/contact/other#tabs"
-        title={t('nav.general')}
-        description={t('cards.generalDescription')}
-      />
+      {Object.entries(nav).map(([key, props]) => (
+        <ContactLink key={`contact-link-${key}`} {...props} />
+      ))}
     </div>
   )
 }

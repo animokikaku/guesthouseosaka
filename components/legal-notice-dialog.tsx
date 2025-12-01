@@ -13,87 +13,80 @@ import {
 import { useTranslations } from 'next-intl'
 
 export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
-  const t = useTranslations()
-  const intro = [
-    t('legal.privacy.intro.company'),
-    t('legal.privacy.intro.purpose')
-  ]
+  const t = useTranslations('LegalNoticeDialog')
+  const intro = [t('intro.company'), t('intro.purpose')]
   const sections = [
     {
-      title: t('legal.privacy.sections.informationCollected.title'),
-      paragraphs: [
-        t('legal.privacy.sections.informationCollected.paragraphs.0')
-      ],
+      title: t('sections.information_collected.title'),
+      paragraphs: [t('sections.information_collected.paragraphs.0')],
       list: [
-        t('legal.privacy.sections.informationCollected.list.0'),
-        t('legal.privacy.sections.informationCollected.list.1'),
-        t('legal.privacy.sections.informationCollected.list.2')
+        t('sections.information_collected.list.0'),
+        t('sections.information_collected.list.1'),
+        t('sections.information_collected.list.2')
       ],
-      closing: t('legal.privacy.sections.informationCollected.closing')
+      closing: t('sections.information_collected.closing')
     },
     {
-      title: t('legal.privacy.sections.usage.title'),
-      paragraphs: [t('legal.privacy.sections.usage.paragraphs.0')],
+      title: t('sections.usage.title'),
+      paragraphs: [t('sections.usage.paragraphs.0')],
       list: [
-        t('legal.privacy.sections.usage.list.0'),
-        t('legal.privacy.sections.usage.list.1'),
-        t('legal.privacy.sections.usage.list.2'),
-        t('legal.privacy.sections.usage.list.3')
+        t('sections.usage.list.0'),
+        t('sections.usage.list.1'),
+        t('sections.usage.list.2'),
+        t('sections.usage.list.3')
       ],
-      closing: t('legal.privacy.sections.usage.closing')
+      closing: t('sections.usage.closing')
     },
     {
-      title: t('legal.privacy.sections.retention.title'),
+      title: t('sections.retention.title'),
       paragraphs: [
-        t('legal.privacy.sections.retention.paragraphs.0'),
-        t('legal.privacy.sections.retention.paragraphs.1'),
-        t('legal.privacy.sections.retention.paragraphs.2')
+        t('sections.retention.paragraphs.0'),
+        t('sections.retention.paragraphs.1'),
+        t('sections.retention.paragraphs.2')
       ]
     },
     {
-      title: t('legal.privacy.sections.sharing.title'),
+      title: t('sections.sharing.title'),
       paragraphs: [
-        t('legal.privacy.sections.sharing.paragraphs.0'),
-        t('legal.privacy.sections.sharing.paragraphs.1')
+        t('sections.sharing.paragraphs.0'),
+        t('sections.sharing.paragraphs.1')
       ]
     },
     {
-      title: t('legal.privacy.sections.rights.title'),
-      paragraphs: [t('legal.privacy.sections.rights.paragraphs.0')],
+      title: t('sections.rights.title'),
+      paragraphs: [t('sections.rights.paragraphs.0')],
       list: [
-        t('legal.privacy.sections.rights.list.0'),
-        t('legal.privacy.sections.rights.list.1'),
-        t('legal.privacy.sections.rights.list.2')
+        t('sections.rights.list.0'),
+        t('sections.rights.list.1'),
+        t('sections.rights.list.2')
       ],
-      closing: t('legal.privacy.sections.rights.closing')
+      closing: t('sections.rights.closing')
     },
     {
-      title: t('legal.privacy.sections.security.title'),
+      title: t('sections.security.title'),
       paragraphs: [
-        t('legal.privacy.sections.security.paragraphs.0'),
-        t('legal.privacy.sections.security.paragraphs.1')
+        t('sections.security.paragraphs.0'),
+        t('sections.security.paragraphs.1')
       ]
     },
     {
-      title: t('legal.privacy.sections.contact.title'),
-      paragraphs: [t('legal.privacy.sections.contact.paragraphs.0')],
+      title: t('sections.contact.title'),
+      paragraphs: [t('sections.contact.paragraphs.0')],
       details: [
-        t('legal.privacy.sections.contact.details.0'),
-        t('legal.privacy.sections.contact.details.1'),
-        t('legal.privacy.sections.contact.details.2'),
-        t('legal.privacy.sections.contact.details.3')
+        t('sections.contact.details.0'),
+        t('sections.contact.details.1'),
+        t('sections.contact.details.2'),
+        t('sections.contact.details.3')
       ]
     },
     {
-      title: t('legal.privacy.sections.changes.title'),
+      title: t('sections.changes.title'),
       paragraphs: [
-        t('legal.privacy.sections.changes.paragraphs.0'),
-        t('legal.privacy.sections.changes.paragraphs.1')
+        t('sections.changes.paragraphs.0'),
+        t('sections.changes.paragraphs.1')
       ]
     }
   ]
-
-  const lastUpdated = t('legal.privacy.lastUpdated')
 
   return (
     <Dialog>
@@ -108,12 +101,10 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
       </DialogTrigger>
       <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{t('legal.privacy.title')}</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         <div className="space-y-6 text-sm leading-6">
-          {lastUpdated && (
-            <p className="text-muted-foreground text-xs">{lastUpdated}</p>
-          )}
+          <p className="text-muted-foreground text-xs">{t('last_updated')}</p>
           <div className="space-y-2">
             {intro.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
@@ -147,7 +138,7 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
         </div>
         <DialogFooter className="pt-4">
           <DialogClose asChild>
-            <Button variant="secondary">{t('common.close')}</Button>
+            <Button variant="secondary">{t('close_button')}</Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

@@ -5,13 +5,22 @@ import {
   HOUSE_ADDRESS,
   HOUSE_CENTERS
 } from '@/components/map/location-map-constants'
+import { useHouseLabels } from '@/hooks/use-house-labels'
+import { useHousePhones } from '@/hooks/use-house-phones'
 import { assets } from '@/lib/assets'
-import { Locale, useTranslations } from 'next-intl'
+import { HouseIdentifier } from '@/lib/types'
+import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { env } from 'process'
 import { use } from 'react'
 import { Accommodation, WithContext } from 'schema-dts'
+
+const NUMBER_OF_ROOMS: Record<HouseIdentifier, number> = {
+  orange: 30,
+  apple: 24,
+  lemon: 20
+}
 
 export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
   const { locale, house } = use(params)
@@ -21,28 +30,9 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
     notFound()
   }
 
-  const t = useTranslations()
-
-  const { title, description, telephone, numberOfRooms } = {
-    orange: {
-      title: t('houses.orange.name'),
-      description: t('houses.orange.summary'),
-      telephone: t(`faq.contact.phones.orange.international`),
-      numberOfRooms: 30
-    },
-    apple: {
-      title: t('houses.apple.name'),
-      description: t('houses.apple.summary'),
-      telephone: t(`faq.contact.phones.apple.international`),
-      numberOfRooms: 24
-    },
-    lemon: {
-      title: t('houses.lemon.name'),
-      description: t('houses.lemon.summary'),
-      telephone: t(`faq.contact.phones.lemon.international`),
-      numberOfRooms: 12
-    }
-  }[house]
+  const houses = useHouseLabels()
+  const phones = useHousePhones()
+  const { name: title, summary: description } = houses[house]
 
   const url = `${env.NEXT_PUBLIC_APP_URL}/${house}`
 
@@ -62,8 +52,8 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
     hasMap: GOOGLE_MAPS_URLS[house],
     logo: assets.logo[house].src,
     address: HOUSE_ADDRESS[house],
-    numberOfRooms,
-    telephone
+    numberOfRooms: NUMBER_OF_ROOMS[house],
+    telephone: phones[house].international
   }
 
   return (

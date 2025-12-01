@@ -9,7 +9,7 @@ import { HouseIdentifier } from '@/lib/types'
 import { useLocale, useTranslations } from 'next-intl'
 
 export function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
-  const t = useTranslations('common')
+  const t = useTranslations('ImageBlockGallery')
   const locale = useLocale()
   const images = storage({ house: id, locale }).images({
     category: 'room',
@@ -60,7 +60,7 @@ export function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
           >
             <Link href={galleryHref}>
               <Icons.gallery className="h-4 w-4" />
-              <span>{t('showAllPhotos')}</span>
+              <span>{t('view_gallery')}</span>
             </Link>
           </Button>
         </div>

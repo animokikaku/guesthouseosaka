@@ -1,10 +1,11 @@
 import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
+import { getHouseLabels } from '@/lib/house-labels'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
 import type { Metadata } from 'next'
 import { hasLocale, Locale } from 'next-intl'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 export function generateStaticParams() {
@@ -27,10 +28,8 @@ export async function generateMetadata(
     return undefined
   }
 
-  const t = await getTranslations({ locale, namespace: 'houses' })
-
-  const title = t(`${house}.name`)
-  const description = t(`${house}.summary`)
+  const labels = await getHouseLabels(locale as Locale)
+  const { name: title, summary: description } = labels[house]
   const image = assets.openGraph[house].src
   const { openGraph, twitter } = await getOpenGraphMetadata({ locale, image })
 

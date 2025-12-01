@@ -4,7 +4,7 @@ import { urls } from '@/lib/config'
 import { useTranslations } from 'next-intl'
 
 export function SiteFooter() {
-  const t = useTranslations()
+  const t = useTranslations('SiteFooter')
   const year = new Date().getFullYear()
 
   return (
@@ -12,8 +12,8 @@ export function SiteFooter() {
       <div className="container-wrapper px-4 xl:px-6">
         <div className="flex min-h-(--footer-height) flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:flex-nowrap">
           <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">
-            <span className="sr-only">{t('meta.siteName')}</span>© {year}{' '}
-            {t('footer.company')}
+            <span className="sr-only">{t('brand_name')}</span>© {year}{' '}
+            {t('company_name')}
           </div>
           <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">
             <span className="sr-only">

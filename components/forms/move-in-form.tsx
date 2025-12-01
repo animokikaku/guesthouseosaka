@@ -24,11 +24,13 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
+import { useContactNavigationItem } from '@/hooks/use-contact-navigation'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
 export function MoveInForm() {
   const t = useTranslations('forms')
+  const { title, description } = useContactNavigationItem('moveIn')
   const router = useRouter()
   const schema = useMoveInFormSchema()
   const { places, date, stayDuration, account, message, privacyPolicy } =
@@ -60,16 +62,16 @@ export function MoveInForm() {
         success: () => {
           router.push('/contact')
           return {
-            message: t('status.success'),
-            description: t('status.successDescription', {
+            message: t('status.success.message'),
+            description: t('status.success.description', {
               name: value.account.name
             })
           }
         },
         error: (error) => {
           return {
-            message: error.message || t('status.failure'),
-            description: t('status.errorDescription', {
+            message: error.message || t('status.error.message'),
+            description: t('status.error.description', {
               email: 'info@guesthouseosaka.com'
             })
           }
@@ -84,23 +86,23 @@ export function MoveInForm() {
   }[] = [
     {
       value: '1-month',
-      label: t('moveInForm.durations.oneMonth')
+      label: t('fields.stay_duration.options.one_month')
     },
     {
       value: '3-months',
-      label: t('moveInForm.durations.threeMonths')
+      label: t('fields.stay_duration.options.three_month')
     },
     {
       value: 'long-term',
-      label: t('moveInForm.durations.longTerm')
+      label: t('fields.stay_duration.options.long_term')
     }
   ]
 
   return (
     <Card className="mx-auto w-full sm:max-w-2xl">
       <CardHeader>
-        <CardTitle>{t('moveInForm.title')}</CardTitle>
-        <CardDescription>{t('moveInForm.description')}</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -115,15 +117,15 @@ export function MoveInForm() {
               fields={{ places: 'places' }}
               form={form}
               label={t('fields.places.label')}
-              description={t('moveInForm.placesDescription')}
+              description={t('fields.places.move_in_description')}
             />
             <form.AppField
               name="date"
               children={(field) => (
                 <field.DateField
                   orientation="responsive"
-                  label={t('moveInForm.moveInDateLabel')}
-                  description={t('moveInForm.moveInDateDescription')}
+                  label={t('fields.date.move_in_label')}
+                  description={t('fields.date.move_in_description')}
                 />
               )}
             />
@@ -133,9 +135,9 @@ export function MoveInForm() {
                 <field.SelectField
                   required
                   orientation="responsive"
-                  label={t('moveInForm.lengthOfStayLabel')}
-                  description={t('moveInForm.lengthOfStayDescription')}
-                  placeholder={t('moveInForm.lengthOfStayPlaceholder')}
+                  label={t('fields.stay_duration.label')}
+                  description={t('fields.stay_duration.description')}
+                  placeholder={t('fields.stay_duration.placeholder')}
                   options={stayDurationOptions}
                 />
               )}
@@ -150,7 +152,7 @@ export function MoveInForm() {
                   label={t('fields.message.label')}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={t('fields.message.moveInPlaceholder')}
+                  placeholder={t('fields.message.move_in_placeholder')}
                   description={t('fields.message.description')}
                 />
               )}
@@ -162,7 +164,7 @@ export function MoveInForm() {
                   required
                   label={
                     <p className="text-muted-foreground">
-                      {t.rich('fields.privacyPolicyAgreement', {
+                      {t.rich('fields.privacy_policy_agreement', {
                         link: (chunks) => (
                           <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
                         )

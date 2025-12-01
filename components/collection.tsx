@@ -6,11 +6,11 @@ import {
   ItemHeader,
   ItemTitle
 } from '@/components/ui/item'
+import { useHouseLabels } from '@/hooks/use-house-labels'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
-import { Routes } from '@/lib/types'
+import { HouseIdentifier, HouseIdentifierSchema, Routes } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
 import { default as Image, ImageProps } from 'next/image'
 
 interface HouseItem {
@@ -22,35 +22,27 @@ interface HouseItem {
   href: Routes
 }
 
-export function Collection({ className }: { className?: string }) {
-  const t = useTranslations('houses')
+const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
+  orange: 'bg-orange-600/50',
+  apple: 'bg-red-600/50',
+  lemon: 'bg-yellow-600/50'
+}
 
-  const items: HouseItem[] = [
-    {
-      name: t('orange.name'),
-      description: t('orange.summary'),
-      accentClass: 'bg-orange-600/50',
-      href: '/orange',
-      icon: assets.orange.icon,
-      image: assets.orange.background
-    },
-    {
-      name: t('apple.name'),
-      description: t('apple.summary'),
-      accentClass: 'bg-red-600/50',
-      href: '/apple',
-      icon: assets.apple.icon,
-      image: assets.apple.background
-    },
-    {
-      name: t('lemon.name'),
-      description: t('lemon.summary'),
-      accentClass: 'bg-yellow-600/50',
-      href: '/lemon',
-      icon: assets.lemon.icon,
-      image: assets.lemon.background
+export function Collection({ className }: { className?: string }) {
+  const houses = useHouseLabels()
+
+  const items = HouseIdentifierSchema.options.map<HouseItem>((house) => {
+    const { name, summary } = houses[house]
+    const { icon, background } = assets[house]
+    return {
+      name,
+      description: summary,
+      accentClass: ACCENT_CLASSES[house],
+      href: `/${house}`,
+      icon,
+      image: background
     }
-  ]
+  })
 
   return (
     <ItemGroup className={cn('grid gap-8 md:grid-cols-3 md:gap-8', className)}>

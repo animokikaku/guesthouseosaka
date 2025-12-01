@@ -70,7 +70,7 @@ interface LocationSectionsProps {
 }
 
 function LocationSections({ id, className }: LocationSectionsProps) {
-  const t = useTranslations('houseLocation')
+  const t = useTranslations('HouseLocation')
 
   const { stations, neighborhood, guideNeighborhood } = {
     apple: {
@@ -83,7 +83,7 @@ function LocationSections({ id, className }: LocationSectionsProps) {
       neighborhood: [
         t('details.apple.nearby.supermarkets'),
         t('details.apple.nearby.sushi'),
-        t('details.apple.nearby.hundredYen'),
+        t('details.apple.nearby.hundred_yen'),
         t('details.apple.nearby.convenience')
       ],
       guideNeighborhood: t('details.apple.overview')
@@ -92,12 +92,12 @@ function LocationSections({ id, className }: LocationSectionsProps) {
       stations: [
         t('details.lemon.stations.nihonbashi'),
         t('details.lemon.stations.namba'),
-        t('details.lemon.stations.nankaiNamba')
+        t('details.lemon.stations.nankai_namba')
       ],
       neighborhood: [
-        t('details.lemon.nearby.postOffice'),
+        t('details.lemon.nearby.post_office'),
         t('details.lemon.nearby.supermarkets'),
-        t('details.lemon.nearby.discountShop')
+        t('details.lemon.nearby.discount_shop')
       ],
       guideNeighborhood: t('details.lemon.overview')
     },
@@ -109,7 +109,7 @@ function LocationSections({ id, className }: LocationSectionsProps) {
       ],
       neighborhood: [
         t('details.orange.nearby.supermarkets'),
-        t('details.orange.nearby.showachoSupermarket'),
+        t('details.orange.nearby.showacho_supermarket'),
         t('details.orange.nearby.harukas')
       ],
       guideNeighborhood: t('details.orange.overview')
@@ -120,7 +120,7 @@ function LocationSections({ id, className }: LocationSectionsProps) {
     <div className={cn('space-y-8', className)}>
       <div>
         <h3 className="text-foreground mb-4 text-lg font-semibold">
-          {t('sections.gettingAround')}
+          {t('sections.getting_around')}
         </h3>
         <ul className="space-y-2">
           {stations.map((station) => (

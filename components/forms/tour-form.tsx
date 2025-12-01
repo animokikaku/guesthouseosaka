@@ -21,11 +21,13 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
+import { useContactNavigationItem } from '@/hooks/use-contact-navigation'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
 export function TourForm() {
   const t = useTranslations('forms')
+  const { title, description } = useContactNavigationItem('tour')
   const router = useRouter()
   const schema = useTourFormSchema()
   const { places, account, message, date, hour, privacyPolicy } =
@@ -50,16 +52,16 @@ export function TourForm() {
         success: () => {
           router.push('/contact')
           return {
-            message: t('status.success'),
-            description: t('status.successDescription', {
+            message: t('status.success.message'),
+            description: t('status.success.description', {
               name: value.account.name
             })
           }
         },
         error: (error) => {
           return {
-            message: error.message || t('status.failure'),
-            description: t('status.errorDescription', {
+            message: error.message || t('status.error.message'),
+            description: t('status.error.description', {
               email: 'info@guesthouseosaka.com'
             })
           }
@@ -71,8 +73,8 @@ export function TourForm() {
   return (
     <Card className="mx-auto w-full sm:max-w-2xl">
       <CardHeader>
-        <CardTitle>{t('tourForm.title')}</CardTitle>
-        <CardDescription>{t('tourForm.description')}</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -87,15 +89,15 @@ export function TourForm() {
               fields={{ places: 'places' }}
               form={form}
               label={t('fields.places.label')}
-              description={t('tourForm.placesDescription')}
+              description={t('fields.places.tour_description')}
             />
             <form.AppField
               name="date"
               children={(field) => (
                 <field.DateField
                   required
-                  label={t('tourForm.tourDateLabel')}
-                  description={t('tourForm.tourDateDescription')}
+                  label={t('fields.date.tour_label')}
+                  description={t('fields.date.tour_description')}
                   orientation="responsive"
                 />
               )}
@@ -104,8 +106,8 @@ export function TourForm() {
               name="hour"
               children={(field) => (
                 <field.InputField
-                  label={t('tourForm.tourHourLabel')}
-                  description={t('tourForm.tourHourDescription')}
+                  label={t('fields.hour.tour_label')}
+                  description={t('fields.hour.tour_description')}
                   orientation="responsive"
                   className="sm:min-w-[220px]"
                   type="time"
@@ -122,7 +124,7 @@ export function TourForm() {
                   label={t('fields.message.label')}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={t('fields.message.contactPlaceholder')}
+                  placeholder={t('fields.message.contact_placeholder')}
                   description={t('fields.message.description')}
                 />
               )}
@@ -134,7 +136,7 @@ export function TourForm() {
                   required
                   label={
                     <p className="text-muted-foreground">
-                      {t.rich('fields.privacyPolicyAgreement', {
+                      {t.rich('fields.privacy_policy_agreement', {
                         link: (chunks) => (
                           <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
                         )

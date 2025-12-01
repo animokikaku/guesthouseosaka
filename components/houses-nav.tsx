@@ -2,10 +2,10 @@
 
 import { useThemeConfig } from '@/components/active-theme'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
 import { useEffect } from 'react'
 
 interface LinkProps {
@@ -19,26 +19,26 @@ export function HousesNav({
   ...props
 }: React.ComponentProps<'div'>) {
   const { setActiveTheme } = useThemeConfig()
-  const t = useTranslations('houses')
+  const houses = useHouseLabels()
   const pathname = usePathname()
   const isMobile = useIsMobile()
 
   const links: LinkProps[] = [
     {
       href: '/orange#tabs',
-      name: t('orange.name'),
+      name: houses.orange.name,
       className:
         'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500'
     },
     {
       href: '/apple#tabs',
-      name: t('apple.name'),
+      name: houses.apple.name,
       className:
         'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500'
     },
     {
       href: '/lemon#tabs',
-      name: t('lemon.name'),
+      name: houses.lemon.name,
       className:
         'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
     }

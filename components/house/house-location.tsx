@@ -36,7 +36,7 @@ const HouseMap = dynamic(
 )
 
 export function HouseLocation({ id }: { id: HouseIdentifier }) {
-  const t = useTranslations('houseLocation')
+  const t = useTranslations('HouseLocation')
   const highlight = {
     orange: t('highlights.orange'),
     apple: t('highlights.apple'),

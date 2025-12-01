@@ -37,20 +37,20 @@ const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
 
 export async function HouseBuilding({ id }: { id: HouseIdentifier }) {
   const building = BUILDING_DATA[id]
-  const t = await getTranslations('houseDetails')
+  const t = await getTranslations('HouseBuilding')
   const details = [
     {
-      label: t('rooms'),
+      label: t('rooms_label'),
       value: building.bedrooms,
       icon: BedDoubleIcon
     },
     {
-      label: t('floors'),
+      label: t('floors_label'),
       value: building.floors,
       icon: LayersIcon
     },
     {
-      label: t('minRent'),
+      label: t('min_rent_label'),
       value: yenFormatter.format(building.monthly_price)
     }
   ]

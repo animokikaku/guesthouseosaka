@@ -1,25 +1,18 @@
+import { useHouseLabels } from '@/hooks/use-house-labels'
+import { useHousePhones } from '@/hooks/use-house-phones'
+import { HouseIdentifierSchema } from '@/lib/types'
 import { useTranslations } from 'next-intl'
 
 export function FAQContactTable() {
-  const t = useTranslations()
+  const t = useTranslations('FAQContactTable')
+  const houses = useHouseLabels()
+  const phonesByHouse = useHousePhones()
 
-  const phones = [
-    {
-      title: t('houses.orange.name'),
-      withinJapan: t('faq.contact.phones.orange.domestic'),
-      overseas: t('faq.contact.phones.orange.international')
-    },
-    {
-      title: t('houses.apple.name'),
-      withinJapan: t('faq.contact.phones.apple.domestic'),
-      overseas: t('faq.contact.phones.apple.international')
-    },
-    {
-      title: t('houses.lemon.name'),
-      withinJapan: t('faq.contact.phones.lemon.domestic'),
-      overseas: t('faq.contact.phones.lemon.international')
-    }
-  ]
+  const phones = HouseIdentifierSchema.options.map((house) => ({
+    title: houses[house].name,
+    withinJapan: phonesByHouse[house].domestic,
+    overseas: phonesByHouse[house].international
+  }))
 
   return (
     <table id="phone" className="border-collapse text-sm">
@@ -27,36 +20,34 @@ export function FAQContactTable() {
         <tr>
           <th className="border-border border-b p-2 text-left"></th>
           <th className="text-muted-foreground border-border border-b p-2 text-center font-medium">
-            {t('faq.contact.withinJapan')}
+            {t('within_japan')}
           </th>
           <th className="text-muted-foreground border-border border-b p-2 text-center font-medium">
-            {t('faq.contact.fromOverseas')}
+            {t('from_overseas')}
           </th>
         </tr>
       </thead>
       <tbody className="font-mono">
-        {phones.map((phone) => (
+        {phones.map(({ title, withinJapan, overseas }) => (
           <tr
             className="border-border/50 last:border-border border-none"
-            key={phone.title}
+            key={title}
           >
-            <td className="text-muted-foreground p-2 font-sans">
-              {phone.title}
-            </td>
+            <td className="text-muted-foreground p-2 font-sans">{title}</td>
             <td className="p-2 text-center">
               <a
-                href={`tel:${phone.withinJapan}`}
+                href={`tel:${withinJapan}`}
                 className="text-foreground hover:text-primary transition-colors"
               >
-                {phone.withinJapan}
+                {withinJapan}
               </a>
             </td>
             <td className="p-2 text-center">
               <a
-                href={`tel:${phone.overseas}`}
+                href={`tel:${overseas}`}
                 className="text-foreground hover:text-primary transition-colors"
               >
-                {phone.overseas}
+                {overseas}
               </a>
             </td>
           </tr>

@@ -5,40 +5,38 @@ import { HouseIdentifier } from '@/lib/types'
 import { getTranslations } from 'next-intl/server'
 
 export async function HouseAbout({ id }: { id: HouseIdentifier }) {
-  const t = await getTranslations()
+  const t = await getTranslations('HouseAbout')
 
   const { description, specificities } = {
     apple: {
-      description: t('houses.apple.about.description'),
+      description: t('houses.apple.description'),
       specificities: [
-        t('houses.apple.about.highlights.privateKitchenBathroom'),
-        t('houses.apple.about.highlights.walkToNamba'),
-        t('houses.apple.about.highlights.loungeKitchen')
+        t('houses.apple.highlights.0'),
+        t('houses.apple.highlights.1'),
+        t('houses.apple.highlights.2')
       ]
     },
     lemon: {
-      description: t('houses.lemon.about.description'),
+      description: t('houses.lemon.description'),
       specificities: [
-        t('houses.lemon.about.highlights.privateKitchensBathrooms'),
-        t('houses.lemon.about.highlights.spaciousRooms'),
-        t('houses.lemon.about.highlights.communityLife')
+        t('houses.lemon.highlights.0'),
+        t('houses.lemon.highlights.1'),
+        t('houses.lemon.highlights.2')
       ]
     },
     orange: {
-      description: t('houses.orange.about.description'),
+      description: t('houses.orange.description'),
       specificities: [
-        t('houses.orange.about.highlights.privateKitchen'),
-        t('houses.orange.about.highlights.longStay'),
-        t('houses.orange.about.highlights.rooftopLounge')
+        t('houses.orange.highlights.0'),
+        t('houses.orange.highlights.1'),
+        t('houses.orange.highlights.2')
       ]
     }
   }[id]
 
   return (
     <section>
-      <h2 className="mb-6 text-2xl font-semibold">
-        {t('houseSections.about')}
-      </h2>
+      <h2 className="mb-6 text-2xl font-semibold">{t('heading')}</h2>
       <div className="mb-4">
         <HouseBuilding id={id} />
       </div>
@@ -59,8 +57,8 @@ export async function HouseAbout({ id }: { id: HouseIdentifier }) {
       )}
 
       <div className="mt-6">
-        <HouseLocationModal id={id} title={t('houseSections.about')}>
-          <Button variant="outline">{t('common.showMore')}</Button>
+        <HouseLocationModal id={id} title={t('heading')}>
+          <Button variant="outline">{t('modal_trigger')}</Button>
         </HouseLocationModal>
       </div>
     </section>

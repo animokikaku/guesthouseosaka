@@ -22,7 +22,7 @@ export function MobileNav({
   className?: string
 }) {
   const [open, setOpen] = useState(false)
-  const t = useTranslations('navigation')
+  const t = useTranslations('MobileNav')
 
   const { mobileItems, mobileListItems } = useMemo(() => {
     return items.reduce(
@@ -60,10 +60,10 @@ export function MobileNav({
                 )}
               />
             </div>
-            <span className="sr-only">{t('toggleMenu')}</span>
+            <span className="sr-only">{t('toggle_menu')}</span>
           </div>
           <span className="flex h-8 items-center text-lg leading-none font-medium">
-            {t('menu')}
+            {t('menu_label')}
           </span>
         </Button>
       </PopoverTrigger>
@@ -75,11 +75,11 @@ export function MobileNav({
         <div className="flex flex-col gap-12 overflow-auto px-6 py-6">
           <div className="flex flex-col gap-4">
             <div className="text-muted-foreground text-sm font-medium">
-              {t('menu')}
+              {t('menu_label')}
             </div>
             <div className="flex flex-col gap-3">
               <MobileLink href="/" onOpenChange={setOpen}>
-                {t('home')}
+                {t('home_label')}
               </MobileLink>
               {mobileItems.map((item, index) => (
                 <MobileLink key={index} href={item.href} onOpenChange={setOpen}>

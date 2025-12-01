@@ -17,10 +17,13 @@ export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/faq'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
-  const t = await getTranslations({ locale: locale as Locale })
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: 'FAQLayout.meta'
+  })
 
-  const title = t('faq.title')
-  const description = t('faq.description')
+  const title = t('title')
+  const description = t('description')
 
   const { openGraph, twitter } = await getOpenGraphMetadata({
     locale: locale as Locale,
@@ -36,24 +39,27 @@ export default async function FAQLayout({
 }: LayoutProps<'/[locale]/faq'>) {
   const { locale } = await params
   setRequestLocale(locale as Locale)
-  const t = await getTranslations({ locale: locale as Locale })
+  const t = await getTranslations({
+    locale: locale as Locale,
+    namespace: 'FAQLayout'
+  })
 
   return (
     <>
       <PageHeader>
-        <PageHeaderHeading>{t('faq.heading')}</PageHeaderHeading>
-        <PageHeaderDescription>{t('faq.intro')}</PageHeaderDescription>
+        <PageHeaderHeading>{t('title')}</PageHeaderHeading>
+        <PageHeaderDescription>{t('description')}</PageHeaderDescription>
         <PageActions>
           <Button asChild size="sm">
             <Link href="#phone">
               <PhoneIcon />
-              {t('forms.fields.phone.label')}
+              {t('actions.phone')}
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm">
             <Link href="/contact">
               <MailIcon />
-              {t('forms.fields.email.label')}
+              {t('actions.email')}
             </Link>
           </Button>
         </PageActions>

@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from '@/components/ui/carousel'
+import { useHouseLabels } from '@/hooks/use-house-labels'
 import { storage } from '@/lib/images'
 import { store } from '@/lib/store'
 import { HouseIdentifier } from '@/lib/types'
@@ -21,12 +22,13 @@ import { useCallback, useEffect, useState } from 'react'
 
 export function GalleryModal({ house }: { house: HouseIdentifier }) {
   const photoId = useStore(store, (state) => state.photoId)
-  const t = useTranslations()
+  const t = useTranslations('GalleryModal')
+  const houses = useHouseLabels()
 
   const { title } = {
-    orange: { title: t('houses.orange.name') },
-    apple: { title: t('houses.apple.name') },
-    lemon: { title: t('houses.lemon.name') }
+    orange: { title: houses.orange.name },
+    apple: { title: houses.apple.name },
+    lemon: { title: houses.lemon.name }
   }[house]
 
   return (
@@ -41,11 +43,9 @@ export function GalleryModal({ house }: { house: HouseIdentifier }) {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-30" />
         <Dialog.Content className="dark text-foreground bg-background sm:bg-background/50 fixed inset-0 z-40 max-w-none translate-x-0 translate-y-0 rounded-none border-0 p-0 shadow-none backdrop-blur-2xl">
-          <Dialog.Title className="sr-only">
-            {t('gallery.modalTitle')}
-          </Dialog.Title>
+          <Dialog.Title className="sr-only">{t('title')}</Dialog.Title>
           <Dialog.Description className="sr-only">
-            {t('gallery.explorePhotos', { title })}
+            {t('description', { title })}
           </Dialog.Description>
           <div className="fixed inset-0 z-50 flex items-center justify-center">
             <GalleryModalCarousel house={house} />
@@ -56,7 +56,7 @@ export function GalleryModal({ house }: { house: HouseIdentifier }) {
                 className="absolute top-0 left-0 m-4 rounded-full"
               >
                 <ArrowLeftIcon className="size-6" />
-                <span className="sr-only">{t('gallery.close')}</span>
+                <span className="sr-only">{t('close')}</span>
               </Button>
             </Dialog.Close>
           </div>

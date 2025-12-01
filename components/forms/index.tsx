@@ -13,6 +13,7 @@ import {
 } from '@/components/forms/fields'
 import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
+import { useHouseLabels } from '@/hooks/use-house-labels'
 import { HouseIdentifier } from '@/lib/types'
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import {
@@ -23,8 +24,6 @@ import {
   UserIcon
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import router from 'next/dist/client/router'
-import { toast } from 'sonner'
 
 export { ContactForm } from './contact-form'
 export { MoveInForm } from './move-in-form'
@@ -63,7 +62,7 @@ export const userAccountDefaultValues = {
 export const FieldGroupUserAccount = withFieldGroup({
   defaultValues: userAccountDefaultValues,
   render: function Render({ group }) {
-    const t = useTranslations()
+    const t = useTranslations('forms')
 
     return (
       <>
@@ -73,12 +72,12 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.SelectField
               required
               orientation="responsive"
-              label={t('forms.fields.gender.label')}
-              placeholder={t('forms.fields.gender.placeholder')}
-              description={t('forms.fields.gender.description')}
+              label={t('fields.gender.label')}
+              placeholder={t('fields.gender.placeholder')}
+              description={t('fields.gender.description')}
               options={[
-                { label: t('forms.fields.gender.male'), value: 'male' },
-                { label: t('forms.fields.gender.female'), value: 'female' }
+                { label: t('fields.gender.options.male'), value: 'male' },
+                { label: t('fields.gender.options.female'), value: 'female' }
               ]}
             />
           )}
@@ -88,10 +87,10 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               required
-              placeholder={t('forms.fields.name.placeholder')}
+              placeholder={t('fields.name.placeholder')}
               orientation="responsive"
-              description={t('forms.fields.name.description')}
-              label={t('forms.fields.name.label')}
+              description={t('fields.name.description')}
+              label={t('fields.name.label')}
               icon={<UserIcon />}
               type="text"
               autoComplete="name"
@@ -103,11 +102,11 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               required
-              description={t('forms.fields.age.description')}
+              description={t('fields.age.description')}
               icon={<CakeIcon />}
               orientation="responsive"
-              placeholder={t('forms.fields.age.placeholder')}
-              label={t('forms.fields.age.label')}
+              placeholder={t('fields.age.placeholder')}
+              label={t('fields.age.label')}
               type="number"
               min={1}
               autoComplete="age"
@@ -120,11 +119,11 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.InputGroupField
               required
               orientation="responsive"
-              label={t('forms.fields.nationality.label')}
-              description={t('forms.fields.nationality.description')}
+              label={t('fields.nationality.label')}
+              description={t('fields.nationality.description')}
               icon={<GlobeIcon />}
               type="text"
-              placeholder={t('forms.fields.nationality.placeholder')}
+              placeholder={t('fields.nationality.placeholder')}
             />
           )}
         />
@@ -134,10 +133,10 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.InputGroupField
               required
               orientation="responsive"
-              placeholder={t('forms.fields.email.placeholder')}
-              description={t('forms.fields.email.description')}
+              placeholder={t('fields.email.placeholder')}
+              description={t('fields.email.description')}
               type="email"
-              label={t('forms.fields.email.label')}
+              label={t('fields.email.label')}
               icon={<MailIcon />}
               autoComplete="email"
             />
@@ -148,14 +147,14 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               orientation="responsive"
-              placeholder={t('forms.fields.phone.placeholder')}
+              placeholder={t('fields.phone.placeholder')}
               type="tel"
-              description={t('forms.fields.phone.description')}
+              description={t('fields.phone.description')}
               label={
                 <div>
-                  {t('forms.fields.phone.label')}{' '}
+                  {t('fields.phone.label')}{' '}
                   <span className="text-muted-foreground text-xs">
-                    {t('forms.fields.phone.optional')}
+                    {t('fields.phone.optional')}
                   </span>
                 </div>
               }
@@ -178,7 +177,7 @@ export const FieldGroupPlaces = withFieldGroup({
     description: ''
   },
   render: function Render({ group, description, label }) {
-    const t = useTranslations()
+    const houses = useHouseLabels()
 
     const placeOptions = [
       {
@@ -186,7 +185,7 @@ export const FieldGroupPlaces = withFieldGroup({
         label: (
           <>
             <HouseIcon name="orange" />
-            {t('houses.orange.name')}
+            {houses.orange.name}
           </>
         ),
         className:
@@ -197,7 +196,7 @@ export const FieldGroupPlaces = withFieldGroup({
         label: (
           <>
             <HouseIcon name="apple" />
-            {t('houses.apple.name')}
+            {houses.apple.name}
           </>
         ),
         className:
@@ -208,7 +207,7 @@ export const FieldGroupPlaces = withFieldGroup({
         label: (
           <>
             <HouseIcon name="lemon" />
-            {t('houses.lemon.name')}
+            {houses.lemon.name}
           </>
         ),
         className:
@@ -240,26 +239,3 @@ export const contactFormDefaultValues = {
   stayDuration: '' as ContactFormFields['stayDuration'],
   hour: ''
 } satisfies ContactFormFields
-
-export function useSubmitToast(promise: Promise<unknown>, name: string) {
-  const t = useTranslations('forms')
-
-  toast.promise(promise, {
-    loading: t('status.sending'),
-    success: () => {
-      router.push('/contact')
-      return {
-        message: t('status.success'),
-        description: t('status.successDescription', { name })
-      }
-    },
-    error: (error) => {
-      return {
-        message: error.message || t('status.failure'),
-        description: t('status.errorDescription', {
-          email: 'info@guesthouseosaka.com'
-        })
-      }
-    }
-  })
-}

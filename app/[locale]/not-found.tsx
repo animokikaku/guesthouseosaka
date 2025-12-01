@@ -16,14 +16,13 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 export default function NotFound() {
-  const t = useTranslations('errors.notFound')
-  const { notFound } = assets
+  const t = useTranslations('NotFound')
 
   return (
     <Empty>
       <EmptyHeader>
         <EmptyMedia>
-          <Image priority {...notFound} alt={notFound.alt} />
+          <Image priority {...assets.notFound} alt={assets.notFound.alt} />
         </EmptyMedia>
         <EmptyTitle className="text-2xl font-bold tracking-tight sm:text-4xl">
           {t('title')}
@@ -34,10 +33,10 @@ export default function NotFound() {
       </EmptyHeader>
       <EmptyContent>
         <Button asChild variant="outline" size="lg">
-          <Link href="/">{t('backToHome')}</Link>
+          <Link href="/">{t('back_home')}</Link>
         </Button>
         <EmptyDescription>
-          {t.rich('contactSupport', {
+          {t.rich('contact_us', {
             link: (chunks) => <Link href="/contact/other#tabs">{chunks}</Link>
           })}
         </EmptyDescription>

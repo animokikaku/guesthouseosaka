@@ -14,6 +14,7 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
+import { useContactNavigationItem } from '@/hooks/use-contact-navigation'
 import { useRouter } from '@/i18n/navigation'
 import { MailIcon, UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -21,6 +22,7 @@ import { toast } from 'sonner'
 
 export function ContactForm() {
   const t = useTranslations('forms')
+  const { title, description } = useContactNavigationItem('general')
   const router = useRouter()
   const schema = useGeneralInquirySchema()
   const { message, privacyPolicy, account } = contactFormDefaultValues
@@ -48,16 +50,16 @@ export function ContactForm() {
         success: () => {
           router.push('/contact')
           return {
-            message: t('status.success'),
-            description: t('status.successDescription', {
+            message: t('status.success.message'),
+            description: t('status.success.description', {
               name: value.account.name
             })
           }
         },
         error: (error) => {
           return {
-            message: error.message || t('status.failure'),
-            description: t('status.errorDescription', {
+            message: error.message || t('status.error.message'),
+            description: t('status.error.description', {
               email: 'info@guesthouseosaka.com'
             })
           }
@@ -69,8 +71,8 @@ export function ContactForm() {
   return (
     <Card className="mx-auto w-full max-w-2xl">
       <CardHeader>
-        <CardTitle>{t('contactForm.title')}</CardTitle>
-        <CardDescription>{t('contactForm.description')}</CardDescription>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -116,7 +118,7 @@ export function ContactForm() {
                   label={t('fields.message.label')}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={t('fields.message.contactPlaceholder')}
+                  placeholder={t('fields.message.contact_placeholder')}
                   description={t('fields.message.description')}
                 />
               )}
@@ -128,7 +130,7 @@ export function ContactForm() {
                   required
                   label={
                     <p className="text-muted-foreground">
-                      {t.rich('fields.privacyPolicyAgreement', {
+                      {t.rich('fields.privacy_policy_agreement', {
                         link: (chunks) => (
                           <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
                         )

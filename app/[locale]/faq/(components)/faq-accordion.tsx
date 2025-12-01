@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
+import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useTranslations } from 'next-intl'
 
 type FaqItem = {
@@ -16,82 +17,69 @@ type FaqItem = {
 }
 
 export function FAQAccordion() {
-  const t = useTranslations()
+  const t = useTranslations('FAQAccordion')
+  const houses = useHouseLabels()
 
   const items: FaqItem[] = [
     {
       id: 'room-occupancy',
-      question: t('faq.qa.roomOccupancy.question'),
-      body: <p>{t('faq.qa.roomOccupancy.answer')}</p>
+      question: t('room_occupancy.question'),
+      body: <p>{t('room_occupancy.answer')}</p>
     },
     {
       id: 'rent-due-date',
-      question: t('faq.qa.rentDueDate.question'),
+      question: t('rent_due_date.question'),
       body: (
         <p>
-          {t.rich(
-            'faq.qa.rentDueDate.answer',
-            {
-              strong: (chunks) => <strong>{chunks}</strong>
-            }
-          )}
+          {t.rich('rent_due_date.answer', {
+            strong: (chunks) => <strong>{chunks}</strong>
+          })}
         </p>
       )
     },
     {
       id: 'manager-in-residence',
-      question: t('faq.qa.managerInResidence.question'),
+      question: t('manager_in_residence.question'),
       body: (
         <p>
-          {t.rich(
-            'faq.qa.managerInResidence.answer',
-            {
-              strong: (chunks) => <strong>{chunks}</strong>
-            }
-          )}
+          {t.rich('manager_in_residence.answer', {
+            strong: (chunks) => <strong>{chunks}</strong>
+          })}
         </p>
       )
     },
     {
       id: 'move-in-requirements',
-      question: t('faq.qa.moveInRequirements.question'),
-      body: (
-        <p>
-          {t('faq.qa.moveInRequirements.answer')}
-        </p>
-      )
+      question: t('move_in_requirements.question'),
+      body: <p>{t('move_in_requirements.answer')}</p>
     },
     {
       id: 'curfew',
-      question: t('faq.qa.curfew.question'),
-      body: (
-        <p>
-          {t('faq.qa.curfew.answer')}
-        </p>
-      )
+      question: t('curfew.question'),
+      body: <p>{t('curfew.answer')}</p>
     },
     {
       id: 'floors-and-rooms',
-      question: t('faq.qa.floorsAndRooms.question'),
+      question: t('floors_and_rooms.question'),
       body: (
         <ul className="text-muted-foreground list-disc space-y-2">
           <li>
-            <strong>{t('houses.orange.name')}: </strong>
-            {t('faq.qa.floorsAndRooms.format', {
+            <strong>{houses.orange.name}: </strong>
+            {t('floors_and_rooms.format', {
               floors: '3',
               rooms: '28'
             })}
           </li>
           <li>
-            <strong>{t('houses.lemon.name')}: </strong>
-            {t('faq.qa.floorsAndRooms.format', {
+            <strong>{houses.lemon.name}: </strong>
+            {t('floors_and_rooms.format', {
               floors: '7',
               rooms: '12'
             })}
           </li>
           <li>
-            <strong>{t('houses.apple.name')}: </strong>
-            {t('faq.qa.floorsAndRooms.format', {
+            <strong>{houses.apple.name}: </strong>
+            {t('floors_and_rooms.format', {
               floors: '8',
               rooms: '24'
             })}
@@ -101,7 +89,7 @@ export function FAQAccordion() {
     },
     {
       id: 'extra-costs',
-      question: t('faq.qa.extraCosts.question'),
+      question: t('extra_costs.question'),
       body: <FAQExtraCostsTable />
     }
   ]

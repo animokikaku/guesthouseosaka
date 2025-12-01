@@ -8,11 +8,11 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
    * https://next-intl.dev/docs/environments/actions-metadata-route-handlers#manifest
    */
   const locale = routing.defaultLocale
-  const t = await getTranslations({ locale, namespace: 'meta' })
+  const t = await getTranslations({ locale, namespace: 'manifest' })
 
   return {
-    name: t('siteName'),
-    short_name: t('siteShortName'),
+    name: t('name'),
+    short_name: t('short_name'),
     start_url: '/',
     theme_color: '#101E33',
     icons: [

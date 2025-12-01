@@ -12,7 +12,7 @@ export default function GalleryPage({
 }: PageProps<'/[locale]/[house]/gallery'>) {
   const { locale, house } = use(params)
   setRequestLocale(locale as Locale)
-  const t = useTranslations('gallery')
+  const t = useTranslations('GalleryPage')
 
   return (
     <div className="bg-background text-foreground fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden">

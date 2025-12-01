@@ -9,7 +9,7 @@ type FormResetButton = Omit<
 
 export const ResetButton = (props: FormResetButton) => {
   const form = useFormContext()
-  const t = useTranslations()
+  const t = useTranslations('ResetButton')
 
   return (
     <Button
@@ -21,7 +21,7 @@ export const ResetButton = (props: FormResetButton) => {
       }}
       {...props}
     >
-      {t('common.reset')}
+      {t('label')}
     </Button>
   )
 }
