@@ -10,10 +10,8 @@ import {
   type CarouselApi
 } from '@/components/ui/carousel'
 import { useHouseLabels } from '@/hooks/use-house-labels'
-import { useImageLabels } from '@/hooks/use-image-labels'
-import { storage } from '@/lib/images'
+import { useImages } from '@/lib/images'
 import { store } from '@/lib/store'
-import { HouseIdentifier } from '@/lib/types'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useStore } from '@tanstack/react-form'
 import { ArrowLeftIcon } from 'lucide-react'
@@ -21,10 +19,11 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 
-export function GalleryModal({ house }: { house: HouseIdentifier }) {
+export function GalleryModal() {
   const photoId = useStore(store, (state) => state.photoId)
   const t = useTranslations('GalleryModal')
   const houseLabel = useHouseLabels()
+  const { house } = useImages()
   const { name: title } = houseLabel(house)
 
   return (
@@ -44,7 +43,7 @@ export function GalleryModal({ house }: { house: HouseIdentifier }) {
             {t('description', { title })}
           </Dialog.Description>
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <GalleryModalCarousel house={house} />
+            <GalleryModalCarousel />
             <Dialog.Close asChild>
               <Button
                 variant="ghost"
@@ -62,19 +61,14 @@ export function GalleryModal({ house }: { house: HouseIdentifier }) {
   )
 }
 
-function GalleryModalCarousel({ house }: { house: HouseIdentifier }) {
+function GalleryModalCarousel() {
   const [api, setApi] = useState<CarouselApi>()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const photoId = useStore(store, (state) => state.photoId)
-  const houseStorage = storage({ house })
-  const getImageLabel = useImageLabels()
+  const storage = useImages()
 
-  const images = houseStorage.images().map((image) => ({
-    ...image,
-    alt: getImageLabel(image.id) ?? ''
-  }))
-
-  const startIndex = photoId ? houseStorage.indexOf(photoId) : undefined
+  const images = storage.images()
+  const startIndex = photoId ? storage.indexOf(photoId) : undefined
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(
     null
   )

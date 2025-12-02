@@ -3,21 +3,17 @@
 import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { useImageLabels } from '@/hooks/use-image-labels'
-import { Link } from '@/i18n/navigation'
-import { storage } from '@/lib/images'
-import { HouseIdentifier } from '@/lib/types'
+import { Link, usePathname } from '@/i18n/navigation'
+import { useImages } from '@/lib/images'
 import { useTranslations } from 'next-intl'
 
-export function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
+export function ImageBlockGallery() {
   const t = useTranslations('ImageBlockGallery')
-  const getImageLabel = useImageLabels()
+  const pathname = usePathname()
+  const { images: getImages } = useImages()
 
-  const images = storage({ house: id })
-    .images({ category: 'room', limit: 5 })
-    .map((image) => ({ ...image, alt: getImageLabel(image.id) ?? '' }))
-
-  const galleryHref = `/${id}/gallery`
+  const images = getImages({ category: 'room', limit: 5 })
+  const galleryHref = `${pathname}/gallery`
 
   return (
     <div className="hidden justify-center sm:flex">

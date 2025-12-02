@@ -33,7 +33,7 @@ export async function HousePageContent({
 }: HousePageContentProps) {
   return (
     <>
-      <MobileHeroImage house={houseId} />
+      <MobileHeroImage />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading>{title}</PageHeaderHeading>
@@ -50,7 +50,7 @@ export async function HousePageContent({
             <HousesNav />
           </PageNav>
           <div className="theme-container">
-            <ImageBlockGallery id={houseId} />
+            <ImageBlockGallery />
             <article
               id={houseId}
               aria-labelledby={`${houseId}-title`}

@@ -8,18 +8,15 @@ import { HouseIdentifier } from '@/lib/types'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { use } from 'react'
+import { useParams } from 'next/navigation'
 
-export default function GalleryModal({
-  params
-}: PageProps<'/[locale]/[house]/gallery'>) {
-  const { house } = use(params)
+export default function GalleryModal() {
   const router = useRouter()
+  const { house } = useParams()
 
   const t = useTranslations('GalleryModal')
   const houseLabel = useHouseLabels()
-  const houseId = house as HouseIdentifier
-  const { name: title } = houseLabel(houseId)
+  const { name: title } = houseLabel(house as HouseIdentifier)
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
@@ -47,7 +44,7 @@ export default function GalleryModal({
             <div className="flex-1 overflow-y-auto scroll-smooth">
               <div className="container-wrapper">
                 <div className="container py-8 md:py-12">
-                  <HouseGallery house={houseId} />
+                  <HouseGallery />
                 </div>
               </div>
             </div>

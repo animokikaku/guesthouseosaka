@@ -2,18 +2,16 @@
 
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { useImageLabels } from '@/hooks/use-image-labels'
-import { storage } from '@/lib/images'
+import { useImages } from '@/lib/images'
 import { store } from '@/lib/store'
-import { HouseIdentifier } from '@/lib/types'
 import { useTranslations } from 'next-intl'
 import { default as Image } from 'next/image'
 import { GalleryImageButton } from './gallery-image-button'
 
-export function HouseGalleryClient({ house }: { house: HouseIdentifier }) {
+export function HouseGalleryClient() {
   const t = useTranslations('HouseGalleryClient')
-  const categories = storage({ house }).categories()
-  const getImageLabel = useImageLabels()
+  const { categories: getCategories } = useImages()
+  const categories = getCategories()
 
   const categoryMap = {
     room: t('categories.room'),
@@ -45,7 +43,7 @@ export function HouseGalleryClient({ house }: { house: HouseIdentifier }) {
                 <div className="relative aspect-4/3 w-32 overflow-hidden rounded-md">
                   <Image
                     src={images[0].src}
-                    alt={getImageLabel(images[0].id) ?? ''}
+                    alt={images[0].alt}
                     fill
                     placeholder="blur"
                     blurDataURL={images[0].blurDataURL}
@@ -82,7 +80,7 @@ export function HouseGalleryClient({ house }: { house: HouseIdentifier }) {
                   key={image.id}
                   onClick={() => store.setState({ photoId: image.id })}
                   className="aspect-square rounded-lg"
-                  imageProps={{ ...image, alt: getImageLabel(image.id) ?? '' }}
+                  imageProps={image}
                   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                 />
               ))}

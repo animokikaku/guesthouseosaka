@@ -7,23 +7,20 @@ import {
   CarouselItem
 } from '@/components/ui/carousel'
 import { Empty, EmptyTitle } from '@/components/ui/empty'
-import { useImageLabels } from '@/hooks/use-image-labels'
-import { Link } from '@/i18n/navigation'
-import { storage } from '@/lib/images'
-import { HouseIdentifier } from '@/lib/types'
+import { Link, usePathname } from '@/i18n/navigation'
+import { useImages } from '@/lib/images'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
-export function MobileHeroImage({ house }: { house: HouseIdentifier }) {
+export function MobileHeroImage() {
   const t = useTranslations('MobileHeroImage')
   const [api, setApi] = useState<CarouselApi>()
   const [currentIndex, setCurrentIndex] = useState(1)
 
-  const getImageLabel = useImageLabels()
-  const images = storage({ house })
-    .images()
-    .map((image) => ({ ...image, alt: getImageLabel(image.id) ?? '' }))
+  const pathname = usePathname()
+  const { images: getHouseImages } = useImages()
+  const images = getHouseImages()
 
   useEffect(() => {
     if (!api) return
@@ -51,7 +48,7 @@ export function MobileHeroImage({ house }: { house: HouseIdentifier }) {
   }
 
   return (
-    <Link href={`/${house}/gallery`} className="select-none">
+    <Link href={`${pathname}/gallery`} className="select-none">
       <Carousel
         className="max-h-96 w-full cursor-pointer select-none"
         setApi={(carouselApi) => setApi(carouselApi)}

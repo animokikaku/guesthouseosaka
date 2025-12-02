@@ -1,6 +1,8 @@
 import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
 import { getHouseLabel } from '@/lib/house-labels'
+import { ImagesProvider } from '@/lib/images'
+import { setRequestHouse } from '@/lib/images/server'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
 import type { Metadata } from 'next'
@@ -50,10 +52,14 @@ export default async function HouseLayout({
 
   setRequestLocale(locale as Locale)
 
+  // Set the house for server components (enables getImages())
+  setRequestHouse(house)
+
   return (
-    <>
+    // ImagesProvider enables useImages() for client components
+    <ImagesProvider house={house}>
       {children}
       {modal}
-    </>
+    </ImagesProvider>
   )
 }

@@ -1,5 +1,5 @@
 import { useImageLabels } from '@/hooks/use-image-labels'
-import { storage } from '@/lib/images'
+import { getHouseStorage } from '@/lib/images'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
@@ -23,22 +23,22 @@ type SocialPost = {
 
 function getPosts(): SocialPost[] {
   // Get images grouped by house and category
-  const lemonStorage = storage({ house: 'lemon' })
-  const orangeStorage = storage({ house: 'orange' })
-  const appleStorage = storage({ house: 'apple' })
+  const lemon = getHouseStorage('lemon')
+  const orange = getHouseStorage('orange')
+  const apple = getHouseStorage('apple')
 
-  const lemonRoom = lemonStorage.image({ category: 'room', index: 0 })
-  const [lemonNeighborhood1, lemonNeighborhood2] = lemonStorage.image({
+  const lemonRoom = lemon.image({ category: 'room', index: 0 })
+  const [lemonNeighborhood1, lemonNeighborhood2] = lemon.image({
     category: 'neighborhood',
     index: [16, 18]
   })
 
-  const orangeCommonSpaces = orangeStorage.image({
+  const orangeCommonSpaces = orange.image({
     category: 'common-spaces',
     index: 2
   })
-  const orangeRoom = orangeStorage.image({ category: 'room', index: 0 })
-  const appleRoom = appleStorage.image({ category: 'room', index: 0 })
+  const orangeRoom = orange.image({ category: 'room', index: 0 })
+  const appleRoom = apple.image({ category: 'room', index: 0 })
 
   return [
     {
