@@ -362,9 +362,7 @@
           "Demander la correction, l'ajout ou la suppression d'informations inexactes ou obsolètes",
           "Retirer votre consentement au traitement de vos informations (le cas échéant)"
         ],
-        "paragraphs": [
-          "Vous avez le droit de :"
-        ],
+        "paragraphs": ["Vous avez le droit de :"],
         "title": "5. Vos droits"
       },
       "security": {
@@ -430,7 +428,7 @@
   },
   "SiteFooter": {
     "brand_name": "Share House Osaka",
-    "company_name": "Animo Planning Co., Ltd."
+    "company_name": "Animo Kikaku Co., Ltd."
   },
   "SiteHeader": {
     "logo_label": "Share House Osaka"
@@ -568,9 +566,9 @@
       "summary": "Chambres privées bien équipées et salon luxueux"
     },
     "orange": {
-      "caption": "Un espace vivant conçu pour des moments mémorables",
+      "caption": "Un accès idéal au quartier rétro de Showachō. Des rencontres internationales dans notre salon.",
       "name": "Orange House",
-      "summary": "Salon spacieux et décontracté de style japonais"
+      "summary": "Salon de style japonais spacieux et décontracté"
     }
   },
   "useHousePhones": {

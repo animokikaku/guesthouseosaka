@@ -365,9 +365,7 @@ declare const messages: {
           "Request correction, addition, or deletion of inaccurate or outdated information",
           "Withdraw your consent to the processing of your information (where applicable)"
         ],
-        "paragraphs": [
-          "You have the right to:"
-        ],
+        "paragraphs": ["You have the right to:"],
         "title": "5. Your Rights"
       },
       "security": {
@@ -433,7 +431,7 @@ declare const messages: {
   },
   "SiteFooter": {
     "brand_name": "Share House Osaka",
-    "company_name": "Animo Planning Co., Ltd."
+    "company_name": "Animo Kikaku Co., Ltd."
   },
   "SiteHeader": {
     "logo_label": "Share House Osaka"
@@ -571,7 +569,7 @@ declare const messages: {
       "summary": "Well-equipped private rooms and a luxurious lounge"
     },
     "orange": {
-      "caption": "Vibrant space designed for memorable experiences",
+      "caption": "Prime access to retro Showachō. International crowd in our Japanese-style lounge.",
       "name": "Orange House",
       "summary": "Relaxed spacious Japanese-style lounge"
     }
