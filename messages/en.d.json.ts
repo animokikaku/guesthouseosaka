@@ -593,7 +593,7 @@ declare const messages: {
       "international": "+81-6-6627-0790"
     }
   },
-  "useImageLabels": {
+  "images": {
     "apple": {
       "room": {
         "wood_flooring": "All rooms with wood flooring.",

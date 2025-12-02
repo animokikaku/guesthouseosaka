@@ -4,22 +4,10 @@ import type { HouseIdentifier } from '@/lib/types'
 import { getTranslations } from 'next-intl/server'
 import { cache } from 'react'
 import { getHouseStorage } from './index'
-import { IMAGE_LABEL_KEYS, type ImageWithAlt } from './labels'
+import { IMAGE_LABEL_KEYS, ImageLabelKeys, type ImageWithAlt } from './labels'
 import type { HouseImageStorage, ImageWithProps } from './storage'
 
 type ImagesAPI = {
-  /**
-   * The house identifier
-   */
-  house: HouseIdentifier
-  /**
-   * The raw storage instance (for advanced use cases)
-   */
-  storage: HouseImageStorage
-  /**
-   * Get the alt text for an image by its ID
-   */
-  getAlt: (id: string | number) => string
   /**
    * Get all images with alt text included
    */
@@ -34,17 +22,6 @@ type ImagesAPI = {
    * Get the index of an image by its ID
    */
   indexOf: HouseImageStorage['indexOf']
-  /**
-   * Get a specific image by category and index with alt text included
-   */
-  image: {
-    (
-      options: Parameters<HouseImageStorage['image']>[0] & { index: number }
-    ): ImageWithAlt
-    (
-      options: Parameters<HouseImageStorage['image']>[0] & { index: number[] }
-    ): ImageWithAlt[]
-  }
 }
 
 // Cache the request house identifier
@@ -82,12 +59,11 @@ export async function getImages(): Promise<ImagesAPI> {
   }
 
   const storage = getHouseStorage(house)
-  const t = await getTranslations('useImageLabels')
+  const t = await getTranslations('images')
 
   const getAlt = (id: string | number): string => {
-    const key = IMAGE_LABEL_KEYS[id]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return key ? t(key as any) : ''
+    const key = IMAGE_LABEL_KEYS[id as ImageLabelKeys]
+    return key ? t(key) : ''
   }
 
   const withAlt = (image: ImageWithProps): ImageWithAlt => ({
@@ -96,24 +72,12 @@ export async function getImages(): Promise<ImagesAPI> {
   })
 
   return {
-    house,
-    storage,
-    getAlt,
     images: (options) => storage.images(options).map(withAlt),
     categories: () =>
       storage.categories().map(({ category, images }) => ({
         category,
         images: images.map(withAlt)
       })),
-    indexOf: storage.indexOf.bind(storage),
-    image: ((options: { category: string; index: number | number[] }) => {
-      const result = storage.image(
-        options as Parameters<HouseImageStorage['image']>[0]
-      )
-      if (Array.isArray(result)) {
-        return result.map(withAlt)
-      }
-      return withAlt(result)
-    }) as ImagesAPI['image']
+    indexOf: storage.indexOf.bind(storage)
   }
 }

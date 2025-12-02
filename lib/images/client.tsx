@@ -4,7 +4,7 @@ import type { HouseIdentifier } from '@/lib/types'
 import { useTranslations } from 'next-intl'
 import { createContext, ReactNode, useContext, useMemo } from 'react'
 import { getHouseStorage } from './index'
-import { IMAGE_LABEL_KEYS, type ImageWithAlt } from './labels'
+import { IMAGE_LABEL_KEYS, ImageLabelKeys, type ImageWithAlt } from './labels'
 import type {
   HouseImageStorage,
   ImageCategory,
@@ -12,18 +12,6 @@ import type {
 } from './storage'
 
 type ImagesContextValue = {
-  /**
-   * The house identifier
-   */
-  house: HouseIdentifier
-  /**
-   * The raw storage instance (for advanced use cases)
-   */
-  storage: HouseImageStorage
-  /**
-   * Get the alt text for an image by its ID
-   */
-  getAlt: (id: string | number) => string
   /**
    * Get all images with alt text included
    */
@@ -38,17 +26,6 @@ type ImagesContextValue = {
    * Get the index of an image by its ID
    */
   indexOf: HouseImageStorage['indexOf']
-  /**
-   * Get a specific image by category and index with alt text included
-   */
-  image: {
-    (
-      options: Parameters<HouseImageStorage['image']>[0] & { index: number }
-    ): ImageWithAlt
-    (
-      options: Parameters<HouseImageStorage['image']>[0] & { index: number[] }
-    ): ImageWithAlt[]
-  }
 }
 
 const ImagesContext = createContext<ImagesContextValue | null>(null)
@@ -62,15 +39,14 @@ type ImagesProviderProps = {
  * Provider component that enables useImages() hook in client components
  */
 export function ImagesProvider({ house, children }: ImagesProviderProps) {
-  const t = useTranslations('useImageLabels')
+  const t = useTranslations('images')
 
   const value = useMemo<ImagesContextValue>(() => {
     const storage = getHouseStorage(house)
 
     const getAlt = (id: string | number): string => {
-      const key = IMAGE_LABEL_KEYS[id]
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return key ? t(key as any) : ''
+      const key = IMAGE_LABEL_KEYS[id as ImageLabelKeys]
+      return key ? t(key) : ''
     }
 
     const withAlt = (image: ImageWithProps): ImageWithAlt => ({
@@ -79,25 +55,13 @@ export function ImagesProvider({ house, children }: ImagesProviderProps) {
     })
 
     return {
-      house,
-      storage,
-      getAlt,
       images: (options) => storage.images(options).map(withAlt),
       categories: () =>
         storage.categories().map(({ category, images }) => ({
           category,
           images: images.map(withAlt)
         })),
-      indexOf: storage.indexOf.bind(storage),
-      image: ((options: { category: string; index: number | number[] }) => {
-        const result = storage.image(
-          options as Parameters<HouseImageStorage['image']>[0]
-        )
-        if (Array.isArray(result)) {
-          return result.map(withAlt)
-        }
-        return withAlt(result)
-      }) as ImagesContextValue['image']
+      indexOf: storage.indexOf.bind(storage)
     }
   }, [house, t])
 

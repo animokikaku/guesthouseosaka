@@ -12,19 +12,21 @@ import {
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useImages } from '@/lib/images'
 import { store } from '@/lib/store'
+import { HouseIdentifier } from '@/lib/types'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useStore } from '@tanstack/react-form'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
+import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
 export function GalleryModal() {
+  const { house } = useParams()
   const photoId = useStore(store, (state) => state.photoId)
   const t = useTranslations('GalleryModal')
   const houseLabel = useHouseLabels()
-  const { house } = useImages()
-  const { name: title } = houseLabel(house)
+  const { name: title } = houseLabel(house as HouseIdentifier)
 
   return (
     <Dialog.Root

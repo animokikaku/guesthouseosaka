@@ -2,10 +2,12 @@ import type { ImageWithProps } from './storage'
 
 export type ImageWithAlt = ImageWithProps & { alt: string }
 
+export type ImageLabelKeys = keyof typeof IMAGE_LABEL_KEYS
+export type ImageLabelValues = (typeof IMAGE_LABEL_KEYS)[ImageLabelKeys]
 /**
  * Image label keys mapped to their translation keys
  */
-export const IMAGE_LABEL_KEYS: Record<string | number, string> = {
+export const IMAGE_LABEL_KEYS = {
   1: 'apple.room.wood_flooring',
   4: 'apple.room.toilet_shower_and_bathtub',
   6: 'apple.room.kitchens',
@@ -65,4 +67,4 @@ export const IMAGE_LABEL_KEYS: Record<string | number, string> = {
   124: 'orange.facilities.shower_room_behind_curtain',
   126: 'orange.facilities.shower_available_hours_for_free',
   129: 'orange.facilities.equipped_with_washlet'
-}
+} as const

@@ -121,49 +121,4 @@ export class HouseImageStorage {
   indexOf(photoId: string): number {
     return this._indexMap.get(photoId) ?? 0
   }
-
-  /**
-   * Get a specific image by category and index
-   * @param options - Category and index
-   * @param options.category - The image category
-   * @param options.index - The index within the category (0-based)
-   * @throws Error if the image is not found
-   */
-  image(options: { category: ImageCategory; index: number }): ImageWithProps
-  /**
-   * Get multiple images by category and indexes
-   * @param options - Category and indexes
-   * @param options.category - The image category
-   * @param options.index - Array of indexes within the category (0-based)
-   * @throws Error if any image is not found
-   */
-  image(options: { category: ImageCategory; index: number[] }): ImageWithProps[]
-  image(options: {
-    category: ImageCategory
-    index: number | number[]
-  }): ImageWithProps | ImageWithProps[] {
-    const { category, index } = options
-    const categoryImages = this.categoryMap.get(category) ?? []
-
-    if (Array.isArray(index)) {
-      const images = index.map((idx) => {
-        const image = categoryImages[idx]
-        if (!image) {
-          throw new Error(
-            `Image at index ${idx} in category "${category}" not found in house storage`
-          )
-        }
-        return image
-      })
-      return images
-    }
-
-    const image = categoryImages[index]
-    if (!image) {
-      throw new Error(
-        `Image at index ${index} in category "${category}" not found in house storage`
-      )
-    }
-    return image
-  }
 }

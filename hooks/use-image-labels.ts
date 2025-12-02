@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl'
 
 export function useImageLabels() {
-  const t = useTranslations('useImageLabels')
+  const t = useTranslations('images')
 
   function label(id: string | number) {
     return {
