@@ -20,7 +20,7 @@ export function MobileHeroImage() {
 
   const pathname = usePathname()
   const storage = useImages()
-  const images = storage.images({ category: 'room', limit: 5 })
+  const images = storage.images()
 
   useEffect(() => {
     if (!api) return
