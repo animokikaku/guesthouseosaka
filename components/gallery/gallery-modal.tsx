@@ -23,13 +23,8 @@ import { useCallback, useEffect, useState } from 'react'
 export function GalleryModal({ house }: { house: HouseIdentifier }) {
   const photoId = useStore(store, (state) => state.photoId)
   const t = useTranslations('GalleryModal')
-  const houses = useHouseLabels()
-
-  const { title } = {
-    orange: { title: houses.orange.name },
-    apple: { title: houses.apple.name },
-    lemon: { title: houses.lemon.name }
-  }[house]
+  const houseLabel = useHouseLabels()
+  const { name: title } = houseLabel(house)
 
   return (
     <Dialog.Root

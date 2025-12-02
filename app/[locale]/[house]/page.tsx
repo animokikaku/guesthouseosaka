@@ -24,9 +24,9 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
     notFound()
   }
 
-  const houses = useHouseLabels()
-  const phones = useHousePhones()
-  const { name: title, summary: description } = houses[house]
+  const houseLabel = useHouseLabels()
+  const housePhonesLabel = useHousePhones()
+  const { name: title, summary: description } = houseLabel(house)
 
   const url = `${env.NEXT_PUBLIC_APP_URL}/${house}`
 
@@ -46,8 +46,8 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
     hasMap: GOOGLE_MAPS_URLS[house],
     logo: assets.logo[house].src,
     address: HOUSE_ADDRESS[house],
-    numberOfRooms: BUILDING_DATA[house].bedrooms,
-    telephone: phones[house].international
+    numberOfRooms: BUILDING_DATA[house].rooms,
+    telephone: housePhonesLabel(house).international
   }
 
   return (

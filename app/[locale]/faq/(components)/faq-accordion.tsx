@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 
 import { FAQExtraCostsTable } from '@/app/[locale]/faq/(components)/faq-extra-costs-table'
+import { BUILDING_DATA } from '@/components/house/house-building'
 import {
   Accordion,
   AccordionContent,
@@ -18,7 +19,7 @@ type FaqItem = {
 
 export function FAQAccordion() {
   const t = useTranslations('FAQAccordion')
-  const houses = useHouseLabels()
+  const houseLabel = useHouseLabels()
 
   const items: FaqItem[] = [
     {
@@ -63,27 +64,18 @@ export function FAQAccordion() {
       question: t('floors_and_rooms.question'),
       body: (
         <ul className="text-muted-foreground list-disc space-y-2">
-          <li>
-            <strong>{houses.orange.name}: </strong>
-            {t('floors_and_rooms.format', {
-              floors: '3',
-              rooms: '28'
-            })}
-          </li>
-          <li>
-            <strong>{houses.lemon.name}: </strong>
-            {t('floors_and_rooms.format', {
-              floors: '7',
-              rooms: '12'
-            })}
-          </li>
-          <li>
-            <strong>{houses.apple.name}: </strong>
-            {t('floors_and_rooms.format', {
-              floors: '8',
-              rooms: '24'
-            })}
-          </li>
+          {(['orange', 'lemon', 'apple'] as const).map((id) => {
+            const { floors, rooms } = BUILDING_DATA[id]
+            return (
+              <li key={`floors-and-rooms-${id}`}>
+                <strong>{houseLabel(id).name}: </strong>
+                {t('floors_and_rooms.format', {
+                  floors: `${floors}`,
+                  rooms: `${rooms}`
+                })}
+              </li>
+            )
+          })}
         </ul>
       )
     },

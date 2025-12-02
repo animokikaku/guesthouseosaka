@@ -34,10 +34,10 @@ const ACCENT_CLASSES = {
 }
 
 function FAQExtraCostsTableHeader() {
-  const houses = useHouseLabels()
+  const houseLabel = useHouseLabels()
 
   const headers = HouseIdentifierSchema.options.map((house) => ({
-    name: houses[house].name,
+    name: houseLabel(house).name,
     accentClass: ACCENT_CLASSES[house]
   }))
 

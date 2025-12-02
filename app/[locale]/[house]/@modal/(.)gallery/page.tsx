@@ -17,8 +17,9 @@ export default function GalleryModal({
   const router = useRouter()
 
   const t = useTranslations('GalleryModal')
-  const houses = useHouseLabels()
+  const houseLabel = useHouseLabels()
   const houseId = house as HouseIdentifier
+  const { name: title } = houseLabel(houseId)
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
@@ -34,7 +35,7 @@ export default function GalleryModal({
         <Dialog.Content className="bg-background text-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-40 max-w-none translate-x-0 translate-y-0 rounded-none border-0 p-0 shadow-none">
           <Dialog.Title className="sr-only">{t('title')}</Dialog.Title>
           <Dialog.Description className="sr-only">
-            {t('description', { title: houses[houseId].name })}
+            {t('description', { title })}
           </Dialog.Description>
           <div className="flex h-full w-full flex-col overflow-hidden">
             <Dialog.Close asChild>

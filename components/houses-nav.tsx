@@ -5,6 +5,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link, usePathname } from '@/i18n/navigation'
+import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useEffect } from 'react'
 
@@ -19,30 +20,25 @@ export function HousesNav({
   ...props
 }: React.ComponentProps<'div'>) {
   const { setActiveTheme } = useThemeConfig()
-  const houses = useHouseLabels()
+  const houseLabel = useHouseLabels()
   const pathname = usePathname()
   const isMobile = useIsMobile()
 
-  const links: LinkProps[] = [
-    {
-      href: '/orange#tabs',
-      name: houses.orange.name,
-      className:
-        'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500'
-    },
-    {
-      href: '/apple#tabs',
-      name: houses.apple.name,
-      className:
-        'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500'
-    },
-    {
-      href: '/lemon#tabs',
-      name: houses.lemon.name,
-      className:
-        'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
-    }
-  ] as const
+  const houseIdentifiers: HouseIdentifier[] = ['orange', 'apple', 'lemon']
+  const classNames = {
+    orange:
+      'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
+    apple:
+      'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500',
+    lemon:
+      'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
+  }
+
+  const links: LinkProps[] = houseIdentifiers.map((house) => ({
+    href: `/${house}#tabs`,
+    name: houseLabel(house).name,
+    className: classNames[house]
+  }))
 
   useEffect(() => {
     if (pathname.startsWith('/orange')) {

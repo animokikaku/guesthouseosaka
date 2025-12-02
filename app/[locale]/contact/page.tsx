@@ -8,7 +8,10 @@ import {
   ItemDescription,
   ItemTitle
 } from '@/components/ui/item'
-import { useContactNavigation } from '@/hooks/use-contact-navigation'
+import {
+  ContactNavigationKey,
+  useContactNavigation
+} from '@/hooks/use-contact-navigation'
 import { Link } from '@/i18n/navigation'
 import { setRequestLocale } from 'next-intl/server'
 import { use } from 'react'
@@ -19,13 +22,22 @@ export default function ContactPage({
   const { locale } = use(params)
 
   setRequestLocale(locale as Locale)
-  const nav = useContactNavigation()
+  const navLabel = useContactNavigation()
+  const keys: ContactNavigationKey[] = ['tour', 'move-in', 'general']
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4">
-      {Object.entries(nav).map(([key, props]) => (
-        <ContactLink key={`contact-link-${key}`} {...props} />
-      ))}
+      {keys.map((key) => {
+        const { href, title, description } = navLabel(key)
+        return (
+          <ContactLink
+            key={`contact-link-${key}`}
+            href={href}
+            title={title}
+            description={description}
+          />
+        )
+      })}
     </div>
   )
 }

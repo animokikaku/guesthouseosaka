@@ -12,24 +12,24 @@ const yenFormatter = new Intl.NumberFormat('ja-JP', {
 })
 
 type BuildingData = {
-  bedrooms: number
+  rooms: number
   floors: number
   monthly_price: number
 }
 
 export const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
   apple: {
-    bedrooms: 24,
+    rooms: 24,
     floors: 8,
     monthly_price: 50000
   },
   lemon: {
-    bedrooms: 12,
+    rooms: 12,
     floors: 7,
     monthly_price: 50000
   },
   orange: {
-    bedrooms: 28,
+    rooms: 28,
     floors: 3,
     monthly_price: 40000
   }
@@ -41,7 +41,7 @@ export async function HouseBuilding({ id }: { id: HouseIdentifier }) {
   const details = [
     {
       label: t('rooms_label'),
-      value: building.bedrooms,
+      value: building.rooms,
       icon: BedDoubleIcon
     },
     {

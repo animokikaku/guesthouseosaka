@@ -29,11 +29,11 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
 }
 
 export function Collection({ className }: { className?: string }) {
-  const houses = useHouseLabels()
+  const houseLabel = useHouseLabels()
   const houseIdentifiers: HouseIdentifier[] = ['orange', 'apple', 'lemon']
 
-  const items = houseIdentifiers.map<HouseItem>((house) => {
-    const { name, summary } = houses[house]
+  const items: HouseItem[] = houseIdentifiers.map((house) => {
+    const { name, summary } = houseLabel(house)
     const { icon, background } = assets[house]
     return {
       name,

@@ -17,7 +17,7 @@ import { assets } from '@/lib/assets'
 import { META_THEME_COLORS, urls } from '@/lib/config'
 import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
-import { getHousePhones } from '@/lib/house-phones'
+import { getHousePhoneLabel } from '@/lib/house-phones'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
 import { type Metadata } from 'next'
@@ -90,7 +90,7 @@ export default async function LocaleLayout({
     namespace: 'SiteFooter'
   })
 
-  const phones = await getHousePhones(locale as Locale)
+  const phoneLabel = await getHousePhoneLabel(locale as Locale)
   const url = env.NEXT_PUBLIC_APP_URL
 
   const jsonLd: WithContext<Organization> = {
@@ -100,7 +100,7 @@ export default async function LocaleLayout({
     url,
     name: t('company_name'),
     alternateName: t('brand_name'),
-    telephone: phones.orange.international,
+    telephone: phoneLabel('orange').international,
     email: 'info@guesthouseosaka.com',
     logo: assets.logo.sho.src,
     sameAs: Object.values(urls.socials),

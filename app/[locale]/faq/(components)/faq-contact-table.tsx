@@ -5,13 +5,13 @@ import { useTranslations } from 'next-intl'
 
 export function FAQContactTable() {
   const t = useTranslations('FAQContactTable')
-  const houses = useHouseLabels()
-  const phonesByHouse = useHousePhones()
+  const houseLabel = useHouseLabels()
+  const housePhonesLabel = useHousePhones()
 
   const phones = HouseIdentifierSchema.options.map((house) => ({
-    title: houses[house].name,
-    withinJapan: phonesByHouse[house].domestic,
-    overseas: phonesByHouse[house].international
+    title: houseLabel(house).name,
+    withinJapan: housePhonesLabel(house).domestic,
+    overseas: housePhonesLabel(house).international
   }))
 
   return (

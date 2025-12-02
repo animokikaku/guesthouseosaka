@@ -1,6 +1,6 @@
 import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
-import { getHouseLabels } from '@/lib/house-labels'
+import { getHouseLabel } from '@/lib/house-labels'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
 import type { Metadata } from 'next'
@@ -28,8 +28,8 @@ export async function generateMetadata(
     return undefined
   }
 
-  const labels = await getHouseLabels(locale as Locale)
-  const { name: title, summary: description } = labels[house]
+  const houseLabel = await getHouseLabel(locale as Locale)
+  const { name: title, summary: description } = houseLabel(house)
   const image = assets.openGraph[house].src
   const { openGraph, twitter } = await getOpenGraphMetadata({ locale, image })
 

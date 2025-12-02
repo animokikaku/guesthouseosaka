@@ -15,6 +15,7 @@ import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { HouseIdentifier } from '@/lib/types'
+import { cn } from '@/lib/utils'
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import {
   CakeIcon,
@@ -177,43 +178,27 @@ export const FieldGroupPlaces = withFieldGroup({
     description: ''
   },
   render: function Render({ group, description, label }) {
-    const houses = useHouseLabels()
+    const houseLabel = useHouseLabels()
+    const houseIdentifiers: HouseIdentifier[] = ['orange', 'apple', 'lemon']
+    const houseClasseNames = {
+      orange:
+        'data-[state=on]:*:[svg]:fill-orange-500 data-[state=on]:*:[svg]:stroke-orange-500',
+      apple:
+        'data-[state=on]:*:[svg]:fill-red-500 data-[state=on]:*:[svg]:stroke-red-500',
+      lemon:
+        'data-[state=on]:*:[svg]:fill-yellow-500 data-[state=on]:*:[svg]:stroke-yellow-500'
+    }
 
-    const placeOptions = [
-      {
-        value: 'orange',
-        label: (
-          <>
-            <HouseIcon name="orange" />
-            {houses.orange.name}
-          </>
-        ),
-        className:
-          'data-[state=on]:bg-transparent data-[state=on]:*:[svg]:fill-orange-500 data-[state=on]:*:[svg]:stroke-orange-500'
-      },
-      {
-        value: 'apple',
-        label: (
-          <>
-            <HouseIcon name="apple" />
-            {houses.apple.name}
-          </>
-        ),
-        className:
-          'data-[state=on]:bg-transparent data-[state=on]:*:[svg]:fill-red-500 data-[state=on]:*:[svg]:stroke-red-500'
-      },
-      {
-        value: 'lemon',
-        label: (
-          <>
-            <HouseIcon name="lemon" />
-            {houses.lemon.name}
-          </>
-        ),
-        className:
-          'data-[state=on]:bg-transparent data-[state=on]:*:[svg]:fill-yellow-500 data-[state=on]:*:[svg]:stroke-yellow-500'
-      }
-    ]
+    const placeOptions = houseIdentifiers.map((house) => ({
+      value: house,
+      label: (
+        <>
+          <HouseIcon name={house} />
+          {houseLabel(house).name}
+        </>
+      ),
+      className: cn('data-[state=on]:bg-transparent', houseClasseNames[house])
+    }))
 
     return (
       <group.AppField

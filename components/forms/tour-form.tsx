@@ -21,13 +21,14 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
-import { useContactNavigationItem } from '@/hooks/use-contact-navigation'
+import { useContactNavigation } from '@/hooks/use-contact-navigation'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
 export function TourForm() {
   const t = useTranslations('forms')
-  const { title, description } = useContactNavigationItem('tour')
+  const navLabel = useContactNavigation()
+  const { title, description } = navLabel('tour')
   const router = useRouter()
   const schema = useTourFormSchema()
   const { places, account, message, date, hour, privacyPolicy } =
