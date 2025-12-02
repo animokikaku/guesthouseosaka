@@ -24,7 +24,7 @@ type ImageCategory = (typeof IMAGE_CATEGORY_ORDER)[number]
 /**
  * Unified image data structure
  */
-export interface ImageData {
+interface ImageData {
   id: string
   src: string
   width: number
@@ -38,7 +38,7 @@ export interface ImageData {
 /**
  * Image with Next.js Image props
  */
-export type ImageWithProps = ImageProps & {
+type ImageWithProps = ImageProps & {
   id: string
   src: string
   width: number
@@ -51,7 +51,7 @@ export type ImageWithProps = ImageProps & {
 /**
  * Image category with its associated images
  */
-export type ImageCategoryGroup = {
+type ImageCategoryGroup = {
   category: ImageCategory
   images: ImageWithProps[]
 }
@@ -239,5 +239,3 @@ export function storage({
 
   return storage
 }
-
-export type { ImageCategory }

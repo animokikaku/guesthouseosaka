@@ -1,5 +1,9 @@
-import { HouseMarker, MapProvider, PlaceDetails } from '@/components/map'
-import { GoogleMaps } from '@/components/map/google-maps'
+import {
+  GoogleMaps,
+  HouseMarker,
+  MapProvider,
+  PlaceDetails
+} from '@/components/map'
 import { HOUSE_CENTERS } from '@/components/map/location-map-constants'
 import { HouseIdentifier } from '@/lib/types'
 

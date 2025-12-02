@@ -15,11 +15,6 @@ import { Locale, useLocale, useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 
-export type Language = {
-  code: Locale
-  label: React.ReactNode
-}
-
 const langs: Record<Locale, string> = {
   en: 'English',
   ja: '日本語',
@@ -72,7 +67,7 @@ export function LanguageSwitcher({
 }
 
 type LanguageSwitcherSelectProps = {
-  languages: Language[]
+  languages: { code: Locale; label: React.ReactNode }[]
   value: Locale
   disabled?: boolean
   align?: 'start' | 'center' | 'end'
