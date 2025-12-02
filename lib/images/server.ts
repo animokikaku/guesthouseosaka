@@ -38,26 +38,39 @@ export function setRequestHouse(house: HouseIdentifier): void {
 }
 
 /**
- * Get the images API for server components
- * Similar to getTranslations() from next-intl
+ * Get the image label/alt text for a specific image ID (server-side)
+ * Can be used outside of house context (e.g., homepage gallery wall)
  *
  * @example
  * ```tsx
  * // In a server component
- * const images = await getImages()
+ * const getLabel = await getImageLabel()
+ * const alt = getLabel(imageId)
+ * ```
+ */
+export async function getImageLabel(): Promise<
+  (id: string | number) => string
+> {
+  const t = await getTranslations('images')
+
+  return (id: string | number): string => {
+    const key = IMAGE_LABEL_KEYS[id as ImageLabelKeys]
+    return key ? t(key) : ''
+  }
+}
+
+/**
+ * Get the images API for a specific house
+ *
+ * @param house - The house identifier
+ * @example
+ * ```tsx
+ * // In a server component
+ * const images = await getImages(house)
  * const roomImages = images.images({ category: 'room', limit: 5 })
  * ```
  */
-export async function getImages(): Promise<ImagesAPI> {
-  const { house } = getRequestHouse()
-
-  if (!house) {
-    throw new Error(
-      'getImages() was called without setting a house. ' +
-        'Make sure to call setRequestHouse() in your layout before using getImages().'
-    )
-  }
-
+export async function getImages(house: HouseIdentifier): Promise<ImagesAPI> {
   const storage = getHouseStorage(house)
   const t = await getTranslations('images')
 

@@ -50,7 +50,7 @@ export async function HousePageContent({
             <HousesNav />
           </PageNav>
           <div className="theme-container">
-            <ImageBlockGallery />
+            <ImageBlockGallery id={houseId} />
             <article
               id={houseId}
               aria-labelledby={`${houseId}-title`}

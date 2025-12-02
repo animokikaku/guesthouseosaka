@@ -18,11 +18,11 @@ import { Accommodation, WithContext } from 'schema-dts'
 
 export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
   const { locale, house } = use(params)
-  setRequestLocale(locale as Locale)
-
   if (!hasHouse(house)) {
     notFound()
   }
+
+  setRequestLocale(locale as Locale)
 
   const houseLabel = useHouseLabels()
   const housePhonesLabel = useHousePhones()

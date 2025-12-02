@@ -1,19 +1,17 @@
-'use client'
-
 import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { Link, usePathname } from '@/i18n/navigation'
-import { useImages } from '@/lib/images'
-import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
+import { getImages } from '@/lib/images/server'
+import { HouseIdentifier } from '@/lib/types'
+import { getTranslations } from 'next-intl/server'
 
-export function ImageBlockGallery() {
-  const t = useTranslations('ImageBlockGallery')
-  const pathname = usePathname()
-  const { images: getImages } = useImages()
+export async function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
+  const t = await getTranslations('ImageBlockGallery')
+  const { images: getHouseImages } = await getImages(id)
 
-  const images = getImages({ category: 'room', limit: 5 })
-  const galleryHref = `${pathname}/gallery`
+  const images = getHouseImages({ category: 'room', limit: 5 })
+  const galleryHref = `/${id}/gallery`
 
   return (
     <div className="hidden justify-center sm:flex">
