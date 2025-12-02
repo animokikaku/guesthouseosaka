@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import { Link } from '@/i18n/navigation'
 import { HouseIdentifier } from '@/lib/types'
 import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
 const yenFormatter = new Intl.NumberFormat('ja-JP', {
   currency: 'JPY',
@@ -35,9 +35,9 @@ export const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
   }
 }
 
-export async function HouseBuilding({ id }: { id: HouseIdentifier }) {
+export function HouseBuilding({ id }: { id: HouseIdentifier }) {
   const building = BUILDING_DATA[id]
-  const t = await getTranslations('HouseBuilding')
+  const t = useTranslations('HouseBuilding')
   const details = [
     {
       label: t('rooms_label'),

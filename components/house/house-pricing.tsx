@@ -1,5 +1,5 @@
 import { HouseIdentifier } from '@/lib/types'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
 type PricingValue = string | string[]
 
@@ -15,8 +15,8 @@ const renderValue = (value: PricingValue) => {
   )
 }
 
-export async function HousePricing({ id }: { id: HouseIdentifier }) {
-  const t = await getTranslations('HousePricing')
+export function HousePricing({ id }: { id: HouseIdentifier }) {
+  const t = useTranslations('HousePricing')
   const labels = {
     rent: t('labels.rent'),
     shortStay: t('labels.short_stay'),

@@ -2,10 +2,10 @@ import { HouseBuilding } from '@/components/house/house-building'
 import { HouseLocationModal } from '@/components/house/house-location-modal'
 import { Button } from '@/components/ui/button'
 import { HouseIdentifier } from '@/lib/types'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
-export async function HouseAbout({ id }: { id: HouseIdentifier }) {
-  const t = await getTranslations('HouseAbout')
+export function HouseAbout({ id }: { id: HouseIdentifier }) {
+  const t = useTranslations('HouseAbout')
 
   const { description, specificities } = {
     apple: {

@@ -1,5 +1,5 @@
+import { useImageLabels } from '@/hooks/use-image-labels'
 import homeImages from '@/lib/images/data/home.json' with { type: 'json' }
-import { getImageLabel } from '@/lib/images/server'
 import { cn } from '@/lib/utils'
 import { url } from '@/lib/utils/blob-storage'
 import Image from 'next/image'
@@ -7,8 +7,8 @@ import Image from 'next/image'
 const BASE_WIDTH = 750
 const BASE_HEIGHT = 452
 
-export async function GalleryWall({ className }: { className?: string }) {
-  const getLabel = await getImageLabel()
+export function GalleryWall({ className }: { className?: string }) {
+  const getLabel = useImageLabels()
 
   const image = (img: (typeof homeImages)[number]) => ({
     ...img,

@@ -26,7 +26,7 @@ const THEME_COLORS: Record<HouseIdentifier, string> = {
   orange: 'bg-orange-500 dark:bg-orange-600'
 }
 
-export async function HousePageContent({
+export function HousePageContent({
   houseId,
   title,
   description
