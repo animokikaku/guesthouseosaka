@@ -50,7 +50,7 @@ export default function LocalePage({ params }: PageProps<'/[locale]'>) {
             {/* Instagram feed */}
             <div className="flex justify-center md:col-span-2 md:justify-end">
               <div className="w-full">
-                <GalleryWall locale={locale as Locale} />
+                <GalleryWall />
               </div>
             </div>
           </div>

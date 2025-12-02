@@ -7,20 +7,23 @@ import {
   CarouselItem
 } from '@/components/ui/carousel'
 import { Empty, EmptyTitle } from '@/components/ui/empty'
+import { useImageLabels } from '@/hooks/use-image-labels'
 import { Link } from '@/i18n/navigation'
 import { storage } from '@/lib/images'
 import { HouseIdentifier } from '@/lib/types'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 export function MobileHeroImage({ house }: { house: HouseIdentifier }) {
-  const locale = useLocale()
   const t = useTranslations('MobileHeroImage')
   const [api, setApi] = useState<CarouselApi>()
   const [currentIndex, setCurrentIndex] = useState(1)
 
-  const images = storage({ house, locale }).images()
+  const getImageLabel = useImageLabels()
+  const images = storage({ house })
+    .images()
+    .map((image) => ({ ...image, alt: getImageLabel(image.id) ?? '' }))
 
   useEffect(() => {
     if (!api) return

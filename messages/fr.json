@@ -362,9 +362,7 @@
           "Demander la correction, l'ajout ou la suppression d'informations inexactes ou obsolètes",
           "Retirer votre consentement au traitement de vos informations (le cas échéant)"
         ],
-        "paragraphs": [
-          "Vous avez le droit de :"
-        ],
+        "paragraphs": ["Vous avez le droit de :"],
         "title": "5. Vos droits"
       },
       "security": {
@@ -590,6 +588,107 @@
     "orange": {
       "domestic": "06-6627-0790",
       "international": "+81-6-6627-0790"
+    }
+  },
+  "useImageLabels": {
+    "apple": {
+      "room": {
+        "wood_flooring": "Toutes les chambres ont un sol en bois.",
+        "toilet_shower_and_bathtub": "Toutes les chambres ont des toilettes, une douche et une baignoire.",
+        "kitchens": "Toutes les chambres ont des cuisines.",
+        "washing_machine_in_balcony": "Il y a une machine à laver sur le balcon."
+      },
+      "common-spaces": {
+        "rooftop": "Toit-terrasse",
+        "apple_tv_and_satellite_channels": "Vous pouvez profiter d'Apple TV et des chaînes satellite sur le grand écran de télévision.",
+        "gas_cookers_available": "3 cuisinières à gaz disponibles.",
+        "toilet_with_washlet_in_lounge": "Toilettes avec washlet dans le salon."
+      },
+      "building-features": {
+        "elevator_for_heavy_luggages": "Nous avons un ascenseur pour que vous puissiez facilement transporter des bagages lourds.",
+        "bicycle_parking_space": "Espace de stationnement pour vélos devant le bâtiment.",
+        "mailbox_at_entrance": "Boîte aux lettres à l'entrée.",
+        "view_from_rooftop_balcony": "La vue depuis le balcon du toit-terrasse"
+      },
+      "neighborhood": {
+        "hour_open_supermarket": "Supermarché ouvert 24h/24 juste à côté de la maison d'hôtes.",
+        "minute_walk_to_another_supermarket": "1 minute à pied d'un autre supermarché.",
+        "minutes_walk_to_rotating_sushi_restaurant": "3 minutes à pied d'un restaurant de sushi tournant (kuru kuru sushi).",
+        "shop_just_by_daikokucho_station": "Magasin à 100¥ juste à côté de la gare de Daikokucho.",
+        "minutes_walk_to_convenience_store": "3 minutes à pied d'un combini.",
+        "minutes_walk_to_post_office": "3 minutes à pied d'un bureau de poste.",
+        "namba_parks": "Namba PARKS."
+      },
+      "floor-plan": {
+        "apple_house_floor_plan": "Plan d'étage d'Apple House"
+      }
+    },
+    "lemon": {
+      "room": {
+        "free_to_use_all_tablewares": "Vous pouvez utiliser librement toute la vaisselle.",
+        "ac_and_gas_heater": "Climatisation et chauffage au gaz",
+        "bathroom_with_sink_toilet_shower_and_bathtub": "Salle de bain avec lavabo, toilettes, douche et baignoire",
+        "kitchen_with_dishes_cutlery_cups_and_kitchenware": "Cuisine avec vaisselle, couverts, tasses et ustensiles de cuisine, réfrigérateur, micro-ondes, grille-pain, cuiseur à riz"
+      },
+      "common-spaces": {
+        "story_building_with_rooms": "Bâtiment de 7 étages avec 12 chambres",
+        "laundromat": "Laverie",
+        "rooftop": "Toit-terrasse"
+      },
+      "neighborhood": {
+        "minute_walk_from_nihonbashi_station_exit": "8 minutes à pied de la gare de Nihonbashi, sortie 8",
+        "minutes_walk_to_post_office": "2 minutes à pied d'un bureau de poste",
+        "minutes_walk_to_supermarket": "2 minutes à pied d'un supermarché",
+        "minutes_walk_to_another_supermarket": "4 minutes à pied d'un autre supermarché",
+        "minutes_walk_to_discount_shop": "5 minutes à pied d'un magasin discount",
+        "minute_walk_to_another_supermarket": "6 minutes à pied d'un autre supermarché",
+        "walking_distance_to_doguyasuji": "À distance de marche de Doguyasuji, où vous pouvez trouver toutes sortes d'équipements de cuisine",
+        "nankai_namba_station": "Gare de Nankai Namba"
+      },
+      "maps": {
+        "route_map": "Plan d'accès"
+      },
+      "floor-plan": {
+        "lemon_house_floor_plan": "Plan d'étage de Lemon House"
+      }
+    },
+    "orange": {
+      "room": {
+        "all_rooms_set_in_traditional_japanese_style": "Toutes les chambres sont aménagées dans un style japonais traditionnel.",
+        "each_room_has_water_and_gas": "Chaque chambre dispose d'eau et de gaz. Il y a également une cuisinière à gaz.",
+        "closet_as_desk_with_lamp_bookshelf_and_outlets": "Vous pouvez également utiliser le placard comme bureau. Il y a une lampe, une étagère et plusieurs prises murales."
+      },
+      "common-spaces": {
+        "traditional_japanese_style_lounge": "Salon de style japonais traditionnel. 100 m² (1200 pi²). Ouvert 24h/24",
+        "tv_show_by_abc": "Nous sommes apparus dans une émission télévisée d'ABC, une chaîne de télévision japonaise",
+        "lounge_equipped_with_large_air_conditioner": "Le salon est équipé d'un grand climatiseur, très confortable que ce soit en été ou en hiver. Il y a également un évier.",
+        "large_collection_of_complete_comic_sets": "Nous avons une grande collection de séries de mangas complètes pour votre plaisir.",
+        "party_at_lounge_about_every_month": "Nous organisons une fête au salon environ tous les mois.",
+        "coffee_tea_and_japanese_tea_available": "Café, thé et thé japonais disponibles dans la section de boissons gratuites."
+      },
+      "building-features": {
+        "see_abeno_harukas_from_rooftop": "Vous pouvez voir Abeno Harukas depuis le toit-terrasse",
+        "showacho_traditional_area": "Showacho, le quartier traditionnel où les maisons ont des toits en tuiles de style japonais"
+      },
+      "neighborhood": {
+        "supermarket_nearby_only_minutes_walk": "Il y a un supermarché à proximité, à seulement 5 minutes à pied",
+        "supermarket_by_showacho_station": "Il y a également un supermarché près de la gare de Showacho.",
+        "stylish_stores_behind_station": "Il y a de nombreuses boutiques élégantes derrière la gare qui ont été rénovées à partir d'anciennes maisons japonaises traditionnelles",
+        "minutes_walk_to_abeno_harukas": "15 minutes à pied d'Abeno Harukas",
+        "minutes_walk_to_biggest_shopping_mall": "12 minutes à pied du plus grand centre commercial d'Osaka \"Q's mall\"",
+        "hanami_cherry_blossom_festival": "Vous pouvez profiter du Hanami (festival des cerisiers en fleurs) au printemps au parc Momogaike !"
+      },
+      "maps": {
+        "route_map": "Plan d'accès"
+      },
+      "floor-plan": {
+        "orange_house_floor_plan": "Plan d'étage d'Orange House"
+      },
+      "facilities": {
+        "shower_room_behind_curtain": "Il y a une douche derrière le rideau",
+        "shower_available_hours_for_free": "La douche est disponible 24h/24, gratuitement",
+        "equipped_with_washlet": "Équipé d'un washlet. Les sièges de toilette sont chauds et confortables même en hiver"
+      }
     }
   }
 }

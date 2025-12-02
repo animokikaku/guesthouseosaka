@@ -1,7 +1,7 @@
 import { HouseIdentifierSchema } from '@/lib/types'
 import { useTranslations } from 'next-intl'
 import { isMobilePhone } from 'validator'
-import z from 'zod'
+import { z } from 'zod'
 
 function useContactFormSchema() {
   const t = useTranslations('forms.validation')

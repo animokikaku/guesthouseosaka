@@ -1,0 +1,71 @@
+import { useTranslations } from 'next-intl'
+
+export function useImageLabels() {
+  const t = useTranslations('useImageLabels')
+
+  function label(id: string) {
+    return {
+      1: t('apple.room.wood_flooring'),
+      4: t('apple.room.toilet_shower_and_bathtub'),
+      6: t('apple.room.kitchens'),
+      7: t('apple.room.washing_machine_in_balcony'),
+      8: t('apple.common-spaces.rooftop'),
+      11: t('apple.common-spaces.apple_tv_and_satellite_channels'),
+      12: t('apple.common-spaces.gas_cookers_available'),
+      14: t('apple.common-spaces.toilet_with_washlet_in_lounge'),
+      17: t('apple.building-features.elevator_for_heavy_luggages'),
+      18: t('apple.building-features.bicycle_parking_space'),
+      19: t('apple.building-features.mailbox_at_entrance'),
+      21: t('apple.building-features.view_from_rooftop_balcony'),
+      25: t('apple.neighborhood.hour_open_supermarket'),
+      26: t('apple.neighborhood.minute_walk_to_another_supermarket'),
+      27: t('apple.neighborhood.minutes_walk_to_rotating_sushi_restaurant'),
+      28: t('apple.neighborhood.shop_just_by_daikokucho_station'),
+      29: t('apple.neighborhood.minutes_walk_to_convenience_store'),
+      30: t('apple.neighborhood.minutes_walk_to_post_office'),
+      31: t('apple.neighborhood.namba_parks'),
+      33: t('apple.floor-plan.apple_house_floor_plan'),
+      34: t('lemon.maps.route_map'),
+      42: t('lemon.room.free_to_use_all_tablewares'),
+      43: t('lemon.room.ac_and_gas_heater'),
+      45: t('lemon.room.bathroom_with_sink_toilet_shower_and_bathtub'),
+      46: t('lemon.room.kitchen_with_dishes_cutlery_cups_and_kitchenware'),
+      47: t('lemon.common-spaces.story_building_with_rooms'),
+      50: t('lemon.common-spaces.laundromat'),
+      51: t('lemon.common-spaces.rooftop'),
+      52: t('lemon.neighborhood.minute_walk_from_nihonbashi_station_exit'),
+      53: t('lemon.neighborhood.minutes_walk_to_post_office'),
+      55: t('lemon.neighborhood.minutes_walk_to_supermarket'),
+      56: t('lemon.neighborhood.minutes_walk_to_another_supermarket'),
+      57: t('lemon.neighborhood.minutes_walk_to_discount_shop'),
+      60: t('lemon.neighborhood.minute_walk_to_another_supermarket'),
+      64: t('lemon.neighborhood.walking_distance_to_doguyasuji'),
+      67: t('lemon.neighborhood.nankai_namba_station'),
+      72: t('lemon.floor-plan.lemon_house_floor_plan'),
+      73: t('orange.maps.route_map'),
+      74: t('orange.room.all_rooms_set_in_traditional_japanese_style'),
+      82: t('orange.room.each_room_has_water_and_gas'),
+      84: t('orange.room.closet_as_desk_with_lamp_bookshelf_and_outlets'),
+      85: t('orange.common-spaces.traditional_japanese_style_lounge'),
+      86: t('orange.common-spaces.tv_show_by_abc'),
+      89: t('orange.common-spaces.lounge_equipped_with_large_air_conditioner'),
+      90: t('orange.common-spaces.large_collection_of_complete_comic_sets'),
+      91: t('orange.common-spaces.party_at_lounge_about_every_month'),
+      94: t('orange.common-spaces.coffee_tea_and_japanese_tea_available'),
+      104: t('orange.building-features.see_abeno_harukas_from_rooftop'),
+      105: t('orange.building-features.showacho_traditional_area'),
+      110: t('orange.neighborhood.supermarket_nearby_only_minutes_walk'),
+      111: t('orange.neighborhood.supermarket_by_showacho_station'),
+      114: t('orange.neighborhood.stylish_stores_behind_station'),
+      116: t('orange.neighborhood.minutes_walk_to_abeno_harukas'),
+      120: t('orange.neighborhood.minutes_walk_to_biggest_shopping_mall'),
+      121: t('orange.neighborhood.hanami_cherry_blossom_festival'),
+      123: t('orange.floor-plan.orange_house_floor_plan'),
+      124: t('orange.facilities.shower_room_behind_curtain'),
+      126: t('orange.facilities.shower_available_hours_for_free'),
+      129: t('orange.facilities.equipped_with_washlet')
+    }[id]
+  }
+
+  return label
+}

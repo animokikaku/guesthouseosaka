@@ -10,13 +10,14 @@ import {
   type CarouselApi
 } from '@/components/ui/carousel'
 import { useHouseLabels } from '@/hooks/use-house-labels'
+import { useImageLabels } from '@/hooks/use-image-labels'
 import { storage } from '@/lib/images'
 import { store } from '@/lib/store'
 import { HouseIdentifier } from '@/lib/types'
 import * as Dialog from '@radix-ui/react-dialog'
 import { useStore } from '@tanstack/react-form'
 import { ArrowLeftIcon } from 'lucide-react'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -62,12 +63,17 @@ export function GalleryModal({ house }: { house: HouseIdentifier }) {
 }
 
 function GalleryModalCarousel({ house }: { house: HouseIdentifier }) {
-  const locale = useLocale()
   const [api, setApi] = useState<CarouselApi>()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const photoId = useStore(store, (state) => state.photoId)
-  const houseStorage = storage({ house, locale })
-  const images = houseStorage.images()
+  const houseStorage = storage({ house })
+  const getImageLabel = useImageLabels()
+
+  const images = houseStorage.images().map((image) => ({
+    ...image,
+    alt: getImageLabel(image.id) ?? ''
+  }))
+
   const startIndex = photoId ? houseStorage.indexOf(photoId) : undefined
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(
     null

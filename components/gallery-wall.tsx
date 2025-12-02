@@ -1,6 +1,6 @@
+import { useImageLabels } from '@/hooks/use-image-labels'
 import { storage } from '@/lib/images'
 import { cn } from '@/lib/utils'
-import { Locale } from 'next-intl'
 import Image from 'next/image'
 
 const BASE_WIDTH = 750
@@ -16,17 +16,16 @@ type DesktopPlacement = {
 type SocialPost = {
   id: string
   src: string
-  alt: string
   blurDataURL: string
   overlay?: string
   desktop: DesktopPlacement
 }
 
-function getPosts(locale: Locale): SocialPost[] {
+function getPosts(): SocialPost[] {
   // Get images grouped by house and category
-  const lemonStorage = storage({ house: 'lemon', locale })
-  const orangeStorage = storage({ house: 'orange', locale })
-  const appleStorage = storage({ house: 'apple', locale })
+  const lemonStorage = storage({ house: 'lemon' })
+  const orangeStorage = storage({ house: 'orange' })
+  const appleStorage = storage({ house: 'apple' })
 
   const lemonRoom = lemonStorage.image({ category: 'room', index: 0 })
   const [lemonNeighborhood1, lemonNeighborhood2] = lemonStorage.image({
@@ -45,7 +44,6 @@ function getPosts(locale: Locale): SocialPost[] {
     {
       id: lemonRoom.id,
       src: lemonRoom.src,
-      alt: lemonRoom.alt,
       blurDataURL: lemonRoom.blurDataURL,
       overlay: 'from-amber-200/80 to-amber-400/40',
       desktop: { width: 142, height: 142, x: 56, y: 130 }
@@ -53,7 +51,6 @@ function getPosts(locale: Locale): SocialPost[] {
     {
       id: orangeCommonSpaces.id,
       src: orangeCommonSpaces.src,
-      alt: orangeCommonSpaces.alt,
       blurDataURL: orangeCommonSpaces.blurDataURL,
       overlay: 'from-slate-500/70 to-slate-800/60',
       desktop: { width: 272, height: 272, x: 212, y: 0 }
@@ -61,7 +58,6 @@ function getPosts(locale: Locale): SocialPost[] {
     {
       id: lemonNeighborhood1.id,
       src: lemonNeighborhood1.src,
-      alt: lemonNeighborhood1.alt,
       blurDataURL: lemonNeighborhood1.blurDataURL,
       overlay: 'from-stone-400/70 to-stone-700/60',
       desktop: { width: 123, height: 123, x: 496, y: 52 }
@@ -69,7 +65,6 @@ function getPosts(locale: Locale): SocialPost[] {
     {
       id: orangeRoom.id,
       src: orangeRoom.src,
-      alt: orangeRoom.alt,
       blurDataURL: orangeRoom.blurDataURL,
       overlay: 'from-emerald-400/70 to-emerald-700/50',
       desktop: { width: 168, height: 168, x: 173, y: 284 }
@@ -77,7 +72,6 @@ function getPosts(locale: Locale): SocialPost[] {
     {
       id: lemonNeighborhood2.id,
       src: lemonNeighborhood2.src,
-      alt: lemonNeighborhood2.alt,
       blurDataURL: lemonNeighborhood2.blurDataURL,
       overlay: 'from-indigo-500/70 to-indigo-800/60',
       desktop: { width: 129, height: 129, x: 354, y: 284 }
@@ -85,7 +79,6 @@ function getPosts(locale: Locale): SocialPost[] {
     {
       id: appleRoom.id,
       src: appleRoom.src,
-      alt: appleRoom.alt,
       blurDataURL: appleRoom.blurDataURL,
       overlay: 'from-rose-400/70 to-rose-700/50',
       desktop: { width: 194, height: 194, x: 496, y: 187 }
@@ -93,14 +86,13 @@ function getPosts(locale: Locale): SocialPost[] {
   ]
 }
 
-export function GalleryWall({
-  className,
-  locale
-}: {
-  className?: string
-  locale: Locale
-}) {
-  const posts = getPosts(locale)
+export function GalleryWall({ className }: { className?: string }) {
+  const getImageLabel = useImageLabels()
+  const posts = getPosts().map((post) => ({
+    ...post,
+    alt: getImageLabel(post.id) ?? ''
+  }))
+
   return (
     <div className={cn('w-full', className)}>
       <div className="relative ml-auto aspect-750/452 w-full">

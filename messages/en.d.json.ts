@@ -592,6 +592,107 @@ declare const messages: {
       "domestic": "06-6627-0790",
       "international": "+81-6-6627-0790"
     }
+  },
+  "useImageLabels": {
+    "apple": {
+      "room": {
+        "wood_flooring": "All rooms with wood flooring.",
+        "toilet_shower_and_bathtub": "All rooms have toilet, shower and bathtub.",
+        "kitchens": "All rooms have kitchens.",
+        "washing_machine_in_balcony": "There is a washing machine in the balcony."
+      },
+      "common-spaces": {
+        "rooftop": "Rooftop",
+        "apple_tv_and_satellite_channels": "You can enjoy the Apple TV and satellite channels on the large TV screen.",
+        "gas_cookers_available": "3 gas cookers available.",
+        "toilet_with_washlet_in_lounge": "Toilet with washlet in the lounge."
+      },
+      "building-features": {
+        "elevator_for_heavy_luggages": "We have an elevator so you can easily bring in heavy luggages.",
+        "bicycle_parking_space": "Bicycle parking space in front of the building.",
+        "mailbox_at_entrance": "Mailbox at the entrance.",
+        "view_from_rooftop_balcony": "The view from the rooftop balcony"
+      },
+      "neighborhood": {
+        "hour_open_supermarket": "24 hour open supermarket just by the guest house.",
+        "minute_walk_to_another_supermarket": "1 minute walk to another supermarket.",
+        "minutes_walk_to_rotating_sushi_restaurant": "3 minutes walk to rotating sushi restaurant (kuru kuru sushi).",
+        "shop_just_by_daikokucho_station": "¥100 shop just by the Daikokucho station.",
+        "minutes_walk_to_convenience_store": "3 minutes walk to a convenience store.",
+        "minutes_walk_to_post_office": "3 minutes walk to a post office.",
+        "namba_parks": "Namba PARKS."
+      },
+      "floor-plan": {
+        "apple_house_floor_plan": "Apple House floor plan"
+      }
+    },
+    "lemon": {
+      "room": {
+        "free_to_use_all_tablewares": "You are free to use all the tablewares.",
+        "ac_and_gas_heater": "AC and gas heater",
+        "bathroom_with_sink_toilet_shower_and_bathtub": "Bathroom with sink, toilet, shower, and bathtub",
+        "kitchen_with_dishes_cutlery_cups_and_kitchenware": "Kitchen with dishes, cutlery, cups and kitchenware, refrigerator, microwave, toaster, rice cooker"
+      },
+      "common-spaces": {
+        "story_building_with_rooms": "7 story building with 12 rooms",
+        "laundromat": "Laundromat",
+        "rooftop": "Rooftop"
+      },
+      "neighborhood": {
+        "minute_walk_from_nihonbashi_station_exit": "8 minute walk from Nihonbashi Station Exit 8",
+        "minutes_walk_to_post_office": "2 minutes walk to a post office",
+        "minutes_walk_to_supermarket": "2 minutes walk to a supermarket",
+        "minutes_walk_to_another_supermarket": "4 minutes walk to another supermarket",
+        "minutes_walk_to_discount_shop": "5 minutes walk to a discount shop",
+        "minute_walk_to_another_supermarket": "6 minute walk to another supermarket",
+        "walking_distance_to_doguyasuji": "Walking distance to Doguyasuji, where you can find all sorts of cooking equipments",
+        "nankai_namba_station": "Nankai Namba station"
+      },
+      "maps": {
+        "route_map": "Route map"
+      },
+      "floor-plan": {
+        "lemon_house_floor_plan": "Lemon House floor plan"
+      }
+    },
+    "orange": {
+      "room": {
+        "all_rooms_set_in_traditional_japanese_style": "All rooms are set in traditional Japanese style.",
+        "each_room_has_water_and_gas": "Each room has both water and gas. There is also a gas cooker.",
+        "closet_as_desk_with_lamp_bookshelf_and_outlets": "You can use the closet as a desk as well. There is a lamp, bookshelf, and multiple wall outlets."
+      },
+      "common-spaces": {
+        "traditional_japanese_style_lounge": "Traditional Japanese style lounge. 100sq.m (1200sq.ft). Open 24 hours",
+        "tv_show_by_abc": "We were on a TV show by ABC, a Japanese broadcasting station",
+        "lounge_equipped_with_large_air_conditioner": "The lounge is equipped with a large air conditioner, very comfortable whether it's summer or winter. There is also a sink.",
+        "large_collection_of_complete_comic_sets": "We have a large collection of complete comic sets for you to enjoy.",
+        "party_at_lounge_about_every_month": "We hold a party at lounge about every month.",
+        "coffee_tea_and_japanese_tea_available": "Coffee, tea, and Japanese tea available at the free drink section."
+      },
+      "building-features": {
+        "see_abeno_harukas_from_rooftop": "You can see Abeno Harukas from the rooftop",
+        "showacho_traditional_area": "Showacho, the traditional area where houses have Japanese style tiled roofs"
+      },
+      "neighborhood": {
+        "supermarket_nearby_only_minutes_walk": "There's a supermarket nearby, only 5 minutes walk",
+        "supermarket_by_showacho_station": "There's also a supermarket by Showacho station.",
+        "stylish_stores_behind_station": "There are many stylish stores behind the station that were renovated from traditional Japanese tenement houses",
+        "minutes_walk_to_abeno_harukas": "15 minutes walk to Abeno Harukas",
+        "minutes_walk_to_biggest_shopping_mall": "12 minutes walk to the biggest shopping mall in Osaka \"Q's mall\"",
+        "hanami_cherry_blossom_festival": "You can enjoy Hanami (cherry blossom festival) in Spring at Momogaike Park!"
+      },
+      "maps": {
+        "route_map": "Route map"
+      },
+      "floor-plan": {
+        "orange_house_floor_plan": "Orange House floor plan"
+      },
+      "facilities": {
+        "shower_room_behind_curtain": "There is a shower room behind the curtain",
+        "shower_available_hours_for_free": "Shower is available 24 hours, for free",
+        "equipped_with_washlet": "Equipped with washlet. Toilet seats are warm and comfortable even in the winter"
+      }
+    }
   }
 };
 export default messages;

@@ -3,20 +3,19 @@
 import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import { useImageLabels } from '@/hooks/use-image-labels'
 import { Link } from '@/i18n/navigation'
 import { storage } from '@/lib/images'
 import { HouseIdentifier } from '@/lib/types'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 
 export function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
   const t = useTranslations('ImageBlockGallery')
-  const locale = useLocale()
-  const images = storage({ house: id, locale }).images({
-    category: 'room',
-    limit: 5
-  })
+  const getImageLabel = useImageLabels()
 
-  const [primary, topLeft, topRight, bottomLeft, bottomRight] = images
+  const images = storage({ house: id })
+    .images({ category: 'room', limit: 5 })
+    .map((image) => ({ ...image, alt: getImageLabel(image.id) ?? '' }))
 
   const galleryHref = `/${id}/gallery`
 
@@ -29,26 +28,26 @@ export function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
               <GalleryImageButton
                 className="col-span-2 row-span-2"
                 sizes="(min-width: 1120px) 560px, 50vw"
-                imageProps={{ ...primary, preload: true }}
+                imageProps={{ ...images[0], preload: true }}
               />
               <GalleryImageButton
                 className="col-span-1 col-start-3 row-start-1"
-                imageProps={topLeft}
+                imageProps={images[1]}
                 sizes="(min-width: 1120px) 280px, 25vw"
               />
               <GalleryImageButton
                 className="col-span-1 col-start-4 row-start-1"
-                imageProps={topRight}
+                imageProps={images[2]}
                 sizes="(min-width: 1120px) 280px, 25vw"
               />
               <GalleryImageButton
                 className="col-span-1 col-start-3 row-start-2"
-                imageProps={bottomLeft}
+                imageProps={images[3]}
                 sizes="(min-width: 1120px) 280px, 25vw"
               />
               <GalleryImageButton
                 className="col-span-1 col-start-4 row-start-2"
-                imageProps={bottomRight}
+                imageProps={images[4]}
                 sizes="(min-width: 1120px) 280px, 25vw"
               />
             </div>

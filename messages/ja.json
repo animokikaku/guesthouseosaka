@@ -362,9 +362,7 @@
           "不正確または古い情報の訂正・追加・削除を求める",
           "（該当する場合）同意の撤回を求める"
         ],
-        "paragraphs": [
-          "お客様は次の権利を有します。"
-        ],
+        "paragraphs": ["お客様は次の権利を有します。"],
         "title": "5. お客さまの権利"
       },
       "security": {
@@ -590,6 +588,107 @@
     "orange": {
       "domestic": "06-6627-0790",
       "international": "+81-6-6627-0790"
+    }
+  },
+  "useImageLabels": {
+    "apple": {
+      "room": {
+        "wood_flooring": "すべての部屋に木の床があります。",
+        "toilet_shower_and_bathtub": "すべての部屋にトイレ、シャワー、バスタブがあります。",
+        "kitchens": "すべての部屋にキッチンがあります。",
+        "washing_machine_in_balcony": "バルコニーに洗濯機があります。"
+      },
+      "common-spaces": {
+        "rooftop": "屋上",
+        "apple_tv_and_satellite_channels": "大きなテレビ画面でApple TVと衛星チャンネルをお楽しみいただけます。",
+        "gas_cookers_available": "ガスコンロ3台利用可能。",
+        "toilet_with_washlet_in_lounge": "ラウンジにウォシュレット付きトイレがあります。"
+      },
+      "building-features": {
+        "elevator_for_heavy_luggages": "重い荷物も簡単に運べるエレベーターがあります。",
+        "bicycle_parking_space": "建物の前に自転車駐輪場があります。",
+        "mailbox_at_entrance": "入口に郵便受けがあります。",
+        "view_from_rooftop_balcony": "屋上バルコニーからの眺め"
+      },
+      "neighborhood": {
+        "hour_open_supermarket": "ゲストハウスのすぐそばに24時間営業のスーパーマーケットがあります。",
+        "minute_walk_to_another_supermarket": "別のスーパーマーケットまで徒歩1分。",
+        "minutes_walk_to_rotating_sushi_restaurant": "回転寿司店（くるくる寿司）まで徒歩3分。",
+        "shop_just_by_daikokucho_station": "大国町駅のすぐそばに100円ショップがあります。",
+        "minutes_walk_to_convenience_store": "コンビニまで徒歩3分。",
+        "minutes_walk_to_post_office": "郵便局まで徒歩3分。",
+        "namba_parks": "なんばパークス。"
+      },
+      "floor-plan": {
+        "apple_house_floor_plan": "アップルハウスの間取り図"
+      }
+    },
+    "lemon": {
+      "room": {
+        "free_to_use_all_tablewares": "すべての食器を自由にご利用いただけます。",
+        "ac_and_gas_heater": "エアコンとガスヒーター",
+        "bathroom_with_sink_toilet_shower_and_bathtub": "洗面台、トイレ、シャワー、バスタブ付きバスルーム",
+        "kitchen_with_dishes_cutlery_cups_and_kitchenware": "食器、カトラリー、カップ、調理器具、冷蔵庫、電子レンジ、トースター、炊飯器付きキッチン"
+      },
+      "common-spaces": {
+        "story_building_with_rooms": "7階建て、12室の建物",
+        "laundromat": "コインランドリー",
+        "rooftop": "屋上"
+      },
+      "neighborhood": {
+        "minute_walk_from_nihonbashi_station_exit": "日本橋駅8番出口から徒歩8分",
+        "minutes_walk_to_post_office": "郵便局まで徒歩2分",
+        "minutes_walk_to_supermarket": "スーパーマーケットまで徒歩2分",
+        "minutes_walk_to_another_supermarket": "別のスーパーマーケットまで徒歩4分",
+        "minutes_walk_to_discount_shop": "ディスカウントショップまで徒歩5分",
+        "minute_walk_to_another_supermarket": "別のスーパーマーケットまで徒歩6分",
+        "walking_distance_to_doguyasuji": "様々な調理器具が揃う道具屋筋まで徒歩圏内",
+        "nankai_namba_station": "南海なんば駅"
+      },
+      "maps": {
+        "route_map": "アクセス地図"
+      },
+      "floor-plan": {
+        "lemon_house_floor_plan": "レモンハウスの間取り図"
+      }
+    },
+    "orange": {
+      "room": {
+        "all_rooms_set_in_traditional_japanese_style": "すべての部屋は伝統的な和風スタイルです。",
+        "each_room_has_water_and_gas": "各部屋に水道とガスがあります。ガスコンロも設置されています。",
+        "closet_as_desk_with_lamp_bookshelf_and_outlets": "クローゼットを机としても使用できます。ランプ、本棚、複数のコンセントがあります。"
+      },
+      "common-spaces": {
+        "traditional_japanese_style_lounge": "伝統的な和風ラウンジ。100平方メートル（1200平方フィート）。24時間開放",
+        "tv_show_by_abc": "日本の放送局ABCのテレビ番組に出演しました",
+        "lounge_equipped_with_large_air_conditioner": "ラウンジには大型エアコンが設置されており、夏でも冬でも快適です。シンクもあります。",
+        "large_collection_of_complete_comic_sets": "お楽しみいただけるよう、完全な漫画セットを多数所蔵しています。",
+        "party_at_lounge_about_every_month": "ラウンジで約1ヶ月ごとにパーティーを開催しています。",
+        "coffee_tea_and_japanese_tea_available": "無料ドリンクコーナーでコーヒー、紅茶、日本茶をご利用いただけます。"
+      },
+      "building-features": {
+        "see_abeno_harukas_from_rooftop": "屋上からあべのハルカスが見えます",
+        "showacho_traditional_area": "庄内町、日本風の瓦屋根の家がある伝統的なエリア"
+      },
+      "neighborhood": {
+        "supermarket_nearby_only_minutes_walk": "近くにスーパーマーケットがあり、徒歩5分です",
+        "supermarket_by_showacho_station": "庄内町駅の近くにもスーパーマーケットがあります。",
+        "stylish_stores_behind_station": "駅の裏には、伝統的な日本の長屋から改装されたおしゃれな店がたくさんあります",
+        "minutes_walk_to_abeno_harukas": "あべのハルカスまで徒歩15分",
+        "minutes_walk_to_biggest_shopping_mall": "大阪最大のショッピングモール「Q's mall」まで徒歩12分",
+        "hanami_cherry_blossom_festival": "春には桃ヶ池公園で花見（桜祭り）をお楽しみいただけます！"
+      },
+      "maps": {
+        "route_map": "アクセス地図"
+      },
+      "floor-plan": {
+        "orange_house_floor_plan": "オレンジハウスの間取り図"
+      },
+      "facilities": {
+        "shower_room_behind_curtain": "カーテンの後ろにシャワールームがあります",
+        "shower_available_hours_for_free": "シャワーは24時間無料でご利用いただけます",
+        "equipped_with_washlet": "ウォシュレット付き。冬でも便座が温かく快適です"
+      }
     }
   }
 }
