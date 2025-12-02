@@ -52,19 +52,18 @@
   "FAQExtraCostsTable": {
     "common_fees": "共益費",
     "deposit": "デポジット",
-    "deposit_amount": "¥{amount}",
     "drying_machine": "乾燥機",
     "free": "無料",
     "free_wifi": "無料Wi-Fi",
     "free_wifi_lan": "無料Wi-Fi/LAN",
     "internet": "インターネット",
     "laundromat": "ランドリー",
-    "price_per_minutes": "¥{price}/{minutes}分",
-    "price_per_month": "¥{price}/月",
+    "price_per_minutes": "{price} / {minutes}",
+    "price_per_month": "{price} / 月",
     "private_washer": "各部屋に専用の洗濯機があります。",
     "seasonal_rates": {
-      "spring_autumn": "春・秋：¥{min}～¥{max}",
-      "summer_winter": "夏・冬：¥{min}～¥{max}"
+      "spring_autumn": "春・秋：{min}～{max}",
+      "summer_winter": "夏・冬：{min}～{max}"
     },
     "utility_fees": "光熱費",
     "water_bill": "水道代"
@@ -362,7 +361,9 @@
           "不正確または古い情報の訂正・追加・削除を求める",
           "（該当する場合）同意の撤回を求める"
         ],
-        "paragraphs": ["お客様は次の権利を有します。"],
+        "paragraphs": [
+          "お客様は次の権利を有します。"
+        ],
         "title": "5. お客さまの権利"
       },
       "security": {

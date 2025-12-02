@@ -9,7 +9,7 @@ import {
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
+import { useFormatter, useTranslations } from 'next-intl'
 
 type AnswerValue = string | string[]
 
@@ -60,6 +60,13 @@ function FAQExtraCostsTableHeader() {
 
 export function FAQExtraCostsTable() {
   const t = useTranslations('FAQExtraCostsTable')
+  const formatter = useFormatter()
+
+  const currency = (amount: number) =>
+    formatter.number(amount, { style: 'currency', currency: 'JPY' })
+
+  const minutes = (minutes: number) =>
+    formatter.number(minutes, { style: 'unit', unit: 'minute' })
 
   const rows: {
     id: string
@@ -70,18 +77,18 @@ export function FAQExtraCostsTable() {
       id: 'deposit',
       label: t('deposit'),
       answers: {
-        orange: t('deposit_amount', { amount: '30000' }),
-        lemon: t('deposit_amount', { amount: '30000' }),
-        apple: t('deposit_amount', { amount: '30000' })
+        orange: currency(30000),
+        lemon: currency(30000),
+        apple: currency(30000)
       }
     },
     {
       id: 'service-fees',
       label: t('common_fees'),
       answers: {
-        orange: t('price_per_month', { price: '12000' }),
-        lemon: t('price_per_month', { price: '10000' }),
-        apple: t('price_per_month', { price: '10000' })
+        orange: t('price_per_month', { price: currency(12000) }),
+        lemon: t('price_per_month', { price: currency(10000) }),
+        apple: t('price_per_month', { price: currency(10000) })
       }
     },
     {
@@ -90,32 +97,32 @@ export function FAQExtraCostsTable() {
       answers: {
         orange: [
           t('seasonal_rates.summer_winter', {
-            min: '3000',
-            max: '6000'
+            min: currency(3000),
+            max: currency(6000)
           }),
           t('seasonal_rates.spring_autumn', {
-            min: '2000',
-            max: '3000'
+            min: currency(2000),
+            max: currency(3000)
           })
         ],
         lemon: [
           t('seasonal_rates.summer_winter', {
-            min: '3000',
-            max: '7000'
+            min: currency(3000),
+            max: currency(7000)
           }),
           t('seasonal_rates.spring_autumn', {
-            min: '2000',
-            max: '4000'
+            min: currency(2000),
+            max: currency(4000)
           })
         ],
         apple: [
           t('seasonal_rates.summer_winter', {
-            min: '3000',
-            max: '7000'
+            min: currency(3000),
+            max: currency(7000)
           }),
           t('seasonal_rates.spring_autumn', {
-            min: '2000',
-            max: '4000'
+            min: currency(2000),
+            max: currency(4000)
           })
         ]
       }
@@ -143,12 +150,12 @@ export function FAQExtraCostsTable() {
       label: t('drying_machine'),
       answers: {
         orange: t('price_per_minutes', {
-          price: '100',
-          minutes: '30'
+          price: currency(100),
+          minutes: minutes(30)
         }),
         lemon: t('price_per_minutes', {
-          price: '100',
-          minutes: '20'
+          price: currency(100),
+          minutes: minutes(20)
         }),
         apple: '–'
       }

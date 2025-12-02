@@ -52,19 +52,18 @@
   "FAQExtraCostsTable": {
     "common_fees": "Charges communes",
     "deposit": "Caution",
-    "deposit_amount": "¥{amount}",
     "drying_machine": "Sèche-linge",
     "free": "Gratuit",
     "free_wifi": "Wi-Fi gratuit",
-    "free_wifi_lan": "Wi-Fi/LAN gratuit",
+    "free_wifi_lan": "Wi-Fi / LAN gratuit",
     "internet": "Internet",
     "laundromat": "Laverie",
-    "price_per_minutes": "¥{price}/{minutes} min",
-    "price_per_month": "¥{price}/mois",
+    "price_per_minutes": "{price} / {minutes}",
+    "price_per_month": "{price} / mois",
     "private_washer": "Chaque chambre dispose d'une machine à laver privée.",
     "seasonal_rates": {
-      "spring_autumn": "Printemps/Automne : ¥{min}–{max}",
-      "summer_winter": "Été/Hiver : ¥{min}–{max}"
+      "spring_autumn": "Printemps/Automne : {min} – {max}",
+      "summer_winter": "Été/Hiver : {min} – {max}"
     },
     "utility_fees": "Charges",
     "water_bill": "Facture d'eau"
@@ -362,7 +361,9 @@
           "Demander la correction, l'ajout ou la suppression d'informations inexactes ou obsolètes",
           "Retirer votre consentement au traitement de vos informations (le cas échéant)"
         ],
-        "paragraphs": ["Vous avez le droit de :"],
+        "paragraphs": [
+          "Vous avez le droit de :"
+        ],
         "title": "5. Vos droits"
       },
       "security": {

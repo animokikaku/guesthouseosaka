@@ -55,19 +55,18 @@ declare const messages: {
   "FAQExtraCostsTable": {
     "common_fees": "Common fees",
     "deposit": "Deposit",
-    "deposit_amount": "¥{amount}",
     "drying_machine": "Drying machine",
     "free": "Free",
     "free_wifi": "Free Wi-Fi",
     "free_wifi_lan": "Free Wi-Fi/LAN",
     "internet": "Internet",
     "laundromat": "Laundromat",
-    "price_per_minutes": "¥{price}/{minutes}min",
-    "price_per_month": "¥{price}/month",
+    "price_per_minutes": "{price}/{minutes}",
+    "price_per_month": "{price}/month",
     "private_washer": "Each room has a private washing machine.",
     "seasonal_rates": {
-      "spring_autumn": "Spring/Autumn: ¥{min}-¥{max}",
-      "summer_winter": "Summer/Winter: ¥{min}-¥{max}"
+      "spring_autumn": "Spring/Autumn: {min}-{max}",
+      "summer_winter": "Summer/Winter: {min}-{max}"
     },
     "utility_fees": "Utility fees",
     "water_bill": "Water bill"
@@ -365,7 +364,9 @@ declare const messages: {
           "Request correction, addition, or deletion of inaccurate or outdated information",
           "Withdraw your consent to the processing of your information (where applicable)"
         ],
-        "paragraphs": ["You have the right to:"],
+        "paragraphs": [
+          "You have the right to:"
+        ],
         "title": "5. Your Rights"
       },
       "security": {
