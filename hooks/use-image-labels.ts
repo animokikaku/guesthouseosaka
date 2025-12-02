@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl'
 export function useImageLabels() {
   const t = useTranslations('useImageLabels')
 
-  function label(id: string) {
+  function label(id: string | number) {
     return {
       1: t('apple.room.wood_flooring'),
       4: t('apple.room.toilet_shower_and_bathtub'),

@@ -1,8 +1,8 @@
 import { HouseIdentifier } from '@/lib/types'
+import { url } from '@/lib/utils/blob-storage'
 import { ImageProps } from 'next/image'
 import { z } from 'zod'
 import data from './data.json' with { type: 'json' }
-import { url } from '@/lib/utils/blob-storage'
 
 const CategoriesSchema = z.enum([
   'room',
@@ -166,6 +166,8 @@ export class HouseImageStorage {
   }
 }
 
+const cache = new Map<HouseIdentifier, HouseImageStorage>()
+
 /**
  * Get or create a HouseImageStorage instance for a specific house
  *
@@ -177,5 +179,10 @@ export function storage({
 }: {
   house: HouseIdentifier
 }): HouseImageStorage {
-  return new HouseImageStorage(house)
+  const storage = cache.get(house)
+  if (!storage) {
+    cache.set(house, new HouseImageStorage(house))
+    return cache.get(house)!
+  }
+  return storage
 }
