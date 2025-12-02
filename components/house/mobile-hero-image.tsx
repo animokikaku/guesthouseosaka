@@ -19,8 +19,8 @@ export function MobileHeroImage() {
   const [currentIndex, setCurrentIndex] = useState(1)
 
   const pathname = usePathname()
-  const { images: getHouseImages } = useImages()
-  const images = getHouseImages()
+  const storage = useImages()
+  const images = storage.images({ category: 'room', limit: 5 })
 
   useEffect(() => {
     if (!api) return

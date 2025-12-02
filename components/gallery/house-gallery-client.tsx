@@ -10,8 +10,8 @@ import { GalleryImageButton } from './gallery-image-button'
 
 export function HouseGalleryClient() {
   const t = useTranslations('HouseGalleryClient')
-  const { categories: getCategories } = useImages()
-  const categories = getCategories()
+  const storage = useImages()
+  const categories = storage.categories()
 
   const categoryMap = {
     room: t('categories.room'),
