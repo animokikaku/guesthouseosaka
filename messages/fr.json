@@ -29,7 +29,7 @@
       "question": "Y a-t-il un responsable sur place ?"
     },
     "move_in_requirements": {
-      "answer": "Chaque maison requiert des consommables et une pièce d'identité valide.",
+      "answer": "Chaque maison nécessite que vous apportiez des consommables et une pièce d'identité valide.",
       "question": "Que dois-je apporter lors de mon emménagement ?"
     },
     "rent_due_date": {
@@ -93,7 +93,7 @@
     "heading": "À propos de ce lieu",
     "houses": {
       "apple": {
-        "description": "Apple House place les résidents à une minute à pied de la station Daikokucho tout en restant proche de Namba. Chaque chambre privée comprend une salle de bain et une cuisine complètes, offrant un confort digne d'un condo pour les séjours moyens et longs.",
+        "description": "Apple House place les résidents à une minute à pied de la station Daikokucho tout en restant proche de Namba. Chaque chambre privée comprend une salle de bain complète et une cuisine, offrant un confort comparable à un appartement pour les séjours moyens et longs.",
         "highlights": [
           "Chambres privées avec cuisine et salle de bain (11 m²)",
           "À 14 minutes à pied de Namba",
@@ -105,11 +105,11 @@
         "highlights": [
           "Chambres privées avec cuisines et salles de bain (19 m²)",
           "Chambres spacieuses, idéales pour les couples et amis",
-          "Vie communautaire et échanges internationaux au coeur d'Osaka"
+          "Vie communautaire et échanges internationaux au cœur d'Osaka"
         ]
       },
       "orange": {
-        "description": "Orange House est un hébergement en chambre privée situé aux abords du centre d'Osaka. La maison combine un style japonais traditionnel et des commodités quotidiennes, en faisant une base calme pour les séjours longs dans le quartier d'Abeno.",
+        "description": "Orange House est un hébergement en chambre privée situé à côté du centre-ville d'Osaka. La maison combine style japonais traditionnel et confort quotidien, offrant une base paisible pour des séjours prolongés dans le quartier d'Abeno.",
         "highlights": [
           "Chambres privées avec cuisine (12 m²)",
           "Réductions pour longs séjours disponibles",
@@ -192,7 +192,7 @@
           "supermarkets": "Supermarché 24h/24 juste à côté de la maison d'hôtes et un autre grand supermarché à environ 1 minute",
           "sushi": "Restaurant de sushis sur tapis roulant à environ 3 minutes à pied"
         },
-        "overview": "À seulement 1 minute à pied de la station Daikokucho (métro lignes Midosuji et Yotsubashi). Juste à côté d'un supermarché ouvert 24 h/24. À proximité du marché Kizu, vieux de 200 ans, et d'un grand bain public avec spa en pierre chaude. À distance de marche de Namba pour profiter de la vie nocturne sans se soucier du dernier train.",
+        "overview": "À seulement 1 minute à pied de la station Daikokucho (lignes Midosuji et Yotsubashi). Juste à côté d'un supermarché ouvert 24 h/24. À proximité du marché Kizu, vieux de 200 ans, et d'un grand bain public avec spa en pierre chaude. À distance de marche de Namba pour profiter de la vie nocturne sans se soucier du dernier train.",
         "stations": {
           "daikokucho": "Station Daikokucho (métro Midosuji et Yotsubashi), sortie 2 — environ 1 minute à pied",
           "ebisucho": "Station Ebisucho — environ 11 minutes à pied",
@@ -362,7 +362,9 @@
           "Demander la correction, l'ajout ou la suppression d'informations inexactes ou obsolètes",
           "Retirer votre consentement au traitement de vos informations (le cas échéant)"
         ],
-        "paragraphs": ["Vous avez le droit de :"],
+        "paragraphs": [
+          "Vous avez le droit de :"
+        ],
         "title": "5. Vos droits"
       },
       "security": {
@@ -419,7 +421,7 @@
   },
   "NotFound": {
     "back_home": "Retour à la page d'accueil",
-    "contact_us": "Besoin d'aide ? <link>Contactez le support</link>.",
+    "contact_us": "Besoin d'aide ? <link>Contactez-nous</link>.",
     "description": "La page que vous cherchez est introuvable, nous vous suggérons de revenir à l'accueil.",
     "title": "Oups !"
   },
