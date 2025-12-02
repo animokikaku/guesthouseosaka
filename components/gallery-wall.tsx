@@ -1,97 +1,53 @@
 import { useImageLabels } from '@/hooks/use-image-labels'
-import { getHouseStorage } from '@/lib/images'
+import homeImages from '@/lib/images/data/home.json' with { type: 'json' }
 import { cn } from '@/lib/utils'
+import { url } from '@/lib/utils/blob-storage'
 import Image from 'next/image'
 
 const BASE_WIDTH = 750
 const BASE_HEIGHT = 452
 
-type DesktopPlacement = {
-  width: number
-  height: number
-  x: number
-  y: number
-}
+export function GalleryWall({ className }: { className?: string }) {
+  const getImageLabel = useImageLabels()
 
-type SocialPost = {
-  id: string
-  src: string
-  blurDataURL: string
-  overlay?: string
-  desktop: DesktopPlacement
-}
-
-function getPosts(): SocialPost[] {
-  // Get images grouped by house and category
-  const lemon = getHouseStorage('lemon')
-  const orange = getHouseStorage('orange')
-  const apple = getHouseStorage('apple')
-
-  const lemonRoom = lemon.image({ category: 'room', index: 0 })
-  const [lemonNeighborhood1, lemonNeighborhood2] = lemon.image({
-    category: 'neighborhood',
-    index: [16, 18]
+  const image = (image: (typeof homeImages)[number]) => ({
+    ...image,
+    src: url(image.src),
+    alt: getImageLabel(image.id) ?? image.id.toString()
   })
 
-  const orangeCommonSpaces = orange.image({
-    category: 'common-spaces',
-    index: 2
-  })
-  const orangeRoom = orange.image({ category: 'room', index: 0 })
-  const appleRoom = apple.image({ category: 'room', index: 0 })
-
-  return [
+  const posts = [
     {
-      id: lemonRoom.id,
-      src: lemonRoom.src,
-      blurDataURL: lemonRoom.blurDataURL,
+      ...image(homeImages[0]),
       overlay: 'from-amber-200/80 to-amber-400/40',
       desktop: { width: 142, height: 142, x: 56, y: 130 }
     },
     {
-      id: orangeCommonSpaces.id,
-      src: orangeCommonSpaces.src,
-      blurDataURL: orangeCommonSpaces.blurDataURL,
+      ...image(homeImages[1]),
       overlay: 'from-slate-500/70 to-slate-800/60',
       desktop: { width: 272, height: 272, x: 212, y: 0 }
     },
     {
-      id: lemonNeighborhood1.id,
-      src: lemonNeighborhood1.src,
-      blurDataURL: lemonNeighborhood1.blurDataURL,
+      ...image(homeImages[2]),
       overlay: 'from-stone-400/70 to-stone-700/60',
       desktop: { width: 123, height: 123, x: 496, y: 52 }
     },
     {
-      id: orangeRoom.id,
-      src: orangeRoom.src,
-      blurDataURL: orangeRoom.blurDataURL,
+      ...image(homeImages[3]),
       overlay: 'from-emerald-400/70 to-emerald-700/50',
       desktop: { width: 168, height: 168, x: 173, y: 284 }
     },
     {
-      id: lemonNeighborhood2.id,
-      src: lemonNeighborhood2.src,
-      blurDataURL: lemonNeighborhood2.blurDataURL,
+      ...image(homeImages[4]),
       overlay: 'from-indigo-500/70 to-indigo-800/60',
       desktop: { width: 129, height: 129, x: 354, y: 284 }
     },
     {
-      id: appleRoom.id,
-      src: appleRoom.src,
-      blurDataURL: appleRoom.blurDataURL,
+      ...image(homeImages[5]),
       overlay: 'from-rose-400/70 to-rose-700/50',
       desktop: { width: 194, height: 194, x: 496, y: 187 }
     }
   ]
-}
-
-export function GalleryWall({ className }: { className?: string }) {
-  const getImageLabel = useImageLabels()
-  const posts = getPosts().map((post) => ({
-    ...post,
-    alt: getImageLabel(post.id) ?? ''
-  }))
 
   return (
     <div className={cn('w-full', className)}>
