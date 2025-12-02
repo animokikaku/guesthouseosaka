@@ -3,13 +3,7 @@ import { cn } from '@/lib/utils'
 import { Link } from '@/i18n/navigation'
 import { HouseIdentifier } from '@/lib/types'
 import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-
-const yenFormatter = new Intl.NumberFormat('ja-JP', {
-  currency: 'JPY',
-  maximumFractionDigits: 0,
-  style: 'currency'
-})
+import { useFormatter, useTranslations } from 'next-intl'
 
 type BuildingData = {
   rooms: number
@@ -38,20 +32,27 @@ export const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
 export function HouseBuilding({ id }: { id: HouseIdentifier }) {
   const building = BUILDING_DATA[id]
   const t = useTranslations('HouseBuilding')
+  const formatter = useFormatter()
+
+  const currency = (amount: number) =>
+    formatter.number(amount, { style: 'currency', currency: 'JPY' })
+
+  const number = (value: number) => formatter.number(value)
+
   const details = [
     {
       label: t('rooms_label'),
-      value: building.rooms,
+      value: number(building.rooms),
       icon: BedDoubleIcon
     },
     {
       label: t('floors_label'),
-      value: building.floors,
+      value: number(building.floors),
       icon: LayersIcon
     },
     {
       label: t('min_rent_label'),
-      value: yenFormatter.format(building.monthly_price)
+      value: currency(building.monthly_price)
     }
   ]
   const [rooms, floors, minRent] = details
