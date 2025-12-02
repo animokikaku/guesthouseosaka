@@ -12,4 +12,5 @@
 - [] Add a viewer for the home screen images
 - [x] Different og image per house
 - [x] Setup JSON-LD
+- [x] Add images captions on Crowdin
 - [] Enable indexing (meta.robots and robots.txt) once production is ready
