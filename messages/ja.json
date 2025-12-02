@@ -433,7 +433,12 @@
     "company_name": "株式会社アニモ企画"
   },
   "SiteHeader": {
-    "logo_label": "シェアハウス大阪"
+    "logo_label": "シェアハウス大阪",
+    "navigation": {
+      "share_houses": "シェアハウス",
+      "faq": "よくある質問",
+      "contact": "お問い合わせ"
+    }
   },
   "SubmitButton": {
     "label": "送信"
@@ -586,10 +591,5 @@
       "domestic": "06-6627-0790",
       "international": "+81-6-6627-0790"
     }
-  },
-  "useNavigationItems": {
-    "contact": "お問い合わせ",
-    "faq": "よくある質問",
-    "share_houses": "シェアハウス"
   }
 }

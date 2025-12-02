@@ -434,7 +434,12 @@ declare const messages: {
     "company_name": "Animo Kikaku Co., Ltd."
   },
   "SiteHeader": {
-    "logo_label": "Share House Osaka"
+    "logo_label": "Share House Osaka",
+    "navigation": {
+      "share_houses": "Share Houses",
+      "faq": "FAQ",
+      "contact": "Contact"
+    }
   },
   "SubmitButton": {
     "label": "Submit"
@@ -587,11 +592,6 @@ declare const messages: {
       "domestic": "06-6627-0790",
       "international": "+81-6-6627-0790"
     }
-  },
-  "useNavigationItems": {
-    "contact": "Contact",
-    "faq": "FAQ",
-    "share_houses": "Share Houses"
   }
 };
 export default messages;

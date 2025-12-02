@@ -431,7 +431,12 @@
     "company_name": "Animo Kikaku Co., Ltd."
   },
   "SiteHeader": {
-    "logo_label": "Share House Osaka"
+    "logo_label": "Share House Osaka",
+    "navigation": {
+      "share_houses": "Share Houses",
+      "faq": "FAQ",
+      "contact": "Contact"
+    }
   },
   "SubmitButton": {
     "label": "Submit"
@@ -584,10 +589,5 @@
       "domestic": "06-6627-0790",
       "international": "+81-6-6627-0790"
     }
-  },
-  "useNavigationItems": {
-    "contact": "Contact",
-    "faq": "FAQ",
-    "share_houses": "Share Houses"
   }
 }

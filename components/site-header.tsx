@@ -6,14 +6,46 @@ import { MainNav } from '@/components/main-nav'
 import { MobileNav } from '@/components/mobile-nav'
 import { ModeSwitcher } from '@/components/mode-switcher'
 import { Button } from '@/components/ui/button'
-import { useNavigationItems } from '@/hooks/use-navigation-items'
+import { useHouseLabels } from '@/hooks/use-house-labels'
 import { Link } from '@/i18n/navigation'
+import { assets } from '@/lib/assets'
+import { NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 
 export function SiteHeader() {
-  const navItems = useNavigationItems()
   const t = useTranslations('SiteHeader')
+  const houseLabel = useHouseLabels()
+
+  const navItems: NavItems = [
+    {
+      key: 'share-houses',
+      items: (['orange', 'apple', 'lemon'] as const).map((house) => {
+        const { name, summary, caption } = houseLabel(house)
+        const { icon, background } = assets[house]
+        return {
+          key: house,
+          href: `/${house}`,
+          label: name,
+          description: summary,
+          caption,
+          icon,
+          background
+        }
+      }),
+      label: t('navigation.share_houses')
+    },
+    {
+      key: 'faq',
+      href: '/faq',
+      label: t('navigation.faq')
+    },
+    {
+      key: 'contact',
+      href: '/contact',
+      label: t('navigation.contact')
+    }
+  ]
 
   return (
     <header
@@ -41,7 +73,6 @@ export function SiteHeader() {
             <div className="hidden w-full flex-1 md:flex md:w-auto md:flex-none"></div>
             <LanguageSwitcher size="icon-sm" />
             <ModeSwitcher />
-            {/* <HouseSwitcher /> */}
           </div>
         </div>
       </div>
