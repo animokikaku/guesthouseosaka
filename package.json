@@ -9,7 +9,9 @@
     "lint": "eslint",
     "deps": "bunx taze@latest -Ilw",
     "deps:major": "bunx taze@latest major -Ilw",
-    "knip": "knip"
+    "knip": "knip",
+    "crowdin:pull": "crowdin download translations",
+    "crowdin:push": "crowdin upload sources"
   },
   "dependencies": {
     "@lucide/lab": "^0.1.2",
