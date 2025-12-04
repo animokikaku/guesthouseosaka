@@ -9,6 +9,7 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion'
 import { useHouseLabels } from '@/hooks/use-house-labels'
+import { HouseIdentifierValues } from '@/lib/types'
 import { useTranslations } from 'next-intl'
 
 type FaqItem = {
@@ -64,7 +65,7 @@ export function FAQAccordion() {
       question: t('floors_and_rooms.question'),
       body: (
         <ul className="text-muted-foreground list-disc space-y-2">
-          {(['orange', 'lemon', 'apple'] as const).map((id) => {
+          {HouseIdentifierValues.map((id) => {
             const { floors, rooms } = BUILDING_DATA[id]
             return (
               <li key={`floors-and-rooms-${id}`}>

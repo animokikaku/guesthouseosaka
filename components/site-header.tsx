@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
-import { NavItems } from '@/lib/types'
+import { HouseIdentifierValues, NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 
@@ -20,7 +20,7 @@ export function SiteHeader() {
   const navItems: NavItems = [
     {
       key: 'share-houses',
-      items: (['orange', 'apple', 'lemon'] as const).map((house) => {
+      items: HouseIdentifierValues.map((house) => {
         const { name, summary, caption } = houseLabel(house)
         const { icon, background } = assets[house]
         return {

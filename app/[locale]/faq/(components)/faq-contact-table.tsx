@@ -1,6 +1,6 @@
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useHousePhones } from '@/hooks/use-house-phones'
-import { HouseIdentifierSchema } from '@/lib/types'
+import { HouseIdentifierValues } from '@/lib/types'
 import { useTranslations } from 'next-intl'
 
 export function FAQContactTable() {
@@ -8,7 +8,7 @@ export function FAQContactTable() {
   const houseLabel = useHouseLabels()
   const housePhonesLabel = useHousePhones()
 
-  const phones = HouseIdentifierSchema.options.map((house) => ({
+  const phones = HouseIdentifierValues.map((house) => ({
     title: houseLabel(house).name,
     withinJapan: housePhonesLabel(house).domestic,
     overseas: housePhonesLabel(house).international

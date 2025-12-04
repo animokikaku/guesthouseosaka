@@ -1,7 +1,8 @@
 import { assets } from '@/lib/assets'
 import { z } from 'zod'
 
-export const HouseIdentifierSchema = z.enum(['apple', 'lemon', 'orange'])
+export const HouseIdentifierValues = ['orange', 'lemon', 'apple'] as const
+export const HouseIdentifierSchema = z.enum(HouseIdentifierValues)
 export type HouseIdentifier = z.infer<typeof HouseIdentifierSchema>
 
 export const routes = [

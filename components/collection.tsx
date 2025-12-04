@@ -9,7 +9,11 @@ import {
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
-import { HouseIdentifier, Routes } from '@/lib/types'
+import {
+  type HouseIdentifier,
+  HouseIdentifierValues,
+  Routes
+} from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { default as Image, ImageProps } from 'next/image'
 
@@ -30,9 +34,8 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
 
 export function Collection({ className }: { className?: string }) {
   const houseLabel = useHouseLabels()
-  const houseIdentifiers: HouseIdentifier[] = ['orange', 'apple', 'lemon']
 
-  const items: HouseItem[] = houseIdentifiers.map((house) => {
+  const items: HouseItem[] = HouseIdentifierValues.map((house) => {
     const { name, summary } = houseLabel(house)
     const { icon, background } = assets[house]
     return {

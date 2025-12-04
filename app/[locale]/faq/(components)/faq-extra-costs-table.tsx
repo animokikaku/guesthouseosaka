@@ -7,7 +7,7 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { useHouseLabels } from '@/hooks/use-house-labels'
-import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
+import { HouseIdentifier, HouseIdentifierValues } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useFormatter, useTranslations } from 'next-intl'
 
@@ -36,7 +36,7 @@ const ACCENT_CLASSES = {
 function FAQExtraCostsTableHeader() {
   const houseLabel = useHouseLabels()
 
-  const headers = HouseIdentifierSchema.options.map((house) => ({
+  const headers = HouseIdentifierValues.map((house) => ({
     name: houseLabel(house).name,
     accentClass: ACCENT_CLASSES[house]
   }))
@@ -182,7 +182,7 @@ export function FAQExtraCostsTable() {
                 <TableCell className="text-foreground font-medium">
                   <span>{row.label}</span>
                 </TableCell>
-                {HouseIdentifierSchema.options.map((house) => (
+                {HouseIdentifierValues.map((house) => (
                   <TableCell key={house}>
                     {renderAnswer(row.answers[house])}
                   </TableCell>

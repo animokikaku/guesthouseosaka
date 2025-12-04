@@ -3,16 +3,19 @@ import { assets } from '@/lib/assets'
 import { getHouseLabel } from '@/lib/house-labels'
 import { ImagesProvider } from '@/lib/images'
 import { getOpenGraphMetadata } from '@/lib/metadata'
-import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
+import {
+  HouseIdentifier,
+  HouseIdentifierSchema,
+  HouseIdentifierValues
+} from '@/lib/types'
 import type { Metadata } from 'next'
 import { hasLocale, Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 export function generateStaticParams() {
-  const houses = HouseIdentifierSchema.options
   return routing.locales.flatMap((locale) =>
-    houses.map((house) => ({ locale, house }))
+    HouseIdentifierValues.map((house) => ({ locale, house }))
   )
 }
 

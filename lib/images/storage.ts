@@ -2,7 +2,7 @@ import { url } from '@/lib/utils/blob-storage'
 import { ImageProps } from 'next/image'
 import { z } from 'zod'
 
-const CategoriesSchema = z.enum([
+export const CategoriesValues = [
   'room',
   'common-spaces',
   'facilities',
@@ -10,7 +10,9 @@ const CategoriesSchema = z.enum([
   'neighborhood',
   'floor-plan',
   'maps'
-])
+] as const
+
+const CategoriesSchema = z.enum(CategoriesValues)
 
 export type ImageCategory = z.infer<typeof CategoriesSchema>
 
@@ -58,7 +60,7 @@ export class HouseImageStorage {
 
   constructor(data: RawImageData[]) {
     this.categoryMap = new Map<ImageCategory, ImageWithProps[]>(
-      CategoriesSchema.options.map((category) => [category, []])
+      CategoriesValues.map((category) => [category, []])
     )
 
     for (const image of data) {
@@ -75,7 +77,7 @@ export class HouseImageStorage {
 
     this._categories = []
     // Build ordered categories
-    for (const category of CategoriesSchema.options) {
+    for (const category of CategoriesValues) {
       const images = this.categoryMap.get(category)
       if (images && images.length > 0) {
         this._categories.push({ category, images })

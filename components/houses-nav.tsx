@@ -5,15 +5,9 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link, usePathname } from '@/i18n/navigation'
-import { HouseIdentifier } from '@/lib/types'
+import { HouseIdentifierValues } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useEffect } from 'react'
-
-interface LinkProps {
-  href: string
-  name: string
-  className?: string
-}
 
 export function HousesNav({
   className,
@@ -24,7 +18,6 @@ export function HousesNav({
   const pathname = usePathname()
   const isMobile = useIsMobile()
 
-  const houseIdentifiers: HouseIdentifier[] = ['orange', 'apple', 'lemon']
   const classNames = {
     orange:
       'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
@@ -33,12 +26,6 @@ export function HousesNav({
     lemon:
       'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
   }
-
-  const links: LinkProps[] = houseIdentifiers.map((house) => ({
-    href: `/${house}#tabs`,
-    name: houseLabel(house).name,
-    className: classNames[house]
-  }))
 
   useEffect(() => {
     if (pathname.startsWith('/orange')) {
@@ -57,18 +44,18 @@ export function HousesNav({
     <div className="relative overflow-hidden">
       <ScrollArea className="max-w-[600px] lg:max-w-none">
         <div className={cn('flex items-center', className)} {...props}>
-          {links.map((link) => (
+          {HouseIdentifierValues.map((house) => (
             <Link
-              href={link.href}
-              key={link.href}
-              data-active={link.href.startsWith(pathname)}
+              key={`house-nav-${house}`}
+              href={`/${house}`}
+              data-active={pathname.startsWith(house, 1)}
               className={cn(
                 'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors',
-                link.className
+                classNames[house]
               )}
               scroll={!isMobile}
             >
-              {link.name}
+              {houseLabel(house).name}
             </Link>
           ))}
         </div>
