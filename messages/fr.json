@@ -313,7 +313,7 @@
       "company": "Animo Kikaku Co., Ltd. (« la Société », « nous », « notre ») respecte votre vie privée et s'engage à protéger vos informations personnelles.",
       "purpose": "Cette Politique de confidentialité explique comment nous collectons, utilisons, stockons et protégeons les informations que vous fournissez via les formulaires de contact et autres fonctionnalités de ce site Web (« le Service »)."
     },
-    "last_updated": "Dernière mise à jour : novembre 2025",
+    "last_updated": "Dernière mise à jour : {date}",
     "sections": {
       "changes": {
         "paragraphs": [

@@ -10,10 +10,13 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { useTranslations } from 'next-intl'
+import { useFormatter, useTranslations } from 'next-intl'
+
+const LAST_UPDATED_DATE = new Date(Date.UTC(2025, 11, 4))
 
 export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
   const t = useTranslations('LegalNoticeDialog')
+  const formatter = useFormatter()
   const intro = [t('intro.company'), t('intro.purpose')]
   const sections = [
     {
@@ -104,7 +107,13 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
           <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
         <div className="space-y-6 text-sm leading-6">
-          <p className="text-muted-foreground text-xs">{t('last_updated')}</p>
+          <p className="text-muted-foreground text-xs">
+            {t('last_updated', {
+              date: formatter.dateTime(LAST_UPDATED_DATE, {
+                dateStyle: 'long'
+              })
+            })}
+          </p>
           <div className="space-y-2">
             {intro.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>

@@ -316,7 +316,7 @@ declare const messages: {
       "company": "Animo Kikaku Co., Ltd. (“the Company”, “we”, “our”, or “us”) respects your privacy and is committed to protecting your personal information.",
       "purpose": "This Privacy Policy explains how we collect, use, store, and protect the information you provide through the contact forms and other features on this website (“the Service”)."
     },
-    "last_updated": "Last updated: November 2025",
+    "last_updated": "Last updated: {date}",
     "sections": {
       "changes": {
         "paragraphs": [
