@@ -5,7 +5,7 @@
       "faq": "FAQ",
       "phone": "Téléphone"
     },
-    "description": "Nous sommes là pour vous aider ! Choisissez l'option qui décrit le mieux votre demande et nous vous répondrons dès que possible.",
+    "description": "Nous recevons vos demandes via le formulaire de contact ou par téléphone. Dès réception, nous vous répondrons au plus vite.",
     "meta": {
       "description": "Contactez-nous pour toute demande ou question.",
       "title": "Contact"
@@ -42,7 +42,8 @@
     }
   },
   "FAQCard": {
-    "description": "Des questions ou besoin d'aide ? Notre équipe est là pour vous !",
+    "description": "Si vous avez des questions, contactez-nous par e-mail ou par téléphone.",
+    "subtext": "Selon l'heure, il se peut que nous ne puissions pas répondre au téléphone.",
     "title": "Vous avez d'autres questions ?"
   },
   "FAQContactTable": {
@@ -73,7 +74,7 @@
       "email": "E-mail",
       "phone": "Téléphone"
     },
-    "description": "Découvrez ici les informations essentielles pour profiter pleinement de votre séjour. Si votre question n'y figure pas, contactez-nous par téléphone ou par e-mail.",
+    "description": "Découvrez ici les informations essentielles pour profiter pleinement de votre séjour. Si votre question n'y figure pas, contactez-nous via le formulaire ou par téléphone.",
     "meta": {
       "description": "Trouvez des réponses aux questions les plus fréquemment posées sur nos maisons en commun.",
       "title": "FAQ"
@@ -89,7 +90,7 @@
     "close": "Fermer la galerie"
   },
   "HouseAbout": {
-    "heading": "À propos de ce lieu",
+    "heading": "À propos de {house}",
     "houses": {
       "apple": {
         "description": "Apple House place les résidents à une minute à pied de la station Daikokucho tout en restant proche de Namba. Chaque chambre privée comprend une salle de bain complète et une cuisine, offrant un confort comparable à un appartement pour les séjours moyens et longs.",
@@ -108,11 +109,11 @@
         ]
       },
       "orange": {
-        "description": "Orange House est un hébergement en chambre privée situé à côté du centre-ville d'Osaka. La maison combine style japonais traditionnel et confort quotidien, offrant une base paisible pour des séjours prolongés dans le quartier d'Abeno.",
+        "description": "Orange House est une colocation en chambres privées située dans le quartier rétro de Showachō à Abeno. Accès idéal au centre d'Osaka et échanges internationaux détendus dans notre salon de style japonais.",
         "highlights": [
           "Chambres privées avec cuisine (12 m²)",
           "Réductions pour longs séjours disponibles",
-          "Salon traditionnel sur le toit (100 m²) avec vue sur Abeno Harukas"
+          "Salon rooftop rétro japonais (100 m²) avec vue sur Abeno Harukas"
         ]
       }
     },
@@ -120,9 +121,9 @@
   },
   "HouseAmenities": {
     "categories": {
-      "accommodation": "Hébergement",
+      "accommodation": "Chambre",
       "bathroom": "Salle de bain",
-      "building_access": "Bâtiment et accès",
+      "building_access": "Autres équipements",
       "common_areas": "Espaces communs",
       "internet_climate": "Internet et confort",
       "kitchen_dining": "Cuisine et salle à manger",
@@ -131,7 +132,7 @@
     "heading": "Ce qu'offre cet endroit",
     "items": {
       "air_conditioning_heating": "Climatisation et chauffage",
-      "appliances": "Appareils ménagers (aspirateur, fer)",
+      "appliances": "Autres appareils ménagers (aspirateur, fer)",
       "bathroom_with_shower_bathtub": "Salle de bain avec douche et baignoire",
       "bicycle_parking": "Parking à vélos",
       "coffee_tea_corner": "Coin café et thé",
@@ -214,14 +215,14 @@
       },
       "orange": {
         "nearby": {
-          "harukas": "Abeno Harukas à environ 15 minutes à pied ; Qs Mall à environ 12 minutes à pied",
+          "harukas": "Abeno Harukas à 15 minutes à pied ; Qs Mall à 12 minutes à pied",
           "showacho_supermarket": "Supermarché proche de la station Showacho",
           "supermarkets": "Supermarchés à environ 5 minutes à pied"
         },
         "overview": "300m de hauteur! A seulement 15 minutes à pied du plus haut bâtiment du Japon « Abeno Harukas ». Situé à proximité des attractions populaires de la ville, avec un excellent transport en commun vers des endroits comme le château d'Osaka, l'Aquarium d'Osaka Kaiyukan, Universal Studios Japon, Tsutenkaku Tower. A seulement quelques minutes à pied des gares les plus proches. A distance de marche, vous trouverez des supermarchés, des magasins de proximité, des boutiques de 100¥, un centre de remise en forme, une boutique de vélos et la mairie d’arrondissement.",
         "stations": {
-          "fuminosato": "Station Fuminosato (métro ligne Tanimachi), sortie 6 — environ 3 minutes à pied",
-          "showacho": "Station Showacho (métro ligne Midosuji), sortie 2 — environ 7 minutes à pied",
+          "fuminosato": "Station Fuminosato (métro ligne Tanimachi), sortie 6 — 3 minutes à pied",
+          "showacho": "Station Showacho (métro ligne Midosuji), sortie 2 — 7 minutes à pied",
           "tennoji": "Tennoji / Abenobashi — environ 15 minutes à pied"
         }
       }
@@ -230,12 +231,12 @@
     "highlights": {
       "apple": "À distance de marche de Namba et à une minute seulement de la station Daikokucho.",
       "lemon": "Un accès idéal à la ligne de métro Midosuji vous relie à tout Osaka.",
-      "orange": "Un accès idéal à la ligne de métro Midosuji vous relie à tout Osaka."
+      "orange": "Un accès idéal aux lignes de métro Midosuji et Tanimachi vous relie à tout Osaka."
     },
     "sections": {
-      "getting_around": "Se déplacer",
+      "getting_around": "Stations les plus proches",
       "nearby": "À proximité",
-      "neighborhood": "Quartier"
+      "neighborhood": "Sites à visiter"
     }
   },
   "HousePricing": {
@@ -289,9 +290,9 @@
         "third_month": "3e mois : économisez 2 000 ¥"
       },
       "other_fees": {
-        "deposit": "Dépôt de garantie : 30 000 ¥ (remboursé à votre départ en l’absence de dommages)",
-        "dryer": "Sèche-linge : 100 ¥",
-        "service_fee": "Frais de service : 12 000 ¥ par mois",
+        "deposit": "Dépôt de garantie : 30 000 ¥ (remboursé à votre départ en l'absence de dégats)",
+        "dryer": "Sèche-linge : 100 ¥ par 30 minutes",
+        "service_fee": "Frais de gestion et charges communes : 12 000 ¥ par mois",
         "utilities": "Charges : environ 3 000–4 000 ¥ par mois (payez uniquement ce que vous consommez)",
         "washing_machine": "Machine à laver : gratuit"
       },
@@ -361,9 +362,7 @@
           "Demander la correction, l'ajout ou la suppression d'informations inexactes ou obsolètes",
           "Retirer votre consentement au traitement de vos informations (le cas échéant)"
         ],
-        "paragraphs": [
-          "Vous avez le droit de :"
-        ],
+        "paragraphs": ["Vous avez le droit de :"],
         "title": "5. Vos droits"
       },
       "security": {
@@ -564,12 +563,12 @@
     "apple": {
       "caption": "Chaleur et confort avec des équipements modernes",
       "name": "Apple House",
-      "summary": "Colocation à 8 minutes à pied de la station de Namba"
+      "summary": "Chambres privées bien équipées et salon haut de gamme"
     },
     "lemon": {
       "caption": "Hébergement lumineux et accueillant pour un séjour revigorant",
       "name": "Lemon House",
-      "summary": "Chambres privées bien équipées et salon luxueux"
+      "summary": "Share house à 8 minutes de la station de Namba"
     },
     "orange": {
       "caption": "Un accès idéal au quartier rétro de Showachō. Des rencontres internationales dans notre salon.",
@@ -655,29 +654,29 @@
     },
     "orange": {
       "room": {
-        "all_rooms_set_in_traditional_japanese_style": "Toutes les chambres sont aménagées dans un style japonais traditionnel.",
+        "all_rooms_set_in_traditional_japanese_style": "Toutes les chambres adoptent un style japonais rétro.",
         "each_room_has_water_and_gas": "Chaque chambre dispose d'eau et de gaz. Il y a également une cuisinière à gaz.",
-        "closet_as_desk_with_lamp_bookshelf_and_outlets": "Vous pouvez également utiliser le placard comme bureau. Il y a une lampe, une étagère et plusieurs prises murales."
+        "closet_as_desk_with_lamp_bookshelf_and_outlets": "Le placard peut aussi servir de bureau avec lampe, étagère et plusieurs prises murales."
       },
       "common-spaces": {
-        "traditional_japanese_style_lounge": "Salon de style japonais traditionnel. 100 m² (1200 pi²). Ouvert 24h/24",
+        "traditional_japanese_style_lounge": "Salon de style japonais rétro. 100 m² (1200 pi²). Ouvert 24h/24",
         "tv_show_by_abc": "Nous sommes apparus dans une émission télévisée d'ABC, une chaîne de télévision japonaise",
         "lounge_equipped_with_large_air_conditioner": "Le salon est équipé d'un grand climatiseur, très confortable que ce soit en été ou en hiver. Il y a également un évier.",
-        "large_collection_of_complete_comic_sets": "Nous avons une grande collection de séries de mangas complètes pour votre plaisir.",
+        "large_collection_of_complete_comic_sets": "Grand choix de séries de mangas complètes à disposition.",
         "party_at_lounge_about_every_month": "Nous organisons une fête au salon environ tous les mois.",
         "coffee_tea_and_japanese_tea_available": "Café, thé et thé japonais disponibles dans la section de boissons gratuites."
       },
       "building-features": {
         "see_abeno_harukas_from_rooftop": "Vous pouvez voir Abeno Harukas depuis le toit-terrasse",
-        "showacho_traditional_area": "Showacho, le quartier traditionnel où les maisons ont des toits en tuiles de style japonais"
+        "showacho_traditional_area": "Showacho est un quartier rétro bordé de maisons aux toits en tuiles japonaises."
       },
       "neighborhood": {
-        "supermarket_nearby_only_minutes_walk": "Il y a un supermarché à proximité, à seulement 5 minutes à pied",
-        "supermarket_by_showacho_station": "Il y a également un supermarché près de la gare de Showacho.",
-        "stylish_stores_behind_station": "Il y a de nombreuses boutiques élégantes derrière la gare qui ont été rénovées à partir d'anciennes maisons japonaises traditionnelles",
+        "supermarket_nearby_only_minutes_walk": "Supermarché à 5 minutes à pied.",
+        "supermarket_by_showacho_station": "Supermarché également juste devant la gare de Showacho.",
+        "stylish_stores_behind_station": "Derrière la gare, des boutiques tendance installées dans d'anciennes maisons de rangée rénovées.",
         "minutes_walk_to_abeno_harukas": "15 minutes à pied d'Abeno Harukas",
-        "minutes_walk_to_biggest_shopping_mall": "12 minutes à pied du plus grand centre commercial d'Osaka \"Q's mall\"",
-        "hanami_cherry_blossom_festival": "Vous pouvez profiter du Hanami (festival des cerisiers en fleurs) au printemps au parc Momogaike !"
+        "minutes_walk_to_biggest_shopping_mall": "12 minutes à pied du « Q's Mall », l'un des plus grands centres commerciaux d'Osaka.",
+        "hanami_cherry_blossom_festival": "Au printemps, profitez des cerisiers en fleurs au parc Momogaike."
       },
       "maps": {
         "route_map": "Plan d'accès"
@@ -686,7 +685,7 @@
         "orange_house_floor_plan": "Plan d'étage d'Orange House"
       },
       "facilities": {
-        "shower_room_behind_curtain": "Il y a une douche derrière le rideau",
+        "shower_room_behind_curtain": "Derrière le rideau noren se trouve la douche.",
         "shower_available_hours_for_free": "La douche est disponible 24h/24, gratuitement",
         "equipped_with_washlet": "Équipé d'un washlet. Les sièges de toilette sont chauds et confortables même en hiver"
       }

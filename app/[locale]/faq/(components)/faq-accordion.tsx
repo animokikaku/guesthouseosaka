@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/accordion'
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { HouseIdentifierValues } from '@/lib/types'
-import { useTranslations } from 'next-intl'
+import { useFormatter, useTranslations } from 'next-intl'
 
 type FaqItem = {
   id: string
@@ -21,6 +21,7 @@ type FaqItem = {
 export function FAQAccordion() {
   const t = useTranslations('FAQAccordion')
   const houseLabel = useHouseLabels()
+  const formatter = useFormatter()
 
   const items: FaqItem[] = [
     {
@@ -71,8 +72,8 @@ export function FAQAccordion() {
               <li key={`floors-and-rooms-${id}`}>
                 <strong>{houseLabel(id).name}: </strong>
                 {t('floors_and_rooms.format', {
-                  floors: `${floors}`,
-                  rooms: `${rooms}`
+                  floors: formatter.number(floors),
+                  rooms: formatter.number(rooms)
                 })}
               </li>
             )

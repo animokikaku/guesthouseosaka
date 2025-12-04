@@ -48,7 +48,7 @@ export function HousesNav({
             <Link
               key={`house-nav-${house}`}
               href={`/${house}`}
-              data-active={pathname.startsWith(house, 1)}
+              data-active={pathname.startsWith(`/${house}`)}
               className={cn(
                 'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors',
                 classNames[house]

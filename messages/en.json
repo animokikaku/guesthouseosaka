@@ -5,7 +5,7 @@
       "faq": "FAQ",
       "phone": "Phone"
     },
-    "description": "We're here to help! Choose the option that best describes your inquiry and we'll get back to you as soon as possible.",
+    "description": "Reach us via the contact form or by phone. We'll reply as quickly as possible.",
     "meta": {
       "description": "Get in touch with us for any inquiries or questions.",
       "title": "Contact"
@@ -42,7 +42,8 @@
     }
   },
   "FAQCard": {
-    "description": "Have questions or need assistance? Our team is here to help!",
+    "description": "If you have questions, feel free to reach us by email or phone.",
+    "subtext": "We may not be able to answer calls at certain times.",
     "title": "Still have questions?"
   },
   "FAQContactTable": {
@@ -73,7 +74,7 @@
       "email": "Email",
       "phone": "Phone"
     },
-    "description": "Here you'll find the key information to make the most of your stay. If you don't see your question here, please contact us by phone or email.",
+    "description": "Here you'll find the key information to make the most of your stay. If you don't see your question here, please contact us via the inquiry form or by phone.",
     "meta": {
       "description": "Find answers to common questions about our share houses.",
       "title": "FAQ"
@@ -89,7 +90,7 @@
     "close": "Close gallery"
   },
   "HouseAbout": {
-    "heading": "About this place",
+    "heading": "About {house}",
     "houses": {
       "apple": {
         "description": "Apple House places residents within a one-minute walk of Daikokucho Station while keeping Namba in easy reach. Every private room includes a full bathroom and kitchen, delivering condo-like comfort for medium and long stays.",
@@ -108,11 +109,11 @@
         ]
       },
       "orange": {
-        "description": "Orange House is a private room accommodation located beside the Osaka city center. The house combines traditional Japanese styling with everyday conveniences, making it a calm base for longer stays in the Abeno area.",
+        "description": "Orange House is a private-room share house in retro Showachō, Abeno Ward. Enjoy prime access to central Osaka and relax with international friends in our Japanese-style lounge.",
         "highlights": [
           "Private rooms with kitchen (12 m²)",
           "Long‑stay discounts available",
-          "Traditional rooftop lounge (100 m²) with Abeno Harukas views"
+          "Retro Japanese rooftop lounge (100 m²) with Abeno Harukas views"
         ]
       }
     },
@@ -120,9 +121,9 @@
   },
   "HouseAmenities": {
     "categories": {
-      "accommodation": "Accommodation",
+      "accommodation": "Room",
       "bathroom": "Bathroom",
-      "building_access": "Building & access",
+      "building_access": "Other facilities",
       "common_areas": "Common areas",
       "internet_climate": "Internet & climate",
       "kitchen_dining": "Kitchen & dining",
@@ -131,7 +132,7 @@
     "heading": "What this place offers",
     "items": {
       "air_conditioning_heating": "Air conditioning & heating",
-      "appliances": "Appliances (vacuum, iron)",
+      "appliances": "Other appliances (vacuum, iron)",
       "bathroom_with_shower_bathtub": "Bathroom with shower & bathtub",
       "bicycle_parking": "Bicycle parking",
       "coffee_tea_corner": "Coffee & tea corner",
@@ -214,14 +215,14 @@
       },
       "orange": {
         "nearby": {
-          "harukas": "Abeno Harukas about 15 minutes on foot; Qs Mall about 12 minutes on foot",
+          "harukas": "Abeno Harukas 15 minutes on foot; Qs Mall 12 minutes on foot",
           "showacho_supermarket": "Supermarket at Showacho Station",
           "supermarkets": "Supermarkets within about 5 minutes on foot"
         },
         "overview": "300m height! Only 15 minutes walk to the highest building in Japan “Abeno Harukas” Located near popular city attractions, with great public transportation to places like Osaka Castle, Osaka Aquarium Kaiyukan, Universal Studios Japan, Tsūtenkaku Tower. Only a few minutes walk to the nearest stations. Within walking distance, there are supermarkets, convenience stores, ¥100 shops, fitness center, bicycle shop and the ward office.",
         "stations": {
-          "fuminosato": "Fuminosato Station (Subway Tanimachi Line), Exit 6 — about 3 minutes on foot",
-          "showacho": "Showacho Station (Subway Midosuji Line), Exit 2 — about 7 minutes on foot",
+          "fuminosato": "Fuminosato Station (Subway Tanimachi Line), Exit 6 — 3 minutes on foot",
+          "showacho": "Showacho Station (Subway Midosuji Line), Exit 2 — 7 minutes on foot",
           "tennoji": "Tennoji / Abenobashi — about 15 minutes on foot"
         }
       }
@@ -230,12 +231,12 @@
     "highlights": {
       "apple": "Walking distance to Namba and reach Daikokucho Station in just one minute.",
       "lemon": "Excellent access on the Subway Midosuji Line keeps you connected across Osaka.",
-      "orange": "Excellent access on the Subway Midosuji Line keeps you connected across Osaka."
+      "orange": "Excellent access on the Subway Midosuji and Tanimachi Lines keeps you connected across Osaka."
     },
     "sections": {
-      "getting_around": "Getting around",
+      "getting_around": "Nearby stations",
       "nearby": "What's nearby",
-      "neighborhood": "Neighborhood"
+      "neighborhood": "Sightseeing"
     }
   },
   "HousePricing": {
@@ -289,9 +290,9 @@
         "third_month": "3rd month: Save ¥2,000"
       },
       "other_fees": {
-        "deposit": "Deposit: ¥30,000 (returned when you leave, if no damage)",
-        "dryer": "Dryer: ¥100",
-        "service_fee": "Service fee: ¥12,000 per month",
+        "deposit": "Deposit: ¥30,000 (refunded at move-out if there is no damage)",
+        "dryer": "Dryer: ¥100 per 30 minutes",
+        "service_fee": "Management and common service fee: ¥12,000 per month",
         "utilities": "Utilities: About ¥3,000 ~ ¥4,000 per month (you pay what you use)",
         "washing_machine": "Washing machine: Free"
       },
@@ -361,9 +362,7 @@
           "Request correction, addition, or deletion of inaccurate or outdated information",
           "Withdraw your consent to the processing of your information (where applicable)"
         ],
-        "paragraphs": [
-          "You have the right to:"
-        ],
+        "paragraphs": ["You have the right to:"],
         "title": "5. Your Rights"
       },
       "security": {
@@ -564,12 +563,12 @@
     "apple": {
       "caption": "Experience the warmth and comfort with modern amenities",
       "name": "Apple House",
-      "summary": "Share house 8 minutes walk from Namba Station"
+      "summary": "Well-appointed private rooms and a luxe lounge"
     },
     "lemon": {
       "caption": "Bright and cheerful accommodation perfect for a refreshing stay",
       "name": "Lemon House",
-      "summary": "Well-equipped private rooms and a luxurious lounge"
+      "summary": "Share house 8 minutes from Namba Station"
     },
     "orange": {
       "caption": "Prime access to retro Showachō. International crowd in our Japanese-style lounge.",
@@ -655,29 +654,29 @@
     },
     "orange": {
       "room": {
-        "all_rooms_set_in_traditional_japanese_style": "All rooms are set in traditional Japanese style.",
+        "all_rooms_set_in_traditional_japanese_style": "All rooms are retro-inspired Japanese style.",
         "each_room_has_water_and_gas": "Each room has both water and gas. There is also a gas cooker.",
-        "closet_as_desk_with_lamp_bookshelf_and_outlets": "You can use the closet as a desk as well. There is a lamp, bookshelf, and multiple wall outlets."
+        "closet_as_desk_with_lamp_bookshelf_and_outlets": "The closet can double as a desk with a lamp, bookshelf, and multiple wall outlets."
       },
       "common-spaces": {
-        "traditional_japanese_style_lounge": "Traditional Japanese style lounge. 100sq.m (1200sq.ft). Open 24 hours",
+        "traditional_japanese_style_lounge": "Retro Japanese-style lounge. 100sq.m (1200sq.ft). Open 24 hours",
         "tv_show_by_abc": "We were on a TV show by ABC, a Japanese broadcasting station",
         "lounge_equipped_with_large_air_conditioner": "The lounge is equipped with a large air conditioner, very comfortable whether it's summer or winter. There is also a sink.",
-        "large_collection_of_complete_comic_sets": "We have a large collection of complete comic sets for you to enjoy.",
+        "large_collection_of_complete_comic_sets": "We have a large collection of complete manga sets for you to enjoy.",
         "party_at_lounge_about_every_month": "We hold a party at lounge about every month.",
         "coffee_tea_and_japanese_tea_available": "Coffee, tea, and Japanese tea available at the free drink section."
       },
       "building-features": {
         "see_abeno_harukas_from_rooftop": "You can see Abeno Harukas from the rooftop",
-        "showacho_traditional_area": "Showacho, the traditional area where houses have Japanese style tiled roofs"
+        "showacho_traditional_area": "Showacho is a retro area lined with Japanese-style tiled roofs."
       },
       "neighborhood": {
-        "supermarket_nearby_only_minutes_walk": "There's a supermarket nearby, only 5 minutes walk",
-        "supermarket_by_showacho_station": "There's also a supermarket by Showacho station.",
-        "stylish_stores_behind_station": "There are many stylish stores behind the station that were renovated from traditional Japanese tenement houses",
+        "supermarket_nearby_only_minutes_walk": "Supermarket 5 minutes away on foot.",
+        "supermarket_by_showacho_station": "There's also a supermarket right by Showacho Station.",
+        "stylish_stores_behind_station": "Behind the station you'll find stylish shops in restored Japanese rowhouses.",
         "minutes_walk_to_abeno_harukas": "15 minutes walk to Abeno Harukas",
-        "minutes_walk_to_biggest_shopping_mall": "12 minutes walk to the biggest shopping mall in Osaka \"Q's mall\"",
-        "hanami_cherry_blossom_festival": "You can enjoy Hanami (cherry blossom festival) in Spring at Momogaike Park!"
+        "minutes_walk_to_biggest_shopping_mall": "12 minutes walk to one of Osaka's largest shopping malls \"Q's mall\"",
+        "hanami_cherry_blossom_festival": "Enjoy cherry blossoms at Momogaike Park in spring."
       },
       "maps": {
         "route_map": "Route map"
@@ -686,7 +685,7 @@
         "orange_house_floor_plan": "Orange House floor plan"
       },
       "facilities": {
-        "shower_room_behind_curtain": "There is a shower room behind the curtain",
+        "shower_room_behind_curtain": "Behind the noren curtain, you'll find the shower.",
         "shower_available_hours_for_free": "Shower is available 24 hours, for free",
         "equipped_with_washlet": "Equipped with washlet. Toilet seats are warm and comfortable even in the winter"
       }

@@ -1,11 +1,14 @@
 import { HouseBuilding } from '@/components/house/house-building'
 import { HouseLocationModal } from '@/components/house/house-location-modal'
 import { Button } from '@/components/ui/button'
+import { useHouseLabels } from '@/hooks/use-house-labels'
 import { HouseIdentifier } from '@/lib/types'
 import { useTranslations } from 'next-intl'
 
 export function HouseAbout({ id }: { id: HouseIdentifier }) {
   const t = useTranslations('HouseAbout')
+  const houseLabel = useHouseLabels()
+  const { name } = houseLabel(id)
 
   const { description, specificities } = {
     apple: {
@@ -36,7 +39,9 @@ export function HouseAbout({ id }: { id: HouseIdentifier }) {
 
   return (
     <section>
-      <h2 className="mb-6 text-2xl font-semibold">{t('heading')}</h2>
+      <h2 className="mb-6 text-2xl font-semibold">
+        {t('heading', { house: name })}
+      </h2>
       <div className="mb-4">
         <HouseBuilding id={id} />
       </div>
@@ -57,7 +62,7 @@ export function HouseAbout({ id }: { id: HouseIdentifier }) {
       )}
 
       <div className="mt-6">
-        <HouseLocationModal id={id} title={t('heading')}>
+        <HouseLocationModal id={id} title={t('heading', { house: name })}>
           <Button variant="outline">{t('modal_trigger')}</Button>
         </HouseLocationModal>
       </div>

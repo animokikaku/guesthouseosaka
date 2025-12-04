@@ -5,12 +5,12 @@
       "faq": "よくある質問",
       "phone": "電話"
     },
-    "description": "私たちがお手伝いします。お問い合わせ内容に最も近い項目を選択していただければ、できるだけ早くご連絡いたします。",
+    "description": "お問い合わせフォーム、お電話で受け付けております。ご連絡をいただきましたらできるだけ早くお返事いたします。",
     "meta": {
       "description": "ご不明点やご質問がございましたら、お気軽にお問い合わせください。",
       "title": "お問い合わせ"
     },
-    "title": "お問い合わせください"
+    "title": "お問い合わせ"
   },
   "FAQAccordion": {
     "curfew": {
@@ -21,7 +21,7 @@
       "question": "家賃以外にどんな費用がありますか？"
     },
     "floors_and_rooms": {
-      "format": "{floors}階建て、{rooms}室。",
+      "format": "{floors}階建て・{rooms}室",
       "question": "フロア数と部屋数は？"
     },
     "manager_in_residence": {
@@ -42,8 +42,9 @@
     }
   },
   "FAQCard": {
-    "description": "ご質問やサポートが必要ですか？私たちのチームがお手伝いします！",
-    "title": "まだ疑問がありますか？"
+    "description": "ご質問がある場合は、メールまたはお電話でお気軽にお問い合わせください。",
+    "subtext": "時間帯によってお電話に出れない場合もありますのであらかじめご了承ください。",
+    "title": "まだご不明な点がありますか？"
   },
   "FAQContactTable": {
     "from_overseas": "海外から",
@@ -73,7 +74,7 @@
       "email": "メール",
       "phone": "電話"
     },
-    "description": "滞在を最大限に楽しむための重要な情報をまとめました。ここにない内容は、お電話またはメールでお問い合わせください。",
+    "description": "滞在を最大限に楽しむための重要な情報をまとめました。ご質問が見つからない場合は、問い合わせフォームまたはお電話でお問い合わせください。",
     "meta": {
       "description": "シェアハウスに関するよくある質問への回答をご覧ください。",
       "title": "よくある質問"
@@ -89,7 +90,7 @@
     "close": "ギャラリーを閉じる"
   },
   "HouseAbout": {
-    "heading": "この場所について",
+    "heading": "{house}について",
     "houses": {
       "apple": {
         "description": "アップルハウスは大国町駅まで徒歩1分、難波へもすぐにアクセスできます。すべての個室にバスルームとキッチンが備わり、中長期滞在でもマンションのような快適さを提供します。",
@@ -108,11 +109,11 @@
         ]
       },
       "orange": {
-        "description": "オレンジハウスは大阪市中心部のそばにある全室個室の宿泊施設です。和の趣と日常の利便性を兼ね備え、阿倍野エリアでの長期滞在に最適な静かな拠点になります。",
+        "description": "オレンジハウスは阿倍野区のレトロな街「昭和町」にある個室のシェアハウスです。大阪の中心部までのアクセスは最高！和風ラウンジでまったり国際交流が楽しめます。",
         "highlights": [
           "キッチン付き個室（12㎡）",
           "長期滞在割引あり",
-          "あべのハルカスを望む伝統的な屋上ラウンジ（100㎡）"
+          "あべのハルカスの景色を望む和風レトロな屋上ラウンジ（100㎡）"
         ]
       }
     },
@@ -120,18 +121,18 @@
   },
   "HouseAmenities": {
     "categories": {
-      "accommodation": "宿泊設備",
+      "accommodation": "居室",
       "bathroom": "バスルーム",
-      "building_access": "建物・アクセス",
+      "building_access": "その他の設備",
       "common_areas": "共用エリア",
       "internet_climate": "インターネット＆空調",
       "kitchen_dining": "キッチン＆ダイニング",
-      "laundry": "コインランドリー"
+      "laundry": "ランドリー施設"
     },
     "heading": "設備・サービス",
     "items": {
       "air_conditioning_heating": "冷暖房",
-      "appliances": "家電（掃除機・アイロン）",
+      "appliances": "その他家電（掃除機・アイロン）",
       "bathroom_with_shower_bathtub": "シャワー・バスタブ付きバスルーム",
       "bicycle_parking": "駐輪場",
       "coffee_tea_corner": "コーヒー＆ティーコーナー",
@@ -144,10 +145,10 @@
       "large_refrigerator": "大型冷蔵庫",
       "lounge": "ラウンジ",
       "lounge_kitchen_oven": "オーブン付きラウンジキッチン",
-      "mailbox": "郵便受け",
+      "mailbox": "メールボックス",
       "microwave_toaster": "電子レンジ＆トースター",
       "microwave_toaster_rice_cooker": "電子レンジ・トースター・炊飯器",
-      "monthly_parties": "月例パーティー",
+      "monthly_parties": "マンスリーパーティー",
       "refrigerator": "冷蔵庫",
       "refrigerator_freezer": "冷蔵冷凍庫",
       "rooftop_lounge": "ルーフトップラウンジ（100㎡）",
@@ -214,14 +215,14 @@
       },
       "orange": {
         "nearby": {
-          "harukas": "阿倍野ハルカスまで徒歩約15分／あべのキューズモールまで徒歩約12分",
+          "harukas": "あべのハルカスまで徒歩15分、Q's mallまで徒歩12分",
           "showacho_supermarket": "昭和町駅のスーパー",
           "supermarkets": "徒歩約5分圏内にスーパーがあります"
         },
         "overview": "高さ300m！日本一高いビル「阿倍野ハルカス」まで徒歩15分。大阪城、水族館海遊館、ユニバーサル・スタジオ・ジャパン、通天閣など人気スポットへのアクセスも良好。最寄り駅までは徒歩数分。徒歩圏内にスーパー、コンビニ、100円ショップ、フィットネス、サイクルショップ、区役所があります。",
         "stations": {
-          "fuminosato": "文の里駅（地下鉄谷町線）6番出口から徒歩約3分",
-          "showacho": "昭和町駅（地下鉄御堂筋線）2番出口まで徒歩約7分",
+          "fuminosato": "文の里駅（地下鉄谷町線）6番出口 — 徒歩3分",
+          "showacho": "昭和町駅（地下鉄御堂筋線）2番出口 — 徒歩7分",
           "tennoji": "天王寺／阿倍野橋まで徒歩約15分"
         }
       }
@@ -230,12 +231,12 @@
     "highlights": {
       "apple": "難波は徒歩圏内、大国町駅へは歩いて1分です。",
       "lemon": "地下鉄御堂筋線で大阪市内のどこへでもスムーズにアクセスできます。",
-      "orange": "地下鉄御堂筋線で大阪市内のどこへでもスムーズにアクセスできます。"
+      "orange": "地下鉄御堂筋線、谷町線で大阪市内のどこへでもスムーズにアクセスできます。"
     },
     "sections": {
-      "getting_around": "周辺情報",
+      "getting_around": "最寄り駅",
       "nearby": "周辺スポット",
-      "neighborhood": "周辺環境"
+      "neighborhood": "観光案内"
     }
   },
   "HousePricing": {
@@ -289,9 +290,9 @@
         "third_month": "3か月目：¥2,000割引"
       },
       "other_fees": {
-        "deposit": "デポジット：¥30,000（退去時に損傷がなければ返金）",
-        "dryer": "乾燥機：¥100",
-        "service_fee": "サービス料：月額¥12,000",
+        "deposit": "デポジット：¥30,000（退去時に損傷等がなければ返金）",
+        "dryer": "乾燥機：¥100／30分",
+        "service_fee": "管理費・共益費：月額¥12,000",
         "utilities": "光熱費：月額約¥3,000～¥4,000（使用量に応じてお支払い）",
         "washing_machine": "洗濯機：無料"
       },
@@ -564,12 +565,12 @@
     "apple": {
       "caption": "温かみと快適さをモダンな設備で提供",
       "name": "アップルハウス",
-      "summary": "難波駅から徒歩8分のシェアハウス"
+      "summary": "充実した個室、豪華なラウンジ"
     },
     "lemon": {
       "caption": "リフレッシュにぴったりの明るく爽やかな宿泊先",
       "name": "レモンハウス",
-      "summary": "設備の整った個室と贅沢なラウンジ"
+      "summary": "なんば駅徒歩８分のシェアハウス"
     },
     "orange": {
       "caption": "レトロな昭和町でアクセス最高。和風ラウンジでまったり国際交流",
@@ -655,29 +656,29 @@
     },
     "orange": {
       "room": {
-        "all_rooms_set_in_traditional_japanese_style": "すべての部屋は伝統的な和風スタイルです。",
+        "all_rooms_set_in_traditional_japanese_style": "レトロ系で統一された和室。",
         "each_room_has_water_and_gas": "各部屋に水道とガスがあります。ガスコンロも設置されています。",
-        "closet_as_desk_with_lamp_bookshelf_and_outlets": "クローゼットを机としても使用できます。ランプ、本棚、複数のコンセントがあります。"
+        "closet_as_desk_with_lamp_bookshelf_and_outlets": "押入は机代わりにも使えます。ライト、本棚、コンセントもあり。"
       },
       "common-spaces": {
-        "traditional_japanese_style_lounge": "伝統的な和風ラウンジ。100平方メートル（1200平方フィート）。24時間開放",
+        "traditional_japanese_style_lounge": "和風レトロ系で統一されたラウンジ。100㎡の広さがあります。24時間利用可能。",
         "tv_show_by_abc": "日本の放送局ABCのテレビ番組に出演しました",
         "lounge_equipped_with_large_air_conditioner": "ラウンジには大型エアコンが設置されており、夏でも冬でも快適です。シンクもあります。",
-        "large_collection_of_complete_comic_sets": "お楽しみいただけるよう、完全な漫画セットを多数所蔵しています。",
+        "large_collection_of_complete_comic_sets": "たくさんの漫画を全巻セットでそろえています。",
         "party_at_lounge_about_every_month": "ラウンジで約1ヶ月ごとにパーティーを開催しています。",
         "coffee_tea_and_japanese_tea_available": "無料ドリンクコーナーでコーヒー、紅茶、日本茶をご利用いただけます。"
       },
       "building-features": {
         "see_abeno_harukas_from_rooftop": "屋上からあべのハルカスが見えます",
-        "showacho_traditional_area": "庄内町、日本風の瓦屋根の家がある伝統的なエリア"
+        "showacho_traditional_area": "瓦屋根の家が立ち並ぶレトロな街、昭和町。"
       },
       "neighborhood": {
-        "supermarket_nearby_only_minutes_walk": "近くにスーパーマーケットがあり、徒歩5分です",
-        "supermarket_by_showacho_station": "庄内町駅の近くにもスーパーマーケットがあります。",
-        "stylish_stores_behind_station": "駅の裏には、伝統的な日本の長屋から改装されたおしゃれな店がたくさんあります",
+        "supermarket_nearby_only_minutes_walk": "徒歩5分のところにスーパーあり。",
+        "supermarket_by_showacho_station": "昭和町駅前にもスーパーあり。",
+        "stylish_stores_behind_station": "駅裏には長屋を再生したオシャレなお店が並びます。",
         "minutes_walk_to_abeno_harukas": "あべのハルカスまで徒歩15分",
-        "minutes_walk_to_biggest_shopping_mall": "大阪最大のショッピングモール「Q's mall」まで徒歩12分",
-        "hanami_cherry_blossom_festival": "春には桃ヶ池公園で花見（桜祭り）をお楽しみいただけます！"
+        "minutes_walk_to_biggest_shopping_mall": "大阪市内最大級のショッピングモール「Q's mall」まで徒歩12分。",
+        "hanami_cherry_blossom_festival": "桃ヶ池公園では春になるとお花見が楽しめます。桃ヶ池公園では春になるとお花見が楽しめます。"
       },
       "maps": {
         "route_map": "アクセス地図"
@@ -686,7 +687,7 @@
         "orange_house_floor_plan": "オレンジハウスの間取り図"
       },
       "facilities": {
-        "shower_room_behind_curtain": "カーテンの後ろにシャワールームがあります",
+        "shower_room_behind_curtain": "のれんの向こうはシャワーになっています。",
         "shower_available_hours_for_free": "シャワーは24時間無料でご利用いただけます",
         "equipped_with_washlet": "ウォシュレット付き。冬でも便座が温かく快適です"
       }

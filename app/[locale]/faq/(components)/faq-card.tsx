@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
@@ -14,9 +15,7 @@ export default function FAQCard() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">
-          {t('title')}
-        </CardTitle>
+        <CardTitle className="text-2xl font-bold">{t('title')}</CardTitle>
         <CardDescription className="text-muted-foreground text-md">
           {t('description')}
         </CardDescription>
@@ -26,6 +25,9 @@ export default function FAQCard() {
           <FAQContactTable />
         </div>
       </CardContent>
+      <CardFooter className="flex items-center justify-center">
+        <div className="text-muted-foreground text-sm">＊{t('subtext')}</div>
+      </CardFooter>
     </Card>
   )
 }
