@@ -60,7 +60,6 @@ export function getHouseStorage(house: HouseIdentifier): HouseImageStorage {
 export {
   HouseImageStorage,
   type ImageCategory,
-  type ImageCategoryGroup,
   type ImageWithProps,
   type RawImageData
 } from './storage'

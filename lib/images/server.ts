@@ -5,7 +5,11 @@ import { getTranslations } from 'next-intl/server'
 import { cache } from 'react'
 import { getHouseStorage } from './index'
 import { IMAGE_LABEL_KEYS, ImageLabelKeys, type ImageWithAlt } from './labels'
-import type { HouseImageStorage, ImageWithProps } from './storage'
+import type {
+  HouseImageStorage,
+  ImageCategory,
+  ImageWithProps
+} from './storage'
 
 type ImagesAPI = {
   /**
@@ -15,9 +19,9 @@ type ImagesAPI = {
     options?: Parameters<HouseImageStorage['images']>[0]
   ) => ImageWithAlt[]
   /**
-   * Get categories with alt text included in images
+   * Get the number of images in a category
    */
-  categories: () => { category: string; images: ImageWithAlt[] }[]
+  count: (options?: { category?: ImageCategory }) => number
   /**
    * Get the index of an image by its ID
    */
@@ -86,11 +90,7 @@ export async function getImages(house: HouseIdentifier): Promise<ImagesAPI> {
 
   return {
     images: (options) => storage.images(options).map(withAlt),
-    categories: () =>
-      storage.categories().map(({ category, images }) => ({
-        category,
-        images: images.map(withAlt)
-      })),
+    count: (options) => storage.count(options),
     indexOf: storage.indexOf.bind(storage)
   }
 }

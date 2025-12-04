@@ -2,7 +2,8 @@
 
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { ImageWithAlt, useImages } from '@/lib/images'
+import { useImages } from '@/lib/images'
+import { CategoriesValues, ImageCategory } from '@/lib/images/storage'
 import { store } from '@/lib/store'
 import { useTranslations } from 'next-intl'
 import { default as Image } from 'next/image'
@@ -10,10 +11,8 @@ import { GalleryImageButton } from './gallery-image-button'
 
 export function HouseGalleryClient() {
   const t = useTranslations('HouseGalleryClient')
-  const storage = useImages()
-  const categories = storage.categories()
 
-  const categoryMap = {
+  const categoryMap: Record<ImageCategory, string> = {
     room: t('categories.room'),
     'common-spaces': t('categories.common_spaces'),
     facilities: t('categories.facilities'),
@@ -29,13 +28,11 @@ export function HouseGalleryClient() {
       <div className="space-y-4">
         <ScrollArea className="w-full">
           <div className="flex gap-2 pb-4">
-            {categories.map(({ category, images }) => (
+            {CategoriesValues.map((category) => (
               <CategoryThumbnail
                 key={`thumbnail-${category}`}
                 id={category}
                 title={categoryMap[category]}
-                image={images[0]}
-                count={images.length}
               />
             ))}
           </div>
@@ -45,12 +42,11 @@ export function HouseGalleryClient() {
 
       {/* All Categories Grid */}
       <div className="space-y-12">
-        {categories.map(({ category, images }) => (
+        {CategoriesValues.map((category) => (
           <CategoryGrid
             key={`grid-${category}`}
             id={category}
             title={categoryMap[category]}
-            images={images}
           />
         ))}
       </div>
@@ -60,15 +56,17 @@ export function HouseGalleryClient() {
 
 function CategoryThumbnail({
   id,
-  title,
-  image,
-  count
+  title
 }: {
-  id: string
+  id: ImageCategory
   title: string
-  image: ImageWithAlt
-  count: number
 }) {
+  const storage = useImages()
+  const count = storage.count({ category: id })
+  const [image] = storage.images({ category: id, limit: 1 })
+
+  if (!image) return null
+
   return (
     <button
       onClick={() => {
@@ -103,15 +101,12 @@ function CategoryThumbnail({
   )
 }
 
-function CategoryGrid({
-  id,
-  title,
-  images
-}: {
-  id: string
-  title: string
-  images: ImageWithAlt[]
-}) {
+function CategoryGrid({ id, title }: { id: ImageCategory; title: string }) {
+  const storage = useImages()
+  const images = storage.images({ category: id })
+
+  if (images.length === 0) return null
+
   return (
     <div id={id} className="scroll-mt-8 space-y-4">
       <h3 className="text-xl font-semibold">{title}</h3>

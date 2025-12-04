@@ -29,14 +29,6 @@ export type ImageWithProps = Omit<ImageProps, 'alt'> & {
 }
 
 /**
- * Image category with its associated images
- */
-export type ImageCategoryGroup = {
-  category: ImageCategory
-  images: ImageWithProps[]
-}
-
-/**
  * Raw image data from JSON files
  */
 export type RawImageData = {
@@ -54,7 +46,6 @@ export type RawImageData = {
  */
 export class HouseImageStorage {
   private readonly categoryMap: Map<ImageCategory, ImageWithProps[]>
-  private readonly _categories: ImageCategoryGroup[]
   private readonly _images: ImageWithProps[]
   private readonly _indexMap: Map<string, number>
 
@@ -75,17 +66,8 @@ export class HouseImageStorage {
       })
     }
 
-    this._categories = []
-    // Build ordered categories
-    for (const category of CategoriesValues) {
-      const images = this.categoryMap.get(category)
-      if (images && images.length > 0) {
-        this._categories.push({ category, images })
-      }
-    }
-
     // Build flattened images array and index map
-    this._images = this._categories.flatMap(({ images }) => images)
+    this._images = Array.from(this.categoryMap.values()).flat()
     this._indexMap = new Map(this._images.map((img, index) => [img.id, index]))
   }
 
@@ -111,10 +93,16 @@ export class HouseImageStorage {
   }
 
   /**
-   * Get ordered categories for this house
+   * Get the number of images in a category
+   * @param options - Optional filters
+   * @param options.category - Filter by specific category. If omitted, returns the total number of images.
    */
-  categories(): ImageCategoryGroup[] {
-    return this._categories
+  count(options?: { category?: ImageCategory }): number {
+    const { category } = options ?? {}
+    if (category) {
+      return this.categoryMap.get(category)?.length ?? 0
+    }
+    return this._images.length
   }
 
   /**
