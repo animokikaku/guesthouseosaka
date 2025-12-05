@@ -7,6 +7,7 @@ import { MobileNav } from '@/components/mobile-nav'
 import { ModeSwitcher } from '@/components/mode-switcher'
 import { Button } from '@/components/ui/button'
 import { useHouseLabels } from '@/hooks/use-house-labels'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { HouseIdentifierValues, NavItems } from '@/lib/types'
@@ -16,6 +17,7 @@ import { useTranslations } from 'next-intl'
 export function SiteHeader() {
   const t = useTranslations('SiteHeader')
   const houseLabel = useHouseLabels()
+  const isMobile = useIsMobile()
 
   const navItems: NavItems = [
     {
@@ -71,7 +73,7 @@ export function SiteHeader() {
           <MainNav items={navItems} className="hidden lg:flex" />
           <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
             <div className="hidden w-full flex-1 md:flex md:w-auto md:flex-none"></div>
-            <LanguageSwitcher size="icon-sm" />
+            <LanguageSwitcher size={isMobile ? 'icon-sm' : 'default'} />
             <ModeSwitcher />
           </div>
         </div>
