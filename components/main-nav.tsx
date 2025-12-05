@@ -9,12 +9,16 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
-import { NavGroupItem, NavItem, NavListItem } from '@/lib/types'
+import {
+  HouseIdentifier,
+  NavGroupItem,
+  NavItem,
+  NavListItem
+} from '@/lib/types'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
-import { useSelectedLayoutSegment } from 'next/navigation'
+import { useParams, useSelectedLayoutSegment } from 'next/navigation'
 import { useState } from 'react'
 
 export function MainNav({
@@ -23,12 +27,12 @@ export function MainNav({
 }: React.ComponentProps<typeof NavigationMenu> & {
   items: Array<NavItem | NavListItem>
 }) {
-  const isMobile = useIsMobile()
   const selectedLayoutSegment = useSelectedLayoutSegment()
   const pathname = selectedLayoutSegment ? `/${selectedLayoutSegment}` : '/'
+  const { house } = useParams<{ house?: HouseIdentifier }>()
 
   return (
-    <NavigationMenu viewport={isMobile} {...props}>
+    <NavigationMenu viewport={false} {...props}>
       <NavigationMenuList className="flex-wrap">
         {items.map((entry) => {
           if ('items' in entry) {
@@ -37,7 +41,7 @@ export function MainNav({
                 key={`nav-item-group-${entry.key}`}
                 title={entry.label}
                 items={entry.items}
-                pathname={pathname}
+                house={house}
               />
             )
           }
@@ -61,11 +65,11 @@ export function MainNav({
 function NavigationMenuGroupItem({
   title,
   items,
-  pathname
+  house
 }: {
   title: string
   items: NavGroupItem[]
-  pathname: string
+  house?: HouseIdentifier
 }) {
   const [item, setHoverItem] = useState<NavGroupItem>(items[0])
 
@@ -82,10 +86,7 @@ function NavigationMenuGroupItem({
                 key={`list-item-${i}`}
                 onMouseEnter={() => setHoverItem(item)}
               >
-                <NavigationMenuLink
-                  data-active={pathname === item.href}
-                  asChild
-                >
+                <NavigationMenuLink data-active={house === item.key} asChild>
                   <Link href={item.href}>
                     <div className="text-sm leading-none font-medium">
                       {item.label}
