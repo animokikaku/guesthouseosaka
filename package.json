@@ -30,7 +30,7 @@
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@react-email/components": "^1.0.1",
     "@t3-oss/env-nextjs": "^0.13.8",
-    "@tanstack/react-form": "^1.27.0",
+    "@tanstack/react-form": "^1.27.1",
     "@tanstack/react-store": "^0.8.0",
     "@vercel/analytics": "^1.6.1",
     "@vercel/speed-insights": "^1.3.1",
