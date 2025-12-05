@@ -362,7 +362,9 @@
           "Demander la correction, l'ajout ou la suppression d'informations inexactes ou obsolètes",
           "Retirer votre consentement au traitement de vos informations (le cas échéant)"
         ],
-        "paragraphs": ["Vous avez le droit de :"],
+        "paragraphs": [
+          "Vous avez le droit de :"
+        ],
         "title": "5. Vos droits"
       },
       "security": {
