@@ -8,14 +8,12 @@ export const contentType = 'image/png'
 export default async function OpenGraphImage() {
   const { openGraph, logo } = assets
   return new ImageResponse(
-    (
-      <div tw="relative flex h-full w-full">
-        <img {...openGraph.home} alt={openGraph.home.alt} tw="h-full w-full" />
-        <div tw="absolute left-4 top-4 flex items-center justify-center">
-          <img {...logo.sho} width={322} height={209} alt={logo.sho.alt} />
-        </div>
+    <div tw="relative flex h-full w-full">
+      <img {...openGraph.home} alt={openGraph.home.alt} tw="h-full w-full" />
+      <div tw="absolute left-4 top-4 flex items-center justify-center">
+        <img {...logo.sho} width={322} height={209} alt={logo.sho.alt} />
       </div>
-    ),
+    </div>,
     { ...size }
   )
 }

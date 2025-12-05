@@ -2,8 +2,10 @@ import { HouseIdentifier } from '@/lib/types'
 import { fruit } from '@lucide/lab'
 import { Apple, Citrus, Icon } from 'lucide-react'
 
-interface HouseIconProps
-  extends Omit<React.ComponentProps<typeof Icon>, 'iconNode' | 'aria-label'> {
+interface HouseIconProps extends Omit<
+  React.ComponentProps<typeof Icon>,
+  'iconNode' | 'aria-label'
+> {
   name: HouseIdentifier
 }
 

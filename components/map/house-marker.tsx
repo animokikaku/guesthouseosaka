@@ -8,8 +8,10 @@ import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { AdvancedMarker, AdvancedMarkerProps } from '@vis.gl/react-google-maps'
 
-interface HouseMarkerProps
-  extends Omit<AdvancedMarkerProps, 'position' | 'onClick'> {
+interface HouseMarkerProps extends Omit<
+  AdvancedMarkerProps,
+  'position' | 'onClick'
+> {
   id: HouseIdentifier
   isActive?: boolean
 }

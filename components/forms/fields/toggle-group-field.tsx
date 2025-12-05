@@ -15,11 +15,10 @@ type ToggleGroupOption = {
   className?: string
 }
 
-interface ToggleGroupFieldProps
-  extends Omit<
-    React.ComponentProps<typeof ToggleGroup>,
-    'value' | 'onValueChange' | 'onBlur' | 'type' | 'defaultValue'
-  > {
+interface ToggleGroupFieldProps extends Omit<
+  React.ComponentProps<typeof ToggleGroup>,
+  'value' | 'onValueChange' | 'onBlur' | 'type' | 'defaultValue'
+> {
   label?: React.ReactNode
   options: ToggleGroupOption[]
   description?: string
