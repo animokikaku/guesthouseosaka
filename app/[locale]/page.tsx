@@ -58,7 +58,7 @@ export default function LocalePage({ params }: PageProps<'/[locale]'>) {
       </section>
       <section className="snap:none container-wrapper relative flex max-w-7xl flex-1 flex-col items-center justify-center md:min-h-[calc(100dvh-var(--header-height)-var(--footer-height))] md:snap-start">
         <PageHeader>
-          <PageHeaderHeading className="self-start text-2xl xl:text-4xl">
+          <PageHeaderHeading className="max-w-none self-start text-2xl xl:text-4xl">
             {t('houses_title')}
           </PageHeaderHeading>
           <PageHeaderDescription className="max-w-none self-start text-start text-wrap">

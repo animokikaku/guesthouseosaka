@@ -399,8 +399,8 @@
     "hero_action": "Contact us",
     "hero_description": "Experience modern co-living in beautifully designed spaces. Connect with like-minded individuals while enjoying your own private room and shared common areas.",
     "hero_title": "Vibrant <block>share house</block> community",
-    "houses_description": "Three unique homes crafted for comfort, connection, and style in the heart of Osaka.",
-    "houses_title": "Our share houses"
+    "houses_description": "Three share houses designed to offer the comfort of living in central Osaka, encourage international exchange, and provide a unique lifestyle.",
+    "houses_title": "Welcome to the Guest House Osaka share house"
   },
   "MessageField": {
     "character_counter": "{count} / {max} characters",

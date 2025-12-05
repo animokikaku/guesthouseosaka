@@ -399,8 +399,8 @@
     "hero_action": "Contactez‑nous",
     "hero_description": "Découvrez la colocation moderne dans des espaces magnifiquement conçus. Connectez-vous avec des personnes partageant les mêmes idées tout en profitant de votre propre chambre privée et des espaces communs partagés.",
     "hero_title": "Communauté de colocation dynamique",
-    "houses_description": "Trois maisons uniques conçues pour le confort et les rencontres au cœur d'Osaka.",
-    "houses_title": "Nos maisons partagées"
+    "houses_description": "Trois maisons partagées conçues pour offrir le confort de vivre au cœur d’Osaka, favoriser les échanges internationaux et créer un cadre de vie unique.",
+    "houses_title": "Bienvenue dans la share house de Guest House Osaka"
   },
   "MessageField": {
     "character_counter": "{count} / {max} caractères",
@@ -617,7 +617,7 @@
         "shop_just_by_daikokucho_station": "Magasin à 100¥ juste à côté de la gare de Daikokucho.",
         "minutes_walk_to_convenience_store": "3 minutes à pied d'un combini.",
         "minutes_walk_to_post_office": "3 minutes à pied d'un bureau de poste.",
-        "namba_parks": "Namba PARKS."
+        "namba_parks": "Namba Parks."
       },
       "floor-plan": {
         "apple_house_floor_plan": "Plan d'étage d'Apple House"

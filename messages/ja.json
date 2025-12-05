@@ -401,8 +401,8 @@
     "hero_action": "お問い合わせ",
     "hero_description": "モダンな共用生活を美しくデザインされた空間で体験。個室でのプライベート時間と共有スペースでのつながりを楽しめます。",
     "hero_title": "活気ある<block>シェアハウス</block>コミュニティ",
-    "houses_description": "大阪の中心で快適さとつながり、スタイルを届ける3つの個性的な住まい。",
-    "houses_title": "私たちのシェアハウス"
+    "houses_description": "大阪の中心部に住むという快適さ、国際交流、そしてライフスタイルを追求して作られた3棟のシェアハウス。",
+    "houses_title": "ゲストハウス大阪のシェアハウスへようこそ"
   },
   "MessageField": {
     "character_counter": "{count} / {max} 文字",
