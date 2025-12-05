@@ -28,7 +28,7 @@ export function ContactNav({
               <Link
                 key={`contact-nav-${key}`}
                 href={href}
-                data-active={href.startsWith(pathname)}
+                data-active={href.pathname === pathname}
                 className={cn(
                   'text-muted-foreground hover:text-primary data-[active=true]:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors'
                 )}

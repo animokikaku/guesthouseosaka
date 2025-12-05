@@ -57,7 +57,7 @@ export default async function ContactLayout({
             </Link>
           </Button>
           <Button asChild variant="ghost" size="sm">
-            <Link href="/faq#phone">
+            <Link href={{ pathname: '/faq', hash: '#phone' }}>
               <PhoneIcon />
               {t('actions.phone')}
             </Link>

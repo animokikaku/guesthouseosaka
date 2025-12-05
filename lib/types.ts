@@ -1,27 +1,15 @@
+import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
+import { ComponentProps } from 'react'
 import { z } from 'zod'
 
 export const HouseIdentifierValues = ['orange', 'lemon', 'apple'] as const
 export const HouseIdentifierSchema = z.enum(HouseIdentifierValues)
 export type HouseIdentifier = z.infer<typeof HouseIdentifierSchema>
 
-export const routes = [
-  '/',
-  '/orange',
-  '/apple',
-  '/lemon',
-  '/faq',
-  '/contact',
-  '/contact/tour',
-  '/contact/move-in',
-  '/contact/other'
-] as const
-
-export type Routes = (typeof routes)[number]
-
 export type NavItem = {
   key: string
-  href: Routes
+  href: ComponentProps<typeof Link>['href']
   label: string
 }
 

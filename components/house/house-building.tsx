@@ -65,7 +65,9 @@ export function HouseBuilding({ id }: { id: HouseIdentifier }) {
         value={floors.value}
         Icon={floors.icon}
       />
-      <Link href="#pricing">
+      <Link
+        href={{ pathname: '/[house]', params: { house: id }, hash: '#pricing' }}
+      >
         <FeatureItem label={minRent.label} value={minRent.value} />
       </Link>
     </div>

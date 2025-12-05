@@ -18,7 +18,7 @@ export default function GalleryPage({
       <div className="flex h-full w-full flex-col overflow-hidden">
         <div className="shrink-0 p-4">
           <Button variant="ghost" size="icon" asChild className="rounded-full">
-            <Link href={`/${house}`}>
+            <Link href={{ pathname: '/[house]', params: { house } }}>
               <ArrowLeftIcon className="size-6" />
               <span className="sr-only">{t('close')}</span>
             </Link>

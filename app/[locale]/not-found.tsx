@@ -37,7 +37,11 @@ export default function NotFound() {
         </Button>
         <EmptyDescription>
           {t.rich('contact_us', {
-            link: (chunks) => <Link href="/contact/other#tabs">{chunks}</Link>
+            link: (chunks) => (
+              <Link href={{ pathname: '/contact/other', hash: '#tabs' }}>
+                {chunks}
+              </Link>
+            )
           })}
         </EmptyDescription>
       </EmptyContent>

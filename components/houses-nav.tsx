@@ -4,9 +4,10 @@ import { useThemeConfig } from '@/components/active-theme'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Link, usePathname } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import { HouseIdentifierValues } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 export function HousesNav({
@@ -15,8 +16,8 @@ export function HousesNav({
 }: React.ComponentProps<'div'>) {
   const { setActiveTheme } = useThemeConfig()
   const houseLabel = useHouseLabels()
-  const pathname = usePathname()
   const isMobile = useIsMobile()
+  const params = useParams()
 
   const classNames = {
     orange:
@@ -28,17 +29,17 @@ export function HousesNav({
   }
 
   useEffect(() => {
-    if (pathname.startsWith('/orange')) {
+    if (params.house === 'orange') {
       setActiveTheme('orange')
-    } else if (pathname.startsWith('/apple')) {
+    } else if (params.house === 'apple') {
       setActiveTheme('red')
-    } else if (pathname.startsWith('/lemon')) {
+    } else if (params.house === 'lemon') {
       setActiveTheme('yellow')
     }
     return () => {
       setActiveTheme('default')
     }
-  }, [pathname, setActiveTheme])
+  }, [params.house, setActiveTheme])
 
   return (
     <div className="relative overflow-hidden">
@@ -47,8 +48,8 @@ export function HousesNav({
           {HouseIdentifierValues.map((house) => (
             <Link
               key={`house-nav-${house}`}
-              href={`/${house}`}
-              data-active={pathname.startsWith(`/${house}`)}
+              href={{ pathname: '/[house]', params: { house } }}
+              data-active={house === params.house}
               className={cn(
                 'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors',
                 classNames[house]

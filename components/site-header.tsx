@@ -25,7 +25,7 @@ export function SiteHeader() {
         const { icon, background } = assets[house]
         return {
           key: house,
-          href: `/${house}`,
+          href: { pathname: '/[house]', params: { house } },
           label: name,
           description: summary,
           caption,

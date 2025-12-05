@@ -9,11 +9,7 @@ import {
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
-import {
-  type HouseIdentifier,
-  HouseIdentifierValues,
-  Routes
-} from '@/lib/types'
+import { type HouseIdentifier, HouseIdentifierValues } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { default as Image, ImageProps } from 'next/image'
 
@@ -23,7 +19,7 @@ interface HouseItem {
   image: ImageProps
   accentClass: string
   icon: ImageProps
-  href: Routes
+  href: { pathname: '/[house]'; params: { house: HouseIdentifier } }
 }
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
@@ -42,7 +38,7 @@ export function Collection({ className }: { className?: string }) {
       name,
       description: summary,
       accentClass: ACCENT_CLASSES[house],
-      href: `/${house}`,
+      href: { pathname: '/[house]', params: { house } },
       icon,
       image: background
     }

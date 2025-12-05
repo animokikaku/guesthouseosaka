@@ -11,7 +11,10 @@ export async function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
   const { images: getHouseImages } = await getImages(id)
 
   const images = getHouseImages({ category: 'room', limit: 5 })
-  const galleryHref = `/${id}/gallery`
+  const galleryHref = {
+    pathname: '/[house]/gallery',
+    params: { house: id }
+  } as const
 
   return (
     <div className="hidden justify-center sm:flex">

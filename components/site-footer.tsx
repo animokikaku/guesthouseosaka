@@ -1,5 +1,4 @@
 import { Icons } from '@/components/icons'
-import { Link } from '@/i18n/navigation'
 import { urls } from '@/lib/config'
 import { useTranslations } from 'next-intl'
 
@@ -41,13 +40,13 @@ export function SiteFooter() {
 
 function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
   return (
-    <Link
+    <a
       className="text-muted-foreground hover:text-foreground transition-colors"
       href={href}
       target="_blank"
       rel="noopener noreferrer"
     >
       {icon}
-    </Link>
+    </a>
   )
 }

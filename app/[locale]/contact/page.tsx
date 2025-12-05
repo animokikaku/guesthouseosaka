@@ -14,7 +14,7 @@ import {
 } from '@/hooks/use-contact-navigation'
 import { Link } from '@/i18n/navigation'
 import { setRequestLocale } from 'next-intl/server'
-import { use } from 'react'
+import { ComponentProps, use } from 'react'
 
 export default function ContactPage({
   params
@@ -47,7 +47,7 @@ function ContactLink({
   title,
   description
 }: {
-  href: string
+  href: ComponentProps<typeof Link>['href']
   title: string
   description: string
 }) {

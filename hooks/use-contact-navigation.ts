@@ -10,17 +10,17 @@ export function useContactNavigation() {
       tour: {
         title: t('tour.title'),
         description: t('tour.description'),
-        href: '/contact/tour#tabs'
+        href: { pathname: '/contact/tour', hash: '#tabs' } as const
       },
       'move-in': {
         title: t('moveIn.title'),
         description: t('moveIn.description'),
-        href: '/contact/move-in#tabs'
+        href: { pathname: '/contact/move-in', hash: '#tabs' } as const
       },
       general: {
         title: t('general.title'),
         description: t('general.description'),
-        href: '/contact/other#tabs'
+        href: { pathname: '/contact/other', hash: '#tabs' } as const
       }
     }[key]
   }

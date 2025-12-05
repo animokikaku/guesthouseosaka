@@ -1,6 +1,6 @@
 'use client'
 
-import { Link, useRouter } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -126,12 +126,10 @@ function MobileLink({
   children: React.ReactNode
   className?: string
 }) {
-  const router = useRouter()
   return (
     <Link
       href={href}
       onClick={() => {
-        router.push(href.toString())
         onOpenChange?.(false)
       }}
       className={cn('text-2xl font-medium', className)}
