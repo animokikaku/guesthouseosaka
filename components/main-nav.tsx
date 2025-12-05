@@ -100,7 +100,7 @@ function NavigationMenuGroupItem({
           </div>
 
           <li className="row-span-3">
-            <div className="group relative h-full min-h-[200px] w-full overflow-hidden rounded-md">
+            <div className="group relative h-full w-full overflow-hidden rounded-md">
               {items.map((it, idx) => {
                 const isActive = it.key === item.key
                 return (
@@ -132,7 +132,7 @@ function NavigationMenuGroupItem({
                         width={40}
                         height={40}
                         loading={isActive ? 'eager' : 'lazy'}
-                        className="h-10 w-10 object-contain opacity-90 drop-shadow-lg"
+                        className="h-10 w-10 object-contain opacity-50 drop-shadow-lg"
                       />
                     </div>
 

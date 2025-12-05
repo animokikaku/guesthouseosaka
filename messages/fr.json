@@ -397,8 +397,8 @@
   },
   "LocalePage": {
     "hero_action": "Contactez‑nous",
-    "hero_description": "Découvrez la colocation moderne dans des espaces magnifiquement conçus. Connectez-vous avec des personnes partageant les mêmes idées tout en profitant de votre propre chambre privée et des espaces communs partagés.",
-    "hero_title": "Communauté de colocation dynamique",
+    "hero_description": "Profitez d'échanges internationaux dans les trois share houses que nous gérons à Osaka.",
+    "hero_title": "Depuis 1991 <block>trois share houses</block> à Osaka",
     "houses_description": "Trois maisons partagées conçues pour offrir le confort de vivre au cœur d’Osaka, favoriser les échanges internationaux et créer un cadre de vie unique.",
     "houses_title": "Bienvenue dans la share house de Guest House Osaka"
   },
@@ -561,12 +561,12 @@
   },
   "useHouseLabels": {
     "apple": {
-      "caption": "Chaleur et confort avec des équipements modernes",
+      "caption": "À 1 minute à pied de la station Daikokucho, Namba aussi facilement à pied ! Lounge chaleureux pour des échanges internationaux en toute liberté.",
       "name": "Apple House",
       "summary": "Chambres privées bien équipées et salon haut de gamme"
     },
     "lemon": {
-      "caption": "Hébergement lumineux et accueillant pour un séjour revigorant",
+      "caption": "Lemon House est à 8 minutes de Namba. Accédez aux lieux nocturnes à pied sans vous soucier du dernier train.",
       "name": "Lemon House",
       "summary": "Share house à 8 minutes de la station de Namba"
     },
