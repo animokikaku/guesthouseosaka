@@ -20,7 +20,7 @@ export default function LocalePage({ params }: PageProps<'/[locale]'>) {
   const t = useTranslations('LocalePage')
 
   return (
-    <div className="section-soft flex flex-col gap-18 md:gap-0">
+    <div className="snap-footer section-soft flex flex-col gap-18 md:gap-0">
       <section className="relative flex snap-none items-center justify-center py-8 md:min-h-[calc(100dvh-var(--header-height))] md:snap-end md:py-0">
         <div className="container-wrapper w-full max-w-7xl">
           <div className="grid items-center gap-12 md:grid-cols-3">
