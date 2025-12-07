@@ -97,7 +97,7 @@ export default async function LocaleLayout({
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${url}/#organization`,
-    url,
+    url: `${url}/${locale}`,
     name: t('company_name'),
     alternateName: t('brand_name'),
     telephone: phoneLabel('orange').international,

@@ -34,7 +34,7 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
     '@context': 'https://schema.org',
     '@type': 'House',
     '@id': `${url}#house`,
-    url,
+    url: `${url}/${locale}`,
     name: title,
     description,
     image: assets.openGraph[house].src,
