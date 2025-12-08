@@ -85,10 +85,6 @@ export default async function LocaleLayout({
 
   // Enable static rendering
   setRequestLocale(locale)
-  const t = await getTranslations({
-    locale: locale as Locale,
-    namespace: 'SiteFooter'
-  })
 
   const phoneLabel = await getHousePhoneLabel(locale as Locale)
   const url = env.NEXT_PUBLIC_APP_URL
@@ -97,9 +93,9 @@ export default async function LocaleLayout({
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${url}/#organization`,
-    url: `${url}/${locale}`,
-    name: t('company_name'),
-    alternateName: t('brand_name'),
+    name: 'Guest House Osaka',
+    legalName: '株式会社アニモ企画',
+    alternateName: 'ゲストハウス大阪',
     telephone: phoneLabel('orange').international,
     email: 'info@guesthouseosaka.com',
     logo: assets.logo.sho.src,
