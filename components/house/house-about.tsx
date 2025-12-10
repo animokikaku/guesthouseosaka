@@ -1,6 +1,4 @@
 import { HouseBuilding } from '@/components/house/house-building'
-import { HouseLocationModal } from '@/components/house/house-location-modal'
-import { Button } from '@/components/ui/button'
 import { useHouseLabels } from '@/hooks/use-house-labels'
 import { HouseIdentifier } from '@/lib/types'
 import { useTranslations } from 'next-intl'
