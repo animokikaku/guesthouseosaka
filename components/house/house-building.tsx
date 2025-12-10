@@ -25,7 +25,7 @@ export const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
   orange: {
     rooms: 28,
     floors: 3,
-    monthly_price: 40000
+    monthly_price: 41000
   }
 }
 
