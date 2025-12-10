@@ -3,7 +3,7 @@ import { assets } from '@/lib/assets'
 import { ComponentProps } from 'react'
 import { z } from 'zod'
 
-export const HouseIdentifierValues = ['orange', 'lemon', 'apple'] as const
+export const HouseIdentifierValues = ['orange', 'apple', 'lemon'] as const
 export const HouseIdentifierSchema = z.enum(HouseIdentifierValues)
 export type HouseIdentifier = z.infer<typeof HouseIdentifierSchema>
 
