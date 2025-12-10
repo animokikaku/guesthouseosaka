@@ -49,7 +49,7 @@ export function HousePricing({ id }: { id: HouseIdentifier }) {
         {
           title: labels.otherFees,
           items: [
-            t('apple.other_fees.service_fee'),
+            t('apple.other_fees.common_fee'),
             t('apple.other_fees.utilities'),
             t('apple.other_fees.deposit')
           ]
@@ -91,7 +91,6 @@ export function HousePricing({ id }: { id: HouseIdentifier }) {
             t('lemon.other_fees.utilities'),
             t('lemon.other_fees.deposit'),
             t('lemon.other_fees.washing_machine'),
-            t('lemon.other_fees.dryer')
           ]
         }
       ]

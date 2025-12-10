@@ -139,17 +139,19 @@
       "drying_space": "物干しスペース",
       "elevator": "エレベーター",
       "free_wifi": "無料Wi-Fi",
+      "lan_cable": "LANケーブル",
       "furnished_rooms": "家具付き個室（{size}㎡）",
       "kitchen": "キッチン",
       "large_refrigerator": "大型冷蔵庫",
       "lounge": "ラウンジ",
       "lounge_kitchen_oven": "オーブン付きラウンジキッチン",
       "mailbox": "メールボックス",
+      "cluster_mailboxes": "集合郵便受け",
+      "door_mail_slot": "ドア投函口",
       "microwave_toaster": "電子レンジ＆トースター",
       "microwave_toaster_rice_cooker": "電子レンジ・トースター・炊飯器",
       "monthly_parties": "マンスリーパーティー",
       "refrigerator": "冷蔵庫",
-      "refrigerator_freezer": "冷蔵冷凍庫",
       "rooftop_lounge": "ルーフトップラウンジ（100㎡）",
       "secure_entry": "セキュリティ付きエントランス",
       "shower": "シャワー",
@@ -157,7 +159,10 @@
       "tableware": "食器類",
       "tv_entertainment": "Netflix・Blu-ray・ケーブル対応テレビ",
       "washing_machine": "洗濯機",
-      "washlet_toilet": "標準便座"
+      "washlet_toilet": "ウォシュレット",
+      "toilet": "トイレ",
+      "smoking_area": "喫煙所　8階",
+      "rooftop_garden": "ルーフトップガーデン"
     },
     "notes": {
       "coin": "コイン",
@@ -244,8 +249,8 @@
       "long_stay": "3か月・6か月滞在で割引あり。",
       "other_fees": {
         "deposit": "デポジット：¥30,000（退去時に損傷がなければ返金）",
-        "service_fee": "サービス料：月額¥10,000",
-        "utilities": "光熱費：月額約¥3,000（使用量に応じてお支払い）"
+        "common_fee": "管理費・共益費：月額¥10,000",
+        "utilities": "光熱費：月額約¥3,000（実費）"
       },
       "rent": "月額¥50,000～¥70,000（1部屋2名まで）",
       "short_stay": {
@@ -266,14 +271,13 @@
       "dormitory": {
         "details": "男女混合・1部屋3ベッド・バスルームとキッチンは共用です。",
         "minimum": "最低滞在期間：1か月",
-        "rate": "月額¥45,000（光熱費・サービス料込）"
+        "rate": "月額¥45,000（光熱費・管理・共益費込）"
       },
       "long_stay": "3か月・6か月滞在で割引あり。",
       "other_fees": {
         "deposit": "デポジット：¥30,000（退去時に損傷がなければ返金）",
-        "dryer": "乾燥機：20分ごとに¥100",
-        "service_fee": "サービス料：月額¥10,000",
-        "utilities": "光熱費：月額約¥3,000（使用量に応じてお支払い）",
+        "service_fee": "管理費・共益費：月額¥10,000",
+        "utilities": "光熱費：月額約¥3,000（実費）",
         "washing_machine": "洗濯機：無料（屋上）"
       },
       "rent": "月額¥50,000～¥70,000（1部屋2名まで）",
@@ -293,11 +297,11 @@
         "deposit": "デポジット：¥30,000（退去時に損傷等がなければ返金）",
         "dryer": "乾燥機：¥100／30分",
         "service_fee": "管理費・共益費：月額¥12,000",
-        "utilities": "光熱費：月額約¥3,000～¥4,000（使用量に応じてお支払い）",
+        "utilities": "光熱費：月額約¥3,000～¥4,000（実費）",
         "washing_machine": "洗濯機：無料"
       },
       "rent": {
-        "base": "月額¥40,000～¥48,000（1名）",
+        "base": "月額¥41,000～¥48,000（1名）",
         "second_person": "2人目は月額+¥5,000"
       }
     }
@@ -660,7 +664,7 @@
       },
       "common-spaces": {
         "traditional_japanese_style_lounge": "和風レトロ系で統一されたラウンジ。100㎡の広さがあります。24時間利用可能。",
-        "tv_show_by_abc": "日本の放送局ABCのテレビ番組に出演しました",
+        "tv_show_by_abc": "ABC放送のテレビ番組に出演しました",
         "lounge_equipped_with_large_air_conditioner": "ラウンジには大型エアコンが設置されており、夏でも冬でも快適です。シンクもあります。",
         "large_collection_of_complete_comic_sets": "たくさんの漫画を全巻セットでそろえています。",
         "party_at_lounge_about_every_month": "ラウンジで約1ヶ月ごとにパーティーを開催しています。",
@@ -676,7 +680,7 @@
         "stylish_stores_behind_station": "駅裏には長屋を再生したオシャレなお店が並びます。",
         "minutes_walk_to_abeno_harukas": "あべのハルカスまで徒歩15分",
         "minutes_walk_to_biggest_shopping_mall": "大阪市内最大級のショッピングモール「Q's mall」まで徒歩12分。",
-        "hanami_cherry_blossom_festival": "桃ヶ池公園では春になるとお花見が楽しめます。桃ヶ池公園では春になるとお花見が楽しめます。"
+        "hanami_cherry_blossom_festival": "桃ヶ池公園では春になるとお花見が楽しめます。"
       },
       "maps": {
         "route_map": "アクセス地図"

@@ -119,8 +119,7 @@ declare const messages: {
           "Retro Japanese rooftop lounge (100 m²) with Abeno Harukas views"
         ]
       }
-    },
-    "modal_trigger": "Show more"
+    }
   },
   "HouseAmenities": {
     "categories": {
@@ -143,17 +142,19 @@ declare const messages: {
       "drying_space": "Drying space",
       "elevator": "Elevator",
       "free_wifi": "Free Wi-Fi",
+      "lan_cable": "LAN cable",
       "furnished_rooms": "Fully furnished rooms ({size} m²)",
       "kitchen": "Kitchen",
       "large_refrigerator": "Large refrigerator",
       "lounge": "Lounge",
       "lounge_kitchen_oven": "Lounge kitchen with oven",
       "mailbox": "Mailbox",
+      "cluster_mailboxes": "Cluster mailboxes",
+      "door_mail_slot": "Door mail slot",
       "microwave_toaster": "Microwave & toaster",
       "microwave_toaster_rice_cooker": "Microwave, toaster & rice cooker",
       "monthly_parties": "Monthly parties",
       "refrigerator": "Refrigerator",
-      "refrigerator_freezer": "Refrigerator & freezer",
       "rooftop_lounge": "Rooftop lounge (100 m²)",
       "secure_entry": "Secure entry",
       "shower": "Shower",
@@ -161,7 +162,10 @@ declare const messages: {
       "tableware": "Tableware",
       "tv_entertainment": "TV with Netflix, Blu-ray, cable",
       "washing_machine": "Washing machine",
-      "washlet_toilet": "Washlet toilet"
+      "washlet_toilet": "Washlet toilet",
+      "toilet": "Toilet",
+      "smoking_area": "Smoking area 8F",
+      "rooftop_garden": "Rooftop garden"
     },
     "notes": {
       "coin": "Coin",
@@ -179,7 +183,7 @@ declare const messages: {
     "categories": {
       "building_features": "Building Features",
       "common_spaces": "Common Spaces",
-      "facilities": "Facilities",
+      "facilities": "Bathroom",
       "floor_plan": "Floor Plan",
       "maps": "Maps",
       "neighborhood": "Neighborhood",
@@ -240,15 +244,16 @@ declare const messages: {
       "getting_around": "Nearby stations",
       "nearby": "What's nearby",
       "neighborhood": "Sightseeing"
-    }
+    },
+    "modal_trigger": "Show more"
   },
   "HousePricing": {
     "apple": {
       "long_stay": "Discounts for 3-month and 6-month stays.",
       "other_fees": {
         "deposit": "Deposit: ¥30,000 (returned when you leave, if no damage)",
-        "service_fee": "Service fee: ¥10,000 per month",
-        "utilities": "Utilities: About ¥3,000 per month (you pay what you use)"
+        "common_fee": "Management and shared fees: ¥10,000 per month",
+        "utilities": "Utilities: About ¥3,000 per month (actual expenses)"
       },
       "rent": "¥50,000 ~ ¥70,000 per month (up to 2 people per room)",
       "short_stay": {
@@ -269,14 +274,13 @@ declare const messages: {
       "dormitory": {
         "details": "Co-ed, 3 beds per room, shared bathroom and kitchen.",
         "minimum": "Minimum stay: 1 month.",
-        "rate": "¥45,000 per month (includes utilities and service fee)"
+        "rate": "¥45,000 per month (including utilities, management, and common service fees)"
       },
       "long_stay": "Discounts for 3-month and 6-month stays.",
       "other_fees": {
         "deposit": "Deposit: ¥30,000 (returned when you leave, if no damage)",
-        "dryer": "Dryer: ¥100 per 20 minutes",
-        "service_fee": "Service fee: ¥10,000 per month",
-        "utilities": "Utilities: About ¥3,000 per month (you pay what you use)",
+        "service_fee": "Management and shared fees: ¥10,000 per month",
+        "utilities": "Utilities: About ¥3,000 per month (actual expenses)",
         "washing_machine": "Washing machine: Free (on rooftop)"
       },
       "rent": "¥50,000 ~ ¥70,000 per month (up to 2 people per room)",
@@ -296,11 +300,11 @@ declare const messages: {
         "deposit": "Deposit: ¥30,000 (refunded at move-out if there is no damage)",
         "dryer": "Dryer: ¥100 per 30 minutes",
         "service_fee": "Management and common service fee: ¥12,000 per month",
-        "utilities": "Utilities: About ¥3,000 ~ ¥4,000 per month (you pay what you use)",
+        "utilities": "Utilities: About ¥3,000 ~ ¥4,000 per month (actual expenses)",
         "washing_machine": "Washing machine: Free"
       },
       "rent": {
-        "base": "¥40,000 ~ ¥48,000 per month (1 person)",
+        "base": "¥41,000 ~ ¥48,000 per month (1 person)",
         "second_person": "+¥5,000 per month for second person"
       }
     }
@@ -430,7 +434,7 @@ declare const messages: {
     "label": "Reset"
   },
   "SiteFooter": {
-    "brand_name": "Share House Osaka",
+    "brand_name": "Guest House Osaka",
     "company_name": "Animo Kikaku Co., Ltd."
   },
   "SiteHeader": {
@@ -657,7 +661,7 @@ declare const messages: {
     },
     "orange": {
       "room": {
-        "all_rooms_set_in_traditional_japanese_style": "All rooms are retro-inspired Japanese style.",
+        "all_rooms_set_in_traditional_japanese_style": "A Japanese-style room with a retro aesthetic.",
         "each_room_has_water_and_gas": "Each room has both water and gas. There is also a gas cooker.",
         "closet_as_desk_with_lamp_bookshelf_and_outlets": "The closet can double as a desk with a lamp, bookshelf, and multiple wall outlets."
       },

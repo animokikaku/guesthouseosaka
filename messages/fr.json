@@ -139,17 +139,19 @@
       "drying_space": "Espace de séchage",
       "elevator": "Ascenseur",
       "free_wifi": "Wi-Fi gratuit",
+      "lan_cable": "Câble LAN",
       "furnished_rooms": "Chambres entièrement meublées ({size} m²)",
       "kitchen": "Cuisine",
       "large_refrigerator": "Grand réfrigérateur",
       "lounge": "Salon",
       "lounge_kitchen_oven": "Cuisine du lounge avec four",
       "mailbox": "Boîte aux lettres",
+      "cluster_mailboxes": "Boîtes aux lettres collectives",
+      "door_mail_slot": "Fente de porte",
       "microwave_toaster": "Micro-ondes et grille-pain",
       "microwave_toaster_rice_cooker": "Micro-ondes, grille-pain et cuiseur à riz",
       "monthly_parties": "Fêtes mensuelles",
       "refrigerator": "Réfrigérateur",
-      "refrigerator_freezer": "Réfrigérateur et congélateur",
       "rooftop_lounge": "Salon rooftop (100 m²)",
       "secure_entry": "Entrée sécurisée",
       "shower": "Douche",
@@ -157,7 +159,10 @@
       "tableware": "Vaisselle",
       "tv_entertainment": "TV avec Netflix, Blu-ray, câble",
       "washing_machine": "Machine à laver",
-      "washlet_toilet": "Toilettes avec washlet"
+      "washlet_toilet": "Toilettes avec washlet",
+      "toilet": "Toilette",
+      "smoking_area": "Espace fumeur, 8ᵉ étage",
+      "rooftop_garden": "Jardin rooftop"
     },
     "notes": {
       "coin": "Pièce",
@@ -244,7 +249,7 @@
       "long_stay": "Réductions pour les séjours de 3 et 6 mois.",
       "other_fees": {
         "deposit": "Dépôt de garantie : 30 000 ¥ (remboursé à votre départ en l’absence de dommages)",
-        "service_fee": "Frais de service : 10 000 ¥ par mois",
+        "common_fee": "Gestion et frais communs : 10 000 ¥ par mois",
         "utilities": "Charges : environ 3 000 ¥ par mois (payez uniquement ce que vous consommez)"
       },
       "rent": "50 000–70 000 ¥ par mois (jusqu’à 2 personnes par chambre)",
@@ -266,13 +271,12 @@
       "dormitory": {
         "details": "Mixte, 3 lits par chambre, salle de bain et cuisine partagées.",
         "minimum": "Séjour minimum : 1 mois.",
-        "rate": "45 000 ¥ par mois (services et charges inclus)"
+        "rate": "45 000 ¥ par mois (charges, gestion et frais communs inclus)"
       },
       "long_stay": "Réductions pour les séjours de 3 et 6 mois.",
       "other_fees": {
         "deposit": "Dépôt de garantie : 30 000 ¥ (remboursé à votre départ en l’absence de dommages)",
-        "dryer": "Sèche-linge : 100 ¥ par 20 minutes",
-        "service_fee": "Frais de service : 10 000 ¥ par mois",
+        "service_fee": "Gestion et frais communs : 10 000 ¥ par mois",
         "utilities": "Charges : environ 3 000 ¥ par mois (payez uniquement ce que vous consommez)",
         "washing_machine": "Machine à laver : gratuit (sur le toit)"
       },
@@ -297,7 +301,7 @@
         "washing_machine": "Machine à laver : gratuit"
       },
       "rent": {
-        "base": "40 000–48 000 ¥ par mois (1 personne)",
+        "base": "41 000–48 000 ¥ par mois (1 personne)",
         "second_person": "+5 000 ¥ par mois pour une deuxième personne"
       }
     }

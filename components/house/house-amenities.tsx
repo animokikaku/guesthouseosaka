@@ -22,10 +22,13 @@ import {
   ArrowUpFromLine,
   Bed,
   Bike,
+  Cable,
   ChefHat,
+  Cigarette,
   Coffee,
   Lock,
   Mail,
+  MailboxIcon,
   Microwave,
   PartyPopper,
   Plug,
@@ -201,7 +204,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               featured: true
             },
             {
-              title: t('items.washlet_toilet'),
+              title: t('items.toilet'),
               icon: Toilet,
               note: t('notes.private')
             }
@@ -219,7 +222,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
             {
               title: t('items.drying_space'),
               icon: Sun,
-              note: t('notes.shared'),
+              note: t('notes.private'),
               featured: true
             }
           ]
@@ -258,9 +261,18 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               featured: true
             },
             {
-              title: t('items.mailbox'),
-              icon: Mail,
+              title: t('items.smoking_area'),
+              icon: Cigarette
+            },
+            {
+              title: t('items.cluster_mailboxes'),
+              icon: MailboxIcon,
               note: t('notes.shared')
+            },
+            {
+              title: t('items.door_mail_slot'),
+              icon: Mail,
+              note: t('notes.private')
             },
             {
               title: t('items.bicycle_parking'),
@@ -324,7 +336,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               featured: true
             },
             {
-              title: t('items.washlet_toilet'),
+              title: t('items.toilet'),
               icon: Toilet,
               note: t('notes.private')
             }
@@ -361,7 +373,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.common_areas'),
           items: [
             {
-              title: t('items.lounge'),
+              title: t('items.rooftop_garden'),
               icon: Sofa,
               featured: true
             }
@@ -371,19 +383,15 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
           category: t('categories.building_access'),
           items: [
             {
-              title: t('items.secure_entry'),
-              icon: Lock,
-              featured: true
+              title: t('items.cluster_mailboxes'),
+              icon: MailboxIcon,
+              note: t('notes.shared')
             },
             {
-              title: t('items.mailbox'),
+              title: t('items.door_mail_slot'),
               icon: Mail,
-              note: t('notes.shared')
-            },
-            {
-              title: t('items.bicycle_parking'),
-              icon: Bike,
-              note: t('notes.shared')
+              note: t('notes.private'),
+              featured: true
             }
           ]
         }
@@ -395,7 +403,14 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
             {
               title: t('items.free_wifi'),
               icon: Wifi,
-              featured: true
+              featured: true,
+              note: t('notes.shared')
+            },
+            {
+              title: t('items.lan_cable'),
+              icon: Cable,
+              featured: true,
+              note: t('notes.private')
             },
             {
               title: t('items.air_conditioning_heating'),
@@ -415,7 +430,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
               featured: true
             },
             {
-              title: t('items.refrigerator_freezer'),
+              title: t('items.refrigerator'),
               icon: Refrigerator,
               note: t('notes.private')
             },
@@ -489,8 +504,7 @@ export function HouseAmenities({ id }: HouseAmenitiesProps) {
             },
             {
               title: t('items.coffee_tea_corner'),
-              icon: Coffee,
-              featured: true
+              icon: Coffee
             },
             {
               title: t('items.monthly_parties'),

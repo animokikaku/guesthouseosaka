@@ -139,17 +139,19 @@
       "drying_space": "Drying space",
       "elevator": "Elevator",
       "free_wifi": "Free Wi-Fi",
+      "lan_cable": "LAN cable",
       "furnished_rooms": "Fully furnished rooms ({size} m²)",
       "kitchen": "Kitchen",
       "large_refrigerator": "Large refrigerator",
       "lounge": "Lounge",
       "lounge_kitchen_oven": "Lounge kitchen with oven",
       "mailbox": "Mailbox",
+      "cluster_mailboxes": "Cluster mailboxes",
+      "door_mail_slot": "Door mail slot",
       "microwave_toaster": "Microwave & toaster",
       "microwave_toaster_rice_cooker": "Microwave, toaster & rice cooker",
       "monthly_parties": "Monthly parties",
       "refrigerator": "Refrigerator",
-      "refrigerator_freezer": "Refrigerator & freezer",
       "rooftop_lounge": "Rooftop lounge (100 m²)",
       "secure_entry": "Secure entry",
       "shower": "Shower",
@@ -157,7 +159,10 @@
       "tableware": "Tableware",
       "tv_entertainment": "TV with Netflix, Blu-ray, cable",
       "washing_machine": "Washing machine",
-      "washlet_toilet": "Washlet toilet"
+      "washlet_toilet": "Washlet toilet",
+      "toilet": "Toilet",
+      "smoking_area": "Smoking area 8F",
+      "rooftop_garden": "Rooftop garden"
     },
     "notes": {
       "coin": "Coin",
@@ -244,8 +249,8 @@
       "long_stay": "Discounts for 3-month and 6-month stays.",
       "other_fees": {
         "deposit": "Deposit: ¥30,000 (returned when you leave, if no damage)",
-        "service_fee": "Service fee: ¥10,000 per month",
-        "utilities": "Utilities: About ¥3,000 per month (you pay what you use)"
+        "common_fee": "Management and shared fees: ¥10,000 per month",
+        "utilities": "Utilities: About ¥3,000 per month (actual expenses)"
       },
       "rent": "¥50,000 ~ ¥70,000 per month (up to 2 people per room)",
       "short_stay": {
@@ -266,14 +271,13 @@
       "dormitory": {
         "details": "Co-ed, 3 beds per room, shared bathroom and kitchen.",
         "minimum": "Minimum stay: 1 month.",
-        "rate": "¥45,000 per month (includes utilities and service fee)"
+        "rate": "¥45,000 per month (including utilities, management, and common service fees)"
       },
       "long_stay": "Discounts for 3-month and 6-month stays.",
       "other_fees": {
         "deposit": "Deposit: ¥30,000 (returned when you leave, if no damage)",
-        "dryer": "Dryer: ¥100 per 20 minutes",
-        "service_fee": "Service fee: ¥10,000 per month",
-        "utilities": "Utilities: About ¥3,000 per month (you pay what you use)",
+        "service_fee": "Management and shared fees: ¥10,000 per month",
+        "utilities": "Utilities: About ¥3,000 per month (actual expenses)",
         "washing_machine": "Washing machine: Free (on rooftop)"
       },
       "rent": "¥50,000 ~ ¥70,000 per month (up to 2 people per room)",
@@ -293,11 +297,11 @@
         "deposit": "Deposit: ¥30,000 (refunded at move-out if there is no damage)",
         "dryer": "Dryer: ¥100 per 30 minutes",
         "service_fee": "Management and common service fee: ¥12,000 per month",
-        "utilities": "Utilities: About ¥3,000 ~ ¥4,000 per month (you pay what you use)",
+        "utilities": "Utilities: About ¥3,000 ~ ¥4,000 per month (actual expenses)",
         "washing_machine": "Washing machine: Free"
       },
       "rent": {
-        "base": "¥40,000 ~ ¥48,000 per month (1 person)",
+        "base": "¥41,000 ~ ¥48,000 per month (1 person)",
         "second_person": "+¥5,000 per month for second person"
       }
     }
