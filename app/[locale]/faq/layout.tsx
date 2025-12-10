@@ -51,15 +51,15 @@ export default async function FAQLayout({
         <PageHeaderDescription>{t('description')}</PageHeaderDescription>
         <PageActions>
           <Button asChild size="sm">
-            <Link href={{ pathname: '/faq', hash: '#phone' }}>
-              <PhoneIcon />
-              {t('actions.phone')}
-            </Link>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
             <Link href="/contact">
               <MailIcon />
               {t('actions.email')}
+            </Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm">
+            <Link href={{ pathname: '/faq', hash: '#phone' }}>
+              <PhoneIcon />
+              {t('actions.phone')}
             </Link>
           </Button>
         </PageActions>
