@@ -60,12 +60,6 @@ export function HouseAbout({ id }: { id: HouseIdentifier }) {
           </ul>
         </div>
       )}
-
-      <div className="mt-6">
-        <HouseLocationModal id={id} title={t('heading', { house: name })}>
-          <Button variant="outline">{t('modal_trigger')}</Button>
-        </HouseLocationModal>
-      </div>
     </section>
   )
 }

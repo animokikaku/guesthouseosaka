@@ -116,8 +116,7 @@
           "Retro Japanese rooftop lounge (100 m²) with Abeno Harukas views"
         ]
       }
-    },
-    "modal_trigger": "Show more"
+    }
   },
   "HouseAmenities": {
     "categories": {
@@ -237,7 +236,8 @@
       "getting_around": "Nearby stations",
       "nearby": "What's nearby",
       "neighborhood": "Sightseeing"
-    }
+    },
+    "modal_trigger": "Show more"
   },
   "HousePricing": {
     "apple": {

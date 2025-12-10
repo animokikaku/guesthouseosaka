@@ -1,7 +1,9 @@
 'use client'
 
+import { HouseLocationModal } from '@/components/house/house-location-modal'
 import { Skeleton } from '@/components/ui/skeleton'
 import { HouseIdentifier } from '@/lib/types'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
 
@@ -53,6 +55,12 @@ export function HouseLocation({ id }: { id: HouseIdentifier }) {
 
       <div className="mb-6">
         <HouseMap id={id} />
+      </div>
+
+      <div className="mt-6">
+        <HouseLocationModal id={id} title={t('heading')}>
+          <Button variant="outline">{t('modal_trigger')}</Button>
+        </HouseLocationModal>
       </div>
     </section>
   )

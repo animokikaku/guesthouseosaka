@@ -116,8 +116,7 @@
           "Salon rooftop rétro japonais (100 m²) avec vue sur Abeno Harukas"
         ]
       }
-    },
-    "modal_trigger": "En savoir plus"
+    }
   },
   "HouseAmenities": {
     "categories": {
@@ -237,7 +236,8 @@
       "getting_around": "Stations les plus proches",
       "nearby": "À proximité",
       "neighborhood": "Sites à visiter"
-    }
+    },
+    "modal_trigger": "En savoir plus"
   },
   "HousePricing": {
     "apple": {
