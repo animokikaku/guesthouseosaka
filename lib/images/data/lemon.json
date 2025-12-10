@@ -120,14 +120,6 @@
     "category": "common-spaces"
   },
   {
-    "id": 49,
-    "src": "uploads/lemon/common-spaces/2.jpg",
-    "width": 665,
-    "height": 1000,
-    "blurDataURL": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAKCAIAAAD3rtNaAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA50lEQVR4nAHcACP/AI+Gfj00KjY2LjY0KnJxc36Fnnh2fAB8gIZWVk49QElSU1hsbXl2e5WfmZMAoYp6++HN7O7s6Ofo7u7u5uXl3NPHALSWg//47ubp5OTl5OLk6ePj5/fy5wCwnoTa3Nqoqa5SS1Onp6fg5e3QvacAiXRXqK+zkJSjJiIvjo2L4Obuspp5AGhbSePl4NfX2L7AwsTHzKKyx11tWAAqJCDd3t3a3NzK0NjF0N6pt812d3gACwkJwsvS1uj4y9/2wNj2orPHT09fAAAADl5kbXF6h2l2iFtofTdPWTE6Q76ofvnGiFwXAAAAAElFTkSuQmCC",
-    "category": "common-spaces"
-  },
-  {
     "id": 50,
     "src": "uploads/lemon/common-spaces/3.jpg",
     "width": 3888,
