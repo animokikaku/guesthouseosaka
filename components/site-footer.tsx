@@ -14,14 +14,6 @@ export function SiteFooter() {
             <span className="sr-only">{t('brand_name')}</span>© {year}{' '}
             {t('company_name')}
           </div>
-          <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">
-            <span className="sr-only">
-              Built with ❤️ by{' '}
-              <a href={urls.author.url} target="_blank" rel="noopener">
-                {urls.author.name}
-              </a>
-            </span>
-          </div>
           <div className="flex shrink-0 items-center gap-3">
             <SocialLink
               href={urls.socials.facebook}

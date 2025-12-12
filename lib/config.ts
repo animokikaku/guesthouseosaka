@@ -8,9 +8,5 @@ export const urls = {
     facebook: 'https://www.facebook.com/animo.planning',
     instagram: 'https://www.instagram.com/guesthouseosaka',
     x: 'https://x.com/animokikaku1'
-  },
-  author: {
-    name: 'melkir',
-    url: 'https://thibaultvieux.com'
   }
 }
