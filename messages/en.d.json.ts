@@ -226,7 +226,7 @@ declare const messages: {
           "showacho_supermarket": "Supermarket at Showacho Station",
           "supermarkets": "Supermarkets within about 5 minutes on foot"
         },
-        "overview": "300m height! Only 15 minutes walk to the highest building in Japan “Abeno Harukas” Located near popular city attractions, with great public transportation to places like Osaka Castle, Osaka Aquarium Kaiyukan, Universal Studios Japan, Tsūtenkaku Tower. Only a few minutes walk to the nearest stations. Within walking distance, there are supermarkets, convenience stores, ¥100 shops, fitness center, bicycle shop and the ward office.",
+        "overview": "Just a 15-minute walk to Abeno Harukas, the iconic 300-meter-tall skyscraper. The area is close to major city attractions and offers excellent public transportation access to destinations such as Osaka Castle, Osaka Aquarium Kaiyukan, Universal Studios Japan, and Tsūtenkaku Tower. The nearest train stations are only a few minutes away on foot. Within walking distance, you’ll also find supermarkets, convenience stores, ¥100 shops, a fitness center, a bicycle shop, and the ward office.",
         "stations": {
           "fuminosato": "Fuminosato Station (Subway Tanimachi Line), Exit 6 — 3 minutes on foot",
           "showacho": "Showacho Station (Subway Midosuji Line), Exit 2 — 7 minutes on foot",
@@ -369,7 +369,9 @@ declare const messages: {
           "Request correction, addition, or deletion of inaccurate or outdated information",
           "Withdraw your consent to the processing of your information (where applicable)"
         ],
-        "paragraphs": ["You have the right to:"],
+        "paragraphs": [
+          "You have the right to:"
+        ],
         "title": "5. Your Rights"
       },
       "security": {

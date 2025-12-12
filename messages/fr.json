@@ -223,7 +223,7 @@
           "showacho_supermarket": "Supermarché proche de la station Showacho",
           "supermarkets": "Supermarchés à environ 5 minutes à pied"
         },
-        "overview": "300m de hauteur! A seulement 15 minutes à pied du plus haut bâtiment du Japon « Abeno Harukas ». Situé à proximité des attractions populaires de la ville, avec un excellent transport en commun vers des endroits comme le château d'Osaka, l'Aquarium d'Osaka Kaiyukan, Universal Studios Japon, Tsutenkaku Tower. A seulement quelques minutes à pied des gares les plus proches. A distance de marche, vous trouverez des supermarchés, des magasins de proximité, des boutiques de 100¥, un centre de remise en forme, une boutique de vélos et la mairie d’arrondissement.",
+        "overview": "À seulement 15 minutes à pied d’Abeno Harukas, l’emblématique gratte-ciel de 300 mètres. Le quartier est proche des principales attractions de la ville et bénéficie d’un excellent accès aux transports en commun vers des lieux tels que le château d’Osaka, l’aquarium Kaiyukan, Universal Studios Japan et la tour Tsūtenkaku. Les stations les plus proches se trouvent à quelques minutes à pied. À proximité immédiate, vous trouverez également des supermarchés, des supérettes, des boutiques à 100 ¥, une salle de sport, un magasin de vélos ainsi que le bureau de l’arrondissement.",
         "stations": {
           "fuminosato": "Station Fuminosato (métro ligne Tanimachi), sortie 6 — 3 minutes à pied",
           "showacho": "Station Showacho (métro ligne Midosuji), sortie 2 — 7 minutes à pied",
@@ -366,7 +366,9 @@
           "Demander la correction, l'ajout ou la suppression d'informations inexactes ou obsolètes",
           "Retirer votre consentement au traitement de vos informations (le cas échéant)"
         ],
-        "paragraphs": ["Vous avez le droit de :"],
+        "paragraphs": [
+          "Vous avez le droit de :"
+        ],
         "title": "5. Vos droits"
       },
       "security": {
