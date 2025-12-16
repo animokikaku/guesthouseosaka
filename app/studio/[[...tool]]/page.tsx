@@ -12,14 +12,6 @@ import { NextStudio } from 'next-sanity/studio'
 
 export const dynamic = 'force-static'
 
-export { metadata, viewport } from 'next-sanity/studio'
-
 export default function StudioPage() {
-  return (
-    <html lang="en">
-      <body>
-        <NextStudio config={config} />
-      </body>
-    </html>
-  )
+  return <NextStudio config={config} />
 }
