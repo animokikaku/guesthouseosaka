@@ -20,7 +20,10 @@ import { fontVariables } from '@/lib/fonts'
 import { getHousePhoneLabel } from '@/lib/house-phones'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
+import { SanityLive } from '@/sanity/lib/live'
 import { type Metadata } from 'next'
+import { VisualEditing } from 'next-sanity/visual-editing'
+import { draftMode } from 'next/headers'
 import { Organization, WithContext } from 'schema-dts'
 
 export function generateStaticParams() {
@@ -147,6 +150,8 @@ export default async function LocaleLayout({
               <Toaster position="top-center" />
               <Analytics />
               <SpeedInsights />
+              <SanityLive />
+              {(await draftMode()).isEnabled && <VisualEditing />}
             </NextIntlClientProvider>
           </ActiveThemeProvider>
         </ThemeProvider>

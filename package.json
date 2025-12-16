@@ -11,7 +11,8 @@
     "deps:major": "bunx taze@latest major -Ilw",
     "knip": "knip",
     "crowdin:pull": "crowdin download translations",
-    "crowdin:push": "crowdin upload sources"
+    "crowdin:push": "crowdin upload sources",
+    "typegen": "sanity schema extract && sanity typegen generate"
   },
   "dependencies": {
     "@lucide/lab": "^0.1.2",
