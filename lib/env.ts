@@ -5,6 +5,7 @@ const vercelBlobHostname = /\.public\.blob\.vercel-storage\.com$/i
 
 export const env = createEnv({
   server: {
+    SANITY_API_READ_TOKEN: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
     NODE_ENV: z.enum(['development', 'production', 'test'])
   },
