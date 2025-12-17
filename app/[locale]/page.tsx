@@ -11,21 +11,22 @@ import { Link } from '@/i18n/navigation'
 import { sanityFetch } from '@/sanity/lib/live'
 import { homePageQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { setRequestLocale } from 'next-intl/server'
+import { notFound } from 'next/navigation'
 
 export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
   const { locale } = await params
-
   // Enable static rendering
   setRequestLocale(locale as Locale)
-  const t = await getTranslations('LocalePage')
 
   const { data } = await sanityFetch({
     query: homePageQuery,
     params: { locale }
   })
 
-  const { title, description } = data?.hero || {}
+  if (!data) {
+    notFound()
+  }
 
   return (
     <div className="snap-footer section-soft flex flex-col gap-18 md:gap-0">
@@ -35,14 +36,14 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
             {/* Text content */}
             <PageHeader className="md:items-start md:text-left">
               <PageHeaderHeading className="md:text-left">
-                {title}
+                {data.heroTitle}
               </PageHeaderHeading>
               <PageHeaderDescription className="md:text-left">
-                {description}
+                {data.heroDescription}
               </PageHeaderDescription>
               <PageActions className="md:justify-start">
                 <Button asChild size="lg">
-                  <Link href="/contact">{t('hero_action')}</Link>
+                  <Link href="/contact">{data.heroCtaLabel}</Link>
                 </Button>
               </PageActions>
             </PageHeader>
@@ -59,10 +60,10 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
       <section className="snap:none container-wrapper relative flex max-w-7xl flex-1 flex-col items-center justify-center md:min-h-[calc(100dvh-var(--header-height)-var(--footer-height))] md:snap-start">
         <PageHeader>
           <PageHeaderHeading className="max-w-none self-start text-2xl xl:text-4xl">
-            {t('houses_title')}
+            {data.housesTitle}
           </PageHeaderHeading>
           <PageHeaderDescription className="max-w-none self-start text-start text-wrap">
-            {t('houses_description')}
+            {data.housesDescription}
           </PageHeaderDescription>
           <PageActions>
             <Collection className="w-full pt-4" />

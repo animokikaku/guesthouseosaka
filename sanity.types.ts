@@ -13,12 +13,6 @@
  */
 
 // Source: schema.json
-export type HeroSection = {
-  _type: 'heroSection'
-  title: string
-  description: string
-}
-
 export type HousePage = {
   _id: string
   _type: 'housePage'
@@ -91,7 +85,11 @@ export type HomePage = {
   _rev: string
   locale: 'en' | 'ja' | 'fr'
   title: string
-  hero: HeroSection
+  heroTitle: string
+  heroDescription: string
+  heroCtaLabel: string
+  housesTitle: string
+  housesDescription: string
 }
 
 export type InternationalizedArrayStringArrayValue = {
@@ -377,7 +375,6 @@ export type Geopoint = {
 }
 
 export type AllSanitySchemaTypes =
-  | HeroSection
   | HousePage
   | Slug
   | FaqPage
@@ -421,19 +418,20 @@ export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: sanity/lib/queries.ts
 // Variable: homePageQuery
-// Query: *[_type == "homePage" && locale == $locale][0]{  title,  hero {    title,    description,  }}
+// Query: *[_type == "homePage" && locale == $locale][0]{  title,  heroTitle,  heroDescription,  heroCtaLabel,  housesTitle,  housesDescription,}
 export type HomePageQueryResult = {
   title: string
-  hero: {
-    title: string
-    description: string
-  }
+  heroTitle: string
+  heroDescription: string
+  heroCtaLabel: string
+  housesTitle: string
+  housesDescription: string
 } | null
 
 // Query TypeMap
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
-    '*[_type == "homePage" && locale == $locale][0]{\n  title,\n  hero {\n    title,\n    description,\n  }\n}': HomePageQueryResult
+    '*[_type == "homePage" && locale == $locale][0]{\n  title,\n  heroTitle,\n  heroDescription,\n  heroCtaLabel,\n  housesTitle,\n  housesDescription,\n}': HomePageQueryResult
   }
 }
