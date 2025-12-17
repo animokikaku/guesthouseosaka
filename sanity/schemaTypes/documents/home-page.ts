@@ -1,20 +1,28 @@
+import { LocaleField } from '@/sanity/schemaTypes/fields/locale-field'
 import { defineField, defineType } from 'sanity'
 
-export const homePage = defineType({
+export default defineType({
   name: 'homePage',
-  title: 'Home Page',
   type: 'document',
   fields: [
+    LocaleField,
     defineField({
       name: 'title',
+      title: 'Title',
       type: 'string',
       validation: (rule) => rule.required()
     }),
     defineField({
-      name: 'slug',
-      type: 'slug',
-      options: { source: 'title' },
+      name: 'hero',
+      title: 'Hero Section',
+      type: 'heroSection',
       validation: (rule) => rule.required()
     })
-  ]
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'locale'
+    }
+  }
 })

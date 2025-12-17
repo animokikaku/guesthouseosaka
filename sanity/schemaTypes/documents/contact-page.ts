@@ -1,6 +1,6 @@
 import { defineField, defineType } from 'sanity'
 
-export const contactPage = defineType({
+export default defineType({
   name: 'contactPage',
   title: 'Contact Page',
   type: 'document',

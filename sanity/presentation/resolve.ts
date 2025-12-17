@@ -1,11 +1,16 @@
+import { LocaleField } from '@/sanity/schemaTypes/fields/locale-field'
 import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
 
 export const resolve: PresentationPluginOptions['resolve'] = {
   locations: {
     homePage: defineLocations({
-      select: { title: 'title', slug: 'slug.current' },
-      resolve: () => ({
-        locations: [{ title: 'Home', href: '/' }]
+      select: {
+        title: 'title',
+        slug: 'slug.current',
+        locale: LocaleField.name
+      },
+      resolve: (doc) => ({
+        locations: [{ title: 'Home', href: `/${doc?.locale || 'en'}` }]
       })
     }),
     housePage: defineLocations({
