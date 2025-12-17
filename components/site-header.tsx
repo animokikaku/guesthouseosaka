@@ -12,7 +12,11 @@ import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { HouseIdentifierValues, NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { Settings2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+
+// eslint-disable-next-line no-restricted-imports
+import NextLink from 'next/link'
 
 export function SiteHeader() {
   const t = useTranslations('SiteHeader')
@@ -75,6 +79,12 @@ export function SiteHeader() {
             <div className="hidden w-full flex-1 md:flex md:w-auto md:flex-none"></div>
             <LanguageSwitcher size={isMobile ? 'icon-sm' : 'default'} />
             <ModeSwitcher />
+            <Button variant="ghost" size="icon" asChild>
+              <NextLink href="/studio" target="_blank">
+                <Settings2 className="size-4.5" />
+                <span className="sr-only">Sanity Studio</span>
+              </NextLink>
+            </Button>
           </div>
         </div>
       </div>
