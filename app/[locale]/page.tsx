@@ -8,16 +8,24 @@ import {
 } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
-import { Locale, useTranslations } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
-import { use } from 'react'
+import { sanityFetch } from '@/sanity/lib/live'
+import { homePageQuery } from '@/sanity/lib/queries'
+import { Locale } from 'next-intl'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-export default function LocalePage({ params }: PageProps<'/[locale]'>) {
-  const { locale } = use(params)
+export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
+  const { locale } = await params
 
   // Enable static rendering
   setRequestLocale(locale as Locale)
-  const t = useTranslations('LocalePage')
+  const t = await getTranslations('LocalePage')
+
+  const { data } = await sanityFetch({
+    query: homePageQuery,
+    params: { locale }
+  })
+
+  const { title, description } = data?.hero || {}
 
   return (
     <div className="snap-footer section-soft flex flex-col gap-18 md:gap-0">
@@ -27,18 +35,10 @@ export default function LocalePage({ params }: PageProps<'/[locale]'>) {
             {/* Text content */}
             <PageHeader className="md:items-start md:text-left">
               <PageHeaderHeading className="md:text-left">
-                {t.rich('hero_title', {
-                  block: (chunks) => (
-                    <>
-                      <br />
-                      {chunks}
-                      <br />
-                    </>
-                  )
-                })}
+                {title}
               </PageHeaderHeading>
               <PageHeaderDescription className="md:text-left">
-                {t('hero_description')}
+                {description}
               </PageHeaderDescription>
               <PageActions className="md:justify-start">
                 <Button asChild size="lg">
