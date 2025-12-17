@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_NO_WARNINGS=1 next dev",
-    "dev:webpack": "next dev --turbopack=false",
-    "build": "next build",
+    "build": "NODE_NO_WARNINGS=1 next build",
     "start": "next start",
     "lint": "eslint",
     "deps": "bunx taze@latest -Ilw",
