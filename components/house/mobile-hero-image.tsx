@@ -22,6 +22,11 @@ export function MobileHeroImage({ id }: { id: HouseIdentifier }) {
   const storage = useImages()
   const images = storage.images()
 
+  if (id === 'orange') {
+    const [heroImage] = images.splice(11, 1)
+    if (heroImage) images.unshift(heroImage)
+  }
+
   useEffect(() => {
     if (!api) return
 

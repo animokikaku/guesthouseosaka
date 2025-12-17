@@ -11,6 +11,12 @@ export async function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
   const { images: getHouseImages } = await getImages(id)
 
   const images = getHouseImages({ category: 'room', limit: 5 })
+
+  if (id === 'orange') {
+    const [mainImage] = getHouseImages({ category: 'common-spaces', limit: 1 })
+    images.unshift(mainImage)
+  }
+
   const galleryHref = {
     pathname: '/[house]/gallery',
     params: { house: id }
