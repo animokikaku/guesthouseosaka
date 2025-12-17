@@ -13,11 +13,41 @@ export default defineType({
       validation: (rule) => rule.required()
     }),
     defineField({
-      name: 'hero',
-      title: 'Hero Section',
-      type: 'heroSection',
+      name: 'heroTitle',
+      type: 'string',
+      fieldset: 'hero',
+      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'heroDescription',
+      type: 'text',
+      rows: 3,
+      fieldset: 'hero',
+      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'heroCtaLabel',
+      type: 'string',
+      fieldset: 'hero',
+      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'housesTitle',
+      type: 'string',
+      fieldset: 'houses',
+      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'housesDescription',
+      type: 'text',
+      rows: 3,
+      fieldset: 'houses',
       validation: (rule) => rule.required()
     })
+  ],
+  fieldsets: [
+    { name: 'hero', title: 'Hero Section' },
+    { name: 'houses', title: 'Houses Section' }
   ],
   preview: {
     select: {
