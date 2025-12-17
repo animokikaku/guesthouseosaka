@@ -37,8 +37,9 @@ export function GalleryWall({
     return {
       id: img._key,
       src: urlFor(img.image)
-        .width(layout.width * 2) // 2x for retina
-        .height(layout.height * 2)
+        .width(layout.width)
+        .height(layout.height)
+        .dpr(2)
         .fit('crop') // Use hotspot/crop data
         .url(),
       blurDataURL: img.lqip,
