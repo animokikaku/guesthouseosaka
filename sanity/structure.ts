@@ -5,10 +5,7 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Pages')
     .items([
-      S.listItem()
-        .title('Home')
-        .icon(HomeIcon)
-        .child(S.document().schemaType('homePage').documentId('homePage')),
+      S.documentTypeListItem('homePage').title('Home').icon(HomeIcon),
       S.documentTypeListItem('housePage').title('House').icon(BuildingIcon),
       S.listItem()
         .title('FAQ')
