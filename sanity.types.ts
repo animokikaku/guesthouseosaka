@@ -15,8 +15,8 @@
 // Source: schema.json
 export type HeroSection = {
   _type: 'heroSection'
-  title?: string
-  description?: string
+  title: string
+  description: string
 }
 
 export type HousePage = {
@@ -25,13 +25,13 @@ export type HousePage = {
   _createdAt: string
   _updatedAt: string
   _rev: string
-  title?: string
-  slug?: Slug
+  title: string
+  slug: Slug
 }
 
 export type Slug = {
   _type: 'slug'
-  current?: string
+  current: string
   source?: string
 }
 
@@ -41,8 +41,8 @@ export type FaqPage = {
   _createdAt: string
   _updatedAt: string
   _rev: string
-  title?: string
-  slug?: Slug
+  title: string
+  slug: Slug
 }
 
 export type ContactPage = {
@@ -51,8 +51,8 @@ export type ContactPage = {
   _createdAt: string
   _updatedAt: string
   _rev: string
-  title?: string
-  slug?: Slug
+  title: string
+  slug: Slug
 }
 
 export type TranslationMetadata = {
@@ -89,9 +89,9 @@ export type HomePage = {
   _createdAt: string
   _updatedAt: string
   _rev: string
-  locale?: 'en' | 'ja' | 'fr'
-  title?: string
-  hero?: HeroSection
+  locale: 'en' | 'ja' | 'fr'
+  title: string
+  hero: HeroSection
 }
 
 export type InternationalizedArrayStringArrayValue = {
@@ -174,7 +174,7 @@ export type AssistInstructionContextReference = {
 
 export type SanityAssistInstructionContext = {
   _type: 'sanity.assist.instruction.context'
-  reference?: AssistInstructionContextReference
+  reference: AssistInstructionContextReference
 }
 
 export type AssistInstructionContext = {
@@ -202,7 +202,7 @@ export type AssistInstructionContext = {
 
 export type SanityAssistInstructionUserInput = {
   _type: 'sanity.assist.instruction.userInput'
-  message?: string
+  message: string
   description?: string
 }
 
@@ -285,9 +285,9 @@ export type SanityImagePalette = {
 
 export type SanityImageDimensions = {
   _type: 'sanity.imageDimensions'
-  height?: number
-  width?: number
-  aspectRatio?: number
+  height: number
+  width: number
+  aspectRatio: number
 }
 
 export type SanityImageMetadata = {
@@ -303,18 +303,18 @@ export type SanityImageMetadata = {
 
 export type SanityImageHotspot = {
   _type: 'sanity.imageHotspot'
-  x?: number
-  y?: number
-  height?: number
-  width?: number
+  x: number
+  y: number
+  height: number
+  width: number
 }
 
 export type SanityImageCrop = {
   _type: 'sanity.imageCrop'
-  top?: number
-  bottom?: number
-  left?: number
-  right?: number
+  top: number
+  bottom: number
+  left: number
+  right: number
 }
 
 export type SanityFileAsset = {
@@ -421,19 +421,19 @@ export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: sanity/lib/queries.ts
 // Variable: homePageQuery
-// Query: *[_type == "homePage" && locale == $locale]{  title,  hero {    title,    description,  }}
-export type HomePageQueryResult = Array<{
-  title: string | null
+// Query: *[_type == "homePage" && locale == $locale][0]{  title,  hero {    title,    description,  }}
+export type HomePageQueryResult = {
+  title: string
   hero: {
-    title: string | null
-    description: string | null
-  } | null
-}>
+    title: string
+    description: string
+  }
+} | null
 
 // Query TypeMap
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
-    '*[_type == "homePage" && locale == $locale]{\n  title,\n  hero {\n    title,\n    description,\n  }\n}': HomePageQueryResult
+    '*[_type == "homePage" && locale == $locale][0]{\n  title,\n  hero {\n    title,\n    description,\n  }\n}': HomePageQueryResult
   }
 }
