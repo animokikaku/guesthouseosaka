@@ -77,6 +77,13 @@ export type InternationalizedArrayReferenceValue = {
   value?: HomePageReference
 }
 
+export type GalleryWallReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'galleryWall'
+}
+
 export type HomePage = {
   _id: string
   _type: 'homePage'
@@ -88,8 +95,58 @@ export type HomePage = {
   heroTitle: string
   heroDescription: string
   heroCtaLabel: string
+  galleryWall: GalleryWallReference
   housesTitle: string
   housesDescription: string
+}
+
+export type SanityImageAssetReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+}
+
+export type GalleryWall = {
+  _id: string
+  _type: 'galleryWall'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  images: Array<{
+    image: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: 'image'
+    }
+    alt: InternationalizedArrayString
+    _key: string
+  }>
+}
+
+export type InternationalizedArrayString = Array<
+  {
+    _key: string
+  } & InternationalizedArrayStringValue
+>
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
 }
 
 export type InternationalizedArrayStringArrayValue = {
@@ -117,12 +174,6 @@ export type InternationalizedArrayText = Array<
   {
     _key: string
   } & InternationalizedArrayTextValue
->
-
-export type InternationalizedArrayString = Array<
-  {
-    _key: string
-  } & InternationalizedArrayStringValue
 >
 
 export type SanityAssistInstructionTask = {
@@ -299,22 +350,6 @@ export type SanityImageMetadata = {
   isOpaque?: boolean
 }
 
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
 export type SanityFileAsset = {
   _id: string
   _type: 'sanity.fileAsset'
@@ -383,13 +418,18 @@ export type AllSanitySchemaTypes =
   | InternationalizedArrayReference
   | HomePageReference
   | InternationalizedArrayReferenceValue
+  | GalleryWallReference
   | HomePage
+  | SanityImageAssetReference
+  | GalleryWall
+  | InternationalizedArrayString
+  | SanityImageCrop
+  | SanityImageHotspot
   | InternationalizedArrayStringArrayValue
   | InternationalizedArrayTextValue
   | InternationalizedArrayStringValue
   | InternationalizedArrayStringArray
   | InternationalizedArrayText
-  | InternationalizedArrayString
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -407,8 +447,6 @@ export type AllSanitySchemaTypes =
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
-  | SanityImageHotspot
-  | SanityImageCrop
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
@@ -418,12 +456,24 @@ export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: sanity/lib/queries.ts
 // Variable: homePageQuery
-// Query: *[_type == "homePage" && locale == $locale][0]{  title,  heroTitle,  heroDescription,  heroCtaLabel,  housesTitle,  housesDescription,}
+// Query: *[_type == "homePage" && locale == $locale][0]{  title,  heroTitle,  heroDescription,  heroCtaLabel,  "galleryWall": galleryWall->images[] {    _key,    image,    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),    "lqip": image.asset->metadata.lqip  },  housesTitle,  housesDescription,}
 export type HomePageQueryResult = {
   title: string
   heroTitle: string
   heroDescription: string
   heroCtaLabel: string
+  galleryWall: Array<{
+    _key: string
+    image: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: 'image'
+    }
+    alt: string | null
+    lqip: string | null
+  }>
   housesTitle: string
   housesDescription: string
 } | null
@@ -432,6 +482,6 @@ export type HomePageQueryResult = {
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
-    '*[_type == "homePage" && locale == $locale][0]{\n  title,\n  heroTitle,\n  heroDescription,\n  heroCtaLabel,\n  housesTitle,\n  housesDescription,\n}': HomePageQueryResult
+    '*[_type == "homePage" && locale == $locale][0]{\n  title,\n  heroTitle,\n  heroDescription,\n  heroCtaLabel,\n  "galleryWall": galleryWall->images[] {\n    _key,\n    image,\n    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),\n    "lqip": image.asset->metadata.lqip\n  },\n  housesTitle,\n  housesDescription,\n}': HomePageQueryResult
   }
 }

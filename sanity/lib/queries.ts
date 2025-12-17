@@ -6,6 +6,12 @@ export const homePageQuery =
   heroTitle,
   heroDescription,
   heroCtaLabel,
+  "galleryWall": galleryWall->images[] {
+    _key,
+    image,
+    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+    "lqip": image.asset->metadata.lqip
+  },
   housesTitle,
   housesDescription,
 }`)
