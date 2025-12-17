@@ -51,7 +51,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
             {/* Instagram feed */}
             <div className="flex justify-center md:col-span-2 md:justify-end">
               <div className="w-full">
-                <GalleryWall />
+                <GalleryWall images={data.galleryWall} />
               </div>
             </div>
           </div>

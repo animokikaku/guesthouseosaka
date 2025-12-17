@@ -1,4 +1,10 @@
-import { BuildingIcon, HelpCircleIcon, HomeIcon, MailIcon } from 'lucide-react'
+import {
+  BuildingIcon,
+  HelpCircleIcon,
+  HomeIcon,
+  ImagesIcon,
+  MailIcon
+} from 'lucide-react'
 import type { StructureResolver } from 'sanity/structure'
 
 export const structure: StructureResolver = (S) =>
@@ -14,5 +20,11 @@ export const structure: StructureResolver = (S) =>
       S.listItem()
         .title('Contact')
         .icon(MailIcon)
-        .child(S.document().schemaType('contactPage').documentId('contactPage'))
+        .child(
+          S.document().schemaType('contactPage').documentId('contactPage')
+        ),
+      S.divider(),
+      S.documentTypeListItem('galleryWall')
+        .title('Gallery Wall')
+        .icon(ImagesIcon)
     ])

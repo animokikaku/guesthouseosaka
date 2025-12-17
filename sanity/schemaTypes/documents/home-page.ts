@@ -32,6 +32,13 @@ export default defineType({
       validation: (rule) => rule.required()
     }),
     defineField({
+      name: 'galleryWall',
+      title: 'Gallery Wall',
+      type: 'reference',
+      to: [{ type: 'galleryWall' }],
+      validation: (rule) => rule.required()
+    }),
+    defineField({
       name: 'housesTitle',
       type: 'string',
       fieldset: 'houses',
