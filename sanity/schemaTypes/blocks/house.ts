@@ -30,7 +30,12 @@ export default defineType({
           name: 'alt',
           title: 'Alt text',
           type: 'internationalizedArrayString',
-          validation: (r) => r.required()
+          validation: (r) => r.required(),
+          options: {
+            aiAssist: {
+              translateAction: true
+            }
+          }
         })
       ]
     })

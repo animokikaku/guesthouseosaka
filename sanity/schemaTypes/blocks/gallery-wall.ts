@@ -29,7 +29,12 @@ export const galleryWall = defineType({
               name: 'alt',
               title: 'Alt Text',
               type: 'internationalizedArrayString',
-              validation: (rule) => rule.required()
+              validation: (rule) => rule.required(),
+              options: {
+                aiAssist: {
+                  translateAction: true
+                }
+              }
             })
           ],
           preview: {
