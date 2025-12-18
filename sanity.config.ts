@@ -41,7 +41,7 @@ export default defineConfig({
         // }
         document: {
           languageField: LocaleField.name,
-          documentTypes: ['homePage']
+          documentTypes: ['homePage', 'faqPage', 'housePage', 'contactPage']
         }
       }
     }),
