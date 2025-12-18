@@ -76,7 +76,7 @@ export default defineConfig({
     documentInternationalization({
       supportedLanguages: languages,
       languageField: LocaleField.name,
-      schemaTypes: ['homePage']
+      schemaTypes: ['homePage', 'faqPage', 'housePage', 'contactPage']
     })
   ]
 })
