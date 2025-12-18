@@ -21,9 +21,10 @@ export const structure: StructureResolver = (S) =>
         .title('Contact Page')
         .icon(MailIcon),
       S.divider(),
-      S.documentTypeListItem('galleryWall').title('Gallery Wall').icon(ImagesIcon),
+      S.documentTypeListItem('galleryWall')
+        .title('Gallery Wall')
+        .icon(ImagesIcon),
       S.documentTypeListItem('collection')
         .title('Collection')
-        .icon(GalleryHorizontal),
-      S.documentTypeListItem('house').title('House').icon(BuildingIcon)
+        .icon(GalleryHorizontal)
     ])

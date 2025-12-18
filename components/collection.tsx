@@ -6,21 +6,14 @@ import {
   ItemHeader,
   ItemTitle
 } from '@/components/ui/item'
-import { useHouseLabels } from '@/hooks/use-house-labels'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
-import { type HouseIdentifier, HouseIdentifierValues } from '@/lib/types'
+import { type HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { default as Image, ImageProps } from 'next/image'
-
-interface HouseItem {
-  name: string
-  description: string
-  image: ImageProps
-  accentClass: string
-  icon: ImageProps
-  href: { pathname: '/[house]'; params: { house: HouseIdentifier } }
-}
+import { HomePageQueryResult } from '@/sanity.types'
+import { urlFor } from '@/sanity/lib/image'
+import { getImageDimensions, SanityImageSource } from '@sanity/asset-utils'
+import Image, { ImageProps } from 'next/image'
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   orange: 'bg-orange-600/50',
@@ -28,25 +21,44 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   lemon: 'bg-yellow-600/50'
 }
 
-export function Collection({ className }: { className?: string }) {
-  const houseLabel = useHouseLabels()
+type CollectionImages = NonNullable<HomePageQueryResult>['collection']
 
-  const items: HouseItem[] = HouseIdentifierValues.map((house) => {
-    const { name, summary } = houseLabel(house)
+export function Collection({
+  images,
+  className
+}: {
+  images: CollectionImages
+  className?: string
+}) {
+  const items = images.map(({ house, image, title, alt, lqip }) => {
     const { icon, background } = assets[house]
+    const dimensions = getImageDimensions(image as SanityImageSource)
+    const src = urlFor(image)
+      .width(dimensions.width)
+      .height(dimensions.height)
+      .url()
+
     return {
-      name,
-      description: summary,
+      name: title,
+      description: alt,
+      image: {
+        src,
+        alt: alt || '',
+        blurDataURL: lqip || undefined,
+        placeholder: lqip ? 'blur' : undefined,
+        width: dimensions.width,
+        height: dimensions.height
+      } satisfies ImageProps,
       accentClass: ACCENT_CLASSES[house],
-      href: { pathname: '/[house]', params: { house } },
+      href: { pathname: '/[house]' as const, params: { house } },
       icon,
-      image: background
+      background
     }
   })
 
   return (
     <ItemGroup className={cn('grid gap-8 md:grid-cols-3 md:gap-8', className)}>
-      {items.map(({ name, description, image, accentClass, icon, href }) => (
+      {items.map(({ name, description, image, accentClass, href, icon }) => (
         <Item
           key={name}
           variant="default"

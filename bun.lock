@@ -20,6 +20,7 @@
         "@radix-ui/react-toggle": "^1.1.10",
         "@radix-ui/react-toggle-group": "^1.1.11",
         "@react-email/components": "^1.0.1",
+        "@sanity/asset-utils": "^2.3.0",
         "@sanity/assist": "^5.0.3",
         "@sanity/document-internationalization": "^4.1.1",
         "@sanity/image-url": "^2.0.2",

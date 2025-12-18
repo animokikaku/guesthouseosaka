@@ -8,10 +8,15 @@ export default defineType({
   fields: [
     LocaleField,
     defineField({
-      name: 'house',
-      title: 'House',
-      type: 'reference',
-      to: [{ type: 'house' }],
+      name: 'slug',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'orange', value: 'orange' },
+          { title: 'apple', value: 'apple' },
+          { title: 'lemon', value: 'lemon' }
+        ]
+      },
       validation: (r) => r.required()
     }),
     defineField({
