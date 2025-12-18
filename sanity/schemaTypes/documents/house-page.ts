@@ -1,3 +1,4 @@
+import { LocaleField } from '@/sanity/schemaTypes/fields/locale-field'
 import { defineField, defineType } from 'sanity'
 
 export default defineType({
@@ -5,6 +6,7 @@ export default defineType({
   title: 'House Page',
   type: 'document',
   fields: [
+    LocaleField,
     defineField({
       name: 'house',
       title: 'House',
