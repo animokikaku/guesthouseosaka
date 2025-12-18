@@ -14,25 +14,40 @@ export const resolve: PresentationPluginOptions['resolve'] = {
       })
     }),
     housePage: defineLocations({
-      select: { title: 'title', slug: 'slug.current' },
+      select: {
+        title: 'title',
+        slug: 'house.slug.current',
+        locale: LocaleField.name
+      },
       resolve: (doc) => ({
-        locations: [{ title: doc?.title || 'Untitled', href: `/${doc?.slug}` }]
+        locations: [
+          {
+            title: doc?.title || 'Untitled',
+            href: `/${doc?.locale || 'en'}/${doc?.slug}`
+          }
+        ]
       })
     }),
     faqPage: defineLocations({
-      select: { title: 'title', slug: 'slug.current' },
-      resolve: () => ({
-        locations: [{ title: 'FAQ', href: '/faq' }]
+      select: {
+        title: 'title',
+        locale: LocaleField.name
+      },
+      resolve: (doc) => ({
+        locations: [{ title: 'FAQ', href: `/${doc?.locale || 'en'}/faq` }]
       })
     }),
     contactPage: defineLocations({
-      select: { title: 'title', slug: 'slug.current' },
-      resolve: () => ({
+      select: {
+        title: 'title',
+        locale: LocaleField.name
+      },
+      resolve: (doc) => ({
         locations: [
-          { title: 'Contact', href: '/contact' },
-          { title: 'Tour', href: '/contact/tour' },
-          { title: 'Move-in', href: '/contact/move-in' },
-          { title: 'General', href: '/contact/general' }
+          { title: 'Contact', href: `/${doc?.locale || 'en'}/contact` },
+          { title: 'Tour', href: `/${doc?.locale || 'en'}/contact/tour` },
+          { title: 'Move-in', href: `/${doc?.locale || 'en'}/contact/move-in` },
+          { title: 'General', href: `/${doc?.locale || 'en'}/contact/general` }
         ]
       })
     })
