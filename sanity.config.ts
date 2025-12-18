@@ -35,10 +35,10 @@ export default defineConfig({
   plugins: [
     assist({
       translate: {
-        // field: {
-        //   documentTypes: ['homePage', 'faqPage', 'housePage', 'contactPage'],
-        //   languages
-        // }
+        field: {
+          documentTypes: ['galleryWall', 'house'],
+          languages
+        },
         document: {
           languageField: LocaleField.name,
           documentTypes: ['homePage', 'faqPage', 'housePage', 'contactPage']
