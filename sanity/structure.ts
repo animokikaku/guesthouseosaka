@@ -1,5 +1,6 @@
 import {
   BuildingIcon,
+  GalleryHorizontal,
   HelpCircleIcon,
   HomeIcon,
   ImagesIcon,
@@ -9,22 +10,20 @@ import type { StructureResolver } from 'sanity/structure'
 
 export const structure: StructureResolver = (S) =>
   S.list()
-    .title('Pages')
+    .title('Content')
     .items([
-      S.documentTypeListItem('homePage').title('Home').icon(HomeIcon),
-      S.documentTypeListItem('housePage').title('House').icon(BuildingIcon),
-      S.listItem()
-        .title('FAQ')
-        .icon(HelpCircleIcon)
-        .child(S.document().schemaType('faqPage').documentId('faqPage')),
-      S.listItem()
-        .title('Contact')
-        .icon(MailIcon)
-        .child(
-          S.document().schemaType('contactPage').documentId('contactPage')
-        ),
+      S.documentTypeListItem('homePage').title('Home Page').icon(HomeIcon),
+      S.documentTypeListItem('housePage')
+        .title('House Page')
+        .icon(BuildingIcon),
+      S.documentTypeListItem('faqPage').title('FAQ Page').icon(HelpCircleIcon),
+      S.documentTypeListItem('contactPage')
+        .title('Contact Page')
+        .icon(MailIcon),
       S.divider(),
-      S.documentTypeListItem('galleryWall')
-        .title('Gallery Wall')
-        .icon(ImagesIcon)
+      S.documentTypeListItem('galleryWall').title('Gallery Wall').icon(ImagesIcon),
+      S.documentTypeListItem('collection')
+        .title('Collection')
+        .icon(GalleryHorizontal),
+      S.documentTypeListItem('house').title('House').icon(BuildingIcon)
     ])

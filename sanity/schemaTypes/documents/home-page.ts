@@ -8,7 +8,6 @@ export default defineType({
     LocaleField,
     defineField({
       name: 'title',
-      title: 'Title',
       type: 'string',
       validation: (rule) => rule.required()
     }),
@@ -49,6 +48,12 @@ export default defineType({
       rows: 3,
       fieldset: 'houses',
       validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'collection',
+      type: 'reference',
+      to: [{ type: 'collection' }],
+      validation: (r) => r.required()
     })
   ],
   fieldsets: [

@@ -3,19 +3,16 @@ import { defineArrayMember, defineField, defineType } from 'sanity'
 
 export const galleryWall = defineType({
   name: 'galleryWall',
-  title: 'Gallery Wall',
   type: 'document',
   icon: ImagesIcon,
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
       type: 'string',
       validation: (rule) => rule.required()
     }),
     defineField({
       name: 'images',
-      title: 'Images',
       description: 'Exactly 6 images required. Drag to reorder.',
       type: 'array',
       of: [
@@ -24,7 +21,6 @@ export const galleryWall = defineType({
           fields: [
             defineField({
               name: 'image',
-              title: 'Image',
               type: 'image',
               options: { hotspot: true },
               validation: (rule) => rule.required()
@@ -61,7 +57,7 @@ export const galleryWall = defineType({
     },
     prepare({ title, images }) {
       return {
-        title: title || 'Gallery Wall',
+        title,
         subtitle: `${images?.length ?? 0}/6 images`
       }
     }

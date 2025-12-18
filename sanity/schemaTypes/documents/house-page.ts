@@ -6,15 +6,28 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'house',
+      title: 'House',
+      type: 'reference',
+      to: [{ type: 'house' }],
+      validation: (r) => r.required()
+    }),
+    defineField({
       name: 'title',
       type: 'string',
       validation: (rule) => rule.required()
     }),
     defineField({
-      name: 'slug',
-      type: 'slug',
-      options: { source: 'title' },
+      name: 'description',
+      type: 'text',
+      rows: 3,
       validation: (rule) => rule.required()
     })
-  ]
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'locale'
+    }
+  }
 })
