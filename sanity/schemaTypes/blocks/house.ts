@@ -14,7 +14,8 @@ export default defineType({
       name: 'slug',
       type: 'slug',
       options: { source: 'name' },
-      validation: (r) => r.required()
+      validation: (r) => r.required(),
+      readOnly: true
     }),
     defineField({
       name: 'card',
