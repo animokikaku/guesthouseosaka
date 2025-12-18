@@ -43,3 +43,6 @@ next-env.d.ts
 
 # keep locally-stored public assets out of source control
 /public/images
+
+# sanity
+*.tar.gz
