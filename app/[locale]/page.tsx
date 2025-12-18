@@ -66,7 +66,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
             {data.housesDescription}
           </PageHeaderDescription>
           <PageActions>
-            <Collection className="w-full pt-4" />
+            <Collection images={data.collection} className="w-full pt-4" />
           </PageActions>
         </PageHeader>
       </section>

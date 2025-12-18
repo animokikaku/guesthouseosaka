@@ -12,6 +12,14 @@ export const homePageQuery =
     "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
     "lqip": image.asset->metadata.lqip
   },
+  "collection": collection->images[] {
+    _key,
+    house,
+    image,
+    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+    "lqip": image.asset->metadata.lqip
+  },
   housesTitle,
   housesDescription,
 }`)

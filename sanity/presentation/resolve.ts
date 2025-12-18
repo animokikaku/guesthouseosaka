@@ -16,7 +16,7 @@ export const resolve: PresentationPluginOptions['resolve'] = {
     housePage: defineLocations({
       select: {
         title: 'title',
-        slug: 'house.slug.current',
+        slug: 'slug',
         locale: LocaleField.name
       },
       resolve: (doc) => ({

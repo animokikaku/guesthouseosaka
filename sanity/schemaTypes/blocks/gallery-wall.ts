@@ -63,6 +63,7 @@ export const galleryWall = defineType({
     prepare({ title, images }) {
       return {
         title,
+        media: images?.[0]?.image,
         subtitle: `${images?.length ?? 0}/6 images`
       }
     }

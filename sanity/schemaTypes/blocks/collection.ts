@@ -1,3 +1,4 @@
+import { HouseIdentifierValues } from '@/lib/types'
 import { GalleryHorizontal } from 'lucide-react'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
@@ -13,22 +14,84 @@ export default defineType({
       validation: (r) => r.required()
     }),
     defineField({
-      name: 'houses',
-      title: 'Houses',
+      name: 'images',
+      description: 'Exactly 3 images required. Drag to reorder.',
       type: 'array',
-      description: 'Drag to reorder the 3 cards on the homepage.',
-      of: [defineArrayMember({ type: 'reference', to: [{ type: 'house' }] })],
-      validation: (r) => r.required().length(3).unique()
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'house',
+              type: 'string',
+              options: {
+                list: HouseIdentifierValues.map((value) => ({
+                  title: value,
+                  value
+                }))
+              },
+              validation: (rule) => rule.required()
+            }),
+            defineField({
+              name: 'image',
+              type: 'image',
+              options: { hotspot: true },
+              validation: (rule) => rule.required()
+            }),
+            defineField({
+              name: 'title',
+              type: 'internationalizedArrayString',
+              validation: (rule) => rule.required(),
+              options: {
+                aiAssist: {
+                  translateAction: true
+                }
+              }
+            }),
+            defineField({
+              name: 'alt',
+              title: 'Description',
+              type: 'internationalizedArrayString',
+              validation: (rule) => rule.required(),
+              options: {
+                aiAssist: {
+                  translateAction: true
+                }
+              }
+            })
+          ],
+          preview: {
+            select: {
+              media: 'image',
+              title: 'title',
+              alt: 'alt'
+            },
+            prepare({ media, alt, title }) {
+              const firstTitle = title?.[0]?.value
+              const firstAlt = alt?.[0]?.value
+              return {
+                title: firstTitle || 'No title',
+                subtitle: firstAlt,
+                media
+              }
+            }
+          }
+        })
+      ],
+      validation: (rule) => rule.required().length(3)
     })
   ],
   preview: {
     select: {
       title: 'title',
-      houses: 'houses'
+      images: 'images'
     },
-    prepare({ title, houses }) {
-      const count = Array.isArray(houses) ? houses.length : 0
-      return { title, subtitle: `${count}/3 images` }
+    prepare({ title, images }) {
+      return {
+        title,
+        media: images?.[0]?.image,
+        subtitle: `${images?.length ?? 0}/3 images`
+      }
     }
   }
 })
