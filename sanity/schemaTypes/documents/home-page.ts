@@ -33,7 +33,6 @@ export default defineType({
     }),
     defineField({
       name: 'galleryWall',
-      title: 'Gallery Wall',
       type: 'reference',
       to: [{ type: 'galleryWall' }],
       validation: (rule) => rule.required()
