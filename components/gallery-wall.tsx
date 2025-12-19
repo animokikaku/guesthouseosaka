@@ -36,13 +36,13 @@ export function GalleryWall({
 
     return {
       id: img._key,
-      src: urlFor(img.image)
+      src: urlFor(img)
         .width(layout.width)
         .height(layout.height)
         .dpr(2)
         .fit('crop') // Use hotspot/crop data
         .url(),
-      blurDataURL: img.lqip,
+      blurDataURL: img.preview,
       alt: img.alt,
       overlay: overlays[index],
       desktop: layout
