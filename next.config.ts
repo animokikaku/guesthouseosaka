@@ -12,7 +12,8 @@ const nextConfig: NextConfig = {
   reactCompiler: env.NODE_ENV === 'production' ? true : false,
   typedRoutes: true,
   experimental: {
-    typedEnv: true
+    typedEnv: true,
+    turbopackFileSystemCacheForDev: true
   },
   images: {
     qualities: [75, 90],
