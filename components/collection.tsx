@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Item,
   ItemContent,
@@ -15,6 +17,7 @@ import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions } from '@sanity/asset-utils'
 import { createDataAttribute } from 'next-sanity'
+import { useOptimistic } from 'next-sanity/hooks'
 import Image from 'next/image'
 
 const { projectId, dataset, stega } = client.config()
@@ -34,17 +37,32 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
 type CollectionHouses = NonNullable<HomePageQueryResult>['houses']
 
 export function Collection({
-  houses,
+  relatedHouses,
   className,
   documentId,
   documentType
 }: {
-  houses: CollectionHouses
+  relatedHouses: CollectionHouses
   className?: string
   documentId: NonNullable<HomePageQueryResult>['_id']
   documentType: NonNullable<HomePageQueryResult>['_type']
 }) {
-  if (!houses) return null
+  const houses = useOptimistic<
+    NonNullable<HomePageQueryResult>['houses'] | undefined,
+    NonNullable<HomePageQueryResult>
+  >(relatedHouses, (state, action) => {
+    if (action.id === documentId && action?.document?.houses) {
+      // Optimistic document only has _ref values, not resolved references
+      return action.document.houses.map(
+        (doc) => state?.find((h) => h._key === doc._key) ?? doc
+      )
+    }
+    return state
+  })
+
+  if (!houses) {
+    return null
+  }
 
   return (
     <ItemGroup
