@@ -36,7 +36,7 @@ export default defineConfig({
     assist({
       translate: {
         field: {
-          documentTypes: ['galleryWall', 'collection'],
+          documentTypes: ['galleryWall', 'collection', 'house'],
           languages
         },
         document: {

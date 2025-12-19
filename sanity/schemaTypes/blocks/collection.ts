@@ -1,4 +1,3 @@
-import { HouseIdentifierValues } from '@/lib/types'
 import { GalleryHorizontal } from 'lucide-react'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
@@ -23,13 +22,8 @@ export default defineType({
           fields: [
             defineField({
               name: 'house',
-              type: 'string',
-              options: {
-                list: HouseIdentifierValues.map((value) => ({
-                  title: value,
-                  value
-                }))
-              },
+              type: 'reference',
+              to: [{ type: 'house' }],
               validation: (rule) => rule.required()
             }),
             defineField({
@@ -37,41 +31,20 @@ export default defineType({
               type: 'image',
               options: { hotspot: true },
               validation: (rule) => rule.required()
-            }),
-            defineField({
-              name: 'title',
-              type: 'internationalizedArrayString',
-              validation: (rule) => rule.required(),
-              options: {
-                aiAssist: {
-                  translateAction: true
-                }
-              }
-            }),
-            defineField({
-              name: 'alt',
-              title: 'Description',
-              type: 'internationalizedArrayString',
-              validation: (rule) => rule.required(),
-              options: {
-                aiAssist: {
-                  translateAction: true
-                }
-              }
             })
           ],
           preview: {
             select: {
               media: 'image',
-              title: 'title',
-              alt: 'alt'
+              title: 'house.title',
+              description: 'house.description'
             },
-            prepare({ media, alt, title }) {
+            prepare({ media, description, title }) {
               const firstTitle = title?.[0]?.value
-              const firstAlt = alt?.[0]?.value
+              const firstDescription = description?.[0]?.value
               return {
                 title: firstTitle || 'No title',
-                subtitle: firstAlt,
+                subtitle: firstDescription,
                 media
               }
             }
