@@ -1,69 +1,82 @@
-import { LocaleField } from '@/sanity/schemaTypes/fields/locale-field'
-import { defineField, defineType } from 'sanity'
+import { ImageField } from '@/sanity/schemaTypes/fields/image'
+import { HomeIcon } from 'lucide-react'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 
 export default defineType({
   name: 'homePage',
+  icon: HomeIcon,
   type: 'document',
   fields: [
-    LocaleField,
     defineField({
       name: 'title',
-      type: 'string',
+      type: 'internationalizedArrayString',
+      options: { aiAssist: { translateAction: true } },
       validation: (rule) => rule.required()
     }),
     defineField({
-      name: 'heroTitle',
-      type: 'string',
-      fieldset: 'hero',
-      validation: (rule) => rule.required()
-    }),
-    defineField({
-      name: 'heroDescription',
-      type: 'text',
-      rows: 3,
-      fieldset: 'hero',
-      validation: (rule) => rule.required()
-    }),
-    defineField({
-      name: 'heroCtaLabel',
-      type: 'string',
-      fieldset: 'hero',
-      validation: (rule) => rule.required()
+      name: 'hero',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'title',
+          type: 'internationalizedArrayString',
+          options: { aiAssist: { translateAction: true } },
+          validation: (rule) => rule.required()
+        }),
+        defineField({
+          name: 'description',
+          type: 'internationalizedArrayText',
+          options: { aiAssist: { translateAction: true } },
+          validation: (rule) => rule.required()
+        }),
+        defineField({
+          name: 'ctaLabel',
+          type: 'internationalizedArrayString',
+          options: { aiAssist: { translateAction: true } },
+          validation: (rule) => rule.required()
+        })
+      ]
     }),
     defineField({
       name: 'galleryWall',
-      type: 'reference',
-      to: [{ type: 'galleryWall' }],
-      validation: (rule) => rule.required()
-    }),
-    defineField({
-      name: 'housesTitle',
-      type: 'string',
-      fieldset: 'houses',
-      validation: (rule) => rule.required()
-    }),
-    defineField({
-      name: 'housesDescription',
-      type: 'text',
-      rows: 3,
-      fieldset: 'houses',
-      validation: (rule) => rule.required()
+      description: 'Exactly 6 images required. Drag to reorder.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          ...ImageField
+        })
+      ],
+      validation: (rule) => rule.required().length(6)
     }),
     defineField({
       name: 'collection',
-      type: 'reference',
-      to: [{ type: 'collection' }],
-      validation: (r) => r.required()
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'title',
+          type: 'internationalizedArrayString',
+          options: { aiAssist: { translateAction: true } },
+          validation: (rule) => rule.required()
+        }),
+        defineField({
+          name: 'description',
+          type: 'internationalizedArrayText',
+          options: { aiAssist: { translateAction: true } },
+          validation: (rule) => rule.required()
+        })
+      ],
+      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'houses',
+      type: 'array',
+      of: [{ type: 'reference', to: { type: 'house' } }]
     })
-  ],
-  fieldsets: [
-    { name: 'hero', title: 'Hero Section' },
-    { name: 'houses', title: 'Houses Section' }
   ],
   preview: {
     select: {
-      title: 'title',
-      subtitle: 'locale'
+      title: 'title.0.value',
+      subtitle: 'hero.title.0.value'
     }
   }
 })

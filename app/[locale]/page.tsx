@@ -36,14 +36,14 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
             {/* Text content */}
             <PageHeader className="md:items-start md:text-left">
               <PageHeaderHeading className="md:text-left">
-                {data.heroTitle}
+                {data.hero?.title}
               </PageHeaderHeading>
               <PageHeaderDescription className="md:text-left">
-                {data.heroDescription}
+                {data.hero?.description}
               </PageHeaderDescription>
               <PageActions className="md:justify-start">
                 <Button asChild size="lg">
-                  <Link href="/contact">{data.heroCtaLabel}</Link>
+                  <Link href="/contact">{data.hero?.ctaLabel}</Link>
                 </Button>
               </PageActions>
             </PageHeader>
@@ -60,13 +60,13 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
       <section className="snap:none container-wrapper relative flex max-w-7xl flex-1 flex-col items-center justify-center md:min-h-[calc(100dvh-var(--header-height)-var(--footer-height))] md:snap-start">
         <PageHeader>
           <PageHeaderHeading className="max-w-none self-start text-2xl xl:text-4xl">
-            {data.housesTitle}
+            {data.collection?.title}
           </PageHeaderHeading>
           <PageHeaderDescription className="max-w-none self-start text-start text-wrap">
-            {data.housesDescription}
+            {data.collection?.description}
           </PageHeaderDescription>
           <PageActions>
-            <Collection images={data.collection} className="w-full pt-4" />
+            <Collection houses={data.houses} className="w-full pt-4" />
           </PageActions>
         </PageHeader>
       </section>

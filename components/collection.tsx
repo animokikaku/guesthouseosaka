@@ -12,8 +12,8 @@ import { type HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
-import { getImageDimensions, SanityImageSource } from '@sanity/asset-utils'
-import Image, { ImageProps } from 'next/image'
+import { getImageDimensions } from '@sanity/asset-utils'
+import Image, { type ImageProps } from 'next/image'
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   orange: 'bg-orange-600/50',
@@ -21,37 +21,35 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   lemon: 'bg-yellow-600/50'
 }
 
-type CollectionImages = NonNullable<HomePageQueryResult>['collection']
+type CollectionHouses = NonNullable<HomePageQueryResult>['houses']
 
 export function Collection({
-  images,
+  houses,
   className
 }: {
-  images: CollectionImages
+  houses: CollectionHouses
   className?: string
 }) {
-  const items = images.map(({ _key, house, image, lqip }) => {
-    const { icon, background } = assets[house.slug]
-    const dimensions = getImageDimensions(image as SanityImageSource)
-    const src = urlFor(image)
-      .width(dimensions.width)
-      .height(dimensions.height)
-      .url()
+  if (!houses) return null
 
+  const items = houses.map((house) => {
+    const { icon, background } = assets[house.slug]
+    const dimensions = getImageDimensions(house.image.asset!)
+    const src = urlFor(house.image).url()
     return {
-      key: _key,
+      key: house._id,
       name: house.title,
       description: house.description,
       image: {
         src,
-        alt: house.title || '',
-        blurDataURL: lqip || undefined,
-        placeholder: lqip ? 'blur' : undefined,
+        alt: house.image.alt || house.title || house.slug,
+        blurDataURL: house.image.preview || undefined,
+        placeholder: house.image.preview ? 'blur' : undefined,
         width: dimensions.width,
         height: dimensions.height
       } satisfies ImageProps,
-      accentClass: ACCENT_CLASSES[house.slug],
       href: { pathname: '/[house]' as const, params: { house: house.slug } },
+      accentClass: ACCENT_CLASSES[house.slug],
       icon,
       background
     }
@@ -71,7 +69,6 @@ export function Collection({
               <Image
                 {...image}
                 alt={image.alt}
-                placeholder="blur"
                 sizes="(max-width: 768px) 100vw, 800px"
                 quality={90}
                 className="aspect-2/1 w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] md:aspect-square md:h-auto"

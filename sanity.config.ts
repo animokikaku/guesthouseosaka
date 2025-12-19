@@ -5,7 +5,6 @@
  */
 
 import { assist } from '@sanity/assist'
-import { documentInternationalization } from '@sanity/document-internationalization'
 import { visionTool } from '@sanity/vision'
 import { defineConfig, defineField } from 'sanity'
 import { internationalizedArray } from 'sanity-plugin-internationalized-array'
@@ -18,7 +17,6 @@ import { env } from '@/lib/env'
 import { locales } from '@/sanity/config'
 import { resolve } from '@/sanity/presentation/resolve'
 import { schema } from '@/sanity/schemaTypes'
-import { LocaleField } from '@/sanity/schemaTypes/fields/locale-field'
 import { structure } from '@/sanity/structure'
 
 const languages = locales.map(({ name, label }) => ({
@@ -36,13 +34,13 @@ export default defineConfig({
     assist({
       translate: {
         field: {
-          documentTypes: ['galleryWall', 'collection', 'house'],
+          documentTypes: ['homePage', 'house'],
           languages
-        },
-        document: {
-          languageField: LocaleField.name,
-          documentTypes: ['homePage', 'faqPage', 'housePage', 'contactPage']
         }
+        // document: {
+        //   languageField: LocaleField.name,
+        //   documentTypes: []
+        // }
       }
     }),
     structureTool({ structure }),
@@ -72,11 +70,11 @@ export default defineConfig({
           of: [{ type: 'string' }]
         })
       ]
-    }),
-    documentInternationalization({
-      supportedLanguages: languages,
-      languageField: LocaleField.name,
-      schemaTypes: ['homePage', 'faqPage', 'housePage', 'contactPage']
     })
+    // documentInternationalization({
+    //   supportedLanguages: languages,
+    //   languageField: LocaleField.name,
+    //   schemaTypes: []
+    // })
   ]
 })

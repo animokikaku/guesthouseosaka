@@ -13,129 +13,6 @@
  */
 
 // Source: schema.json
-export type TranslationMetadata = {
-  _id: string
-  _type: 'translation.metadata'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  translations?: InternationalizedArrayReference
-  schemaTypes?: Array<string>
-}
-
-export type InternationalizedArrayReference = Array<
-  {
-    _key: string
-  } & InternationalizedArrayReferenceValue
->
-
-export type HomePageReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'homePage'
-}
-
-export type FaqPageReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'faqPage'
-}
-
-export type HousePageReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'housePage'
-}
-
-export type ContactPageReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'contactPage'
-}
-
-export type InternationalizedArrayReferenceValue = {
-  _type: 'internationalizedArrayReferenceValue'
-  value?:
-    | HomePageReference
-    | FaqPageReference
-    | HousePageReference
-    | ContactPageReference
-}
-
-export type ContactPage = {
-  _id: string
-  _type: 'contactPage'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  locale: 'en' | 'ja' | 'fr'
-  title: string
-}
-
-export type HousePage = {
-  _id: string
-  _type: 'housePage'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  locale: 'en' | 'ja' | 'fr'
-  slug: 'orange' | 'apple' | 'lemon'
-  title: string
-  description: string
-}
-
-export type FaqPage = {
-  _id: string
-  _type: 'faqPage'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  locale: 'en' | 'ja' | 'fr'
-  title: string
-}
-
-export type GalleryWallReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'galleryWall'
-}
-
-export type CollectionReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'collection'
-}
-
-export type HomePage = {
-  _id: string
-  _type: 'homePage'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  locale: 'en' | 'ja' | 'fr'
-  title: string
-  heroTitle: string
-  heroDescription: string
-  heroCtaLabel: string
-  galleryWall: GalleryWallReference
-  housesTitle: string
-  housesDescription: string
-  collection: CollectionReference
-}
-
-export type HouseReference = {
-  _ref: string
-  _type: 'reference'
-  _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'house'
-}
-
 export type SanityImageAssetReference = {
   _ref: string
   _type: 'reference'
@@ -143,25 +20,30 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
 }
 
-export type Collection = {
+export type House = {
   _id: string
-  _type: 'collection'
+  _type: 'house'
   _createdAt: string
   _updatedAt: string
   _rev: string
-  title: string
-  images: Array<{
-    house: HouseReference
-    image: {
-      asset?: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      _type: 'image'
-    }
-    _key: string
-  }>
+  slug: 'orange' | 'apple' | 'lemon'
+  title: InternationalizedArrayString
+  description: InternationalizedArrayText
+  image: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt: InternationalizedArrayString
+    _type: 'image'
+  }
 }
+
+export type InternationalizedArrayString = Array<
+  {
+    _key: string
+  } & InternationalizedArrayStringValue
+>
 
 export type SanityImageCrop = {
   _type: 'sanity.imageCrop'
@@ -179,41 +61,49 @@ export type SanityImageHotspot = {
   width: number
 }
 
-export type House = {
-  _id: string
-  _type: 'house'
-  _createdAt: string
-  _updatedAt: string
-  _rev: string
-  slug: 'orange' | 'apple' | 'lemon'
-  title: InternationalizedArrayString
-  description: InternationalizedArrayString
-}
-
-export type InternationalizedArrayString = Array<
+export type InternationalizedArrayText = Array<
   {
     _key: string
-  } & InternationalizedArrayStringValue
+  } & InternationalizedArrayTextValue
 >
 
-export type GalleryWall = {
+export type HouseReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'house'
+}
+
+export type HomePage = {
   _id: string
-  _type: 'galleryWall'
+  _type: 'homePage'
   _createdAt: string
   _updatedAt: string
   _rev: string
-  title: string
-  images: Array<{
-    image: {
-      asset?: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      _type: 'image'
-    }
+  title: InternationalizedArrayString
+  hero?: {
+    title: InternationalizedArrayString
+    description: InternationalizedArrayText
+    ctaLabel: InternationalizedArrayString
+  }
+  galleryWall: Array<{
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
     alt: InternationalizedArrayString
+    _type: 'image'
     _key: string
   }>
+  collection: {
+    title: InternationalizedArrayString
+    description: InternationalizedArrayText
+  }
+  houses?: Array<
+    {
+      _key: string
+    } & HouseReference
+  >
 }
 
 export type InternationalizedArrayStringArrayValue = {
@@ -235,12 +125,6 @@ export type InternationalizedArrayStringArray = Array<
   {
     _key: string
   } & InternationalizedArrayStringArrayValue
->
-
-export type InternationalizedArrayText = Array<
-  {
-    _key: string
-  } & InternationalizedArrayTextValue
 >
 
 export type SanityAssistInstructionTask = {
@@ -483,32 +367,18 @@ export type Slug = {
 }
 
 export type AllSanitySchemaTypes =
-  | TranslationMetadata
-  | InternationalizedArrayReference
-  | HomePageReference
-  | FaqPageReference
-  | HousePageReference
-  | ContactPageReference
-  | InternationalizedArrayReferenceValue
-  | ContactPage
-  | HousePage
-  | FaqPage
-  | GalleryWallReference
-  | CollectionReference
-  | HomePage
-  | HouseReference
   | SanityImageAssetReference
-  | Collection
-  | SanityImageCrop
-  | SanityImageHotspot
   | House
   | InternationalizedArrayString
-  | GalleryWall
+  | SanityImageCrop
+  | SanityImageHotspot
+  | InternationalizedArrayText
+  | HouseReference
+  | HomePage
   | InternationalizedArrayStringArrayValue
   | InternationalizedArrayTextValue
   | InternationalizedArrayStringValue
   | InternationalizedArrayStringArray
-  | InternationalizedArrayText
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations
@@ -536,48 +406,49 @@ export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: sanity/lib/queries.ts
 // Variable: homePageQuery
-// Query: *[_type == "homePage" && locale == $locale][0]{  title,  heroTitle,  heroDescription,  heroCtaLabel,  "galleryWall": galleryWall->images[] {    _key,    image,    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),    "lqip": image.asset->metadata.lqip  },  "collection": collection->images[] {    _key,    house-> {      slug,      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),      "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)    },    image,    "lqip": image.asset->metadata.lqip  },  housesTitle,  housesDescription,}
+// Query: *[_type == "homePage"][0]{  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),  "hero": hero{    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),    "ctaLabel": coalesce(ctaLabel[_key == $locale][0].value, ctaLabel[_key == "en"][0].value)  },  "galleryWall": galleryWall[]{    ...,    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),    "preview": asset->metadata.lqip  },  "collection": collection{    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)  },  "houses": houses[]->{    _id,    slug,    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),    image{      ...,      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),      "preview": asset->metadata.lqip    }  }}
 export type HomePageQueryResult = {
-  title: string
-  heroTitle: string
-  heroDescription: string
-  heroCtaLabel: string
+  title: string | null
+  hero: {
+    title: string | null
+    description: string | null
+    ctaLabel: string | null
+  } | null
   galleryWall: Array<{
-    _key: string
-    image: {
-      asset?: SanityImageAssetReference
-      media?: unknown
-      hotspot?: SanityImageHotspot
-      crop?: SanityImageCrop
-      _type: 'image'
-    }
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
     alt: string | null
-    lqip: string | null
-  }>
-  collection: Array<{
+    _type: 'image'
     _key: string
-    house: {
-      slug: 'apple' | 'lemon' | 'orange'
-      title: string | null
-      description: string | null
-    }
+    preview: string | null
+  }>
+  collection: {
+    title: string | null
+    description: string | null
+  }
+  houses: Array<{
+    _id: string
+    slug: 'apple' | 'lemon' | 'orange'
+    title: string | null
+    description: string | null
     image: {
       asset?: SanityImageAssetReference
       media?: unknown
       hotspot?: SanityImageHotspot
       crop?: SanityImageCrop
+      alt: string | null
       _type: 'image'
+      preview: string | null
     }
-    lqip: string | null
-  }>
-  housesTitle: string
-  housesDescription: string
+  }> | null
 } | null
 
 // Query TypeMap
 import '@sanity/client'
 declare module '@sanity/client' {
   interface SanityQueries {
-    '*[_type == "homePage" && locale == $locale][0]{\n  title,\n  heroTitle,\n  heroDescription,\n  heroCtaLabel,\n  "galleryWall": galleryWall->images[] {\n    _key,\n    image,\n    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),\n    "lqip": image.asset->metadata.lqip\n  },\n  "collection": collection->images[] {\n    _key,\n    house-> {\n      slug,\n      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n      "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)\n    },\n    image,\n    "lqip": image.asset->metadata.lqip\n  },\n  housesTitle,\n  housesDescription,\n}': HomePageQueryResult
+    '*[_type == "homePage"][0]{\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "hero": hero{\n    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n    "ctaLabel": coalesce(ctaLabel[_key == $locale][0].value, ctaLabel[_key == "en"][0].value)\n  },\n  "galleryWall": galleryWall[]{\n    ...,\n    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),\n    "preview": asset->metadata.lqip\n  },\n  "collection": collection{\n    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)\n  },\n  "houses": houses[]->{\n    _id,\n    slug,\n    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n    image{\n      ...,\n      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),\n      "preview": asset->metadata.lqip\n    }\n  }\n}': HomePageQueryResult
   }
 }
