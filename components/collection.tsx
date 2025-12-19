@@ -30,8 +30,8 @@ export function Collection({
   images: CollectionImages
   className?: string
 }) {
-  const items = images.map(({ house, image, title, alt, lqip }) => {
-    const { icon, background } = assets[house]
+  const items = images.map(({ _key, house, image, lqip }) => {
+    const { icon, background } = assets[house.slug]
     const dimensions = getImageDimensions(image as SanityImageSource)
     const src = urlFor(image)
       .width(dimensions.width)
@@ -39,18 +39,19 @@ export function Collection({
       .url()
 
     return {
-      name: title,
-      description: alt,
+      key: _key,
+      name: house.title,
+      description: house.description,
       image: {
         src,
-        alt: alt || '',
+        alt: house.title || '',
         blurDataURL: lqip || undefined,
         placeholder: lqip ? 'blur' : undefined,
         width: dimensions.width,
         height: dimensions.height
       } satisfies ImageProps,
-      accentClass: ACCENT_CLASSES[house],
-      href: { pathname: '/[house]' as const, params: { house } },
+      accentClass: ACCENT_CLASSES[house.slug],
+      href: { pathname: '/[house]' as const, params: { house: house.slug } },
       icon,
       background
     }
@@ -58,9 +59,9 @@ export function Collection({
 
   return (
     <ItemGroup className={cn('grid gap-8 md:grid-cols-3 md:gap-8', className)}>
-      {items.map(({ name, description, image, accentClass, href, icon }) => (
+      {items.map(({ key, name, description, image, accentClass, href, icon }) => (
         <Item
-          key={name}
+          key={key}
           variant="default"
           role="listitem"
           className="h-full flex-col items-start p-0"

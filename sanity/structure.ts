@@ -26,5 +26,6 @@ export const structure: StructureResolver = (S) =>
         .icon(ImagesIcon),
       S.documentTypeListItem('collection')
         .title('Collection')
-        .icon(GalleryHorizontal)
+        .icon(GalleryHorizontal),
+      S.documentTypeListItem('house').title('House').icon(BuildingIcon)
     ])
