@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Item,
   ItemContent,
@@ -15,7 +13,7 @@ import { cn } from '@/lib/utils'
 import { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions } from '@sanity/asset-utils'
-import Image, { type ImageProps } from 'next/image'
+import Image from 'next/image'
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   orange: 'bg-orange-600/50',
@@ -36,20 +34,11 @@ export function Collection({
 
   const items = houses.map((house) => {
     const { icon, background } = assets[house.slug]
-    const dimensions = getImageDimensions(house.image.asset!)
-    const src = urlFor(house.image).url()
     return {
       key: house._id,
       name: house.title,
       description: house.description,
-      image: {
-        src,
-        alt: house.image.alt || house.title || house.slug,
-        blurDataURL: house.image.preview || undefined,
-        placeholder: house.image.preview ? 'blur' : undefined,
-        width: dimensions.width,
-        height: dimensions.height
-      } satisfies ImageProps,
+      image: house.image,
       href: { pathname: '/[house]' as const, params: { house: house.slug } },
       accentClass: ACCENT_CLASSES[house.slug],
       icon,
@@ -69,13 +58,7 @@ export function Collection({
           >
             <Link href={href} className="group block w-full">
               <ItemHeader className="relative overflow-hidden rounded-sm">
-                <Image
-                  {...image}
-                  alt={image.alt}
-                  sizes="(max-width: 768px) 100vw, 800px"
-                  quality={90}
-                  className="aspect-2/1 w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] md:aspect-square md:h-auto"
-                />
+                <CollectionImage image={image} />
                 <div
                   className={cn(
                     'absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100',
@@ -101,5 +84,43 @@ export function Collection({
         )
       )}
     </ItemGroup>
+  )
+}
+
+function CollectionImage({
+  image
+}: {
+  image: NonNullable<CollectionHouses>[number]['image']
+}) {
+  const buildImage = urlFor(image)
+  const dimensions = getImageDimensions(image.asset!)
+  const alt = image.alt || ''
+  const blurDataURL = image.preview || undefined
+  const placeholder = image.preview ? 'blur' : undefined
+  const width = dimensions.width
+  const height = dimensions.height
+
+  return (
+    <>
+      <Image
+        src={buildImage.url()}
+        alt={alt}
+        width={width}
+        height={height}
+        blurDataURL={blurDataURL}
+        placeholder={placeholder}
+        quality={85}
+        className="block aspect-2/1 w-full object-cover md:hidden"
+      />
+      <Image
+        src={buildImage.fit('crop').width(800).height(800).url()}
+        alt={alt}
+        width={800}
+        height={800}
+        blurDataURL={blurDataURL}
+        placeholder={placeholder}
+        className="hidden aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] md:block"
+      />
+    </>
   )
 }
