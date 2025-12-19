@@ -1,24 +1,23 @@
-import { locales } from '@/sanity/config'
+import { HouseIdentifier } from '@/lib/types'
 import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
+
+const l = {
+  home: () => ({ title: 'Home', href: '/' }),
+  house: (slug: HouseIdentifier) => ({ title: 'House', href: `/${slug}` })
+}
 
 export const resolve: PresentationPluginOptions['resolve'] = {
   locations: {
     homePage: defineLocations({
       select: {},
       resolve: () => ({
-        locations: locales.map((locale) => ({
-          title: `Home (${locale.label})`,
-          href: `/${locale.name}`
-        }))
+        locations: [l.home()]
       })
     }),
     house: defineLocations({
       select: { slug: 'slug' },
       resolve: (doc) => ({
-        locations: locales.map((locale) => ({
-          title: `House (${locale.label})`,
-          href: `/${locale.name}/${doc?.slug}`
-        }))
+        locations: [l.home(), l.house(doc?.slug)]
       })
     })
   }
