@@ -36,7 +36,7 @@ export function Collection({
   data: CollectionData
   className?: string
 }) {
-  const [houses, dataSanity] = useOptimistic(data, 'houses')
+  const [houses, attribute] = useOptimistic(data, 'houses')
 
   if (!houses) {
     return null
@@ -45,7 +45,7 @@ export function Collection({
   return (
     <ItemGroup
       className={cn('grid gap-8 md:grid-cols-3 md:gap-8', className)}
-      data-sanity={dataSanity.toString()}
+      data-sanity={attribute.list()}
     >
       {houses.map((house) => (
         <Item
@@ -53,7 +53,7 @@ export function Collection({
           variant="default"
           role="listitem"
           className="h-full flex-col items-start p-0"
-          data-sanity={dataSanity(house._key)}
+          data-sanity={attribute.item(house._key)}
         >
           <Link
             href={{
