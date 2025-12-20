@@ -8,25 +8,15 @@ import {
   ItemHeader,
   ItemTitle
 } from '@/components/ui/item'
+import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { type HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { HomePageQueryResult } from '@/sanity.types'
-import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions } from '@sanity/asset-utils'
-import { createDataAttribute } from 'next-sanity'
-import { useOptimistic } from 'next-sanity/hooks'
 import Image from 'next/image'
-
-const { projectId, dataset, stega } = client.config()
-
-const dataAttributeConfig = {
-  projectId,
-  dataset,
-  baseUrl: typeof stega.studioUrl === 'string' ? stega.studioUrl : ''
-}
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   orange: 'bg-orange-600/50',
@@ -34,31 +24,19 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   lemon: 'bg-yellow-600/50'
 }
 
-type CollectionHouses = NonNullable<HomePageQueryResult>['houses']
+type CollectionData = Pick<
+  NonNullable<HomePageQueryResult>,
+  'houses' | '_id' | '_type'
+>
 
 export function Collection({
-  relatedHouses,
-  className,
-  documentId,
-  documentType
+  data,
+  className
 }: {
-  relatedHouses: CollectionHouses
+  data: CollectionData
   className?: string
-  documentId: NonNullable<HomePageQueryResult>['_id']
-  documentType: NonNullable<HomePageQueryResult>['_type']
 }) {
-  const houses = useOptimistic<
-    NonNullable<HomePageQueryResult>['houses'] | undefined,
-    NonNullable<HomePageQueryResult>
-  >(relatedHouses, (state, action) => {
-    if (action.id === documentId && action?.document?.houses) {
-      // Optimistic document only has _ref values, not resolved references
-      return action.document.houses.map(
-        (doc) => state?.find((h) => h._key === doc._key) ?? doc
-      )
-    }
-    return state
-  })
+  const [houses, dataSanity] = useOptimistic(data, 'houses')
 
   if (!houses) {
     return null
@@ -67,12 +45,7 @@ export function Collection({
   return (
     <ItemGroup
       className={cn('grid gap-8 md:grid-cols-3 md:gap-8', className)}
-      data-sanity={createDataAttribute({
-        ...dataAttributeConfig,
-        id: documentId,
-        type: documentType,
-        path: 'houses'
-      }).toString()}
+      data-sanity={dataSanity.toString()}
     >
       {houses.map((house) => (
         <Item
@@ -80,12 +53,7 @@ export function Collection({
           variant="default"
           role="listitem"
           className="h-full flex-col items-start p-0"
-          data-sanity={createDataAttribute({
-            ...dataAttributeConfig,
-            id: documentId,
-            type: documentType,
-            path: `houses[_key=="${house._key}"]`
-          }).toString()}
+          data-sanity={dataSanity(house._key)}
         >
           <Link
             href={{
@@ -126,7 +94,7 @@ export function Collection({
 function CollectionImage({
   image
 }: {
-  image: NonNullable<CollectionHouses>[number]['image']
+  image: NonNullable<CollectionData['houses']>[number]['image']
 }) {
   const buildImage = urlFor(image)
   const dimensions = getImageDimensions(image.asset!)
