@@ -75,12 +75,6 @@ function useOptimisticArray<
   ) as TDocument[K]
 }
 
-type AttributeFn = ((itemKey?: string) => string) & {
-  toString: () => string
-  valueOf: () => string
-  [Symbol.toPrimitive]: () => string
-}
-
 export function useOptimistic<
   TDocument extends { _id: string; _type: string },
   K extends ArrayFieldKey<TDocument>
@@ -89,16 +83,11 @@ export function useOptimistic<
   const createAttribute = data
     ? createDataAttribute({ id: data._id, type: data._type })
     : null
-  const arrayAttribute = createAttribute?.(String(fieldKey)) ?? ''
-
-  const attribute = ((itemKey?: string) =>
-    createAttribute
-      ? createAttribute(String(fieldKey), itemKey)
-      : '') as AttributeFn
-
-  attribute.toString = () => arrayAttribute
-  attribute.valueOf = () => arrayAttribute
-  attribute[Symbol.toPrimitive] = () => arrayAttribute
+  const attribute = {
+    list: () => (createAttribute ? createAttribute(String(fieldKey)) : ''),
+    item: (itemKey: string) =>
+      createAttribute ? createAttribute(String(fieldKey), itemKey) : ''
+  }
 
   return [array, attribute] as const
 }
