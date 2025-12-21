@@ -8,10 +8,11 @@ export const settings = defineType({
   icon: CogIcon,
   fields: [
     defineField({
-      name: 'siteName',
-      title: 'Site Name',
+      name: 'brandName',
+      title: 'Brand Name (SEO)',
       type: 'internationalizedArrayString',
-      description: 'The name of your website',
+      description:
+        'Legacy brand name for SEO purposes, shown in footer as sr-only (e.g., Guest House Osaka)',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     }),
@@ -33,12 +34,12 @@ export const settings = defineType({
   ],
   preview: {
     select: {
-      siteName: 'siteName.0.value'
+      brandName: 'brandName.0.value'
     },
-    prepare({ siteName }) {
+    prepare({ brandName }) {
       return {
         title: 'Site Settings',
-        subtitle: siteName || 'Not configured'
+        subtitle: brandName || 'Not configured'
       }
     }
   }

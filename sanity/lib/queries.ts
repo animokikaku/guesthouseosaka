@@ -44,7 +44,6 @@ export const homePageQuery = defineQuery(`*[_type == "homePage"][0]{
     hotspot,
     crop,
     "alt": ${l('alt')},
-    "caption": ${l('caption')},
     "preview": asset->metadata.lqip
   },
   "collection": collection{
@@ -58,7 +57,6 @@ export const homePageQuery = defineQuery(`*[_type == "homePage"][0]{
       slug,
       "title": ${l('title')},
       "description": ${l('description')},
-      "summary": ${l('summary')},
       "caption": ${l('caption')},
       building,
       image{
@@ -87,7 +85,6 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   slug,
   "title": ${l('title')},
   "description": ${l('description')},
-  "summary": ${l('summary')},
   "caption": ${l('caption')},
   building,
   phone,
@@ -126,8 +123,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       },
       hotspot,
       crop,
-      "alt": ${l('alt')},
-      "caption": ${l('caption')}
+      "alt": ${l('alt')}
     },
     "category": category->{
       "key": key.current,

@@ -15,13 +15,6 @@ export const localizedImage = defineType({
       description: 'Describe this image for screen readers and SEO',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
-    }),
-    defineField({
-      name: 'caption',
-      title: 'Caption',
-      type: 'internationalizedArrayString',
-      description: 'Optional caption displayed below the image',
-      options: { aiAssist: { translateAction: true } }
     })
   ],
   preview: {

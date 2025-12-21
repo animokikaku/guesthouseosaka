@@ -182,6 +182,7 @@ export type AmenityCategory = {
   _updatedAt: string
   _rev: string
   key: Slug
+  icon?: LucideIcon
   label: InternationalizedArrayString
   order: number
 }
@@ -193,31 +194,9 @@ export type GalleryCategory = {
   _updatedAt: string
   _rev: string
   key: Slug
+  icon?: LucideIcon
   label: InternationalizedArrayString
   order: number
-  image?: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    _type: 'image'
-  }
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type ContactPage = {
@@ -265,6 +244,7 @@ export type Settings = {
   _updatedAt: string
   _rev: string
   siteName: InternationalizedArrayString
+  brandName: InternationalizedArrayString
   companyName: InternationalizedArrayString
   socialLinks?: Array<
     {
@@ -347,6 +327,22 @@ export type Geopoint = {
   lat?: number
   lng?: number
   alt?: number
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
 }
 
 export type HouseReference = {
@@ -657,14 +653,14 @@ export type AllSanitySchemaTypes =
   | Slug
   | AmenityCategory
   | GalleryCategory
-  | SanityImageCrop
-  | SanityImageHotspot
   | ContactPage
   | InternationalizedArrayText
   | FaqPage
   | Settings
   | House
   | Geopoint
+  | SanityImageCrop
+  | SanityImageHotspot
   | HouseReference
   | HomePage
   | InternationalizedArrayStringArrayValue
@@ -948,16 +944,7 @@ export type GalleryCategoriesQueryResult = Array<{
   key: string
   label: string | null
   order: number
-  image: {
-    asset: {
-      _id: string
-      url: string | null
-      dimensions: SanityImageDimensions | null
-      lqip: string | null
-    } | null
-    hotspot: SanityImageHotspot | null
-    crop: SanityImageCrop | null
-  } | null
+  image: null
 }>
 
 // Source: sanity/lib/queries.ts

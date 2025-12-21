@@ -70,11 +70,30 @@ export default defineConfig({
       fieldTypes: [
         'string',
         'text',
-        // TODO: Add other custom field types as needed
         defineField({
           name: 'stringArray',
           type: 'array',
           of: [{ type: 'string' }]
+        }),
+        defineField({
+          name: 'portableText',
+          type: 'array',
+          of: [
+            {
+              type: 'block',
+              styles: [{ title: 'Normal', value: 'normal' }],
+              marks: {
+                decorators: [
+                  { title: 'Bold', value: 'strong' },
+                  { title: 'Italic', value: 'em' }
+                ]
+              },
+              lists: [
+                { title: 'Bullet', value: 'bullet' },
+                { title: 'Numbered', value: 'number' }
+              ]
+            }
+          ]
         })
       ]
     })

@@ -47,14 +47,6 @@ export const house = defineType({
       options: { aiAssist: { translateAction: true } }
     }),
     defineField({
-      name: 'summary',
-      title: 'Summary',
-      type: 'internationalizedArrayString',
-      group: 'identity',
-      description: 'Short tagline for listings and navigation',
-      options: { aiAssist: { translateAction: true } }
-    }),
-    defineField({
       name: 'caption',
       title: 'Navigation Caption',
       type: 'internationalizedArrayText',
