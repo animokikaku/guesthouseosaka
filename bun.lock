@@ -35,12 +35,12 @@
         "clsx": "^2.1.1",
         "embla-carousel-react": "^8.6.0",
         "lucide-react": "^0.562.0",
-        "next": "16.1.0",
+        "next": "^16.1.0",
         "next-intl": "^4.6.1",
         "next-sanity": "^12.0.5",
         "next-themes": "^0.4.6",
-        "react": "19.2.3",
-        "react-dom": "19.2.3",
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3",
         "resend": "^6.6.0",
         "sanity": "^5.0.1",
         "sanity-plugin-internationalized-array": "^3.2.2",
@@ -61,7 +61,7 @@
         "babel-plugin-react-compiler": "^1.0.0",
         "eslint": "^9.39.2",
         "eslint-config-next": "16.1.0",
-        "knip": "^5.75.2",
+        "knip": "^5.76.1",
         "prettier": "3.7.4",
         "prettier-plugin-tailwindcss": "^0.7.2",
         "tailwindcss": "^4.1.18",
@@ -2004,7 +2004,7 @@
 
     "kind-of": ["kind-of@6.0.3", "", {}, "sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw=="],
 
-    "knip": ["knip@5.75.2", "", { "dependencies": { "@nodelib/fs.walk": "^1.2.3", "fast-glob": "^3.3.3", "formatly": "^0.3.0", "jiti": "^2.6.0", "js-yaml": "^4.1.1", "minimist": "^1.2.8", "oxc-resolver": "^11.15.0", "picocolors": "^1.1.1", "picomatch": "^4.0.1", "smol-toml": "^1.5.2", "strip-json-comments": "5.0.3", "zod": "^4.1.11" }, "peerDependencies": { "@types/node": ">=18", "typescript": ">=5.0.4 <7" }, "bin": { "knip": "bin/knip.js", "knip-bun": "bin/knip-bun.js" } }, "sha512-ZSO9gGKG/RztUYawrMbPTqO9VG3qvTW/ddINJqYM+N+9F/0bX6HEBolo8+HKaBuTIgyM4dn2rZ8M+JLObRdzog=="],
+    "knip": ["knip@5.76.1", "", { "dependencies": { "@nodelib/fs.walk": "^1.2.3", "fast-glob": "^3.3.3", "formatly": "^0.3.0", "jiti": "^2.6.0", "js-yaml": "^4.1.1", "minimist": "^1.2.8", "oxc-resolver": "^11.15.0", "picocolors": "^1.1.1", "picomatch": "^4.0.1", "smol-toml": "^1.5.2", "strip-json-comments": "5.0.3", "zod": "^4.1.11" }, "peerDependencies": { "@types/node": ">=18", "typescript": ">=5.0.4 <7" }, "bin": { "knip": "bin/knip.js", "knip-bun": "bin/knip-bun.js" } }, "sha512-V9CgrzE8ZhqsJeZE4VFUXZHm1cRDmL8WiRRZUPBi65rWJkExdJkEmV2ab+jiOQTzhoBIL/d3DegOPpMq5IF3DA=="],
 
     "lambda-runtimes": ["lambda-runtimes@2.0.5", "", {}, "sha512-6BoLX9xuvr+B/f05MOhJnzRdF8Za5YYh82n45ndun9EU3uhJv9kIwnYrOrvuA7MoGwZgCMI7RUhBRzfw/l63SQ=="],
 
