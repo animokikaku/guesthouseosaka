@@ -8,20 +8,21 @@ import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { AdvancedMarker, AdvancedMarkerProps } from '@vis.gl/react-google-maps'
 
-interface HouseMarkerProps extends Omit<
-  AdvancedMarkerProps,
-  'position' | 'onClick'
-> {
+interface HouseMarkerProps
+  extends Omit<AdvancedMarkerProps, 'position' | 'onClick'> {
   id: HouseIdentifier
+  center?: { lat: number; lng: number }
   isActive?: boolean
 }
 
 export function HouseMarker({
   id,
+  center,
   className,
   ...markerProps
 }: HouseMarkerProps) {
-  const position = HOUSE_CENTERS[id]
+  // Use provided center or fallback to constants
+  const position = center ?? HOUSE_CENTERS[id]
   const mapsUrl = GOOGLE_MAPS_URLS[id]
 
   return (

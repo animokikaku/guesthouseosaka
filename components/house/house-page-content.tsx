@@ -1,5 +1,6 @@
 import { HouseAbout } from '@/components/house/house-about'
 import { HouseAmenities } from '@/components/house/house-amenities'
+import { HouseBuilding } from '@/components/house/house-building'
 import { HouseLocation } from '@/components/house/house-location'
 import { HousePricing } from '@/components/house/house-pricing'
 import { MobileHeroImage } from '@/components/house/mobile-hero-image'
@@ -13,11 +14,10 @@ import {
 import { PageNav } from '@/components/page-nav'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import type { HouseQueryResult } from '@/sanity.types'
 
 type HousePageContentProps = {
-  houseId: HouseIdentifier
-  title: string
-  description: string
+  data: NonNullable<HouseQueryResult>
 }
 
 const THEME_COLORS: Record<HouseIdentifier, string> = {
@@ -26,18 +26,16 @@ const THEME_COLORS: Record<HouseIdentifier, string> = {
   orange: 'bg-orange-500 dark:bg-orange-600'
 }
 
-export function HousePageContent({
-  houseId,
-  title,
-  description
-}: HousePageContentProps) {
+export function HousePageContent({ data }: HousePageContentProps) {
+  const houseId = data.slug
+
   return (
     <>
-      <MobileHeroImage id={houseId} />
+      <MobileHeroImage id={houseId} image={data.image} />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
-          <PageHeaderHeading>{title}</PageHeaderHeading>
-          <PageHeaderDescription>{description}</PageHeaderDescription>
+          <PageHeaderHeading>{data.title}</PageHeaderHeading>
+          <PageHeaderDescription>{data.description}</PageHeaderDescription>
           <div
             className={cn('mx-auto mt-6 h-1 w-24', THEME_COLORS[houseId])}
             aria-hidden="true"
@@ -50,16 +48,20 @@ export function HousePageContent({
             <HousesNav />
           </PageNav>
           <div className="theme-container">
-            <ImageBlockGallery id={houseId} />
+            <ImageBlockGallery id={houseId} gallery={data.gallery} />
             <article
               id={houseId}
               aria-labelledby={`${houseId}-title`}
               className="space-y-12 pt-8"
             >
-              <HouseAbout id={houseId} />
-              <HouseAmenities id={houseId} />
-              <HouseLocation id={houseId} />
-              <HousePricing id={houseId} />
+              <HouseAbout
+                title={data.title}
+                about={data.about}
+                building={<HouseBuilding id={houseId} building={data.building} />}
+              />
+              <HouseAmenities amenities={data.amenities} />
+              <HouseLocation id={houseId} location={data.location} />
+              <HousePricing pricing={data.pricing} />
             </article>
           </div>
         </div>

@@ -1,10 +1,11 @@
-import { cn } from '@/lib/utils'
-
 import { Link } from '@/i18n/navigation'
 import { HouseIdentifier } from '@/lib/types'
+import { cn } from '@/lib/utils'
+import type { HouseQueryResult } from '@/sanity.types'
 import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
 
+// Legacy constant for backward compatibility - will be removed after content migration
 type BuildingData = {
   rooms: number
   floors: number
@@ -12,25 +13,17 @@ type BuildingData = {
 }
 
 export const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
-  apple: {
-    rooms: 24,
-    floors: 8,
-    monthly_price: 50000
-  },
-  lemon: {
-    rooms: 12,
-    floors: 7,
-    monthly_price: 50000
-  },
-  orange: {
-    rooms: 28,
-    floors: 3,
-    monthly_price: 41000
-  }
+  apple: { rooms: 24, floors: 8, monthly_price: 50000 },
+  lemon: { rooms: 12, floors: 7, monthly_price: 50000 },
+  orange: { rooms: 28, floors: 3, monthly_price: 41000 }
 }
 
-export function HouseBuilding({ id }: { id: HouseIdentifier }) {
-  const building = BUILDING_DATA[id]
+type HouseBuildingProps = {
+  id: HouseIdentifier
+  building: NonNullable<HouseQueryResult>['building']
+}
+
+export function HouseBuilding({ id, building }: HouseBuildingProps) {
   const t = useTranslations('HouseBuilding')
   const formatter = useFormatter()
 
@@ -42,17 +35,17 @@ export function HouseBuilding({ id }: { id: HouseIdentifier }) {
   const details = [
     {
       label: t('rooms_label'),
-      value: number(building.rooms),
+      value: number(building?.rooms ?? 0),
       icon: BedDoubleIcon
     },
     {
       label: t('floors_label'),
-      value: number(building.floors),
+      value: number(building?.floors ?? 0),
       icon: LayersIcon
     },
     {
       label: t('min_rent_label'),
-      value: currency(building.monthly_price)
+      value: currency(building?.startingPrice ?? 0)
     }
   ]
   const [rooms, floors, minRent] = details

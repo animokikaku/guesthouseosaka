@@ -4,9 +4,15 @@ import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { getImages } from '@/lib/images/server'
 import { HouseIdentifier } from '@/lib/types'
+import type { HouseQueryResult } from '@/sanity.types'
 import { getTranslations } from 'next-intl/server'
 
-export async function ImageBlockGallery({ id }: { id: HouseIdentifier }) {
+type ImageBlockGalleryProps = {
+  id: HouseIdentifier
+  gallery?: NonNullable<HouseQueryResult>['gallery']
+}
+
+export async function ImageBlockGallery({ id }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
   const { images: getHouseImages } = await getImages(id)
 
