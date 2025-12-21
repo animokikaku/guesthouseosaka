@@ -413,7 +413,8 @@
     "optional_hint": "optional"
   },
   "MobileHeroImage": {
-    "empty_title": "No images found"
+    "empty_title": "No gallery images",
+    "empty_description": "Gallery images are managed through Sanity CMS."
   },
   "MobileNav": {
     "home_label": "Home",

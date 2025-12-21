@@ -6,10 +6,17 @@ import {
   CarouselContent,
   CarouselItem
 } from '@/components/ui/carousel'
-import { Empty, EmptyTitle } from '@/components/ui/empty'
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { useGallery } from '@/lib/images/sanity-client'
 import { HouseIdentifier } from '@/lib/types'
+import { ImageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
@@ -50,8 +57,14 @@ export function MobileHeroImage({ id }: MobileHeroImageProps) {
 
   if (images.length === 0) {
     return (
-      <Empty className="min-h-96 w-full">
-        <EmptyTitle>{t('empty_title')}</EmptyTitle>
+      <Empty className="min-h-96 w-full border border-dashed">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <ImageIcon />
+          </EmptyMedia>
+          <EmptyTitle>{t('empty_title')}</EmptyTitle>
+          <EmptyDescription>{t('empty_description')}</EmptyDescription>
+        </EmptyHeader>
       </Empty>
     )
   }

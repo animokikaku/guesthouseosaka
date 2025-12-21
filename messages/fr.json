@@ -413,7 +413,8 @@
     "optional_hint": "facultatif"
   },
   "MobileHeroImage": {
-    "empty_title": "Aucune image trouvée"
+    "empty_title": "Aucune image de galerie",
+    "empty_description": "Les images de galerie sont gérées via Sanity CMS."
   },
   "MobileNav": {
     "home_label": "Accueil",

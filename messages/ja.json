@@ -411,7 +411,8 @@
     "optional_hint": "任意"
   },
   "MobileHeroImage": {
-    "empty_title": "画像が見つかりません"
+    "empty_title": "ギャラリー画像がありません",
+    "empty_description": "ギャラリー画像はSanity CMSで管理されています。"
   },
   "MobileNav": {
     "home_label": "ホーム",
