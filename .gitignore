@@ -47,3 +47,4 @@ next-env.d.ts
 # sanity
 *.tar.gz
 dist/
+backup/

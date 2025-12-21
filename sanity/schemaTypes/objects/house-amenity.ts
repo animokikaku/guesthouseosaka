@@ -1,11 +1,10 @@
-import { CheckmarkCircleIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
+import { IconPreview } from '../../lib/icon-preview'
 
 export const houseAmenity = defineType({
   name: 'houseAmenity',
   title: 'House Amenity',
   type: 'object',
-  icon: CheckmarkCircleIcon,
   fields: [
     defineField({
       name: 'amenity',
@@ -59,7 +58,6 @@ export const houseAmenity = defineType({
         coin: 'Coin-operated'
       }
       const subtitle = [
-        icon ? `Icon: ${icon}` : null,
         note ? noteLabels[note] : null,
         featured ? 'Featured' : null
       ]
@@ -68,7 +66,8 @@ export const houseAmenity = defineType({
 
       return {
         title: displayLabel,
-        subtitle: subtitle || 'No details'
+        subtitle: subtitle || undefined,
+        media: IconPreview({ icon })
       }
     }
   }

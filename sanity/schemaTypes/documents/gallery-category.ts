@@ -1,5 +1,6 @@
 import { ImagesIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
+import { IconPreview } from '../../lib/icon-preview'
 
 export const galleryCategory = defineType({
   name: 'galleryCategory',
@@ -19,6 +20,12 @@ export const galleryCategory = defineType({
       }
     }),
     defineField({
+      name: 'icon',
+      title: 'Icon',
+      type: 'lucide-icon',
+      description: 'Decorative icon for this category'
+    }),
+    defineField({
       name: 'label',
       title: 'Label',
       type: 'internationalizedArrayString',
@@ -33,13 +40,6 @@ export const galleryCategory = defineType({
       description: 'Categories are sorted by this number (lowest first)',
       validation: (rule) => rule.required().min(0),
       initialValue: 0
-    }),
-    defineField({
-      name: 'image',
-      title: 'Cover Image',
-      type: 'image',
-      description: 'Representative image for this category',
-      options: { hotspot: true }
     })
   ],
   orderings: [
@@ -54,13 +54,13 @@ export const galleryCategory = defineType({
       label: 'label.0.value',
       key: 'key.current',
       order: 'order',
-      media: 'image'
+      icon: 'icon'
     },
-    prepare({ label, key, order, media }) {
+    prepare({ label, key, order, icon }) {
       return {
         title: label || 'No label',
         subtitle: `${key || 'no-key'} (order: ${order ?? 'unset'})`,
-        media
+        media: IconPreview({ icon })
       }
     }
   }

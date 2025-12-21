@@ -1,5 +1,6 @@
 import { ComponentIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
+import { IconPreview } from '../../lib/icon-preview'
 
 export const amenityCategory = defineType({
   name: 'amenityCategory',
@@ -17,6 +18,12 @@ export const amenityCategory = defineType({
         source: 'label.0.value',
         maxLength: 50
       }
+    }),
+    defineField({
+      name: 'icon',
+      title: 'Icon',
+      type: 'lucide-icon',
+      description: 'Decorative icon for this category'
     }),
     defineField({
       name: 'label',
@@ -46,12 +53,14 @@ export const amenityCategory = defineType({
     select: {
       label: 'label.0.value',
       key: 'key.current',
-      order: 'order'
+      order: 'order',
+      icon: 'icon'
     },
-    prepare({ label, key, order }) {
+    prepare({ label, key, order, icon }) {
       return {
         title: label || 'No label',
-        subtitle: `${key || 'no-key'} (order: ${order ?? 'unset'})`
+        subtitle: `${key || 'no-key'} (order: ${order ?? 'unset'})`,
+        media: IconPreview({ icon })
       }
     }
   }
