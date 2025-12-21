@@ -34,13 +34,18 @@ export default defineConfig({
     assist({
       translate: {
         field: {
-          documentTypes: ['homePage', 'house'],
+          documentTypes: [
+            'homePage',
+            'house',
+            'settings',
+            'faqPage',
+            'contactPage',
+            'amenity',
+            'amenityCategory',
+            'galleryCategory'
+          ],
           languages
         }
-        // document: {
-        //   languageField: LocaleField.name,
-        //   documentTypes: []
-        // }
       }
     }),
     structureTool({ structure }),
