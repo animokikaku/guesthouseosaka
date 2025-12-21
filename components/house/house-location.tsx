@@ -1,9 +1,10 @@
 'use client'
 
 import { HouseLocationModal } from '@/components/house/house-location-modal'
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { HouseIdentifier } from '@/lib/types'
-import { Button } from '@/components/ui/button'
+import type { HouseQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
 
@@ -37,28 +38,30 @@ const HouseMap = dynamic(
   }
 )
 
-export function HouseLocation({ id }: { id: HouseIdentifier }) {
+type HouseLocationProps = {
+  id: HouseIdentifier
+  location: NonNullable<HouseQueryResult>['location']
+}
+
+export function HouseLocation({ id, location }: HouseLocationProps) {
   const t = useTranslations('HouseLocation')
-  const highlight = {
-    orange: t('highlights.orange'),
-    apple: t('highlights.apple'),
-    lemon: t('highlights.lemon')
-  }[id]
 
   return (
     <section>
       <h2 className="mb-6 text-2xl font-semibold">{t('heading')}</h2>
 
-      <p className="text-foreground mb-6 text-base leading-relaxed">
-        {highlight}
-      </p>
+      {location?.highlight && (
+        <p className="text-foreground mb-6 text-base leading-relaxed">
+          {location.highlight}
+        </p>
+      )}
 
       <div className="mb-6">
-        <HouseMap id={id} />
+        <HouseMap id={id} location={location} />
       </div>
 
       <div className="mt-6">
-        <HouseLocationModal id={id} title={t('heading')}>
+        <HouseLocationModal id={id} location={location} title={t('heading')}>
           <Button variant="outline">{t('modal_trigger')}</Button>
         </HouseLocationModal>
       </div>

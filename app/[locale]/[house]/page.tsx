@@ -1,32 +1,32 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
-import { BUILDING_DATA } from '@/components/house/house-building'
-import {
-  GOOGLE_MAPS_URLS,
-  HOUSE_ADDRESS,
-  HOUSE_CENTERS
-} from '@/components/map/location-map-constants'
-import { useHouseLabels } from '@/hooks/use-house-labels'
-import { useHousePhones } from '@/hooks/use-house-phones'
 import { assets } from '@/lib/assets'
+import { sanityFetch } from '@/sanity/lib/live'
+import { houseQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { env } from 'process'
-import { use } from 'react'
 import { Accommodation, WithContext } from 'schema-dts'
 
-export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
-  const { locale, house } = use(params)
+export default async function HousePage({
+  params
+}: PageProps<'/[locale]/[house]'>) {
+  const { locale, house } = await params
   if (!hasHouse(house)) {
     notFound()
   }
 
   setRequestLocale(locale as Locale)
 
-  const houseLabel = useHouseLabels()
-  const housePhonesLabel = useHousePhones()
-  const { name: title, summary: description } = houseLabel(house)
+  const { data } = await sanityFetch({
+    query: houseQuery,
+    params: { locale, slug: house }
+  })
+
+  if (!data) {
+    notFound()
+  }
 
   const url = `${env.NEXT_PUBLIC_APP_URL}/${house}`
 
@@ -35,19 +35,21 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
     '@type': 'House',
     '@id': `${url}#house`,
     url: `${url}/${locale}`,
-    name: title,
-    description,
+    name: data.title ?? '',
+    description: data.description ?? '',
     image: assets.openGraph[house].src,
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: HOUSE_CENTERS[house].lat,
-      longitude: HOUSE_CENTERS[house].lng
-    },
-    hasMap: GOOGLE_MAPS_URLS[house],
+    geo: data.location?.coordinates
+      ? {
+          '@type': 'GeoCoordinates',
+          latitude: data.location.coordinates.lat,
+          longitude: data.location.coordinates.lng
+        }
+      : undefined,
+    hasMap: data.location?.googleMapsUrl ?? undefined,
     logo: assets.logo[house].src,
-    address: HOUSE_ADDRESS[house],
-    numberOfRooms: BUILDING_DATA[house].rooms,
-    telephone: housePhonesLabel(house).international
+    address: data.location?.address ?? undefined,
+    numberOfRooms: data.building?.rooms,
+    telephone: data.phone?.international
   }
 
   return (
@@ -58,11 +60,7 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
           __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c')
         }}
       />
-      <HousePageContent
-        houseId={house}
-        title={title}
-        description={description}
-      />
+      <HousePageContent data={data} />
     </>
   )
 }

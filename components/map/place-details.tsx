@@ -7,25 +7,30 @@ import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import { memo } from 'react'
 
-const PLACE_IDS = {
+const PLACE_IDS: Record<HouseIdentifier, string> = {
   orange: 'ChIJ6wny0-ndAGARZjNwMl6Naig',
   apple: 'ChIJeTfoJiPnAGARS9lOqv7CCIc',
   lemon: 'ChIJcUK9NYvnAGAR7GqSLIZIUdk'
 }
 
+interface PlaceDetailsProps {
+  id: HouseIdentifier
+  placeId?: string | null
+  className?: string
+}
+
 export const PlaceDetails = memo(function PlaceDetailsComponent({
   id,
+  placeId: sanityPlaceId,
   className
-}: {
-  id: HouseIdentifier
-  className?: string
-}) {
+}: PlaceDetailsProps) {
   const { resolvedTheme } = useTheme()
   const colorScheme =
     resolvedTheme === 'dark' ? ColorScheme.DARK : ColorScheme.LIGHT
 
   useMapsLibrary('places')
-  const placeId = PLACE_IDS[id]
+  // Use Sanity placeId if available, fallback to constants
+  const placeId = sanityPlaceId ?? PLACE_IDS[id]
   const image = assets[id].map
 
   return (

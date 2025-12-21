@@ -10,11 +10,17 @@ import { Empty, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { useImages } from '@/lib/images'
 import { HouseIdentifier } from '@/lib/types'
+import type { HouseQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
-export function MobileHeroImage({ id }: { id: HouseIdentifier }) {
+type MobileHeroImageProps = {
+  id: HouseIdentifier
+  image?: NonNullable<HouseQueryResult>['image']
+}
+
+export function MobileHeroImage({ id }: MobileHeroImageProps) {
   const t = useTranslations('MobileHeroImage')
   const [api, setApi] = useState<CarouselApi>()
   const [currentIndex, setCurrentIndex] = useState(1)

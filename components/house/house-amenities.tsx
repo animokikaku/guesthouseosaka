@@ -17,7 +17,7 @@ import {
   DrawerTrigger
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { HouseIdentifier } from '@/lib/types'
+import type { HouseQueryResult } from '@/sanity.types'
 import {
   ArrowUpFromLine,
   Bed,
@@ -27,6 +27,7 @@ import {
   Cigarette,
   Coffee,
   Lock,
+  type LucideIcon,
   Mail,
   MailboxIcon,
   Microwave,
@@ -48,9 +49,42 @@ import {
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
+// Map icon names from Sanity to Lucide components
+const ICON_MAP: Record<string, LucideIcon> = {
+  Wifi,
+  ThermometerSnowflake,
+  Utensils,
+  Refrigerator,
+  Microwave,
+  ChefHat,
+  UtensilsCrossed,
+  ShowerHead,
+  Toilet,
+  WashingMachine,
+  RotateCcw,
+  Sun,
+  Bed,
+  Sofa,
+  Tv,
+  Coffee,
+  PartyPopper,
+  ArrowUpFromLine,
+  Cigarette,
+  MailboxIcon,
+  Mail,
+  Bike,
+  Lock,
+  Cable,
+  Plug
+}
+
+type SanityAmenity = NonNullable<
+  NonNullable<HouseQueryResult>['amenities']
+>[number]
+
 type Amenity = {
-  title: string
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+  label: string
+  icon: LucideIcon
   note?: string
   featured?: boolean
 }
@@ -61,7 +95,7 @@ type AmenityCategory = {
 }
 
 interface HouseAmenitiesProps {
-  id: HouseIdentifier
+  amenities: NonNullable<HouseQueryResult>['amenities']
 }
 
 interface AmenitiesDialogProps {
@@ -78,7 +112,7 @@ function AmenityItem({ amenity }: { amenity: Amenity }) {
         <Icon className="h-5 w-5" />
       </div>
       <div className="flex-1">
-        <span className="text-foreground">{amenity.title}</span>
+        <span className="text-foreground">{amenity.label}</span>
         {amenity.note && (
           <Badge variant="outline" className="ml-2 text-xs">
             {amenity.note}
@@ -139,408 +173,63 @@ function AmenitiesDialog({ amenities, trigger, title }: AmenitiesDialogProps) {
   )
 }
 
-export function HouseAmenities({ id }: HouseAmenitiesProps) {
+// Transform Sanity amenities data into grouped categories
+function transformAmenities(
+  sanityAmenities: SanityAmenity[] | null,
+  noteLabels: Record<string, string>
+): AmenityCategory[] {
+  if (!sanityAmenities) return []
+
+  // Group by category
+  const categoryMap = new Map<string, Amenity[]>()
+
+  for (const amenity of sanityAmenities) {
+    const categoryKey = amenity.category?.key ?? 'other'
+
+    if (!categoryMap.has(categoryKey)) {
+      categoryMap.set(categoryKey, [])
+    }
+
+    const icon = ICON_MAP[amenity.icon] ?? Wifi
+
+    categoryMap.get(categoryKey)!.push({
+      label: amenity.label ?? '',
+      icon,
+      note: amenity.note ? noteLabels[amenity.note] : undefined,
+      featured: amenity.featured ?? false
+    })
+  }
+
+  // Convert to array preserving order from Sanity (already sorted by category.order)
+  const seen = new Set<string>()
+  const result: AmenityCategory[] = []
+
+  for (const amenity of sanityAmenities) {
+    const categoryKey = amenity.category?.key ?? 'other'
+    if (seen.has(categoryKey)) continue
+    seen.add(categoryKey)
+
+    result.push({
+      category: amenity.category?.label ?? 'Other',
+      items: categoryMap.get(categoryKey) ?? []
+    })
+  }
+
+  return result
+}
+
+export function HouseAmenities({ amenities: sanityAmenities }: HouseAmenitiesProps) {
   const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
   const maxTopAmenities = isMobile ? 5 : 10
 
-  const amenities: AmenityCategory[] = (() => {
-    const data: Record<HouseIdentifier, AmenityCategory[]> = {
-      apple: [
-        {
-          category: t('categories.internet_climate'),
-          items: [
-            {
-              title: t('items.free_wifi'),
-              icon: Wifi,
-              featured: true
-            },
-            {
-              title: t('items.air_conditioning_heating'),
-              icon: ThermometerSnowflake,
-              note: t('notes.private'),
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.kitchen_dining'),
-          items: [
-            {
-              title: t('items.kitchen'),
-              icon: Utensils,
-              note: t('notes.private'),
-              featured: true
-            },
-            {
-              title: t('items.refrigerator'),
-              icon: Refrigerator,
-              note: t('notes.private')
-            },
-            {
-              title: t('items.microwave_toaster'),
-              icon: Microwave,
-              note: t('notes.private')
-            },
-            {
-              title: t('items.lounge_kitchen_oven'),
-              icon: ChefHat,
-              note: t('notes.shared')
-            },
-            {
-              title: t('items.large_refrigerator'),
-              icon: Refrigerator,
-              note: t('notes.shared')
-            }
-          ]
-        },
-        {
-          category: t('categories.bathroom'),
-          items: [
-            {
-              title: t('items.bathroom_with_shower_bathtub'),
-              icon: ShowerHead,
-              note: t('notes.private'),
-              featured: true
-            },
-            {
-              title: t('items.toilet'),
-              icon: Toilet,
-              note: t('notes.private')
-            }
-          ]
-        },
-        {
-          category: t('categories.laundry'),
-          items: [
-            {
-              title: t('items.washing_machine'),
-              icon: WashingMachine,
-              note: t('notes.private'),
-              featured: true
-            },
-            {
-              title: t('items.drying_space'),
-              icon: Sun,
-              note: t('notes.private'),
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.accommodation'),
-          items: [
-            {
-              title: t('items.furnished_rooms', { size: '11' }),
-              icon: Bed,
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.common_areas'),
-          items: [
-            {
-              title: t('items.lounge'),
-              icon: Sofa,
-              featured: true
-            },
-            {
-              title: t('items.tv_entertainment'),
-              icon: Tv,
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.building_access'),
-          items: [
-            {
-              title: t('items.elevator'),
-              icon: ArrowUpFromLine,
-              featured: true
-            },
-            {
-              title: t('items.smoking_area'),
-              icon: Cigarette
-            },
-            {
-              title: t('items.cluster_mailboxes'),
-              icon: MailboxIcon,
-              note: t('notes.shared')
-            },
-            {
-              title: t('items.door_mail_slot'),
-              icon: Mail,
-              note: t('notes.private')
-            },
-            {
-              title: t('items.bicycle_parking'),
-              icon: Bike,
-              note: t('notes.shared')
-            }
-          ]
-        }
-      ],
-      lemon: [
-        {
-          category: t('categories.internet_climate'),
-          items: [
-            {
-              title: t('items.free_wifi'),
-              icon: Wifi,
-              featured: true
-            },
-            {
-              title: t('items.air_conditioning_heating'),
-              icon: ThermometerSnowflake,
-              note: t('notes.private'),
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.kitchen_dining'),
-          items: [
-            {
-              title: t('items.kitchen'),
-              icon: Utensils,
-              note: t('notes.private'),
-              featured: true
-            },
-            {
-              title: t('items.refrigerator'),
-              icon: Refrigerator,
-              note: t('notes.private')
-            },
-            {
-              title: t('items.microwave_toaster_rice_cooker'),
-              icon: Microwave,
-              note: t('notes.private'),
-              featured: true
-            },
-            {
-              title: t('items.tableware'),
-              icon: UtensilsCrossed,
-              note: t('notes.private')
-            }
-          ]
-        },
-        {
-          category: t('categories.bathroom'),
-          items: [
-            {
-              title: t('items.bathroom_with_shower_bathtub'),
-              icon: ShowerHead,
-              note: t('notes.private'),
-              featured: true
-            },
-            {
-              title: t('items.toilet'),
-              icon: Toilet,
-              note: t('notes.private')
-            }
-          ]
-        },
-        {
-          category: t('categories.laundry'),
-          items: [
-            {
-              title: t('items.washing_machine'),
-              icon: WashingMachine,
-              note: t('notes.shared'),
-              featured: true
-            },
-            {
-              title: t('items.drying_space'),
-              icon: Sun,
-              note: t('notes.shared'),
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.accommodation'),
-          items: [
-            {
-              title: t('items.spacious_rooms'),
-              icon: Bed,
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.common_areas'),
-          items: [
-            {
-              title: t('items.rooftop_garden'),
-              icon: Sofa,
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.building_access'),
-          items: [
-            {
-              title: t('items.cluster_mailboxes'),
-              icon: MailboxIcon,
-              note: t('notes.shared')
-            },
-            {
-              title: t('items.door_mail_slot'),
-              icon: Mail,
-              note: t('notes.private'),
-              featured: true
-            }
-          ]
-        }
-      ],
-      orange: [
-        {
-          category: t('categories.internet_climate'),
-          items: [
-            {
-              title: t('items.free_wifi'),
-              icon: Wifi,
-              featured: true,
-              note: t('notes.shared')
-            },
-            {
-              title: t('items.lan_cable'),
-              icon: Cable,
-              featured: true,
-              note: t('notes.private')
-            },
-            {
-              title: t('items.air_conditioning_heating'),
-              icon: ThermometerSnowflake,
-              note: t('notes.private'),
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.kitchen_dining'),
-          items: [
-            {
-              title: t('items.kitchen'),
-              icon: Utensils,
-              note: t('notes.private'),
-              featured: true
-            },
-            {
-              title: t('items.refrigerator'),
-              icon: Refrigerator,
-              note: t('notes.private')
-            },
-            {
-              title: t('items.microwave_toaster'),
-              icon: Microwave,
-              note: t('notes.shared')
-            },
-            {
-              title: t('items.tableware'),
-              icon: UtensilsCrossed,
-              note: t('notes.private')
-            }
-          ]
-        },
-        {
-          category: t('categories.bathroom'),
-          items: [
-            {
-              title: t('items.shower'),
-              icon: ShowerHead,
-              note: t('notes.shared'),
-              featured: true
-            },
-            {
-              title: t('items.washlet_toilet'),
-              icon: Toilet,
-              note: t('notes.shared'),
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.laundry'),
-          items: [
-            {
-              title: t('items.washing_machine'),
-              icon: WashingMachine,
-              note: t('notes.shared'),
-              featured: true
-            },
-            {
-              title: t('items.dryer'),
-              icon: RotateCcw,
-              note: t('notes.coin')
-            },
-            {
-              title: t('items.drying_space'),
-              icon: Sun,
-              note: t('notes.shared')
-            }
-          ]
-        },
-        {
-          category: t('categories.accommodation'),
-          items: [
-            {
-              title: t('items.furnished_rooms', { size: '12' }),
-              icon: Bed,
-              featured: true
-            }
-          ]
-        },
-        {
-          category: t('categories.common_areas'),
-          items: [
-            {
-              title: t('items.rooftop_lounge'),
-              icon: Sofa,
-              featured: true
-            },
-            {
-              title: t('items.coffee_tea_corner'),
-              icon: Coffee
-            },
-            {
-              title: t('items.monthly_parties'),
-              icon: PartyPopper
-            }
-          ]
-        },
-        {
-          category: t('categories.building_access'),
-          items: [
-            {
-              title: t('items.secure_entry'),
-              icon: Lock,
-              featured: true
-            },
-            {
-              title: t('items.mailbox'),
-              icon: Mail,
-              note: t('notes.shared')
-            },
-            {
-              title: t('items.bicycle_parking'),
-              icon: Bike,
-              note: t('notes.shared')
-            },
-            {
-              title: t('items.appliances'),
-              icon: Plug,
-              note: t('notes.shared')
-            }
-          ]
-        }
-      ]
-    }
-    return data[id]
-  })()
+  const noteLabels: Record<string, string> = {
+    private: t('notes.private'),
+    shared: t('notes.shared'),
+    coin: t('notes.coin')
+  }
+
+  const amenities = transformAmenities(sanityAmenities, noteLabels)
 
   const featuredAmenities = amenities
     .flatMap((category) => category.items.filter((item) => item.featured))

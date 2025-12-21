@@ -1,58 +1,35 @@
-import { HouseBuilding } from '@/components/house/house-building'
-import { useHouseLabels } from '@/hooks/use-house-labels'
-import { HouseIdentifier } from '@/lib/types'
+import type { HouseQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
+import type { ReactNode } from 'react'
 
-export function HouseAbout({ id }: { id: HouseIdentifier }) {
+type HouseAboutProps = {
+  title: NonNullable<HouseQueryResult>['title']
+  about: NonNullable<HouseQueryResult>['about']
+  building: ReactNode
+}
+
+export function HouseAbout({ title, about, building }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
-  const houseLabel = useHouseLabels()
-  const { name } = houseLabel(id)
-
-  const { description, specificities } = {
-    apple: {
-      description: t('houses.apple.description'),
-      specificities: [
-        t('houses.apple.highlights.0'),
-        t('houses.apple.highlights.1'),
-        t('houses.apple.highlights.2')
-      ]
-    },
-    lemon: {
-      description: t('houses.lemon.description'),
-      specificities: [
-        t('houses.lemon.highlights.0'),
-        t('houses.lemon.highlights.1'),
-        t('houses.lemon.highlights.2')
-      ]
-    },
-    orange: {
-      description: t('houses.orange.description'),
-      specificities: [
-        t('houses.orange.highlights.0'),
-        t('houses.orange.highlights.1'),
-        t('houses.orange.highlights.2')
-      ]
-    }
-  }[id]
+  const highlights = about?.highlights ?? []
 
   return (
     <section>
       <h2 className="mb-6 text-2xl font-semibold">
-        {t('heading', { house: name })}
+        {t('heading', { house: title ?? '' })}
       </h2>
-      <div className="mb-4">
-        <HouseBuilding id={id} />
-      </div>
+      <div className="mb-4">{building}</div>
 
-      <p className="text-foreground text-base leading-relaxed">{description}</p>
+      <p className="text-foreground text-base leading-relaxed">
+        {about?.description}
+      </p>
 
-      {specificities.length > 0 && (
+      {highlights.length > 0 && (
         <div className="mt-4">
           <ul className="space-y-2">
-            {specificities.map((specificity, index) => (
-              <li key={index} className="flex items-start gap-3">
+            {highlights.map((highlight) => (
+              <li key={highlight._key} className="flex items-start gap-3">
                 <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
-                <span className="text-foreground">{specificity}</span>
+                <span className="text-foreground">{highlight.text}</span>
               </li>
             ))}
           </ul>
