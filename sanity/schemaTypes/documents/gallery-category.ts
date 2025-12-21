@@ -33,6 +33,13 @@ export const galleryCategory = defineType({
       description: 'Categories are sorted by this number (lowest first)',
       validation: (rule) => rule.required().min(0),
       initialValue: 0
+    }),
+    defineField({
+      name: 'image',
+      title: 'Cover Image',
+      type: 'image',
+      description: 'Representative image for this category',
+      options: { hotspot: true }
     })
   ],
   orderings: [
@@ -46,12 +53,14 @@ export const galleryCategory = defineType({
     select: {
       label: 'label.0.value',
       key: 'key.current',
-      order: 'order'
+      order: 'order',
+      media: 'image'
     },
-    prepare({ label, key, order }) {
+    prepare({ label, key, order, media }) {
       return {
         title: label || 'No label',
-        subtitle: `${key || 'no-key'} (order: ${order ?? 'unset'})`
+        subtitle: `${key || 'no-key'} (order: ${order ?? 'unset'})`,
+        media
       }
     }
   }

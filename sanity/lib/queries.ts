@@ -229,8 +229,7 @@ export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
     _key,
     key,
     "title": ${l('title')},
-    "description": ${l('description')},
-    href
+    "description": ${l('description')}
   }
 }`)
 
@@ -242,7 +241,17 @@ export const galleryCategoriesQuery = defineQuery(`*[_type == "galleryCategory"]
   _id,
   "key": key.current,
   "label": ${l('label')},
-  order
+  order,
+  image{
+    asset->{
+      _id,
+      url,
+      "dimensions": metadata.dimensions,
+      "lqip": metadata.lqip
+    },
+    hotspot,
+    crop
+  }
 }`)
 
 export const amenityCategoriesQuery = defineQuery(`*[_type == "amenityCategory"] | order(order asc){

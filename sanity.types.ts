@@ -15,10 +15,9 @@
 // Source: schema.json
 export type ContactType = {
   _type: 'contactType'
-  key: string
+  key: 'tour' | 'move-in' | 'general'
   title: InternationalizedArrayString
   description?: InternationalizedArrayText
-  href?: string
 }
 
 export type Address = {
@@ -158,9 +157,11 @@ export type Amenity = {
   _rev: string
   key: Slug
   label: InternationalizedArrayString
-  icon: string
+  icon: LucideIcon
   category: AmenityCategoryReference
 }
+
+export type LucideIcon = string
 
 export type InternationalizedArrayString = Array<
   {
@@ -194,6 +195,29 @@ export type GalleryCategory = {
   key: Slug
   label: InternationalizedArrayString
   order: number
+  image?: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    _type: 'image'
+  }
+}
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop'
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot'
+  x: number
+  y: number
+  height: number
+  width: number
 }
 
 export type ContactPage = {
@@ -323,22 +347,6 @@ export type Geopoint = {
   lat?: number
   lng?: number
   alt?: number
-}
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop'
-  top: number
-  bottom: number
-  left: number
-  right: number
-}
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot'
-  x: number
-  y: number
-  height: number
-  width: number
 }
 
 export type HouseReference = {
@@ -644,18 +652,19 @@ export type AllSanitySchemaTypes =
   | LocalizedImage
   | AmenityCategoryReference
   | Amenity
+  | LucideIcon
   | InternationalizedArrayString
   | Slug
   | AmenityCategory
   | GalleryCategory
+  | SanityImageCrop
+  | SanityImageHotspot
   | ContactPage
   | InternationalizedArrayText
   | FaqPage
   | Settings
   | House
   | Geopoint
-  | SanityImageCrop
-  | SanityImageHotspot
   | HouseReference
   | HomePage
   | InternationalizedArrayStringArrayValue
@@ -820,7 +829,7 @@ export type HouseQueryResult = {
     featured: boolean | null
     note: 'coin' | 'private' | 'shared' | null
     label: string | null
-    icon: string
+    icon: LucideIcon
     amenityKey: string
     category: {
       key: string
@@ -917,7 +926,7 @@ export type FaqPageQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: contactPageQuery
-// Query: *[_type == "contactPage"][0]{  _id,  _type,  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),  "contactTypes": contactTypes[]{    _key,    key,    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),    href  }}
+// Query: *[_type == "contactPage"][0]{  _id,  _type,  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),  "contactTypes": contactTypes[]{    _key,    key,    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)  }}
 export type ContactPageQueryResult = {
   _id: string
   _type: 'contactPage'
@@ -925,21 +934,30 @@ export type ContactPageQueryResult = {
   description: string | null
   contactTypes: Array<{
     _key: string
-    key: string
+    key: 'general' | 'move-in' | 'tour'
     title: string | null
     description: string | null
-    href: string | null
   }> | null
 } | null
 
 // Source: sanity/lib/queries.ts
 // Variable: galleryCategoriesQuery
-// Query: *[_type == "galleryCategory"] | order(order asc){  _id,  "key": key.current,  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),  order}
+// Query: *[_type == "galleryCategory"] | order(order asc){  _id,  "key": key.current,  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),  order,  image{    asset->{      _id,      url,      "dimensions": metadata.dimensions,      "lqip": metadata.lqip    },    hotspot,    crop  }}
 export type GalleryCategoriesQueryResult = Array<{
   _id: string
   key: string
   label: string | null
   order: number
+  image: {
+    asset: {
+      _id: string
+      url: string | null
+      dimensions: SanityImageDimensions | null
+      lqip: string | null
+    } | null
+    hotspot: SanityImageHotspot | null
+    crop: SanityImageCrop | null
+  } | null
 }>
 
 // Source: sanity/lib/queries.ts
@@ -959,7 +977,7 @@ export type AmenitiesQueryResult = Array<{
   _id: string
   key: string
   label: string | null
-  icon: string
+  icon: LucideIcon
   category: {
     key: string
     label: string | null
@@ -976,8 +994,8 @@ declare module '@sanity/client' {
     '*[_type == "house" && slug == $slug][0]{\n  _id,\n  _type,\n  slug,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n  "summary": coalesce(summary[_key == $locale][0].value, summary[_key == "en"][0].value),\n  "caption": coalesce(caption[_key == $locale][0].value, caption[_key == "en"][0].value),\n  building,\n  phone,\n\n  // Hero Image\n  image{\n    asset->{\n      _id,\n      url,\n      "dimensions": metadata.dimensions,\n      "lqip": metadata.lqip\n    },\n    hotspot,\n    crop,\n    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value)\n  },\n\n  // About Section\n  "about": about{\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n    "highlights": highlights[]{\n      _key,\n      "text": coalesce(text[_key == $locale][0].value, text[_key == "en"][0].value)\n    }\n  },\n\n  // Gallery with categories\n  "gallery": gallery[]{\n    _key,\n    "image": image{\n      asset->{\n        _id,\n        url,\n        "dimensions": metadata.dimensions,\n        "lqip": metadata.lqip\n      },\n      hotspot,\n      crop,\n      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),\n      "caption": coalesce(caption[_key == $locale][0].value, caption[_key == "en"][0].value)\n    },\n    "category": category->{\n      "key": key.current,\n      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n      order\n    }\n  } | order(category.order asc),\n\n  // Amenities with categories\n  "amenities": amenities[]{\n    _key,\n    featured,\n    note,\n    "label": coalesce(\n      customLabel[_key == $locale][0].value,\n      amenity->label[_key == $locale][0].value,\n      amenity->label[_key == "en"][0].value\n    ),\n    "icon": amenity->icon,\n    "amenityKey": amenity->key.current,\n    "category": amenity->category->{\n      "key": key.current,\n      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n      order\n    }\n  } | order(category.order asc),\n\n  // Location\n  "location": location{\n    "highlight": coalesce(highlight[_key == $locale][0].value, highlight[_key == "en"][0].value),\n    coordinates,\n    googleMapsUrl,\n    placeId,\n    address,\n    "stations": stations[]{\n      _key,\n      "name": coalesce(name[_key == $locale][0].value, name[_key == "en"][0].value),\n      "lines": coalesce(lines[_key == $locale][0].value, lines[_key == "en"][0].value),\n      "exit": coalesce(exit[_key == $locale][0].value, exit[_key == "en"][0].value),\n      walkMinutes\n    },\n    "nearby": nearby[]{\n      _key,\n      "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)\n    }\n  },\n\n  // Pricing\n  "pricing": pricing{\n    "rows": rows[]{\n      _key,\n      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n      "values": coalesce(values[_key == $locale][0].value, values[_key == "en"][0].value)\n    },\n    "notes": notes[]{\n      _key,\n      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n      "items": items[]{\n        _key,\n        "text": coalesce(text[_key == $locale][0].value, text[_key == "en"][0].value)\n      }\n    }\n  }\n}': HouseQueryResult
     '*[_type == "house" && defined(slug)]{\n  "slug": slug\n}': HouseSlugsQueryResult
     '*[_type == "faqPage"][0]{\n  _id,\n  _type,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n  "items": items[]{\n    _key,\n    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),\n    answer\n  },\n  "contactTitle": coalesce(contactTitle[_key == $locale][0].value, contactTitle[_key == "en"][0].value),\n  "contactDescription": coalesce(contactDescription[_key == $locale][0].value, contactDescription[_key == "en"][0].value)\n}': FaqPageQueryResult
-    '*[_type == "contactPage"][0]{\n  _id,\n  _type,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n  "contactTypes": contactTypes[]{\n    _key,\n    key,\n    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n    href\n  }\n}': ContactPageQueryResult
-    '*[_type == "galleryCategory"] | order(order asc){\n  _id,\n  "key": key.current,\n  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n  order\n}': GalleryCategoriesQueryResult
+    '*[_type == "contactPage"][0]{\n  _id,\n  _type,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n  "contactTypes": contactTypes[]{\n    _key,\n    key,\n    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)\n  }\n}': ContactPageQueryResult
+    '*[_type == "galleryCategory"] | order(order asc){\n  _id,\n  "key": key.current,\n  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n  order,\n  image{\n    asset->{\n      _id,\n      url,\n      "dimensions": metadata.dimensions,\n      "lqip": metadata.lqip\n    },\n    hotspot,\n    crop\n  }\n}': GalleryCategoriesQueryResult
     '*[_type == "amenityCategory"] | order(order asc){\n  _id,\n  "key": key.current,\n  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n  order\n}': AmenityCategoriesQueryResult
     '*[_type == "amenity"]{\n  _id,\n  "key": key.current,\n  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n  icon,\n  "category": category->{\n    "key": key.current,\n    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n    order\n  }\n} | order(category.order asc, label asc)': AmenitiesQueryResult
   }

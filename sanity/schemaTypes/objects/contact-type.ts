@@ -9,10 +9,17 @@ export const contactType = defineType({
   fields: [
     defineField({
       name: 'key',
-      title: 'Key',
+      title: 'Type',
       type: 'string',
-      description: 'Internal identifier (e.g., "tour", "move-in", "general")',
-      validation: (rule) => rule.required()
+      validation: (rule) => rule.required(),
+      options: {
+        list: [
+          { title: 'Tour Request', value: 'tour' },
+          { title: 'Move-in Inquiry', value: 'move-in' },
+          { title: 'General Inquiry', value: 'general' }
+        ],
+        layout: 'radio'
+      }
     }),
     defineField({
       name: 'title',
@@ -26,12 +33,6 @@ export const contactType = defineType({
       title: 'Description',
       type: 'internationalizedArrayText',
       options: { aiAssist: { translateAction: true } }
-    }),
-    defineField({
-      name: 'href',
-      title: 'Link',
-      type: 'string',
-      description: 'URL path for this contact type (e.g., "/contact/tour")'
     })
   ],
   preview: {
