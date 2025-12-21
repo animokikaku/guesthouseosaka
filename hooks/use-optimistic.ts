@@ -1,93 +1,72 @@
+import { createDataAttribute } from '@/lib/sanity-data-attributes'
 import { useOptimistic as useSanityOptimistic } from 'next-sanity/hooks'
 
-import { createDataAttribute } from '@/lib/sanity-data-attributes'
+type SanityItem = { _key: string }
+type SanityDocument = { _id: string; _type: string }
 
-/**
- * Generic hook for optimistic updates on array fields in Sanity documents.
- * Works with any array field that contains items with `_key` properties.
- *
- * @template TItem - The type of items in the array (must have `_key: string`)
- *
- * @param data - The current document data from the query
- * @param fieldKey - The key of the array field to update (e.g., 'houses', 'galleryWall')
- *
- * @returns The optimistic array state, which will update when the document is edited in Sanity Studio
- *
- * @example
- * ```ts
- * // For houses array
- * const houses = useOptimisticArray(data, 'houses')
- *
- * // For galleryWall array
- * const images = useOptimisticArray(data, 'galleryWall')
- * ```
- */
-type ArrayFieldKey<TDocument> = {
-  [K in keyof TDocument]-?: TDocument[K] extends
-    | Array<infer TItem>
-    | null
-    | undefined
-    ? TItem extends { _key?: string }
+// Extract array field keys that contain items with _key
+type ArrayFieldKey<T> = {
+  [K in keyof T]: T[K] extends (infer Item)[] | null | undefined
+    ? Item extends SanityItem
       ? K
       : never
     : never
-}[keyof TDocument]
+}[keyof T]
 
-type ArrayItemFor<TDocument, K extends ArrayFieldKey<TDocument>> = Extract<
-  TDocument[K],
-  Array<{ _key?: string }>
->[number] & {
-  _key?: string
-}
+// Get the array item type for a given field
+type ArrayItem<T, K extends keyof T> =
+  NonNullable<T[K]> extends (infer Item)[] ? Item : never
 
-function useOptimisticArray<
-  TDocument extends { _id: string },
-  K extends ArrayFieldKey<TDocument>
->(data: TDocument | null | undefined, fieldKey: K): TDocument[K] {
-  type ArrayItem = ArrayItemFor<TDocument, K>
+/**
+ * Hook for optimistic updates on Sanity array fields.
+ * Automatically updates when the document is edited in Sanity Studio.
+ *
+ * @example
+ * const [houses, attr] = useOptimistic(data, 'houses')
+ * <div data-sanity={attr.list()}>
+ *   {houses?.map(house => (
+ *     <div key={house._key} data-sanity={attr.item(house._key)} />
+ *   ))}
+ * </div>
+ */
+export function useOptimistic<
+  T extends SanityDocument,
+  K extends ArrayFieldKey<T>
+>(data: T | null | undefined, fieldKey: K) {
+  type Item = ArrayItem<T, K>
+
   const documentId = data?._id
+  const currentArray = (data?.[fieldKey] ?? undefined) as Item[] | undefined
 
-  // Normalize null to undefined for useOptimistic
-  const normalizedData = (data?.[fieldKey] ?? undefined) as
-    | Array<ArrayItem>
-    | undefined
-
-  return useSanityOptimistic<Array<ArrayItem> | undefined, TDocument>(
-    normalizedData,
+  const optimisticArray = useSanityOptimistic<Item[] | undefined, T>(
+    currentArray,
     (state, action) => {
+      if (action.id !== documentId) return state
+
       const updatedArray = action.document?.[fieldKey] as
-        | Array<{ _key?: string }>
+        | Item[]
         | null
         | undefined
+      if (!updatedArray) return state
 
-      if (action.id === documentId && updatedArray) {
-        // Optimistic document only has _ref values, not resolved references
-        // Match by _key and preserve existing resolved data when available
-        return updatedArray.map((doc) => {
-          const existing = state?.find(
-            (item) => (item as { _key?: string })._key === doc._key
-          )
-          return existing ?? (doc as ArrayItem)
-        })
-      }
-      return state
+      // Preserve resolved references by matching on _key
+      return updatedArray.map((updated) => {
+        const existing = state?.find(
+          (item) => (item as SanityItem)._key === (updated as SanityItem)._key
+        )
+        return existing ?? updated
+      })
     }
-  ) as TDocument[K]
-}
+  ) as T[K]
 
-export function useOptimistic<
-  TDocument extends { _id: string; _type: string },
-  K extends ArrayFieldKey<TDocument>
->(data: TDocument | null | undefined, fieldKey: K) {
-  const array = useOptimisticArray(data, fieldKey)
   const createAttribute = data
     ? createDataAttribute({ id: data._id, type: data._type })
     : null
-  const attribute = {
-    list: () => (createAttribute ? createAttribute(String(fieldKey)) : ''),
-    item: (itemKey: string) =>
-      createAttribute ? createAttribute(String(fieldKey), itemKey) : ''
+
+  const attr = {
+    list: () => createAttribute?.(String(fieldKey)) ?? '',
+    item: (key: string) => createAttribute?.(String(fieldKey), key) ?? ''
   }
 
-  return [array, attribute] as const
+  return [optimisticArray, attr] as const
 }
