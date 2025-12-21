@@ -8,6 +8,7 @@ import { assist } from '@sanity/assist'
 import { visionTool } from '@sanity/vision'
 import { defineConfig, defineField } from 'sanity'
 import { internationalizedArray } from 'sanity-plugin-internationalized-array'
+import { lucideIconPicker } from 'sanity-plugin-lucide-icon-picker'
 import { presentationTool } from 'sanity/presentation'
 import { structureTool } from 'sanity/structure'
 
@@ -31,6 +32,7 @@ export default defineConfig({
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
   plugins: [
+    lucideIconPicker(),
     assist({
       translate: {
         field: {

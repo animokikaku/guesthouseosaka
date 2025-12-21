@@ -310,7 +310,9 @@ declare const messages: {
     }
   },
   "ImageBlockGallery": {
-    "view_gallery": "Show all photos"
+    "view_gallery": "Show all photos",
+    "empty_title": "No gallery images",
+    "empty_description": "Gallery images are managed through Sanity CMS."
   },
   "LanguageSwitcher": {
     "aria_label": "Select language"
@@ -416,7 +418,8 @@ declare const messages: {
     "optional_hint": "optional"
   },
   "MobileHeroImage": {
-    "empty_title": "No images found"
+    "empty_title": "No gallery images",
+    "empty_description": "Gallery images are managed through Sanity CMS."
   },
   "MobileNav": {
     "home_label": "Home",

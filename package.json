@@ -54,6 +54,7 @@
     "resend": "^6.6.0",
     "sanity": "^5.0.1",
     "sanity-plugin-internationalized-array": "^3.2.2",
+    "sanity-plugin-lucide-icon-picker": "^1.0.3",
     "schema-dts": "^1.1.5",
     "sonner": "^2.0.7",
     "styled-components": "^6.1.19",

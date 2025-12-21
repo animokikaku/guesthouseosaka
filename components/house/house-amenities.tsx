@@ -18,65 +18,11 @@ import {
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
 import type { HouseQueryResult } from '@/sanity.types'
-import {
-  ArrowUpFromLine,
-  Bed,
-  Bike,
-  Cable,
-  ChefHat,
-  Cigarette,
-  Coffee,
-  Lock,
-  type LucideIcon,
-  Mail,
-  MailboxIcon,
-  Microwave,
-  PartyPopper,
-  Plug,
-  Refrigerator,
-  RotateCcw,
-  ShowerHead,
-  Sofa,
-  Sun,
-  ThermometerSnowflake,
-  Toilet,
-  Tv,
-  Utensils,
-  UtensilsCrossed,
-  WashingMachine,
-  Wifi
-} from 'lucide-react'
+import { DynamicIcon, dynamicIconImports } from 'lucide-react/dynamic'
+
+type IconName = keyof typeof dynamicIconImports
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
-
-// Map icon names from Sanity to Lucide components
-const ICON_MAP: Record<string, LucideIcon> = {
-  Wifi,
-  ThermometerSnowflake,
-  Utensils,
-  Refrigerator,
-  Microwave,
-  ChefHat,
-  UtensilsCrossed,
-  ShowerHead,
-  Toilet,
-  WashingMachine,
-  RotateCcw,
-  Sun,
-  Bed,
-  Sofa,
-  Tv,
-  Coffee,
-  PartyPopper,
-  ArrowUpFromLine,
-  Cigarette,
-  MailboxIcon,
-  Mail,
-  Bike,
-  Lock,
-  Cable,
-  Plug
-}
 
 type SanityAmenity = NonNullable<
   NonNullable<HouseQueryResult>['amenities']
@@ -84,7 +30,7 @@ type SanityAmenity = NonNullable<
 
 type Amenity = {
   label: string
-  icon: LucideIcon
+  icon: string
   note?: string
   featured?: boolean
 }
@@ -105,11 +51,10 @@ interface AmenitiesDialogProps {
 }
 
 function AmenityItem({ amenity }: { amenity: Amenity }) {
-  const Icon = amenity.icon
   return (
     <div className="flex items-center gap-3 py-2">
       <div className="text-muted-foreground h-5 w-5 shrink-0">
-        <Icon className="h-5 w-5" />
+        <DynamicIcon name={amenity.icon as IconName} className="h-5 w-5" />
       </div>
       <div className="flex-1">
         <span className="text-foreground">{amenity.label}</span>
@@ -190,11 +135,9 @@ function transformAmenities(
       categoryMap.set(categoryKey, [])
     }
 
-    const icon = ICON_MAP[amenity.icon] ?? Wifi
-
     categoryMap.get(categoryKey)!.push({
       label: amenity.label ?? '',
-      icon,
+      icon: amenity.icon ?? 'circle',
       note: amenity.note ? noteLabels[amenity.note] : undefined,
       featured: amenity.featured ?? false
     })

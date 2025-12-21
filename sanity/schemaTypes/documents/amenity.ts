@@ -28,10 +28,8 @@ export const amenity = defineType({
     }),
     defineField({
       name: 'icon',
-      title: 'Icon Name',
-      type: 'string',
-      description:
-        'Lucide icon name (e.g., "Wifi", "AirVent", "Bed"). See lucide.dev/icons for options.',
+      title: 'Icon',
+      type: 'lucide-icon',
       validation: (rule) => rule.required()
     }),
     defineField({
