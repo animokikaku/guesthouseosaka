@@ -10,7 +10,7 @@ import {
   type CarouselApi
 } from '@/components/ui/carousel'
 import { useHouseLabels } from '@/hooks/use-house-labels'
-import { useImages } from '@/lib/images'
+import { useGallery } from '@/lib/images/sanity-client'
 import { store } from '@/lib/store'
 import { HouseIdentifier } from '@/lib/types'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -67,10 +67,10 @@ function GalleryModalCarousel() {
   const [api, setApi] = useState<CarouselApi>()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const photoId = useStore(store, (state) => state.photoId)
-  const storage = useImages()
+  const gallery = useGallery()
 
-  const images = storage.images()
-  const startIndex = photoId ? storage.indexOf(photoId) : undefined
+  const images = gallery.images()
+  const startIndex = photoId ? gallery.indexOf(photoId) : undefined
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(
     null
   )

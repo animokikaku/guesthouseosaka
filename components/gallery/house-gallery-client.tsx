@@ -2,25 +2,14 @@
 
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { useImages } from '@/lib/images'
-import { CategoriesValues, ImageCategory } from '@/lib/images/storage'
+import { useGallery, type GalleryImageWithProps } from '@/lib/images/sanity-client'
 import { store } from '@/lib/store'
-import { useTranslations } from 'next-intl'
-import { default as Image } from 'next/image'
+import Image from 'next/image'
 import { GalleryImageButton } from './gallery-image-button'
 
 export function HouseGalleryClient() {
-  const t = useTranslations('HouseGalleryClient')
-
-  const categoryMap: Record<ImageCategory, string> = {
-    room: t('categories.room'),
-    'common-spaces': t('categories.common_spaces'),
-    facilities: t('categories.facilities'),
-    'building-features': t('categories.building_features'),
-    neighborhood: t('categories.neighborhood'),
-    'floor-plan': t('categories.floor_plan'),
-    maps: t('categories.maps')
-  }
+  const gallery = useGallery()
+  const categories = gallery.categories()
 
   return (
     <div className="space-y-8">
@@ -28,11 +17,10 @@ export function HouseGalleryClient() {
       <div className="space-y-4">
         <ScrollArea className="w-full">
           <div className="flex gap-2 pb-4">
-            {CategoriesValues.map((category) => (
+            {categories.map((categoryKey) => (
               <CategoryThumbnail
-                key={`thumbnail-${category}`}
-                id={category}
-                title={categoryMap[category]}
+                key={`thumbnail-${categoryKey}`}
+                categoryKey={categoryKey}
               />
             ))}
           </div>
@@ -42,35 +30,26 @@ export function HouseGalleryClient() {
 
       {/* All Categories Grid */}
       <div className="space-y-12">
-        {CategoriesValues.map((category) => (
-          <CategoryGrid
-            key={`grid-${category}`}
-            id={category}
-            title={categoryMap[category]}
-          />
+        {categories.map((categoryKey) => (
+          <CategoryGrid key={`grid-${categoryKey}`} categoryKey={categoryKey} />
         ))}
       </div>
     </div>
   )
 }
 
-function CategoryThumbnail({
-  id,
-  title
-}: {
-  id: ImageCategory
-  title: string
-}) {
-  const storage = useImages()
-  const count = storage.count({ category: id })
-  const [image] = storage.images({ category: id, limit: 1 })
+function CategoryThumbnail({ categoryKey }: { categoryKey: string }) {
+  const gallery = useGallery()
+  const count = gallery.count({ category: categoryKey })
+  const [image] = gallery.images({ category: categoryKey, limit: 1 })
+  const label = gallery.categoryLabel(categoryKey)
 
   if (!image) return null
 
   return (
     <button
       onClick={() => {
-        const targetElement = document.getElementById(id)
+        const targetElement = document.getElementById(categoryKey)
         if (targetElement) {
           targetElement.scrollIntoView({ behavior: 'smooth' })
         }
@@ -82,7 +61,7 @@ function CategoryThumbnail({
           src={image.src}
           alt={image.alt}
           fill
-          placeholder="blur"
+          placeholder={image.placeholder}
           blurDataURL={image.blurDataURL}
           className="object-cover"
           sizes="128px"
@@ -96,22 +75,23 @@ function CategoryThumbnail({
           </Badge>
         </div>
       </div>
-      <span className="text-xs font-medium">{title}</span>
+      <span className="text-xs font-medium">{label}</span>
     </button>
   )
 }
 
-function CategoryGrid({ id, title }: { id: ImageCategory; title: string }) {
-  const storage = useImages()
-  const images = storage.images({ category: id })
+function CategoryGrid({ categoryKey }: { categoryKey: string }) {
+  const gallery = useGallery()
+  const images = gallery.images({ category: categoryKey })
+  const label = gallery.categoryLabel(categoryKey)
 
   if (images.length === 0) return null
 
   return (
-    <div id={id} className="scroll-mt-8 space-y-4">
-      <h3 className="text-xl font-semibold">{title}</h3>
+    <div id={categoryKey} className="scroll-mt-8 space-y-4">
+      <h3 className="text-xl font-semibold">{label}</h3>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {images.map((image) => (
+        {images.map((image: GalleryImageWithProps) => (
           <GalleryImageButton
             key={image.id}
             onClick={() => store.setState({ photoId: image.id })}

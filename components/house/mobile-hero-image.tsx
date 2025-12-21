@@ -8,16 +8,14 @@ import {
 } from '@/components/ui/carousel'
 import { Empty, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import { useImages } from '@/lib/images'
+import { useGallery } from '@/lib/images/sanity-client'
 import { HouseIdentifier } from '@/lib/types'
-import type { HouseQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 type MobileHeroImageProps = {
   id: HouseIdentifier
-  image?: NonNullable<HouseQueryResult>['image']
 }
 
 export function MobileHeroImage({ id }: MobileHeroImageProps) {
@@ -25,8 +23,8 @@ export function MobileHeroImage({ id }: MobileHeroImageProps) {
   const [api, setApi] = useState<CarouselApi>()
   const [currentIndex, setCurrentIndex] = useState(1)
 
-  const storage = useImages()
-  const images = storage.images()
+  const gallery = useGallery()
+  const images = gallery.images()
 
   if (id === 'orange') {
     const [heroImage] = images.splice(11, 1)

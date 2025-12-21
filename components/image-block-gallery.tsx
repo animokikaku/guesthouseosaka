@@ -2,31 +2,47 @@ import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
-import { getImages } from '@/lib/images/server'
 import { HouseIdentifier } from '@/lib/types'
 import type { HouseQueryResult } from '@/sanity.types'
+import type { ImageProps } from 'next/image'
 import { getTranslations } from 'next-intl/server'
+
+type SanityGalleryImage = NonNullable<
+  NonNullable<HouseQueryResult>['gallery']
+>[number]
 
 type ImageBlockGalleryProps = {
   id: HouseIdentifier
-  gallery?: NonNullable<HouseQueryResult>['gallery']
+  gallery: NonNullable<HouseQueryResult>['gallery']
 }
 
-export async function ImageBlockGallery({ id }: ImageBlockGalleryProps) {
-  const t = await getTranslations('ImageBlockGallery')
-  const { images: getHouseImages } = await getImages(id)
+type GalleryHref = {
+  pathname: '/[house]/gallery'
+  params: { house: HouseIdentifier }
+}
 
-  const images = getHouseImages({ category: 'room', limit: 5 })
-
-  if (id === 'orange') {
-    const [mainImage] = getHouseImages({ category: 'common-spaces', limit: 1 })
-    images.unshift(mainImage)
+// Transform Sanity gallery image to Next.js Image props
+function toImageProps(image: SanityGalleryImage): Omit<ImageProps, 'fill'> {
+  return {
+    src: image.image.asset?.url ?? '',
+    alt: image.image.alt ?? '',
+    width: image.image.asset?.dimensions?.width ?? 800,
+    height: image.image.asset?.dimensions?.height ?? 600,
+    blurDataURL: image.image.asset?.lqip ?? undefined,
+    placeholder: image.image.asset?.lqip ? 'blur' : undefined
   }
+}
 
-  const galleryHref = {
-    pathname: '/[house]/gallery',
-    params: { house: id }
-  } as const
+function GalleryGrid({
+  images,
+  galleryHref,
+  viewGalleryLabel
+}: {
+  images: Omit<ImageProps, 'fill'>[]
+  galleryHref: GalleryHref
+  viewGalleryLabel: string
+}) {
+  if (images.length < 5) return null
 
   return (
     <div className="hidden justify-center sm:flex">
@@ -37,7 +53,7 @@ export async function ImageBlockGallery({ id }: ImageBlockGalleryProps) {
               <GalleryImageButton
                 className="col-span-2 row-span-2"
                 sizes="(min-width: 1120px) 560px, 50vw"
-                imageProps={{ ...images[0], preload: true }}
+                imageProps={{ ...images[0], priority: true }}
               />
               <GalleryImageButton
                 className="col-span-1 col-start-3 row-start-1"
@@ -68,11 +84,40 @@ export async function ImageBlockGallery({ id }: ImageBlockGalleryProps) {
           >
             <Link href={galleryHref}>
               <Icons.gallery className="h-4 w-4" />
-              <span>{t('view_gallery')}</span>
+              <span>{viewGalleryLabel}</span>
             </Link>
           </Button>
         </div>
       </div>
     </div>
+  )
+}
+
+export async function ImageBlockGallery({
+  id,
+  gallery
+}: ImageBlockGalleryProps) {
+  const t = await getTranslations('ImageBlockGallery')
+  const galleryHref: GalleryHref = {
+    pathname: '/[house]/gallery',
+    params: { house: id }
+  }
+
+  if (!gallery || gallery.length < 5) {
+    return null
+  }
+
+  // Prefer room images, fallback to first 5 images
+  const roomImages = gallery.filter((img) => img.category?.key === 'room')
+  const displayImages =
+    roomImages.length >= 5 ? roomImages.slice(0, 5) : gallery.slice(0, 5)
+  const images = displayImages.map(toImageProps)
+
+  return (
+    <GalleryGrid
+      images={images}
+      galleryHref={galleryHref}
+      viewGalleryLabel={t('view_gallery')}
+    />
   )
 }

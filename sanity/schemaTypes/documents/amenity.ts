@@ -46,12 +46,7 @@ export const amenity = defineType({
     {
       title: 'Label A-Z',
       name: 'labelAsc',
-      by: [{ field: 'label.0.value', direction: 'asc' }]
-    },
-    {
-      title: 'Category',
-      name: 'categoryAsc',
-      by: [{ field: 'category.label.0.value', direction: 'asc' }]
+      by: [{ field: 'key.current', direction: 'asc' }]
     }
   ],
   preview: {
