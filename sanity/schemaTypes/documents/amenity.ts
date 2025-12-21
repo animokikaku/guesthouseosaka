@@ -1,5 +1,6 @@
 import { CheckmarkCircleIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
+import { IconPreview } from '../../lib/icon-preview'
 
 export const amenity = defineType({
   name: 'amenity',
@@ -56,7 +57,8 @@ export const amenity = defineType({
     prepare({ label, icon, categoryLabel }) {
       return {
         title: label || 'No label',
-        subtitle: `${icon ? `Icon: ${icon}` : 'No icon'} | ${categoryLabel || 'No category'}`
+        subtitle: categoryLabel || 'No category',
+        media: IconPreview({ icon })
       }
     }
   }
