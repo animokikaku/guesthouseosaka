@@ -57,22 +57,24 @@ export function MobileHeroImage({ id }: MobileHeroImageProps) {
 
   if (images.length === 0) {
     return (
-      <Empty className="min-h-96 w-full border border-dashed">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <ImageIcon />
-          </EmptyMedia>
-          <EmptyTitle>{t('empty_title')}</EmptyTitle>
-          <EmptyDescription>{t('empty_description')}</EmptyDescription>
-        </EmptyHeader>
-      </Empty>
+      <div className="sm:hidden">
+        <Empty className="min-h-96 w-full border border-dashed">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <ImageIcon />
+            </EmptyMedia>
+            <EmptyTitle>{t('empty_title')}</EmptyTitle>
+            <EmptyDescription>{t('empty_description')}</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </div>
     )
   }
 
   return (
     <Link
       href={{ pathname: '/[house]/gallery', params: { house: id } }}
-      className="select-none"
+      className="select-none sm:hidden"
     >
       <Carousel
         className="max-h-96 w-full cursor-pointer select-none"
@@ -80,10 +82,7 @@ export function MobileHeroImage({ id }: MobileHeroImageProps) {
       >
         <CarouselContent>
           {images.map(({ id, src, alt, blurDataURL }, index) => (
-            <CarouselItem
-              className="relative h-96 w-full select-none sm:hidden"
-              key={id}
-            >
+            <CarouselItem className="relative h-96 w-full select-none" key={id}>
               <Image
                 src={src}
                 alt={alt}
@@ -98,7 +97,7 @@ export function MobileHeroImage({ id }: MobileHeroImageProps) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className="absolute right-3 bottom-12 z-10 block rounded-sm bg-black/60 px-3 py-1 text-xs text-white backdrop-blur sm:hidden">
+        <div className="absolute right-3 bottom-12 z-10 block rounded-sm bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">
           {currentIndex} / {images.length}
         </div>
       </Carousel>
