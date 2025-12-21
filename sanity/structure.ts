@@ -83,6 +83,16 @@ export const structure: StructureResolver = (S) =>
       S.divider(),
 
       // ============================================
+      // AMENITIES
+      // ============================================
+      S.listItem()
+        .title('Amenities')
+        .icon(CheckmarkCircleIcon)
+        .child(S.documentTypeList('amenity').title('Amenities')),
+
+      S.divider(),
+
+      // ============================================
       // CATEGORIES FOLDER
       // ============================================
       S.listItem()
@@ -107,14 +117,6 @@ export const structure: StructureResolver = (S) =>
                   S.documentTypeList('amenityCategory')
                     .title('Amenity Categories')
                     .defaultOrdering([{ field: 'order', direction: 'asc' }])
-                ),
-              S.listItem()
-                .title('Amenities')
-                .icon(CheckmarkCircleIcon)
-                .child(
-                  S.documentTypeList('amenity')
-                    .title('Amenities')
-                    .defaultOrdering([{ field: 'label.0.value', direction: 'asc' }])
                 )
             ])
         ),
