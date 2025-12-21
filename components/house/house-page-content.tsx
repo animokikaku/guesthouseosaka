@@ -31,7 +31,7 @@ export function HousePageContent({ data }: HousePageContentProps) {
 
   return (
     <>
-      <MobileHeroImage id={houseId} image={data.image} />
+      <MobileHeroImage id={houseId} />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading>{data.title}</PageHeaderHeading>
