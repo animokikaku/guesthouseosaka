@@ -307,7 +307,9 @@
     }
   },
   "ImageBlockGallery": {
-    "view_gallery": "すべての写真を表示"
+    "view_gallery": "すべての写真を表示",
+    "empty_title": "ギャラリー画像がありません",
+    "empty_description": "ギャラリー画像はSanity CMSで管理されています。"
   },
   "LanguageSwitcher": {
     "aria_label": "言語を選択"

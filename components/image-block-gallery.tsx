@@ -1,9 +1,17 @@
 import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { HouseIdentifier } from '@/lib/types'
 import type { HouseQueryResult } from '@/sanity.types'
+import { ImageIcon } from 'lucide-react'
 import type { ImageProps } from 'next/image'
 import { getTranslations } from 'next-intl/server'
 
@@ -104,7 +112,19 @@ export async function ImageBlockGallery({
   }
 
   if (!gallery || gallery.length < 5) {
-    return null
+    return (
+      <div className="hidden sm:block">
+        <Empty className="min-h-[300px] rounded-xl border border-dashed">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <ImageIcon />
+            </EmptyMedia>
+            <EmptyTitle>{t('empty_title')}</EmptyTitle>
+            <EmptyDescription>{t('empty_description')}</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </div>
+    )
   }
 
   // Prefer room images, fallback to first 5 images
