@@ -13,11 +13,240 @@
  */
 
 // Source: schema.json
+export type ContactType = {
+  _type: 'contactType'
+  key: string
+  title: InternationalizedArrayString
+  description?: InternationalizedArrayText
+  href?: string
+}
+
+export type Address = {
+  _type: 'address'
+  streetAddress: string
+  locality: string
+  postalCode: string
+  country: string
+}
+
+export type NearbyPlace = {
+  _type: 'nearbyPlace'
+  description: InternationalizedArrayText
+}
+
+export type StationInfo = {
+  _type: 'stationInfo'
+  name: InternationalizedArrayString
+  lines?: InternationalizedArrayString
+  exit?: InternationalizedArrayString
+  walkMinutes: number
+}
+
+export type FaqItem = {
+  _type: 'faqItem'
+  question: InternationalizedArrayString
+  answer?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'normal'
+        listItem?: 'bullet' | 'number'
+        markDefs?: Array<{
+          href?: string
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        rows?: Array<{
+          cells?: Array<string>
+          _type: 'row'
+          _key: string
+        }>
+        _type: 'table'
+        _key: string
+      }
+  >
+}
+
+export type PricingNote = {
+  _type: 'pricingNote'
+  title: InternationalizedArrayString
+  items?: Array<{
+    text: InternationalizedArrayText
+    _type: 'item'
+    _key: string
+  }>
+}
+
+export type PricingRow = {
+  _type: 'pricingRow'
+  label: InternationalizedArrayString
+  values: InternationalizedArrayText
+}
+
+export type SocialLink = {
+  _type: 'socialLink'
+  platform: 'facebook' | 'instagram' | 'x' | 'youtube' | 'linkedin' | 'tiktok'
+  url: string
+}
+
+export type AmenityReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'amenity'
+}
+
+export type HouseAmenity = {
+  _type: 'houseAmenity'
+  amenity: AmenityReference
+  note?: 'private' | 'shared' | 'coin'
+  featured?: boolean
+  customLabel?: InternationalizedArrayString
+}
+
+export type GalleryCategoryReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'galleryCategory'
+}
+
+export type GalleryImage = {
+  _type: 'galleryImage'
+  image: LocalizedImage
+  category: GalleryCategoryReference
+}
+
 export type SanityImageAssetReference = {
   _ref: string
   _type: 'reference'
   _weak?: boolean
   [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+}
+
+export type LocalizedImage = {
+  _type: 'localizedImage'
+  asset?: SanityImageAssetReference
+  media?: unknown
+  hotspot?: SanityImageHotspot
+  crop?: SanityImageCrop
+  alt: InternationalizedArrayString
+  caption?: InternationalizedArrayString
+}
+
+export type AmenityCategoryReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'amenityCategory'
+}
+
+export type Amenity = {
+  _id: string
+  _type: 'amenity'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  key: Slug
+  label: InternationalizedArrayString
+  icon: string
+  category: AmenityCategoryReference
+}
+
+export type InternationalizedArrayString = Array<
+  {
+    _key: string
+  } & InternationalizedArrayStringValue
+>
+
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
+export type AmenityCategory = {
+  _id: string
+  _type: 'amenityCategory'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  key: Slug
+  label: InternationalizedArrayString
+  order: number
+}
+
+export type GalleryCategory = {
+  _id: string
+  _type: 'galleryCategory'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  key: Slug
+  label: InternationalizedArrayString
+  order: number
+}
+
+export type ContactPage = {
+  _id: string
+  _type: 'contactPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: InternationalizedArrayString
+  description?: InternationalizedArrayText
+  contactTypes?: Array<
+    {
+      _key: string
+    } & ContactType
+  >
+}
+
+export type InternationalizedArrayText = Array<
+  {
+    _key: string
+  } & InternationalizedArrayTextValue
+>
+
+export type FaqPage = {
+  _id: string
+  _type: 'faqPage'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: InternationalizedArrayString
+  description?: InternationalizedArrayText
+  items?: Array<
+    {
+      _key: string
+    } & FaqItem
+  >
+  contactTitle?: InternationalizedArrayString
+  contactDescription?: InternationalizedArrayText
+}
+
+export type Settings = {
+  _id: string
+  _type: 'settings'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  siteName: InternationalizedArrayString
+  companyName: InternationalizedArrayString
+  socialLinks?: Array<
+    {
+      _key: string
+    } & SocialLink
+  >
 }
 
 export type House = {
@@ -29,21 +258,72 @@ export type House = {
   slug: 'orange' | 'apple' | 'lemon'
   title: InternationalizedArrayString
   description: InternationalizedArrayText
-  image: {
-    asset?: SanityImageAssetReference
-    media?: unknown
-    hotspot?: SanityImageHotspot
-    crop?: SanityImageCrop
-    alt: InternationalizedArrayString
-    _type: 'image'
+  summary?: InternationalizedArrayString
+  caption?: InternationalizedArrayText
+  image: LocalizedImage
+  building?: {
+    rooms: number
+    floors: number
+    startingPrice: number
+  }
+  about?: {
+    description: InternationalizedArrayText
+    highlights?: Array<{
+      text: InternationalizedArrayString
+      _key: string
+    }>
+  }
+  gallery?: Array<
+    {
+      _key: string
+    } & GalleryImage
+  >
+  amenities?: Array<
+    {
+      _key: string
+    } & HouseAmenity
+  >
+  location?: {
+    highlight?: InternationalizedArrayText
+    address?: Address
+    coordinates?: Geopoint
+    googleMapsUrl?: string
+    placeId?: string
+    stations?: Array<
+      {
+        _key: string
+      } & StationInfo
+    >
+    nearby?: Array<
+      {
+        _key: string
+      } & NearbyPlace
+    >
+  }
+  pricing?: {
+    rows?: Array<
+      {
+        _key: string
+      } & PricingRow
+    >
+    notes?: Array<
+      {
+        _key: string
+      } & PricingNote
+    >
+  }
+  phone?: {
+    domestic?: string
+    international?: string
   }
 }
 
-export type InternationalizedArrayString = Array<
-  {
-    _key: string
-  } & InternationalizedArrayStringValue
->
+export type Geopoint = {
+  _type: 'geopoint'
+  lat?: number
+  lng?: number
+  alt?: number
+}
 
 export type SanityImageCrop = {
   _type: 'sanity.imageCrop'
@@ -60,12 +340,6 @@ export type SanityImageHotspot = {
   height: number
   width: number
 }
-
-export type InternationalizedArrayText = Array<
-  {
-    _key: string
-  } & InternationalizedArrayTextValue
->
 
 export type HouseReference = {
   _ref: string
@@ -353,26 +627,35 @@ export type SanityImageAsset = {
   source?: SanityAssetSourceData
 }
 
-export type Geopoint = {
-  _type: 'geopoint'
-  lat?: number
-  lng?: number
-  alt?: number
-}
-
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
-}
-
 export type AllSanitySchemaTypes =
+  | ContactType
+  | Address
+  | NearbyPlace
+  | StationInfo
+  | FaqItem
+  | PricingNote
+  | PricingRow
+  | SocialLink
+  | AmenityReference
+  | HouseAmenity
+  | GalleryCategoryReference
+  | GalleryImage
   | SanityImageAssetReference
-  | House
+  | LocalizedImage
+  | AmenityCategoryReference
+  | Amenity
   | InternationalizedArrayString
+  | Slug
+  | AmenityCategory
+  | GalleryCategory
+  | ContactPage
+  | InternationalizedArrayText
+  | FaqPage
+  | Settings
+  | House
+  | Geopoint
   | SanityImageCrop
   | SanityImageHotspot
-  | InternationalizedArrayText
   | HouseReference
   | HomePage
   | InternationalizedArrayStringArrayValue
@@ -399,8 +682,6 @@ export type AllSanitySchemaTypes =
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
-  | Geopoint
-  | Slug
 
 export declare const internalGroqTypeReferenceTo: unique symbol
 
@@ -437,12 +718,13 @@ export type HomePageQueryResult = {
     title: string | null
     description: string | null
     image: {
+      _type: 'localizedImage'
       asset?: SanityImageAssetReference
       media?: unknown
       hotspot?: SanityImageHotspot
       crop?: SanityImageCrop
       alt: string | null
-      _type: 'image'
+      caption?: InternationalizedArrayString
       preview: string | null
     }
   }> | null
