@@ -189,6 +189,16 @@ export const houseSlugsQuery = defineQuery(`*[_type == "house" && defined(slug)]
   "slug": slug
 }`)
 
+// All houses building data (for FAQ page)
+export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(slug asc){
+  slug,
+  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+  "building": building{
+    rooms,
+    floors
+  }
+}`)
+
 // =============================================================================
 // FAQ PAGE
 // =============================================================================

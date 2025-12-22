@@ -1,15 +1,13 @@
 import type { ReactNode } from 'react'
 
 import { FAQExtraCostsTable } from '@/app/[locale]/faq/(components)/faq-extra-costs-table'
-import { BUILDING_DATA } from '@/components/house/house-building'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
-import { useHouseLabels } from '@/hooks/use-house-labels'
-import { HouseIdentifierValues } from '@/lib/types'
+import type { HousesBuildingQueryResult } from '@/sanity.types'
 import { useFormatter, useTranslations } from 'next-intl'
 
 type FaqItem = {
@@ -18,9 +16,12 @@ type FaqItem = {
   body: ReactNode
 }
 
-export function FAQAccordion() {
+type FAQAccordionProps = {
+  housesBuilding: HousesBuildingQueryResult
+}
+
+export function FAQAccordion({ housesBuilding }: FAQAccordionProps) {
   const t = useTranslations('FAQAccordion')
-  const houseLabel = useHouseLabels()
   const formatter = useFormatter()
 
   const items: FaqItem[] = [
@@ -66,11 +67,12 @@ export function FAQAccordion() {
       question: t('floors_and_rooms.question'),
       body: (
         <ul className="text-muted-foreground list-disc space-y-2">
-          {HouseIdentifierValues.map((id) => {
-            const { floors, rooms } = BUILDING_DATA[id]
+          {housesBuilding.map((house) => {
+            const floors = house.building?.floors ?? 0
+            const rooms = house.building?.rooms ?? 0
             return (
-              <li key={`floors-and-rooms-${id}`}>
-                <strong>{houseLabel(id).name}: </strong>
+              <li key={`floors-and-rooms-${house.slug}`}>
+                <strong>{house.title}: </strong>
                 {t('floors_and_rooms.format', {
                   floors: formatter.number(floors),
                   rooms: formatter.number(rooms)
