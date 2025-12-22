@@ -24,7 +24,7 @@ export const houseAmenity = defineType({
           { title: 'Shared', value: 'shared' },
           { title: 'Coin-operated', value: 'coin' }
         ],
-        layout: 'radio'
+        layout: 'dropdown'
       }
     }),
     defineField({
