@@ -5,25 +5,17 @@ import type { HouseQueryResult } from '@/sanity.types'
 import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
 
-// Legacy constant for backward compatibility - will be removed after content migration
-type BuildingData = {
-  rooms: number
-  floors: number
-  monthly_price: number
-}
-
-export const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
-  apple: { rooms: 24, floors: 8, monthly_price: 50000 },
-  lemon: { rooms: 12, floors: 7, monthly_price: 50000 },
-  orange: { rooms: 28, floors: 3, monthly_price: 41000 }
-}
-
 type HouseBuildingProps = {
   id: HouseIdentifier
   building: NonNullable<HouseQueryResult>['building']
+  dataAttribute?: (path: string) => string
 }
 
-export function HouseBuilding({ id, building }: HouseBuildingProps) {
+export function HouseBuilding({
+  id,
+  building,
+  dataAttribute
+}: HouseBuildingProps) {
   const t = useTranslations('HouseBuilding')
   const formatter = useFormatter()
 
@@ -36,32 +28,45 @@ export function HouseBuilding({ id, building }: HouseBuildingProps) {
     {
       label: t('rooms_label'),
       value: number(building?.rooms ?? 0),
-      icon: BedDoubleIcon
+      icon: BedDoubleIcon,
+      path: 'building.rooms'
     },
     {
       label: t('floors_label'),
       value: number(building?.floors ?? 0),
-      icon: LayersIcon
+      icon: LayersIcon,
+      path: 'building.floors'
     },
     {
       label: t('min_rent_label'),
-      value: currency(building?.startingPrice ?? 0)
+      value: currency(building?.startingPrice ?? 0),
+      path: 'building.startingPrice'
     }
   ]
   const [rooms, floors, minRent] = details
 
   return (
     <div className="text-muted-foreground grid grid-cols-3 gap-2 text-center text-xs">
-      <FeatureItem label={rooms.label} value={rooms.value} Icon={rooms.icon} />
+      <FeatureItem
+        label={rooms.label}
+        value={rooms.value}
+        Icon={rooms.icon}
+        data-sanity={dataAttribute?.(rooms.path)}
+      />
       <FeatureItem
         label={floors.label}
         value={floors.value}
         Icon={floors.icon}
+        data-sanity={dataAttribute?.(floors.path)}
       />
       <Link
         href={{ pathname: '/[house]', params: { house: id }, hash: '#pricing' }}
       >
-        <FeatureItem label={minRent.label} value={minRent.value} />
+        <FeatureItem
+          label={minRent.label}
+          value={minRent.value}
+          data-sanity={dataAttribute?.(minRent.path)}
+        />
       </Link>
     </div>
   )
@@ -71,12 +76,14 @@ function FeatureItem({
   label,
   value,
   Icon,
-  className
+  className,
+  'data-sanity': dataSanity
 }: {
   label: string
   value: string | number
   Icon?: LucideIcon
   className?: string
+  'data-sanity'?: string
 }) {
   return (
     <div
@@ -85,6 +92,7 @@ function FeatureItem({
         'border-border/60 bg-muted/40 rounded-lg border px-2 py-3',
         className
       )}
+      data-sanity={dataSanity}
     >
       <div className="text-foreground flex items-center justify-center gap-1 text-sm font-semibold">
         {Icon && <Icon className="text-primary h-4 w-4" />}
