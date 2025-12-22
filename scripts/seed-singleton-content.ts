@@ -35,8 +35,8 @@ const textBlock = (text: string) => ({
   _type: 'block',
   _key: Math.random().toString(36).substring(2, 10),
   style: 'normal',
-  markDefs: [],
-  children: [{ _type: 'span', _key: 's1', text, marks: [] }]
+  markDefs: [] as string[],
+  children: [{ _type: 'span', _key: 's1', text, marks: [] as string[] }]
 })
 
 type TextPart = { text: string; bold?: boolean }

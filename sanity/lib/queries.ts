@@ -1,18 +1,13 @@
 import { defineQuery } from 'next-sanity'
 
-// Helper for localized field fallback pattern
-// Usage: ${l('fieldName')} => coalesce(fieldName[_key == $locale][0].value, fieldName[_key == "en"][0].value)
-const l = (field: string) =>
-  `coalesce(${field}[_key == $locale][0].value, ${field}[_key == "en"][0].value)`
-
 // =============================================================================
 // GLOBAL SETTINGS
 // =============================================================================
 
 export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
   _id,
-  "siteName": ${l('siteName')},
-  "companyName": ${l('companyName')},
+  "siteName": coalesce(siteName[_key == $locale][0].value, siteName[_key == "en"][0].value),
+  "companyName": coalesce(companyName[_key == $locale][0].value, companyName[_key == "en"][0].value),
   "socialLinks": socialLinks[]{
     _key,
     platform,
@@ -27,11 +22,11 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
 export const homePageQuery = defineQuery(`*[_type == "homePage"][0]{
   _id,
   _type,
-  "title": ${l('title')},
+  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "hero": hero{
-    "title": ${l('title')},
-    "description": ${l('description')},
-    "ctaLabel": ${l('ctaLabel')}
+    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
+    "ctaLabel": coalesce(ctaLabel[_key == $locale][0].value, ctaLabel[_key == "en"][0].value)
   },
   "galleryWall": galleryWall[]{
     _key,
@@ -43,21 +38,21 @@ export const homePageQuery = defineQuery(`*[_type == "homePage"][0]{
     },
     hotspot,
     crop,
-    "alt": ${l('alt')},
+    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
     "preview": asset->metadata.lqip
   },
   "collection": collection{
-    "title": ${l('title')},
-    "description": ${l('description')}
+    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
   },
   "houses": houses[]{
     _key,
     ...@->{
       _id,
       slug,
-      "title": ${l('title')},
-      "description": ${l('description')},
-      "caption": ${l('caption')},
+      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+      "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
+      "caption": coalesce(caption[_key == $locale][0].value, caption[_key == "en"][0].value),
       building,
       image{
         asset->{
@@ -68,7 +63,7 @@ export const homePageQuery = defineQuery(`*[_type == "homePage"][0]{
         },
         hotspot,
         crop,
-        "alt": ${l('alt')},
+        "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
         "preview": asset->metadata.lqip
       }
     }
@@ -83,9 +78,9 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   _id,
   _type,
   slug,
-  "title": ${l('title')},
-  "description": ${l('description')},
-  "caption": ${l('caption')},
+  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
+  "caption": coalesce(caption[_key == $locale][0].value, caption[_key == "en"][0].value),
   building,
   phone,
 
@@ -99,15 +94,15 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     },
     hotspot,
     crop,
-    "alt": ${l('alt')}
+    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value)
   },
 
   // About Section
   "about": about{
-    "description": ${l('description')},
+    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
     "highlights": highlights[]{
       _key,
-      "text": ${l('text')}
+      "text": coalesce(text[_key == $locale][0].value, text[_key == "en"][0].value)
     }
   },
 
@@ -123,11 +118,11 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       },
       hotspot,
       crop,
-      "alt": ${l('alt')}
+      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value)
     },
     "category": category->{
       "key": key.current,
-      "label": ${l('label')},
+      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       order
     }
   } | order(category.order asc),
@@ -146,28 +141,28 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     "amenityKey": amenity->key.current,
     "category": amenity->category->{
       "key": key.current,
-      "label": ${l('label')},
+      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       order
     }
   } | order(category.order asc),
 
   // Location
   "location": location{
-    "highlight": ${l('highlight')},
+    "highlight": coalesce(highlight[_key == $locale][0].value, highlight[_key == "en"][0].value),
     coordinates,
     googleMapsUrl,
     placeId,
     address,
     "stations": stations[]{
       _key,
-      "name": ${l('name')},
-      "lines": ${l('lines')},
-      "exit": ${l('exit')},
+      "name": coalesce(name[_key == $locale][0].value, name[_key == "en"][0].value),
+      "lines": coalesce(lines[_key == $locale][0].value, lines[_key == "en"][0].value),
+      "exit": coalesce(exit[_key == $locale][0].value, exit[_key == "en"][0].value),
       walkMinutes
     },
     "nearby": nearby[]{
       _key,
-      "description": ${l('description')}
+      "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
     }
   },
 
@@ -175,15 +170,15 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   "pricing": pricing{
     "rows": rows[]{
       _key,
-      "label": ${l('label')},
-      "values": ${l('values')}
+      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
+      "values": coalesce(values[_key == $locale][0].value, values[_key == "en"][0].value)
     },
     "notes": notes[]{
       _key,
-      "title": ${l('title')},
+      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
       "items": items[]{
         _key,
-        "text": ${l('text')}
+        "text": coalesce(text[_key == $locale][0].value, text[_key == "en"][0].value)
       }
     }
   }
@@ -201,15 +196,15 @@ export const houseSlugsQuery = defineQuery(`*[_type == "house" && defined(slug)]
 export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   _id,
   _type,
-  "title": ${l('title')},
-  "description": ${l('description')},
+  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
   "items": items[]{
     _key,
-    "question": ${l('question')},
+    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),
     answer
   },
-  "contactTitle": ${l('contactTitle')},
-  "contactDescription": ${l('contactDescription')}
+  "contactTitle": coalesce(contactTitle[_key == $locale][0].value, contactTitle[_key == "en"][0].value),
+  "contactDescription": coalesce(contactDescription[_key == $locale][0].value, contactDescription[_key == "en"][0].value)
 }`)
 
 // =============================================================================
@@ -219,13 +214,13 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
 export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
   _id,
   _type,
-  "title": ${l('title')},
-  "description": ${l('description')},
+  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
   "contactTypes": contactTypes[]{
     _key,
     key,
-    "title": ${l('title')},
-    "description": ${l('description')}
+    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
   }
 }`)
 
@@ -236,7 +231,7 @@ export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
 export const galleryCategoriesQuery = defineQuery(`*[_type == "galleryCategory"] | order(order asc){
   _id,
   "key": key.current,
-  "label": ${l('label')},
+  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
   order,
   image{
     asset->{
@@ -253,18 +248,18 @@ export const galleryCategoriesQuery = defineQuery(`*[_type == "galleryCategory"]
 export const amenityCategoriesQuery = defineQuery(`*[_type == "amenityCategory"] | order(order asc){
   _id,
   "key": key.current,
-  "label": ${l('label')},
+  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
   order
 }`)
 
 export const amenitiesQuery = defineQuery(`*[_type == "amenity"]{
   _id,
   "key": key.current,
-  "label": ${l('label')},
+  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
   icon,
   "category": category->{
     "key": key.current,
-    "label": ${l('label')},
+    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
     order
   }
 } | order(category.order asc, label asc)`)
