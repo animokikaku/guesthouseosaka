@@ -26,9 +26,7 @@ const components: PortableTextComponents = {
     h3: ({ children }) => (
       <h3 className="text-foreground mb-4 text-lg font-semibold">{children}</h3>
     ),
-    normal: ({ children }) => (
-      <p className="text-foreground">{children}</p>
-    )
+    normal: ({ children }) => <p className="text-foreground">{children}</p>
   },
   list: {
     bullet: ({ children }) => <ul className="mb-6 space-y-2">{children}</ul>,
@@ -52,18 +50,22 @@ const components: PortableTextComponents = {
 interface HouseLocationModalProps {
   children: React.ReactNode
   id: HouseIdentifier
-  location: NonNullable<HouseQueryResult>['location']
+  details: NonNullable<NonNullable<HouseQueryResult>['location']>['details']
   title: string
 }
 
 export function HouseLocationModal({
   children,
   id,
-  location,
+  details,
   title
 }: HouseLocationModalProps) {
   const [open, setOpen] = React.useState(false)
   const isMobile = useIsMobile()
+
+  if (!details || details.length === 0) {
+    return null
+  }
 
   if (isMobile) {
     return (
@@ -74,7 +76,7 @@ export function HouseLocationModal({
             <DrawerTitle>{title}</DrawerTitle>
           </DrawerHeader>
           <div className="overflow-y-auto px-4 pb-6">
-            <LocationSections id={id} location={location} />
+            <LocationSections id={id} details={details} />
           </div>
         </DrawerContent>
       </Drawer>
@@ -88,8 +90,7 @@ export function HouseLocationModal({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-
-        <LocationSections id={id} location={location} className="pt-8" />
+        <LocationSections id={id} details={details} className="pt-8" />
       </DialogContent>
     </Dialog>
   )
@@ -97,17 +98,13 @@ export function HouseLocationModal({
 
 interface LocationSectionsProps {
   id: HouseIdentifier
-  location: NonNullable<HouseQueryResult>['location']
+  details: NonNullable<
+    NonNullable<NonNullable<HouseQueryResult>['location']>['details']
+  >
   className?: string
 }
 
-function LocationSections({ location, className }: LocationSectionsProps) {
-  const details = location?.details
-
-  if (!details) {
-    return null
-  }
-
+function LocationSections({ details, className }: LocationSectionsProps) {
   return (
     <div className={cn('space-y-2', className)}>
       <PortableText value={details} components={components} />

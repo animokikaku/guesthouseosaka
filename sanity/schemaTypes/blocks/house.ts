@@ -149,13 +149,15 @@ export const house = defineType({
           name: 'highlight',
           title: 'Location Highlight',
           type: 'internationalizedArrayText',
-          description: 'Key location selling point (e.g., "14 minutes walk to Namba")',
+          description:
+            'Key location selling point (e.g., "14 minutes walk to Namba")',
           options: { aiAssist: { translateAction: true } }
         }),
         defineField({
           name: 'address',
           title: 'Address',
-          type: 'address'
+          type: 'address',
+          validation: (rule) => rule.required()
         }),
         defineField({
           name: 'coordinates',
@@ -167,7 +169,8 @@ export const house = defineType({
           name: 'googleMapsUrl',
           title: 'Google Maps URL',
           type: 'url',
-          description: 'Direct link to Google Maps'
+          description: 'Direct link to Google Maps',
+          validation: (rule) => rule.required()
         }),
         defineField({
           name: 'placeId',

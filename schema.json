@@ -1205,7 +1205,7 @@
                 "type": "inline",
                 "name": "address"
               },
-              "optional": true
+              "optional": false
             },
             "coordinates": {
               "type": "objectAttribute",
@@ -1220,7 +1220,7 @@
               "value": {
                 "type": "string"
               },
-              "optional": true
+              "optional": false
             },
             "placeId": {
               "type": "objectAttribute",

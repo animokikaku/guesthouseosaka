@@ -46,23 +46,29 @@ type HouseLocationProps = {
 export function HouseLocation({ id, location }: HouseLocationProps) {
   const t = useTranslations('HouseLocation')
 
+  if (!location) {
+    return null
+  }
+
+  const { coordinates, placeId, highlight, details } = location
+
   return (
     <section>
       <h2 className="mb-6 text-2xl font-semibold">{t('heading')}</h2>
 
-      {location?.highlight && (
-        <p className="text-foreground mb-6 text-base leading-relaxed">
-          {location.highlight}
-        </p>
-      )}
+      <p className="text-foreground mb-6 text-base leading-relaxed">
+        {highlight}
+      </p>
 
       <div className="mb-6">
-        <HouseMap id={id} location={location} />
+        <HouseMap id={id} coordinates={coordinates} placeId={placeId} />
       </div>
 
       <div className="mt-6">
-        <HouseLocationModal id={id} location={location} title={t('heading')}>
-          <Button variant="outline">{t('modal_trigger')}</Button>
+        <HouseLocationModal id={id} details={details} title={t('heading')}>
+          <Button variant="outline" disabled={!details || details.length === 0}>
+            {t('modal_trigger')}
+          </Button>
         </HouseLocationModal>
       </div>
     </section>

@@ -233,9 +233,9 @@ export type House = {
   >
   location?: {
     highlight?: InternationalizedArrayText
-    address?: Address
+    address: Address
     coordinates?: Geopoint
-    googleMapsUrl?: string
+    googleMapsUrl: string
     placeId?: string
     details?: InternationalizedArrayPortableText
   }
@@ -833,9 +833,9 @@ export type HouseQueryResult = {
   location: {
     highlight: string | null
     coordinates: Geopoint | null
-    googleMapsUrl: string | null
+    googleMapsUrl: string
     placeId: string | null
-    address: Address | null
+    address: Address
     details: Array<{
       children?: Array<{
         marks?: Array<string>
