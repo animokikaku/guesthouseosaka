@@ -8,17 +8,11 @@ export const faqPage = defineType({
   icon: HelpCircleIcon,
   fields: [
     defineField({
-      name: 'title',
-      title: 'Page Title',
-      type: 'internationalizedArrayString',
+      name: 'header',
+      title: 'Page Header',
+      type: 'internationalizedArrayPortableText',
+      description: 'Use H1 for the title and normal text for the description',
       validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
-    }),
-    defineField({
-      name: 'description',
-      title: 'Page Description',
-      type: 'internationalizedArrayText',
-      description: 'Shown below the title',
       options: { aiAssist: { translateAction: true } }
     }),
     defineField({
@@ -29,17 +23,12 @@ export const faqPage = defineType({
       of: [defineArrayMember({ type: 'faqItem' })]
     }),
     defineField({
-      name: 'contactTitle',
-      title: 'Contact Section Title',
-      type: 'internationalizedArrayString',
-      description: 'Title for the contact card shown below FAQs',
-      options: { aiAssist: { translateAction: true } }
-    }),
-    defineField({
-      name: 'contactDescription',
-      title: 'Contact Section Description',
-      type: 'internationalizedArrayText',
-      description: 'Description for the contact card',
+      name: 'contactSection',
+      title: 'Contact Section',
+      type: 'internationalizedArrayPortableText',
+      description:
+        'Content for the contact card shown below FAQs. Use H2 for the title.',
+      validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     })
   ],

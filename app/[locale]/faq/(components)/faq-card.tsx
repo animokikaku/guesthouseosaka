@@ -2,23 +2,37 @@ import { FAQContactTable } from '@/app/[locale]/faq/(components)/faq-contact-tab
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle
+  CardHeader
 } from '@/components/ui/card'
+import type { FaqPageQueryResult } from '@/sanity.types'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 
-export default function FAQCard() {
+const components: PortableTextComponents = {
+  block: {
+    h2: ({ children }) => (
+      <h2 className="text-2xl font-bold">{children}</h2>
+    ),
+    normal: ({ children }) => (
+      <p className="text-muted-foreground text-md">{children}</p>
+    )
+  }
+}
+
+type FAQCardProps = {
+  contactSection: NonNullable<FaqPageQueryResult>['contactSection'] | null
+}
+
+export default function FAQCard({ contactSection }: FAQCardProps) {
   const t = useTranslations('FAQCard')
 
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">{t('title')}</CardTitle>
-        <CardDescription className="text-muted-foreground text-md">
-          {t('description')}
-        </CardDescription>
+        {contactSection && (
+          <PortableText value={contactSection} components={components} />
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-center">

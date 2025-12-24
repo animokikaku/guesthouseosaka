@@ -201,15 +201,13 @@ export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(slug
 export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   _id,
   _type,
-  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
-  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
+  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),
   "items": items[]{
     _key,
     "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),
     answer
   },
-  "contactTitle": coalesce(contactTitle[_key == $locale][0].value, contactTitle[_key == "en"][0].value),
-  "contactDescription": coalesce(contactDescription[_key == $locale][0].value, contactDescription[_key == "en"][0].value)
+  "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value)
 }`)
 
 // =============================================================================
@@ -219,8 +217,7 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
 export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
   _id,
   _type,
-  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
-  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
+  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),
   "contactTypes": contactTypes[]{
     _key,
     key,

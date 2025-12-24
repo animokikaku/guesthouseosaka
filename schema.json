@@ -853,21 +853,13 @@
           "type": "string"
         }
       },
-      "title": {
+      "header": {
         "type": "objectAttribute",
         "value": {
           "type": "inline",
-          "name": "internationalizedArrayString"
+          "name": "internationalizedArrayPortableText"
         },
         "optional": false
-      },
-      "description": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "internationalizedArrayText"
-        },
-        "optional": true
       },
       "contactTypes": {
         "type": "objectAttribute",
@@ -916,6 +908,28 @@
     }
   },
   {
+    "name": "internationalizedArrayPortableText",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "internationalizedArrayPortableTextValue"
+        }
+      }
+    }
+  },
+  {
     "name": "faqPage",
     "type": "document",
     "attributes": {
@@ -950,21 +964,13 @@
           "type": "string"
         }
       },
-      "title": {
+      "header": {
         "type": "objectAttribute",
         "value": {
           "type": "inline",
-          "name": "internationalizedArrayString"
+          "name": "internationalizedArrayPortableText"
         },
         "optional": false
-      },
-      "description": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "internationalizedArrayText"
-        },
-        "optional": true
       },
       "items": {
         "type": "objectAttribute",
@@ -988,43 +994,13 @@
         },
         "optional": true
       },
-      "contactTitle": {
+      "contactSection": {
         "type": "objectAttribute",
         "value": {
           "type": "inline",
-          "name": "internationalizedArrayString"
+          "name": "internationalizedArrayPortableText"
         },
-        "optional": true
-      },
-      "contactDescription": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "internationalizedArrayText"
-        },
-        "optional": true
-      }
-    }
-  },
-  {
-    "name": "internationalizedArrayPortableText",
-    "type": "type",
-    "value": {
-      "type": "array",
-      "of": {
-        "type": "object",
-        "attributes": {
-          "_key": {
-            "type": "objectAttribute",
-            "value": {
-              "type": "string"
-            }
-          }
-        },
-        "rest": {
-          "type": "inline",
-          "name": "internationalizedArrayPortableTextValue"
-        }
+        "optional": false
       }
     }
   },

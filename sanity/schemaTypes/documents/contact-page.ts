@@ -8,17 +8,11 @@ export const contactPage = defineType({
   icon: EnvelopeIcon,
   fields: [
     defineField({
-      name: 'title',
-      title: 'Page Title',
-      type: 'internationalizedArrayString',
+      name: 'header',
+      title: 'Page Header',
+      type: 'internationalizedArrayPortableText',
+      description: 'Use H1 for the title and normal text for the description',
       validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
-    }),
-    defineField({
-      name: 'description',
-      title: 'Page Description',
-      type: 'internationalizedArrayText',
-      description: 'Shown below the title',
       options: { aiAssist: { translateAction: true } }
     }),
     defineField({
