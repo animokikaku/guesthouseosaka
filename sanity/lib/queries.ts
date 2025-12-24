@@ -158,17 +158,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     googleMapsUrl,
     placeId,
     address,
-    "stations": stations[]{
-      _key,
-      "name": coalesce(name[_key == $locale][0].value, name[_key == "en"][0].value),
-      "lines": coalesce(lines[_key == $locale][0].value, lines[_key == "en"][0].value),
-      "exit": coalesce(exit[_key == $locale][0].value, exit[_key == "en"][0].value),
-      walkMinutes
-    },
-    "nearby": nearby[]{
-      _key,
-      "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
-    }
+    "details": coalesce(details[_key == $locale][0].value, details[_key == "en"][0].value)
   },
 
   // Pricing

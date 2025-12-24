@@ -18,8 +18,36 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import type { HouseQueryResult } from '@/sanity.types'
-import { useTranslations } from 'next-intl'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import * as React from 'react'
+
+const components: PortableTextComponents = {
+  block: {
+    h3: ({ children }) => (
+      <h3 className="text-foreground mb-4 text-lg font-semibold">{children}</h3>
+    ),
+    normal: ({ children }) => (
+      <p className="text-foreground">{children}</p>
+    )
+  },
+  list: {
+    bullet: ({ children }) => <ul className="mb-6 space-y-2">{children}</ul>,
+    number: ({ children }) => (
+      <ol className="text-foreground mb-6 list-decimal space-y-2 pl-5">
+        {children}
+      </ol>
+    )
+  },
+  listItem: {
+    bullet: ({ children }) => (
+      <li className="flex items-start gap-3">
+        <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
+        <span className="text-foreground">{children}</span>
+      </li>
+    ),
+    number: ({ children }) => <li>{children}</li>
+  }
+}
 
 interface HouseLocationModalProps {
   children: React.ReactNode
@@ -74,44 +102,15 @@ interface LocationSectionsProps {
 }
 
 function LocationSections({ location, className }: LocationSectionsProps) {
-  const t = useTranslations('HouseLocation')
+  const details = location?.details
 
-  const stations = location?.stations ?? []
-  const nearby = location?.nearby ?? []
+  if (!details) {
+    return null
+  }
 
   return (
-    <div className={cn('space-y-8', className)}>
-      {stations.length > 0 && (
-        <div>
-          <h3 className="text-foreground mb-4 text-lg font-semibold">
-            {t('sections.getting_around')}
-          </h3>
-          <ul className="space-y-2">
-            {stations.map((station) => (
-              <li key={station._key} className="flex items-start gap-3">
-                <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
-                <span className="text-foreground">{station.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {nearby.length > 0 && (
-        <div>
-          <h3 className="text-foreground mb-4 text-lg font-semibold">
-            {t('sections.nearby')}
-          </h3>
-          <ul className="space-y-2">
-            {nearby.map((item) => (
-              <li key={item._key} className="flex items-start gap-3">
-                <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
-                <span className="text-foreground">{item.description}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+    <div className={cn('space-y-2', className)}>
+      <PortableText value={details} components={components} />
     </div>
   )
 }

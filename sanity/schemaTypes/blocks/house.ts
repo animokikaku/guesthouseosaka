@@ -176,18 +176,12 @@ export const house = defineType({
           description: 'Google Maps Place ID for embedded maps'
         }),
         defineField({
-          name: 'stations',
-          title: 'Nearby Stations',
-          type: 'array',
-          description: 'Train stations within walking distance',
-          of: [defineArrayMember({ type: 'stationInfo' })]
-        }),
-        defineField({
-          name: 'nearby',
-          title: 'Nearby Places',
-          type: 'array',
-          description: 'Notable places and facilities nearby',
-          of: [defineArrayMember({ type: 'nearbyPlace' })]
+          name: 'details',
+          title: 'Location Details',
+          type: 'internationalizedArrayPortableText',
+          description:
+            'Use H3 for section headings (e.g., "Getting Around", "Nearby") and bullet lists for items',
+          options: { aiAssist: { translateAction: true } }
         })
       ]
     }),

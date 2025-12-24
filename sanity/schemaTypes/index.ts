@@ -18,10 +18,8 @@ import {
   galleryImage,
   houseAmenity,
   localizedImage,
-  nearbyPlace,
   pricingRow,
-  socialLink,
-  stationInfo
+  socialLink
 } from './objects'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
@@ -45,8 +43,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     socialLink,
     pricingRow,
     faqItem,
-    stationInfo,
-    nearbyPlace,
     address,
     contactType
   ]
