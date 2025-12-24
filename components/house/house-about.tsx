@@ -1,7 +1,5 @@
-'use client'
-
 import { HouseBuilding } from '@/components/house/house-building'
-import { useNestedOptimistic } from '@/hooks/use-optimistic'
+import { HouseHighlights } from '@/components/house/house-highlights'
 import type { HouseQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 
@@ -18,11 +16,9 @@ export function HouseAbout({ data }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
   const { about, title, _id, _type, building, slug } = data
 
-  const [highlights, attr] = useNestedOptimistic(
-    data,
-    'about.highlights',
-    about?.highlights
-  )
+  if (!about) {
+    return null
+  }
 
   return (
     <section>
@@ -34,25 +30,10 @@ export function HouseAbout({ data }: HouseAboutProps) {
       </div>
 
       <p className="text-foreground text-base leading-relaxed">
-        {about?.description}
+        {about.description}
       </p>
 
-      {highlights && highlights.length > 0 ? (
-        <div className="mt-4">
-          <ul className="space-y-2" data-sanity={attr.list()}>
-            {highlights.map((highlight) => (
-              <li
-                key={highlight._key}
-                className="flex items-start gap-3"
-                data-sanity={attr.item(highlight._key)}
-              >
-                <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
-                <span className="text-foreground">{highlight.text}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
+      <HouseHighlights data={{ _id, _type, highlights: about.highlights }} />
     </section>
   )
 }

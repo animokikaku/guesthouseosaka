@@ -61,10 +61,10 @@ export function HousePageContent({ data }: HousePageContentProps) {
                 data={{
                   _id: data._id,
                   _type: data._type,
+                  slug: data.slug,
                   title: data.title,
                   about: data.about,
-                  building: data.building,
-                  slug: data.slug
+                  building: data.building
                 }}
               />
               <HouseAmenities amenities={data.amenities} />
