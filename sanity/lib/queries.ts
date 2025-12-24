@@ -24,8 +24,7 @@ export const homePageQuery = defineQuery(`*[_type == "homePage"][0]{
   _type,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "hero": hero{
-    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
-    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
+    "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value),
     "ctaLabel": coalesce(ctaLabel[_key == $locale][0].value, ctaLabel[_key == "en"][0].value)
   },
   "galleryWall": galleryWall[]{
@@ -42,8 +41,7 @@ export const homePageQuery = defineQuery(`*[_type == "homePage"][0]{
     "preview": asset->metadata.lqip
   },
   "collection": collection{
-    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
-    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
+    "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value)
   },
   "houses": houses[]{
     _key,

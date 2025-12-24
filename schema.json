@@ -1622,19 +1622,11 @@
         "value": {
           "type": "object",
           "attributes": {
-            "title": {
+            "content": {
               "type": "objectAttribute",
               "value": {
                 "type": "inline",
-                "name": "internationalizedArrayString"
-              },
-              "optional": false
-            },
-            "description": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "internationalizedArrayText"
+                "name": "internationalizedArrayPortableText"
               },
               "optional": false
             },
@@ -1648,7 +1640,7 @@
             }
           }
         },
-        "optional": true
+        "optional": false
       },
       "galleryWall": {
         "type": "objectAttribute",
@@ -1724,19 +1716,11 @@
         "value": {
           "type": "object",
           "attributes": {
-            "title": {
+            "content": {
               "type": "objectAttribute",
               "value": {
                 "type": "inline",
-                "name": "internationalizedArrayString"
-              },
-              "optional": false
-            },
-            "description": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "internationalizedArrayText"
+                "name": "internationalizedArrayPortableText"
               },
               "optional": false
             }
@@ -1843,6 +1827,14 @@
                       {
                         "type": "string",
                         "value": "normal"
+                      },
+                      {
+                        "type": "string",
+                        "value": "h1"
+                      },
+                      {
+                        "type": "string",
+                        "value": "h2"
                       }
                     ]
                   },

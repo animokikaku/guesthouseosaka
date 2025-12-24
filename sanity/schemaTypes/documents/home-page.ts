@@ -18,14 +18,11 @@ export default defineType({
       type: 'object',
       fields: [
         defineField({
-          name: 'title',
-          type: 'internationalizedArrayString',
-          options: { aiAssist: { translateAction: true } },
-          validation: (rule) => rule.required()
-        }),
-        defineField({
-          name: 'description',
-          type: 'internationalizedArrayText',
+          name: 'content',
+          title: 'Content',
+          type: 'internationalizedArrayPortableText',
+          description:
+            'Use H1 for the heading and normal text for the description',
           options: { aiAssist: { translateAction: true } },
           validation: (rule) => rule.required()
         }),
@@ -35,7 +32,8 @@ export default defineType({
           options: { aiAssist: { translateAction: true } },
           validation: (rule) => rule.required()
         })
-      ]
+      ],
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'galleryWall',
@@ -53,14 +51,11 @@ export default defineType({
       type: 'object',
       fields: [
         defineField({
-          name: 'title',
-          type: 'internationalizedArrayString',
-          options: { aiAssist: { translateAction: true } },
-          validation: (rule) => rule.required()
-        }),
-        defineField({
-          name: 'description',
-          type: 'internationalizedArrayText',
+          name: 'content',
+          title: 'Content',
+          type: 'internationalizedArrayPortableText',
+          description:
+            'Use H2 for the heading and normal text for the description',
           options: { aiAssist: { translateAction: true } },
           validation: (rule) => rule.required()
         })
@@ -75,8 +70,7 @@ export default defineType({
   ],
   preview: {
     select: {
-      title: 'title.0.value',
-      subtitle: 'hero.title.0.value'
+      title: 'title.0.value'
     }
   }
 })

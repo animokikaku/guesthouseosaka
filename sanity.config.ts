@@ -81,7 +81,11 @@ export default defineConfig({
           of: [
             {
               type: 'block',
-              styles: [{ title: 'Normal', value: 'normal' }],
+              styles: [
+                { title: 'Normal', value: 'normal' },
+                { title: 'Heading 1', value: 'h1' },
+                { title: 'Heading 2', value: 'h2' }
+              ],
               marks: {
                 decorators: [
                   { title: 'Bold', value: 'strong' },
