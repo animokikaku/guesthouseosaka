@@ -1,7 +1,6 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
 import { assets } from '@/lib/assets'
-import { createDataAttribute } from '@/lib/sanity-data-attributes'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
@@ -28,8 +27,6 @@ export default async function HousePage({
   if (!data) {
     notFound()
   }
-
-  const dataAttribute = createDataAttribute({ id: data._id, type: data._type })
 
   const url = `${env.NEXT_PUBLIC_APP_URL}/${house}`
 
@@ -71,7 +68,7 @@ export default async function HousePage({
           __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c')
         }}
       />
-      <HousePageContent data={data} dataAttribute={dataAttribute} />
+      <HousePageContent data={data} />
     </>
   )
 }

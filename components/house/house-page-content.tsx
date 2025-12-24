@@ -1,6 +1,5 @@
 import { HouseAbout } from '@/components/house/house-about'
 import { HouseAmenities } from '@/components/house/house-amenities'
-import { HouseBuilding } from '@/components/house/house-building'
 import { HouseLocation } from '@/components/house/house-location'
 import { HousePricing } from '@/components/house/house-pricing'
 import { MobileHeroImage } from '@/components/house/mobile-hero-image'
@@ -18,7 +17,6 @@ import type { HouseQueryResult } from '@/sanity.types'
 
 type HousePageContentProps = {
   data: NonNullable<HouseQueryResult>
-  dataAttribute?: (path: string) => string
 }
 
 const THEME_COLORS: Record<HouseIdentifier, string> = {
@@ -27,10 +25,7 @@ const THEME_COLORS: Record<HouseIdentifier, string> = {
   orange: 'bg-orange-500 dark:bg-orange-600'
 }
 
-export function HousePageContent({
-  data,
-  dataAttribute
-}: HousePageContentProps) {
+export function HousePageContent({ data }: HousePageContentProps) {
   const houseId = data.slug
 
   return (
@@ -63,15 +58,14 @@ export function HousePageContent({
               className="space-y-12 pt-8"
             >
               <HouseAbout
-                title={data.title}
-                about={data.about}
-                building={
-                  <HouseBuilding
-                    id={houseId}
-                    building={data.building}
-                    dataAttribute={dataAttribute}
-                  />
-                }
+                data={{
+                  _id: data._id,
+                  _type: data._type,
+                  title: data.title,
+                  about: data.about,
+                  building: data.building,
+                  slug: data.slug
+                }}
               />
               <HouseAmenities amenities={data.amenities} />
               <HouseLocation id={houseId} location={data.location} />
