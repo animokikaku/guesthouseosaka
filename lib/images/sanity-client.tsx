@@ -9,6 +9,9 @@ type SanityGalleryImage = NonNullable<
   NonNullable<HouseQueryResult>['gallery']
 >[number]
 
+// Featured image from Sanity (same structure as localizedImage in query)
+type SanityFeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
+
 // Image with Next.js Image props for display
 export type GalleryImageWithProps = Omit<ImageProps, 'fill'> & {
   id: string
@@ -52,6 +55,7 @@ const GalleryContext = createContext<GalleryContextValue | null>(null)
 
 type SanityGalleryProviderProps = {
   gallery: NonNullable<HouseQueryResult>['gallery']
+  featuredImage?: SanityFeaturedImage
   children: ReactNode
 }
 
@@ -68,15 +72,37 @@ function toImageProps(image: SanityGalleryImage): GalleryImageWithProps {
   }
 }
 
+function featuredToImageProps(
+  image: NonNullable<SanityFeaturedImage>
+): GalleryImageWithProps {
+  return {
+    id: 'featured',
+    src: image.asset?.url ?? '',
+    alt: image.alt ?? '',
+    width: image.asset?.dimensions?.width ?? 800,
+    height: image.asset?.dimensions?.height ?? 600,
+    blurDataURL: image.asset?.lqip ?? undefined,
+    placeholder: image.asset?.lqip ? 'blur' : undefined,
+    category: { key: 'featured', label: null, order: -1 }
+  }
+}
+
 /**
  * Provider component that enables useGallery() hook with Sanity gallery data
  */
 export function SanityGalleryProvider({
   gallery,
+  featuredImage,
   children
 }: SanityGalleryProviderProps) {
   const value = useMemo<GalleryContextValue>(() => {
-    const allImages = (gallery ?? []).map(toImageProps)
+    const galleryImages = (gallery ?? []).map(toImageProps)
+
+    // Prepend featured image if available
+    const allImages =
+      featuredImage?.asset?.url
+        ? [featuredToImageProps(featuredImage), ...galleryImages]
+        : galleryImages
     const indexMap = new Map(allImages.map((img, idx) => [img.id, idx]))
 
     // Build category map for quick lookups
@@ -117,7 +143,7 @@ export function SanityGalleryProvider({
       categories: () => categoryKeys,
       categoryLabel: (key) => categoryLabelMap.get(key) ?? null
     }
-  }, [gallery])
+  }, [gallery, featuredImage])
 
   return (
     <GalleryContext.Provider value={value}>{children}</GalleryContext.Provider>

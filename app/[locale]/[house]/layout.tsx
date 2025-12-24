@@ -68,7 +68,7 @@ export default async function HouseLayout({
 
   return (
     // SanityGalleryProvider enables useGallery() for client components
-    <SanityGalleryProvider gallery={data.gallery}>
+    <SanityGalleryProvider gallery={data.gallery} featuredImage={data.featuredImage}>
       {children}
       {modal}
     </SanityGalleryProvider>

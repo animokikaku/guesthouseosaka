@@ -97,6 +97,19 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value)
   },
 
+  // Featured Image (optional, prepended to gallery grids)
+  featuredImage{
+    asset->{
+      _id,
+      url,
+      "dimensions": metadata.dimensions,
+      "lqip": metadata.lqip
+    },
+    hotspot,
+    crop,
+    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value)
+  },
+
   // About Section
   "about": about{
     "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),

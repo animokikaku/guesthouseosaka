@@ -19,9 +19,12 @@ type SanityGalleryImage = NonNullable<
   NonNullable<HouseQueryResult>['gallery']
 >[number]
 
+type SanityFeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
+
 type ImageBlockGalleryProps = {
   id: HouseIdentifier
   gallery: NonNullable<HouseQueryResult>['gallery']
+  featuredImage?: SanityFeaturedImage
 }
 
 type GalleryHref = {
@@ -38,6 +41,20 @@ function toImageProps(image: SanityGalleryImage): Omit<ImageProps, 'fill'> {
     height: image.image.asset?.dimensions?.height ?? 600,
     blurDataURL: image.image.asset?.lqip ?? undefined,
     placeholder: image.image.asset?.lqip ? 'blur' : undefined
+  }
+}
+
+// Transform featured image to Next.js Image props
+function featuredToImageProps(
+  image: NonNullable<SanityFeaturedImage>
+): Omit<ImageProps, 'fill'> {
+  return {
+    src: image.asset?.url ?? '',
+    alt: image.alt ?? '',
+    width: image.asset?.dimensions?.width ?? 800,
+    height: image.asset?.dimensions?.height ?? 600,
+    blurDataURL: image.asset?.lqip ?? undefined,
+    placeholder: image.asset?.lqip ? 'blur' : undefined
   }
 }
 
@@ -103,7 +120,8 @@ function GalleryGrid({
 
 export async function ImageBlockGallery({
   id,
-  gallery
+  gallery,
+  featuredImage
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
   const galleryHref: GalleryHref = {
@@ -111,7 +129,12 @@ export async function ImageBlockGallery({
     params: { house: id }
   }
 
-  if (!gallery || gallery.length < 5) {
+  // Count total available images (featured + gallery)
+  const hasFeatured = !!featuredImage?.asset?.url
+  const galleryCount = gallery?.length ?? 0
+  const totalCount = (hasFeatured ? 1 : 0) + galleryCount
+
+  if (totalCount < 5) {
     return (
       <div className="hidden sm:block">
         <Empty className="min-h-[300px] rounded-xl border border-dashed">
@@ -127,11 +150,11 @@ export async function ImageBlockGallery({
     )
   }
 
-  // Prefer room images, fallback to first 5 images
-  const roomImages = gallery.filter((img) => img.category?.key === 'room')
-  const displayImages =
-    roomImages.length >= 5 ? roomImages.slice(0, 5) : gallery.slice(0, 5)
-  const images = displayImages.map(toImageProps)
+  // Build display images: featured first (if available), then gallery images
+  const galleryImages = (gallery ?? []).map(toImageProps)
+  const images = hasFeatured
+    ? [featuredToImageProps(featuredImage), ...galleryImages.slice(0, 4)]
+    : galleryImages.slice(0, 5)
 
   return (
     <GalleryGrid

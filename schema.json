@@ -1253,6 +1253,14 @@
         },
         "optional": false
       },
+      "featuredImage": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "localizedImage"
+        },
+        "optional": true
+      },
       "building": {
         "type": "objectAttribute",
         "value": {

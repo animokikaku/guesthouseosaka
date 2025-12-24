@@ -52,7 +52,11 @@ export function HousePageContent({
             <HousesNav />
           </PageNav>
           <div className="theme-container">
-            <ImageBlockGallery id={houseId} gallery={data.gallery} />
+            <ImageBlockGallery
+              id={houseId}
+              gallery={data.gallery}
+              featuredImage={data.featuredImage}
+            />
             <article
               id={houseId}
               aria-labelledby={`${houseId}-title`}
