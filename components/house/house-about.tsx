@@ -1,7 +1,32 @@
 import { HouseBuilding } from '@/components/house/house-building'
-import { HouseHighlights } from '@/components/house/house-highlights'
 import type { HouseQueryResult } from '@/sanity.types'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
+
+const components: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="text-foreground text-base leading-relaxed">{children}</p>
+    )
+  },
+  list: {
+    bullet: ({ children }) => <ul className="mt-4 space-y-2">{children}</ul>,
+    number: ({ children }) => (
+      <ol className="text-foreground mt-4 list-decimal space-y-2 pl-5">
+        {children}
+      </ol>
+    )
+  },
+  listItem: {
+    bullet: ({ children }) => (
+      <li className="flex items-start gap-3">
+        <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
+        <span className="text-foreground">{children}</span>
+      </li>
+    ),
+    number: ({ children }) => <li>{children}</li>
+  }
+}
 
 type AboutData = Pick<
   NonNullable<HouseQueryResult>,
@@ -29,11 +54,7 @@ export function HouseAbout({ data }: HouseAboutProps) {
         <HouseBuilding data={{ _id, _type, slug, building }} />
       </div>
 
-      <p className="text-foreground text-base leading-relaxed">
-        {about.description}
-      </p>
-
-      <HouseHighlights data={{ _id, _type, highlights: about.highlights }} />
+      <PortableText value={about} components={components} />
     </section>
   )
 }

@@ -1232,50 +1232,10 @@
       "about": {
         "type": "objectAttribute",
         "value": {
-          "type": "object",
-          "attributes": {
-            "description": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "internationalizedArrayText"
-              },
-              "optional": false
-            },
-            "highlights": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "array",
-                "of": {
-                  "type": "object",
-                  "attributes": {
-                    "text": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "inline",
-                        "name": "internationalizedArrayString"
-                      },
-                      "optional": false
-                    }
-                  },
-                  "rest": {
-                    "type": "object",
-                    "attributes": {
-                      "_key": {
-                        "type": "objectAttribute",
-                        "value": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "optional": true
-            }
-          }
+          "type": "inline",
+          "name": "internationalizedArrayPortableText"
         },
-        "optional": true
+        "optional": false
       },
       "gallery": {
         "type": "objectAttribute",

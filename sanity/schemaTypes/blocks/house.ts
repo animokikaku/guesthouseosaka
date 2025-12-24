@@ -103,44 +103,12 @@ export const house = defineType({
     defineField({
       name: 'about',
       title: 'About Section',
-      type: 'object',
+      type: 'internationalizedArrayPortableText',
       group: 'about',
-      fields: [
-        defineField({
-          name: 'description',
-          title: 'Description',
-          type: 'internationalizedArrayText',
-          description: 'Detailed description of the house',
-          validation: (rule) => rule.required(),
-          options: { aiAssist: { translateAction: true } }
-        }),
-        defineField({
-          name: 'highlights',
-          title: 'Highlights',
-          type: 'array',
-          description: 'Key features as bullet points',
-          of: [
-            defineArrayMember({
-              type: 'object',
-              fields: [
-                defineField({
-                  name: 'text',
-                  title: 'Text',
-                  type: 'internationalizedArrayString',
-                  validation: (rule) => rule.required(),
-                  options: { aiAssist: { translateAction: true } }
-                })
-              ],
-              preview: {
-                select: { text: 'text.0.value' },
-                prepare({ text }) {
-                  return { title: text || 'No text' }
-                }
-              }
-            })
-          ]
-        })
-      ]
+      description:
+        'Detailed description and highlights of the house. Use bullet points for key features.',
+      validation: (rule) => rule.required(),
+      options: { aiAssist: { translateAction: true } }
     }),
 
     // ============================================

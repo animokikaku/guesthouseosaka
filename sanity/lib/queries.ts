@@ -111,13 +111,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   },
 
   // About Section
-  "about": about{
-    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
-    "highlights": highlights[]{
-      _key,
-      "text": coalesce(text[_key == $locale][0].value, text[_key == "en"][0].value)
-    }
-  },
+  "about": coalesce(about[_key == $locale][0].value, about[_key == "en"][0].value),
 
   // Gallery with categories
   "gallery": gallery[]{
