@@ -180,20 +180,10 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   },
 
   // Pricing
-  "pricing": pricing{
-    "rows": rows[]{
-      _key,
-      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-      "values": coalesce(values[_key == $locale][0].value, values[_key == "en"][0].value)
-    },
-    "notes": notes[]{
-      _key,
-      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
-      "items": items[]{
-        _key,
-        "text": coalesce(text[_key == $locale][0].value, text[_key == "en"][0].value)
-      }
-    }
+  "pricing": pricing[]{
+    _key,
+    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
+    "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value)
   }
 }`)
 

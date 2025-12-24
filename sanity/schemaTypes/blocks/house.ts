@@ -230,24 +230,10 @@ export const house = defineType({
     defineField({
       name: 'pricing',
       title: 'Pricing',
-      type: 'object',
+      type: 'array',
       group: 'pricing',
-      fields: [
-        defineField({
-          name: 'rows',
-          title: 'Pricing Table',
-          type: 'array',
-          description: 'Main pricing information rows',
-          of: [defineArrayMember({ type: 'pricingRow' })]
-        }),
-        defineField({
-          name: 'notes',
-          title: 'Additional Notes',
-          type: 'array',
-          description: 'Additional pricing notes (discounts, fees, etc.)',
-          of: [defineArrayMember({ type: 'pricingNote' })]
-        })
-      ]
+      description: 'Pricing information rows with rich text content',
+      of: [defineArrayMember({ type: 'pricingRow' })]
     }),
 
     // ============================================

@@ -11,28 +11,26 @@ export const pricingRow = defineType({
       name: 'label',
       title: 'Label',
       type: 'internationalizedArrayString',
-      description: 'Row label (e.g., "Rent", "Short Stay")',
+      description: 'Row label (e.g., "Rent", "Short Stay", "Utilities")',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     }),
     defineField({
-      name: 'values',
-      title: 'Values',
-      type: 'internationalizedArrayText',
-      description: 'Price details (multi-line supported)',
+      name: 'content',
+      title: 'Content',
+      type: 'internationalizedArrayPortableText',
+      description: 'Rich text content for this row',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     })
   ],
   preview: {
     select: {
-      label: 'label.0.value',
-      values: 'values.0.value'
+      label: 'label.0.value'
     },
-    prepare({ label, values }) {
+    prepare({ label }) {
       return {
-        title: label || 'No label',
-        subtitle: values ? values.substring(0, 50) + '...' : 'No values'
+        title: label || 'No label'
       }
     }
   }

@@ -200,68 +200,6 @@
     }
   },
   {
-    "name": "pricingNote",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "pricingNote"
-          }
-        },
-        "title": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "internationalizedArrayString"
-          },
-          "optional": false
-        },
-        "items": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "array",
-            "of": {
-              "type": "object",
-              "attributes": {
-                "text": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "inline",
-                    "name": "internationalizedArrayText"
-                  },
-                  "optional": false
-                },
-                "_type": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "string",
-                    "value": "item"
-                  }
-                }
-              },
-              "rest": {
-                "type": "object",
-                "attributes": {
-                  "_key": {
-                    "type": "objectAttribute",
-                    "value": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "optional": true
-        }
-      }
-    }
-  },
-  {
     "name": "pricingRow",
     "type": "type",
     "value": {
@@ -282,11 +220,11 @@
           },
           "optional": false
         },
-        "values": {
+        "content": {
           "type": "objectAttribute",
           "value": {
             "type": "inline",
-            "name": "internationalizedArrayText"
+            "name": "internationalizedArrayPortableText"
           },
           "optional": false
         }
@@ -1477,51 +1415,20 @@
       "pricing": {
         "type": "objectAttribute",
         "value": {
-          "type": "object",
-          "attributes": {
-            "rows": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "array",
-                "of": {
-                  "type": "object",
-                  "attributes": {
-                    "_key": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "rest": {
-                    "type": "inline",
-                    "name": "pricingRow"
-                  }
+          "type": "array",
+          "of": {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
                 }
-              },
-              "optional": true
+              }
             },
-            "notes": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "array",
-                "of": {
-                  "type": "object",
-                  "attributes": {
-                    "_key": {
-                      "type": "objectAttribute",
-                      "value": {
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "rest": {
-                    "type": "inline",
-                    "name": "pricingNote"
-                  }
-                }
-              },
-              "optional": true
+            "rest": {
+              "type": "inline",
+              "name": "pricingRow"
             }
           }
         },

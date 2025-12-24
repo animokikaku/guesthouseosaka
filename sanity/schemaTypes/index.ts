@@ -19,7 +19,6 @@ import {
   houseAmenity,
   localizedImage,
   nearbyPlace,
-  pricingNote,
   pricingRow,
   socialLink,
   stationInfo
@@ -45,7 +44,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     houseAmenity,
     socialLink,
     pricingRow,
-    pricingNote,
     faqItem,
     stationInfo,
     nearbyPlace,
