@@ -15,7 +15,6 @@ import {
   DrawerTrigger
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import type { HouseQueryResult } from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
@@ -49,14 +48,12 @@ const components: PortableTextComponents = {
 
 interface HouseLocationModalProps {
   children: React.ReactNode
-  id: HouseIdentifier
   details: NonNullable<NonNullable<HouseQueryResult>['location']>['details']
   title: string
 }
 
 export function HouseLocationModal({
   children,
-  id,
   details,
   title
 }: HouseLocationModalProps) {
@@ -76,7 +73,7 @@ export function HouseLocationModal({
             <DrawerTitle>{title}</DrawerTitle>
           </DrawerHeader>
           <div className="overflow-y-auto px-4 pb-6">
-            <LocationSections id={id} details={details} />
+            <LocationSections details={details} />
           </div>
         </DrawerContent>
       </Drawer>
@@ -90,14 +87,13 @@ export function HouseLocationModal({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <LocationSections id={id} details={details} className="pt-8" />
+        <LocationSections details={details} className="pt-8" />
       </DialogContent>
     </Dialog>
   )
 }
 
 interface LocationSectionsProps {
-  id: HouseIdentifier
   details: NonNullable<
     NonNullable<NonNullable<HouseQueryResult>['location']>['details']
   >

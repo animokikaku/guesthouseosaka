@@ -6,15 +6,15 @@ import {
 } from '@/components/map'
 import { HouseIdentifier } from '@/lib/types'
 import type { HouseQueryResult } from '@/sanity.types'
-
 interface HouseMapProps extends Pick<
   NonNullable<NonNullable<HouseQueryResult>['location']>,
   'coordinates' | 'placeId'
 > {
   id: HouseIdentifier
+  mapsUrl: string
 }
 
-export function HouseMap({ id, coordinates, placeId }: HouseMapProps) {
+export function HouseMap({ id, coordinates, placeId, mapsUrl }: HouseMapProps) {
   // Use Sanity coordinates if available, fallback to constants
   if (!coordinates?.lat || !coordinates?.lng || !placeId) {
     return null
@@ -36,7 +36,7 @@ export function HouseMap({ id, coordinates, placeId }: HouseMapProps) {
               defaultZoom={15}
               defaultCenter={center}
             >
-              <HouseMarker id={id} center={center} />
+              <HouseMarker center={center} mapsUrl={mapsUrl} />
             </GoogleMaps>
           </div>
         </div>

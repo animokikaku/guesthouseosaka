@@ -15,17 +15,16 @@ import {
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { useGallery } from '@/lib/images/sanity-client'
-import { HouseIdentifier } from '@/lib/types'
 import { ImageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { ComponentProps, useEffect, useState } from 'react'
 
-type MobileHeroImageProps = {
-  id: HouseIdentifier
-}
-
-export function MobileHeroImage({ id }: MobileHeroImageProps) {
+export function MobileHeroImage({
+  href
+}: {
+  href: ComponentProps<typeof Link>['href']
+}) {
   const t = useTranslations('MobileHeroImage')
   const [api, setApi] = useState<CarouselApi>()
   const [currentIndex, setCurrentIndex] = useState(1)
@@ -72,10 +71,7 @@ export function MobileHeroImage({ id }: MobileHeroImageProps) {
   }
 
   return (
-    <Link
-      href={{ pathname: '/[house]/gallery', params: { house: id } }}
-      className="select-none sm:hidden"
-    >
+    <Link href={href} className="select-none sm:hidden">
       <Carousel
         className="max-h-96 w-full cursor-pointer select-none"
         setApi={(carouselApi) => setApi(carouselApi)}

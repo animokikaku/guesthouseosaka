@@ -9,11 +9,11 @@ import {
   EmptyTitle
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import { HouseIdentifier } from '@/lib/types'
 import type { HouseQueryResult } from '@/sanity.types'
 import { ImageIcon } from 'lucide-react'
-import type { ImageProps } from 'next/image'
 import { getTranslations } from 'next-intl/server'
+import type { ImageProps } from 'next/image'
+import { ComponentProps } from 'react'
 
 type SanityGalleryImage = NonNullable<
   NonNullable<HouseQueryResult>['gallery']
@@ -22,14 +22,9 @@ type SanityGalleryImage = NonNullable<
 type SanityFeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
 
 type ImageBlockGalleryProps = {
-  id: HouseIdentifier
+  href: ComponentProps<typeof Link>['href']
   gallery: NonNullable<HouseQueryResult>['gallery']
   featuredImage?: SanityFeaturedImage
-}
-
-type GalleryHref = {
-  pathname: '/[house]/gallery'
-  params: { house: HouseIdentifier }
 }
 
 // Transform Sanity gallery image to Next.js Image props
@@ -60,11 +55,11 @@ function featuredToImageProps(
 
 function GalleryGrid({
   images,
-  galleryHref,
+  href,
   viewGalleryLabel
 }: {
   images: Omit<ImageProps, 'fill'>[]
-  galleryHref: GalleryHref
+  href: ComponentProps<typeof Link>['href']
   viewGalleryLabel: string
 }) {
   if (images.length < 5) return null
@@ -73,7 +68,7 @@ function GalleryGrid({
     <div className="hidden justify-center sm:flex">
       <div className="w-full">
         <div className="relative aspect-2/1 min-h-[300px] overflow-hidden rounded-xl lg:aspect-7/3">
-          <Link href={galleryHref} className="block h-full w-full">
+          <Link href={href} className="block h-full w-full">
             <div className="grid h-full w-full grid-cols-4 grid-rows-2 gap-0.5">
               <GalleryImageButton
                 className="col-span-2 row-span-2"
@@ -107,7 +102,7 @@ function GalleryGrid({
             asChild
             className="absolute right-4 bottom-4"
           >
-            <Link href={galleryHref}>
+            <Link href={href}>
               <Icons.gallery className="h-4 w-4" />
               <span>{viewGalleryLabel}</span>
             </Link>
@@ -119,15 +114,11 @@ function GalleryGrid({
 }
 
 export async function ImageBlockGallery({
-  id,
+  href,
   gallery,
   featuredImage
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
-  const galleryHref: GalleryHref = {
-    pathname: '/[house]/gallery',
-    params: { house: id }
-  }
 
   // Count total available images (featured + gallery)
   const hasFeatured = !!featuredImage?.asset?.url
@@ -159,7 +150,7 @@ export async function ImageBlockGallery({
   return (
     <GalleryGrid
       images={images}
-      galleryHref={galleryHref}
+      href={href}
       viewGalleryLabel={t('view_gallery')}
     />
   )

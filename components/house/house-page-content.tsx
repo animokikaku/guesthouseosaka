@@ -11,9 +11,11 @@ import {
   PageHeaderHeading
 } from '@/components/page-header'
 import { PageNav } from '@/components/page-nav'
+import { Link } from '@/i18n/navigation'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import type { HouseQueryResult } from '@/sanity.types'
+import { ComponentProps } from 'react'
 
 type HousePageContentProps = {
   data: NonNullable<HouseQueryResult>
@@ -26,17 +28,20 @@ const THEME_COLORS: Record<HouseIdentifier, string> = {
 }
 
 export function HousePageContent({ data }: HousePageContentProps) {
-  const houseId = data.slug
+  const href: ComponentProps<typeof Link>['href'] = {
+    pathname: '/[house]/gallery',
+    params: { house: data.slug }
+  }
 
   return (
     <>
-      <MobileHeroImage id={houseId} />
+      <MobileHeroImage href={href} />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading>{data.title}</PageHeaderHeading>
           <PageHeaderDescription>{data.description}</PageHeaderDescription>
           <div
-            className={cn('mx-auto mt-6 h-1 w-24', THEME_COLORS[houseId])}
+            className={cn('mx-auto mt-6 h-1 w-24', THEME_COLORS[data.slug])}
             aria-hidden="true"
           />
         </PageHeader>
@@ -48,13 +53,13 @@ export function HousePageContent({ data }: HousePageContentProps) {
           </PageNav>
           <div className="theme-container">
             <ImageBlockGallery
-              id={houseId}
+              href={href}
               gallery={data.gallery}
               featuredImage={data.featuredImage}
             />
             <article
-              id={houseId}
-              aria-labelledby={`${houseId}-title`}
+              id={data.slug}
+              aria-labelledby={`${data.slug}-title`}
               className="space-y-12 pt-8"
             >
               <HouseAbout
@@ -68,7 +73,7 @@ export function HousePageContent({ data }: HousePageContentProps) {
                 }}
               />
               <HouseAmenities amenities={data.amenities} />
-              <HouseLocation id={houseId} location={data.location} />
+              <HouseLocation slug={data.slug} location={data.location} />
               <HousePricing pricing={data.pricing} />
             </article>
           </div>

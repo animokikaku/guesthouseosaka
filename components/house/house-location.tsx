@@ -3,7 +3,6 @@
 import { HouseLocationModal } from '@/components/house/house-location-modal'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { HouseIdentifier } from '@/lib/types'
 import type { HouseQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
@@ -39,18 +38,18 @@ const HouseMap = dynamic(
 )
 
 type HouseLocationProps = {
-  id: HouseIdentifier
+  slug: NonNullable<HouseQueryResult>['slug']
   location: NonNullable<HouseQueryResult>['location']
 }
 
-export function HouseLocation({ id, location }: HouseLocationProps) {
+export function HouseLocation({ slug, location }: HouseLocationProps) {
   const t = useTranslations('HouseLocation')
 
   if (!location) {
     return null
   }
 
-  const { coordinates, placeId, highlight, details } = location
+  const { coordinates, placeId, highlight, details, googleMapsUrl } = location
 
   return (
     <section>
@@ -61,11 +60,16 @@ export function HouseLocation({ id, location }: HouseLocationProps) {
       </p>
 
       <div className="mb-6">
-        <HouseMap id={id} coordinates={coordinates} placeId={placeId} />
+        <HouseMap
+          id={slug}
+          coordinates={coordinates}
+          placeId={placeId}
+          mapsUrl={googleMapsUrl}
+        />
       </div>
 
       <div className="mt-6">
-        <HouseLocationModal id={id} details={details} title={t('heading')}>
+        <HouseLocationModal details={details} title={t('heading')}>
           <Button variant="outline" disabled={!details || details.length === 0}>
             {t('modal_trigger')}
           </Button>

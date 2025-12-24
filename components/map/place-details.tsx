@@ -6,22 +6,15 @@ import { ColorScheme, useMapsLibrary } from '@vis.gl/react-google-maps'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import { memo } from 'react'
-
-const PLACE_IDS: Record<HouseIdentifier, string> = {
-  orange: 'ChIJ6wny0-ndAGARZjNwMl6Naig',
-  apple: 'ChIJeTfoJiPnAGARS9lOqv7CCIc',
-  lemon: 'ChIJcUK9NYvnAGAR7GqSLIZIUdk'
-}
-
 interface PlaceDetailsProps {
   id: HouseIdentifier
-  placeId?: string | null
+  placeId: string
   className?: string
 }
 
 export const PlaceDetails = memo(function PlaceDetailsComponent({
   id,
-  placeId: sanityPlaceId,
+  placeId,
   className
 }: PlaceDetailsProps) {
   const { resolvedTheme } = useTheme()
@@ -29,8 +22,8 @@ export const PlaceDetails = memo(function PlaceDetailsComponent({
     resolvedTheme === 'dark' ? ColorScheme.DARK : ColorScheme.LIGHT
 
   useMapsLibrary('places')
-  // Use Sanity placeId if available, fallback to constants
-  const placeId = sanityPlaceId ?? PLACE_IDS[id]
+
+  // TODO: Use Sanity image instead of assets
   const image = assets[id].map
 
   return (
