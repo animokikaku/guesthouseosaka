@@ -6,12 +6,13 @@ import {
   HouseIdentifierSchema,
   HouseIdentifierValues
 } from '@/lib/types'
-import { houseQuery } from '@/sanity/lib/queries'
 import { sanityFetch } from '@/sanity/lib/live'
+import { houseQuery } from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
 import { hasLocale, Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import { use } from 'react'
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -49,12 +50,12 @@ export async function generateMetadata(
   return { title, description, openGraph, twitter }
 }
 
-export default async function HouseLayout({
+export default function HouseLayout({
   children,
   modal,
   params
 }: LayoutProps<'/[locale]/[house]'>) {
-  const { locale, house } = await params
+  const { locale, house } = use(params)
 
   if (!hasHouse(house)) {
     notFound()
