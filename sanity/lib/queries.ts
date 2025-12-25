@@ -8,7 +8,6 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
   _id,
   "siteName": coalesce(siteName[_key == $locale][0].value, siteName[_key == "en"][0].value),
   "siteDescription": coalesce(siteDescription[_key == $locale][0].value, siteDescription[_key == "en"][0].value),
-  "brandName": coalesce(brandName[_key == $locale][0].value, brandName[_key == "en"][0].value),
   companyName,
   email,
   phone,

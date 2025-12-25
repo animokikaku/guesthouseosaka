@@ -24,15 +24,6 @@ export const settings = defineType({
       options: { aiAssist: { translateAction: true } }
     }),
     defineField({
-      name: 'brandName',
-      title: 'Brand Name (SEO)',
-      type: 'internationalizedArrayString',
-      description:
-        'Brand name for SEO/JSON-LD purposes (e.g., Guest House Osaka)',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
-    }),
-    defineField({
       name: 'companyName',
       title: 'Company Name',
       type: 'string',

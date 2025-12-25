@@ -53,36 +53,6 @@
     }
   },
   {
-    "name": "phone",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "phone"
-          }
-        },
-        "domestic": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        },
-        "international": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        }
-      }
-    }
-  },
-  {
     "name": "address",
     "type": "type",
     "value": {
@@ -998,14 +968,6 @@
         "optional": false
       },
       "siteDescription": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "internationalizedArrayString"
-        },
-        "optional": false
-      },
-      "brandName": {
         "type": "objectAttribute",
         "value": {
           "type": "inline",
