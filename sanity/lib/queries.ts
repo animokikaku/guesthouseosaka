@@ -11,6 +11,7 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
   "socialLinks": socialLinks[]{
     _key,
     platform,
+    icon,
     url
   }
 }`)

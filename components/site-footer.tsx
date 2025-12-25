@@ -1,4 +1,3 @@
-import { Icons } from '@/components/icons'
 import type { SettingsQueryResult } from '@/sanity.types'
 
 type SiteFooterProps = {
@@ -18,13 +17,13 @@ export function SiteFooter({ settings }: SiteFooterProps) {
           </div>
           <div className="flex shrink-0 items-center gap-3">
             {settings?.socialLinks?.map((link) => {
-              if (!link.platform || !link.url) return null
-              const Icon = Icons[link.platform]
+              if (!link.icon || !link.url) return null
               return (
                 <SocialLink
                   key={link._key}
                   href={link.url}
-                  icon={<Icon className="size-5" />}
+                  platform={link.platform ?? 'social'}
+                  icon={link.icon}
                 />
               )
             })}
@@ -35,15 +34,23 @@ export function SiteFooter({ settings }: SiteFooterProps) {
   )
 }
 
-function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
+function SocialLink({
+  href,
+  platform,
+  icon
+}: {
+  href: string
+  platform: string
+  icon: string
+}) {
   return (
     <a
-      className="text-muted-foreground hover:text-foreground transition-colors"
+      className="text-muted-foreground hover:text-foreground transition-colors [&_svg]:size-5"
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-    >
-      {icon}
-    </a>
+      aria-label={platform}
+      dangerouslySetInnerHTML={{ __html: icon }}
+    />
   )
 }
