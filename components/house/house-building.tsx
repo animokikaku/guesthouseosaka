@@ -5,16 +5,20 @@ import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 
-type HouseBuildingData = Pick<
+type HouseBuildingProps = Pick<
   NonNullable<HouseQueryResult>,
-  'building' | '_id' | '_type' | 'slug'
+  '_id' | '_type' | 'building' | 'slug'
 >
 
-export function HouseBuilding({ data }: { data: HouseBuildingData }) {
+export function HouseBuilding({
+  _id,
+  _type,
+  building,
+  slug
+}: HouseBuildingProps) {
   const t = useTranslations('HouseBuilding')
   const formatter = useFormatter()
 
-  const { building, _id, _type, slug } = data
   const dataAttribute = createDataAttribute({ id: _id, type: _type })
 
   const currency = (amount: number) =>

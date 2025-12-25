@@ -23,19 +23,14 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   apple: 'bg-red-600/50',
   lemon: 'bg-yellow-600/50'
 }
-
-type CollectionData = Pick<
+interface CollectionProps extends Pick<
   NonNullable<HomePageQueryResult>,
-  'houses' | '_id' | '_type'
->
-
-export function Collection({
-  data,
-  className
-}: {
-  data: CollectionData
+  '_id' | '_type' | 'houses'
+> {
   className?: string
-}) {
+}
+
+export function Collection({ className, ...data }: CollectionProps) {
   const [houses, attribute] = useOptimistic(data, 'houses')
 
   if (!houses) {
@@ -91,11 +86,12 @@ export function Collection({
   )
 }
 
-function CollectionImage({
-  image
-}: {
-  image: NonNullable<CollectionData['houses']>[number]['image']
-}) {
+type CollectionImageProps = Pick<
+  NonNullable<NonNullable<CollectionProps['houses']>[number]>,
+  'image'
+>
+
+function CollectionImage({ image }: CollectionImageProps) {
   const buildImage = urlFor(image)
   const dimensions = getImageDimensions(image.asset!)
   const alt = image.alt || ''

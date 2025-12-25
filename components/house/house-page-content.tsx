@@ -63,17 +63,24 @@ export function HousePageContent({ data }: HousePageContentProps) {
               className="space-y-12 pt-8"
             >
               <HouseAbout
-                data={{
-                  _id: data._id,
-                  _type: data._type,
-                  slug: data.slug,
-                  title: data.title,
-                  about: data.about,
-                  building: data.building
-                }}
+                _id={data._id}
+                _type={data._type}
+                slug={data.slug}
+                title={data.title}
+                about={data.about}
+                building={data.building}
               />
               <HouseAmenities amenities={data.amenities} />
-              <HouseLocation slug={data.slug} location={data.location} />
+              {data.location && (
+                <HouseLocation
+                  slug={data.slug}
+                  coordinates={data.location.coordinates}
+                  placeId={data.location.placeId}
+                  highlight={data.location.highlight}
+                  details={data.location.details}
+                  googleMapsUrl={data.location.googleMapsUrl}
+                />
+              )}
               <HousePricing pricing={data.pricing} />
             </article>
           </div>

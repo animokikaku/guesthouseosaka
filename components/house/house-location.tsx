@@ -37,19 +37,22 @@ const HouseMap = dynamic(
   }
 )
 
-type HouseLocationProps = {
+type LocationProps = Pick<
+  NonNullable<NonNullable<HouseQueryResult>['location']>,
+  'coordinates' | 'placeId' | 'highlight' | 'details' | 'googleMapsUrl'
+> & {
   slug: NonNullable<HouseQueryResult>['slug']
-  location: NonNullable<HouseQueryResult>['location']
 }
 
-export function HouseLocation({ slug, location }: HouseLocationProps) {
+export function HouseLocation({
+  coordinates,
+  placeId,
+  highlight,
+  details,
+  googleMapsUrl,
+  slug
+}: LocationProps) {
   const t = useTranslations('HouseLocation')
-
-  if (!location) {
-    return null
-  }
-
-  const { coordinates, placeId, highlight, details, googleMapsUrl } = location
 
   return (
     <section>

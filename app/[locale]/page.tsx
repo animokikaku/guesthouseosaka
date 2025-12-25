@@ -93,7 +93,9 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
           )}
           <PageActions>
             <Collection
-              data={{ houses: data.houses, _id: data._id, _type: data._type }}
+              _id={data._id}
+              _type={data._type}
+              houses={data.houses}
               className="w-full pt-4"
             />
           </PageActions>

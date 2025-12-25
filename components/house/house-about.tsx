@@ -28,18 +28,20 @@ const components: PortableTextComponents = {
   }
 }
 
-type AboutData = Pick<
+type HouseAboutProps = Pick<
   NonNullable<HouseQueryResult>,
-  'about' | 'title' | '_id' | '_type' | 'building' | 'slug'
+  '_id' | '_type' | 'about' | 'title' | 'building' | 'slug'
 >
 
-type HouseAboutProps = {
-  data: AboutData
-}
-
-export function HouseAbout({ data }: HouseAboutProps) {
+export function HouseAbout({
+  _id,
+  _type,
+  about,
+  title,
+  building,
+  slug
+}: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
-  const { about, title, _id, _type, building, slug } = data
 
   if (!about) {
     return null
@@ -51,7 +53,12 @@ export function HouseAbout({ data }: HouseAboutProps) {
         {t('heading', { house: title ?? '' })}
       </h2>
       <div className="mb-4">
-        <HouseBuilding data={{ _id, _type, slug, building }} />
+        <HouseBuilding
+          _id={_id}
+          _type={_type}
+          slug={slug}
+          building={building}
+        />
       </div>
 
       <PortableText value={about} components={components} />
