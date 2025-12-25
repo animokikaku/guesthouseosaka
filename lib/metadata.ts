@@ -1,7 +1,6 @@
 import { routing } from '@/i18n/routing'
 import { Metadata } from 'next'
 import { Locale } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
 
 const openGraphLocaleMap: Record<Locale, string> = {
   en: 'en_US',
@@ -9,19 +8,19 @@ const openGraphLocaleMap: Record<Locale, string> = {
   fr: 'fr_FR'
 }
 
-export async function getOpenGraphMetadata({
+export function getOpenGraphMetadata({
   image,
-  locale
+  locale,
+  siteName
 }: {
   image?: string
+  siteName?: string | null
   locale: Locale
 }) {
-  const t = await getTranslations({ locale, namespace: 'manifest' })
-
   const openGraph = {
     type: 'website',
     images: image,
-    siteName: t('name'),
+    siteName: siteName ?? undefined,
     locale: openGraphLocaleMap[locale],
     alternateLocale: routing.locales
       .filter((currentLocale) => currentLocale !== locale)

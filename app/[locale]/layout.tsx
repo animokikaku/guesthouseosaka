@@ -18,8 +18,7 @@ import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
-import { sanityFetch } from '@/sanity/lib/live'
-import { SanityLive } from '@/sanity/lib/live'
+import { sanityFetch, SanityLive } from '@/sanity/lib/live'
 import { settingsQuery } from '@/sanity/lib/queries'
 import { type Metadata } from 'next'
 import { VisualEditing } from 'next-sanity/visual-editing'
@@ -40,16 +39,17 @@ export async function generateMetadata(
     params: { locale }
   })
 
-  const siteName = settings?.siteName ?? 'Share House Osaka'
-  const { openGraph, twitter } = await getOpenGraphMetadata({
-    locale: locale as Locale
+  const siteName = settings?.siteName
+
+  const { openGraph, twitter } = getOpenGraphMetadata({
+    locale: locale as Locale,
+    siteName
   })
 
   return {
-    title: {
-      default: siteName,
-      template: `%s - ${siteName}`
-    },
+    title: siteName
+      ? { default: siteName, template: `%s - ${siteName}` }
+      : undefined,
     metadataBase: env.NEXT_PUBLIC_APP_URL,
     authors: [{ name: 'Thibault Vieux', url: 'https://thibaultvieux.com' }],
     description: settings?.siteDescription,

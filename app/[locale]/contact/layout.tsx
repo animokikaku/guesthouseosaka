@@ -4,7 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
-import { contactPageQuery } from '@/sanity/lib/queries'
+import { contactPageQuery, settingsQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { BookTextIcon, MailIcon, PhoneIcon } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -30,18 +30,22 @@ export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/contact'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
-  const t = await getTranslations({
-    locale: locale as Locale,
-    namespace: 'ContactLayout.meta'
-  })
-
-  const { openGraph, twitter } = await getOpenGraphMetadata({
-    locale: locale as Locale,
-    image: assets.openGraph.contact.src
-  })
+  const [t, { data: settings }] = await Promise.all([
+    getTranslations({
+      locale: locale as Locale,
+      namespace: 'ContactLayout.meta'
+    }),
+    sanityFetch({ query: settingsQuery, params: { locale } })
+  ])
 
   const title = t('title')
   const description = t('description')
+
+  const { openGraph, twitter } = getOpenGraphMetadata({
+    locale: locale as Locale,
+    image: assets.openGraph.contact.src,
+    siteName: settings?.siteName
+  })
 
   return { title, description, openGraph, twitter }
 }

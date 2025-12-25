@@ -7,7 +7,7 @@ import {
   HouseIdentifierValues
 } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
-import { houseQuery } from '@/sanity/lib/queries'
+import { houseQuery, settingsQuery } from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
 import { hasLocale, Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
@@ -33,10 +33,10 @@ export async function generateMetadata(
     return undefined
   }
 
-  const { data } = await sanityFetch({
-    query: houseQuery,
-    params: { locale, slug: house }
-  })
+  const [{ data }, { data: settings }] = await Promise.all([
+    sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
+    sanityFetch({ query: settingsQuery, params: { locale } })
+  ])
 
   if (!data) {
     return undefined
@@ -44,8 +44,11 @@ export async function generateMetadata(
 
   const title = data.title
   const description = data.description
-  const image = assets.openGraph[house].src
-  const { openGraph, twitter } = await getOpenGraphMetadata({ locale, image })
+  const { openGraph, twitter } = getOpenGraphMetadata({
+    locale,
+    image: assets.openGraph[house].src,
+    siteName: settings?.siteName
+  })
 
   return { title, description, openGraph, twitter }
 }
