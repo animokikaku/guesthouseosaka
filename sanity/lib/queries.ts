@@ -27,7 +27,6 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
 export const homePageQuery = defineQuery(`*[_type == "homePage"][0]{
   _id,
   _type,
-  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "hero": hero{
     "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value),
     "ctaLabel": coalesce(ctaLabel[_key == $locale][0].value, ctaLabel[_key == "en"][0].value)

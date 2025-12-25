@@ -8,12 +8,6 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
-      type: 'internationalizedArrayString',
-      options: { aiAssist: { translateAction: true } },
-      validation: (rule) => rule.required()
-    }),
-    defineField({
       name: 'hero',
       type: 'object',
       fields: [
@@ -69,8 +63,8 @@ export default defineType({
     })
   ],
   preview: {
-    select: {
-      title: 'title.0.value'
+    prepare() {
+      return { title: 'Home Page' }
     }
   }
 })

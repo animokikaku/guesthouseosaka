@@ -975,6 +975,28 @@
         },
         "optional": false
       },
+      "socialLinks": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "array",
+          "of": {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "socialLink"
+            }
+          }
+        },
+        "optional": true
+      },
       "companyName": {
         "type": "objectAttribute",
         "value": {
@@ -1001,28 +1023,6 @@
         "value": {
           "type": "inline",
           "name": "address"
-        },
-        "optional": true
-      },
-      "socialLinks": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "array",
-          "of": {
-            "type": "object",
-            "attributes": {
-              "_key": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                }
-              }
-            },
-            "rest": {
-              "type": "inline",
-              "name": "socialLink"
-            }
-          }
         },
         "optional": true
       }
@@ -1497,14 +1497,6 @@
         "value": {
           "type": "string"
         }
-      },
-      "title": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "inline",
-          "name": "internationalizedArrayString"
-        },
-        "optional": false
       },
       "hero": {
         "type": "objectAttribute",
