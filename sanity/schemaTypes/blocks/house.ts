@@ -59,7 +59,7 @@ export const house = defineType({
       title: 'Hero Image',
       type: 'localizedImage',
       group: 'identity',
-      validation: (rule) => rule.required()
+      validation: (rule) => rule.required().assetRequired()
     }),
     defineField({
       name: 'featuredImage',

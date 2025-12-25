@@ -7,7 +7,6 @@ export const localizedImage = defineType({
   type: 'image',
   icon: ImageIcon,
   options: { hotspot: true },
-  validation: (rule) => rule.assetRequired(),
   fields: [
     defineField({
       name: 'alt',

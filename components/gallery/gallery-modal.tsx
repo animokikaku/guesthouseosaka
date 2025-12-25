@@ -155,7 +155,7 @@ function GalleryModalCarousel({ images }: { images: GalleryImages }) {
         onTouchEnd={handleTouchEnd}
       >
         {imageList.map(({ _key, image }) => {
-          if (!image) return null
+          if (!image?.asset) return null
           const dimensions = getImageDimensions(image.asset)
           const src = urlFor(image).url()
 

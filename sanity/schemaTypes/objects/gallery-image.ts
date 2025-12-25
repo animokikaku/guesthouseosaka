@@ -11,7 +11,7 @@ export const galleryImage = defineType({
       name: 'image',
       title: 'Image',
       type: 'localizedImage',
-      validation: (rule) => rule.required()
+      validation: (rule) => rule.required().assetRequired()
     }),
     defineField({
       name: 'category',

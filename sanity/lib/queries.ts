@@ -100,13 +100,15 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   },
 
   // Featured Image (optional, prepended to gallery grids)
-  featuredImage{
-    asset,
-    hotspot,
-    crop,
-    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
-    "preview": asset->metadata.lqip
-  },
+  "featuredImage": select(
+    defined(featuredImage.asset) => featuredImage{
+      asset,
+      hotspot,
+      crop,
+      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+      "preview": asset->metadata.lqip
+    }
+  ),
 
   // About Section
   "about": coalesce(about[_key == $locale][0].value, about[_key == "en"][0].value),

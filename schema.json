@@ -408,7 +408,7 @@
             "type": "inline",
             "name": "sanity.imageAsset.reference"
           },
-          "optional": false
+          "optional": true
         },
         "media": {
           "type": "objectAttribute",
