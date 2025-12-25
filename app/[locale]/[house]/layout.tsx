@@ -1,6 +1,5 @@
 import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
-import { SanityGalleryProvider } from '@/lib/images/sanity-client'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import {
   HouseIdentifier,
@@ -55,7 +54,6 @@ export default async function HouseLayout({
   modal,
   params
 }: LayoutProps<'/[locale]/[house]'>) {
-  // Ensure that the incoming `house` is valid
   const { locale, house } = await params
 
   if (!hasHouse(house)) {
@@ -64,21 +62,10 @@ export default async function HouseLayout({
 
   setRequestLocale(locale as Locale)
 
-  // Fetch house data including gallery from Sanity
-  const { data } = await sanityFetch({
-    query: houseQuery,
-    params: { locale, slug: house }
-  })
-
-  if (!data) {
-    notFound()
-  }
-
   return (
-    // SanityGalleryProvider enables useGallery() for client components
-    <SanityGalleryProvider galleryByCategory={data.galleryByCategory}>
+    <>
       {children}
       {modal}
-    </SanityGalleryProvider>
+    </>
   )
 }

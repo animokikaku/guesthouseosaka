@@ -12,6 +12,11 @@ import {
 } from '@/components/page-header'
 import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
+import {
+  featuredToGalleryImage,
+  flattenGalleryImages,
+  GalleryImage
+} from '@/lib/gallery'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import type { HouseQueryResult } from '@/sanity.types'
@@ -42,9 +47,15 @@ export function HousePageContent({
     params: { house: slug }
   }
 
+  // Build mobile hero images: featured first (if present), then gallery images
+  const galleryImages = flattenGalleryImages(galleryByCategory)
+  const mobileHeroImages: GalleryImage[] = featuredImage?.asset?.url
+    ? [featuredToGalleryImage(featuredImage), ...galleryImages]
+    : galleryImages
+
   return (
     <>
-      <MobileHeroImage href={href} featuredImage={featuredImage} />
+      <MobileHeroImage href={href} images={mobileHeroImages} />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading>{title}</PageHeaderHeading>

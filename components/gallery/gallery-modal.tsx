@@ -9,8 +9,8 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from '@/components/ui/carousel'
+import { getImageIndex, type GalleryImage } from '@/lib/gallery'
 import { useHouseLabels } from '@/hooks/use-house-labels'
-import { useGallery } from '@/lib/images/sanity-client'
 import { store } from '@/lib/store'
 import { HouseIdentifier } from '@/lib/types'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -21,7 +21,11 @@ import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
-export function GalleryModal() {
+type GalleryModalProps = {
+  images: GalleryImage[]
+}
+
+export function GalleryModal({ images }: GalleryModalProps) {
   const { house } = useParams()
   const photoId = useStore(store, (state) => state.photoId)
   const t = useTranslations('GalleryModal')
@@ -45,7 +49,7 @@ export function GalleryModal() {
             {t('description', { title })}
           </Dialog.Description>
           <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <GalleryModalCarousel />
+            <GalleryModalCarousel images={images} />
             <Dialog.Close asChild>
               <Button
                 variant="ghost"
@@ -63,14 +67,12 @@ export function GalleryModal() {
   )
 }
 
-function GalleryModalCarousel() {
+function GalleryModalCarousel({ images }: { images: GalleryImage[] }) {
   const [api, setApi] = useState<CarouselApi>()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const photoId = useStore(store, (state) => state.photoId)
-  const gallery = useGallery()
 
-  const images = gallery.images()
-  const startIndex = photoId ? gallery.indexOf(photoId) : undefined
+  const startIndex = photoId ? getImageIndex(images, photoId) : undefined
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(
     null
   )

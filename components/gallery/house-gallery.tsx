@@ -1,14 +1,27 @@
 import { GalleryModal } from '@/components/gallery/gallery-modal'
+import {
+  flattenGalleryImages,
+  GalleryByCategory,
+  GalleryImage,
+  processGalleryByCategory
+} from '@/lib/gallery'
 import { HouseGalleryClient } from './house-gallery-client'
+
+type HouseGalleryProps = {
+  galleryByCategory: GalleryByCategory
+}
+
 /**
- * Server component that fetches gallery data at build time
- * The data is statically generated since getHouseImageStorage reads from JSON files
+ * Server component that processes gallery data at build time
  */
-export function HouseGallery() {
+export function HouseGallery({ galleryByCategory }: HouseGalleryProps) {
+  const categories = processGalleryByCategory(galleryByCategory)
+  const allImages: GalleryImage[] = flattenGalleryImages(galleryByCategory)
+
   return (
     <>
-      <HouseGalleryClient />
-      <GalleryModal />
+      <HouseGalleryClient categories={categories} />
+      <GalleryModal images={allImages} />
     </>
   )
 }
