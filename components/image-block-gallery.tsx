@@ -9,37 +9,33 @@ import {
   EmptyTitle
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import type { HouseQueryResult } from '@/sanity.types'
+import type { FeaturedImage, GalleryImage, GalleryImages } from '@/lib/gallery'
 import { ImageIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import type { ImageProps } from 'next/image'
 import { ComponentProps } from 'react'
 
-type SanityGalleryByCategory = NonNullable<HouseQueryResult>['galleryByCategory']
-type SanityFeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
-type CategoryImage = NonNullable<SanityGalleryByCategory[number]['images']>[number]
-
 type ImageBlockGalleryProps = {
   href: ComponentProps<typeof Link>['href']
-  galleryByCategory: SanityGalleryByCategory
-  featuredImage?: SanityFeaturedImage
+  galleryImages: GalleryImages
+  featuredImage?: FeaturedImage
 }
 
-// Transform Sanity gallery image to Next.js Image props
-function toImageProps(image: CategoryImage): Omit<ImageProps, 'fill'> {
+// Transform gallery image to Next.js Image props
+function toImageProps(image: GalleryImage): Omit<ImageProps, 'fill'> {
   return {
-    src: image.image.asset?.url ?? '',
-    alt: image.image.alt ?? '',
-    width: image.image.asset?.dimensions?.width ?? 800,
-    height: image.image.asset?.dimensions?.height ?? 600,
-    blurDataURL: image.image.asset?.lqip ?? undefined,
-    placeholder: image.image.asset?.lqip ? 'blur' : undefined
+    src: image.src ?? '',
+    alt: image.alt ?? '',
+    width: image.width ?? 800,
+    height: image.height ?? 600,
+    blurDataURL: image.blurDataURL ?? undefined,
+    placeholder: image.blurDataURL ? 'blur' : undefined
   }
 }
 
 // Transform featured image to Next.js Image props
 function featuredToImageProps(
-  image: NonNullable<SanityFeaturedImage>
+  image: NonNullable<FeaturedImage>
 ): Omit<ImageProps, 'fill'> {
   return {
     src: image.asset?.url ?? '',
@@ -49,13 +45,6 @@ function featuredToImageProps(
     blurDataURL: image.asset?.lqip ?? undefined,
     placeholder: image.asset?.lqip ? 'blur' : undefined
   }
-}
-
-// Flatten gallery by category into a single array of images
-function flattenGallery(
-  galleryByCategory: SanityGalleryByCategory
-): CategoryImage[] {
-  return galleryByCategory.flatMap((group) => group.images ?? [])
 }
 
 function GalleryGrid({
@@ -120,17 +109,14 @@ function GalleryGrid({
 
 export async function ImageBlockGallery({
   href,
-  galleryByCategory,
+  galleryImages,
   featuredImage
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
 
-  // Flatten grouped gallery into a single array
-  const flatGallery = flattenGallery(galleryByCategory)
-
   // Count total available images (featured + gallery)
   const hasFeatured = !!featuredImage?.asset?.url
-  const totalCount = (hasFeatured ? 1 : 0) + flatGallery.length
+  const totalCount = (hasFeatured ? 1 : 0) + (galleryImages?.length ?? 0)
 
   if (totalCount < 5) {
     return (
@@ -149,10 +135,10 @@ export async function ImageBlockGallery({
   }
 
   // Build display images: featured first (if available), then gallery images
-  const galleryImages = flatGallery.map(toImageProps)
+  const processedImages = (galleryImages ?? []).map(toImageProps)
   const images = hasFeatured
-    ? [featuredToImageProps(featuredImage), ...galleryImages.slice(0, 4)]
-    : galleryImages.slice(0, 5)
+    ? [featuredToImageProps(featuredImage), ...processedImages.slice(0, 4)]
+    : processedImages.slice(0, 5)
 
   return (
     <GalleryGrid

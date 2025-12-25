@@ -70,18 +70,18 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
         setApi={(carouselApi) => setApi(carouselApi)}
       >
         <CarouselContent>
-          {images.map(({ id, src, alt, blurDataURL }, index) => (
-            <CarouselItem className="relative h-96 w-full select-none" key={id}>
+          {images.map(({ _key, src, alt, blurDataURL }, index) => (
+            <CarouselItem className="relative h-96 w-full select-none" key={_key}>
               <Image
-                src={src}
-                alt={alt}
+                src={src ?? ''}
+                alt={alt ?? ''}
                 fill
                 preload={index === 0}
                 fetchPriority={index === 0 ? 'high' : 'auto'}
                 className="object-cover"
                 sizes="(max-width: 639px) 100vw, 0"
                 placeholder={blurDataURL ? 'blur' : undefined}
-                blurDataURL={blurDataURL}
+                blurDataURL={blurDataURL ?? undefined}
               />
             </CarouselItem>
           ))}

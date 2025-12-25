@@ -115,28 +115,38 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[_key == $locale][0].value, about[_key == "en"][0].value),
 
-  // Gallery grouped by category (server-side grouping)
-  "galleryByCategory": *[_type == "galleryCategory" && _id in ^.gallery[].category._ref] | order(order asc) {
-    "category": {
-      "key": key.current,
-      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-      order
+  // Gallery categories with count and thumbnail (for category nav)
+  "galleryCategories": *[_type == "galleryCategory" && _id in ^.gallery[].category._ref] | order(order asc) {
+    "key": key.current,
+    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
+    "count": count(^.gallery[category._ref == ^._id]),
+    "thumbnail": ^.gallery[category._ref == ^._id][0].image{
+      "src": asset->url,
+      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height,
+      "blurDataURL": asset->metadata.lqip
     },
     "images": ^.gallery[category._ref == ^._id]{
-      _key,
-      "image": image{
-        asset->{
-          _id,
-          url,
-          "dimensions": metadata.dimensions,
-          "lqip": metadata.lqip
-        },
-        hotspot,
-        crop,
-        "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value)
-      }
+      "_key": _key,
+      "src": image.asset->url,
+      "alt": coalesce(image.alt[_key == $locale][0].value, image.alt[_key == "en"][0].value),
+      "width": image.asset->metadata.dimensions.width,
+      "height": image.asset->metadata.dimensions.height,
+      "blurDataURL": image.asset->metadata.lqip
     }
   },
+
+  // All gallery images flattened (for modal carousel)
+  "galleryImages": gallery[]{
+    "_key": _key,
+    "src": image.asset->url,
+    "alt": coalesce(image.alt[_key == $locale][0].value, image.alt[_key == "en"][0].value),
+    "width": image.asset->metadata.dimensions.width,
+    "height": image.asset->metadata.dimensions.height,
+    "blurDataURL": image.asset->metadata.lqip,
+    "categoryOrder": category->order
+  } | order(categoryOrder asc),
 
   // Amenities with categories
   "amenities": amenities[]{

@@ -28,7 +28,7 @@ export default async function GalleryModalPage({
 
   return (
     <GalleryModalWrapper>
-      <HouseGallery galleryByCategory={data.galleryByCategory} />
+      <HouseGallery categories={data.galleryCategories} images={data.galleryImages} />
     </GalleryModalWrapper>
   )
 }

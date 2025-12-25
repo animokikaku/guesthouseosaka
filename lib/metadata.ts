@@ -3,11 +3,11 @@ import { Metadata } from 'next'
 import { Locale } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 
-const openGraphLocaleMap = {
+const openGraphLocaleMap: Record<Locale, string> = {
   en: 'en_US',
   ja: 'ja_JP',
   fr: 'fr_FR'
-} as const
+}
 
 export async function getOpenGraphMetadata({
   image,

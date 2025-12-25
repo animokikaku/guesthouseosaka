@@ -1,27 +1,20 @@
 import { GalleryModal } from '@/components/gallery/gallery-modal'
-import {
-  flattenGalleryImages,
-  GalleryByCategory,
-  GalleryImage,
-  processGalleryByCategory
-} from '@/lib/gallery'
+import type { GalleryCategories, GalleryImages } from '@/lib/gallery'
 import { HouseGalleryClient } from './house-gallery-client'
 
 type HouseGalleryProps = {
-  galleryByCategory: GalleryByCategory
+  categories: GalleryCategories
+  images: GalleryImages
 }
 
 /**
- * Server component that processes gallery data at build time
+ * Server component that renders gallery with pre-processed data from GROQ
  */
-export function HouseGallery({ galleryByCategory }: HouseGalleryProps) {
-  const categories = processGalleryByCategory(galleryByCategory)
-  const allImages: GalleryImage[] = flattenGalleryImages(galleryByCategory)
-
+export function HouseGallery({ categories, images }: HouseGalleryProps) {
   return (
     <>
       <HouseGalleryClient categories={categories} />
-      <GalleryModal images={allImages} />
+      <GalleryModal images={images} />
     </>
   )
 }

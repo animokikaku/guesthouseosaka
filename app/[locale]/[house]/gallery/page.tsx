@@ -45,7 +45,7 @@ export default async function GalleryPage({
         <div className="flex-1 overflow-y-auto scroll-smooth">
           <div className="container-wrapper">
             <div className="container py-8 md:py-12">
-              <HouseGallery galleryByCategory={data.galleryByCategory} />
+              <HouseGallery categories={data.galleryCategories} images={data.galleryImages} />
             </div>
           </div>
         </div>
