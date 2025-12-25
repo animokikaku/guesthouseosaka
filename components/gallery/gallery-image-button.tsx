@@ -1,6 +1,5 @@
 'use client'
 
-import { ImageHoverOverlay } from '@/components/image-hover-overlay'
 import { cn } from '@/lib/utils'
 import Image, { ImageProps } from 'next/image'
 import { ComponentPropsWithoutRef, forwardRef } from 'react'
@@ -30,29 +29,37 @@ export const GalleryImageButton = forwardRef<
   ) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { alt, height, width, ...restImageProps } = imageProps
+
     return (
       <div
         ref={ref}
-        className={cn(
-          'group relative overflow-hidden transition-opacity hover:opacity-90',
-          className
-        )}
+        className={cn('group relative cursor-pointer overflow-hidden', className)}
         {...divProps}
       >
         <div
           className={cn(
-            'bg-muted/40 relative h-full w-full cursor-pointer overflow-hidden',
+            'bg-muted/40 relative h-full w-full overflow-hidden',
             containerClassName
           )}
         >
           <Image
             fill
             alt={alt}
-            className={cn('object-cover', imageClassName)}
+            className={cn(
+              'object-cover transition-opacity duration-300 group-hover:opacity-90',
+              imageClassName
+            )}
             sizes={sizes}
             {...restImageProps}
           />
-          {alt && <ImageHoverOverlay>{alt}</ImageHoverOverlay>}
+          {alt && (
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-end bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
+              aria-hidden
+            >
+              <span className="text-sm font-medium text-white">{alt}</span>
+            </div>
+          )}
         </div>
         {children}
       </div>

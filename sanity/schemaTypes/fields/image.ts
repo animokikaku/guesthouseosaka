@@ -4,7 +4,7 @@ export const ImageField = defineField({
   name: 'image',
   type: 'image',
   options: { hotspot: true },
-  validation: (rule) => rule.required(),
+  validation: (rule) => rule.assetRequired(),
   fields: [
     defineField({
       name: 'alt',

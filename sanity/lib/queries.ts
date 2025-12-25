@@ -101,15 +101,11 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
 
   // Featured Image (optional, prepended to gallery grids)
   featuredImage{
-    asset->{
-      _id,
-      url,
-      "dimensions": metadata.dimensions,
-      "lqip": metadata.lqip
-    },
+    asset,
     hotspot,
     crop,
-    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value)
+    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+    "preview": asset->metadata.lqip
   },
 
   // About Section
@@ -121,30 +117,34 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
     "count": count(^.gallery[category._ref == ^._id]),
     "thumbnail": ^.gallery[category._ref == ^._id][0].image{
-      "src": asset->url,
+      asset,
+      hotspot,
+      crop,
       "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
-      "width": asset->metadata.dimensions.width,
-      "height": asset->metadata.dimensions.height,
-      "blurDataURL": asset->metadata.lqip
+      "preview": asset->metadata.lqip
     },
     "images": ^.gallery[category._ref == ^._id]{
       "_key": _key,
-      "src": image.asset->url,
-      "alt": coalesce(image.alt[_key == $locale][0].value, image.alt[_key == "en"][0].value),
-      "width": image.asset->metadata.dimensions.width,
-      "height": image.asset->metadata.dimensions.height,
-      "blurDataURL": image.asset->metadata.lqip
+      "image": image{
+        asset,
+        hotspot,
+        crop,
+        "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+        "preview": asset->metadata.lqip
+      }
     }
   },
 
   // All gallery images flattened (for modal carousel)
   "galleryImages": gallery[]{
     "_key": _key,
-    "src": image.asset->url,
-    "alt": coalesce(image.alt[_key == $locale][0].value, image.alt[_key == "en"][0].value),
-    "width": image.asset->metadata.dimensions.width,
-    "height": image.asset->metadata.dimensions.height,
-    "blurDataURL": image.asset->metadata.lqip,
+    "image": image{
+      asset,
+      hotspot,
+      crop,
+      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+      "preview": asset->metadata.lqip
+    },
     "categoryOrder": category->order
   } | order(categoryOrder asc),
 

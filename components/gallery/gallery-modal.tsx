@@ -9,11 +9,13 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from '@/components/ui/carousel'
-import { getImageIndex, type GalleryImages } from '@/lib/gallery'
 import { useHouseLabels } from '@/hooks/use-house-labels'
+import { getImageIndex, type GalleryImages } from '@/lib/gallery'
 import { store } from '@/lib/store'
 import { HouseIdentifier } from '@/lib/types'
+import { urlFor } from '@/sanity/lib/image'
 import * as Dialog from '@radix-ui/react-dialog'
+import { getImageDimensions } from '@sanity/asset-utils'
 import { useStore } from '@tanstack/react-form'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -152,28 +154,34 @@ function GalleryModalCarousel({ images }: { images: GalleryImages }) {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        {imageList.map((image) => (
-          <CarouselItem
-            key={image._key}
-            className="flex h-full items-center justify-center"
-          >
-            <Image
-              src={image.src ?? ''}
-              alt={image.alt ?? ''}
-              width={image.width ?? 800}
-              height={image.height ?? 600}
-              placeholder={image.blurDataURL ? 'blur' : undefined}
-              blurDataURL={image.blurDataURL ?? undefined}
-              className="max-h-screen max-w-screen object-contain select-none"
-              sizes="100vw"
-            />
-          </CarouselItem>
-        ))}
+        {imageList.map(({ _key, image }) => {
+          if (!image) return null
+          const dimensions = getImageDimensions(image.asset)
+          const src = urlFor(image).url()
+
+          return (
+            <CarouselItem
+              key={_key}
+              className="flex h-full items-center justify-center"
+            >
+              <Image
+                src={src}
+                alt={image.alt ?? ''}
+                width={dimensions.width}
+                height={dimensions.height}
+                placeholder={image.preview ? 'blur' : undefined}
+                blurDataURL={image.preview ?? undefined}
+                className="max-h-screen max-w-screen object-contain select-none"
+                sizes="100vw"
+              />
+            </CarouselItem>
+          )
+        })}
       </CarouselContent>
-      {selectedIndex !== null && imageList[selectedIndex]?.alt && (
+      {selectedIndex !== null && imageList[selectedIndex]?.image?.alt && (
         <div className="pointer-events-none absolute bottom-0 left-1/2 z-50 w-full -translate-x-1/2 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] text-center sm:pb-4 lg:w-fit">
           <span className="bg-primary-foreground/90 pointer-events-auto inline-block max-w-[90vw] rounded-lg px-4 py-2 text-sm wrap-break-word backdrop-blur-sm sm:max-w-none sm:text-base">
-            {imageList[selectedIndex].alt}
+            {imageList[selectedIndex].image.alt}
           </span>
         </div>
       )}

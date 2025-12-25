@@ -44,7 +44,7 @@ export function HousePageContent({
   }
 
   // Build mobile hero images: featured first (if present), then gallery images
-  const mobileHeroImages: GalleryImage[] = featuredImage?.asset?.url
+  const mobileHeroImages: GalleryImage[] = featuredImage?.asset
     ? [featuredToGalleryImage(featuredImage), ...(galleryImages ?? [])]
     : (galleryImages ?? [])
 

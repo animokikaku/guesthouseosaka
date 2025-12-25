@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import type { FeaturedImage, GalleryImage, GalleryImages } from '@/lib/gallery'
+import { urlFor } from '@/sanity/lib/image'
 import { ImageIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import type { ImageProps } from 'next/image'
@@ -21,29 +22,21 @@ type ImageBlockGalleryProps = {
   featuredImage?: FeaturedImage
 }
 
-// Transform gallery image to Next.js Image props
-function toImageProps(image: GalleryImage): Omit<ImageProps, 'fill'> {
-  return {
-    src: image.src ?? '',
-    alt: image.alt ?? '',
-    width: image.width ?? 800,
-    height: image.height ?? 600,
-    blurDataURL: image.blurDataURL ?? undefined,
-    placeholder: image.blurDataURL ? 'blur' : undefined
-  }
-}
+type SanityImage =
+  | NonNullable<GalleryImage['image']>
+  | NonNullable<FeaturedImage>
 
-// Transform featured image to Next.js Image props
-function featuredToImageProps(
-  image: NonNullable<FeaturedImage>
+// Transform Sanity image to Next.js Image props
+function toImageProps(
+  image: SanityImage,
+  width: number
 ): Omit<ImageProps, 'fill'> {
   return {
-    src: image.asset?.url ?? '',
+    src: urlFor(image).width(width).fit('crop').dpr(2).url(),
     alt: image.alt ?? '',
-    width: image.asset?.dimensions?.width ?? 800,
-    height: image.asset?.dimensions?.height ?? 600,
-    blurDataURL: image.asset?.lqip ?? undefined,
-    placeholder: image.asset?.lqip ? 'blur' : undefined
+    width,
+    blurDataURL: image.preview ?? undefined,
+    placeholder: image.preview ? 'blur' : undefined
   }
 }
 
@@ -114,9 +107,13 @@ export async function ImageBlockGallery({
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
 
+  // Gallery images are already filtered by GROQ (defined(image.asset))
+  const validGalleryImages = galleryImages ?? []
+
   // Count total available images (featured + gallery)
-  const hasFeatured = !!featuredImage?.asset?.url
-  const totalCount = (hasFeatured ? 1 : 0) + (galleryImages?.length ?? 0)
+  // featuredImage is null from GROQ if no asset uploaded
+  const hasFeatured = !!featuredImage
+  const totalCount = (hasFeatured ? 1 : 0) + validGalleryImages.length
 
   if (totalCount < 5) {
     return (
@@ -135,10 +132,20 @@ export async function ImageBlockGallery({
   }
 
   // Build display images: featured first (if available), then gallery images
-  const processedImages = (galleryImages ?? []).map(toImageProps)
-  const images = hasFeatured
-    ? [featuredToImageProps(featuredImage), ...processedImages.slice(0, 4)]
-    : processedImages.slice(0, 5)
+  // Request width only, let CSS object-cover handle aspect ratio
+  const images: Omit<ImageProps, 'fill'>[] = hasFeatured
+    ? [
+        toImageProps(featuredImage, 560),
+        ...validGalleryImages
+          .slice(0, 4)
+          .map((img) => toImageProps(img.image, 560))
+      ]
+    : [
+        toImageProps(validGalleryImages[0].image, 560),
+        ...validGalleryImages
+          .slice(1, 5)
+          .map((img) => toImageProps(img.image, 560))
+      ]
 
   return (
     <GalleryGrid

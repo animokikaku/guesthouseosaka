@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import type { GalleryImage } from '@/lib/gallery'
+import { urlFor } from '@/sanity/lib/image'
 import { ImageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
@@ -70,21 +71,33 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
         setApi={(carouselApi) => setApi(carouselApi)}
       >
         <CarouselContent>
-          {images.map(({ _key, src, alt, blurDataURL }, index) => (
-            <CarouselItem className="relative h-96 w-full select-none" key={_key}>
-              <Image
-                src={src ?? ''}
-                alt={alt ?? ''}
-                fill
-                preload={index === 0}
-                fetchPriority={index === 0 ? 'high' : 'auto'}
-                className="object-cover"
-                sizes="(max-width: 639px) 100vw, 0"
-                placeholder={blurDataURL ? 'blur' : undefined}
-                blurDataURL={blurDataURL ?? undefined}
-              />
-            </CarouselItem>
-          ))}
+          {images.map(({ _key, image }, index) => {
+            const src = urlFor(image)
+              .width(640)
+              .height(384)
+              .dpr(2)
+              .fit('crop')
+              .url()
+
+            return (
+              <CarouselItem
+                className="relative h-96 w-full select-none"
+                key={_key}
+              >
+                <Image
+                  src={src}
+                  alt={image.alt ?? ''}
+                  fill
+                  preload={index === 0}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                  className="object-cover"
+                  sizes="(max-width: 639px) 100vw, 0"
+                  placeholder={image.preview ? 'blur' : undefined}
+                  blurDataURL={image.preview ?? undefined}
+                />
+              </CarouselItem>
+            )
+          })}
         </CarouselContent>
         <div className="absolute right-3 bottom-12 z-10 block rounded-sm bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">
           {currentIndex} / {images.length}
