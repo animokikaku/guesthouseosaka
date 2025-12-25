@@ -19,7 +19,7 @@ import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
 import { sanityFetch, SanityLive } from '@/sanity/lib/live'
-import { settingsQuery } from '@/sanity/lib/queries'
+import { housesNavQuery, settingsQuery } from '@/sanity/lib/queries'
 import { type Metadata } from 'next'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import { draftMode } from 'next/headers'
@@ -92,10 +92,10 @@ export default async function LocaleLayout({
 
   const url = env.NEXT_PUBLIC_APP_URL
 
-  const { data: settings } = await sanityFetch({
-    query: settingsQuery,
-    params: { locale }
-  })
+  const [{ data: settings }, { data: houses }] = await Promise.all([
+    sanityFetch({ query: settingsQuery, params: { locale } }),
+    sanityFetch({ query: housesNavQuery, params: { locale } })
+  ])
 
   const jsonLd: WithContext<Organization> = {
     '@context': 'https://schema.org',
@@ -157,7 +157,7 @@ export default async function LocaleLayout({
           <ActiveThemeProvider initialTheme="default">
             <NextIntlClientProvider>
               <div className="bg-background relative z-10 flex min-h-svh flex-col">
-                <SiteHeader />
+                <SiteHeader houses={houses} />
                 <main className="flex flex-1 flex-col">{children}</main>
                 <SiteFooter settings={settings} />
               </div>

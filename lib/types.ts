@@ -23,8 +23,8 @@ export type NavGroupItem = NavItem & {
   key: HouseIdentifier
   background: (typeof assets)[HouseIdentifier]['background']
   icon: (typeof assets)[HouseIdentifier]['icon']
-  caption: string
-  description: string
+  caption?: string
+  description?: string
 }
 
 export type NavItems = Array<NavItem | NavListItem>

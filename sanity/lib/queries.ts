@@ -190,6 +190,14 @@ export const houseSlugsQuery = defineQuery(`*[_type == "house" && defined(slug)]
   "slug": slug
 }`)
 
+// Houses for navigation (header) - ordered by home page houses array
+export const housesNavQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
+  slug,
+  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
+  "caption": coalesce(caption[_key == $locale][0].value, caption[_key == "en"][0].value)
+}`)
+
 // All houses building data (for FAQ page)
 export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(slug asc){
   slug,

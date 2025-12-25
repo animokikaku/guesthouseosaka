@@ -91,9 +91,11 @@ function NavigationMenuGroupItem({
                     <div className="text-sm leading-none font-medium">
                       {item.label}
                     </div>
-                    <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-                      {item.description}
-                    </p>
+                    {item.description && (
+                      <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                        {item.description}
+                      </p>
+                    )}
                   </Link>
                 </NavigationMenuLink>
               </li>
@@ -137,11 +139,13 @@ function NavigationMenuGroupItem({
                       />
                     </div>
 
-                    <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/60 to-transparent p-4">
-                      <p className="text-left text-sm leading-relaxed font-medium text-white/90">
-                        {it.caption}
-                      </p>
-                    </div>
+                    {it.caption && (
+                      <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/60 to-transparent p-4">
+                        <p className="text-left text-sm leading-relaxed font-medium text-white/90">
+                          {it.caption}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )
               })}

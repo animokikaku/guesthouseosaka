@@ -6,35 +6,33 @@ import { MainNav } from '@/components/main-nav'
 import { MobileNav } from '@/components/mobile-nav'
 import { ModeSwitcher } from '@/components/mode-switcher'
 import { Button } from '@/components/ui/button'
-import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
-import { HouseIdentifierValues, NavItems } from '@/lib/types'
+import { NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HousesNavQueryResult } from '@/sanity.types'
 import { Settings2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 // eslint-disable-next-line no-restricted-imports
 import NextLink from 'next/link'
 
-export function SiteHeader() {
+export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
   const t = useTranslations('SiteHeader')
-  const houseLabel = useHouseLabels()
   const isMobile = useIsMobile()
 
   const navItems: NavItems = [
     {
       key: 'share-houses',
-      items: HouseIdentifierValues.map((house) => {
-        const { name, summary, caption } = houseLabel(house)
-        const { icon, background } = assets[house]
+      items: (houses ?? []).map(({ slug, title, description, caption }) => {
+        const { icon, background } = assets[slug]
         return {
-          key: house,
-          href: { pathname: '/[house]', params: { house } },
-          label: name,
-          description: summary,
-          caption,
+          key: slug,
+          href: { pathname: '/[house]', params: { house: slug } },
+          label: title ?? slug,
+          description: description ?? undefined,
+          caption: caption ?? undefined,
           icon,
           background
         }

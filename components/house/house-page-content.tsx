@@ -15,7 +15,7 @@ import { Link } from '@/i18n/navigation'
 import { featuredToGalleryImage, type GalleryImage } from '@/lib/gallery'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import type { HouseQueryResult } from '@/sanity.types'
+import type { HouseQueryResult, HousesNavQueryResult } from '@/sanity.types'
 import { ComponentProps } from 'react'
 
 const THEME_COLORS: Record<HouseIdentifier, string> = {
@@ -36,8 +36,9 @@ export function HousePageContent({
   location,
   pricing,
   about,
-  building
-}: NonNullable<HouseQueryResult>) {
+  building,
+  houses
+}: NonNullable<HouseQueryResult> & { houses: HousesNavQueryResult }) {
   const href: ComponentProps<typeof Link>['href'] = {
     pathname: '/[house]/gallery',
     params: { house: slug }
@@ -64,7 +65,7 @@ export function HousePageContent({
       <div className="container-wrapper section-soft flex-1 pb-12">
         <div className="container max-w-6xl">
           <PageNav id="tabs">
-            <HousesNav />
+            <HousesNav houses={houses} />
           </PageNav>
           <div className="theme-container">
             <ImageBlockGallery

@@ -2,7 +2,7 @@ import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
 import { assets } from '@/lib/assets'
 import { sanityFetch } from '@/sanity/lib/live'
-import { houseQuery } from '@/sanity/lib/queries'
+import { houseQuery, housesNavQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -19,10 +19,10 @@ export default async function HousePage({
 
   setRequestLocale(locale as Locale)
 
-  const { data } = await sanityFetch({
-    query: houseQuery,
-    params: { locale, slug: house }
-  })
+  const [{ data }, { data: houses }] = await Promise.all([
+    sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
+    sanityFetch({ query: housesNavQuery, params: { locale } })
+  ])
 
   if (!data) {
     notFound()
@@ -68,7 +68,7 @@ export default async function HousePage({
           __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c')
         }}
       />
-      <HousePageContent {...data} />
+      <HousePageContent {...data} houses={houses} />
     </>
   )
 }
