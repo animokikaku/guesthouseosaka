@@ -29,7 +29,7 @@ export function HousePageContent({
   slug,
   title,
   description,
-  gallery,
+  galleryByCategory,
   featuredImage,
   amenities,
   location,
@@ -63,7 +63,7 @@ export function HousePageContent({
           <div className="theme-container">
             <ImageBlockGallery
               href={href}
-              gallery={gallery}
+              galleryByCategory={galleryByCategory}
               featuredImage={featuredImage}
             />
             <article

@@ -115,26 +115,28 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[_key == $locale][0].value, about[_key == "en"][0].value),
 
-  // Gallery with categories
-  "gallery": gallery[]{
-    _key,
-    "image": image{
-      asset->{
-        _id,
-        url,
-        "dimensions": metadata.dimensions,
-        "lqip": metadata.lqip
-      },
-      hotspot,
-      crop,
-      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value)
-    },
-    "category": category->{
+  // Gallery grouped by category (server-side grouping)
+  "galleryByCategory": *[_type == "galleryCategory" && _id in ^.gallery[].category._ref] | order(order asc) {
+    "category": {
       "key": key.current,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       order
+    },
+    "images": ^.gallery[category._ref == ^._id]{
+      _key,
+      "image": image{
+        asset->{
+          _id,
+          url,
+          "dimensions": metadata.dimensions,
+          "lqip": metadata.lqip
+        },
+        hotspot,
+        crop,
+        "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value)
+      }
     }
-  } | order(category.order asc),
+  },
 
   // Amenities with categories
   "amenities": amenities[]{

@@ -15,20 +15,18 @@ import { getTranslations } from 'next-intl/server'
 import type { ImageProps } from 'next/image'
 import { ComponentProps } from 'react'
 
-type SanityGalleryImage = NonNullable<
-  NonNullable<HouseQueryResult>['gallery']
->[number]
-
+type SanityGalleryByCategory = NonNullable<HouseQueryResult>['galleryByCategory']
 type SanityFeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
+type CategoryImage = NonNullable<SanityGalleryByCategory[number]['images']>[number]
 
 type ImageBlockGalleryProps = {
   href: ComponentProps<typeof Link>['href']
-  gallery: NonNullable<HouseQueryResult>['gallery']
+  galleryByCategory: SanityGalleryByCategory
   featuredImage?: SanityFeaturedImage
 }
 
 // Transform Sanity gallery image to Next.js Image props
-function toImageProps(image: SanityGalleryImage): Omit<ImageProps, 'fill'> {
+function toImageProps(image: CategoryImage): Omit<ImageProps, 'fill'> {
   return {
     src: image.image.asset?.url ?? '',
     alt: image.image.alt ?? '',
@@ -51,6 +49,13 @@ function featuredToImageProps(
     blurDataURL: image.asset?.lqip ?? undefined,
     placeholder: image.asset?.lqip ? 'blur' : undefined
   }
+}
+
+// Flatten gallery by category into a single array of images
+function flattenGallery(
+  galleryByCategory: SanityGalleryByCategory
+): CategoryImage[] {
+  return galleryByCategory.flatMap((group) => group.images ?? [])
 }
 
 function GalleryGrid({
@@ -115,15 +120,17 @@ function GalleryGrid({
 
 export async function ImageBlockGallery({
   href,
-  gallery,
+  galleryByCategory,
   featuredImage
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
 
+  // Flatten grouped gallery into a single array
+  const flatGallery = flattenGallery(galleryByCategory)
+
   // Count total available images (featured + gallery)
   const hasFeatured = !!featuredImage?.asset?.url
-  const galleryCount = gallery?.length ?? 0
-  const totalCount = (hasFeatured ? 1 : 0) + galleryCount
+  const totalCount = (hasFeatured ? 1 : 0) + flatGallery.length
 
   if (totalCount < 5) {
     return (
@@ -142,7 +149,7 @@ export async function ImageBlockGallery({
   }
 
   // Build display images: featured first (if available), then gallery images
-  const galleryImages = (gallery ?? []).map(toImageProps)
+  const galleryImages = flatGallery.map(toImageProps)
   const images = hasFeatured
     ? [featuredToImageProps(featuredImage), ...galleryImages.slice(0, 4)]
     : galleryImages.slice(0, 5)

@@ -4,10 +4,8 @@ import type { HouseQueryResult } from '@/sanity.types'
 import type { ImageProps } from 'next/image'
 import { createContext, ReactNode, useContext, useMemo } from 'react'
 
-// Gallery image from Sanity with all required props
-type SanityGalleryImage = NonNullable<
-  NonNullable<HouseQueryResult>['gallery']
->[number]
+// Gallery by category from Sanity (pre-grouped server-side)
+type SanityGalleryByCategory = NonNullable<HouseQueryResult>['galleryByCategory']
 
 // Featured image from Sanity (same structure as localizedImage in query)
 type SanityFeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
@@ -54,12 +52,18 @@ type GalleryContextValue = {
 const GalleryContext = createContext<GalleryContextValue | null>(null)
 
 type SanityGalleryProviderProps = {
-  gallery: NonNullable<HouseQueryResult>['gallery']
+  galleryByCategory: SanityGalleryByCategory
   featuredImage?: SanityFeaturedImage
   children: ReactNode
 }
 
-function toImageProps(image: SanityGalleryImage): GalleryImageWithProps {
+type CategoryGroup = SanityGalleryByCategory[number]
+type CategoryImage = NonNullable<CategoryGroup['images']>[number]
+
+function toImageProps(
+  image: CategoryImage,
+  category: CategoryGroup['category']
+): GalleryImageWithProps {
   return {
     id: image._key,
     src: image.image.asset?.url ?? '',
@@ -68,7 +72,7 @@ function toImageProps(image: SanityGalleryImage): GalleryImageWithProps {
     height: image.image.asset?.dimensions?.height ?? 600,
     blurDataURL: image.image.asset?.lqip ?? undefined,
     placeholder: image.image.asset?.lqip ? 'blur' : undefined,
-    category: image.category
+    category
   }
 }
 
@@ -89,36 +93,39 @@ function featuredToImageProps(
 
 /**
  * Provider component that enables useGallery() hook with Sanity gallery data
+ * Accepts pre-grouped gallery data from server-side GROQ query
  */
 export function SanityGalleryProvider({
-  gallery,
+  galleryByCategory,
   featuredImage,
   children
 }: SanityGalleryProviderProps) {
   const value = useMemo<GalleryContextValue>(() => {
-    const galleryImages = (gallery ?? []).map(toImageProps)
-
-    // Prepend featured image if available
-    const allImages =
-      featuredImage?.asset?.url
-        ? [featuredToImageProps(featuredImage), ...galleryImages]
-        : galleryImages
-    const indexMap = new Map(allImages.map((img, idx) => [img.id, idx]))
-
-    // Build category map for quick lookups
+    // Build category map and flatten images (data already grouped server-side)
     const categoryMap = new Map<string, GalleryImageWithProps[]>()
     const categoryLabelMap = new Map<string, string | null>()
+    const allImages: GalleryImageWithProps[] = []
 
-    for (const img of allImages) {
-      const key = img.category.key
-      if (!categoryMap.has(key)) {
-        categoryMap.set(key, [])
-        categoryLabelMap.set(key, img.category.label)
-      }
-      categoryMap.get(key)!.push(img)
+    // Prepend featured image if available
+    if (featuredImage?.asset?.url) {
+      const featured = featuredToImageProps(featuredImage)
+      allImages.push(featured)
+      categoryMap.set('featured', [featured])
+      categoryLabelMap.set('featured', null)
     }
 
-    // Get unique category keys in order they appear (already sorted by order from GROQ)
+    // Process pre-grouped categories (already sorted by order from GROQ)
+    for (const group of galleryByCategory) {
+      const { category, images } = group
+      if (!images) continue
+
+      const categoryImages = images.map((img) => toImageProps(img, category))
+      categoryMap.set(category.key, categoryImages)
+      categoryLabelMap.set(category.key, category.label)
+      allImages.push(...categoryImages)
+    }
+
+    const indexMap = new Map(allImages.map((img, idx) => [img.id, idx]))
     const categoryKeys = Array.from(categoryMap.keys())
 
     return {
@@ -143,7 +150,7 @@ export function SanityGalleryProvider({
       categories: () => categoryKeys,
       categoryLabel: (key) => categoryLabelMap.get(key) ?? null
     }
-  }, [gallery, featuredImage])
+  }, [galleryByCategory, featuredImage])
 
   return (
     <GalleryContext.Provider value={value}>{children}</GalleryContext.Provider>
