@@ -12,7 +12,7 @@ export function SiteFooter({ settings }: SiteFooterProps) {
       <div className="container-wrapper px-4 xl:px-6">
         <div className="flex min-h-(--footer-height) flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:flex-nowrap">
           <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">
-            <span className="sr-only">{settings?.siteName}</span>© {year}{' '}
+            <span className="sr-only">{settings?.brandName}</span>© {year}{' '}
             {settings?.companyName}
           </div>
           <div className="flex shrink-0 items-center gap-3">

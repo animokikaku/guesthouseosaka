@@ -1,6 +1,5 @@
 import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
-import { getHouseLabel } from '@/lib/house-labels'
 import { SanityGalleryProvider } from '@/lib/images/sanity-client'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import {
@@ -34,8 +33,17 @@ export async function generateMetadata(
     return undefined
   }
 
-  const houseLabel = await getHouseLabel(locale as Locale)
-  const { name: title, summary: description } = houseLabel(house)
+  const { data } = await sanityFetch({
+    query: houseQuery,
+    params: { locale, slug: house }
+  })
+
+  if (!data) {
+    return undefined
+  }
+
+  const title = data.title
+  const description = data.description
   const image = assets.openGraph[house].src
   const { openGraph, twitter } = await getOpenGraphMetadata({ locale, image })
 

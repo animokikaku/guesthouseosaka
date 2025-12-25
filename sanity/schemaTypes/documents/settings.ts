@@ -8,21 +8,56 @@ export const settings = defineType({
   icon: CogIcon,
   fields: [
     defineField({
+      name: 'siteName',
+      title: 'Site Name',
+      type: 'internationalizedArrayString',
+      description: 'Website name for manifest/UI (e.g., Share House Osaka)',
+      validation: (rule) => rule.required(),
+      options: { aiAssist: { translateAction: true } }
+    }),
+    defineField({
+      name: 'siteDescription',
+      title: 'Site Description',
+      type: 'internationalizedArrayString',
+      description: 'Default meta description for SEO',
+      validation: (rule) => rule.required(),
+      options: { aiAssist: { translateAction: true } }
+    }),
+    defineField({
       name: 'brandName',
       title: 'Brand Name (SEO)',
       type: 'internationalizedArrayString',
       description:
-        'Legacy brand name for SEO purposes, shown in footer as sr-only (e.g., Guest House Osaka)',
+        'Brand name for SEO/JSON-LD purposes (e.g., Guest House Osaka)',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     }),
     defineField({
       name: 'companyName',
       title: 'Company Name',
-      type: 'internationalizedArrayString',
-      description: 'Legal company name shown in the footer',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      type: 'string',
+      description: 'Legal company name for JSON-LD (e.g., 株式会社アニモ企画)',
+      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'email',
+      title: 'Contact Email',
+      type: 'string',
+      description: 'Main contact email for Organization schema',
+      validation: (rule) => rule.email()
+    }),
+    defineField({
+      name: 'phone',
+      title: 'Organization Phone',
+      type: 'string',
+      description: 'Main contact phone for Organization schema (international format)',
+      placeholder: '+81-6-6643-4646'
+    }),
+    defineField({
+      name: 'address',
+      title: 'Organization Address',
+      type: 'address',
+      description: 'Main address for Organization schema'
     }),
     defineField({
       name: 'socialLinks',
@@ -34,12 +69,12 @@ export const settings = defineType({
   ],
   preview: {
     select: {
-      brandName: 'brandName.0.value'
+      siteName: 'siteName.0.value'
     },
-    prepare({ brandName }) {
+    prepare({ siteName }) {
       return {
         title: 'Site Settings',
-        subtitle: brandName || 'Not configured'
+        subtitle: siteName || 'Not configured'
       }
     }
   }

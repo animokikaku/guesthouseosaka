@@ -1,23 +1,21 @@
 import { routing } from '@/i18n/routing'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 import '@/app/globals.css'
 import { ActiveThemeProvider } from '@/components/active-theme'
 import { Analytics } from '@/components/analytics'
-import { HOUSE_ADDRESS } from '@/components/map/location-map-constants'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { assets } from '@/lib/assets'
-import { META_THEME_COLORS, urls } from '@/lib/config'
+import { META_THEME_COLORS } from '@/lib/config'
 import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
-import { getHousePhoneLabel } from '@/lib/house-phones'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -36,12 +34,13 @@ export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
-  const t = await getTranslations({
-    locale: locale as Locale,
-    namespace: 'manifest'
+
+  const { data: settings } = await sanityFetch({
+    query: settingsQuery,
+    params: { locale }
   })
 
-  const siteName = t('name')
+  const siteName = settings?.siteName ?? 'Share House Osaka'
   const { openGraph, twitter } = await getOpenGraphMetadata({
     locale: locale as Locale
   })
@@ -53,7 +52,7 @@ export async function generateMetadata(
     },
     metadataBase: env.NEXT_PUBLIC_APP_URL,
     authors: [{ name: 'Thibault Vieux', url: 'https://thibaultvieux.com' }],
-    description: t('description'),
+    description: settings?.siteDescription,
     keywords: [
       'Guest House Osaka',
       'Osaka Guest House',
@@ -91,7 +90,6 @@ export default async function LocaleLayout({
   // Enable static rendering
   setRequestLocale(locale)
 
-  const phoneLabel = await getHousePhoneLabel(locale as Locale)
   const url = env.NEXT_PUBLIC_APP_URL
 
   const { data: settings } = await sanityFetch({
@@ -103,14 +101,22 @@ export default async function LocaleLayout({
     '@context': 'https://schema.org',
     '@type': 'Organization',
     '@id': `${url}/#organization`,
-    name: 'Guest House Osaka',
-    legalName: '株式会社アニモ企画',
-    alternateName: 'ゲストハウス大阪',
-    telephone: phoneLabel('orange').international,
-    email: 'info@guesthouseosaka.com',
+    name: settings?.brandName ?? 'Guest House Osaka',
+    legalName: settings?.companyName ?? '株式会社アニモ企画',
+    alternateName: settings?.siteName ?? 'Share House Osaka',
+    telephone: settings?.phone ?? undefined,
+    email: settings?.email ?? undefined,
     logo: assets.logo.sho.src,
-    sameAs: Object.values(urls.socials),
-    address: HOUSE_ADDRESS.orange,
+    sameAs: settings?.socialLinks?.map((link) => link.url),
+    address: settings?.address
+      ? {
+          '@type': 'PostalAddress',
+          streetAddress: settings.address.streetAddress,
+          addressLocality: settings.address.locality,
+          postalCode: settings.address.postalCode,
+          addressCountry: settings.address.country
+        }
+      : undefined,
     image: assets.openGraph.home.src
   }
 

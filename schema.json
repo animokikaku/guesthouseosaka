@@ -53,6 +53,36 @@
     }
   },
   {
+    "name": "phone",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "phone"
+          }
+        },
+        "domestic": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
+        "international": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "address",
     "type": "type",
     "value": {
@@ -959,6 +989,22 @@
           "type": "string"
         }
       },
+      "siteName": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "internationalizedArrayString"
+        },
+        "optional": false
+      },
+      "siteDescription": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "internationalizedArrayString"
+        },
+        "optional": false
+      },
       "brandName": {
         "type": "objectAttribute",
         "value": {
@@ -970,10 +1016,31 @@
       "companyName": {
         "type": "objectAttribute",
         "value": {
-          "type": "inline",
-          "name": "internationalizedArrayString"
+          "type": "string"
         },
         "optional": false
+      },
+      "email": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "phone": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "address": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "address"
+        },
+        "optional": true
       },
       "socialLinks": {
         "type": "objectAttribute",
