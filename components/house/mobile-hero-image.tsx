@@ -14,23 +14,46 @@ import {
   EmptyTitle
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import { useGallery } from '@/lib/images/sanity-client'
+import { GalleryImageWithProps, useGallery } from '@/lib/images/sanity-client'
+import type { HouseQueryResult } from '@/sanity.types'
 import { ImageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { ComponentProps, useEffect, useState } from 'react'
+import { ComponentProps, useEffect, useMemo, useState } from 'react'
+
+type FeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
 
 export function MobileHeroImage({
-  href
+  href,
+  featuredImage
 }: {
   href: ComponentProps<typeof Link>['href']
+  featuredImage?: FeaturedImage
 }) {
   const t = useTranslations('MobileHeroImage')
   const [api, setApi] = useState<CarouselApi>()
   const [currentIndex, setCurrentIndex] = useState(1)
 
   const gallery = useGallery()
-  const images = gallery.images()
+  const galleryImages = gallery.images()
+
+  // Prepend featured image if available
+  const images = useMemo(() => {
+    if (!featuredImage?.asset?.url) return galleryImages
+
+    const featured: GalleryImageWithProps = {
+      id: 'featured',
+      src: featuredImage.asset.url,
+      alt: featuredImage.alt ?? '',
+      width: featuredImage.asset.dimensions?.width ?? 800,
+      height: featuredImage.asset.dimensions?.height ?? 600,
+      blurDataURL: featuredImage.asset.lqip ?? undefined,
+      placeholder: featuredImage.asset.lqip ? 'blur' : undefined,
+      category: { key: 'featured', label: null, order: -1 }
+    }
+
+    return [featured, ...galleryImages]
+  }, [featuredImage, galleryImages])
 
   if (id === 'orange') {
     const [heroImage] = images.splice(11, 1)

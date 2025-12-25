@@ -44,7 +44,7 @@ export function HousePageContent({
 
   return (
     <>
-      <MobileHeroImage href={href} />
+      <MobileHeroImage href={href} featuredImage={featuredImage} />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading>{title}</PageHeaderHeading>
