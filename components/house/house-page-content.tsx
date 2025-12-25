@@ -17,20 +17,29 @@ import { cn } from '@/lib/utils'
 import type { HouseQueryResult } from '@/sanity.types'
 import { ComponentProps } from 'react'
 
-type HousePageContentProps = {
-  data: NonNullable<HouseQueryResult>
-}
-
 const THEME_COLORS: Record<HouseIdentifier, string> = {
   apple: 'bg-red-600 dark:bg-red-500',
   lemon: 'bg-yellow-400 dark:bg-yellow-500',
   orange: 'bg-orange-500 dark:bg-orange-600'
 }
 
-export function HousePageContent({ data }: HousePageContentProps) {
+export function HousePageContent({
+  _id,
+  _type,
+  slug,
+  title,
+  description,
+  gallery,
+  featuredImage,
+  amenities,
+  location,
+  pricing,
+  about,
+  building
+}: NonNullable<HouseQueryResult>) {
   const href: ComponentProps<typeof Link>['href'] = {
     pathname: '/[house]/gallery',
-    params: { house: data.slug }
+    params: { house: slug }
   }
 
   return (
@@ -38,10 +47,10 @@ export function HousePageContent({ data }: HousePageContentProps) {
       <MobileHeroImage href={href} />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
-          <PageHeaderHeading>{data.title}</PageHeaderHeading>
-          <PageHeaderDescription>{data.description}</PageHeaderDescription>
+          <PageHeaderHeading>{title}</PageHeaderHeading>
+          <PageHeaderDescription>{description}</PageHeaderDescription>
           <div
-            className={cn('mx-auto mt-6 h-1 w-24', THEME_COLORS[data.slug])}
+            className={cn('mx-auto mt-6 h-1 w-24', THEME_COLORS[slug])}
             aria-hidden="true"
           />
         </PageHeader>
@@ -54,34 +63,34 @@ export function HousePageContent({ data }: HousePageContentProps) {
           <div className="theme-container">
             <ImageBlockGallery
               href={href}
-              gallery={data.gallery}
-              featuredImage={data.featuredImage}
+              gallery={gallery}
+              featuredImage={featuredImage}
             />
             <article
-              id={data.slug}
-              aria-labelledby={`${data.slug}-title`}
+              id={slug}
+              aria-labelledby={`${slug}-title`}
               className="space-y-12 pt-8"
             >
               <HouseAbout
-                _id={data._id}
-                _type={data._type}
-                slug={data.slug}
-                title={data.title}
-                about={data.about}
-                building={data.building}
+                _id={_id}
+                _type={_type}
+                slug={slug}
+                title={title}
+                about={about}
+                building={building}
               />
-              <HouseAmenities amenities={data.amenities} />
-              {data.location && (
+              <HouseAmenities amenities={amenities} />
+              {location && (
                 <HouseLocation
-                  slug={data.slug}
-                  coordinates={data.location.coordinates}
-                  placeId={data.location.placeId}
-                  highlight={data.location.highlight}
-                  details={data.location.details}
-                  googleMapsUrl={data.location.googleMapsUrl}
+                  slug={slug}
+                  coordinates={location.coordinates}
+                  placeId={location.placeId}
+                  highlight={location.highlight}
+                  details={location.details}
+                  googleMapsUrl={location.googleMapsUrl}
                 />
               )}
-              <HousePricing pricing={data.pricing} />
+              <HousePricing pricing={pricing} />
             </article>
           </div>
         </div>
