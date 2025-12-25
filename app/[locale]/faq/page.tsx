@@ -22,7 +22,10 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
 
   return (
     <section className="mx-auto flex w-full max-w-3xl flex-col gap-12">
-      <FAQAccordion housesBuilding={housesBuilding} />
+      <FAQAccordion
+        faqItems={faqPage?.items ?? null}
+        housesBuilding={housesBuilding}
+      />
       <FAQCard contactSection={faqPage?.contactSection ?? null} />
     </section>
   )

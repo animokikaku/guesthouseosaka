@@ -20,7 +20,9 @@ import { fontVariables } from '@/lib/fonts'
 import { getHousePhoneLabel } from '@/lib/house-phones'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { cn } from '@/lib/utils'
+import { sanityFetch } from '@/sanity/lib/live'
 import { SanityLive } from '@/sanity/lib/live'
+import { settingsQuery } from '@/sanity/lib/queries'
 import { type Metadata } from 'next'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import { draftMode } from 'next/headers'
@@ -92,6 +94,11 @@ export default async function LocaleLayout({
   const phoneLabel = await getHousePhoneLabel(locale as Locale)
   const url = env.NEXT_PUBLIC_APP_URL
 
+  const { data: settings } = await sanityFetch({
+    query: settingsQuery,
+    params: { locale }
+  })
+
   const jsonLd: WithContext<Organization> = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -146,7 +153,7 @@ export default async function LocaleLayout({
               <div className="bg-background relative z-10 flex min-h-svh flex-col">
                 <SiteHeader />
                 <main className="flex flex-1 flex-col">{children}</main>
-                <SiteFooter />
+                <SiteFooter settings={settings} />
               </div>
               <TailwindIndicator />
               <Toaster position="top-center" />

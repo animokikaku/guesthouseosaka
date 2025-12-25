@@ -1,9 +1,11 @@
 import { Icons } from '@/components/icons'
-import { urls } from '@/lib/config'
-import { useTranslations } from 'next-intl'
+import type { SettingsQueryResult } from '@/sanity.types'
 
-export function SiteFooter() {
-  const t = useTranslations('SiteFooter')
+type SiteFooterProps = {
+  settings: SettingsQueryResult
+}
+
+export function SiteFooter({ settings }: SiteFooterProps) {
   const year = new Date().getFullYear()
 
   return (
@@ -11,18 +13,21 @@ export function SiteFooter() {
       <div className="container-wrapper px-4 xl:px-6">
         <div className="flex min-h-(--footer-height) flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:flex-nowrap">
           <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">
-            <span className="sr-only">{t('brand_name')}</span>© {year}{' '}
-            {t('company_name')}
+            <span className="sr-only">{settings?.siteName}</span>© {year}{' '}
+            {settings?.companyName}
           </div>
           <div className="flex shrink-0 items-center gap-3">
-            <SocialLink
-              href={urls.socials.facebook}
-              icon={<Icons.facebook className="size-5" />}
-            />
-            <SocialLink
-              href={urls.socials.instagram}
-              icon={<Icons.instagram className="size-5" />}
-            />
+            {settings?.socialLinks?.map((link) => {
+              if (!link.platform || !link.url) return null
+              const Icon = Icons[link.platform]
+              return (
+                <SocialLink
+                  key={link._key}
+                  href={link.url}
+                  icon={<Icon className="size-5" />}
+                />
+              )
+            })}
           </div>
         </div>
       </div>

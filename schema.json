@@ -185,22 +185,6 @@
               {
                 "type": "string",
                 "value": "instagram"
-              },
-              {
-                "type": "string",
-                "value": "x"
-              },
-              {
-                "type": "string",
-                "value": "youtube"
-              },
-              {
-                "type": "string",
-                "value": "linkedin"
-              },
-              {
-                "type": "string",
-                "value": "tiktok"
               }
             ]
           },

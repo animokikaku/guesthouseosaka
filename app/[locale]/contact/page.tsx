@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from 'lucide-react'
-import { Locale } from 'next-intl'
+import type { Locale } from 'next-intl'
 
 import {
   Item,
@@ -8,36 +8,38 @@ import {
   ItemDescription,
   ItemTitle
 } from '@/components/ui/item'
-import {
-  ContactNavigationKey,
-  useContactNavigation
-} from '@/hooks/use-contact-navigation'
 import { Link } from '@/i18n/navigation'
+import { sanityFetch } from '@/sanity/lib/live'
+import { contactPageQuery } from '@/sanity/lib/queries'
 import { setRequestLocale } from 'next-intl/server'
-import { ComponentProps, use } from 'react'
 
-export default function ContactPage({
+const hrefMap = {
+  tour: { pathname: '/contact/tour', hash: '#tabs' },
+  'move-in': { pathname: '/contact/move-in', hash: '#tabs' },
+  general: { pathname: '/contact/other', hash: '#tabs' }
+} as const
+
+export default async function ContactPage({
   params
 }: PageProps<'/[locale]/contact'>) {
-  const { locale } = use(params)
-
+  const { locale } = await params
   setRequestLocale(locale as Locale)
-  const navLabel = useContactNavigation()
-  const keys: ContactNavigationKey[] = ['tour', 'move-in', 'general']
+
+  const { data } = await sanityFetch({
+    query: contactPageQuery,
+    params: { locale }
+  })
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4">
-      {keys.map((key) => {
-        const { href, title, description } = navLabel(key)
-        return (
-          <ContactLink
-            key={`contact-link-${key}`}
-            href={href}
-            title={title}
-            description={description}
-          />
-        )
-      })}
+      {data?.contactTypes?.map((contactType) => (
+        <ContactLink
+          key={contactType._key}
+          href={hrefMap[contactType.key]}
+          title={contactType.title ?? ''}
+          description={contactType.description ?? ''}
+        />
+      ))}
     </div>
   )
 }
@@ -47,7 +49,7 @@ function ContactLink({
   title,
   description
 }: {
-  href: ComponentProps<typeof Link>['href']
+  href: (typeof hrefMap)[keyof typeof hrefMap]
   title: string
   description: string
 }) {

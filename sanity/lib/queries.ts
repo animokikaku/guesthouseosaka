@@ -195,7 +195,7 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   "items": items[]{
     _key,
     "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),
-    answer
+    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value)
   },
   "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value)
 }`)
