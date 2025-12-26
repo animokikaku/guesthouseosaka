@@ -56,17 +56,19 @@ export const structure: StructureResolver = (S) =>
               S.listItem()
                 .title('FAQ Page')
                 .icon(HelpCircleIcon)
-                .child(S.document().schemaType('faqPage').documentId('faqPage')),
+                .child(
+                  S.document().schemaType('faqPage').documentId('faqPage')
+                ),
               S.listItem()
                 .title('Contact Page')
                 .icon(EnvelopeIcon)
                 .child(
-                  S.document().schemaType('contactPage').documentId('contactPage')
+                  S.document()
+                    .schemaType('contactPage')
+                    .documentId('contactPage')
                 )
             ])
         ),
-
-      S.divider(),
 
       // ============================================
       // HOUSES
@@ -80,8 +82,6 @@ export const structure: StructureResolver = (S) =>
             .defaultOrdering([{ field: 'slug', direction: 'asc' }])
         ),
 
-      S.divider(),
-
       // ============================================
       // AMENITIES
       // ============================================
@@ -89,8 +89,6 @@ export const structure: StructureResolver = (S) =>
         .title('Amenities')
         .icon(CheckmarkCircleIcon)
         .child(S.documentTypeList('amenity').title('Amenities')),
-
-      S.divider(),
 
       // ============================================
       // CATEGORIES FOLDER
