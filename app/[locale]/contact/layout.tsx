@@ -1,12 +1,15 @@
+import { DynamicPageActions } from '@/components/dynamic-page-actions'
 import { PageActions, PageHeader } from '@/components/page-header'
-import { Button } from '@/components/ui/button'
-import { Link } from '@/i18n/navigation'
+import { LegalNoticeProvider } from '@/hooks/use-legal-notice'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
-import { contactPageQuery, settingsQuery } from '@/sanity/lib/queries'
+import {
+  contactPageQuery,
+  legalNoticeQuery,
+  settingsQuery
+} from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
-import { BookTextIcon, MailIcon, PhoneIcon } from 'lucide-react'
 import type { Metadata } from 'next'
 import type { Locale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
@@ -56,48 +59,38 @@ export default async function ContactLayout({
 }: LayoutProps<'/[locale]/contact'>) {
   const { locale } = await params
   setRequestLocale(locale as Locale)
-  const t = await getTranslations({
-    locale: locale as Locale,
-    namespace: 'ContactLayout'
-  })
 
-  const { data } = await sanityFetch({
-    query: contactPageQuery,
-    params: { locale }
-  })
+  const [{ data: contactPage }, { data: legalNotice }] = await Promise.all([
+    sanityFetch({
+      query: contactPageQuery,
+      params: { locale }
+    }),
+    sanityFetch({
+      query: legalNoticeQuery,
+      params: { locale }
+    })
+  ])
 
   return (
-    <>
+    <LegalNoticeProvider data={legalNotice}>
       <PageHeader>
-        {data?.header && (
-          <PortableText value={data.header} components={headerComponents} />
+        {contactPage?.header && (
+          <PortableText
+            value={contactPage.header}
+            components={headerComponents}
+          />
         )}
-        <PageActions>
-          <Button asChild size="sm">
-            <Link href="/contact">
-              <MailIcon />
-              {t('actions.contact')}
-            </Link>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <Link href={{ pathname: '/faq', hash: '#phone' }}>
-              <PhoneIcon />
-              {t('actions.phone')}
-            </Link>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <Link href="/faq">
-              <BookTextIcon />
-              {t('actions.faq')}
-            </Link>
-          </Button>
-        </PageActions>
+        {contactPage?.actions && contactPage.actions.length > 0 && (
+          <PageActions>
+            <DynamicPageActions actions={contactPage.actions} />
+          </PageActions>
+        )}
       </PageHeader>
       <div className="container-wrapper section-soft flex-1 md:pb-12">
         <div className="sm:container">
           <div className="mx-auto w-full max-w-2xl">{children}</div>
         </div>
       </div>
-    </>
+    </LegalNoticeProvider>
   )
 }

@@ -150,7 +150,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     "categoryOrder": category->order
   } | order(categoryOrder asc),
 
-  // Amenities with categories
+  // Amenities (array position preserved for drag-and-drop reordering in Sanity Studio)
   "amenities": amenities[]{
     _key,
     featured,
@@ -167,7 +167,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       order
     }
-  } | order(category.order asc),
+  },
 
   // Location
   "location": location{
@@ -209,6 +209,8 @@ export const housesNavQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
 
 // All houses building data (for FAQ page)
 export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(slug asc){
+  _id,
+  _type,
   slug,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "building": building{
@@ -225,6 +227,13 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   _id,
   _type,
   "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),
+  "actions": actions[]{
+    _key,
+    icon,
+    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
+    href,
+    variant
+  },
   "items": items[]{
     _key,
     "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),
@@ -241,6 +250,13 @@ export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
   _id,
   _type,
   "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),
+  "actions": actions[]{
+    _key,
+    icon,
+    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
+    href,
+    variant
+  },
   "contactTypes": contactTypes[]{
     _key,
     key,
@@ -249,6 +265,18 @@ export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
 }`)
 
 export const contactTypeQuery = defineQuery(`*[_type == "contactPage"][0].contactTypes[key == $type][0]{
+  "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value)
+}`)
+
+// =============================================================================
+// LEGAL NOTICE
+// =============================================================================
+
+export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
+  _id,
+  _type,
+  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+  lastUpdated,
   "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value)
 }`)
 

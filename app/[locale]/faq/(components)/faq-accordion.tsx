@@ -1,3 +1,5 @@
+'use client'
+
 import { FAQExtraCostsTable } from '@/app/[locale]/faq/(components)/faq-extra-costs-table'
 import {
   Accordion,
@@ -5,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
+import { createDataAttribute } from '@/lib/sanity-data-attributes'
 import type {
   FaqPageQueryResult,
   HousesBuildingQueryResult
@@ -54,8 +57,15 @@ export function FAQAccordion({ faqItems, housesBuilding }: FAQAccordionProps) {
             {housesBuilding.map((house) => {
               const floors = house.building?.floors ?? 0
               const rooms = house.building?.rooms ?? 0
+              const dataAttribute = createDataAttribute({
+                id: house._id,
+                type: house._type
+              })
               return (
-                <li key={`floors-and-rooms-${house.slug}`}>
+                <li
+                  key={`floors-and-rooms-${house.slug}`}
+                  data-sanity={dataAttribute('building')}
+                >
                   <strong>{house.title}: </strong>
                   {t('floors_and_rooms.format', {
                     floors: formatter.number(floors),

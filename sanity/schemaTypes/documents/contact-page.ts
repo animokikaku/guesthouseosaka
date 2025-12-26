@@ -16,6 +16,14 @@ export const contactPage = defineType({
       options: { aiAssist: { translateAction: true } }
     }),
     defineField({
+      name: 'actions',
+      title: 'Page Actions',
+      type: 'array',
+      description:
+        'Action buttons shown in the page header. Drag to reorder, first item is primary.',
+      of: [defineArrayMember({ type: 'pageAction' })]
+    }),
+    defineField({
       name: 'contactTypes',
       title: 'Contact Types',
       type: 'array',

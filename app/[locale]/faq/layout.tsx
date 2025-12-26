@@ -1,12 +1,10 @@
+import { DynamicPageActions } from '@/components/dynamic-page-actions'
 import { PageActions, PageHeader } from '@/components/page-header'
-import { Button } from '@/components/ui/button'
-import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
 import { faqPageQuery, settingsQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
-import { MailIcon, PhoneIcon } from 'lucide-react'
 import type { Metadata } from 'next'
 import type { Locale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
@@ -53,10 +51,6 @@ export default async function FAQLayout({
 }: LayoutProps<'/[locale]/faq'>) {
   const { locale } = await params
   setRequestLocale(locale as Locale)
-  const t = await getTranslations({
-    locale: locale as Locale,
-    namespace: 'FAQLayout'
-  })
 
   const { data } = await sanityFetch({
     query: faqPageQuery,
@@ -69,20 +63,11 @@ export default async function FAQLayout({
         {data?.header && (
           <PortableText value={data.header} components={headerComponents} />
         )}
-        <PageActions>
-          <Button asChild size="sm">
-            <Link href="/contact">
-              <MailIcon />
-              {t('actions.email')}
-            </Link>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <Link href={{ pathname: '/faq', hash: '#phone' }}>
-              <PhoneIcon />
-              {t('actions.phone')}
-            </Link>
-          </Button>
-        </PageActions>
+        {data?.actions && data.actions.length > 0 && (
+          <PageActions>
+            <DynamicPageActions actions={data.actions} />
+          </PageActions>
+        )}
       </PageHeader>
       <div className="container-wrapper section-soft flex-1 pb-12">
         <div className="align-center container max-w-2xl">{children}</div>

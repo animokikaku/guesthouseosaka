@@ -8,6 +8,7 @@ import { contactPage } from './documents/contact-page'
 import { faqPage } from './documents/faq-page'
 import { galleryCategory } from './documents/gallery-category'
 import homePage from './documents/home-page'
+import { legalNotice } from './documents/legal-notice'
 import { settings } from './documents/settings'
 
 // Object types
@@ -18,6 +19,7 @@ import {
   galleryImage,
   houseAmenity,
   localizedImage,
+  pageAction,
   pricingRow,
   socialLink
 } from './objects'
@@ -30,6 +32,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     settings,
     faqPage,
     contactPage,
+    legalNotice,
 
     // Taxonomy
     galleryCategory,
@@ -44,6 +47,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     pricingRow,
     faqItem,
     address,
-    contactType
+    contactType,
+    pageAction
   ]
 }
