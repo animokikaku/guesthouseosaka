@@ -150,22 +150,32 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     "categoryOrder": category->order
   } | order(categoryOrder asc),
 
-  // Amenities (array position preserved for drag-and-drop reordering in Sanity Studio)
-  "amenities": amenities[]{
+  // Featured amenities (for quick display, max 10)
+  "featuredAmenities": amenities[featured == true][0...10]{
     _key,
-    featured,
     note,
     "label": coalesce(
       customLabel[_key == $locale][0].value,
       amenity->label[_key == $locale][0].value,
       amenity->label[_key == "en"][0].value
     ),
-    "icon": amenity->icon,
-    "amenityKey": amenity->key.current,
-    "category": amenity->category->{
-      "key": key.current,
-      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-      order
+    "icon": amenity->icon
+  },
+
+  // Amenities grouped by category (ordered by category.order)
+  "amenityCategories": *[_type == "amenityCategory" && _id in ^.amenities[].amenity->category._ref] | order(order asc) {
+    "key": key.current,
+    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
+    icon,
+    "items": ^.amenities[amenity->category._ref == ^._id]{
+      _key,
+      note,
+      "label": coalesce(
+        customLabel[_key == $locale][0].value,
+        amenity->label[_key == $locale][0].value,
+        amenity->label[_key == "en"][0].value
+      ),
+      "icon": amenity->icon
     }
   },
 

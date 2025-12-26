@@ -32,7 +32,8 @@ export function HousePageContent({
   description,
   galleryImages,
   featuredImage,
-  amenities,
+  featuredAmenities,
+  amenityCategories,
   location,
   pricing,
   about,
@@ -86,7 +87,10 @@ export function HousePageContent({
                 about={about}
                 building={building}
               />
-              <HouseAmenities amenities={amenities} />
+              <HouseAmenities
+                  amenityCategories={amenityCategories}
+                  featuredAmenities={featuredAmenities}
+                />
               {location && (
                 <HouseLocation
                   slug={slug}
