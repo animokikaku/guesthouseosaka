@@ -1,14 +1,9 @@
 import { DynamicPageActions } from '@/components/dynamic-page-actions'
 import { PageActions, PageHeader } from '@/components/page-header'
-import { LegalNoticeProvider } from '@/hooks/use-legal-notice'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
-import {
-  contactPageQuery,
-  legalNoticeQuery,
-  settingsQuery
-} from '@/sanity/lib/queries'
+import { contactPageQuery, settingsQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import type { Metadata } from 'next'
 import type { Locale } from 'next-intl'
@@ -60,19 +55,13 @@ export default async function ContactLayout({
   const { locale } = await params
   setRequestLocale(locale as Locale)
 
-  const [{ data: contactPage }, { data: legalNotice }] = await Promise.all([
-    sanityFetch({
-      query: contactPageQuery,
-      params: { locale }
-    }),
-    sanityFetch({
-      query: legalNoticeQuery,
-      params: { locale }
-    })
-  ])
+  const { data: contactPage } = await sanityFetch({
+    query: contactPageQuery,
+    params: { locale }
+  })
 
   return (
-    <LegalNoticeProvider data={legalNotice}>
+    <>
       <PageHeader>
         {contactPage?.header && (
           <PortableText
@@ -91,6 +80,6 @@ export default async function ContactLayout({
           <div className="mx-auto w-full max-w-2xl">{children}</div>
         </div>
       </div>
-    </LegalNoticeProvider>
+    </>
   )
 }

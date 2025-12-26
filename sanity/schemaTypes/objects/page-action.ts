@@ -35,13 +35,6 @@ const icons = [
   }
 ] as const
 
-const variants = [
-  { title: 'Default (filled)', value: 'default' },
-  { title: 'Ghost (transparent)', value: 'ghost' },
-  { title: 'Outline', value: 'outline' },
-  { title: 'Secondary', value: 'secondary' }
-] as const
-
 export const pageAction = defineType({
   name: 'pageAction',
   title: 'Page Action',
@@ -73,32 +66,20 @@ export const pageAction = defineType({
         'Internal path (e.g., /contact, /faq#phone) or external URL (e.g., https://...)',
       validation: (rule) => rule.required()
     }),
-    defineField({
-      name: 'variant',
-      title: 'Style Variant',
-      type: 'string',
-      initialValue: 'default',
-      options: {
-        list: [...variants],
-        layout: 'radio'
-      }
-    })
   ],
   preview: {
     select: {
       icon: 'icon',
       label: 'label',
-      href: 'href',
-      variant: 'variant'
+      href: 'href'
     },
-    prepare({ icon, label, href, variant }) {
+    prepare({ icon, label, href }) {
       const iconDef = icons.find((i) => i.value === icon)
       const labelText = label?.[0]?.value || 'No label'
-      const variantText = variants.find((v) => v.value === variant)?.title || ''
 
       return {
         title: labelText,
-        subtitle: `${href} (${variantText})`,
+        subtitle: href,
         media: iconDef?.icon
           ? () =>
               createElement('span', {

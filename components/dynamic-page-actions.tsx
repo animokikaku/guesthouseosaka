@@ -20,15 +20,11 @@ const iconMap: Record<string, LucideIcon> = {
   calendar: CalendarIcon
 }
 
-// Map variant names from Sanity to Button variants
-type ButtonVariant = 'default' | 'ghost' | 'outline' | 'secondary'
-
 interface PageAction {
   _key: string
   icon: string | null
   label: string | null
   href: string | null
-  variant: string | null
 }
 
 interface DynamicPageActionsProps {
@@ -44,9 +40,8 @@ export function DynamicPageActions({ actions }: DynamicPageActionsProps) {
         if (!action.href || !action.label) return null
 
         const Icon = action.icon ? iconMap[action.icon] : null
-        // First action defaults to 'default' variant, others to 'ghost'
-        const variant = (action.variant ||
-          (index === 0 ? 'default' : 'ghost')) as ButtonVariant
+        // First action is 'default' variant, others are 'ghost'
+        const variant = index === 0 ? 'default' : 'ghost'
 
         // Check if href is external or internal
         const isExternal =

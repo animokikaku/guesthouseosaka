@@ -231,8 +231,7 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
     _key,
     icon,
     "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-    href,
-    variant
+    href
   },
   "items": items[]{
     _key,
@@ -254,8 +253,7 @@ export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
     _key,
     icon,
     "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-    href,
-    variant
+    href
   },
   "contactTypes": contactTypes[]{
     _key,

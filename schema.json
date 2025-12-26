@@ -59,31 +59,6 @@
             "type": "string"
           },
           "optional": false
-        },
-        "variant": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "union",
-            "of": [
-              {
-                "type": "string",
-                "value": "default"
-              },
-              {
-                "type": "string",
-                "value": "ghost"
-              },
-              {
-                "type": "string",
-                "value": "outline"
-              },
-              {
-                "type": "string",
-                "value": "secondary"
-              }
-            ]
-          },
-          "optional": true
         }
       }
     }
