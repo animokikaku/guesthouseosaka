@@ -21,7 +21,11 @@ export type NavListItem = {
 
 export type NavGroupItem = NavItem & {
   key: HouseIdentifier
-  background: (typeof assets)[HouseIdentifier]['background']
+  background: {
+    src: string
+    alt: string
+    blurDataURL?: string
+  }
   icon: (typeof assets)[HouseIdentifier]['icon']
   caption?: string
   description?: string

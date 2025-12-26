@@ -12,6 +12,7 @@ import { assets } from '@/lib/assets'
 import { NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { HousesNavQueryResult } from '@/sanity.types'
+import { urlFor } from '@/sanity/lib/image'
 import { Settings2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -25,18 +26,31 @@ export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
   const navItems: NavItems = [
     {
       key: 'share-houses',
-      items: (houses ?? []).map(({ slug, title, description, caption }) => {
-        const { icon, background } = assets[slug]
-        return {
-          key: slug,
-          href: { pathname: '/[house]', params: { house: slug } },
-          label: title ?? slug,
-          description: description ?? undefined,
-          caption: caption ?? undefined,
-          icon,
-          background
+      items: (houses ?? []).map(
+        ({ slug, title, description, caption, image }) => {
+          const { icon } = assets[slug]
+          const src = urlFor(image)
+            .width(250)
+            .height(150)
+            .dpr(2)
+            .fit('crop')
+            .url()
+
+          return {
+            key: slug,
+            href: { pathname: '/[house]', params: { house: slug } },
+            label: title ?? slug,
+            description: description ?? undefined,
+            caption: caption ?? undefined,
+            icon,
+            background: {
+              src,
+              alt: image?.alt ?? '',
+              blurDataURL: image?.lqip ?? undefined
+            }
+          }
         }
-      }),
+      ),
       label: t('navigation.share_houses')
     },
     {

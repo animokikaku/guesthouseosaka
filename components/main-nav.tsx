@@ -119,7 +119,7 @@ function NavigationMenuGroupItem({
                     <Image
                       src={it.background.src}
                       alt={it.background.alt}
-                      placeholder="blur"
+                      placeholder={it.background.blurDataURL ? 'blur' : undefined}
                       blurDataURL={it.background.blurDataURL}
                       loading={isActive ? 'eager' : 'lazy'}
                       {...(isActive ? { preload: true } : {})}

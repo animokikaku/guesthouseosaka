@@ -197,7 +197,14 @@ export const housesNavQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
   slug,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
-  "caption": coalesce(caption[_key == $locale][0].value, caption[_key == "en"][0].value)
+  "caption": coalesce(caption[_key == $locale][0].value, caption[_key == "en"][0].value),
+  image{
+    asset,
+    hotspot,
+    crop,
+    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+    "lqip": asset->metadata.lqip
+  }
 }`)
 
 // All houses building data (for FAQ page)
