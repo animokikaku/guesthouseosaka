@@ -14,16 +14,18 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
-import { useContactNavigation } from '@/hooks/use-contact-navigation'
 import { useRouter } from '@/i18n/navigation'
 import { MailIcon, UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 
-export function ContactForm() {
+type ContactFormProps = {
+  title?: string
+  description?: string
+}
+
+export function ContactForm({ title, description }: ContactFormProps) {
   const t = useTranslations('forms')
-  const navLabel = useContactNavigation()
-  const { title, description } = navLabel('general')
   const router = useRouter()
   const schema = useGeneralInquirySchema()
   const { message, privacyPolicy, account } = contactFormDefaultValues

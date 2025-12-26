@@ -24,14 +24,16 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
-import { useContactNavigation } from '@/hooks/use-contact-navigation'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
-export function MoveInForm() {
+type MoveInFormProps = {
+  title?: string
+  description?: string
+}
+
+export function MoveInForm({ title, description }: MoveInFormProps) {
   const t = useTranslations('forms')
-  const navLabel = useContactNavigation()
-  const { title, description } = navLabel('move-in')
   const router = useRouter()
   const schema = useMoveInFormSchema()
   const { places, date, stayDuration, account, message, privacyPolicy } =

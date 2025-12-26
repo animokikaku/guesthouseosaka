@@ -1,13 +1,24 @@
 import { ContactForm } from '@/components/forms'
+import { sanityFetch } from '@/sanity/lib/live'
+import { contactTypeQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
-import { use } from 'react'
 
-export default function ContactPage({
+export default async function ContactPage({
   params
 }: PageProps<'/[locale]/contact/other'>) {
-  const { locale } = use(params)
+  const { locale } = await params
   setRequestLocale(locale as Locale)
 
-  return <ContactForm />
+  const { data } = await sanityFetch({
+    query: contactTypeQuery,
+    params: { locale, type: 'general' }
+  })
+
+  return (
+    <ContactForm
+      title={data?.title ?? undefined}
+      description={data?.description ?? undefined}
+    />
+  )
 }
