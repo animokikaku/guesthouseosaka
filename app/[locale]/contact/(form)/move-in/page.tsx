@@ -15,10 +15,5 @@ export default async function ContactPage({
     params: { locale, type: 'move-in' }
   })
 
-  return (
-    <MoveInForm
-      title={data?.title ?? undefined}
-      description={data?.description ?? undefined}
-    />
-  )
+  return <MoveInForm content={data?.content} />
 }

@@ -244,14 +244,12 @@ export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
   "contactTypes": contactTypes[]{
     _key,
     key,
-    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
-    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
+    "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value)
   }
 }`)
 
 export const contactTypeQuery = defineQuery(`*[_type == "contactPage"][0].contactTypes[key == $type][0]{
-  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
-  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
+  "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value)
 }`)
 
 // =============================================================================

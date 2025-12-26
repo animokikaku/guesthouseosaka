@@ -25,14 +25,25 @@ import {
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useRouter } from '@/i18n/navigation'
+import { ContactTypeQueryResult } from '@/sanity.types'
+import {
+  PortableText,
+  type PortableTextComponents
+} from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 
-type MoveInFormProps = {
-  title?: string
-  description?: string
+const cardHeaderComponents: PortableTextComponents = {
+  block: {
+    h3: ({ children }) => <CardTitle>{children}</CardTitle>,
+    normal: ({ children }) => <CardDescription>{children}</CardDescription>
+  }
 }
 
-export function MoveInForm({ title, description }: MoveInFormProps) {
+type MoveInFormProps = {
+  content?: NonNullable<ContactTypeQueryResult>['content']
+}
+
+export function MoveInForm({ content }: MoveInFormProps) {
   const t = useTranslations('forms')
   const router = useRouter()
   const schema = useMoveInFormSchema()
@@ -104,8 +115,9 @@ export function MoveInForm({ title, description }: MoveInFormProps) {
   return (
     <Card className="mx-auto w-full sm:max-w-2xl">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        {content && (
+          <PortableText value={content} components={cardHeaderComponents} />
+        )}
       </CardHeader>
       <CardContent>
         <form

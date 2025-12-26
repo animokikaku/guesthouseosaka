@@ -15,10 +15,5 @@ export default async function ContactPage({
     params: { locale, type: 'tour' }
   })
 
-  return (
-    <TourForm
-      title={data?.title ?? undefined}
-      description={data?.description ?? undefined}
-    />
-  )
+  return <TourForm content={data?.content} />
 }

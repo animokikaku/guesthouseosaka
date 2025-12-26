@@ -15,16 +15,27 @@ import {
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useRouter } from '@/i18n/navigation'
+import { ContactTypeQueryResult } from '@/sanity.types'
+import {
+  PortableText,
+  type PortableTextComponents
+} from '@portabletext/react'
 import { MailIcon, UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 
-type ContactFormProps = {
-  title?: string
-  description?: string
+const cardHeaderComponents: PortableTextComponents = {
+  block: {
+    h3: ({ children }) => <CardTitle>{children}</CardTitle>,
+    normal: ({ children }) => <CardDescription>{children}</CardDescription>
+  }
 }
 
-export function ContactForm({ title, description }: ContactFormProps) {
+type ContactFormProps = {
+  content?: NonNullable<ContactTypeQueryResult>['content']
+}
+
+export function ContactForm({ content }: ContactFormProps) {
   const t = useTranslations('forms')
   const router = useRouter()
   const schema = useGeneralInquirySchema()
@@ -74,8 +85,9 @@ export function ContactForm({ title, description }: ContactFormProps) {
   return (
     <Card className="mx-auto w-full max-w-2xl">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        {content && (
+          <PortableText value={content} components={cardHeaderComponents} />
+        )}
       </CardHeader>
       <CardContent>
         <form

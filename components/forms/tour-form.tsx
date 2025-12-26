@@ -22,14 +22,25 @@ import {
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { useRouter } from '@/i18n/navigation'
+import { ContactTypeQueryResult } from '@/sanity.types'
+import {
+  PortableText,
+  type PortableTextComponents
+} from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 
-type TourFormProps = {
-  title?: string
-  description?: string
+const cardHeaderComponents: PortableTextComponents = {
+  block: {
+    h3: ({ children }) => <CardTitle>{children}</CardTitle>,
+    normal: ({ children }) => <CardDescription>{children}</CardDescription>
+  }
 }
 
-export function TourForm({ title, description }: TourFormProps) {
+type TourFormProps = {
+  content?: NonNullable<ContactTypeQueryResult>['content']
+}
+
+export function TourForm({ content }: TourFormProps) {
   const t = useTranslations('forms')
   const router = useRouter()
   const schema = useTourFormSchema()
@@ -76,8 +87,9 @@ export function TourForm({ title, description }: TourFormProps) {
   return (
     <Card className="mx-auto w-full sm:max-w-2xl">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        {content && (
+          <PortableText value={content} components={cardHeaderComponents} />
+        )}
       </CardHeader>
       <CardContent>
         <form

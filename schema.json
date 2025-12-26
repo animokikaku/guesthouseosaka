@@ -33,21 +33,13 @@
           },
           "optional": false
         },
-        "title": {
+        "content": {
           "type": "objectAttribute",
           "value": {
             "type": "inline",
-            "name": "internationalizedArrayString"
+            "name": "internationalizedArrayPortableText"
           },
           "optional": false
-        },
-        "description": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "internationalizedArrayText"
-          },
-          "optional": true
         }
       }
     }
@@ -806,28 +798,6 @@
     }
   },
   {
-    "name": "internationalizedArrayText",
-    "type": "type",
-    "value": {
-      "type": "array",
-      "of": {
-        "type": "object",
-        "attributes": {
-          "_key": {
-            "type": "objectAttribute",
-            "value": {
-              "type": "string"
-            }
-          }
-        },
-        "rest": {
-          "type": "inline",
-          "name": "internationalizedArrayTextValue"
-        }
-      }
-    }
-  },
-  {
     "name": "internationalizedArrayPortableText",
     "type": "type",
     "value": {
@@ -1341,6 +1311,28 @@
             "type": "number"
           },
           "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "internationalizedArrayText",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "internationalizedArrayTextValue"
         }
       }
     }
