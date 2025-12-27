@@ -1,5 +1,9 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
+import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
+import { stegaClean } from '@sanity/client/stega'
 import {
   BookTextIcon,
   CalendarIcon,
@@ -27,42 +31,54 @@ interface PageAction {
   href: string | null
 }
 
-interface DynamicPageActionsProps {
+interface PageData {
+  _id: string
+  _type: string
   actions: PageAction[] | null
 }
 
-export function DynamicPageActions({ actions }: DynamicPageActionsProps) {
+interface DynamicPageActionsProps {
+  page: PageData
+}
+
+export function DynamicPageActions({ page }: DynamicPageActionsProps) {
+  const [actions, attr] = useOptimistic(page, 'actions')
+
   if (!actions || actions.length === 0) return null
 
   return (
-    <>
+    <div className="flex items-center gap-2" data-sanity={attr.list()}>
       {actions.map((action, index) => {
         if (!action.href || !action.label) return null
 
-        const Icon = action.icon ? iconMap[action.icon] : null
+        const key = stegaClean(action._key)
+        const icon = action.icon ? stegaClean(action.icon) : null
+        const href = stegaClean(action.href)
+        const label = stegaClean(action.label)
+        const Icon = icon ? iconMap[icon] : null
         // First action is 'default' variant, others are 'ghost'
         const variant = index === 0 ? 'default' : 'ghost'
 
         // Check if href is external or internal
         const isExternal =
-          action.href.startsWith('http://') ||
-          action.href.startsWith('https://')
+          href.startsWith('http://') || href.startsWith('https://')
 
         // Parse href for internal links with hash
-        const hasHash = action.href.includes('#')
-        const [pathname, hash] = action.href.split('#')
+        const hasHash = href.includes('#')
+        const [pathname, hash] = href.split('#')
 
         if (isExternal) {
           return (
             <Button
-              key={action._key}
+              key={key}
               asChild
               variant={variant}
               size="sm"
+              data-sanity={attr.item(key)}
             >
-              <a href={action.href} target="_blank" rel="noopener noreferrer">
+              <a href={href} target="_blank" rel="noopener noreferrer">
                 {Icon && <Icon />}
-                {action.label}
+                {label}
               </a>
             </Button>
           )
@@ -70,24 +86,25 @@ export function DynamicPageActions({ actions }: DynamicPageActionsProps) {
 
         return (
           <Button
-            key={action._key}
+            key={key}
             asChild
             variant={variant}
             size="sm"
+            data-sanity={attr.item(key)}
           >
             <Link
               href={
                 hasHash
                   ? { pathname: (pathname || '/') as '/', hash: `#${hash}` }
-                  : (action.href as '/')
+                  : (href as '/')
               }
             >
               {Icon && <Icon />}
-              {action.label}
+              {label}
             </Link>
           </Button>
         )
       })}
-    </>
+    </div>
   )
 }
