@@ -98,16 +98,10 @@ function AmenitiesDialog({
 
     for (const amenity of data) {
       if (!amenity.category) continue
-      const key = amenity.category.key ?? 'uncategorized'
+      const key = amenity.category.key
 
       if (!categoryMap.has(key)) {
-        categoryMap.set(key, {
-          key,
-          label: amenity.category.label,
-          icon: amenity.category.icon,
-          order: amenity.category.order,
-          items: []
-        })
+        categoryMap.set(key, { ...amenity.category, items: [] })
       }
 
       categoryMap.get(key)!.items.push(amenity)
