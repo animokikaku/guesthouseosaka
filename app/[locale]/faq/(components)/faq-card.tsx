@@ -7,7 +7,6 @@ import {
 } from '@/components/ui/card'
 import type { FaqPageQueryResult } from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
-import { useTranslations } from 'next-intl'
 
 const components: PortableTextComponents = {
   block: {
@@ -22,11 +21,10 @@ const components: PortableTextComponents = {
 
 type FAQCardProps = {
   contactSection: NonNullable<FaqPageQueryResult>['contactSection'] | null
+  contactNote: NonNullable<FaqPageQueryResult>['contactNote'] | null
 }
 
-export default function FAQCard({ contactSection }: FAQCardProps) {
-  const t = useTranslations('FAQCard')
-
+export default function FAQCard({ contactSection, contactNote }: FAQCardProps) {
   return (
     <Card>
       <CardHeader className="text-center">
@@ -39,9 +37,11 @@ export default function FAQCard({ contactSection }: FAQCardProps) {
           <FAQContactTable />
         </div>
       </CardContent>
-      <CardFooter className="flex items-center justify-center">
-        <div className="text-muted-foreground text-sm">＊{t('subtext')}</div>
-      </CardFooter>
+      {contactNote && (
+        <CardFooter className="flex items-center justify-center">
+          <div className="text-muted-foreground text-sm">{contactNote}</div>
+        </CardFooter>
+      )}
     </Card>
   )
 }

@@ -41,11 +41,6 @@
       "question": "Combien de personnes peuvent séjourner dans une chambre ?"
     }
   },
-  "FAQCard": {
-    "description": "Si vous avez des questions, contactez-nous par e-mail ou par téléphone.",
-    "subtext": "Selon l'heure, il se peut que nous ne puissions pas répondre au téléphone.",
-    "title": "Vous avez d'autres questions ?"
-  },
   "FAQContactTable": {
     "from_overseas": "Depuis l'étranger",
     "within_japan": "Depuis le Japon"

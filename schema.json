@@ -1059,6 +1059,14 @@
           "name": "internationalizedArrayPortableText"
         },
         "optional": false
+      },
+      "contactNote": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "internationalizedArrayString"
+        },
+        "optional": true
       }
     }
   },

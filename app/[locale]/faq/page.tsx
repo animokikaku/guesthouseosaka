@@ -32,7 +32,10 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
         }}
         housesBuilding={housesBuilding}
       />
-      <FAQCard contactSection={faqPage.contactSection} />
+      <FAQCard
+        contactSection={faqPage.contactSection}
+        contactNote={faqPage.contactNote}
+      />
     </section>
   )
 }

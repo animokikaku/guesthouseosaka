@@ -44,11 +44,6 @@ declare const messages: {
       "question": "Up to how many people can stay in a room?"
     }
   },
-  "FAQCard": {
-    "description": "If you have questions, feel free to reach us by email or phone.",
-    "subtext": "We may not be able to answer calls at certain times.",
-    "title": "Still have questions?"
-  },
   "FAQContactTable": {
     "from_overseas": "From overseas",
     "within_japan": "Within Japan"

@@ -38,6 +38,14 @@ export const faqPage = defineType({
         'Content for the contact card shown below FAQs. Use H2 for the title.',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
+    }),
+    defineField({
+      name: 'contactNote',
+      title: 'Contact Note',
+      type: 'internationalizedArrayString',
+      description:
+        'Small note shown below the contact section (e.g., "We may not be able to answer calls at certain times.")',
+      options: { aiAssist: { translateAction: true } }
     })
   ],
   preview: {
