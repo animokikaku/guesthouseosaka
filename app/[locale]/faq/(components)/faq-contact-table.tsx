@@ -1,17 +1,17 @@
-import { useHouseLabels } from '@/hooks/use-house-labels'
-import { useHousePhones } from '@/hooks/use-house-phones'
-import { HouseIdentifierValues } from '@/lib/types'
+import type { HousesBuildingQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 
-export function FAQContactTable() {
-  const t = useTranslations('FAQContactTable')
-  const houseLabel = useHouseLabels()
-  const housePhonesLabel = useHousePhones()
+type FAQContactTableProps = {
+  houses: HousesBuildingQueryResult
+}
 
-  const phones = HouseIdentifierValues.map((house) => ({
-    title: houseLabel(house).name,
-    withinJapan: housePhonesLabel(house).domestic,
-    overseas: housePhonesLabel(house).international
+export function FAQContactTable({ houses }: FAQContactTableProps) {
+  const t = useTranslations('FAQContactTable')
+
+  const phones = houses.map((house) => ({
+    title: house.title ?? house.slug,
+    withinJapan: house.phone?.domestic,
+    overseas: house.phone?.international
   }))
 
   return (

@@ -35,6 +35,7 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
       <FAQCard
         contactSection={faqPage.contactSection}
         contactNote={faqPage.contactNote}
+        houses={housesBuilding}
       />
     </section>
   )

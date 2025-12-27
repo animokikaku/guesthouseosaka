@@ -5,7 +5,7 @@ import {
   CardFooter,
   CardHeader
 } from '@/components/ui/card'
-import type { FaqPageQueryResult } from '@/sanity.types'
+import type { FaqPageQueryResult, HousesBuildingQueryResult } from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 
 const components: PortableTextComponents = {
@@ -22,9 +22,10 @@ const components: PortableTextComponents = {
 type FAQCardProps = {
   contactSection: NonNullable<FaqPageQueryResult>['contactSection'] | null
   contactNote: NonNullable<FaqPageQueryResult>['contactNote'] | null
+  houses: HousesBuildingQueryResult
 }
 
-export default function FAQCard({ contactSection, contactNote }: FAQCardProps) {
+export default function FAQCard({ contactSection, contactNote, houses }: FAQCardProps) {
   return (
     <Card>
       <CardHeader className="text-center">
@@ -34,7 +35,7 @@ export default function FAQCard({ contactSection, contactNote }: FAQCardProps) {
       </CardHeader>
       <CardContent>
         <div className="flex justify-center">
-          <FAQContactTable />
+          <FAQContactTable houses={houses} />
         </div>
       </CardContent>
       {contactNote && (

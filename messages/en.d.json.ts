@@ -583,20 +583,6 @@ declare const messages: {
       "summary": "Relaxed spacious Japanese-style lounge"
     }
   },
-  "useHousePhones": {
-    "apple": {
-      "domestic": "06-6131-6677",
-      "international": "+81-6-6131-6677"
-    },
-    "lemon": {
-      "domestic": "06-6627-0790",
-      "international": "+81-6-6627-0790"
-    },
-    "orange": {
-      "domestic": "06-6627-0790",
-      "international": "+81-6-6627-0790"
-    }
-  },
   "images": {
     "apple": {
       "room": {
