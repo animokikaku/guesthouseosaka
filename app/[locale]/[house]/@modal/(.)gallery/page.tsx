@@ -28,7 +28,7 @@ export default async function GalleryModalPage({
 
   return (
     <GalleryModalWrapper>
-      <HouseGallery categories={data.galleryCategories} images={data.galleryImages} />
+      <HouseGallery _id={data._id} _type={data._type} gallery={data.gallery} />
     </GalleryModalWrapper>
   )
 }

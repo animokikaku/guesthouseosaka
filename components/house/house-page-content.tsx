@@ -30,7 +30,7 @@ export function HousePageContent({
   slug,
   title,
   description,
-  galleryImages,
+  gallery,
   featuredImage,
   amenities,
   location,
@@ -46,8 +46,8 @@ export function HousePageContent({
 
   // Build mobile hero images: featured first (if present), then gallery images
   const mobileHeroImages: GalleryImage[] = featuredImage?.asset
-    ? [featuredToGalleryImage(featuredImage), ...(galleryImages ?? [])]
-    : (galleryImages ?? [])
+    ? [featuredToGalleryImage(featuredImage), ...(gallery ?? [])]
+    : (gallery ?? [])
 
   return (
     <>
@@ -70,7 +70,7 @@ export function HousePageContent({
           <div className="theme-container">
             <ImageBlockGallery
               href={href}
-              galleryImages={galleryImages}
+              gallery={gallery}
               featuredImage={featuredImage}
             />
             <article

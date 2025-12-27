@@ -1,20 +1,22 @@
 import { GalleryModal } from '@/components/gallery/gallery-modal'
-import type { GalleryCategories, GalleryImages } from '@/lib/gallery'
+import type { Gallery } from '@/lib/gallery'
+import type { HouseQueryResult } from '@/sanity.types'
 import { HouseGalleryClient } from './house-gallery-client'
 
 type HouseGalleryProps = {
-  categories: GalleryCategories
-  images: GalleryImages
+  _id: NonNullable<HouseQueryResult>['_id']
+  _type: NonNullable<HouseQueryResult>['_type']
+  gallery: Gallery
 }
 
 /**
  * Server component that renders gallery with pre-processed data from GROQ
  */
-export function HouseGallery({ categories, images }: HouseGalleryProps) {
+export function HouseGallery({ _id, _type, gallery }: HouseGalleryProps) {
   return (
     <>
-      <HouseGalleryClient categories={categories} />
-      <GalleryModal images={images} />
+      <HouseGalleryClient _id={_id} _type={_type} gallery={gallery} />
+      <GalleryModal gallery={gallery} />
     </>
   )
 }

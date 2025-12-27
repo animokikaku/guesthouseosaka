@@ -2,19 +2,39 @@
 
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import type { GalleryCategories, GalleryCategory } from '@/lib/gallery'
+import { useOptimistic } from '@/hooks/use-optimistic'
+import {
+  groupByCategory,
+  type Gallery,
+  type GalleryCategory,
+  type GalleryItem
+} from '@/lib/gallery'
 import { store } from '@/lib/store'
+import type { HouseQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
+import { stegaClean } from '@sanity/client/stega'
 import Image from 'next/image'
+import { useMemo } from 'react'
 import { GalleryImageButton } from './gallery-image-button'
 
 type HouseGalleryClientProps = {
-  categories: GalleryCategories
+  _id: NonNullable<HouseQueryResult>['_id']
+  _type: NonNullable<HouseQueryResult>['_type']
+  gallery: Gallery
 }
 
-export function HouseGalleryClient({ categories }: HouseGalleryClientProps) {
-  // Filter out categories with no images
-  const validCategories = categories.filter((c) => c.images && c.images.length > 0)
+export function HouseGalleryClient({
+  _id,
+  _type,
+  gallery
+}: HouseGalleryClientProps) {
+  const [data, attr] = useOptimistic({ _id, _type, gallery }, 'gallery')
+
+  // Group by category for display
+  const categories = useMemo(() => groupByCategory(data), [data])
+
+  // Filter out categories with no items
+  const validCategories = categories.filter((c) => c.items.length > 0)
 
   return (
     <div className="space-y-8">
@@ -23,7 +43,10 @@ export function HouseGalleryClient({ categories }: HouseGalleryClientProps) {
         <ScrollArea className="w-full">
           <div className="flex gap-2 pb-4">
             {validCategories.map((category) => (
-              <CategoryThumbnail key={`thumbnail-${category.key}`} category={category} />
+              <CategoryThumbnail
+                key={`thumbnail-${category.key}`}
+                category={category}
+              />
             ))}
           </div>
           <ScrollBar orientation="horizontal" />
@@ -33,7 +56,11 @@ export function HouseGalleryClient({ categories }: HouseGalleryClientProps) {
       {/* All Categories Grid */}
       <div className="space-y-12">
         {validCategories.map((category) => (
-          <CategoryGrid key={`grid-${category.key}`} category={category} />
+          <CategoryGrid
+            key={`grid-${category.key}`}
+            category={category}
+            attr={attr}
+          />
         ))}
       </div>
     </div>
@@ -59,7 +86,7 @@ function CategoryThumbnail({ category }: { category: GalleryCategory }) {
       <div className="relative aspect-4/3 w-32 overflow-hidden rounded-md">
         <Image
           src={src}
-          alt={thumbnail.alt ?? ''}
+          alt={stegaClean(thumbnail.alt) ?? ''}
           fill
           placeholder={thumbnail.preview ? 'blur' : undefined}
           blurDataURL={thumbnail.preview ?? undefined}
@@ -75,40 +102,59 @@ function CategoryThumbnail({ category }: { category: GalleryCategory }) {
           </Badge>
         </div>
       </div>
-      <span className="text-xs font-medium">{category.label}</span>
+      <span className="text-xs font-medium">{stegaClean(category.label)}</span>
     </button>
   )
 }
 
-function CategoryGrid({ category }: { category: GalleryCategory }) {
-  if (!category.images || category.images.length === 0) return null
+type CategoryGridProps = {
+  category: GalleryCategory
+  attr: { list: () => string; item: (key: string) => string }
+}
+
+function CategoryGrid({ category, attr }: CategoryGridProps) {
+  if (category.items.length === 0) return null
 
   return (
     <div id={category.key} className="scroll-mt-8 space-y-4">
       <h3 className="text-xl font-semibold">{category.label}</h3>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {category.images.map(({ _key, image }) => {
-          if (!image) return null
-          const src = urlFor(image).width(400).height(400).dpr(2).fit('crop').url()
-
-          return (
-            <GalleryImageButton
-              key={_key}
-              onClick={() => store.setState({ photoId: _key })}
-              imageProps={{
-                src,
-                alt: image.alt ?? '',
-                width: 400,
-                height: 400,
-                blurDataURL: image.preview ?? undefined,
-                placeholder: image.preview ? 'blur' : undefined
-              }}
-              className="aspect-square rounded-lg"
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-            />
-          )
-        })}
+      <div
+        className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        data-sanity={attr.list()}
+      >
+        {category.items.map((item) => (
+          <GalleryGridItem key={item._key} item={item} attr={attr} />
+        ))}
       </div>
     </div>
+  )
+}
+
+type GalleryGridItemProps = {
+  item: GalleryItem
+  attr: { list: () => string; item: (key: string) => string }
+}
+
+function GalleryGridItem({ item, attr }: GalleryGridItemProps) {
+  const { _key, image } = item
+  if (!image) return null
+
+  const src = urlFor(image).width(400).height(400).dpr(2).fit('crop').url()
+
+  return (
+    <GalleryImageButton
+      data-sanity={attr.item(_key)}
+      onClick={() => store.setState({ photoId: _key })}
+      imageProps={{
+        src,
+        alt: stegaClean(image.alt) ?? '',
+        width: 400,
+        height: 400,
+        blurDataURL: image.preview ?? undefined,
+        placeholder: image.preview ? 'blur' : undefined
+      }}
+      className="aspect-square rounded-lg"
+      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+    />
   )
 }

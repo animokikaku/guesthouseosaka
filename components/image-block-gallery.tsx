@@ -9,7 +9,7 @@ import {
   EmptyTitle
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import type { FeaturedImage, GalleryImage, GalleryImages } from '@/lib/gallery'
+import type { FeaturedImage, Gallery, GalleryItem } from '@/lib/gallery'
 import { urlFor } from '@/sanity/lib/image'
 import { ImageIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
@@ -18,12 +18,12 @@ import { ComponentProps } from 'react'
 
 type ImageBlockGalleryProps = {
   href: ComponentProps<typeof Link>['href']
-  galleryImages: GalleryImages
+  gallery: Gallery
   featuredImage?: FeaturedImage
 }
 
 type SanityImage =
-  | NonNullable<GalleryImage['image']>
+  | NonNullable<GalleryItem['image']>
   | NonNullable<FeaturedImage>
 
 // Transform Sanity image to Next.js Image props
@@ -102,13 +102,13 @@ function GalleryGrid({
 
 export async function ImageBlockGallery({
   href,
-  galleryImages,
+  gallery,
   featuredImage
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
 
   // Gallery images are already filtered by GROQ (defined(image.asset))
-  const validGalleryImages = galleryImages ?? []
+  const validGalleryImages = gallery ?? []
 
   // Count total available images (featured + gallery)
   // featuredImage is null from GROQ if no asset uploaded
@@ -138,13 +138,13 @@ export async function ImageBlockGallery({
         toImageProps(featuredImage, 560),
         ...validGalleryImages
           .slice(0, 4)
-          .map((img) => toImageProps(img.image, 560))
+          .map(({ image }) => toImageProps(image, 560))
       ]
     : [
         toImageProps(validGalleryImages[0].image, 560),
         ...validGalleryImages
           .slice(1, 5)
-          .map((img) => toImageProps(img.image, 560))
+          .map(({ image }) => toImageProps(image, 560))
       ]
 
   return (

@@ -113,33 +113,9 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[_key == $locale][0].value, about[_key == "en"][0].value),
 
-  // Gallery categories with count and thumbnail (for category nav)
-  "galleryCategories": *[_type == "galleryCategory" && _id in ^.gallery[].category._ref] | order(order asc) {
-    "key": key.current,
-    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-    "count": count(^.gallery[category._ref == ^._id]),
-    "thumbnail": ^.gallery[category._ref == ^._id][0].image{
-      asset,
-      hotspot,
-      crop,
-      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
-      "preview": asset->metadata.lqip
-    },
-    "images": ^.gallery[category._ref == ^._id]{
-      "_key": _key,
-      "image": image{
-        asset,
-        hotspot,
-        crop,
-        "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
-        "preview": asset->metadata.lqip
-      }
-    }
-  },
-
-  // All gallery images flattened (for modal carousel)
-  "galleryImages": gallery[]{
-    "_key": _key,
+  // Gallery as flat list (grouped by category on frontend for drag-and-drop reordering)
+  "gallery": gallery[]{
+    _key,
     "image": image{
       asset,
       hotspot,
@@ -147,8 +123,13 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
       "preview": asset->metadata.lqip
     },
-    "categoryOrder": category->order
-  } | order(categoryOrder asc),
+    "category": category->{
+      _id,
+      "key": key.current,
+      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
+      order
+    }
+  },
 
   // Amenities as flat list (grouped by category on frontend for drag-and-drop reordering)
   "amenities": amenities[]{
