@@ -3,42 +3,14 @@
 import { Button } from '@/components/ui/button'
 import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
+import { ContactPageQueryResult, FaqPageQueryResult } from '@/sanity.types'
 import { stegaClean } from '@sanity/client/stega'
-import {
-  BookTextIcon,
-  CalendarIcon,
-  ExternalLinkIcon,
-  type LucideIcon,
-  MailIcon,
-  MapPinIcon,
-  PhoneIcon
-} from 'lucide-react'
-
-// Map icon names from Sanity to Lucide components
-const iconMap: Record<string, LucideIcon> = {
-  mail: MailIcon,
-  phone: PhoneIcon,
-  'book-text': BookTextIcon,
-  'external-link': ExternalLinkIcon,
-  'map-pin': MapPinIcon,
-  calendar: CalendarIcon
-}
-
-interface PageAction {
-  _key: string
-  icon: string | null
-  label: string | null
-  href: string | null
-}
-
-interface PageData {
-  _id: string
-  _type: string
-  actions: PageAction[] | null
-}
+import { DynamicIcon, type IconName } from 'lucide-react/dynamic'
 
 interface DynamicPageActionsProps {
-  page: PageData
+  page:
+    | Pick<NonNullable<FaqPageQueryResult>, 'actions' | '_id' | '_type'>
+    | Pick<NonNullable<ContactPageQueryResult>, 'actions' | '_id' | '_type'>
 }
 
 export function DynamicPageActions({ page }: DynamicPageActionsProps) {
@@ -49,13 +21,10 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
   return (
     <div className="flex items-center gap-2" data-sanity={attr.list()}>
       {actions.map((action, index) => {
-        if (!action.href || !action.label) return null
-
         const key = stegaClean(action._key)
-        const icon = action.icon ? stegaClean(action.icon) : null
+        const iconName = stegaClean(action.icon) as IconName
         const href = stegaClean(action.href)
         const label = stegaClean(action.label)
-        const Icon = icon ? iconMap[icon] : null
         // First action is 'default' variant, others are 'ghost'
         const variant = index === 0 ? 'default' : 'ghost'
 
@@ -77,7 +46,7 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
               data-sanity={attr.item(key)}
             >
               <a href={href} target="_blank" rel="noopener noreferrer">
-                {Icon && <Icon />}
+                <DynamicIcon name={iconName} />
                 {label}
               </a>
             </Button>
@@ -95,11 +64,11 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
             <Link
               href={
                 hasHash
-                  ? { pathname: (pathname || '/') as '/', hash: `#${hash}` }
+                  ? { pathname: pathname as '/', hash: `#${hash}` }
                   : (href as '/')
               }
             >
-              {Icon && <Icon />}
+              <DynamicIcon name={iconName} />
               {label}
             </Link>
           </Button>

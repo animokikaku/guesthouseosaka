@@ -15,13 +15,7 @@
 // Source: schema.json
 export type PageAction = {
   _type: 'pageAction'
-  icon:
-    | 'mail'
-    | 'phone'
-    | 'book-text'
-    | 'external-link'
-    | 'map-pin'
-    | 'calendar'
+  icon: LucideIcon
   label: InternationalizedArrayString
   href: string
 }
@@ -998,13 +992,7 @@ export type FaqPageQueryResult = {
   }> | null
   actions: Array<{
     _key: string
-    icon:
-      | 'book-text'
-      | 'calendar'
-      | 'external-link'
-      | 'mail'
-      | 'map-pin'
-      | 'phone'
+    icon: LucideIcon
     label: string | null
     href: string
   }> | null
@@ -1077,13 +1065,7 @@ export type ContactPageQueryResult = {
   }> | null
   actions: Array<{
     _key: string
-    icon:
-      | 'book-text'
-      | 'calendar'
-      | 'external-link'
-      | 'mail'
-      | 'map-pin'
-      | 'phone'
+    icon: LucideIcon
     label: string | null
     href: string
   }> | null

@@ -71,7 +71,13 @@ export default async function ContactLayout({
         )}
         {contactPage?.actions && contactPage.actions.length > 0 && (
           <PageActions>
-            <DynamicPageActions page={contactPage} />
+            <DynamicPageActions
+              page={{
+                _id: contactPage._id,
+                _type: contactPage._type,
+                actions: contactPage.actions
+              }}
+            />
           </PageActions>
         )}
       </PageHeader>

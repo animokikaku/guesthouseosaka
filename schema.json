@@ -15,33 +15,8 @@
         "icon": {
           "type": "objectAttribute",
           "value": {
-            "type": "union",
-            "of": [
-              {
-                "type": "string",
-                "value": "mail"
-              },
-              {
-                "type": "string",
-                "value": "phone"
-              },
-              {
-                "type": "string",
-                "value": "book-text"
-              },
-              {
-                "type": "string",
-                "value": "external-link"
-              },
-              {
-                "type": "string",
-                "value": "map-pin"
-              },
-              {
-                "type": "string",
-                "value": "calendar"
-              }
-            ]
+            "type": "inline",
+            "name": "lucide-icon"
           },
           "optional": false
         },

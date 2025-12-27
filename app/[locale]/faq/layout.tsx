@@ -65,7 +65,13 @@ export default async function FAQLayout({
         )}
         {data?.actions && data.actions.length > 0 && (
           <PageActions>
-            <DynamicPageActions page={data} />
+            <DynamicPageActions
+              page={{
+                _id: data._id,
+                _type: data._type,
+                actions: data.actions
+              }}
+            />
           </PageActions>
         )}
       </PageHeader>
