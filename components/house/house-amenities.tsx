@@ -19,33 +19,40 @@ import {
 import { useIsMobile } from '@/hooks/use-mobile'
 import type { HouseQueryResult } from '@/sanity.types'
 import { DynamicIcon, dynamicIconImports } from 'lucide-react/dynamic'
-
-type IconName = keyof typeof dynamicIconImports
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
+import { useMemo } from 'react'
 
-type AmenityCategories = NonNullable<HouseQueryResult>['amenityCategories']
-type FeaturedAmenities = NonNullable<HouseQueryResult>['featuredAmenities']
+type IconName = keyof typeof dynamicIconImports
+
+type Amenities = NonNullable<HouseQueryResult>['amenities']
+type Amenity = NonNullable<Amenities>[number]
 
 interface HouseAmenitiesProps {
-  amenityCategories: AmenityCategories
-  featuredAmenities: FeaturedAmenities
+  amenities: Amenities
+}
+
+interface AmenityCategory {
+  _id: string | null
+  key: string | null
+  label: string | null
+  icon: string | null
+  order: number | null
+  items: Amenity[]
 }
 
 interface AmenitiesDialogProps {
-  amenityCategories: AmenityCategories
+  amenityCategories: AmenityCategory[]
   noteLabels: Record<string, string>
   trigger: React.ReactNode
   title: string
 }
 
-type AmenityItem = NonNullable<NonNullable<AmenityCategories>[number]['items']>[number]
-
 function AmenityItem({
   amenity,
   noteLabel
 }: {
-  amenity: AmenityItem
+  amenity: Amenity
   noteLabel?: string
 }) {
   return (
@@ -78,13 +85,13 @@ function AmenitiesDialog({
 
   const content = (
     <div className="space-y-8 pt-8">
-      {amenityCategories?.map((category) => (
+      {amenityCategories.map((category) => (
         <div key={category.key}>
           <h3 className="text-foreground mb-4 text-lg font-semibold">
             {category.label}
           </h3>
           <div className="grid grid-cols-1 gap-2">
-            {category.items?.map((amenity) => (
+            {category.items.map((amenity) => (
               <AmenityItem
                 key={amenity._key}
                 amenity={amenity}
@@ -124,10 +131,7 @@ function AmenitiesDialog({
   )
 }
 
-export function HouseAmenities({
-  amenityCategories,
-  featuredAmenities
-}: HouseAmenitiesProps) {
+export function HouseAmenities({ amenities }: HouseAmenitiesProps) {
   const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
 
@@ -137,16 +141,41 @@ export function HouseAmenities({
     coin: t('notes.coin')
   }
 
+  // Group amenities by category, preserving array order within each category
+  const amenityCategories = useMemo(() => {
+    if (!amenities) return []
+
+    const categoryMap = new Map<string, AmenityCategory>()
+
+    for (const amenity of amenities) {
+      if (!amenity.category) continue
+      const { key } = amenity.category
+
+      if (!categoryMap.has(key)) {
+        categoryMap.set(key, { ...amenity.category, items: [] })
+      }
+
+      categoryMap.get(key)?.items.push(amenity)
+    }
+
+    // Sort categories by order field
+    return [...categoryMap.values()].sort(
+      (a, b) => (a.order ?? 999) - (b.order ?? 999)
+    )
+  }, [amenities])
+
+  // Featured amenities derived from flat list
+  const featuredAmenities = useMemo(() => {
+    if (!amenities) return []
+    return amenities.filter((a) => a.featured).slice(0, 10)
+  }, [amenities])
+
   // Query returns max 10, slice to 5 on mobile
   const displayedFeatured = isMobile
-    ? (featuredAmenities?.slice(0, 5) ?? [])
-    : (featuredAmenities ?? [])
+    ? featuredAmenities.slice(0, 5)
+    : featuredAmenities
 
-  const totalAmenitiesCount =
-    amenityCategories?.reduce(
-      (total, category) => total + (category.items?.length ?? 0),
-      0
-    ) ?? 0
+  const totalAmenitiesCount = amenities?.length ?? 0
 
   return (
     <section>

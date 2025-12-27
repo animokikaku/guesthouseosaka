@@ -150,32 +150,23 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     "categoryOrder": category->order
   } | order(categoryOrder asc),
 
-  // Featured amenities (for quick display, max 10)
-  "featuredAmenities": amenities[featured == true][0...10]{
+  // Amenities as flat list (grouped by category on frontend for drag-and-drop reordering)
+  "amenities": amenities[]{
     _key,
     note,
+    featured,
     "label": coalesce(
       customLabel[_key == $locale][0].value,
       amenity->label[_key == $locale][0].value,
       amenity->label[_key == "en"][0].value
     ),
-    "icon": amenity->icon
-  },
-
-  // Amenities grouped by category (ordered by category.order)
-  "amenityCategories": *[_type == "amenityCategory" && _id in ^.amenities[].amenity->category._ref] | order(order asc) {
-    "key": key.current,
-    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-    icon,
-    "items": ^.amenities[amenity->category._ref == ^._id]{
-      _key,
-      note,
-      "label": coalesce(
-        customLabel[_key == $locale][0].value,
-        amenity->label[_key == $locale][0].value,
-        amenity->label[_key == "en"][0].value
-      ),
-      "icon": amenity->icon
+    "icon": amenity->icon,
+    "category": amenity->category->{
+      _id,
+      "key": key.current,
+      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
+      icon,
+      order
     }
   },
 
