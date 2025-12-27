@@ -20,7 +20,7 @@ import { useFormatter, useTranslations } from 'next-intl'
 const legalContentComponents: PortableTextComponents = {
   block: {
     h3: ({ children }) => (
-      <h3 className="text-base font-semibold">{children}</h3>
+      <h3 className="mt-6 mb-3 text-base font-semibold">{children}</h3>
     ),
     normal: ({ children }) => <p>{children}</p>
   },
@@ -71,7 +71,7 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
             })}
           </p>
           {data?.content ? (
-            <div className="space-y-4">
+            <div className="space-y-2">
               <PortableText
                 value={data.content}
                 components={legalContentComponents}
