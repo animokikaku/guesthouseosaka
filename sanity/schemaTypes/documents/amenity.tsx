@@ -58,7 +58,7 @@ export const amenity = defineType({
       return {
         title: label || 'No label',
         subtitle: categoryLabel || 'No category',
-        media: IconPreview({ icon })
+        media: <IconPreview icon={icon} />
       }
     }
   }

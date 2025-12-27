@@ -60,7 +60,7 @@ export const galleryCategory = defineType({
       return {
         title: label || 'No label',
         subtitle: `${key || 'no-key'} (order: ${order ?? 'unset'})`,
-        media: IconPreview({ icon })
+        media: <IconPreview icon={icon} />
       }
     }
   }

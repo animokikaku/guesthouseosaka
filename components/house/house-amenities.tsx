@@ -17,7 +17,9 @@ import {
   DrawerTrigger
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { useOptimistic } from '@/hooks/use-optimistic'
 import type { HouseQueryResult } from '@/sanity.types'
+import { stegaClean } from '@sanity/client/stega'
 import { DynamicIcon, dynamicIconImports } from 'lucide-react/dynamic'
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
@@ -29,12 +31,13 @@ type Amenities = NonNullable<HouseQueryResult>['amenities']
 type Amenity = NonNullable<Amenities>[number]
 
 interface HouseAmenitiesProps {
+  _id: NonNullable<HouseQueryResult>['_id']
+  _type: NonNullable<HouseQueryResult>['_type']
   amenities: Amenities
 }
 
 interface AmenityCategory {
-  _id: string | null
-  key: string | null
+  key: string
   label: string | null
   icon: string | null
   order: number | null
@@ -42,26 +45,27 @@ interface AmenityCategory {
 }
 
 interface AmenitiesDialogProps {
-  amenityCategories: AmenityCategory[]
+  _id: NonNullable<HouseQueryResult>['_id']
+  _type: NonNullable<HouseQueryResult>['_type']
+  amenities: Amenities
   noteLabels: Record<string, string>
   trigger: React.ReactNode
   title: string
 }
 
-function AmenityItem({
-  amenity,
-  noteLabel
-}: {
+interface AmenityItemProps extends React.HTMLAttributes<HTMLDivElement> {
   amenity: Amenity
   noteLabel?: string
-}) {
+}
+
+function AmenityItem({ amenity, noteLabel, ...props }: AmenityItemProps) {
+  // Clean stega encoding from icon to ensure DynamicIcon works correctly
+  const iconName = stegaClean(amenity.icon) as IconName
+
   return (
-    <div className="flex items-center gap-3 py-2">
+    <div className="flex items-center gap-3 px-2 py-3" {...props}>
       <div className="text-muted-foreground h-5 w-5 shrink-0">
-        <DynamicIcon
-          name={(amenity.icon ?? 'circle') as IconName}
-          className="h-5 w-5"
-        />
+        <DynamicIcon name={iconName} className="h-5 w-5" />
       </div>
       <div className="flex-1">
         <span className="text-foreground">{amenity.label}</span>
@@ -76,26 +80,64 @@ function AmenityItem({
 }
 
 function AmenitiesDialog({
-  amenityCategories,
   noteLabels,
   trigger,
-  title
+  _id,
+  _type,
+  title,
+  amenities
 }: AmenitiesDialogProps) {
   const isMobile = useIsMobile()
+  const [data, attr] = useOptimistic({ _id, _type, amenities }, 'amenities')
+
+  // Group by category for display, but data-sanity still references flat array
+  const amenityCategories = useMemo(() => {
+    if (!data) return []
+
+    const categoryMap = new Map<string, AmenityCategory>()
+
+    for (const amenity of data) {
+      if (!amenity.category) continue
+      const key = amenity.category.key ?? 'uncategorized'
+
+      if (!categoryMap.has(key)) {
+        categoryMap.set(key, {
+          key,
+          label: amenity.category.label,
+          icon: amenity.category.icon,
+          order: amenity.category.order,
+          items: []
+        })
+      }
+
+      categoryMap.get(key)!.items.push(amenity)
+    }
+
+    return [...categoryMap.values()].sort(
+      (a, b) => (a.order ?? 999) - (b.order ?? 999)
+    )
+  }, [data])
+
+  if (!data) return null
 
   const content = (
-    <div className="space-y-8 pt-8">
+    <div className="space-y-6 pt-4">
       {amenityCategories.map((category) => (
         <div key={category.key}>
-          <h3 className="text-foreground mb-4 text-lg font-semibold">
+          <h3 className="text-foreground mb-3 text-lg font-semibold">
             {category.label}
           </h3>
-          <div className="grid grid-cols-1 gap-2">
+          <div className="grid grid-cols-1 gap-1" data-sanity={attr.list()}>
             {category.items.map((amenity) => (
               <AmenityItem
+                data-sanity={attr.item(amenity._key)}
                 key={amenity._key}
                 amenity={amenity}
-                noteLabel={amenity.note ? noteLabels[amenity.note] : undefined}
+                noteLabel={
+                  amenity.note
+                    ? noteLabels[stegaClean(amenity.note)]
+                    : undefined
+                }
               />
             ))}
           </div>
@@ -131,7 +173,7 @@ function AmenitiesDialog({
   )
 }
 
-export function HouseAmenities({ amenities }: HouseAmenitiesProps) {
+export function HouseAmenities({ _id, _type, amenities }: HouseAmenitiesProps) {
   const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
 
@@ -141,36 +183,13 @@ export function HouseAmenities({ amenities }: HouseAmenitiesProps) {
     coin: t('notes.coin')
   }
 
-  // Group amenities by category, preserving array order within each category
-  const amenityCategories = useMemo(() => {
-    if (!amenities) return []
-
-    const categoryMap = new Map<string, AmenityCategory>()
-
-    for (const amenity of amenities) {
-      if (!amenity.category) continue
-      const { key } = amenity.category
-
-      if (!categoryMap.has(key)) {
-        categoryMap.set(key, { ...amenity.category, items: [] })
-      }
-
-      categoryMap.get(key)?.items.push(amenity)
-    }
-
-    // Sort categories by order field
-    return [...categoryMap.values()].sort(
-      (a, b) => (a.order ?? 999) - (b.order ?? 999)
-    )
-  }, [amenities])
-
   // Featured amenities derived from flat list
   const featuredAmenities = useMemo(() => {
     if (!amenities) return []
     return amenities.filter((a) => a.featured).slice(0, 10)
   }, [amenities])
 
-  // Query returns max 10, slice to 5 on mobile
+  // Slice to 5 on mobile
   const displayedFeatured = isMobile
     ? featuredAmenities.slice(0, 5)
     : featuredAmenities
@@ -186,14 +205,18 @@ export function HouseAmenities({ amenities }: HouseAmenitiesProps) {
             <AmenityItem
               key={amenity._key}
               amenity={amenity}
-              noteLabel={amenity.note ? noteLabels[amenity.note] : undefined}
+              noteLabel={
+                amenity.note ? noteLabels[stegaClean(amenity.note)] : undefined
+              }
             />
           ))}
         </div>
 
         <AmenitiesDialog
           title={t('heading')}
-          amenityCategories={amenityCategories}
+          _id={_id}
+          _type={_type}
+          amenities={amenities}
           noteLabels={noteLabels}
           trigger={
             <Button variant="outline">

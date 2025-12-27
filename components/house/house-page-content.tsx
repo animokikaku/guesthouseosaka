@@ -86,7 +86,7 @@ export function HousePageContent({
                 about={about}
                 building={building}
               />
-              <HouseAmenities amenities={amenities} />
+              <HouseAmenities _id={_id} _type={_type} amenities={amenities} />
               {location && (
                 <HouseLocation
                   slug={slug}

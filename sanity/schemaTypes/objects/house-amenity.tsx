@@ -67,7 +67,7 @@ export const houseAmenity = defineType({
       return {
         title: displayLabel,
         subtitle: subtitle || undefined,
-        media: IconPreview({ icon })
+        media: <IconPreview icon={icon} />
       }
     }
   }
