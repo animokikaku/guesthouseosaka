@@ -6,6 +6,7 @@ import { defineQuery } from 'next-sanity'
 
 export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
   _id,
+  _type,
   "siteName": coalesce(siteName[_key == $locale][0].value, siteName[_key == "en"][0].value),
   "siteDescription": coalesce(siteDescription[_key == $locale][0].value, siteDescription[_key == "en"][0].value),
   companyName,
