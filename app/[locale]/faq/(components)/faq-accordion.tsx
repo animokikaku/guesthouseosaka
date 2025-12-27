@@ -7,12 +7,14 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
+import { useOptimistic } from '@/hooks/use-optimistic'
 import { createDataAttribute } from '@/lib/sanity-data-attributes'
 import type {
   FaqPageQueryResult,
   HousesBuildingQueryResult
 } from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
+import { stegaClean } from '@sanity/client/stega'
 import { useFormatter, useTranslations } from 'next-intl'
 
 const components: PortableTextComponents = {
@@ -24,29 +26,41 @@ const components: PortableTextComponents = {
   }
 }
 
+type FaqPage = NonNullable<FaqPageQueryResult>
+
+// Narrowed type for useOptimistic (avoids union with 'actions' array)
+type FaqPageData = Pick<FaqPage, '_id' | '_type' | 'items'>
+
 type FAQAccordionProps = {
-  faqItems: NonNullable<FaqPageQueryResult>['items']
+  faqPage: FaqPageData
   housesBuilding: HousesBuildingQueryResult
 }
 
-export function FAQAccordion({ faqItems, housesBuilding }: FAQAccordionProps) {
+export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
   const t = useTranslations('FAQAccordion')
   const formatter = useFormatter()
+  const [items, attr] = useOptimistic(faqPage, 'items')
+
+  if (!items) return null
 
   return (
-    <Accordion type="multiple">
-      {faqItems?.map((item) => (
-        <AccordionItem key={item._key} value={item._key}>
-          <AccordionTrigger className="text-md sm:text-lg">
-            {item.question}
-          </AccordionTrigger>
-          <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
-            {item.answer && (
-              <PortableText value={item.answer} components={components} />
-            )}
-          </AccordionContent>
-        </AccordionItem>
-      ))}
+    <Accordion type="multiple" data-sanity={attr.list()}>
+      {items.map((item) => {
+        const key = stegaClean(item._key)
+        const question = stegaClean(item.question)
+        return (
+          <AccordionItem key={key} value={key} data-sanity={attr.item(key)}>
+            <AccordionTrigger className="text-md sm:text-lg">
+              {question}
+            </AccordionTrigger>
+            <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
+              {item.answer && (
+                <PortableText value={item.answer} components={components} />
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        )
+      })}
 
       <AccordionItem value="floors-and-rooms">
         <AccordionTrigger className="text-md sm:text-lg">
