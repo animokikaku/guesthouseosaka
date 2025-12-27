@@ -63,7 +63,7 @@ function AmenityItem({ amenity, noteLabel, ...props }: AmenityItemProps) {
   const iconName = stegaClean(amenity.icon) as IconName
 
   return (
-    <div className="flex items-center gap-3 px-2 py-3" {...props}>
+    <div className="flex items-center gap-3 py-2" {...props}>
       <div className="text-muted-foreground h-5 w-5 shrink-0">
         <DynamicIcon name={iconName} className="h-5 w-5" />
       </div>
@@ -115,13 +115,13 @@ function AmenitiesDialog({
   if (!data) return null
 
   const content = (
-    <div className="space-y-6 pt-4">
+    <div className="space-y-8 pt-8">
       {amenityCategories.map((category) => (
         <div key={category.key}>
-          <h3 className="text-foreground mb-3 text-lg font-semibold">
+          <h3 className="text-foreground mb-4 text-lg font-semibold">
             {category.label}
           </h3>
-          <div className="grid grid-cols-1 gap-1" data-sanity={attr.list()}>
+          <div className="grid grid-cols-1 gap-2" data-sanity={attr.list()}>
             {category.items.map((amenity) => (
               <AmenityItem
                 data-sanity={attr.item(amenity._key)}
