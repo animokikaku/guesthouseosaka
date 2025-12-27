@@ -38,22 +38,22 @@ export default async function HousePage({
     name: data.title ?? '',
     description: data.description ?? '',
     image: assets.openGraph[house].src,
-    ...(data.location?.coordinates && {
+    ...(data.map?.coordinates && {
       geo: {
         '@type': 'GeoCoordinates',
-        latitude: data.location.coordinates.lat,
-        longitude: data.location.coordinates.lng
+        latitude: data.map.coordinates.lat,
+        longitude: data.map.coordinates.lng
       }
     }),
-    hasMap: data.location?.googleMapsUrl ?? undefined,
+    hasMap: data.map?.googleMapsUrl ?? undefined,
     logo: assets.logo[house].src,
-    ...(data.location?.address && {
+    ...(data.map?.address && {
       address: {
         '@type': 'PostalAddress',
-        streetAddress: data.location.address.streetAddress,
-        addressLocality: data.location.address.locality,
-        postalCode: data.location.address.postalCode,
-        addressCountry: data.location.address.country
+        streetAddress: data.map.address.streetAddress,
+        addressLocality: data.map.address.locality,
+        postalCode: data.map.address.postalCode,
+        addressCountry: data.map.address.country
       }
     }),
     numberOfRooms: data.building?.rooms,

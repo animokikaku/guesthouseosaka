@@ -37,20 +37,19 @@ const HouseMap = dynamic(
   }
 )
 
-type LocationProps = Pick<
-  NonNullable<NonNullable<HouseQueryResult>['location']>,
-  'coordinates' | 'placeId' | 'highlight' | 'details' | 'googleMapsUrl'
-> & {
-  slug: NonNullable<HouseQueryResult>['slug']
-}
+type Location = NonNullable<NonNullable<HouseQueryResult>['location']>
+type Map = NonNullable<NonNullable<HouseQueryResult>['map']>
+
+type LocationProps = Pick<Location, 'highlight' | 'details'> &
+  Pick<Map, 'coordinates' | 'placeId' | 'placeImage' | 'googleMapsUrl'>
 
 export function HouseLocation({
   coordinates,
   placeId,
+  placeImage,
   highlight,
   details,
-  googleMapsUrl,
-  slug
+  googleMapsUrl
 }: LocationProps) {
   const t = useTranslations('HouseLocation')
 
@@ -63,12 +62,14 @@ export function HouseLocation({
       </p>
 
       <div className="mb-6">
-        <HouseMap
-          id={slug}
-          coordinates={coordinates}
-          placeId={placeId}
-          mapsUrl={googleMapsUrl}
-        />
+        {coordinates.lat !== undefined && coordinates.lng !== undefined && (
+          <HouseMap
+            center={{ lat: coordinates.lat, lng: coordinates.lng }}
+            placeId={placeId}
+            placeImage={placeImage}
+            mapsUrl={googleMapsUrl}
+          />
+        )}
       </div>
 
       <div className="mt-6">

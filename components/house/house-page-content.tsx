@@ -34,6 +34,7 @@ export function HousePageContent({
   featuredImage,
   amenities,
   location,
+  map,
   pricing,
   about,
   building,
@@ -87,14 +88,14 @@ export function HousePageContent({
                 building={building}
               />
               <HouseAmenities _id={_id} _type={_type} amenities={amenities} />
-              {location && (
+              {location && map && (
                 <HouseLocation
-                  slug={slug}
-                  coordinates={location.coordinates}
-                  placeId={location.placeId}
+                  coordinates={map.coordinates}
+                  placeId={map.placeId}
+                  placeImage={map.placeImage}
                   highlight={location.highlight}
                   details={location.details}
-                  googleMapsUrl={location.googleMapsUrl}
+                  googleMapsUrl={map.googleMapsUrl}
                 />
               )}
               <HousePricing pricing={pricing} />

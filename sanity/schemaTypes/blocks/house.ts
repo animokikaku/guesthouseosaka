@@ -13,6 +13,7 @@ export const house = defineType({
     { name: 'gallery', title: 'Gallery' },
     { name: 'amenities', title: 'Amenities' },
     { name: 'location', title: 'Location' },
+    { name: 'map', title: 'Map' },
     { name: 'pricing', title: 'Pricing' },
     { name: 'contact', title: 'Contact' }
   ],
@@ -154,17 +155,26 @@ export const house = defineType({
           options: { aiAssist: { translateAction: true } }
         }),
         defineField({
-          name: 'address',
-          title: 'Address',
-          type: 'address',
-          validation: (rule) => rule.required()
-        }),
-        defineField({
-          name: 'coordinates',
-          title: 'Coordinates',
-          type: 'geopoint',
-          description: 'Pin location on the map'
-        }),
+          name: 'details',
+          title: 'Location Details',
+          type: 'internationalizedArrayPortableText',
+          description:
+            'Use H3 for section headings (e.g., "Getting Around", "Nearby") and bullet lists for items',
+          options: { aiAssist: { translateAction: true } }
+        })
+      ]
+    }),
+
+    // ============================================
+    // MAP GROUP
+    // ============================================
+    defineField({
+      name: 'map',
+      title: 'Map',
+      type: 'object',
+      group: 'map',
+      description: 'Google Maps configuration and address for JSON-LD',
+      fields: [
         defineField({
           name: 'googleMapsUrl',
           title: 'Google Maps URL',
@@ -176,15 +186,28 @@ export const house = defineType({
           name: 'placeId',
           title: 'Google Place ID',
           type: 'string',
-          description: 'Google Maps Place ID for embedded maps'
+          description: 'Google Maps Place ID for embedded maps',
+          validation: (rule) => rule.required()
         }),
         defineField({
-          name: 'details',
-          title: 'Location Details',
-          type: 'internationalizedArrayPortableText',
-          description:
-            'Use H3 for section headings (e.g., "Getting Around", "Nearby") and bullet lists for items',
-          options: { aiAssist: { translateAction: true } }
+          name: 'placeImage',
+          title: 'Place Image',
+          type: 'localizedImage',
+          description: 'Image for Google Maps Place card',
+          validation: (rule) => rule.required().assetRequired()
+        }),
+        defineField({
+          name: 'coordinates',
+          title: 'Coordinates',
+          type: 'geopoint',
+          description: 'Pin location on the map',
+          validation: (rule) => rule.required()
+        }),
+        defineField({
+          name: 'address',
+          title: 'Address',
+          type: 'address',
+          validation: (rule) => rule.required()
         })
       ]
     }),

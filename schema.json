@@ -1365,22 +1365,23 @@
               },
               "optional": true
             },
-            "address": {
+            "details": {
               "type": "objectAttribute",
               "value": {
                 "type": "inline",
-                "name": "address"
-              },
-              "optional": false
-            },
-            "coordinates": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "geopoint"
+                "name": "internationalizedArrayPortableText"
               },
               "optional": true
-            },
+            }
+          }
+        },
+        "optional": true
+      },
+      "map": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
             "googleMapsUrl": {
               "type": "objectAttribute",
               "value": {
@@ -1393,15 +1394,31 @@
               "value": {
                 "type": "string"
               },
-              "optional": true
+              "optional": false
             },
-            "details": {
+            "placeImage": {
               "type": "objectAttribute",
               "value": {
                 "type": "inline",
-                "name": "internationalizedArrayPortableText"
+                "name": "localizedImage"
               },
-              "optional": true
+              "optional": false
+            },
+            "coordinates": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "geopoint"
+              },
+              "optional": false
+            },
+            "address": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "address"
+              },
+              "optional": false
             }
           }
         },

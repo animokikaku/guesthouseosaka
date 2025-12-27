@@ -1,20 +1,22 @@
 'use client'
 
-import { assets } from '@/lib/assets'
-import { HouseIdentifier } from '@/lib/types'
+import type { HouseQueryResult } from '@/sanity.types'
+import { urlFor } from '@/sanity/lib/image'
 import { ColorScheme, useMapsLibrary } from '@vis.gl/react-google-maps'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import { memo } from 'react'
-interface PlaceDetailsProps {
-  id: HouseIdentifier
+
+type Map = NonNullable<NonNullable<HouseQueryResult>['map']>
+
+interface PlaceDetailsProps extends Pick<Map, 'placeImage'> {
   placeId: string
   className?: string
 }
 
 export const PlaceDetails = memo(function PlaceDetailsComponent({
-  id,
   placeId,
+  placeImage,
   className
 }: PlaceDetailsProps) {
   const { resolvedTheme } = useTheme()
@@ -23,29 +25,25 @@ export const PlaceDetails = memo(function PlaceDetailsComponent({
 
   useMapsLibrary('places')
 
-  // TODO: Use Sanity image instead of assets
-  const image = assets[id].map
-
   return (
     <PlaceDetailsCompact
       id={placeId}
-      image={image}
+      placeImage={placeImage}
       colorScheme={colorScheme}
       className={className}
     />
   )
 })
 
-interface GoogleMapsPlaceDetailsProps {
+interface GoogleMapsPlaceDetailsProps extends Pick<Map, 'placeImage'> {
   id: string
-  image: (typeof assets)[HouseIdentifier]['map']
   colorScheme: ColorScheme
   className?: string
 }
 
 function PlaceDetailsCompact({
   id,
-  image,
+  placeImage,
   colorScheme,
   className
 }: GoogleMapsPlaceDetailsProps) {
@@ -53,9 +51,17 @@ function PlaceDetailsCompact({
     <div className="overflow-hidden">
       <div className="relative w-full overflow-hidden">
         <Image
-          {...image}
-          alt={image.alt}
-          placeholder="blur"
+          src={urlFor(placeImage)
+            .width(600)
+            .height(400)
+            .dpr(2)
+            .fit('crop')
+            .url()}
+          alt={placeImage.alt ?? ''}
+          width={600}
+          height={400}
+          placeholder={placeImage.preview ? 'blur' : 'empty'}
+          blurDataURL={placeImage.preview ?? undefined}
           className="h-auto w-full object-cover"
           sizes="(max-width: 768px) 100vw, 400px"
         />
