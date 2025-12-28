@@ -121,7 +121,9 @@ export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
                   </div>
                   <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
                     {house.extraCosts?.map((cost, index) => {
-                      const categoryLabel = categoryLabels[cost.category]
+                      // Clean category to remove stega encoding in draft mode
+                      const category = stegaClean(cost.category)
+                      const categoryLabel = categoryLabels[category]
 
                       return (
                         <div
