@@ -23,30 +23,21 @@ const portableTextComponents: PortableTextComponents = {
 const HOUSE_STYLES = {
   orange: {
     text: 'text-orange-700 dark:text-orange-400',
-    bg: 'bg-orange-500',
     headerBg:
       'bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-orange-950/40 dark:to-orange-900/20',
-    border: 'border-orange-200 dark:border-orange-800/50',
-    dot: 'bg-orange-500',
-    dotInactive: 'bg-orange-200 dark:bg-orange-800'
+    border: 'border-orange-200 dark:border-orange-800/50'
   },
   apple: {
     text: 'text-red-700 dark:text-red-400',
-    bg: 'bg-red-500',
     headerBg:
       'bg-gradient-to-r from-red-50 to-red-100/50 dark:from-red-950/40 dark:to-red-900/20',
-    border: 'border-red-200 dark:border-red-800/50',
-    dot: 'bg-red-500',
-    dotInactive: 'bg-red-200 dark:bg-red-800'
+    border: 'border-red-200 dark:border-red-800/50'
   },
   lemon: {
     text: 'text-yellow-700 dark:text-yellow-400',
-    bg: 'bg-yellow-500',
     headerBg:
       'bg-gradient-to-r from-yellow-50 to-amber-100/50 dark:from-yellow-950/40 dark:to-amber-900/20',
-    border: 'border-yellow-200 dark:border-yellow-800/50',
-    dot: 'bg-yellow-500',
-    dotInactive: 'bg-yellow-200 dark:bg-yellow-800'
+    border: 'border-yellow-200 dark:border-yellow-800/50'
   }
 }
 
@@ -163,25 +154,20 @@ export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
       </Carousel>
 
       <div className="flex items-center justify-center gap-2">
-        {houses.map((house, index) => {
-          const slug = stegaClean(house.slug) as HouseIdentifier
-          const styles = HOUSE_STYLES[slug]
-
-          return (
-            <button
-              key={house._id}
-              type="button"
-              onClick={() => api?.scrollTo(index)}
-              className={cn(
-                'h-2 rounded-full transition-all duration-300',
-                current === index
-                  ? cn('w-6', styles.dot)
-                  : cn('w-2', styles.dotInactive)
-              )}
-              aria-label={`Go to ${house.title}`}
-            />
-          )
-        })}
+        {houses.map((house, index) => (
+          <button
+            key={house._id}
+            type="button"
+            onClick={() => api?.scrollTo(index)}
+            className={cn(
+              'h-2 rounded-full transition-all duration-300',
+              current === index
+                ? 'bg-foreground w-6'
+                : 'bg-muted-foreground/30 w-2'
+            )}
+            aria-label={`Go to ${house.title}`}
+          />
+        ))}
       </div>
     </div>
   )
