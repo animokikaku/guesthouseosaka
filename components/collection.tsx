@@ -92,8 +92,10 @@ type CollectionImageProps = Pick<
 >
 
 function CollectionImage({ image }: CollectionImageProps) {
+  if (!image.asset) return null
+
   const buildImage = urlFor(image)
-  const dimensions = getImageDimensions(image.asset!)
+  const dimensions = getImageDimensions(image.asset)
   const alt = image.alt || ''
   const blurDataURL = image.preview || undefined
   const placeholder = image.preview ? 'blur' : undefined

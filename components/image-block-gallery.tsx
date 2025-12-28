@@ -133,6 +133,8 @@ export async function ImageBlockGallery({
 
   // Build display images: featured first (if available), then gallery images
   // Request width only, let CSS object-cover handle aspect ratio
+  // Safety: We've already verified totalCount >= 5 above, so arrays are safe to access
+  const firstGalleryImage = validGalleryImages[0]
   const images: Omit<ImageProps, 'fill'>[] = hasFeatured
     ? [
         toImageProps(featuredImage, 560),
@@ -140,12 +142,14 @@ export async function ImageBlockGallery({
           .slice(0, 4)
           .map(({ image }) => toImageProps(image, 560))
       ]
-    : [
-        toImageProps(validGalleryImages[0].image, 560),
-        ...validGalleryImages
-          .slice(1, 5)
-          .map(({ image }) => toImageProps(image, 560))
-      ]
+    : firstGalleryImage
+      ? [
+          toImageProps(firstGalleryImage.image, 560),
+          ...validGalleryImages
+            .slice(1, 5)
+            .map(({ image }) => toImageProps(image, 560))
+        ]
+      : []
 
   return (
     <GalleryGrid
