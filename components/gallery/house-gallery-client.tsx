@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useOptimistic } from '@/hooks/use-optimistic'
 import {
-  groupByCategory,
+  groupGalleryByCategory,
   type Gallery,
   type GalleryCategory,
   type GalleryItem
@@ -31,7 +31,7 @@ export function HouseGalleryClient({
   const [data, attr] = useOptimistic({ _id, _type, gallery }, 'gallery')
 
   // Group by category for display
-  const categories = useMemo(() => groupByCategory(data), [data])
+  const categories = useMemo(() => groupGalleryByCategory(data), [data])
 
   // Filter out categories with no items
   const validCategories = categories.filter((c) => c.items.length > 0)

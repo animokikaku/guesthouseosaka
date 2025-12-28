@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useOptimistic } from '@/hooks/use-optimistic'
+import { groupByCategory } from '@/lib/utils/group-by-category'
 import type { HouseQueryResult } from '@/sanity.types'
 import { stegaClean } from '@sanity/client/stega'
 import { DynamicIcon, dynamicIconImports } from 'lucide-react/dynamic'
@@ -34,14 +35,6 @@ interface HouseAmenitiesProps {
   _id: NonNullable<HouseQueryResult>['_id']
   _type: NonNullable<HouseQueryResult>['_type']
   amenities: Amenities
-}
-
-interface AmenityCategory {
-  key: string
-  label: string | null
-  icon: string | null
-  order: number | null
-  items: Amenity[]
 }
 
 interface AmenitiesDialogProps {
@@ -91,26 +84,7 @@ function AmenitiesDialog({
   const [data, attr] = useOptimistic({ _id, _type, amenities }, 'amenities')
 
   // Group by category for display, but data-sanity still references flat array
-  const amenityCategories = useMemo(() => {
-    if (!data) return []
-
-    const categoryMap = new Map<string, AmenityCategory>()
-
-    for (const amenity of data) {
-      if (!amenity.category) continue
-      const key = amenity.category.key
-
-      if (!categoryMap.has(key)) {
-        categoryMap.set(key, { ...amenity.category, items: [] })
-      }
-
-      categoryMap.get(key)!.items.push(amenity)
-    }
-
-    return [...categoryMap.values()].sort(
-      (a, b) => (a.order ?? 999) - (b.order ?? 999)
-    )
-  }, [data])
+  const amenityCategories = useMemo(() => groupByCategory(data), [data])
 
   if (!data) return null
 

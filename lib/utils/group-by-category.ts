@@ -12,12 +12,15 @@ interface BaseCategory {
 }
 
 /** Item that has an optional category property */
-type ItemWithCategory<C extends BaseCategory> = {
-  category: C | null
+type ItemWithCategory = {
+  category: BaseCategory | null
 }
 
+/** Extract the category type from an item type */
+type ExtractCategory<T extends ItemWithCategory> = NonNullable<T['category']>
+
 /** Result type: category with its items */
-type GroupedCategory<T, C extends BaseCategory> = C & {
+type GroupedCategory<T extends ItemWithCategory> = ExtractCategory<T> & {
   items: T[]
 }
 
@@ -37,20 +40,22 @@ type GroupedCategory<T, C extends BaseCategory> = C & {
  * const categories = groupByCategory(amenities)
  * // Returns: Array<{ key, label, icon, order, items: Amenity[] }>
  */
-export function groupByCategory<
-  C extends BaseCategory,
-  T extends ItemWithCategory<C>
->(items: T[] | null): GroupedCategory<T, C>[] {
+export function groupByCategory<T extends ItemWithCategory>(
+  items: T[] | null
+): GroupedCategory<T>[] {
   if (!items) return []
 
-  const categoryMap = new Map<string, GroupedCategory<T, C>>()
+  const categoryMap = new Map<string, GroupedCategory<T>>()
 
   for (const item of items) {
     if (!item.category) continue
     const key = item.category.key
 
     if (!categoryMap.has(key)) {
-      categoryMap.set(key, { ...item.category, items: [] })
+      categoryMap.set(key, {
+        ...(item.category as ExtractCategory<T>),
+        items: []
+      })
     }
 
     categoryMap.get(key)!.items.push(item)

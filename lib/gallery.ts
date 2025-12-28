@@ -1,3 +1,4 @@
+import { groupByCategory } from '@/lib/utils/group-by-category'
 import type { HouseQueryResult } from '@/sanity.types'
 
 // Types from Sanity query result - flat gallery array with category info
@@ -8,7 +9,7 @@ export type FeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
 // Minimal type for components that only need _key and image (e.g., MobileHeroImage carousel)
 export type GalleryImage = Pick<GalleryItem, '_key' | 'image'>
 
-// Grouped category type for frontend display
+// Grouped category type for frontend display (extends base grouping with computed fields)
 export interface GalleryCategory {
   _id: string
   key: string
@@ -39,38 +40,15 @@ export function getImageIndex(
 }
 
 // Group gallery items by category (for frontend display)
-export function groupByCategory(gallery: Gallery | null): GalleryCategory[] {
-  if (!gallery) return []
-
-  const categoryMap = new Map<string, GalleryCategory>()
-
-  for (const item of gallery) {
-    if (!item.category) continue
-    const key = item.category.key
-
-    if (!categoryMap.has(key)) {
-      categoryMap.set(key, {
-        _id: item.category._id ?? '',
-        key,
-        label: item.category.label,
-        order: item.category.order,
-        count: 0,
-        thumbnail: null,
-        items: []
-      })
-    }
-
-    const category = categoryMap.get(key)!
-    category.items.push(item)
-    category.count++
-
-    // First item becomes thumbnail
-    if (!category.thumbnail) {
-      category.thumbnail = item.image
-    }
-  }
-
-  return [...categoryMap.values()].sort(
-    (a, b) => (a.order ?? 999) - (b.order ?? 999)
-  )
+// Uses generic utility and adds computed fields (count, thumbnail)
+export function groupGalleryByCategory(
+  gallery: Gallery | null
+): GalleryCategory[] {
+  const grouped = groupByCategory(gallery)
+  return grouped.map((category) => ({
+    ...category,
+    _id: category._id ?? '',
+    count: category.items.length,
+    thumbnail: category.items[0]?.image ?? null
+  }))
 }
