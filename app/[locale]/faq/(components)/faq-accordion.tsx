@@ -46,13 +46,16 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
   if (!items) return null
 
   return (
-    <Accordion type="multiple" data-sanity={attr.list()}>
+    <Accordion type="multiple">
       {items.map((item) => {
         const key = stegaClean(item._key)
         const question = stegaClean(item.question)
         return (
-          <AccordionItem key={key} value={key} data-sanity={attr.item(key)}>
-            <AccordionTrigger className="text-md sm:text-lg">
+          <AccordionItem key={key} value={key}>
+            <AccordionTrigger
+              className="text-md sm:text-lg"
+              data-sanity={attr.item(key)}
+            >
               {question}
             </AccordionTrigger>
             <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
