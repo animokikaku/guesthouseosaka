@@ -58,24 +58,8 @@
     "min_rent_label": "Min Rent",
     "rooms_label": "Rooms"
   },
-  "HouseGalleryClient": {
-    "categories": {
-      "building_features": "Building Features",
-      "common_spaces": "Common Spaces",
-      "facilities": "Bathroom",
-      "floor_plan": "Floor Plan",
-      "maps": "Maps",
-      "neighborhood": "Neighborhood",
-      "room": "Room"
-    }
-  },
   "HouseLocation": {
     "heading": "Where you'll be",
-    "sections": {
-      "getting_around": "Nearby stations",
-      "nearby": "What's nearby",
-      "neighborhood": "Sightseeing"
-    },
     "modal_trigger": "Show more"
   },
   "HousePricing": {

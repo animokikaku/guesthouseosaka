@@ -58,24 +58,8 @@
     "min_rent_label": "最低賃料",
     "rooms_label": "部屋数"
   },
-  "HouseGalleryClient": {
-    "categories": {
-      "building_features": "建物の特徴",
-      "common_spaces": "共用スペース",
-      "facilities": "バスルーム",
-      "floor_plan": "間取り図",
-      "maps": "地図",
-      "neighborhood": "周辺環境",
-      "room": "部屋"
-    }
-  },
   "HouseLocation": {
     "heading": "周辺地図",
-    "sections": {
-      "getting_around": "最寄り駅",
-      "nearby": "周辺スポット",
-      "neighborhood": "観光案内"
-    },
     "modal_trigger": "もっと見る"
   },
   "HousePricing": {

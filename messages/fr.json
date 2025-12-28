@@ -58,24 +58,8 @@
     "min_rent_label": "Loyer min.",
     "rooms_label": "Chambres"
   },
-  "HouseGalleryClient": {
-    "categories": {
-      "building_features": "Caractéristiques du bâtiment",
-      "common_spaces": "Espaces communs",
-      "facilities": "Salle de bain",
-      "floor_plan": "Plan d'étage",
-      "maps": "Cartes",
-      "neighborhood": "Quartier",
-      "room": "Chambre"
-    }
-  },
   "HouseLocation": {
     "heading": "Où vous vous trouverez",
-    "sections": {
-      "getting_around": "Stations les plus proches",
-      "nearby": "À proximité",
-      "neighborhood": "Sites à visiter"
-    },
     "modal_trigger": "En savoir plus"
   },
   "HousePricing": {
