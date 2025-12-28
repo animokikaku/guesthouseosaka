@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { useHouseLabels } from '@/hooks/use-house-labels'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import type { HousesBuildingQueryResult } from '@/sanity.types'
@@ -41,17 +40,16 @@ const portableTextComponents: PortableTextComponents = {
   }
 }
 
-type ExtraCostValue = NonNullable<
-  NonNullable<HousesBuildingQueryResult[number]['extraCosts']>[number]['value']
->
+type Houses = NonNullable<HousesBuildingQueryResult>
+
+type ExtraCostValue = NonNullable<Houses[number]['extraCosts']>[number]['value']
 
 type FAQExtraCostsTableProps = {
-  houses: HousesBuildingQueryResult
+  houses: Houses
 }
 
 export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
   const t = useTranslations('FAQExtraCostsTable')
-  const houseLabel = useHouseLabels()
 
   const categoryLabels = useMemo(
     () => ({
@@ -93,11 +91,11 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
                 <TableHead
                   key={house._id}
                   className={cn(
-                    'bg-secondary font-semibold capitalize',
+                    'bg-secondary font-semibold',
                     ACCENT_CLASSES[slug]
                   )}
                 >
-                  {houseLabel(slug).name}
+                  {house.title}
                 </TableHead>
               )
             })}

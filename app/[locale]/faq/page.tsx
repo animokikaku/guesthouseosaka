@@ -22,6 +22,8 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
 
   if (!faqPage) return null
 
+  const houses = housesBuilding ?? []
+
   return (
     <section className="mx-auto flex w-full max-w-3xl flex-col gap-12">
       <FAQAccordion
@@ -30,12 +32,12 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
           _type: faqPage._type,
           items: faqPage.items
         }}
-        housesBuilding={housesBuilding}
+        housesBuilding={houses}
       />
       <FAQCard
         contactSection={faqPage.contactSection}
         contactNote={faqPage.contactNote}
-        houses={housesBuilding}
+        houses={houses}
       />
     </section>
   )

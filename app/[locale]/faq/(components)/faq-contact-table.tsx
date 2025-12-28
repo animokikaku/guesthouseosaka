@@ -1,8 +1,10 @@
 import type { HousesBuildingQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 
+type Houses = NonNullable<HousesBuildingQueryResult>
+
 type FAQContactTableProps = {
-  houses: HousesBuildingQueryResult
+  houses: Houses
 }
 
 export function FAQContactTable({ houses }: FAQContactTableProps) {

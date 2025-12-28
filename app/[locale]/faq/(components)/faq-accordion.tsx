@@ -28,13 +28,14 @@ const components: PortableTextComponents = {
 }
 
 type FaqPage = NonNullable<FaqPageQueryResult>
+type Houses = NonNullable<HousesBuildingQueryResult>
 
 // Narrowed type for useOptimistic (avoids union with 'actions' array)
 type FaqPageData = Pick<FaqPage, '_id' | '_type' | 'items'>
 
 type FAQAccordionProps = {
   faqPage: FaqPageData
-  housesBuilding: HousesBuildingQueryResult
+  housesBuilding: Houses
 }
 
 export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {

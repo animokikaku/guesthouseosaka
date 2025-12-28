@@ -202,7 +202,7 @@ export const housesNavQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
 }`)
 
 // All houses building and contact data (for FAQ page)
-export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(slug asc){
+export const housesBuildingQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
   _id,
   _type,
   slug,

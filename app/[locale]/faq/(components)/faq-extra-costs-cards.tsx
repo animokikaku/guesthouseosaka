@@ -6,7 +6,6 @@ import {
   CarouselItem,
   type CarouselApi
 } from '@/components/ui/carousel'
-import { useHouseLabels } from '@/hooks/use-house-labels'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import type { HousesBuildingQueryResult } from '@/sanity.types'
@@ -51,13 +50,14 @@ const HOUSE_STYLES = {
   }
 }
 
+type Houses = NonNullable<HousesBuildingQueryResult>
+
 type FAQExtraCostsCardsProps = {
-  houses: HousesBuildingQueryResult
+  houses: Houses
 }
 
 export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
   const t = useTranslations('FAQExtraCostsTable')
-  const houseLabel = useHouseLabels()
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
 
@@ -100,7 +100,6 @@ export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
           {houses.map((house) => {
             const slug = stegaClean(house.slug)
             const styles = HOUSE_STYLES[slug]
-            const label = houseLabel(slug)
 
             return (
               <CarouselItem key={house._id}>
@@ -113,11 +112,11 @@ export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
                   <div className={cn('px-4 py-3', styles.headerBg)}>
                     <h4
                       className={cn(
-                        'text-base font-semibold tracking-tight capitalize',
+                        'text-base font-semibold tracking-tight',
                         styles.text
                       )}
                     >
-                      {label.name}
+                      {house.title}
                     </h4>
                   </div>
                   <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
@@ -177,7 +176,7 @@ export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
                   ? cn('w-6', styles.dot)
                   : cn('w-2', styles.dotInactive)
               )}
-              aria-label={`Go to ${houseLabel(slug).name}`}
+              aria-label={`Go to ${house.title}`}
             />
           )
         })}

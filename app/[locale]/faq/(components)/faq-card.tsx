@@ -19,10 +19,12 @@ const components: PortableTextComponents = {
   }
 }
 
+type Houses = NonNullable<HousesBuildingQueryResult>
+
 type FAQCardProps = {
   contactSection: NonNullable<FaqPageQueryResult>['contactSection'] | null
   contactNote: NonNullable<FaqPageQueryResult>['contactNote'] | null
-  houses: HousesBuildingQueryResult
+  houses: Houses
 }
 
 export default function FAQCard({ contactSection, contactNote, houses }: FAQCardProps) {
