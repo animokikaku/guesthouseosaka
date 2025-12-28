@@ -9,6 +9,7 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from '@/components/ui/carousel'
+import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
 import { getImageIndex, type Gallery } from '@/lib/gallery'
 import { store } from '@/lib/store'
 import { urlFor } from '@/sanity/lib/image'
@@ -71,9 +72,10 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
 
   const imageList = gallery ?? []
   const startIndex = photoId ? getImageIndex(imageList, photoId) : undefined
-  const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(
-    null
-  )
+
+  const { onTouchStart, onTouchEnd } = useSwipeToClose({
+    onClose: () => store.setState({ photoId: null })
+  })
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -86,34 +88,6 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
       }
     },
     [api]
-  )
-
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    const touch = e.touches[0]
-    setTouchStart({ x: touch.clientX, y: touch.clientY })
-  }, [])
-
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent) => {
-      if (!touchStart) return
-
-      const touch = e.changedTouches[0]
-      const deltaX = touch.clientX - touchStart.x
-      const deltaY = touch.clientY - touchStart.y
-      const absDeltaX = Math.abs(deltaX)
-      const absDeltaY = Math.abs(deltaY)
-
-      // Close if:
-      // 1. It's a downward swipe (deltaY > 0) or upward swipe (deltaY < 0)
-      // 2. Vertical movement is greater than horizontal (to avoid interfering with carousel)
-      // 3. The swipe is significant enough (at least 50px)
-      if (absDeltaY > absDeltaX && absDeltaY > 50) {
-        store.setState({ photoId: null })
-      }
-
-      setTouchStart(null)
-    },
-    [touchStart]
   )
 
   useEffect(() => {
@@ -146,8 +120,8 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
     >
       <CarouselContent
         className="h-screen items-center"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
         {imageList.map(({ _key, image }) => {
           if (!image?.asset) return null
