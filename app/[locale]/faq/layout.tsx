@@ -71,8 +71,10 @@ export default async function FAQLayout({
           />
         )}
       </PageHeader>
-      <div className="container-wrapper section-soft flex-1 pb-12">
-        <div className="align-center container max-w-2xl">{children}</div>
+      <div className="container-wrapper section-soft flex-1 md:pb-12">
+        <div className="sm:container">
+          <div className="mx-auto w-full max-w-2xl">{children}</div>
+        </div>
       </div>
     </>
   )
