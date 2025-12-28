@@ -29,6 +29,7 @@ import { useTranslations } from 'next-intl'
 export { ContactForm } from './contact-form'
 export { MoveInForm } from './move-in-form'
 export { TourForm } from './tour-form'
+export { useFormSubmit } from './use-form-submit'
 
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts()
