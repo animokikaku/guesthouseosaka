@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -58,6 +59,9 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
       <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{data?.title}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {t('description')}
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-6 text-sm leading-6">
           <p className="text-muted-foreground text-xs">

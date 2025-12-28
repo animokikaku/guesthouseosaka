@@ -63,6 +63,7 @@
   },
   "LegalNoticeDialog": {
     "close_button": "閉じる",
+    "description": "プライバシーポリシーと利用規約",
     "last_updated": "最終更新日：{date}"
   },
   "MessageField": {

@@ -3,6 +3,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -10,6 +11,7 @@ import {
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger
@@ -71,6 +73,7 @@ export function HouseLocationModal({
         <DrawerContent className="theme-container max-h-[90vh]">
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription className="sr-only">{title}</DrawerDescription>
           </DrawerHeader>
           <div className="overflow-y-auto px-4 pb-6">
             <LocationSections details={details} />
@@ -86,6 +89,7 @@ export function HouseLocationModal({
       <DialogContent className="theme-container max-h-[85vh] w-3xl overflow-y-auto md:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="sr-only">{title}</DialogDescription>
         </DialogHeader>
         <LocationSections details={details} className="pt-8" />
       </DialogContent>
