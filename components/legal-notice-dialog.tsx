@@ -11,10 +11,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog'
 import { useLegalNotice } from '@/hooks/use-legal-notice'
-import {
-  PortableText,
-  type PortableTextComponents
-} from '@portabletext/react'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useFormatter, useTranslations } from 'next-intl'
 
 const legalContentComponents: PortableTextComponents = {

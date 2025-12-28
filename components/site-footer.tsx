@@ -21,7 +21,10 @@ export function SiteFooter({ settings }: SiteFooterProps) {
             </span>
             © {year} {settings?.companyName}
           </div>
-          <div className="flex shrink-0 items-center gap-3" data-sanity={attr.list()}>
+          <div
+            className="flex shrink-0 items-center gap-3"
+            data-sanity={attr.list()}
+          >
             {socialLinks?.map((link) => {
               if (!link.icon || !link.url) return null
               return (

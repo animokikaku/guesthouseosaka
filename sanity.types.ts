@@ -259,13 +259,13 @@ export type House = {
   description: InternationalizedArrayText
   caption?: InternationalizedArrayText
   image: LocalizedImage
-  featuredImage?: LocalizedImage
   building?: {
     rooms: number
     floors: number
     startingPrice: number
   }
   about: InternationalizedArrayPortableText
+  featuredImage?: LocalizedImage
   gallery?: Array<
     {
       _key: string

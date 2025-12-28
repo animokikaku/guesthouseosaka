@@ -99,7 +99,10 @@ export function TourForm({ title, description, houseTitles }: TourFormProps) {
             />
           )}
         />
-        <PrivacyPolicyField fields={{ privacyPolicy: 'privacyPolicy' }} form={form} />
+        <PrivacyPolicyField
+          fields={{ privacyPolicy: 'privacyPolicy' }}
+          form={form}
+        />
       </FieldGroup>
     </FormCard>
   )

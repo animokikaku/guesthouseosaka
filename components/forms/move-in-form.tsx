@@ -25,7 +25,11 @@ type MoveInFormProps = {
   houseTitles: HouseTitles
 }
 
-export function MoveInForm({ title, description, houseTitles }: MoveInFormProps) {
+export function MoveInForm({
+  title,
+  description,
+  houseTitles
+}: MoveInFormProps) {
   const t = useTranslations('forms')
   const schema = useMoveInFormSchema()
   const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
@@ -127,7 +131,10 @@ export function MoveInForm({ title, description, houseTitles }: MoveInFormProps)
             />
           )}
         />
-        <PrivacyPolicyField fields={{ privacyPolicy: 'privacyPolicy' }} form={form} />
+        <PrivacyPolicyField
+          fields={{ privacyPolicy: 'privacyPolicy' }}
+          form={form}
+        />
       </FieldGroup>
     </FormCard>
   )

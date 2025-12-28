@@ -7,7 +7,10 @@ import {
   useAppForm,
   useFormSubmit
 } from '@/components/forms'
-import { GeneralInquiryFields, useGeneralInquirySchema } from '@/components/forms/schema'
+import {
+  GeneralInquiryFields,
+  useGeneralInquirySchema
+} from '@/components/forms/schema'
 import { FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { ContactTypeQueryResult } from '@/sanity.types'
 import { MailIcon, UserIcon } from 'lucide-react'
@@ -90,7 +93,10 @@ export function ContactForm({ title, description }: ContactFormProps) {
             />
           )}
         />
-        <PrivacyPolicyField fields={{ privacyPolicy: 'privacyPolicy' }} form={form} />
+        <PrivacyPolicyField
+          fields={{ privacyPolicy: 'privacyPolicy' }}
+          form={form}
+        />
       </FieldGroup>
     </FormCard>
   )

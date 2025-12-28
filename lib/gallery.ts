@@ -31,10 +31,7 @@ export function featuredToGalleryImage(
 }
 
 // Get index of image by key
-export function getImageIndex(
-  images: GalleryItem[],
-  photoKey: string
-): number {
+export function getImageIndex(images: GalleryItem[], photoKey: string): number {
   const index = images.findIndex((img) => img._key === photoKey)
   return index >= 0 ? index : 0
 }

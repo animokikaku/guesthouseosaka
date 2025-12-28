@@ -13,7 +13,12 @@ type HouseGalleryProps = {
 /**
  * Server component that renders gallery with pre-processed data from GROQ
  */
-export function HouseGallery({ _id, _type, gallery, title }: HouseGalleryProps) {
+export function HouseGallery({
+  _id,
+  _type,
+  gallery,
+  title
+}: HouseGalleryProps) {
   return (
     <>
       <HouseGalleryClient _id={_id} _type={_type} gallery={gallery} />

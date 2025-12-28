@@ -27,7 +27,7 @@ export const pageAction = defineType({
       description:
         'Internal path (e.g., /contact, /faq#phone) or external URL (e.g., https://...)',
       validation: (rule) => rule.required()
-    }),
+    })
   ],
   preview: {
     select: {

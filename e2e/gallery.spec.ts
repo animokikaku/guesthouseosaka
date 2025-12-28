@@ -238,14 +238,19 @@ test.describe('Gallery', () => {
       })
 
       // Check if the button is visible (desktop view)
-      const isVisible = await viewGalleryButton.first().isVisible().catch(() => false)
+      const isVisible = await viewGalleryButton
+        .first()
+        .isVisible()
+        .catch(() => false)
 
       if (isVisible) {
         // Click on the gallery link
         await viewGalleryButton.first().click()
 
         // Wait for gallery to load (either as modal or full page)
-        await page.waitForURL(new RegExp(`${house}/gallery`), { timeout: 10000 })
+        await page.waitForURL(new RegExp(`${house}/gallery`), {
+          timeout: 10000
+        })
       }
     })
 

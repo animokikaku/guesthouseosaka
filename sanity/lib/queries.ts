@@ -182,12 +182,14 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
 }`)
 
 // House slugs for static generation
-export const houseSlugsQuery = defineQuery(`*[_type == "house" && defined(slug)]{
+export const houseSlugsQuery =
+  defineQuery(`*[_type == "house" && defined(slug)]{
   "slug": slug
 }`)
 
 // House titles for forms (ordered by home page houses array)
-export const housesTitlesQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
+export const housesTitlesQuery =
+  defineQuery(`*[_type == "homePage"][0].houses[]->{
   "slug": slug,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value)
 }`)
@@ -208,7 +210,8 @@ export const housesNavQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
 }`)
 
 // All houses building and contact data (for FAQ page)
-export const housesBuildingQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
+export const housesBuildingQuery =
+  defineQuery(`*[_type == "homePage"][0].houses[]->{
   _id,
   _type,
   slug,
@@ -274,7 +277,8 @@ export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
   }
 }`)
 
-export const contactTypeQuery = defineQuery(`*[_type == "contactPage"][0].contactTypes[key == $type][0]{
+export const contactTypeQuery =
+  defineQuery(`*[_type == "contactPage"][0].contactTypes[key == $type][0]{
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
 }`)
@@ -295,7 +299,8 @@ export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
 // TAXONOMY QUERIES
 // =============================================================================
 
-export const galleryCategoriesQuery = defineQuery(`*[_type == "galleryCategory"] | order(order asc){
+export const galleryCategoriesQuery =
+  defineQuery(`*[_type == "galleryCategory"] | order(order asc){
   _id,
   "key": key.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
@@ -312,7 +317,8 @@ export const galleryCategoriesQuery = defineQuery(`*[_type == "galleryCategory"]
   }
 }`)
 
-export const amenityCategoriesQuery = defineQuery(`*[_type == "amenityCategory"] | order(order asc){
+export const amenityCategoriesQuery =
+  defineQuery(`*[_type == "amenityCategory"] | order(order asc){
   _id,
   "key": key.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
