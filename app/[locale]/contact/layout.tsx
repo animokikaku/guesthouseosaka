@@ -59,16 +59,25 @@ export default async function ContactLayout({
     params: { locale }
   })
 
+  // Show centered content without header when no data
+  if (!contactPage) {
+    return (
+      <div className="container-wrapper flex flex-1 items-center justify-center py-12">
+        <div className="mx-auto w-full max-w-2xl">{children}</div>
+      </div>
+    )
+  }
+
   return (
     <>
       <PageHeader>
-        {contactPage?.header && (
+        {contactPage.header && (
           <PortableText
             value={contactPage.header}
             components={headerComponents}
           />
         )}
-        {contactPage?.actions && contactPage.actions.length > 0 && (
+        {contactPage.actions && contactPage.actions.length > 0 && (
           <DynamicPageActions
             page={{
               _id: contactPage._id,
