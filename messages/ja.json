@@ -1,7 +1,7 @@
 {
   "FAQAccordion": {
     "floors_and_rooms": {
-      "format": "<floorsTag>{floors}</floorsTag>階建て・<roomsTag>{rooms}</roomsTag>室",
+      "format": "<floorsTag>{floors}階建て</floorsTag>・<roomsTag>{rooms}室</roomsTag>",
       "question": "フロア数と部屋数は？"
     },
     "extra_costs": {

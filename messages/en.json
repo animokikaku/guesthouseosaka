@@ -1,7 +1,7 @@
 {
   "FAQAccordion": {
     "floors_and_rooms": {
-      "format": "<floorsTag>{floors}</floorsTag>-story building with <roomsTag>{rooms}</roomsTag> rooms.",
+      "format": "<floorsTag>{floors}-story building</floorsTag> with <roomsTag>{rooms} rooms</roomsTag>.",
       "question": "How many floors and rooms?"
     },
     "extra_costs": {
