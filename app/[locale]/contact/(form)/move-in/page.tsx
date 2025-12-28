@@ -22,6 +22,10 @@ export default async function ContactPage({
   ])
 
   return (
-    <MoveInForm content={contactData?.content} houseTitles={houseTitles ?? []} />
+    <MoveInForm
+      title={contactData?.title}
+      description={contactData?.description}
+      houseTitles={houseTitles ?? []}
+    />
   )
 }

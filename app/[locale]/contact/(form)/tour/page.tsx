@@ -22,6 +22,10 @@ export default async function ContactPage({
   ])
 
   return (
-    <TourForm content={contactData?.content} houseTitles={houseTitles ?? []} />
+    <TourForm
+      title={contactData?.title}
+      description={contactData?.description}
+      houseTitles={houseTitles ?? []}
+    />
   )
 }

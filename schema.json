@@ -133,13 +133,21 @@
           },
           "optional": false
         },
-        "content": {
+        "title": {
           "type": "objectAttribute",
           "value": {
             "type": "inline",
-            "name": "internationalizedArrayPortableText"
+            "name": "internationalizedArrayString"
           },
           "optional": false
+        },
+        "description": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "internationalizedArrayString"
+          },
+          "optional": true
         }
       }
     }

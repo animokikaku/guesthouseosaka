@@ -233,19 +233,5 @@
     "description": "Fondé en 1991. Nous avons 3 share houses dans la ville d'Osaka.",
     "name": "Share House Osaka",
     "short_name": "SHO"
-  },
-  "useContactNavigation": {
-    "general": {
-      "description": "Des questions sur les chambres, les tarifs ou les disponibilités ? Nous sommes ravis de vous aider.",
-      "title": "Demande générale"
-    },
-    "moveIn": {
-      "description": "Prêt à emménager ? Partagez vos préférences et votre calendrier.",
-      "title": "Demande d'emménagement"
-    },
-    "tour": {
-      "description": "Réservez une visite pour découvrir nos share houses et ce que nous offrons.",
-      "title": "Demande de visite"
-    }
   }
 }

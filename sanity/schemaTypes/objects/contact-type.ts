@@ -22,26 +22,29 @@ export const contactType = defineType({
       }
     }),
     defineField({
-      name: 'content',
-      title: 'Content',
-      type: 'internationalizedArrayPortableText',
-      description: 'Use H3 for the title and normal text for the description',
+      name: 'title',
+      title: 'Navigation Title',
+      type: 'internationalizedArrayString',
+      description: 'Short title for navigation tabs (e.g., "Tour request")',
       validation: (rule) => rule.required(),
+      options: { aiAssist: { translateAction: true } }
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'internationalizedArrayString',
+      description: 'Brief description for navigation and form headers',
       options: { aiAssist: { translateAction: true } }
     })
   ],
   preview: {
     select: {
-      content: 'content.0.value',
+      title: 'title.0.value',
       key: 'key'
     },
-    prepare({ content, key }) {
-      const title =
-        content?.find(
-          (block: { _type: string }) => block._type === 'block'
-        )?.children?.[0]?.text || 'No title'
+    prepare({ title, key }) {
       return {
-        title,
+        title: title || 'No title',
         subtitle: key || 'No key'
       }
     }

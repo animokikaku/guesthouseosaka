@@ -15,5 +15,5 @@ export default async function ContactPage({
     params: { locale, type: 'general' }
   })
 
-  return <ContactForm content={data?.content} />
+  return <ContactForm title={data?.title} description={data?.description} />
 }

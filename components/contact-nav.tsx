@@ -1,20 +1,29 @@
 'use client'
 
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import {
-  ContactNavigationKey,
-  useContactNavigation
-} from '@/hooks/use-contact-navigation'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
+import { ContactPageQueryResult } from '@/sanity.types'
+import { stegaClean } from 'next-sanity'
+
+type ContactTypes = NonNullable<ContactPageQueryResult>['contactTypes']
+
+const HREFS = {
+  tour: { pathname: '/contact/tour', hash: '#tabs' },
+  'move-in': { pathname: '/contact/move-in', hash: '#tabs' },
+  general: { pathname: '/contact/other', hash: '#tabs' }
+} as const
+
+type ContactNavProps = React.ComponentProps<'div'> & {
+  contactTypes: ContactTypes
+}
 
 export function ContactNav({
   className,
+  contactTypes,
   ...props
-}: React.ComponentProps<'div'>) {
-  const navLabel = useContactNavigation()
-  const keys: ContactNavigationKey[] = ['tour', 'move-in', 'general']
+}: ContactNavProps) {
   const pathname = usePathname()
   const isMobile = useIsMobile()
 
@@ -22,11 +31,13 @@ export function ContactNav({
     <div className="relative overflow-hidden">
       <ScrollArea className="max-w-[600px] lg:max-w-none">
         <div className={cn('flex items-center', className)} {...props}>
-          {keys.map((key) => {
-            const { href, title } = navLabel(key)
+          {contactTypes?.map((contactType) => {
+            const key = stegaClean(contactType.key)
+            const href = HREFS[key]
+            if (!href || !contactType.title) return null
             return (
               <Link
-                key={`contact-nav-${key}`}
+                key={contactType._key}
                 href={href}
                 data-active={href.pathname === pathname}
                 className={cn(
@@ -34,7 +45,7 @@ export function ContactNav({
                 )}
                 scroll={!isMobile}
               >
-                {title}
+                {contactType.title}
               </Link>
             )
           })}
