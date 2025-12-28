@@ -27,7 +27,13 @@ export default async function HousePage({
   ])
 
   if (!data) {
-    return <PageEmptyState />
+    return (
+      <div className="container-wrapper section-soft flex-1 pb-12">
+        <div className="mx-auto w-full max-w-2xl">
+          <PageEmptyState />
+        </div>
+      </div>
+    )
   }
 
   const url = `${env.NEXT_PUBLIC_APP_URL}/${house}`

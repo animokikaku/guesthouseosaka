@@ -54,7 +54,13 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
   const hasContent = data?.houses && data.houses.length > 0
 
   if (!data || !hasContent) {
-    return <PageEmptyState />
+    return (
+      <div className="container-wrapper section-soft flex-1 pb-12">
+        <div className="mx-auto w-full max-w-2xl">
+          <PageEmptyState />
+        </div>
+      </div>
+    )
   }
 
   const { _id, _type, hero, collection, galleryWall, houses } = data
