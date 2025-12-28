@@ -17,6 +17,18 @@ import { useEffect, useMemo, useState } from 'react'
 const portableTextComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => <span>{children}</span>
+  },
+  list: {
+    bullet: ({ children }) => (
+      <ul className="list-none space-y-1">{children}</ul>
+    ),
+    number: ({ children }) => (
+      <ol className="list-none space-y-1">{children}</ol>
+    )
+  },
+  listItem: {
+    bullet: ({ children }) => <li>{children}</li>,
+    number: ({ children }) => <li>{children}</li>
   }
 }
 

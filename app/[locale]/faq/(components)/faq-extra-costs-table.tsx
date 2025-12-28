@@ -37,6 +37,18 @@ const portableTextComponents: PortableTextComponents = {
     normal: ({ children }) => (
       <p className="leading-relaxed whitespace-pre-line">{children}</p>
     )
+  },
+  list: {
+    bullet: ({ children }) => (
+      <ul className="list-none space-y-1">{children}</ul>
+    ),
+    number: ({ children }) => (
+      <ol className="list-none space-y-1">{children}</ol>
+    )
+  },
+  listItem: {
+    bullet: ({ children }) => <li className="break-words">{children}</li>,
+    number: ({ children }) => <li className="break-words">{children}</li>
   }
 }
 
@@ -119,7 +131,7 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
                 const slug = stegaClean(house.slug)
                 const value = costsByHouse[slug]?.[category]
                 return (
-                  <TableCell key={house._id}>
+                  <TableCell key={house._id} className="overflow-hidden">
                     {value ? (
                       <PortableText
                         value={value}
