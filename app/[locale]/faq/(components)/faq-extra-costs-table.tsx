@@ -35,7 +35,9 @@ const CATEGORY_ORDER = [
 
 const portableTextComponents: PortableTextComponents = {
   block: {
-    normal: ({ children }) => <p className="leading-relaxed">{children}</p>
+    normal: ({ children }) => (
+      <p className="leading-relaxed whitespace-pre-line">{children}</p>
+    )
   }
 }
 
@@ -104,14 +106,14 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
         <TableBody>
           {CATEGORY_ORDER.map((category) => (
             <TableRow key={category}>
-              <TableCell className="text-foreground font-medium">
+              <TableCell className="text-foreground font-medium wrap-break-word">
                 {categoryLabels[category]}
               </TableCell>
               {houses.map((house) => {
                 const slug = stegaClean(house.slug)
                 const value = costsByHouse[slug]?.[category]
                 return (
-                  <TableCell key={house._id}>
+                  <TableCell key={house._id} className="wrap-break-word">
                     {value ? (
                       <PortableText
                         value={value}
