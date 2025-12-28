@@ -83,7 +83,13 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
 
   return (
     <div className="border-border overflow-hidden rounded-xs border">
-      <Table className="w-full">
+      <Table className="w-full table-fixed">
+        <colgroup>
+          <col className="w-36" />
+          {houses.map((house) => (
+            <col key={house._id} />
+          ))}
+        </colgroup>
         <TableHeader>
           <TableRow>
             <TableHead className="bg-secondary text-foreground font-semibold" />
@@ -106,14 +112,14 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
         <TableBody>
           {CATEGORY_ORDER.map((category) => (
             <TableRow key={category}>
-              <TableCell className="text-foreground font-medium wrap-break-word">
+              <TableCell className="text-foreground whitespace-nowrap font-medium">
                 {categoryLabels[category]}
               </TableCell>
               {houses.map((house) => {
                 const slug = stegaClean(house.slug)
                 const value = costsByHouse[slug]?.[category]
                 return (
-                  <TableCell key={house._id} className="wrap-break-word">
+                  <TableCell key={house._id}>
                     {value ? (
                       <PortableText
                         value={value}
