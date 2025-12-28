@@ -1,44 +1,17 @@
 {
   "ContactLayout": {
-    "actions": {
-      "contact": "お問い合わせ",
-      "faq": "よくある質問",
-      "phone": "電話"
-    },
-    "description": "お問い合わせフォーム、お電話で受け付けております。ご連絡をいただきましたらできるだけ早くお返事いたします。",
     "meta": {
       "description": "ご不明点やご質問がございましたら、お気軽にお問い合わせください。",
       "title": "お問い合わせ"
-    },
-    "title": "お問い合わせ"
+    }
   },
   "FAQAccordion": {
-    "curfew": {
-      "answer": "どのハウスにも門限はありません。早朝や深夜は静かにお過ごしください。",
-      "question": "門限はありますか？"
-    },
-    "extra_costs": {
-      "question": "家賃以外にどんな費用がありますか？"
-    },
     "floors_and_rooms": {
       "format": "{floors}階建て・{rooms}室",
       "question": "フロア数と部屋数は？"
     },
-    "manager_in_residence": {
-      "answer": "<strong>オレンジハウス</strong>には常駐管理人がいますが、<strong>レモンハウス</strong>と<strong>アップルハウス</strong>にはいません。",
-      "question": "管理人は常駐していますか？"
-    },
-    "move_in_requirements": {
-      "answer": "各ハウスでは消耗品と有効な身分証明書をご持参ください。",
-      "question": "入居時に必要なものは？"
-    },
-    "rent_due_date": {
-      "answer": "<strong>オレンジハウス</strong>の家賃は毎月10日までにお支払いください。<strong>レモンハウス</strong>と<strong>アップルハウス</strong>は入居日と同じ日付が毎月の支払期日になります。例えば23日に入居した場合、毎月23日が支払日です。",
-      "question": "毎月いつ家賃を支払えばいいですか？"
-    },
-    "room_occupancy": {
-      "answer": "すべてのハウスで1部屋につき最大2名まで滞在できます。",
-      "question": "1部屋に何人まで滞在できますか？"
+    "extra_costs": {
+      "question": "家賃以外にどんな費用がありますか？"
     }
   },
   "FAQContactTable": {
@@ -46,35 +19,19 @@
     "within_japan": "日本国内"
   },
   "FAQExtraCostsTable": {
-    "common_fees": "共益費",
     "deposit": "デポジット",
-    "drying_machine": "乾燥機",
-    "free": "無料",
-    "free_wifi": "無料Wi-Fi",
-    "free_wifi_lan": "無料Wi-Fi/LAN",
-    "internet": "インターネット",
-    "laundromat": "ランドリー",
-    "price_per_minutes": "{price} / {minutes}",
-    "price_per_month": "{price} / 月",
-    "private_washer": "各部屋に専用の洗濯機があります。",
-    "seasonal_rates": {
-      "spring_autumn": "春・秋：{min}～{max}",
-      "summer_winter": "夏・冬：{min}～{max}"
-    },
+    "common_fees": "共益費",
     "utility_fees": "光熱費",
-    "water_bill": "水道代"
+    "water_bill": "水道代",
+    "laundromat": "ランドリー",
+    "drying_machine": "乾燥機",
+    "internet": "インターネット"
   },
   "FAQLayout": {
-    "actions": {
-      "email": "メール",
-      "phone": "電話"
-    },
-    "description": "滞在を最大限に楽しむための重要な情報をまとめました。ご質問が見つからない場合は、問い合わせフォームまたはお電話でお問い合わせください。",
     "meta": {
       "description": "シェアハウスに関するよくある質問への回答をご覧ください。",
       "title": "よくある質問"
-    },
-    "title": "よくある質問"
+    }
   },
   "GalleryModal": {
     "close": "ギャラリーを閉じる",
@@ -88,51 +45,7 @@
     "heading": "{house}について"
   },
   "HouseAmenities": {
-    "categories": {
-      "accommodation": "居室",
-      "bathroom": "バスルーム",
-      "building_access": "その他の設備",
-      "common_areas": "共用エリア",
-      "internet_climate": "インターネット＆空調",
-      "kitchen_dining": "キッチン＆ダイニング",
-      "laundry": "ランドリー施設"
-    },
     "heading": "設備・サービス",
-    "items": {
-      "air_conditioning_heating": "冷暖房",
-      "appliances": "その他家電（掃除機・アイロン）",
-      "bathroom_with_shower_bathtub": "シャワー・バスタブ付きバスルーム",
-      "bicycle_parking": "駐輪場",
-      "coffee_tea_corner": "コーヒー＆ティーコーナー",
-      "dryer": "乾燥機",
-      "drying_space": "物干しスペース",
-      "elevator": "エレベーター",
-      "free_wifi": "無料Wi-Fi",
-      "lan_cable": "LANケーブル",
-      "furnished_rooms": "家具付き個室（{size}㎡）",
-      "kitchen": "キッチン",
-      "large_refrigerator": "大型冷蔵庫",
-      "lounge": "ラウンジ",
-      "lounge_kitchen_oven": "オーブン付きラウンジキッチン",
-      "mailbox": "メールボックス",
-      "cluster_mailboxes": "集合郵便受け",
-      "door_mail_slot": "ドア投函口",
-      "microwave_toaster": "電子レンジ＆トースター",
-      "microwave_toaster_rice_cooker": "電子レンジ・トースター・炊飯器",
-      "monthly_parties": "マンスリーパーティー",
-      "refrigerator": "冷蔵庫",
-      "rooftop_lounge": "ルーフトップラウンジ（100㎡）",
-      "secure_entry": "セキュリティ付きエントランス",
-      "shower": "シャワー",
-      "spacious_rooms": "広々とした客室（19㎡）",
-      "tableware": "食器類",
-      "tv_entertainment": "Netflix・Blu-ray・ケーブル対応テレビ",
-      "washing_machine": "洗濯機",
-      "washlet_toilet": "ウォシュレット",
-      "toilet": "トイレ",
-      "smoking_area": "喫煙所　8階",
-      "rooftop_garden": "ルーフトップガーデン"
-    },
     "notes": {
       "coin": "コイン",
       "private": "個室",
@@ -180,13 +93,6 @@
     "close_button": "閉じる",
     "last_updated": "最終更新日：{date}",
     "title": "プライバシーポリシー"
-  },
-  "LocalePage": {
-    "hero_action": "お問い合わせ",
-    "hero_description": "私たちゲストハウス大阪が運営する3つのシェアハウスで国際交流をぜひお楽しみください。",
-    "hero_title": "創業1991年<block>大阪で3つの</block>シェアハウス",
-    "houses_description": "大阪の中心部に住むという快適さ、国際交流、そしてライフスタイルを追求して作られた3棟のシェアハウス。",
-    "houses_title": "ゲストハウス大阪のシェアハウスへようこそ"
   },
   "MessageField": {
     "character_counter": "{count} / {max} 文字",

@@ -1,44 +1,17 @@
 {
   "ContactLayout": {
-    "actions": {
-      "contact": "Contact",
-      "faq": "FAQ",
-      "phone": "Phone"
-    },
-    "description": "Reach us via the contact form or by phone. We'll reply as quickly as possible.",
     "meta": {
       "description": "Get in touch with us for any inquiries or questions.",
       "title": "Contact"
-    },
-    "title": "Get in touch"
+    }
   },
   "FAQAccordion": {
-    "curfew": {
-      "answer": "There is no curfew in any house; please keep noise low in the early mornings and late evenings.",
-      "question": "Is there a curfew?"
-    },
-    "extra_costs": {
-      "question": "What extra costs are there besides rent?"
-    },
     "floors_and_rooms": {
       "format": "{floors}-story building with {rooms} rooms.",
       "question": "How many floors and rooms?"
     },
-    "manager_in_residence": {
-      "answer": "<strong>Orange House</strong> has an on-site manager, while <strong>Lemon House</strong> and <strong>Apple House</strong> do not.",
-      "question": "Is there a manager in residence?"
-    },
-    "move_in_requirements": {
-      "answer": "Each house requires you to bring consumables and a valid ID.",
-      "question": "What do I need when I move in?"
-    },
-    "rent_due_date": {
-      "answer": "<strong>Orange House</strong> rent is due by the 10th of each month, while <strong>Lemon House</strong> and <strong>Apple House</strong> pay on the calendar day that matches their move-in date. For example, if you move in on the 23rd, rent is due every 23rd.",
-      "question": "When do I need to pay the rent every month?"
-    },
-    "room_occupancy": {
-      "answer": "All houses accommodate up to 2 guests per room.",
-      "question": "Up to how many people can stay in a room?"
+    "extra_costs": {
+      "question": "What extra costs are there besides rent?"
     }
   },
   "FAQContactTable": {
@@ -46,35 +19,19 @@
     "within_japan": "Within Japan"
   },
   "FAQExtraCostsTable": {
-    "common_fees": "Common fees",
     "deposit": "Deposit",
-    "drying_machine": "Drying machine",
-    "free": "Free",
-    "free_wifi": "Free Wi-Fi",
-    "free_wifi_lan": "Free Wi-Fi/LAN",
-    "internet": "Internet",
-    "laundromat": "Laundromat",
-    "price_per_minutes": "{price}/{minutes}",
-    "price_per_month": "{price}/month",
-    "private_washer": "Each room has a private washing machine.",
-    "seasonal_rates": {
-      "spring_autumn": "Spring/Autumn: {min}-{max}",
-      "summer_winter": "Summer/Winter: {min}-{max}"
-    },
+    "common_fees": "Common fees",
     "utility_fees": "Utility fees",
-    "water_bill": "Water bill"
+    "water_bill": "Water bill",
+    "laundromat": "Laundromat",
+    "drying_machine": "Drying machine",
+    "internet": "Internet"
   },
   "FAQLayout": {
-    "actions": {
-      "email": "Email",
-      "phone": "Phone"
-    },
-    "description": "Here you'll find the key information to make the most of your stay. If you don't see your question here, please contact us via the inquiry form or by phone.",
     "meta": {
       "description": "Find answers to common questions about our share houses.",
       "title": "FAQ"
-    },
-    "title": "Frequently asked questions"
+    }
   },
   "GalleryModal": {
     "close": "Close gallery",
@@ -88,51 +45,7 @@
     "heading": "About {house}"
   },
   "HouseAmenities": {
-    "categories": {
-      "accommodation": "Room",
-      "bathroom": "Bathroom",
-      "building_access": "Other facilities",
-      "common_areas": "Common areas",
-      "internet_climate": "Internet & climate",
-      "kitchen_dining": "Kitchen & dining",
-      "laundry": "Laundry"
-    },
     "heading": "What this place offers",
-    "items": {
-      "air_conditioning_heating": "Air conditioning & heating",
-      "appliances": "Other appliances (vacuum, iron)",
-      "bathroom_with_shower_bathtub": "Bathroom with shower & bathtub",
-      "bicycle_parking": "Bicycle parking",
-      "coffee_tea_corner": "Coffee & tea corner",
-      "dryer": "Dryer",
-      "drying_space": "Drying space",
-      "elevator": "Elevator",
-      "free_wifi": "Free Wi-Fi",
-      "lan_cable": "LAN cable",
-      "furnished_rooms": "Fully furnished rooms ({size} m²)",
-      "kitchen": "Kitchen",
-      "large_refrigerator": "Large refrigerator",
-      "lounge": "Lounge",
-      "lounge_kitchen_oven": "Lounge kitchen with oven",
-      "mailbox": "Mailbox",
-      "cluster_mailboxes": "Cluster mailboxes",
-      "door_mail_slot": "Door mail slot",
-      "microwave_toaster": "Microwave & toaster",
-      "microwave_toaster_rice_cooker": "Microwave, toaster & rice cooker",
-      "monthly_parties": "Monthly parties",
-      "refrigerator": "Refrigerator",
-      "rooftop_lounge": "Rooftop lounge (100 m²)",
-      "secure_entry": "Secure entry",
-      "shower": "Shower",
-      "spacious_rooms": "Spacious rooms (19 m²)",
-      "tableware": "Tableware",
-      "tv_entertainment": "TV with Netflix, Blu-ray, cable",
-      "washing_machine": "Washing machine",
-      "washlet_toilet": "Washlet toilet",
-      "toilet": "Toilet",
-      "smoking_area": "Smoking area 8F",
-      "rooftop_garden": "Rooftop garden"
-    },
     "notes": {
       "coin": "Coin",
       "private": "Private",
@@ -180,13 +93,6 @@
     "close_button": "Close",
     "last_updated": "Last updated: {date}",
     "title": "Privacy Policy"
-  },
-  "LocalePage": {
-    "hero_action": "Contact us",
-    "hero_description": "Enjoy international exchange at the three share houses we operate in Osaka.",
-    "hero_title": "Since 1991, <block>three share houses</block> in Osaka",
-    "houses_description": "Three share houses designed to offer the comfort of living in central Osaka, encourage international exchange, and provide a unique lifestyle.",
-    "houses_title": "Welcome to the Guest House Osaka share house"
   },
   "MessageField": {
     "character_counter": "{count} / {max} characters",

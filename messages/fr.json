@@ -1,44 +1,17 @@
 {
   "ContactLayout": {
-    "actions": {
-      "contact": "Contact",
-      "faq": "FAQ",
-      "phone": "Téléphone"
-    },
-    "description": "Nous recevons vos demandes via le formulaire de contact ou par téléphone. Dès réception, nous vous répondrons au plus vite.",
     "meta": {
       "description": "Contactez-nous pour toute demande ou question.",
       "title": "Contact"
-    },
-    "title": "Entrer en contact"
+    }
   },
   "FAQAccordion": {
-    "curfew": {
-      "answer": "Il n'y a pas de couvre-feu dans aucune maison ; merci de limiter le bruit tôt le matin et tard le soir.",
-      "question": "Y a-t-il un couvre-feu ?"
-    },
-    "extra_costs": {
-      "question": "Quels frais supplémentaires s'ajoutent au loyer ?"
-    },
     "floors_and_rooms": {
       "format": "Bâtiment de {floors} étages avec {rooms} chambres.",
       "question": "Combien d'étages et de chambres ?"
     },
-    "manager_in_residence": {
-      "answer": "<strong>Orange House</strong> dispose d’un responsable sur place. <strong>Lemon House</strong> et <strong>Apple House</strong> n’en ont pas.",
-      "question": "Y a-t-il un responsable sur place ?"
-    },
-    "move_in_requirements": {
-      "answer": "Chaque maison nécessite que vous apportiez des consommables et une pièce d'identité valide.",
-      "question": "Que dois-je apporter lors de mon emménagement ?"
-    },
-    "rent_due_date": {
-      "answer": "Le loyer de <strong>Orange House</strong> est dû le 10 de chaque mois, tandis que <strong>Lemon House</strong> et <strong>Apple House</strong> paient le jour du mois correspondant à leur date d'emménagement. Par exemple, si vous emménagez le 23, le loyer est dû chaque 23.",
-      "question": "Quand dois-je payer le loyer chaque mois ?"
-    },
-    "room_occupancy": {
-      "answer": "Toutes les maisons peuvent accueillir jusqu'à 2 personnes par chambre.",
-      "question": "Combien de personnes peuvent séjourner dans une chambre ?"
+    "extra_costs": {
+      "question": "Quels frais supplémentaires s'ajoutent au loyer ?"
     }
   },
   "FAQContactTable": {
@@ -46,35 +19,19 @@
     "within_japan": "Depuis le Japon"
   },
   "FAQExtraCostsTable": {
-    "common_fees": "Charges comm.",
     "deposit": "Caution",
-    "drying_machine": "Sèche-linge",
-    "free": "Gratuit",
-    "free_wifi": "Wi-Fi gratuit",
-    "free_wifi_lan": "Wi-Fi / LAN gratuit",
-    "internet": "Internet",
-    "laundromat": "Laverie",
-    "price_per_minutes": "{price} / {minutes}",
-    "price_per_month": "{price} / mois",
-    "private_washer": "Chaque chambre dispose d'une machine à laver privée.",
-    "seasonal_rates": {
-      "spring_autumn": "Printemps/Automne : {min} – {max}",
-      "summer_winter": "Été/Hiver : {min} – {max}"
-    },
+    "common_fees": "Charges comm.",
     "utility_fees": "Charges",
-    "water_bill": "Facture d'eau"
+    "water_bill": "Facture d'eau",
+    "laundromat": "Laverie",
+    "drying_machine": "Sèche-linge",
+    "internet": "Internet"
   },
   "FAQLayout": {
-    "actions": {
-      "email": "E-mail",
-      "phone": "Téléphone"
-    },
-    "description": "Découvrez ici les informations essentielles pour profiter pleinement de votre séjour. Si votre question n'y figure pas, contactez-nous via le formulaire ou par téléphone.",
     "meta": {
       "description": "Trouvez des réponses aux questions les plus fréquemment posées sur nos maisons en commun.",
       "title": "FAQ"
-    },
-    "title": "Foire aux questions"
+    }
   },
   "GalleryModal": {
     "close": "Fermer la galerie",
@@ -88,51 +45,7 @@
     "heading": "À propos de {house}"
   },
   "HouseAmenities": {
-    "categories": {
-      "accommodation": "Chambre",
-      "bathroom": "Salle de bain",
-      "building_access": "Autres équipements",
-      "common_areas": "Espaces communs",
-      "internet_climate": "Internet et confort",
-      "kitchen_dining": "Cuisine et salle à manger",
-      "laundry": "Buanderie"
-    },
     "heading": "Ce qu'offre cet endroit",
-    "items": {
-      "air_conditioning_heating": "Climatisation et chauffage",
-      "appliances": "Autres appareils ménagers (aspirateur, fer)",
-      "bathroom_with_shower_bathtub": "Salle de bain avec douche et baignoire",
-      "bicycle_parking": "Parking à vélos",
-      "coffee_tea_corner": "Coin café et thé",
-      "dryer": "Sèche-linge",
-      "drying_space": "Espace de séchage",
-      "elevator": "Ascenseur",
-      "free_wifi": "Wi-Fi gratuit",
-      "lan_cable": "Câble LAN",
-      "furnished_rooms": "Chambres entièrement meublées ({size} m²)",
-      "kitchen": "Cuisine",
-      "large_refrigerator": "Grand réfrigérateur",
-      "lounge": "Salon",
-      "lounge_kitchen_oven": "Cuisine du lounge avec four",
-      "mailbox": "Boîte aux lettres",
-      "cluster_mailboxes": "Boîtes aux lettres collectives",
-      "door_mail_slot": "Fente de porte",
-      "microwave_toaster": "Micro-ondes et grille-pain",
-      "microwave_toaster_rice_cooker": "Micro-ondes, grille-pain et cuiseur à riz",
-      "monthly_parties": "Fêtes mensuelles",
-      "refrigerator": "Réfrigérateur",
-      "rooftop_lounge": "Salon rooftop (100 m²)",
-      "secure_entry": "Entrée sécurisée",
-      "shower": "Douche",
-      "spacious_rooms": "Chambres spacieuses (19 m²)",
-      "tableware": "Vaisselle",
-      "tv_entertainment": "TV avec Netflix, Blu-ray, câble",
-      "washing_machine": "Machine à laver",
-      "washlet_toilet": "Toilettes avec washlet",
-      "toilet": "Toilette",
-      "smoking_area": "Espace fumeur, 8ᵉ étage",
-      "rooftop_garden": "Jardin rooftop"
-    },
     "notes": {
       "coin": "Pièce",
       "private": "Privé",
@@ -180,13 +93,6 @@
     "close_button": "Fermer",
     "last_updated": "Dernière mise à jour : {date}",
     "title": "Politique de confidentialité"
-  },
-  "LocalePage": {
-    "hero_action": "Contactez‑nous",
-    "hero_description": "Profitez d'échanges internationaux dans les trois share houses que nous gérons à Osaka.",
-    "hero_title": "Depuis 1991, <block>trois share houses</block> à Osaka",
-    "houses_description": "Trois maisons partagées conçues pour offrir le confort de vivre au cœur d’Osaka, favoriser les échanges internationaux et créer un cadre de vie unique.",
-    "houses_title": "Bienvenue dans la share house de Guest House Osaka"
   },
   "MessageField": {
     "character_counter": "{count} / {max} caractères",
