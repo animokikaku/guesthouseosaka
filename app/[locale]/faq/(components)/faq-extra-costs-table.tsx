@@ -47,8 +47,8 @@ const portableTextComponents: PortableTextComponents = {
     )
   },
   listItem: {
-    bullet: ({ children }) => <li className="break-words">{children}</li>,
-    number: ({ children }) => <li className="break-words">{children}</li>
+    bullet: ({ children }) => <li className="wrap-break-word">{children}</li>,
+    number: ({ children }) => <li className="wrap-break-word">{children}</li>
   }
 }
 
@@ -97,7 +97,7 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
     <div className="border-border overflow-hidden rounded-xs border">
       <Table className="w-full table-fixed">
         <colgroup>
-          <col className="w-36" />
+          <col className="w-30" />
           {houses.map((house) => (
             <col key={house._id} />
           ))}
@@ -124,7 +124,7 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
         <TableBody>
           {CATEGORY_ORDER.map((category) => (
             <TableRow key={category}>
-              <TableCell className="text-foreground whitespace-nowrap font-medium">
+              <TableCell className="text-foreground font-medium whitespace-nowrap">
                 {categoryLabels[category]}
               </TableCell>
               {houses.map((house) => {
