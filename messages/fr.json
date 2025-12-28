@@ -1,7 +1,7 @@
 {
   "FAQAccordion": {
     "floors_and_rooms": {
-      "format": "Bâtiment de {floors} étages avec {rooms} chambres.",
+      "format": "Bâtiment de <floorsTag>{floors}</floorsTag> étages avec <roomsTag>{rooms}</roomsTag> chambres.",
       "question": "Combien d'étages et de chambres ?"
     },
     "extra_costs": {

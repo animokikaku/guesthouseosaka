@@ -78,14 +78,21 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
               const { floors, rooms } = building
               const dataAttr = createDataAttribute({ id: _id, type: _type })
               return (
-                <li
-                  key={`floors-and-rooms-${slug}`}
-                  data-sanity={dataAttr('building')}
-                >
+                <li key={`floors-and-rooms-${slug}`}>
                   <strong>{stegaClean(title)}: </strong>
-                  {t('floors_and_rooms.format', {
+                  {t.rich('floors_and_rooms.format', {
                     floors: formatter.number(floors),
-                    rooms: formatter.number(rooms)
+                    rooms: formatter.number(rooms),
+                    floorsTag: (chunks) => (
+                      <span data-sanity={dataAttr('building.floors')}>
+                        {chunks}
+                      </span>
+                    ),
+                    roomsTag: (chunks) => (
+                      <span data-sanity={dataAttr('building.rooms')}>
+                        {chunks}
+                      </span>
+                    )
                   })}
                 </li>
               )
