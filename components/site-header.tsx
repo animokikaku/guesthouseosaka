@@ -23,36 +23,38 @@ export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
   const t = useTranslations('SiteHeader')
   const isMobile = useIsMobile()
 
-  const navItems: NavItems = [
-    {
-      key: 'share-houses',
-      items: (houses ?? []).map(
-        ({ slug, title, description, caption, image }) => {
-          const { icon } = assets[slug]
-          const src = urlFor(image)
-            .width(250)
-            .height(150)
-            .dpr(2)
-            .fit('crop')
-            .url()
+  const houseItems = (houses ?? []).map(
+    ({ slug, title, description, caption, image }) => {
+      const { icon } = assets[slug]
+      const src = urlFor(image).width(250).height(150).dpr(2).fit('crop').url()
 
-          return {
-            key: slug,
-            href: { pathname: '/[house]', params: { house: slug } },
-            label: title ?? slug,
-            description: description ?? undefined,
-            caption: caption ?? undefined,
-            icon,
-            background: {
-              src,
-              alt: image?.alt ?? '',
-              blurDataURL: image?.lqip ?? undefined
-            }
-          }
+      return {
+        key: slug,
+        href: { pathname: '/[house]', params: { house: slug } } as const,
+        label: title ?? slug,
+        description: description ?? undefined,
+        caption: caption ?? undefined,
+        icon,
+        background: {
+          src,
+          alt: image?.alt ?? '',
+          blurDataURL: image?.lqip ?? undefined
         }
-      ),
-      label: t('navigation.share_houses')
-    },
+      }
+    }
+  )
+
+  const navItems: NavItems = [
+    // Only include share-houses menu if there are houses
+    ...(houseItems.length > 0
+      ? [
+          {
+            key: 'share-houses',
+            items: houseItems,
+            label: t('navigation.share_houses')
+          }
+        ]
+      : []),
     {
       key: 'faq',
       href: '/faq',

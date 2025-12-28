@@ -17,7 +17,10 @@ export default async function ContactPage({
     params: { locale }
   })
 
-  if (!data) {
+  // Check for actual content, not just existence of the document
+  const hasContactTypes = data?.contactTypes && data.contactTypes.length > 0
+
+  if (!data || !hasContactTypes) {
     return <PageEmptyState />
   }
 

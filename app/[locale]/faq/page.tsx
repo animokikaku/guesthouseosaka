@@ -21,7 +21,11 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
     })
   ])
 
-  if (!faqPage || !housesBuilding) return <PageEmptyState />
+  // Check for actual content, not just existence of objects
+  const hasHouses = housesBuilding && housesBuilding.length > 0
+  const hasFaqItems = faqPage?.items && faqPage.items.length > 0
+
+  if (!hasFaqItems || !hasHouses) return <PageEmptyState />
 
   return (
     <section className="mx-auto flex w-full max-w-3xl flex-col gap-12">

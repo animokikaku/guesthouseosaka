@@ -1,6 +1,7 @@
 import { Collection } from '@/components/collection'
 import { GalleryWall } from '@/components/gallery-wall'
 import { PageActions, PageHeader } from '@/components/page-header'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -8,7 +9,6 @@ import { homePageQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
-import { notFound } from 'next/navigation'
 
 const heroComponents: PortableTextComponents = {
   block: {
@@ -50,8 +50,11 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
     params: { locale }
   })
 
-  if (!data) {
-    notFound()
+  // Check for actual content, not just existence of the document
+  const hasContent = data?.houses && data.houses.length > 0
+
+  if (!data || !hasContent) {
+    return <PageEmptyState />
   }
 
   const { _id, _type, hero, collection, galleryWall, houses } = data
