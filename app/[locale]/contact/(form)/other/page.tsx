@@ -1,4 +1,5 @@
 import { ContactForm } from '@/components/forms'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactTypeQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
@@ -16,7 +17,7 @@ export default async function ContactPage({
   })
 
   if (!data) {
-    return null
+    return <PageEmptyState />
   }
 
   const { title, description } = data

@@ -1,4 +1,5 @@
 import { MoveInForm } from '@/components/forms'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactTypeQuery, housesTitlesQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
@@ -21,8 +22,8 @@ export default async function ContactPage({
     })
   ])
 
-  if (!contactData || !houseTitles) {
-    return null
+  if (!contactData || !houseTitles || houseTitles.length === 0) {
+    return <PageEmptyState />
   }
 
   const { title, description } = contactData

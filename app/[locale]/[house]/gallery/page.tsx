@@ -1,5 +1,6 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HouseGallery } from '@/components/gallery/house-gallery'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -26,7 +27,7 @@ export default async function GalleryPage({
   })
 
   if (!data) {
-    notFound()
+    return <PageEmptyState />
   }
 
   return (

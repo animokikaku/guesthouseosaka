@@ -1,6 +1,7 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HouseGallery } from '@/components/gallery/house-gallery'
 import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
@@ -23,7 +24,7 @@ export default async function GalleryModalPage({
   })
 
   if (!data) {
-    notFound()
+    return <PageEmptyState />
   }
 
   return (
