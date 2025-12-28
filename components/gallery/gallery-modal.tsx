@@ -18,6 +18,7 @@ import { getImageDimensions } from '@sanity/asset-utils'
 import { useStore } from '@tanstack/react-form'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { stegaClean } from 'next-sanity'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -71,6 +72,11 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
   const photoId = useStore(store, (state) => state.photoId)
 
   const imageList = gallery ?? []
+  const currentAlt =
+    selectedIndex !== null
+      ? stegaClean(imageList[selectedIndex].image.alt)
+      : null
+
   const startIndex = photoId ? getImageIndex(imageList, photoId) : undefined
 
   const { onTouchStart, onTouchEnd } = useSwipeToClose({
@@ -127,6 +133,7 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
           if (!image?.asset) return null
           const dimensions = getImageDimensions(image.asset)
           const src = urlFor(image).url()
+          const alt = image.alt ? stegaClean(image.alt) : ''
 
           return (
             <CarouselItem
@@ -135,7 +142,7 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
             >
               <Image
                 src={src}
-                alt={image.alt ?? ''}
+                alt={alt}
                 width={dimensions.width}
                 height={dimensions.height}
                 placeholder={image.preview ? 'blur' : undefined}
@@ -147,10 +154,10 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
           )
         })}
       </CarouselContent>
-      {selectedIndex !== null && imageList[selectedIndex]?.image?.alt && (
+      {currentAlt && (
         <div className="pointer-events-none absolute bottom-0 left-1/2 z-50 w-full -translate-x-1/2 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] text-center sm:pb-4 lg:w-fit">
           <span className="bg-primary-foreground/90 pointer-events-auto inline-block max-w-[90vw] rounded-lg px-4 py-2 text-sm wrap-break-word backdrop-blur-sm sm:max-w-none sm:text-base">
-            {imageList[selectedIndex].image.alt}
+            {currentAlt}
           </span>
         </div>
       )}
