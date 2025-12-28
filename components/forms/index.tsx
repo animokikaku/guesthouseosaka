@@ -29,6 +29,7 @@ import { useTranslations } from 'next-intl'
 export { ContactForm } from './contact-form'
 export { FormCard } from './form-card'
 export { MoveInForm } from './move-in-form'
+export { PrivacyPolicyField } from './privacy-policy-field'
 export { TourForm } from './tour-form'
 export { useFormSubmit } from './use-form-submit'
 
