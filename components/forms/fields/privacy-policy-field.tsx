@@ -28,15 +28,18 @@ export function PrivacyPolicyField() {
             aria-invalid={isInvalid}
             onCheckedChange={(checked) => field.handleChange(checked === true)}
             onBlur={() => field.handleBlur()}
-            required
           />
           <FieldLabel
             htmlFor={`form-tanstack-checkbox-${field.name}`}
             className="text-muted-foreground font-normal"
           >
-            {t.rich('fields.privacy_policy_agreement', {
-              link: (chunks) => <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
-            })}
+            <p className="text-muted-foreground">
+              {t.rich('fields.privacy_policy_agreement', {
+                link: (chunks) => (
+                  <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
+                )
+              })}
+            </p>
           </FieldLabel>
         </Field>
       </FieldGroup>
