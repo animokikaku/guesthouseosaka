@@ -80,7 +80,7 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
                   key={`floors-and-rooms-${house.slug}`}
                   data-sanity={dataAttribute('building')}
                 >
-                  <strong>{house.title}: </strong>
+                  <strong>{stegaClean(house.title)}: </strong>
                   {t('floors_and_rooms.format', {
                     floors: formatter.number(floors),
                     rooms: formatter.number(rooms)
