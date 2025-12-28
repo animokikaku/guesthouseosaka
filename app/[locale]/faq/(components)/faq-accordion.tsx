@@ -76,10 +76,11 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
             {housesBuilding.map(({ _id, _type, slug, title, building }) => {
               if (!building) return null
               const { floors, rooms } = building
+              const dataAttr = createDataAttribute({ id: _id, type: _type })
               return (
                 <li
                   key={`floors-and-rooms-${slug}`}
-                  data-sanity={createDataAttribute({ id: _id, type: _type }).toString()}
+                  data-sanity={dataAttr('building')}
                 >
                   <strong>{stegaClean(title)}: </strong>
                   {t('floors_and_rooms.format', {
