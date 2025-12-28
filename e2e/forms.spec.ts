@@ -242,6 +242,22 @@ test.describe('Contact Form Tests', () => {
     })
 
     test('loading state shows while submitting', async ({ page }) => {
+      // Mock the API route to prevent actual email sending
+      await page.route('**/contact', async (route) => {
+        const request = route.request()
+        if (request.method() === 'POST') {
+          // Add a small delay to observe loading state
+          await new Promise((resolve) => setTimeout(resolve, 500))
+          await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({ success: true })
+          })
+        } else {
+          await route.continue()
+        }
+      })
+
       // Fill all required fields
       await page.getByPlaceholder('Enter your name').fill('Test User')
       await page.getByPlaceholder('Enter your email').fill('test@example.com')
