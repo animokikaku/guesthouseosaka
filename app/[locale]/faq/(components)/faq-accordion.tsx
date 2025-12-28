@@ -1,5 +1,6 @@
 'use client'
 
+import { FAQExtraCostsCards } from '@/app/[locale]/faq/(components)/faq-extra-costs-cards'
 import { FAQExtraCostsTable } from '@/app/[locale]/faq/(components)/faq-extra-costs-table'
 import {
   Accordion,
@@ -97,7 +98,12 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
           {t('extra_costs.question')}
         </AccordionTrigger>
         <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
-          <FAQExtraCostsTable />
+          <div className="md:hidden">
+            <FAQExtraCostsCards houses={housesBuilding} />
+          </div>
+          <div className="hidden md:block">
+            <FAQExtraCostsTable houses={housesBuilding} />
+          </div>
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -1,5 +1,66 @@
 [
   {
+    "name": "extraCostItem",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "extraCostItem"
+          }
+        },
+        "category": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "union",
+            "of": [
+              {
+                "type": "string",
+                "value": "deposit"
+              },
+              {
+                "type": "string",
+                "value": "common-fees"
+              },
+              {
+                "type": "string",
+                "value": "utility-fees"
+              },
+              {
+                "type": "string",
+                "value": "water-bill"
+              },
+              {
+                "type": "string",
+                "value": "laundromat"
+              },
+              {
+                "type": "string",
+                "value": "drying-machine"
+              },
+              {
+                "type": "string",
+                "value": "internet"
+              }
+            ]
+          },
+          "optional": false
+        },
+        "value": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "internationalizedArrayPortableText"
+          },
+          "optional": false
+        }
+      }
+    }
+  },
+  {
     "name": "pageAction",
     "type": "type",
     "value": {
@@ -1416,6 +1477,28 @@
             "rest": {
               "type": "inline",
               "name": "pricingRow"
+            }
+          }
+        },
+        "optional": true
+      },
+      "extraCosts": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "array",
+          "of": {
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
+              }
+            },
+            "rest": {
+              "type": "inline",
+              "name": "extraCostItem"
             }
           }
         },

@@ -223,6 +223,15 @@ export const house = defineType({
       description: 'Pricing information rows with rich text content',
       of: [defineArrayMember({ type: 'pricingRow' })]
     }),
+    defineField({
+      name: 'extraCosts',
+      title: 'Extra Costs',
+      type: 'array',
+      group: 'pricing',
+      description:
+        'Additional costs shown in the FAQ section (deposit, fees, utilities)',
+      of: [defineArrayMember({ type: 'extraCostItem' })]
+    }),
 
     // ============================================
     // CONTACT GROUP

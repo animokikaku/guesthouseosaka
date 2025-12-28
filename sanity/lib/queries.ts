@@ -211,7 +211,12 @@ export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(slug
     rooms,
     floors
   },
-  phone
+  phone,
+  "extraCosts": extraCosts[]{
+    _key,
+    category,
+    "value": coalesce(value[_key == $locale][0].value, value[_key == "en"][0].value)[]
+  }
 }`)
 
 // =============================================================================

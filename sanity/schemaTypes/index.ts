@@ -15,6 +15,7 @@ import { settings } from './documents/settings'
 import {
   address,
   contactType,
+  extraCostItem,
   faqItem,
   galleryImage,
   houseAmenity,
@@ -48,6 +49,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     faqItem,
     address,
     contactType,
-    pageAction
+    pageAction,
+    extraCostItem
   ]
 }

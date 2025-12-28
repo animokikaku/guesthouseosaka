@@ -1,5 +1,6 @@
 export { address } from './address'
 export { contactType } from './contact-type'
+export { extraCostItem } from './extra-cost-item'
 export { faqItem } from './faq-item'
 export { galleryImage } from './gallery-image'
 export { houseAmenity } from './house-amenity'
