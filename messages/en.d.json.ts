@@ -90,6 +90,10 @@ declare const messages: {
     "description": "The page you're looking for isn't found, we suggest you back to home.",
     "title": "Oops!"
   },
+  "PageEmptyState": {
+    "title": "Content not available",
+    "description": "This page content is managed in Sanity CMS. Please add content to display it here."
+  },
   "ResetButton": {
     "label": "Reset"
   },

@@ -1,6 +1,7 @@
 import type { Locale } from 'next-intl'
 
 import { ContactTypesList } from '@/app/[locale]/contact/(components)/contact-types-list'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactPageQuery } from '@/sanity/lib/queries'
 import { setRequestLocale } from 'next-intl/server'
@@ -17,7 +18,7 @@ export default async function ContactPage({
   })
 
   if (!data) {
-    return null
+    return <PageEmptyState />
   }
 
   const { _id, _type, contactTypes } = data

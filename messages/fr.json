@@ -87,6 +87,10 @@
     "description": "La page que vous cherchez est introuvable, nous vous suggérons de revenir à l'accueil.",
     "title": "Oups !"
   },
+  "PageEmptyState": {
+    "title": "Contenu non disponible",
+    "description": "Le contenu de cette page est géré dans Sanity CMS. Veuillez ajouter du contenu pour l'afficher ici."
+  },
   "ResetButton": {
     "label": "Réinitialiser"
   },

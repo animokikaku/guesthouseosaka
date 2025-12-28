@@ -87,6 +87,10 @@
     "description": "お探しのページが見つかりません。ホームに戻ってください。",
     "title": "おっと！"
   },
+  "PageEmptyState": {
+    "title": "コンテンツがありません",
+    "description": "このページのコンテンツはSanity CMSで管理されています。コンテンツを追加してください。"
+  },
   "ResetButton": {
     "label": "リセット"
   },

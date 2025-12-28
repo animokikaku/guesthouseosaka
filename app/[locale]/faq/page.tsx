@@ -1,5 +1,6 @@
 import { FAQAccordion } from '@/app/[locale]/faq/(components)/faq-accordion'
 import FAQCard from '@/app/[locale]/faq/(components)/faq-card'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { faqPageQuery, housesBuildingQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
@@ -20,7 +21,7 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
     })
   ])
 
-  if (!faqPage || !housesBuilding) return null
+  if (!faqPage || !housesBuilding) return <PageEmptyState />
 
   return (
     <section className="mx-auto flex w-full max-w-3xl flex-col gap-12">
