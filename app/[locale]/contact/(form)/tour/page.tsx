@@ -21,11 +21,15 @@ export default async function ContactPage({
     })
   ])
 
+  if (!contactData || !houseTitles) {
+    return null
+  }
+
   return (
     <TourForm
-      title={contactData?.title}
-      description={contactData?.description}
-      houseTitles={houseTitles ?? []}
+      title={contactData.title}
+      description={contactData.description}
+      houseTitles={houseTitles}
     />
   )
 }

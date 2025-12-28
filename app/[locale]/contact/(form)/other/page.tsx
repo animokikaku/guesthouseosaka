@@ -15,5 +15,11 @@ export default async function ContactPage({
     params: { locale, type: 'general' }
   })
 
-  return <ContactForm title={data?.title} description={data?.description} />
+  if (!data) {
+    return null
+  }
+
+  const { title, description } = data
+
+  return <ContactForm title={title} description={description} />
 }

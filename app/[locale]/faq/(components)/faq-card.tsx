@@ -1,33 +1,31 @@
 import { FAQContactTable } from '@/app/[locale]/faq/(components)/faq-contact-table'
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader
-} from '@/components/ui/card'
-import type { FaqPageQueryResult, HousesBuildingQueryResult } from '@/sanity.types'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import type {
+  FaqPageQueryResult,
+  HousesBuildingQueryResult
+} from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 
 const components: PortableTextComponents = {
   block: {
-    h2: ({ children }) => (
-      <h2 className="text-2xl font-bold">{children}</h2>
-    ),
+    h2: ({ children }) => <h2 className="text-2xl font-bold">{children}</h2>,
     normal: ({ children }) => (
       <p className="text-muted-foreground text-md">{children}</p>
     )
   }
 }
 
-type Houses = NonNullable<HousesBuildingQueryResult>
-
 type FAQCardProps = {
   contactSection: NonNullable<FaqPageQueryResult>['contactSection'] | null
   contactNote: NonNullable<FaqPageQueryResult>['contactNote'] | null
-  houses: Houses
+  houses: NonNullable<HousesBuildingQueryResult>
 }
 
-export default function FAQCard({ contactSection, contactNote, houses }: FAQCardProps) {
+export default function FAQCard({
+  contactSection,
+  contactNote,
+  houses
+}: FAQCardProps) {
   return (
     <Card>
       <CardHeader className="text-center">

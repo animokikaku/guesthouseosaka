@@ -21,11 +21,17 @@ export default async function ContactPage({
     })
   ])
 
+  if (!contactData || !houseTitles) {
+    return null
+  }
+
+  const { title, description } = contactData
+
   return (
     <MoveInForm
-      title={contactData?.title}
-      description={contactData?.description}
-      houseTitles={houseTitles ?? []}
+      title={title}
+      description={description}
+      houseTitles={houseTitles}
     />
   )
 }

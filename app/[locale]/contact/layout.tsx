@@ -33,16 +33,18 @@ export async function generateMetadata(
     sanityFetch({ query: settingsQuery, params: { locale } })
   ])
 
-  const title = contactPage?.metaTitle ?? 'Contact'
-  const description = contactPage?.metaDescription ?? ''
-
   const { openGraph, twitter } = getOpenGraphMetadata({
     locale: locale as Locale,
     image: assets.openGraph.contact.src,
     siteName: settings?.siteName
   })
 
-  return { title, description, openGraph, twitter }
+  return {
+    title: contactPage?.metaTitle ?? 'Contact',
+    description: contactPage?.metaDescription ?? undefined,
+    openGraph,
+    twitter
+  }
 }
 
 export default async function ContactLayout({

@@ -27,17 +27,18 @@ export function ContactNav({
   const pathname = usePathname()
   const isMobile = useIsMobile()
 
+  if (!contactTypes || contactTypes.length === 0) return null
+
   return (
     <div className="relative overflow-hidden">
       <ScrollArea className="max-w-[600px] lg:max-w-none">
         <div className={cn('flex items-center', className)} {...props}>
-          {contactTypes?.map((contactType) => {
-            const key = stegaClean(contactType.key)
-            const href = HREFS[key]
-            if (!href || !contactType.title) return null
+          {contactTypes.map(({ _key, key, title }) => {
+            const href = HREFS[stegaClean(key)]
+            if (!href || !title) return null
             return (
               <Link
-                key={contactType._key}
+                key={_key}
                 href={href}
                 data-active={href.pathname === pathname}
                 className={cn(
@@ -45,7 +46,7 @@ export function ContactNav({
                 )}
                 scroll={!isMobile}
               >
-                {contactType.title}
+                {title}
               </Link>
             )
           })}

@@ -21,10 +21,16 @@ export default async function Layout({
     })
   ])
 
+  if (!contactPage) {
+    return null
+  }
+
+  const { contactTypes } = contactPage
+
   return (
     <>
       <PageNav id="tabs">
-        <ContactNav contactTypes={contactPage?.contactTypes ?? []} />
+        <ContactNav contactTypes={contactTypes} />
       </PageNav>
       <LegalNoticeProvider data={legalNotice}>{children}</LegalNoticeProvider>
     </>

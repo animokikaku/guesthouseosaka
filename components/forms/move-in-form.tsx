@@ -30,8 +30,8 @@ import { ContactTypeQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 
 type MoveInFormProps = {
-  title?: NonNullable<ContactTypeQueryResult>['title']
-  description?: NonNullable<ContactTypeQueryResult>['description']
+  title: NonNullable<ContactTypeQueryResult>['title']
+  description: NonNullable<ContactTypeQueryResult>['description']
   houseTitles: HouseTitles
 }
 

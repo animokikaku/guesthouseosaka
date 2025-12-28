@@ -43,10 +43,6 @@ export function HouseAbout({
 }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
 
-  if (!about) {
-    return null
-  }
-
   return (
     <section>
       <h2 className="mb-6 text-2xl font-semibold">
@@ -61,7 +57,7 @@ export function HouseAbout({
         />
       </div>
 
-      <PortableText value={about} components={components} />
+      {about ? <PortableText value={about} components={components} /> : null}
     </section>
   )
 }

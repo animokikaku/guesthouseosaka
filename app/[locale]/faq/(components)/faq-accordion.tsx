@@ -9,7 +9,6 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion'
 import { useOptimistic } from '@/hooks/use-optimistic'
-import { createDataAttribute } from '@/lib/sanity-data-attributes'
 import type {
   FaqPageQueryResult,
   HousesBuildingQueryResult
@@ -17,6 +16,7 @@ import type {
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
 import { useFormatter, useTranslations } from 'next-intl'
+import { createDataAttribute } from 'next-sanity'
 
 const components: PortableTextComponents = {
   block: {
@@ -73,19 +73,15 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
         </AccordionTrigger>
         <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
           <ul className="text-muted-foreground list-disc space-y-2">
-            {housesBuilding.map((house) => {
-              const floors = house.building?.floors ?? 0
-              const rooms = house.building?.rooms ?? 0
-              const dataAttribute = createDataAttribute({
-                id: house._id,
-                type: house._type
-              })
+            {housesBuilding.map(({ _id, _type, slug, title, building }) => {
+              if (!building) return null
+              const { floors, rooms } = building
               return (
                 <li
-                  key={`floors-and-rooms-${house.slug}`}
-                  data-sanity={dataAttribute('building')}
+                  key={`floors-and-rooms-${slug}`}
+                  data-sanity={createDataAttribute({ id: _id, type: _type })}
                 >
-                  <strong>{stegaClean(house.title)}: </strong>
+                  <strong>{stegaClean(title)}: </strong>
                   {t('floors_and_rooms.format', {
                     floors: formatter.number(floors),
                     rooms: formatter.number(rooms)

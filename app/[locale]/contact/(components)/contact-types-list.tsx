@@ -11,6 +11,7 @@ import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
 import type { ContactPageQueryResult } from '@/sanity.types'
 import { ChevronRightIcon } from 'lucide-react'
+import { stegaClean } from 'next-sanity'
 
 const hrefMap = {
   tour: { pathname: '/contact/tour', hash: '#tabs' },
@@ -35,26 +36,24 @@ export function ContactTypesList(props: ContactPageProps) {
       className="mx-auto flex w-full flex-col gap-4"
       data-sanity={attr.list()}
     >
-      {contactTypes.map((contactType) => (
+      {contactTypes.map(({ _key, title, description, key }) => (
         <Item
-          key={contactType._key}
+          key={_key}
           asChild
           className="flex-1"
-          data-sanity={attr.item(contactType._key)}
+          data-sanity={attr.item(_key)}
         >
           <Link
-            href={hrefMap[contactType.key]}
+            href={hrefMap[stegaClean(key)]}
             className="flex w-full items-center gap-4"
           >
             <ItemContent>
-              {contactType.title && (
-                <ItemTitle className="text-lg font-medium">
-                  {contactType.title}
-                </ItemTitle>
+              {title && (
+                <ItemTitle className="text-lg font-medium">{title}</ItemTitle>
               )}
-              {contactType.description && (
+              {description && (
                 <ItemDescription className="text-md">
-                  {contactType.description}
+                  {description}
                 </ItemDescription>
               )}
             </ItemContent>

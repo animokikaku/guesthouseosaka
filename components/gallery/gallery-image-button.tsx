@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { stegaClean } from 'next-sanity'
 import Image, { ImageProps } from 'next/image'
 import { ComponentPropsWithoutRef, forwardRef } from 'react'
 
@@ -29,11 +30,15 @@ export const GalleryImageButton = forwardRef<
   ) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { alt, height, width, ...restImageProps } = imageProps
+    const caption = stegaClean(alt)
 
     return (
       <div
         ref={ref}
-        className={cn('group relative cursor-pointer overflow-hidden', className)}
+        className={cn(
+          'group relative cursor-pointer overflow-hidden',
+          className
+        )}
         {...divProps}
       >
         <div
@@ -52,12 +57,12 @@ export const GalleryImageButton = forwardRef<
             sizes={sizes}
             {...restImageProps}
           />
-          {alt && (
+          {caption && (
             <div
-              className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-end bg-gradient-to-t from-black/70 to-transparent p-3 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
+              className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-end bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
               aria-hidden
             >
-              <span className="text-sm font-medium text-white">{alt}</span>
+              <span className="text-sm font-medium text-white">{caption}</span>
             </div>
           )}
         </div>

@@ -91,31 +91,30 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
     return map
   }, [houses])
 
-  if (!houses || houses.length === 0) return null
+  if (houses.length === 0) return null
 
   return (
     <div className="border-border overflow-hidden rounded-xs border">
       <Table className="w-full table-fixed">
         <colgroup>
           <col className="w-30" />
-          {houses.map((house) => (
-            <col key={house._id} />
+          {houses.map(({ _id }) => (
+            <col key={_id} />
           ))}
         </colgroup>
         <TableHeader>
           <TableRow>
             <TableHead className="bg-secondary text-foreground font-semibold" />
-            {houses.map((house) => {
-              const slug = stegaClean(house.slug)
+            {houses.map(({ _id, title, slug }) => {
               return (
                 <TableHead
-                  key={house._id}
+                  key={_id}
                   className={cn(
                     'bg-secondary font-semibold',
-                    ACCENT_CLASSES[slug]
+                    ACCENT_CLASSES[stegaClean(slug)]
                   )}
                 >
-                  {house.title}
+                  {title}
                 </TableHead>
               )
             })}
@@ -127,11 +126,10 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
               <TableCell className="text-foreground font-medium whitespace-nowrap">
                 {categoryLabels[category]}
               </TableCell>
-              {houses.map((house) => {
-                const slug = stegaClean(house.slug)
-                const value = costsByHouse[slug]?.[category]
+              {houses.map(({ _id, slug }) => {
+                const value = costsByHouse[stegaClean(slug)]?.[category]
                 return (
-                  <TableCell key={house._id} className="overflow-hidden">
+                  <TableCell key={_id} className="overflow-hidden">
                     {value ? (
                       <PortableText
                         value={value}

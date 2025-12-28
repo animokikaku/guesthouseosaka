@@ -54,6 +54,8 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
     notFound()
   }
 
+  const { _id, _type, hero, collection, galleryWall, houses } = data
+
   return (
     <div className="snap-footer section-soft flex flex-col gap-18 md:gap-0">
       <section className="relative flex snap-none items-center justify-center py-8 md:min-h-[calc(100dvh-var(--header-height))] md:snap-end md:py-0">
@@ -61,23 +63,25 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
           <div className="grid items-center gap-12 md:grid-cols-3">
             {/* Text content */}
             <PageHeader className="md:items-start md:text-left">
-              {data.hero.content && (
+              {hero.content && (
                 <PortableText
-                  value={data.hero.content}
+                  value={hero.content}
                   components={heroComponents}
                 />
               )}
-              <PageActions className="md:justify-start">
-                <Button asChild size="lg">
-                  <Link href="/contact">{data.hero.ctaLabel}</Link>
-                </Button>
-              </PageActions>
+              {hero.ctaLabel && (
+                <PageActions className="md:justify-start">
+                  <Button asChild size="lg">
+                    <Link href="/contact">{hero.ctaLabel}</Link>
+                  </Button>
+                </PageActions>
+              )}
             </PageHeader>
 
             {/* Instagram feed */}
             <div className="flex justify-center md:col-span-2 md:justify-end">
               <div className="w-full">
-                <GalleryWall images={data.galleryWall} />
+                <GalleryWall images={galleryWall} />
               </div>
             </div>
           </div>
@@ -85,17 +89,17 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
       </section>
       <section className="snap:none container-wrapper relative flex max-w-7xl flex-1 flex-col items-center justify-center md:min-h-[calc(100dvh-var(--header-height)-var(--footer-height))] md:snap-start">
         <PageHeader>
-          {data.collection.content && (
+          {collection.content && (
             <PortableText
-              value={data.collection.content}
+              value={collection.content}
               components={collectionComponents}
             />
           )}
           <PageActions>
             <Collection
-              _id={data._id}
-              _type={data._type}
-              houses={data.houses}
+              _id={_id}
+              _type={_type}
+              houses={houses}
               className="w-full pt-4"
             />
           </PageActions>

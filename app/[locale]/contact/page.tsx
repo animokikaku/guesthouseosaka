@@ -20,11 +20,9 @@ export default async function ContactPage({
     return null
   }
 
+  const { _id, _type, contactTypes } = data
+
   return (
-    <ContactTypesList
-      _id={data._id}
-      _type={data._type}
-      contactTypes={data.contactTypes}
-    />
+    <ContactTypesList _id={_id} _type={_type} contactTypes={contactTypes} />
   )
 }

@@ -32,7 +32,13 @@ const portableTextComponents: PortableTextComponents = {
   }
 }
 
-const HOUSE_STYLES = {
+type HouseStyles = {
+  text: string
+  headerBg: string
+  border: string
+}
+
+const HOUSE_STYLES: Record<HouseIdentifier, HouseStyles> = {
   orange: {
     text: 'text-orange-700 dark:text-orange-400',
     headerBg:
@@ -53,10 +59,13 @@ const HOUSE_STYLES = {
   }
 }
 
-type Houses = NonNullable<HousesBuildingQueryResult>
+type House = Pick<
+  NonNullable<HousesBuildingQueryResult>[number],
+  '_id' | 'title' | 'slug' | 'extraCosts'
+>
 
 type FAQExtraCostsCardsProps = {
-  houses: Houses
+  houses: House[]
 }
 
 export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
@@ -100,75 +109,22 @@ export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
     <div className="w-full space-y-4">
       <Carousel setApi={setApi} opts={{ loop: true }}>
         <CarouselContent>
-          {houses.map((house) => {
-            const slug = stegaClean(house.slug)
-            const styles = HOUSE_STYLES[slug]
-
-            return (
-              <CarouselItem key={house._id}>
-                <div
-                  className={cn(
-                    'overflow-hidden rounded-xl border shadow-sm transition-shadow',
-                    styles.border
-                  )}
-                >
-                  <div className={cn('px-4 py-3', styles.headerBg)}>
-                    <h4
-                      className={cn(
-                        'text-base font-semibold tracking-tight',
-                        styles.text
-                      )}
-                    >
-                      {house.title}
-                    </h4>
-                  </div>
-                  <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
-                    {house.extraCosts?.map((cost, index) => {
-                      // Clean category to remove stega encoding in draft mode
-                      const category = stegaClean(cost.category)
-                      const categoryLabel = categoryLabels[category]
-
-                      return (
-                        <div
-                          key={cost._key}
-                          className={cn(
-                            'flex items-center justify-between gap-4 px-4 py-3',
-                            index % 2 === 1 && 'bg-muted/30'
-                          )}
-                        >
-                          <span className="text-foreground text-sm font-medium">
-                            {categoryLabel}
-                          </span>
-                          <span className="text-foreground/70 text-right text-sm tabular-nums">
-                            {cost.value ? (
-                              <PortableText
-                                value={cost.value}
-                                components={portableTextComponents}
-                              />
-                            ) : (
-                              '–'
-                            )}
-                          </span>
-                        </div>
-                      )
-                    })}
-                    {(!house.extraCosts || house.extraCosts.length === 0) && (
-                      <div className="text-muted-foreground px-4 py-6 text-center text-sm">
-                        No data available
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CarouselItem>
-            )
-          })}
+          {houses.map((house) => (
+            <ExtraCostsCard
+              key={house._id}
+              styles={HOUSE_STYLES[house.slug]}
+              title={house.title ?? house.slug}
+              extraCosts={house.extraCosts}
+              categoryLabels={categoryLabels}
+            />
+          ))}
         </CarouselContent>
       </Carousel>
 
       <div className="flex items-center justify-center gap-2">
-        {houses.map((house, index) => (
+        {houses.map(({ _id, title }, index) => (
           <button
-            key={house._id}
+            key={_id}
             type="button"
             onClick={() => api?.scrollTo(index)}
             className={cn(
@@ -177,10 +133,77 @@ export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
                 ? 'bg-foreground w-6'
                 : 'bg-muted-foreground/30 w-2'
             )}
-            aria-label={`Go to ${house.title}`}
+            aria-label={`Go to ${stegaClean(title)}`}
           />
         ))}
       </div>
     </div>
+  )
+}
+
+interface ExtraCostsCardProps {
+  styles: HouseStyles | undefined
+  title: string
+  extraCosts: House['extraCosts']
+  categoryLabels: Record<string, string>
+}
+
+function ExtraCostsCard({
+  styles,
+  title,
+  extraCosts,
+  categoryLabels
+}: ExtraCostsCardProps) {
+  return (
+    <CarouselItem>
+      <div
+        className={cn(
+          'overflow-hidden rounded-xl border shadow-sm transition-shadow',
+          styles?.border
+        )}
+      >
+        <div className={cn('px-4 py-3', styles?.headerBg)}>
+          <h4
+            className={cn(
+              'text-base font-semibold tracking-tight',
+              styles?.text
+            )}
+          >
+            {title}
+          </h4>
+        </div>
+        <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
+          {extraCosts?.map((cost, index) => {
+            // Clean category to remove stega encoding in draft mode
+            const category = stegaClean(cost.category)
+            const categoryLabel = categoryLabels[category]
+
+            return (
+              <div
+                key={cost._key}
+                className={cn(
+                  'flex items-center justify-between gap-4 px-4 py-3',
+                  index % 2 === 1 && 'bg-muted/30'
+                )}
+              >
+                <span className="text-foreground text-sm font-medium">
+                  {categoryLabel}
+                </span>
+                <span className="text-foreground/70 text-right text-sm tabular-nums">
+                  {cost.value ? (
+                    <PortableText
+                      value={cost.value}
+                      components={portableTextComponents}
+                    />
+                  ) : (
+                    '–'
+                  )}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </CarouselItem>
   )
 }

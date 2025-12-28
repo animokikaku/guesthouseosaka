@@ -42,8 +42,7 @@ export async function generateMetadata(
     return undefined
   }
 
-  const title = data.title
-  const description = data.description
+  const { title, description } = data
   const { openGraph, twitter } = getOpenGraphMetadata({
     locale,
     image: assets.openGraph[house].src,

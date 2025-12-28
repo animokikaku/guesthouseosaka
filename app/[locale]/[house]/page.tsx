@@ -1,6 +1,7 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
 import { assets } from '@/lib/assets'
+import { urlFor } from '@/sanity/lib/image'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery, housesNavQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
@@ -29,35 +30,36 @@ export default async function HousePage({
   }
 
   const url = `${env.NEXT_PUBLIC_APP_URL}/${house}`
+  const { title, description, map, building, phone, image } = data
 
   const jsonLd: WithContext<Accommodation> = {
     '@context': 'https://schema.org',
     '@type': 'House',
     '@id': `${url}#house`,
     url: `${url}/${locale}`,
-    name: data.title ?? '',
-    description: data.description ?? '',
-    image: assets.openGraph[house].src,
-    ...(data.map?.coordinates && {
+    name: title ?? undefined,
+    description: description ?? undefined,
+    image: urlFor(image).width(1200).height(630).fit('crop').url(),
+    ...(map?.coordinates && {
       geo: {
         '@type': 'GeoCoordinates',
-        latitude: data.map.coordinates.lat,
-        longitude: data.map.coordinates.lng
+        latitude: map.coordinates.lat,
+        longitude: map.coordinates.lng
       }
     }),
-    hasMap: data.map?.googleMapsUrl ?? undefined,
+    hasMap: map?.googleMapsUrl ?? undefined,
     logo: assets.logo[house].src,
-    ...(data.map?.address && {
+    ...(map?.address && {
       address: {
         '@type': 'PostalAddress',
-        streetAddress: data.map.address.streetAddress,
-        addressLocality: data.map.address.locality,
-        postalCode: data.map.address.postalCode,
-        addressCountry: data.map.address.country
+        streetAddress: map.address.streetAddress,
+        addressLocality: map.address.locality,
+        postalCode: map.address.postalCode,
+        addressCountry: map.address.country
       }
     }),
-    numberOfRooms: data.building?.rooms,
-    telephone: data.phone?.international
+    numberOfRooms: building?.rooms,
+    telephone: phone?.international
   }
 
   return (

@@ -1,19 +1,22 @@
 import type { HousesBuildingQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 
-type Houses = NonNullable<HousesBuildingQueryResult>
+type House = Pick<
+  NonNullable<HousesBuildingQueryResult>[number],
+  'title' | 'slug' | 'phone'
+>
 
 type FAQContactTableProps = {
-  houses: Houses
+  houses: House[]
 }
 
 export function FAQContactTable({ houses }: FAQContactTableProps) {
   const t = useTranslations('FAQContactTable')
 
-  const phones = houses.map((house) => ({
-    title: house.title ?? house.slug,
-    withinJapan: house.phone?.domestic,
-    overseas: house.phone?.international
+  const phones = houses.map(({ title, slug, phone }) => ({
+    title: title ?? slug,
+    withinJapan: phone?.domestic,
+    overseas: phone?.international
   }))
 
   return (

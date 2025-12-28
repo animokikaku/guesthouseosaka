@@ -33,16 +33,18 @@ export async function generateMetadata(
     sanityFetch({ query: settingsQuery, params: { locale } })
   ])
 
-  const title = faqPage?.metaTitle ?? 'FAQ'
-  const description = faqPage?.metaDescription ?? ''
-
   const { openGraph, twitter } = getOpenGraphMetadata({
     locale: locale as Locale,
     image: assets.openGraph.faq.src,
     siteName: settings?.siteName
   })
 
-  return { title, description, openGraph, twitter }
+  return {
+    title: faqPage?.metaTitle ?? 'FAQ',
+    description: faqPage?.metaDescription ?? undefined,
+    openGraph,
+    twitter
+  }
 }
 
 export default async function FAQLayout({
@@ -57,20 +59,20 @@ export default async function FAQLayout({
     params: { locale }
   })
 
+  if (!data) {
+    return null
+  }
+
+  const { header, actions, _id, _type } = data
+
   return (
     <>
       <PageHeader>
-        {data?.header && (
-          <PortableText value={data.header} components={headerComponents} />
+        {header && (
+          <PortableText value={header} components={headerComponents} />
         )}
-        {data?.actions && data.actions.length > 0 && (
-          <DynamicPageActions
-            page={{
-              _id: data._id,
-              _type: data._type,
-              actions: data.actions
-            }}
-          />
+        {actions && actions.length > 0 && (
+          <DynamicPageActions page={{ _id, _type, actions }} />
         )}
       </PageHeader>
       <div className="container-wrapper section-soft flex-1 pb-12">
