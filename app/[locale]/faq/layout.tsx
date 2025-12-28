@@ -61,16 +61,16 @@ export default async function FAQLayout({
 
   return (
     <>
-      {data?.header && (
-        <PageHeader>
+      <PageHeader>
+        {data?.header && (
           <PortableText value={data.header} components={headerComponents} />
-          {data.actions && data.actions.length > 0 && (
-            <DynamicPageActions
-              page={{ _id: data._id, _type: data._type, actions: data.actions }}
-            />
-          )}
-        </PageHeader>
-      )}
+        )}
+        {data?.actions && data.actions.length > 0 && (
+          <DynamicPageActions
+            page={{ _id: data._id, _type: data._type, actions: data.actions }}
+          />
+        )}
+      </PageHeader>
       <div className="container-wrapper section-soft flex-1 pb-12">
         <div className="align-center container max-w-2xl">{children}</div>
       </div>
