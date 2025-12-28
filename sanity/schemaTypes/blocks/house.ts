@@ -63,14 +63,6 @@ export const house = defineType({
       validation: (rule) => rule.required().assetRequired()
     }),
     defineField({
-      name: 'featuredImage',
-      title: 'Featured Image',
-      type: 'localizedImage',
-      group: 'identity',
-      description:
-        'Optional image displayed first in gallery grids (mobile carousel and desktop block gallery)'
-    }),
-    defineField({
       name: 'building',
       title: 'Building Facts',
       type: 'object',
@@ -115,6 +107,14 @@ export const house = defineType({
     // ============================================
     // GALLERY GROUP
     // ============================================
+    defineField({
+      name: 'featuredImage',
+      title: 'Featured Image',
+      type: 'localizedImage',
+      group: 'gallery',
+      description:
+        'Optional image displayed first in gallery grids (mobile carousel and desktop block gallery)'
+    }),
     defineField({
       name: 'gallery',
       title: 'Gallery Images',
