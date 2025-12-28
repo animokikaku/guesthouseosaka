@@ -1,5 +1,6 @@
 'use client'
 
+import { PageActions } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
@@ -19,7 +20,7 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
   if (!actions || actions.length === 0) return null
 
   return (
-    <div className="flex items-center gap-2" data-sanity={attr.list()}>
+    <PageActions data-sanity={attr.list()}>
       {actions.map((action, index) => {
         const key = stegaClean(action._key)
         const iconName = stegaClean(action.icon) as IconName
@@ -74,6 +75,6 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
           </Button>
         )
       })}
-    </div>
+    </PageActions>
   )
 }

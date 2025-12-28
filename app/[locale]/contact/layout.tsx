@@ -1,5 +1,5 @@
 import { DynamicPageActions } from '@/components/dynamic-page-actions'
-import { PageActions, PageHeader } from '@/components/page-header'
+import { PageHeader } from '@/components/page-header'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -70,15 +70,13 @@ export default async function ContactLayout({
           />
         )}
         {contactPage?.actions && contactPage.actions.length > 0 && (
-          <PageActions>
-            <DynamicPageActions
-              page={{
-                _id: contactPage._id,
-                _type: contactPage._type,
-                actions: contactPage.actions
-              }}
-            />
-          </PageActions>
+          <DynamicPageActions
+            page={{
+              _id: contactPage._id,
+              _type: contactPage._type,
+              actions: contactPage.actions
+            }}
+          />
         )}
       </PageHeader>
       <div className="container-wrapper section-soft flex-1 md:pb-12">

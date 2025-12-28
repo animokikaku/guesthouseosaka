@@ -1,5 +1,5 @@
 import { DynamicPageActions } from '@/components/dynamic-page-actions'
-import { PageActions, PageHeader } from '@/components/page-header'
+import { PageHeader } from '@/components/page-header'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -64,15 +64,13 @@ export default async function FAQLayout({
           <PortableText value={data.header} components={headerComponents} />
         )}
         {data?.actions && data.actions.length > 0 && (
-          <PageActions>
-            <DynamicPageActions
-              page={{
-                _id: data._id,
-                _type: data._type,
-                actions: data.actions
-              }}
-            />
-          </PageActions>
+          <DynamicPageActions
+            page={{
+              _id: data._id,
+              _type: data._type,
+              actions: data.actions
+            }}
+          />
         )}
       </PageHeader>
       <div className="container-wrapper section-soft flex-1 pb-12">
