@@ -60,7 +60,7 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
       </DialogTrigger>
       <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{data?.title ?? t('title')}</DialogTitle>
+          <DialogTitle>{data?.title}</DialogTitle>
         </DialogHeader>
         <div className="space-y-6 text-sm leading-6">
           <p className="text-muted-foreground text-xs">
