@@ -59,24 +59,15 @@ export default async function FAQLayout({
     params: { locale }
   })
 
-  // Show centered content without header when no data
-  if (!data) {
-    return (
-      <div className="container-wrapper flex flex-1 items-center justify-center py-12">
-        <div className="mx-auto w-full max-w-2xl">{children}</div>
-      </div>
-    )
-  }
-
   return (
     <>
       <PageHeader>
-        {data.header && (
-          <PortableText value={data.header} components={headerComponents} />
+        {data?.header && (
+          <PortableText value={data?.header} components={headerComponents} />
         )}
-        {data.actions && data.actions.length > 0 && (
+        {data?.actions && data?.actions.length > 0 && (
           <DynamicPageActions
-            page={{ _id: data._id, _type: data._type, actions: data.actions }}
+            page={{ _id: data._id, _type: data._type, actions: data?.actions }}
           />
         )}
       </PageHeader>

@@ -54,36 +54,20 @@ export default async function ContactLayout({
   const { locale } = await params
   setRequestLocale(locale as Locale)
 
-  const { data: contactPage } = await sanityFetch({
+  const { data } = await sanityFetch({
     query: contactPageQuery,
     params: { locale }
   })
 
-  // Show centered content without header when no data
-  if (!contactPage) {
-    return (
-      <div className="container-wrapper flex flex-1 items-center justify-center py-12">
-        <div className="mx-auto w-full max-w-2xl">{children}</div>
-      </div>
-    )
-  }
-
   return (
     <>
       <PageHeader>
-        {contactPage.header && (
-          <PortableText
-            value={contactPage.header}
-            components={headerComponents}
-          />
+        {data?.header && (
+          <PortableText value={data?.header} components={headerComponents} />
         )}
-        {contactPage.actions && contactPage.actions.length > 0 && (
+        {data?.actions && data?.actions.length > 0 && (
           <DynamicPageActions
-            page={{
-              _id: contactPage._id,
-              _type: contactPage._type,
-              actions: contactPage.actions
-            }}
+            page={{ _id: data._id, _type: data._type, actions: data.actions }}
           />
         )}
       </PageHeader>
