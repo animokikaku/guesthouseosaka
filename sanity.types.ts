@@ -202,6 +202,8 @@ export type ContactPage = {
       _key: string
     } & ContactType
   >
+  metaTitle: InternationalizedArrayString
+  metaDescription: InternationalizedArrayString
 }
 
 export type FaqPage = {
@@ -223,6 +225,8 @@ export type FaqPage = {
   >
   contactSection: InternationalizedArrayPortableText
   contactNote?: InternationalizedArrayString
+  metaTitle: InternationalizedArrayString
+  metaDescription: InternationalizedArrayString
 }
 
 export type Settings = {
@@ -1025,7 +1029,7 @@ export type HousesBuildingQueryResult = Array<{
 
 // Source: sanity/lib/queries.ts
 // Variable: faqPageQuery
-// Query: *[_type == "faqPage"][0]{  _id,  _type,  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),  "actions": actions[]{    _key,    icon,    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),    href  },  "items": items[]{    _key,    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value)  },  "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),  "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)}
+// Query: *[_type == "faqPage"][0]{  _id,  _type,  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),  "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),  "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),  "actions": actions[]{    _key,    icon,    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),    href  },  "items": items[]{    _key,    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value)  },  "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),  "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)}
 export type FaqPageQueryResult = {
   _id: string
   _type: 'faqPage'
@@ -1047,6 +1051,8 @@ export type FaqPageQueryResult = {
     _type: 'block'
     _key: string
   }> | null
+  metaTitle: string | null
+  metaDescription: string | null
   actions: Array<{
     _key: string
     icon: LucideIcon
@@ -1098,7 +1104,7 @@ export type FaqPageQueryResult = {
 
 // Source: sanity/lib/queries.ts
 // Variable: contactPageQuery
-// Query: *[_type == "contactPage"][0]{  _id,  _type,  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),  "actions": actions[]{    _key,    icon,    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),    href  },  "contactTypes": contactTypes[]{    _key,    key,    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)  }}
+// Query: *[_type == "contactPage"][0]{  _id,  _type,  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),  "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),  "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),  "actions": actions[]{    _key,    icon,    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),    href  },  "contactTypes": contactTypes[]{    _key,    key,    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)  }}
 export type ContactPageQueryResult = {
   _id: string
   _type: 'contactPage'
@@ -1120,6 +1126,8 @@ export type ContactPageQueryResult = {
     _type: 'block'
     _key: string
   }> | null
+  metaTitle: string | null
+  metaDescription: string | null
   actions: Array<{
     _key: string
     icon: LucideIcon
@@ -1217,8 +1225,8 @@ declare module '@sanity/client' {
     '*[_type == "homePage"][0].houses[]->{\n  "slug": slug,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value)\n}': HousesTitlesQueryResult
     '*[_type == "homePage"][0].houses[]->{\n  slug,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n  "caption": coalesce(caption[_key == $locale][0].value, caption[_key == "en"][0].value),\n  image{\n    asset,\n    hotspot,\n    crop,\n    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),\n    "lqip": asset->metadata.lqip\n  }\n}': HousesNavQueryResult
     '*[_type == "homePage"][0].houses[]->{\n  _id,\n  _type,\n  slug,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "building": building{\n    rooms,\n    floors\n  },\n  phone,\n  "extraCosts": extraCosts[]{\n    _key,\n    category,\n    "value": coalesce(value[_key == $locale][0].value, value[_key == "en"][0].value)[]\n  }\n}': HousesBuildingQueryResult
-    '*[_type == "faqPage"][0]{\n  _id,\n  _type,\n  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),\n  "actions": actions[]{\n    _key,\n    icon,\n    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n    href\n  },\n  "items": items[]{\n    _key,\n    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),\n    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value)\n  },\n  "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),\n  "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)\n}': FaqPageQueryResult
-    '*[_type == "contactPage"][0]{\n  _id,\n  _type,\n  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),\n  "actions": actions[]{\n    _key,\n    icon,\n    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n    href\n  },\n  "contactTypes": contactTypes[]{\n    _key,\n    key,\n    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)\n  }\n}': ContactPageQueryResult
+    '*[_type == "faqPage"][0]{\n  _id,\n  _type,\n  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),\n  "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),\n  "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),\n  "actions": actions[]{\n    _key,\n    icon,\n    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n    href\n  },\n  "items": items[]{\n    _key,\n    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),\n    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value)\n  },\n  "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),\n  "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)\n}': FaqPageQueryResult
+    '*[_type == "contactPage"][0]{\n  _id,\n  _type,\n  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),\n  "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),\n  "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),\n  "actions": actions[]{\n    _key,\n    icon,\n    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n    href\n  },\n  "contactTypes": contactTypes[]{\n    _key,\n    key,\n    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)\n  }\n}': ContactPageQueryResult
     '*[_type == "contactPage"][0].contactTypes[key == $type][0]{\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)\n}': ContactTypeQueryResult
     '*[_type == "legalNotice"][0]{\n  _id,\n  _type,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  lastUpdated,\n  "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value)\n}': LegalNoticeQueryResult
     '*[_type == "galleryCategory"] | order(order asc){\n  _id,\n  "key": key.current,\n  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n  order,\n  image{\n    asset->{\n      _id,\n      url,\n      "dimensions": metadata.dimensions,\n      "lqip": metadata.lqip\n    },\n    hotspot,\n    crop\n  }\n}': GalleryCategoriesQueryResult

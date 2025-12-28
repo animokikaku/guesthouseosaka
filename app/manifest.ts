@@ -1,18 +1,18 @@
 import { routing } from '@/i18n/routing'
+import { sanityFetch } from '@/sanity/lib/live'
+import { settingsQuery } from '@/sanity/lib/queries'
 import { MetadataRoute } from 'next'
-import { getTranslations } from 'next-intl/server'
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
-  /*
-   * Provide locale explicitly since manifest is outside [locale] segment.
-   * https://next-intl.dev/docs/environments/actions-metadata-route-handlers#manifest
-   */
   const locale = routing.defaultLocale
-  const t = await getTranslations({ locale, namespace: 'manifest' })
+  const { data: settings } = await sanityFetch({
+    query: settingsQuery,
+    params: { locale }
+  })
 
   return {
-    name: t('name'),
-    short_name: t('short_name'),
+    name: settings?.siteName ?? 'Share House Osaka',
+    short_name: 'SHO',
     start_url: '/',
     theme_color: '#101E33',
     icons: [

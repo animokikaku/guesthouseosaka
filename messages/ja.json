@@ -1,10 +1,4 @@
 {
-  "ContactLayout": {
-    "meta": {
-      "description": "ご不明点やご質問がございましたら、お気軽にお問い合わせください。",
-      "title": "お問い合わせ"
-    }
-  },
   "FAQAccordion": {
     "floors_and_rooms": {
       "format": "{floors}階建て・{rooms}室",
@@ -26,12 +20,6 @@
     "laundromat": "ランドリー",
     "drying_machine": "乾燥機",
     "internet": "インターネット"
-  },
-  "FAQLayout": {
-    "meta": {
-      "description": "シェアハウスに関するよくある質問への回答をご覧ください。",
-      "title": "よくある質問"
-    }
   },
   "GalleryModal": {
     "close": "ギャラリーを閉じる",
@@ -211,10 +199,5 @@
       "stay_duration": "希望する最短滞在期間を選択してください。",
       "time_range": "時間は10:00から20:00の間で入力してください。"
     }
-  },
-  "manifest": {
-    "description": "1991年創業。大阪市内に3つのシェアハウスがあります。",
-    "name": "シェアハウス大阪",
-    "short_name": "SHO"
   }
 }

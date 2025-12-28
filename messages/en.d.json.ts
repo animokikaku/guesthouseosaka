@@ -2,12 +2,6 @@
 // See: https://next-intl.dev/docs/workflows/typescript#messages-arguments
 
 declare const messages: {
-  "ContactLayout": {
-    "meta": {
-      "description": "Get in touch with us for any inquiries or questions.",
-      "title": "Contact"
-    }
-  },
   "FAQAccordion": {
     "floors_and_rooms": {
       "format": "{floors}-story building with {rooms} rooms.",
@@ -29,12 +23,6 @@ declare const messages: {
     "laundromat": "Laundromat",
     "drying_machine": "Drying machine",
     "internet": "Internet"
-  },
-  "FAQLayout": {
-    "meta": {
-      "description": "Find answers to common questions about our share houses.",
-      "title": "FAQ"
-    }
   },
   "GalleryModal": {
     "close": "Close gallery",
@@ -78,8 +66,7 @@ declare const messages: {
   },
   "LegalNoticeDialog": {
     "close_button": "Close",
-    "last_updated": "Last updated: {date}",
-    "title": "Privacy Policy"
+    "last_updated": "Last updated: {date}"
   },
   "MessageField": {
     "character_counter": "{count} / {max} characters",
@@ -215,11 +202,6 @@ declare const messages: {
       "stay_duration": "Please select your desired minimum stay.",
       "time_range": "Time must be between 10:00 and 20:00."
     }
-  },
-  "manifest": {
-    "description": "Founded in 1991. We have 3 share houses in the city of Osaka.",
-    "name": "Share House Osaka",
-    "short_name": "SHO"
   }
 };
 export default messages;

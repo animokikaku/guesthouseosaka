@@ -1,10 +1,4 @@
 {
-  "ContactLayout": {
-    "meta": {
-      "description": "Contactez-nous pour toute demande ou question.",
-      "title": "Contact"
-    }
-  },
   "FAQAccordion": {
     "floors_and_rooms": {
       "format": "Bâtiment de {floors} étages avec {rooms} chambres.",
@@ -26,12 +20,6 @@
     "laundromat": "Laverie",
     "drying_machine": "Sèche-linge",
     "internet": "Internet"
-  },
-  "FAQLayout": {
-    "meta": {
-      "description": "Trouvez des réponses aux questions les plus fréquemment posées sur nos maisons en commun.",
-      "title": "FAQ"
-    }
   },
   "GalleryModal": {
     "close": "Fermer la galerie",
@@ -211,10 +199,5 @@
       "stay_duration": "Veuillez sélectionner votre durée de séjour minimale souhaitée.",
       "time_range": "L'heure doit être comprise entre 10:00 et 20:00."
     }
-  },
-  "manifest": {
-    "description": "Fondé en 1991. Nous avons 3 share houses dans la ville d'Osaka.",
-    "name": "Share House Osaka",
-    "short_name": "SHO"
   }
 }
