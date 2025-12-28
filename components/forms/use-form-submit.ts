@@ -1,31 +1,29 @@
 'use client'
 
+import { submitContactForm } from '@/app/actions/contact'
+import {
+  GeneralInquiryFields,
+  MoveInFormFields,
+  TourFormFields
+} from '@/components/forms/schema'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useCallback } from 'react'
 import { toast } from 'sonner'
 
 /**
- * Minimal type constraint for form values that can be submitted.
- * All forms must have an account with at least a name field.
+ * Mapping from form type to its corresponding field types.
  */
-type FormValueWithAccount = {
-  account: { name: string }
+type FormTypeDataMap = {
+  tour: TourFormFields
+  'move-in': MoveInFormFields
+  other: GeneralInquiryFields
 }
 
 /**
  * Form type identifiers matching the ContactFormPayload discriminated union.
  */
-type FormType = 'tour' | 'move-in' | 'other'
-
-/**
- * Generic submit action that returns a promise.
- * Matches the signature of submitContactForm from app/actions/contact.ts
- */
-type SubmitAction<TValue> = (payload: {
-  type: FormType
-  data: TValue
-}) => Promise<unknown>
+type FormType = keyof FormTypeDataMap
 
 /**
  * Hook that provides shared form submission handlers.
@@ -41,7 +39,7 @@ type SubmitAction<TValue> = (payload: {
  *   defaultValues: {...},
  *   validators: { onSubmit: schema },
  *   onSubmitInvalid,
- *   onSubmit: createOnSubmit('tour', submitContactForm)
+ *   onSubmit: createOnSubmit('tour')
  * })
  * ```
  */
@@ -65,16 +63,15 @@ export function useFormSubmit() {
    * Wraps the submit action with toast notifications for loading/success/error states.
    *
    * @param formType - The type of form being submitted ('tour' | 'move-in' | 'other')
-   * @param submitAction - The server action to call with form data
    * @returns An async onSubmit handler compatible with @tanstack/react-form
    */
   const createOnSubmit = useCallback(
-    <TValue extends FormValueWithAccount>(
-      formType: FormType,
-      submitAction: SubmitAction<TValue>
-    ) => {
-      return async ({ value }: { value: TValue }) => {
-        const promise = submitAction({ type: formType, data: value })
+    <T extends FormType>(formType: T) => {
+      return async ({ value }: { value: FormTypeDataMap[T] }) => {
+        const promise = submitContactForm({
+          type: formType,
+          data: value
+        } as Parameters<typeof submitContactForm>[0])
 
         toast.promise(promise, {
           loading: t('status.sending'),

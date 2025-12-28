@@ -1,11 +1,12 @@
 /* eslint-disable react/no-children-prop */
 import { withFieldGroup } from '@/components/forms'
+import { ContactFormFields } from '@/components/forms/schema'
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import { useTranslations } from 'next-intl'
 
 export const PrivacyPolicyField = withFieldGroup({
   defaultValues: {
-    privacyPolicy: false as const
+    privacyPolicy: false as ContactFormFields['privacyPolicy']
   },
   render: function Render({ group }) {
     const t = useTranslations('forms')
