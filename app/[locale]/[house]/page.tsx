@@ -1,5 +1,6 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
 import { urlFor } from '@/sanity/lib/image'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -26,7 +27,7 @@ export default async function HousePage({
   ])
 
   if (!data) {
-    notFound()
+    return <PageEmptyState />
   }
 
   const url = `${env.NEXT_PUBLIC_APP_URL}/${house}`

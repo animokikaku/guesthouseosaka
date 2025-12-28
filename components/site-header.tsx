@@ -45,16 +45,11 @@ export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
   )
 
   const navItems: NavItems = [
-    // Only include share-houses menu if there are houses
-    ...(houseItems.length > 0
-      ? [
-          {
-            key: 'share-houses',
-            items: houseItems,
-            label: t('navigation.share_houses')
-          }
-        ]
-      : []),
+    {
+      key: 'share-houses',
+      items: houseItems,
+      label: t('navigation.share_houses')
+    },
     {
       key: 'faq',
       href: '/faq',

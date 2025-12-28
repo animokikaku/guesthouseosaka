@@ -17,6 +17,8 @@ import {
   NavListItem
 } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { FileWarningIcon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useParams, useSelectedLayoutSegment } from 'next/navigation'
 import { useState } from 'react'
@@ -71,7 +73,28 @@ function NavigationMenuGroupItem({
   items: NavGroupItem[]
   house?: HouseIdentifier
 }) {
-  const [item, setHoverItem] = useState<NavGroupItem>(items[0])
+  const [item, setHoverItem] = useState<NavGroupItem | undefined>(items[0])
+  const t = useTranslations('PageEmptyState')
+
+  // Show empty state when no items
+  if (items.length === 0) {
+    return (
+      <NavigationMenuItem>
+        <NavigationMenuTrigger className="bg-transparent">
+          {title}
+        </NavigationMenuTrigger>
+        <NavigationMenuContent>
+          <div className="flex w-[300px] flex-col items-center justify-center gap-3 p-6 text-center">
+            <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900/50">
+              <FileWarningIcon className="size-5 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div className="text-sm font-medium">{t('title')}</div>
+            <p className="text-muted-foreground text-sm">{t('description')}</p>
+          </div>
+        </NavigationMenuContent>
+      </NavigationMenuItem>
+    )
+  }
 
   return (
     <NavigationMenuItem>
@@ -105,7 +128,7 @@ function NavigationMenuGroupItem({
           <li className="row-span-3">
             <div className="group relative h-full w-full overflow-hidden rounded-md">
               {items.map((it, idx) => {
-                const isActive = it.key === item.key
+                const isActive = it.key === item?.key
                 return (
                   <div
                     key={`preview-${idx}`}
@@ -119,7 +142,9 @@ function NavigationMenuGroupItem({
                     <Image
                       src={it.background.src}
                       alt={it.background.alt}
-                      placeholder={it.background.blurDataURL ? 'blur' : undefined}
+                      placeholder={
+                        it.background.blurDataURL ? 'blur' : undefined
+                      }
                       blurDataURL={it.background.blurDataURL}
                       loading={isActive ? 'eager' : 'lazy'}
                       {...(isActive ? { preload: true } : {})}
