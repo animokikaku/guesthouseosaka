@@ -85,33 +85,7 @@
     "close": "ギャラリーを閉じる"
   },
   "HouseAbout": {
-    "heading": "{house}について",
-    "houses": {
-      "apple": {
-        "description": "アップルハウスは大国町駅まで徒歩1分、難波へもすぐにアクセスできます。すべての個室にバスルームとキッチンが備わり、中長期滞在でもマンションのような快適さを提供します。",
-        "highlights": [
-          "キッチンとバスルーム付きの個室（11㎡）",
-          "難波まで徒歩14分",
-          "美しく充実したキッチンを備えたラウンジ"
-        ]
-      },
-      "lemon": {
-        "description": "レモンハウスは難波の中心からすぐの場所に、個室と一部ドミトリーを備えています。コンパクトな建物ながら、短期・長期の滞在に必要な設備がそろっています。",
-        "highlights": [
-          "キッチンとバスルーム付き個室（19㎡）",
-          "広々とした客室でカップルや友人に最適",
-          "大阪の中心でコミュニティと国際交流を楽しむ暮らし"
-        ]
-      },
-      "orange": {
-        "description": "オレンジハウスは阿倍野区のレトロな街「昭和町」にある個室のシェアハウスです。大阪の中心部までのアクセスは最高！和風ラウンジでまったり国際交流が楽しめます。",
-        "highlights": [
-          "キッチン付き個室（12㎡）",
-          "長期滞在割引あり",
-          "あべのハルカスの景色を望む和風レトロな屋上ラウンジ（100㎡）"
-        ]
-      }
-    }
+    "heading": "{house}について"
   },
   "HouseAmenities": {
     "categories": {
@@ -183,55 +157,7 @@
     }
   },
   "HouseLocation": {
-    "details": {
-      "apple": {
-        "nearby": {
-          "convenience": "コンビニと郵便局まで徒歩約3分",
-          "hundred_yen": "大国町駅そばの100円ショップ",
-          "supermarkets": "ゲストハウスのすぐ隣に24時間営業のスーパーがあり、徒歩約1分の場所にも大型スーパーがあります。",
-          "sushi": "回転寿司店まで徒歩約3分"
-        },
-        "overview": "地下鉄御堂筋線・四つ橋線の大国町駅まで徒歩1分。24時間営業のスーパーがすぐそば。創業200年以上の木津市場や岩盤浴付きの大浴場も近くにあります。難波まで徒歩圏内なので、終電を気にせず夜の街を楽しめます。",
-        "stations": {
-          "daikokucho": "大国町駅（地下鉄御堂筋線・四つ橋線）2番出口から徒歩約1分",
-          "ebisucho": "恵美須町駅まで徒歩約11分",
-          "imamiya": "今宮駅／今宮戎駅まで徒歩約7分",
-          "namba": "難波駅各線まで徒歩約15分"
-        }
-      },
-      "lemon": {
-        "nearby": {
-          "discount_shop": "徒歩約5分の場所にディスカウントストアがあり、ほかのコンビニも徒歩圏内にあります。",
-          "post_office": "郵便局まで徒歩約2分",
-          "supermarkets": "徒歩約2分・4分・6分の場所にスーパーがあります"
-        },
-        "overview": "難波まで徒歩8分！終電を気にせず夜を満喫できる好立地。大阪の各エリアへもアクセス抜群。観光にも長期滞在にも最適。門限はありません。",
-        "stations": {
-          "namba": "難波駅（地下鉄御堂筋線）4番出口まで徒歩約10分",
-          "nankai_namba": "南海難波駅（南出口）まで徒歩約8分",
-          "nihonbashi": "日本橋駅（地下鉄堺筋線）10番出口まで徒歩約8分"
-        }
-      },
-      "orange": {
-        "nearby": {
-          "harukas": "あべのハルカスまで徒歩15分、Q's mallまで徒歩12分",
-          "showacho_supermarket": "昭和町駅のスーパー",
-          "supermarkets": "徒歩約5分圏内にスーパーがあります"
-        },
-        "overview": "地上300mを誇るランドマーク「あべのハルカス」まで徒歩15分。大阪城、海遊館、ユニバーサル・スタジオ・ジャパン、通天閣などの主要観光スポットへも、公共交通機関でアクセス良好な立地です。最寄り駅までは徒歩数分。周辺にはスーパー、コンビニ、100円ショップ、フィットネスジム、自転車店、区役所など、生活に便利な施設が揃っています。",
-        "stations": {
-          "fuminosato": "文の里駅（地下鉄谷町線）6番出口 — 徒歩3分",
-          "showacho": "昭和町駅（地下鉄御堂筋線）2番出口 — 徒歩7分",
-          "tennoji": "天王寺／阿倍野橋まで徒歩約15分"
-        }
-      }
-    },
     "heading": "周辺地図",
-    "highlights": {
-      "apple": "難波は徒歩圏内、大国町駅へは歩いて1分です。",
-      "lemon": "地下鉄御堂筋線で大阪市内のどこへでもスムーズにアクセスできます。",
-      "orange": "地下鉄御堂筋線、谷町線で大阪市内のどこへでもスムーズにアクセスできます。"
-    },
     "sections": {
       "getting_around": "最寄り駅",
       "nearby": "周辺スポット",
@@ -240,66 +166,7 @@
     "modal_trigger": "もっと見る"
   },
   "HousePricing": {
-    "apple": {
-      "long_stay": "3か月・6か月滞在で割引あり。",
-      "other_fees": {
-        "deposit": "デポジット：¥30,000（退去時に損傷がなければ返金）",
-        "common_fee": "管理費・共益費：月額¥10,000",
-        "utilities": "光熱費：月額約¥3,000（実費）"
-      },
-      "rent": "月額¥50,000～¥70,000（1部屋2名まで）",
-      "short_stay": {
-        "all_fees": "3か月未満の滞在：すべての費用込み。",
-        "minimum": "最低滞在期間：1か月",
-        "rate": "月額¥80,000～¥95,000"
-      }
-    },
-    "heading": "料金",
-    "labels": {
-      "dormitory_plan": "ドミトリープラン",
-      "long_stay": "長期滞在割引",
-      "other_fees": "その他の費用",
-      "rent": "家賃",
-      "short_stay": "短期滞在"
-    },
-    "lemon": {
-      "dormitory": {
-        "details": "男女混合・1部屋3ベッド・バスルームとキッチンは共用です。",
-        "minimum": "最低滞在期間：1か月",
-        "rate": "月額¥45,000（光熱費・管理・共益費込）"
-      },
-      "long_stay": "3か月・6か月滞在で割引あり。",
-      "other_fees": {
-        "deposit": "デポジット：¥30,000（退去時に損傷がなければ返金）",
-        "service_fee": "管理費・共益費：月額¥10,000",
-        "utilities": "光熱費：月額約¥3,000（実費）",
-        "washing_machine": "洗濯機：無料（屋上）"
-      },
-      "rent": "月額¥50,000～¥70,000（1部屋2名まで）",
-      "short_stay": {
-        "all_fees": "3か月未満の滞在：すべての費用込み。",
-        "minimum": "最低滞在期間：1か月",
-        "rate": "月額¥80,000～¥95,000"
-      }
-    },
-    "orange": {
-      "long_stay": {
-        "after_six_months": "6か月以降：毎月¥5,000割引",
-        "second_month": "2か月目：¥1,000割引",
-        "third_month": "3か月目：¥2,000割引"
-      },
-      "other_fees": {
-        "deposit": "デポジット：¥30,000（退去時に損傷等がなければ返金）",
-        "dryer": "乾燥機：¥100／30分",
-        "service_fee": "管理費・共益費：月額¥12,000",
-        "utilities": "光熱費：月額約¥3,000～¥4,000（実費）",
-        "washing_machine": "洗濯機：無料"
-      },
-      "rent": {
-        "base": "月額¥41,000～¥48,000（1名）",
-        "second_person": "2人目は月額+¥5,000"
-      }
-    }
+    "heading": "料金"
   },
   "ImageBlockGallery": {
     "view_gallery": "すべての写真を表示",
@@ -311,89 +178,7 @@
   },
   "LegalNoticeDialog": {
     "close_button": "閉じる",
-    "intro": {
-      "company": "株式会社アニモ企画（以下「当社」）はお客様のプライバシーを尊重し、個人情報の保護に取り組んでいます。",
-      "purpose": "本プライバシーポリシーは、本ウェブサイト（以下「本サービス」）の問い合わせフォームなどを通じて提供いただく情報の収集・利用・保存・保護方法について説明します。"
-    },
     "last_updated": "最終更新日：{date}",
-    "sections": {
-      "changes": {
-        "paragraphs": [
-          "本プライバシーポリシーは随時更新される場合があります。",
-          "重要な変更がある場合は、このページで更新日とともにお知らせします。"
-        ],
-        "title": "8. 本ポリシーの変更"
-      },
-      "contact": {
-        "details": [
-          "株式会社アニモ企画",
-          "日本国大阪市阿倍野区阪南町1-21-21",
-          "📧 orange@guesthouseosaka.com",
-          "👤 代表取締役：久本健司"
-        ],
-        "paragraphs": [
-          "本プライバシーポリシーやデータ取り扱いについてご質問・ご不明点がありましたら、以下までお問い合わせください。"
-        ],
-        "title": "7. お問い合わせ"
-      },
-      "information_collected": {
-        "closing": "これらの情報は、フォームの送信やご連絡を通じてお客様から直接取得します。",
-        "list": [
-          "基本情報：氏名、年齢、性別、国籍、メールアドレス、（任意で）電話番号",
-          "お問い合わせ内容：メッセージ、質問、フォーム送信情報",
-          "宿泊情報：希望する見学日・入居日・希望物件"
-        ],
-        "paragraphs": [
-          "本サービスを通じてお問い合わせいただく際、次の個人情報を取得する場合があります。"
-        ],
-        "title": "1. 収集する情報"
-      },
-      "retention": {
-        "paragraphs": [
-          "個人情報は上記の目的を達成するために必要な期間のみ保管します。",
-          "通常は、お取引終了後最大10年間保管します。",
-          "この期間を過ぎると、情報は安全に削除または匿名化されます。"
-        ],
-        "title": "3. 保存期間"
-      },
-      "rights": {
-        "closing": "日本のプライバシー法に基づき、正当なご請求には迅速かつ透明に対応します。",
-        "list": [
-          "保有する個人情報へのアクセスを請求する",
-          "不正確または古い情報の訂正・追加・削除を求める",
-          "（該当する場合）同意の撤回を求める"
-        ],
-        "paragraphs": ["お客様は次の権利を有します。"],
-        "title": "5. お客さまの権利"
-      },
-      "security": {
-        "paragraphs": [
-          "当社は適切な技術的・組織的措置を講じ、個人情報を不正アクセスや紛失、悪用、改ざん、漏えいから保護します。",
-          "個人データへのアクセスは権限を持つ担当者のみに制限されています。"
-        ],
-        "title": "6. セキュリティ対策"
-      },
-      "sharing": {
-        "paragraphs": [
-          "当社は個人情報を第三者と共有・販売することはありません。",
-          "お客様の同意なく日本国外へデータを移転することはありません。ただし、法令に基づく場合や個人情報保護法などに基づき権利保護が必要な場合を除きます。"
-        ],
-        "title": "4. 共有と国際間移転"
-      },
-      "usage": {
-        "closing": "お客様の明示的な同意なしに、マーケティング目的で情報を利用することはありません。",
-        "list": [
-          "お問い合わせやリクエストへの対応",
-          "物件見学の手配と入居手続きの管理",
-          "サービスに関する情報提供・更新・サポート",
-          "事業運営および法令遵守に必要な社内記録の維持"
-        ],
-        "paragraphs": [
-          "当社は次の正当な事業目的のためにのみ個人情報を利用します。"
-        ],
-        "title": "2. 情報の利用方法"
-      }
-    },
     "title": "プライバシーポリシー"
   },
   "LocalePage": {
@@ -427,10 +212,6 @@
   },
   "ResetButton": {
     "label": "リセット"
-  },
-  "SiteFooter": {
-    "brand_name": "ゲストハウス大阪",
-    "company_name": "株式会社アニモ企画"
   },
   "SiteHeader": {
     "logo_label": "シェアハウス大阪",
@@ -576,107 +357,6 @@
       "caption": "レトロな昭和町でアクセス最高。和風ラウンジでまったり国際交流",
       "name": "オレンジハウス",
       "summary": "まったり広々和風ラウンジ"
-    }
-  },
-  "images": {
-    "apple": {
-      "room": {
-        "wood_flooring": "すべての部屋に木の床があります。",
-        "toilet_shower_and_bathtub": "すべての部屋にトイレ、シャワー、バスタブがあります。",
-        "kitchens": "すべての部屋にキッチンがあります。",
-        "washing_machine_in_balcony": "バルコニーに洗濯機があります。"
-      },
-      "common-spaces": {
-        "rooftop": "屋上",
-        "apple_tv_and_satellite_channels": "大きなテレビ画面でApple TVと衛星チャンネルをお楽しみいただけます。",
-        "gas_cookers_available": "ガスコンロ3台利用可能。",
-        "toilet_with_washlet_in_lounge": "ラウンジにウォシュレット付きトイレがあります。"
-      },
-      "building-features": {
-        "elevator_for_heavy_luggages": "重い荷物も簡単に運べるエレベーターがあります。",
-        "bicycle_parking_space": "建物の前に自転車駐輪場があります。",
-        "mailbox_at_entrance": "入口に郵便受けがあります。",
-        "view_from_rooftop_balcony": "屋上バルコニーからの眺め"
-      },
-      "neighborhood": {
-        "hour_open_supermarket": "ゲストハウスのすぐそばに24時間営業のスーパーマーケットがあります。",
-        "minute_walk_to_another_supermarket": "別のスーパーマーケットまで徒歩1分。",
-        "minutes_walk_to_rotating_sushi_restaurant": "回転寿司店（くるくる寿司）まで徒歩3分。",
-        "shop_just_by_daikokucho_station": "大国町駅のすぐそばに100円ショップがあります。",
-        "minutes_walk_to_convenience_store": "コンビニまで徒歩3分。",
-        "minutes_walk_to_post_office": "郵便局まで徒歩3分。",
-        "namba_parks": "なんばパークス。"
-      },
-      "floor-plan": {
-        "apple_house_floor_plan": "アップルハウスの間取り図"
-      }
-    },
-    "lemon": {
-      "room": {
-        "free_to_use_all_tablewares": "すべての食器を自由にご利用いただけます。",
-        "ac_and_gas_heater": "エアコンとガスヒーター",
-        "bathroom_with_sink_toilet_shower_and_bathtub": "洗面台、トイレ、シャワー、バスタブ付きバスルーム",
-        "kitchen_with_dishes_cutlery_cups_and_kitchenware": "食器、カトラリー、カップ、調理器具、冷蔵庫、電子レンジ、トースター、炊飯器付きキッチン"
-      },
-      "common-spaces": {
-        "story_building_with_rooms": "7階建て、12室の建物",
-        "laundromat": "コインランドリー",
-        "rooftop": "屋上"
-      },
-      "neighborhood": {
-        "minute_walk_from_nihonbashi_station_exit": "日本橋駅8番出口から徒歩8分",
-        "minutes_walk_to_post_office": "郵便局まで徒歩2分",
-        "minutes_walk_to_supermarket": "スーパーマーケットまで徒歩2分",
-        "minutes_walk_to_another_supermarket": "別のスーパーマーケットまで徒歩4分",
-        "minutes_walk_to_discount_shop": "ディスカウントショップまで徒歩5分",
-        "minute_walk_to_another_supermarket": "別のスーパーマーケットまで徒歩6分",
-        "walking_distance_to_doguyasuji": "様々な調理器具が揃う道具屋筋まで徒歩圏内",
-        "nankai_namba_station": "南海なんば駅"
-      },
-      "maps": {
-        "route_map": "アクセス地図"
-      },
-      "floor-plan": {
-        "lemon_house_floor_plan": "レモンハウスの間取り図"
-      }
-    },
-    "orange": {
-      "room": {
-        "all_rooms_set_in_traditional_japanese_style": "レトロ系で統一された和室。",
-        "each_room_has_water_and_gas": "各部屋に水道とガスがあります。ガスコンロも設置されています。",
-        "closet_as_desk_with_lamp_bookshelf_and_outlets": "押入は机代わりにも使えます。ライト、本棚、コンセントもあり。"
-      },
-      "common-spaces": {
-        "traditional_japanese_style_lounge": "和風レトロ系で統一されたラウンジ。100㎡の広さがあります。24時間利用可能。",
-        "tv_show_by_abc": "ABC放送のテレビ番組に出演しました",
-        "lounge_equipped_with_large_air_conditioner": "ラウンジには大型エアコンが設置されており、夏でも冬でも快適です。シンクもあります。",
-        "large_collection_of_complete_comic_sets": "たくさんの漫画を全巻セットでそろえています。",
-        "party_at_lounge_about_every_month": "ラウンジで約1ヶ月ごとにパーティーを開催しています。",
-        "coffee_tea_and_japanese_tea_available": "無料ドリンクコーナーでコーヒー、紅茶、日本茶をご利用いただけます。"
-      },
-      "building-features": {
-        "see_abeno_harukas_from_rooftop": "屋上からあべのハルカスが見えます",
-        "showacho_traditional_area": "瓦屋根の家が立ち並ぶレトロな街、昭和町。"
-      },
-      "neighborhood": {
-        "supermarket_nearby_only_minutes_walk": "徒歩5分のところにスーパーあり。",
-        "supermarket_by_showacho_station": "昭和町駅前にもスーパーあり。",
-        "stylish_stores_behind_station": "駅裏には長屋を再生したオシャレなお店が並びます。",
-        "minutes_walk_to_abeno_harukas": "あべのハルカスまで徒歩15分",
-        "minutes_walk_to_biggest_shopping_mall": "大阪市内最大級のショッピングモール「Q's mall」まで徒歩12分。",
-        "hanami_cherry_blossom_festival": "桃ヶ池公園では春になるとお花見が楽しめます。"
-      },
-      "maps": {
-        "route_map": "アクセス地図"
-      },
-      "floor-plan": {
-        "orange_house_floor_plan": "オレンジハウスの間取り図"
-      },
-      "facilities": {
-        "shower_room_behind_curtain": "のれんの向こうはシャワーになっています。",
-        "shower_available_hours_for_free": "シャワーは24時間無料でご利用いただけます",
-        "equipped_with_washlet": "ウォシュレット付き。冬でも便座が温かく快適です"
-      }
     }
   }
 }
