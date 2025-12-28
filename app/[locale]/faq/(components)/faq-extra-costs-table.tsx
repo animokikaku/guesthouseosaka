@@ -71,7 +71,9 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
       const slug = stegaClean(house.slug)
       map[slug] = {}
       for (const cost of house.extraCosts ?? []) {
-        map[slug][cost.category] = cost.value ?? null
+        // Clean category to remove stega encoding in draft mode
+        const category = stegaClean(cost.category)
+        map[slug][category] = cost.value ?? null
       }
     }
     return map
