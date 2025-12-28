@@ -7,7 +7,6 @@ import {
   FieldGroupUserAccount,
   FormCard,
   HouseTitles,
-  PrivacyPolicyField,
   useAppForm,
   useFormSubmit
 } from '@/components/forms'
@@ -99,9 +98,9 @@ export function TourForm({ title, description, houseTitles }: TourFormProps) {
             />
           )}
         />
-        <PrivacyPolicyField
-          fields={{ privacyPolicy: 'privacyPolicy' }}
-          form={form}
+        <form.AppField
+          name="privacyPolicy"
+          children={(field) => <field.PrivacyPolicyField />}
         />
       </FieldGroup>
     </FormCard>

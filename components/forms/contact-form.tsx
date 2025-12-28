@@ -1,12 +1,7 @@
 /* eslint-disable react/no-children-prop */
 'use client'
 
-import {
-  FormCard,
-  PrivacyPolicyField,
-  useAppForm,
-  useFormSubmit
-} from '@/components/forms'
+import { FormCard, useAppForm, useFormSubmit } from '@/components/forms'
 import {
   GeneralInquiryFields,
   useGeneralInquirySchema
@@ -93,9 +88,9 @@ export function ContactForm({ title, description }: ContactFormProps) {
             />
           )}
         />
-        <PrivacyPolicyField
-          fields={{ privacyPolicy: 'privacyPolicy' }}
-          form={form}
+        <form.AppField
+          name="privacyPolicy"
+          children={(field) => <field.PrivacyPolicyField />}
         />
       </FieldGroup>
     </FormCard>
