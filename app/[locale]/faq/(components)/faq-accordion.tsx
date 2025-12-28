@@ -79,7 +79,7 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
               return (
                 <li
                   key={`floors-and-rooms-${slug}`}
-                  data-sanity={createDataAttribute({ id: _id, type: _type })}
+                  data-sanity={createDataAttribute({ id: _id, type: _type }).toString()}
                 >
                   <strong>{stegaClean(title)}: </strong>
                   {t('floors_and_rooms.format', {
