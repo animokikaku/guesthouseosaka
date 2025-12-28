@@ -9,10 +9,8 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from '@/components/ui/carousel'
-import { useHouseLabels } from '@/hooks/use-house-labels'
 import { getImageIndex, type Gallery } from '@/lib/gallery'
 import { store } from '@/lib/store'
-import { HouseIdentifier } from '@/lib/types'
 import { urlFor } from '@/sanity/lib/image'
 import * as Dialog from '@radix-ui/react-dialog'
 import { getImageDimensions } from '@sanity/asset-utils'
@@ -20,19 +18,16 @@ import { useStore } from '@tanstack/react-form'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
 type GalleryModalProps = {
   gallery: Gallery
+  title: string
 }
 
-export function GalleryModal({ gallery }: GalleryModalProps) {
-  const { house } = useParams()
+export function GalleryModal({ gallery, title }: GalleryModalProps) {
   const photoId = useStore(store, (state) => state.photoId)
   const t = useTranslations('GalleryModal')
-  const houseLabel = useHouseLabels()
-  const { name: title } = houseLabel(house as HouseIdentifier)
 
   return (
     <Dialog.Root

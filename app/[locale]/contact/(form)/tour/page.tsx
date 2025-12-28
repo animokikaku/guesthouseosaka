@@ -1,6 +1,6 @@
 import { TourForm } from '@/components/forms'
 import { sanityFetch } from '@/sanity/lib/live'
-import { contactTypeQuery } from '@/sanity/lib/queries'
+import { contactTypeQuery, housesTitlesQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 
@@ -10,10 +10,18 @@ export default async function ContactPage({
   const { locale } = await params
   setRequestLocale(locale as Locale)
 
-  const { data } = await sanityFetch({
-    query: contactTypeQuery,
-    params: { locale, type: 'tour' }
-  })
+  const [{ data: contactData }, { data: houseTitles }] = await Promise.all([
+    sanityFetch({
+      query: contactTypeQuery,
+      params: { locale, type: 'tour' }
+    }),
+    sanityFetch({
+      query: housesTitlesQuery,
+      params: { locale }
+    })
+  ])
 
-  return <TourForm content={data?.content} />
+  return (
+    <TourForm content={contactData?.content} houseTitles={houseTitles ?? []} />
+  )
 }

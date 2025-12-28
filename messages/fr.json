@@ -247,22 +247,5 @@
       "description": "Réservez une visite pour découvrir nos share houses et ce que nous offrons.",
       "title": "Demande de visite"
     }
-  },
-  "useHouseLabels": {
-    "apple": {
-      "caption": "À 1 minute à pied de la station Daikokucho, Namba aussi facilement à pied ! Lounge chaleureux pour des échanges internationaux en toute liberté.",
-      "name": "Apple House",
-      "summary": "Chambres privées bien équipées et salon haut de gamme"
-    },
-    "lemon": {
-      "caption": "Lemon House est à 8 minutes de Namba. Accédez aux lieux nocturnes à pied sans vous soucier du dernier train.",
-      "name": "Lemon House",
-      "summary": "Share house à 8 minutes de la station de Namba"
-    },
-    "orange": {
-      "caption": "Un accès idéal au quartier rétro de Showachō. Des rencontres internationales dans notre salon.",
-      "name": "Orange House",
-      "summary": "Salon de style japonais spacieux et décontracté"
-    }
   }
 }

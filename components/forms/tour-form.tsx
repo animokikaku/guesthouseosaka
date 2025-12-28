@@ -8,6 +8,7 @@ import {
   contactFormDefaultValues,
   FieldGroupPlaces,
   FieldGroupUserAccount,
+  HouseTitles,
   useAppForm
 } from '@/components/forms'
 import { useTourFormSchema } from '@/components/forms/schema'
@@ -38,9 +39,10 @@ const cardHeaderComponents: PortableTextComponents = {
 
 type TourFormProps = {
   content?: NonNullable<ContactTypeQueryResult>['content']
+  houseTitles: HouseTitles
 }
 
-export function TourForm({ content }: TourFormProps) {
+export function TourForm({ content, houseTitles }: TourFormProps) {
   const t = useTranslations('forms')
   const router = useRouter()
   const schema = useTourFormSchema()
@@ -105,6 +107,7 @@ export function TourForm({ content }: TourFormProps) {
               form={form}
               label={t('fields.places.label')}
               description={t('fields.places.tour_description')}
+              houseTitles={houseTitles}
             />
             <form.AppField
               name="date"

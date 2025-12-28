@@ -7,16 +7,17 @@ type HouseGalleryProps = {
   _id: NonNullable<HouseQueryResult>['_id']
   _type: NonNullable<HouseQueryResult>['_type']
   gallery: Gallery
+  title: string
 }
 
 /**
  * Server component that renders gallery with pre-processed data from GROQ
  */
-export function HouseGallery({ _id, _type, gallery }: HouseGalleryProps) {
+export function HouseGallery({ _id, _type, gallery, title }: HouseGalleryProps) {
   return (
     <>
       <HouseGalleryClient _id={_id} _type={_type} gallery={gallery} />
-      <GalleryModal gallery={gallery} />
+      <GalleryModal gallery={gallery} title={title} />
     </>
   )
 }

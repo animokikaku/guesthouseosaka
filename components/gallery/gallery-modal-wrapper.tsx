@@ -1,26 +1,23 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useRouter } from '@/i18n/navigation'
-import { HouseIdentifier } from '@/lib/types'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { useParams } from 'next/navigation'
 import { ReactNode } from 'react'
 
 type GalleryModalWrapperProps = {
+  title: string
   children: ReactNode
 }
 
-export function GalleryModalWrapper({ children }: GalleryModalWrapperProps) {
+export function GalleryModalWrapper({
+  title,
+  children
+}: GalleryModalWrapperProps) {
   const router = useRouter()
-  const { house } = useParams()
-
   const t = useTranslations('GalleryModal')
-  const houseLabel = useHouseLabels()
-  const { name: title } = houseLabel(house as HouseIdentifier)
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {

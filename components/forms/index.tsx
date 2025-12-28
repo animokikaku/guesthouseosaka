@@ -13,9 +13,9 @@ import {
 } from '@/components/forms/fields'
 import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
-import { useHouseLabels } from '@/hooks/use-house-labels'
 import { HouseIdentifier, HouseIdentifierValues } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HousesTitlesQueryResult } from '@/sanity.types'
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import {
   CakeIcon,
@@ -169,18 +169,19 @@ export const FieldGroupUserAccount = withFieldGroup({
   }
 })
 
+export type HouseTitles = NonNullable<HousesTitlesQueryResult>
+
 export const FieldGroupPlaces = withFieldGroup({
   defaultValues: {
     places: [] as HouseIdentifier[]
   },
   props: {
     label: '',
-    description: ''
+    description: '',
+    houseTitles: [] as HouseTitles
   },
-  render: function Render({ group, description, label }) {
-    const houseLabel = useHouseLabels()
-
-    const classNames = {
+  render: function Render({ group, description, label, houseTitles }) {
+    const classNames: Record<HouseIdentifier, string> = {
       orange:
         'data-[state=on]:*:[svg]:fill-orange-500 data-[state=on]:*:[svg]:stroke-orange-500',
       apple:
@@ -189,16 +190,19 @@ export const FieldGroupPlaces = withFieldGroup({
         'data-[state=on]:*:[svg]:fill-yellow-500 data-[state=on]:*:[svg]:stroke-yellow-500'
     }
 
-    const placeOptions = HouseIdentifierValues.map((house) => ({
-      value: house,
-      label: (
-        <>
-          <HouseIcon name={house} />
-          {houseLabel(house).name}
-        </>
-      ),
-      className: cn('data-[state=on]:bg-transparent', classNames[house])
-    }))
+    const placeOptions = HouseIdentifierValues.map((house) => {
+      const houseData = houseTitles.find((h) => h.slug === house)
+      return {
+        value: house,
+        label: (
+          <>
+            <HouseIcon name={house} />
+            {houseData?.title ?? house}
+          </>
+        ),
+        className: cn('data-[state=on]:bg-transparent', classNames[house])
+      }
+    })
 
     return (
       <group.AppField

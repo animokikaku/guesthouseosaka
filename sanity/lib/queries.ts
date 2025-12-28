@@ -186,6 +186,12 @@ export const houseSlugsQuery = defineQuery(`*[_type == "house" && defined(slug)]
   "slug": slug
 }`)
 
+// House titles for forms (ordered by home page houses array)
+export const housesTitlesQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
+  "slug": slug,
+  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value)
+}`)
+
 // Houses for navigation (header) - ordered by home page houses array
 export const housesNavQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
   slug,

@@ -8,6 +8,7 @@ import {
   contactFormDefaultValues,
   FieldGroupPlaces,
   FieldGroupUserAccount,
+  HouseTitles,
   useAppForm
 } from '@/components/forms'
 import {
@@ -41,9 +42,10 @@ const cardHeaderComponents: PortableTextComponents = {
 
 type MoveInFormProps = {
   content?: NonNullable<ContactTypeQueryResult>['content']
+  houseTitles: HouseTitles
 }
 
-export function MoveInForm({ content }: MoveInFormProps) {
+export function MoveInForm({ content, houseTitles }: MoveInFormProps) {
   const t = useTranslations('forms')
   const router = useRouter()
   const schema = useMoveInFormSchema()
@@ -133,6 +135,7 @@ export function MoveInForm({ content }: MoveInFormProps) {
               form={form}
               label={t('fields.places.label')}
               description={t('fields.places.move_in_description')}
+              houseTitles={houseTitles}
             />
             <form.AppField
               name="date"
