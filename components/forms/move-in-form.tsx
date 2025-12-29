@@ -5,7 +5,6 @@ import {
   contactFormDefaultValues,
   FieldGroupPlaces,
   FieldGroupUserAccount,
-  FormCard,
   HouseTitles,
   useAppForm,
   useFormSubmit
@@ -14,7 +13,15 @@ import {
   ContactFormFields,
   useMoveInFormSchema
 } from '@/components/forms/schema'
-import { FieldGroup, FieldSeparator } from '@/components/ui/field'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
+import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { ContactTypeQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 
@@ -70,71 +77,82 @@ export function MoveInForm({
   ]
 
   return (
-    <FormCard
-      title={title}
-      description={description}
-      formId="move-in-form"
-      onSubmit={form.handleSubmit}
-      className="sm:max-w-2xl"
-      footerClassName="flex flex-col gap-3"
-      footer={
-        <form.AppForm>
-          <form.ResetButton />
-          <form.SubmitButton form="move-in-form" />
-        </form.AppForm>
-      }
-    >
-      <FieldGroup>
-        <FieldGroupPlaces
-          fields={{ places: 'places' }}
-          form={form}
-          label={t('fields.places.label')}
-          description={t('fields.places.move_in_description')}
-          houseTitles={houseTitles}
-        />
-        <form.AppField
-          name="date"
-          children={(field) => (
-            <field.DateField
-              orientation="responsive"
-              label={t('fields.date.move_in_label')}
-              description={t('fields.date.move_in_description')}
+    <Card className="mx-auto w-full sm:max-w-2xl">
+      {(title || description) && (
+        <CardHeader>
+          {title && <CardTitle>{title}</CardTitle>}
+          {description && <CardDescription>{description}</CardDescription>}
+        </CardHeader>
+      )}
+      <CardContent>
+        <form
+          id="move-in-form"
+          onSubmit={(e) => {
+            e.preventDefault()
+            form.handleSubmit()
+          }}
+        >
+          <FieldGroup>
+            <FieldGroupPlaces
+              fields={{ places: 'places' }}
+              form={form}
+              label={t('fields.places.label')}
+              description={t('fields.places.move_in_description')}
+              houseTitles={houseTitles}
             />
-          )}
-        />
-        <form.AppField
-          name="stayDuration"
-          children={(field) => (
-            <field.SelectField
-              required
-              orientation="responsive"
-              label={t('fields.stay_duration.label')}
-              description={t('fields.stay_duration.description')}
-              placeholder={t('fields.stay_duration.placeholder')}
-              options={stayDurationOptions}
+            <form.AppField
+              name="date"
+              children={(field) => (
+                <field.DateField
+                  orientation="responsive"
+                  label={t('fields.date.move_in_label')}
+                  description={t('fields.date.move_in_description')}
+                />
+              )}
             />
-          )}
-        />
-        <FieldSeparator />
-        <FieldGroupUserAccount fields="account" form={form} />
-        <FieldSeparator />
-        <form.AppField
-          name="message"
-          children={(field) => (
-            <field.MessageField
-              label={t('fields.message.label')}
-              rows={6}
-              className="min-h-24 resize-none"
-              placeholder={t('fields.message.move_in_placeholder')}
-              description={t('fields.message.description')}
+            <form.AppField
+              name="stayDuration"
+              children={(field) => (
+                <field.SelectField
+                  required
+                  orientation="responsive"
+                  label={t('fields.stay_duration.label')}
+                  description={t('fields.stay_duration.description')}
+                  placeholder={t('fields.stay_duration.placeholder')}
+                  options={stayDurationOptions}
+                />
+              )}
             />
-          )}
-        />
-        <form.AppField
-          name="privacyPolicy"
-          children={(field) => <field.PrivacyPolicyField />}
-        />
-      </FieldGroup>
-    </FormCard>
+            <FieldSeparator />
+            <FieldGroupUserAccount fields="account" form={form} />
+            <FieldSeparator />
+            <form.AppField
+              name="message"
+              children={(field) => (
+                <field.MessageField
+                  label={t('fields.message.label')}
+                  rows={6}
+                  className="min-h-24 resize-none"
+                  placeholder={t('fields.message.move_in_placeholder')}
+                  description={t('fields.message.description')}
+                />
+              )}
+            />
+            <form.AppField
+              name="privacyPolicy"
+              children={(field) => <field.PrivacyPolicyField />}
+            />
+          </FieldGroup>
+        </form>
+      </CardContent>
+      <CardFooter className="flex flex-col gap-3">
+        <Field orientation="horizontal">
+          <form.AppForm>
+            <form.ResetButton />
+            <form.SubmitButton form="move-in-form" />
+          </form.AppForm>
+        </Field>
+      </CardFooter>
+    </Card>
   )
 }

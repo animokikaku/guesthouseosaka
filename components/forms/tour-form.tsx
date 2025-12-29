@@ -5,13 +5,20 @@ import {
   contactFormDefaultValues,
   FieldGroupPlaces,
   FieldGroupUserAccount,
-  FormCard,
   HouseTitles,
   useAppForm,
   useFormSubmit
 } from '@/components/forms'
 import { useTourFormSchema } from '@/components/forms/schema'
-import { FieldGroup, FieldSeparator } from '@/components/ui/field'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
+import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { ContactTypeQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 
@@ -38,71 +45,82 @@ export function TourForm({ title, description, houseTitles }: TourFormProps) {
   })
 
   return (
-    <FormCard
-      title={title}
-      description={description}
-      formId="tour-form"
-      onSubmit={form.handleSubmit}
-      className="sm:max-w-2xl"
-      footerClassName="flex flex-col gap-3"
-      footer={
-        <form.AppForm>
-          <form.ResetButton />
-          <form.SubmitButton form="tour-form" />
-        </form.AppForm>
-      }
-    >
-      <FieldGroup>
-        <FieldGroupPlaces
-          fields={{ places: 'places' }}
-          form={form}
-          label={t('fields.places.label')}
-          description={t('fields.places.tour_description')}
-          houseTitles={houseTitles}
-        />
-        <form.AppField
-          name="date"
-          children={(field) => (
-            <field.DateField
-              required
-              label={t('fields.date.tour_label')}
-              description={t('fields.date.tour_description')}
-              orientation="responsive"
+    <Card className="mx-auto w-full sm:max-w-2xl">
+      {(title || description) && (
+        <CardHeader>
+          {title && <CardTitle>{title}</CardTitle>}
+          {description && <CardDescription>{description}</CardDescription>}
+        </CardHeader>
+      )}
+      <CardContent>
+        <form
+          id="tour-form"
+          onSubmit={(e) => {
+            e.preventDefault()
+            form.handleSubmit()
+          }}
+        >
+          <FieldGroup>
+            <FieldGroupPlaces
+              fields={{ places: 'places' }}
+              form={form}
+              label={t('fields.places.label')}
+              description={t('fields.places.tour_description')}
+              houseTitles={houseTitles}
             />
-          )}
-        />
-        <form.AppField
-          name="hour"
-          children={(field) => (
-            <field.InputField
-              label={t('fields.hour.tour_label')}
-              description={t('fields.hour.tour_description')}
-              orientation="responsive"
-              className="sm:min-w-[220px]"
-              type="time"
+            <form.AppField
+              name="date"
+              children={(field) => (
+                <field.DateField
+                  required
+                  label={t('fields.date.tour_label')}
+                  description={t('fields.date.tour_description')}
+                  orientation="responsive"
+                />
+              )}
             />
-          )}
-        />
-        <FieldSeparator />
-        <FieldGroupUserAccount fields="account" form={form} />
-        <FieldSeparator />
-        <form.AppField
-          name="message"
-          children={(field) => (
-            <field.MessageField
-              label={t('fields.message.label')}
-              rows={6}
-              className="min-h-24 resize-none"
-              placeholder={t('fields.message.contact_placeholder')}
-              description={t('fields.message.description')}
+            <form.AppField
+              name="hour"
+              children={(field) => (
+                <field.InputField
+                  label={t('fields.hour.tour_label')}
+                  description={t('fields.hour.tour_description')}
+                  orientation="responsive"
+                  className="sm:min-w-[220px]"
+                  type="time"
+                />
+              )}
             />
-          )}
-        />
-        <form.AppField
-          name="privacyPolicy"
-          children={(field) => <field.PrivacyPolicyField />}
-        />
-      </FieldGroup>
-    </FormCard>
+            <FieldSeparator />
+            <FieldGroupUserAccount fields="account" form={form} />
+            <FieldSeparator />
+            <form.AppField
+              name="message"
+              children={(field) => (
+                <field.MessageField
+                  label={t('fields.message.label')}
+                  rows={6}
+                  className="min-h-24 resize-none"
+                  placeholder={t('fields.message.contact_placeholder')}
+                  description={t('fields.message.description')}
+                />
+              )}
+            />
+            <form.AppField
+              name="privacyPolicy"
+              children={(field) => <field.PrivacyPolicyField />}
+            />
+          </FieldGroup>
+        </form>
+      </CardContent>
+      <CardFooter className="flex flex-col gap-3">
+        <Field orientation="horizontal">
+          <form.AppForm>
+            <form.ResetButton />
+            <form.SubmitButton form="tour-form" />
+          </form.AppForm>
+        </Field>
+      </CardFooter>
+    </Card>
   )
 }
