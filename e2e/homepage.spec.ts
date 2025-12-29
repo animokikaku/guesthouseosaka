@@ -12,7 +12,7 @@ test.describe('Homepage', () => {
       await expect(heroHeading).toBeVisible()
 
       // Hero section should have a CTA button linking to contact
-      const ctaButton = page.getByRole('link', { name: /contact/i })
+      const ctaButton = page.getByRole('link', { name: /contact us/i })
       await expect(ctaButton.first()).toBeVisible()
     })
 
