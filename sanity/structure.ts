@@ -120,18 +120,6 @@ export const structure: StructureResolver = (S) =>
             ])
         ),
 
-      // ============================================
-      // CONTACT TYPES FOLDER
-      // ============================================
-      S.listItem()
-        .title('Contact')
-        .icon(EnvelopeIcon)
-        .child(
-          S.documentTypeList('contactType')
-            .title('Contact')
-            .defaultOrdering([{ field: 'slug', direction: 'asc' }])
-        ),
-
       S.divider(),
 
       // ============================================
