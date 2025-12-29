@@ -1,16 +1,15 @@
 'use client'
 
-import type { HouseQueryResult } from '@/sanity.types'
+import type { SanityImage } from '@/lib/types/components'
 import { urlFor } from '@/sanity/lib/image'
 import { ColorScheme, useMapsLibrary } from '@vis.gl/react-google-maps'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import { memo } from 'react'
 
-type Map = NonNullable<NonNullable<HouseQueryResult>['map']>
-
-interface PlaceDetailsProps extends Pick<Map, 'placeImage'> {
+interface PlaceDetailsProps {
   placeId: string
+  placeImage: SanityImage
   className?: string
 }
 
@@ -35,8 +34,9 @@ export const PlaceDetails = memo(function PlaceDetailsComponent({
   )
 })
 
-interface GoogleMapsPlaceDetailsProps extends Pick<Map, 'placeImage'> {
+interface GoogleMapsPlaceDetailsProps {
   id: string
+  placeImage: SanityImage
   colorScheme: ColorScheme
   className?: string
 }

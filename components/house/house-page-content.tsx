@@ -14,6 +14,7 @@ import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
 import { featuredToGalleryImage, type GalleryImage } from '@/lib/gallery'
 import {
+  toAboutContent,
   toAmenityItems,
   toBuildingData,
   toLocationData,
@@ -22,7 +23,6 @@ import {
 } from '@/lib/transforms/house'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import type { PortableTextBlock } from '@portabletext/types'
 import type { HouseQueryResult, HousesNavQueryResult } from '@/sanity.types'
 import { ComponentProps } from 'react'
 
@@ -92,7 +92,7 @@ export function HousePageContent({
                 _type={_type}
                 slug={slug}
                 title={title}
-                about={(about as PortableTextBlock[]) ?? null}
+                about={toAboutContent(about)}
                 building={toBuildingData(building)}
               />
               <HouseAmenities

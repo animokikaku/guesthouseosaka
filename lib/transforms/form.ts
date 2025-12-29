@@ -43,6 +43,10 @@ const FIELD_KEYS: FieldKey[] = [
 
 /**
  * Transforms a single Sanity form field to FormFieldConfig
+ *
+ * Note: `label` is guaranteed non-null by schema validation + coalesce query.
+ * The fallback empty string should never be reached in production.
+ *
  * @param field - Raw field data from Sanity query
  * @returns FormFieldConfig or undefined if field is missing
  */
@@ -54,7 +58,7 @@ function toFormFieldConfig(
   }
 
   return {
-    label: field.label ?? null,
+    label: field.label ?? '', // Guaranteed by schema, fallback for safety
     placeholder: field.placeholder ?? null,
     description: field.description ?? null
   }
@@ -95,6 +99,10 @@ export function toFormFieldsConfig(
 
 /**
  * Transforms full ContactTypeQueryResult to ContactFormConfig
+ *
+ * Note: `title` is guaranteed non-null by schema validation + coalesce query.
+ * The fallback empty string should never be reached in production.
+ *
  * @param contactType - Raw contact type data from Sanity query
  * @returns ContactFormConfig with title, description, and fields
  */
@@ -103,12 +111,13 @@ export function toContactFormConfig(
 ): ContactFormConfig {
   if (!contactType) {
     return {
+      title: '', // Should never happen - query returns null handled at page level
       fields: {}
     }
   }
 
   return {
-    title: contactType.title ?? null,
+    title: contactType.title ?? '', // Guaranteed by schema, fallback for safety
     description: contactType.description ?? null,
     fields: toFormFieldsConfig(contactType.fields)
   }

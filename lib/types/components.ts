@@ -100,12 +100,16 @@ export interface AmenityItemData {
 
 /**
  * Configuration for a single form field
- * @see components/forms/tour-form.tsx
- * @see components/forms/move-in-form.tsx
- * @see components/forms/contact-form.tsx
+ *
+ * Type guarantees:
+ * - `label` is `string` (not null) because schema has `validation: rule.required()`
+ *   and queries use `coalesce(..., title[_key == "en"][0].value)` fallback
+ * - `placeholder` and `description` are nullable (no validation in schema)
+ *
+ * @see sanity/schemaTypes/objects/form-field-config.ts
  */
 export interface FormFieldConfig {
-  label: string | null
+  label: string
   placeholder?: string | null
   description?: string | null
 }
@@ -130,9 +134,15 @@ export interface FormFieldsConfig {
 
 /**
  * Complete contact form configuration including title and fields
+ *
+ * Type guarantees:
+ * - `title` is `string` (not null) because schema has `validation: rule.required()`
+ * - `description` is nullable (no validation in schema)
+ *
+ * @see sanity/schemaTypes/documents/contact-type.ts
  */
 export interface ContactFormConfig {
-  title?: string | null
+  title: string
   description?: string | null
   fields: FormFieldsConfig
 }

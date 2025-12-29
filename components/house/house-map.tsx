@@ -4,12 +4,11 @@ import {
   MapProvider,
   PlaceDetails
 } from '@/components/map'
-import type { HouseQueryResult } from '@/sanity.types'
+import type { SanityImage } from '@/lib/types/components'
 
-interface HouseMapProps extends Pick<
-  NonNullable<NonNullable<HouseQueryResult>['map']>,
-  'placeId' | 'placeImage'
-> {
+interface HouseMapProps {
+  placeId: string
+  placeImage: SanityImage
   mapsUrl?: string
   center: { lat: number; lng: number }
 }

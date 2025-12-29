@@ -4,11 +4,8 @@ import { HouseLocationModal } from '@/components/house/house-location-modal'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { LocationData, MapData } from '@/lib/types/components'
-import type { HouseQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
-
-type PlaceImage = NonNullable<NonNullable<HouseQueryResult>['map']>['placeImage']
 
 const HouseMap = dynamic(
   () => import('@/components/house/house-map').then((mod) => mod.HouseMap),
@@ -63,7 +60,7 @@ export function HouseLocation({ location, map }: HouseLocationProps) {
           <HouseMap
             center={{ lat: coordinates.lat, lng: coordinates.lng }}
             placeId={placeId}
-            placeImage={placeImage as PlaceImage}
+            placeImage={placeImage}
             mapsUrl={googleMapsUrl ?? undefined}
           />
         )}

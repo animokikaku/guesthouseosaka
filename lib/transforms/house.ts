@@ -18,6 +18,7 @@ type HouseLocation = NonNullable<HouseQueryResult>['location']
 type HouseMap = NonNullable<HouseQueryResult>['map']
 type HousePricing = NonNullable<HouseQueryResult>['pricing']
 type HouseAmenities = NonNullable<HouseQueryResult>['amenities']
+type HouseAbout = NonNullable<HouseQueryResult>['about']
 
 // ============================================
 // Building Transformer
@@ -156,4 +157,26 @@ export function toAmenityItems(amenities: HouseAmenities): AmenityItemData[] {
       order: amenity.category.order
     }
   }))
+}
+
+// ============================================
+// About Content Transformer
+// ============================================
+
+/**
+ * Transforms house about content to PortableTextBlock array
+ *
+ * The Sanity-generated type is structurally compatible with PortableTextBlock
+ * but TypeScript doesn't recognize them as the same due to literal types.
+ * This transformer handles the type narrowing explicitly.
+ *
+ * @param about - Raw about content from Sanity query
+ * @returns PortableTextBlock array or null
+ */
+export function toAboutContent(about: HouseAbout): PortableTextBlock[] | null {
+  if (!about || about.length === 0) {
+    return null
+  }
+  // Sanity block content is structurally compatible with PortableTextBlock
+  return about as PortableTextBlock[]
 }
