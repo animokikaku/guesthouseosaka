@@ -92,6 +92,18 @@ export const structure: StructureResolver = (S) =>
         .child(S.documentTypeList('amenity').title('Amenities')),
 
       // ============================================
+      // FORMS
+      // ============================================
+      S.listItem()
+        .title('Forms')
+        .icon(EnvelopeIcon)
+        .child(
+          S.documentTypeList('contactType')
+            .title('Contact Form Types')
+            .defaultOrdering([{ field: 'slug', direction: 'asc' }])
+        ),
+
+      // ============================================
       // CATEGORIES FOLDER
       // ============================================
       S.listItem()

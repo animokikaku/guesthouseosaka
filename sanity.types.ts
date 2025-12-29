@@ -13,6 +13,12 @@
  */
 
 // Source: schema.json
+export type FormFieldConfigNoPlaceholder = {
+  _type: 'formFieldConfigNoPlaceholder'
+  label: InternationalizedArrayString
+  description?: InternationalizedArrayString
+}
+
 export type FormFieldConfig = {
   _type: 'formFieldConfig'
   label: InternationalizedArrayString
@@ -195,9 +201,9 @@ export type ContactType = {
   title: InternationalizedArrayString
   description?: InternationalizedArrayString
   fields?: {
-    places?: FormFieldConfig
-    date?: FormFieldConfig
-    hour?: FormFieldConfig
+    places?: FormFieldConfigNoPlaceholder
+    date?: FormFieldConfigNoPlaceholder
+    hour?: FormFieldConfigNoPlaceholder
     stayDuration?: FormFieldConfig
     gender?: FormFieldConfig
     age?: FormFieldConfig
@@ -669,6 +675,7 @@ export type SanityImageAsset = {
 }
 
 export type AllSanitySchemaTypes =
+  | FormFieldConfigNoPlaceholder
   | FormFieldConfig
   | ExtraCostItem
   | PageAction
@@ -1177,17 +1184,17 @@ export type ContactPageQueryResult = {
     fields: {
       places: {
         label: string | null
-        placeholder: string | null
+        placeholder: null
         description: string | null
       }
       date: {
         label: string | null
-        placeholder: string | null
+        placeholder: null
         description: string | null
       }
       hour: {
         label: string | null
-        placeholder: string | null
+        placeholder: null
         description: string | null
       }
       stayDuration: {
@@ -1246,17 +1253,17 @@ export type ContactTypeQueryResult = {
   fields: {
     places: {
       label: string | null
-      placeholder: string | null
+      placeholder: null
       description: string | null
     }
     date: {
       label: string | null
-      placeholder: string | null
+      placeholder: null
       description: string | null
     }
     hour: {
       label: string | null
-      placeholder: string | null
+      placeholder: null
       description: string | null
     }
     stayDuration: {

@@ -18,6 +18,7 @@ import {
   extraCostItem,
   faqItem,
   formFieldConfig,
+  formFieldConfigNoPlaceholder,
   galleryImage,
   houseAmenity,
   localizedImage,
@@ -52,6 +53,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     address,
     pageAction,
     extraCostItem,
-    formFieldConfig
+    formFieldConfig,
+    formFieldConfigNoPlaceholder
   ]
 }

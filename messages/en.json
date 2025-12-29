@@ -108,72 +108,22 @@
   },
   "forms": {
     "fields": {
-      "age": {
-        "description": "How old are you?",
-        "label": "Age",
-        "placeholder": "Enter your age"
-      },
-      "date": {
-        "move_in_description": "When would you like to move in?",
-        "move_in_label": "Move-in date",
-        "tour_description": "When would you like to get a tour?",
-        "tour_label": "Tour date"
-      },
-      "email": {
-        "description": "We'll use this email to share with you more details.",
-        "label": "Email",
-        "placeholder": "Enter your email"
-      },
       "gender": {
-        "description": "What is your gender?",
-        "label": "Gender",
         "options": {
           "female": "Female",
           "male": "Male"
-        },
-        "placeholder": "Select your gender"
-      },
-      "hour": {
-        "tour_description": "Our operating hours are from 10AM to 8PM.",
-        "tour_label": "Tour hour"
-      },
-      "message": {
-        "contact_placeholder": "Let us know any additional information or questions.",
-        "description": "Do not include sensitive information such as your home address or credit card number.",
-        "label": "Message",
-        "move_in_placeholder": "Share any special requirements for your move-in or questions you might have."
-      },
-      "name": {
-        "description": "How should we address you?",
-        "label": "Name",
-        "placeholder": "Enter your name"
-      },
-      "nationality": {
-        "description": "Let us know your nationality.",
-        "label": "Nationality",
-        "placeholder": "Japanese"
+        }
       },
       "phone": {
-        "description": "We may use this number to contact you on the visit day.",
-        "label": "Phone",
-        "optional": "(optional)",
-        "placeholder": "070-1234-5678"
-      },
-      "places": {
-        "label": "Places",
-        "move_in_description": "Which places would you like to move in?",
-        "tour_description": "Which places would you like to get a tour?"
+        "optional": "(optional)"
       },
       "privacy_policy_agreement": "By submitting this form, you agree to the <link>Privacy Policy</link>.",
       "stay_duration": {
-        "description": "How long would you like to stay?",
-        "label": "Length of stay",
         "options": {
           "long_term": "Long term",
           "one_month": "1 month or more",
           "three_month": "3 months or more"
-        },
-        "placeholder": "Choose a duration"
+        }
       }
     },
     "status": {

@@ -108,72 +108,22 @@
   },
   "forms": {
     "fields": {
-      "age": {
-        "description": "年齢を教えてください",
-        "label": "年齢",
-        "placeholder": "年齢を入力してください"
-      },
-      "date": {
-        "move_in_description": "いつ入居を希望されますか？",
-        "move_in_label": "入居希望日",
-        "tour_description": "いつ見学をご希望ですか？",
-        "tour_label": "見学日"
-      },
-      "email": {
-        "description": "詳細をご案内するためにこのメールアドレスを使用します。",
-        "label": "メール",
-        "placeholder": "メールアドレスを入力してください"
-      },
       "gender": {
-        "description": "性別を教えてください。",
-        "label": "性別",
         "options": {
           "female": "女性",
           "male": "男性"
-        },
-        "placeholder": "性別を選択してください"
-      },
-      "hour": {
-        "tour_description": "営業時間は10:00〜20:00です。",
-        "tour_label": "見学時間"
-      },
-      "message": {
-        "contact_placeholder": "補足情報やご質問があればお知らせください。",
-        "description": "自宅住所やクレジットカード番号などの機密情報は入力しないでください。",
-        "label": "メッセージ",
-        "move_in_placeholder": "入居にあたっての特別なご要望やご質問があればお知らせください。"
-      },
-      "name": {
-        "description": "どのようにお呼びすればよいですか？",
-        "label": "お名前",
-        "placeholder": "お名前を入力してください"
-      },
-      "nationality": {
-        "description": "国籍を教えてください。",
-        "label": "国籍",
-        "placeholder": "日本人"
+        }
       },
       "phone": {
-        "description": "見学当日にご連絡する場合があります。",
-        "label": "電話",
-        "optional": "（任意）",
-        "placeholder": "070-1234-5678"
-      },
-      "places": {
-        "label": "場所",
-        "move_in_description": "どの物件に入居を希望しますか？",
-        "tour_description": "どの物件を見学したいですか？"
+        "optional": "（任意）"
       },
       "privacy_policy_agreement": "このフォームを送信することで、<link>プライバシーポリシー</link>に同意することになります。",
       "stay_duration": {
-        "description": "どのくらい滞在したいですか？",
-        "label": "滞在期間",
         "options": {
           "long_term": "長期",
           "one_month": "1か月以上",
           "three_month": "3か月以上"
-        },
-        "placeholder": "期間を選択してください"
+        }
       }
     },
     "status": {

@@ -108,72 +108,22 @@
   },
   "forms": {
     "fields": {
-      "age": {
-        "description": "Quel âge avez-vous ?",
-        "label": "Âge",
-        "placeholder": "Saisissez votre âge"
-      },
-      "date": {
-        "move_in_description": "Quand souhaitez-vous emménager ?",
-        "move_in_label": "Date d'emménagement",
-        "tour_description": "Quand souhaitez-vous organiser une visite ?",
-        "tour_label": "Date de visite"
-      },
-      "email": {
-        "description": "Nous utiliserons cette adresse pour vous transmettre plus de détails.",
-        "label": "E-mail",
-        "placeholder": "Saisissez votre e-mail"
-      },
       "gender": {
-        "description": "Quel est votre sexe ?",
-        "label": "Genre",
         "options": {
           "female": "Femme",
           "male": "Homme"
-        },
-        "placeholder": "Sélectionnez votre sexe"
-      },
-      "hour": {
-        "tour_description": "Nos heures d'ouverture sont de 10:00 à 20:00.",
-        "tour_label": "Heure de visite"
-      },
-      "message": {
-        "contact_placeholder": "Faites-nous part de toute information ou question complémentaire.",
-        "description": "N'incluez pas d'informations sensibles telles que votre adresse personnelle ou votre numéro de carte bancaire.",
-        "label": "Message",
-        "move_in_placeholder": "Partagez toute exigence particulière pour votre emménagement ou vos questions."
-      },
-      "name": {
-        "description": "Comment devons-nous nous adresser à vous ?",
-        "label": "Nom",
-        "placeholder": "Saisissez votre nom"
-      },
-      "nationality": {
-        "description": "Faites-nous part de votre nationalité.",
-        "label": "Nationalité",
-        "placeholder": "Japonais"
+        }
       },
       "phone": {
-        "description": "Nous pourrons vous contacter à ce numéro le jour de la visite.",
-        "label": "Téléphone",
-        "optional": "(facultatif)",
-        "placeholder": "070-1234-5678"
-      },
-      "places": {
-        "label": "Lieux",
-        "move_in_description": "Dans quels lieux souhaitez-vous emménager ?",
-        "tour_description": "Quels lieux souhaitez-vous visiter ?"
+        "optional": "(facultatif)"
       },
       "privacy_policy_agreement": "En soumettant ce formulaire, vous acceptez la <link>Politique de confidentialité</link>.",
       "stay_duration": {
-        "description": "Combien de temps souhaitez-vous rester ?",
-        "label": "Durée du séjour",
         "options": {
           "long_term": "Long séjour",
           "one_month": "1 mois ou plus",
           "three_month": "3 mois ou plus"
-        },
-        "placeholder": "Choisissez une durée"
+        }
       }
     },
     "status": {

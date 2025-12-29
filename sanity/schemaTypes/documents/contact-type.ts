@@ -6,12 +6,14 @@ import { defineField, defineType } from 'sanity'
 const fieldConfig = (
   name: string,
   title: string,
-  options?: { hiddenFor?: string[] }
+  options?: { hiddenFor?: string[]; noPlaceholder?: boolean }
 ) =>
   defineField({
     name,
     title,
-    type: 'formFieldConfig',
+    type: options?.noPlaceholder
+      ? 'formFieldConfigNoPlaceholder'
+      : 'formFieldConfig',
     hidden: options?.hiddenFor
       ? ({ document }) => options.hiddenFor!.includes(document?.slug as string)
       : undefined
@@ -71,10 +73,16 @@ export const contactType = defineType({
       options: { collapsible: true, collapsed: false },
       fields: [
         // Tour & Move-in only
-        fieldConfig('places', 'Places Selection', { hiddenFor: ['other'] }),
-        fieldConfig('date', 'Date', { hiddenFor: ['other'] }),
+        fieldConfig('places', 'Places Selection', {
+          hiddenFor: ['other'],
+          noPlaceholder: true
+        }),
+        fieldConfig('date', 'Date', { hiddenFor: ['other'], noPlaceholder: true }),
         // Tour only
-        fieldConfig('hour', 'Hour', { hiddenFor: ['move-in', 'other'] }),
+        fieldConfig('hour', 'Hour', {
+          hiddenFor: ['move-in', 'other'],
+          noPlaceholder: true
+        }),
         // Move-in only
         fieldConfig('stayDuration', 'Length of Stay', {
           hiddenFor: ['tour', 'other']

@@ -1,6 +1,9 @@
 export { address } from './address'
 export { extraCostItem } from './extra-cost-item'
-export { formFieldConfig } from './form-field-config'
+export {
+  formFieldConfig,
+  formFieldConfigNoPlaceholder
+} from './form-field-config'
 export { faqItem } from './faq-item'
 export { galleryImage } from './gallery-image'
 export { houseAmenity } from './house-amenity'
