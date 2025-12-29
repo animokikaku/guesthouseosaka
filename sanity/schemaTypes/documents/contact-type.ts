@@ -1,3 +1,4 @@
+import { ContactTypeSchema, ContactTypeValues } from '@/lib/types'
 import { EnvelopeIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
@@ -13,19 +14,14 @@ export const contactType = defineType({
       type: 'string',
       validation: (rule) =>
         rule.required().custom((value) => {
-          const validSlugs = ['tour', 'move-in', 'other']
-          if (!value || !validSlugs.includes(value)) {
-            return `Must be one of: ${validSlugs.join(', ')}`
+          if (!ContactTypeSchema.safeParse(value).success) {
+            return `Must be one of: ${ContactTypeValues.join(', ')}`
           }
           return true
         }),
       options: {
-        list: [
-          { title: 'Tour Request', value: 'tour' },
-          { title: 'Move-in Inquiry', value: 'move-in' },
-          { title: 'General Inquiry', value: 'other' }
-        ],
-        layout: 'radio'
+        list: [...ContactTypeValues],
+        layout: 'dropdown'
       }
     }),
     defineField({

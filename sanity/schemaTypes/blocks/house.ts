@@ -1,4 +1,4 @@
-import { HouseIdentifierValues } from '@/lib/types'
+import { HouseIdentifierSchema, HouseIdentifierValues } from '@/lib/types'
 import { HomeIcon } from '@sanity/icons'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
@@ -27,8 +27,17 @@ export const house = defineType({
       type: 'string',
       group: 'identity',
       description: 'Unique identifier for this house',
-      options: { list: [...HouseIdentifierValues] },
-      validation: (rule) => rule.required()
+      options: {
+        list: [...HouseIdentifierValues],
+        layout: 'dropdown'
+      },
+      validation: (rule) =>
+        rule.required().custom((value) => {
+          if (!HouseIdentifierSchema.safeParse(value).success) {
+            return `Must be one of: ${HouseIdentifierValues.join(', ')}`
+          }
+          return true
+        })
     }),
     defineField({
       name: 'title',
