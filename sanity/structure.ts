@@ -67,14 +67,6 @@ export const structure: StructureResolver = (S) =>
                   S.document()
                     .schemaType('contactPage')
                     .documentId('contactPage')
-                ),
-              S.listItem()
-                .title('Contact Types')
-                .icon(EnvelopeIcon)
-                .child(
-                  S.documentTypeList('contactType')
-                    .title('Contact Types')
-                    .defaultOrdering([{ field: 'slug', direction: 'asc' }])
                 )
             ])
         ),
@@ -126,6 +118,18 @@ export const structure: StructureResolver = (S) =>
                     .defaultOrdering([{ field: 'order', direction: 'asc' }])
                 )
             ])
+        ),
+
+      // ============================================
+      // CONTACT TYPES FOLDER
+      // ============================================
+      S.listItem()
+        .title('Contact')
+        .icon(EnvelopeIcon)
+        .child(
+          S.documentTypeList('contactType')
+            .title('Contact')
+            .defaultOrdering([{ field: 'slug', direction: 'asc' }])
         ),
 
       S.divider(),
