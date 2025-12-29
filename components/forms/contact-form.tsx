@@ -1,11 +1,13 @@
 /* eslint-disable react/no-children-prop */
 'use client'
 
-import { FormCard, useAppForm, useFormSubmit } from '@/components/forms'
 import {
-  GeneralInquiryFields,
-  useGeneralInquirySchema
-} from '@/components/forms/schema'
+  contactFormDefaultValues,
+  FormCard,
+  useAppForm,
+  useFormSubmit
+} from '@/components/forms'
+import { useGeneralInquirySchema } from '@/components/forms/schema'
 import { FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { ContactTypeQueryResult } from '@/sanity.types'
 import { MailIcon, UserIcon } from 'lucide-react'
@@ -20,12 +22,13 @@ export function ContactForm({ title, description }: ContactFormProps) {
   const t = useTranslations('forms')
   const schema = useGeneralInquirySchema()
   const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
+  const { message, privacyPolicy, account } = contactFormDefaultValues
 
   const form = useAppForm({
     defaultValues: {
-      message: '',
-      privacyPolicy: false as GeneralInquiryFields['privacyPolicy'],
-      account: { name: '', email: '' }
+      message,
+      privacyPolicy,
+      account: { name: account.name, email: account.email }
     },
     validators: {
       onSubmit: schema
