@@ -2,6 +2,7 @@ import type { Locale } from 'next-intl'
 
 import { ContactTypesList } from '@/app/[locale]/contact/(components)/contact-types-list'
 import { PageEmptyState } from '@/components/page-empty-state'
+import { toContactTypesListData } from '@/lib/transforms/collection'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactPageQuery } from '@/sanity/lib/queries'
 import { setRequestLocale } from 'next-intl/server'
@@ -23,9 +24,11 @@ export default async function ContactPage({
 
   return (
     <ContactTypesList
-      _id={data._id}
-      _type={data._type}
-      contactTypes={data.contactTypes}
+      {...toContactTypesListData({
+        _id: data._id,
+        _type: data._type,
+        contactTypes: data.contactTypes
+      })}
     />
   )
 }

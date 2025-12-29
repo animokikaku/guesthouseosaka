@@ -1,9 +1,10 @@
 import { Collection } from '@/components/collection'
 import { GalleryWall } from '@/components/gallery-wall'
-import { PageActions, PageHeader } from '@/components/page-header'
 import { PageEmptyState } from '@/components/page-empty-state'
+import { PageActions, PageHeader } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
+import { toCollectionData } from '@/lib/transforms/collection'
 import { sanityFetch } from '@/sanity/lib/live'
 import { homePageQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
@@ -105,12 +106,12 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
             />
           )}
           <PageActions>
-            <Collection
-              _id={_id}
-              _type={_type}
-              houses={houses}
-              className="w-full pt-4"
-            />
+            {houses ? (
+              <Collection
+                {...toCollectionData({ _id, _type, houses })}
+                className="w-full pt-4"
+              />
+            ) : null}
           </PageActions>
         </PageHeader>
       </section>

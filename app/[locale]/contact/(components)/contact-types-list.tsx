@@ -9,15 +9,10 @@ import {
 } from '@/components/ui/item'
 import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
-import type { ContactPageQueryResult } from '@/sanity.types'
+import type { ContactTypesListData } from '@/lib/types/components'
 import { ChevronRightIcon } from 'lucide-react'
 
-type ContactPage = NonNullable<ContactPageQueryResult>
-type ContactPageData = Pick<ContactPage, '_id' | '_type' | 'contactTypes'> & {
-  contactTypes: NonNullable<ContactPage['contactTypes']>
-}
-
-export function ContactTypesList(props: ContactPageData) {
+export function ContactTypesList(props: ContactTypesListData) {
   const [contactTypes, attr] = useOptimistic(props, 'contactTypes')
 
   return (

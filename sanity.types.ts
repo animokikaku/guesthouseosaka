@@ -398,7 +398,7 @@ export type HomePage = {
   collection: {
     content: InternationalizedArrayPortableText
   }
-  houses?: Array<
+  houses: Array<
     {
       _key: string
     } & HouseReference
@@ -842,7 +842,7 @@ export type HomePageQueryResult = {
       alt: string | null
       preview: string | null
     }
-  }> | null
+  }>
 } | null
 
 // Source: sanity/lib/queries.ts

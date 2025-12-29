@@ -12,10 +12,13 @@ import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { type HouseIdentifier } from '@/lib/types'
+import type {
+  CollectionData,
+  CollectionHouseItem
+} from '@/lib/types/components'
 import { cn } from '@/lib/utils'
-import { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
-import { getImageDimensions } from '@sanity/asset-utils'
+import { getImageDimensions, type SanityImageSource } from '@sanity/asset-utils'
 import Image from 'next/image'
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
@@ -23,19 +26,13 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   apple: 'bg-red-600/50',
   lemon: 'bg-yellow-600/50'
 }
-interface CollectionProps extends Pick<
-  NonNullable<HomePageQueryResult>,
-  '_id' | '_type' | 'houses'
-> {
+
+interface CollectionProps extends CollectionData {
   className?: string
 }
 
 export function Collection({ className, ...data }: CollectionProps) {
   const [houses, attribute] = useOptimistic(data, 'houses')
-
-  if (!houses) {
-    return null
-  }
 
   return (
     <ItemGroup
@@ -86,16 +83,13 @@ export function Collection({ className, ...data }: CollectionProps) {
   )
 }
 
-type CollectionImageProps = Pick<
-  NonNullable<NonNullable<CollectionProps['houses']>[number]>,
-  'image'
->
+type CollectionImageProps = Pick<CollectionHouseItem, 'image'>
 
 function CollectionImage({ image }: CollectionImageProps) {
   if (!image.asset) return null
 
   const buildImage = urlFor(image)
-  const dimensions = getImageDimensions(image.asset)
+  const dimensions = getImageDimensions(image.asset as SanityImageSource)
   const alt = image.alt || ''
   const blurDataURL = image.preview || undefined
   const placeholder = image.preview ? 'blur' : undefined

@@ -1,5 +1,6 @@
 import type { SanityImageCrop, SanityImageHotspot } from '@/sanity.types'
 import type { PortableTextBlock } from '@portabletext/react'
+import type { ContactType, HouseIdentifier } from '@/lib/types'
 
 // ============================================
 // Image Types
@@ -146,4 +147,56 @@ export interface ContactFormConfig {
   title: string
   description: string | null
   fields: FormFieldsConfig
+}
+
+// ============================================
+// Visual Editing Components
+// ============================================
+
+/**
+ * Base interface for components that support Sanity visual editing
+ * Includes _id and _type needed by useOptimistic hook
+ */
+interface VisualEditingBase {
+  _id: string
+  _type: string
+}
+
+/**
+ * House item in the collection grid
+ * @see components/collection.tsx
+ */
+export interface CollectionHouseItem {
+  _key: string
+  slug: HouseIdentifier
+  title: string | null
+  description: string | null
+  image: SanityImage
+}
+
+/**
+ * Collection component data with visual editing support
+ * @see components/collection.tsx
+ */
+export interface CollectionData extends VisualEditingBase {
+  houses: CollectionHouseItem[]
+}
+
+/**
+ * Contact type item in the navigation list
+ * @see app/[locale]/contact/(components)/contact-types-list.tsx
+ */
+export interface ContactTypeItem {
+  _key: string
+  slug: ContactType
+  title: string | null
+  description: string | null
+}
+
+/**
+ * Contact types list data with visual editing support
+ * @see app/[locale]/contact/(components)/contact-types-list.tsx
+ */
+export interface ContactTypesListData extends VisualEditingBase {
+  contactTypes: ContactTypeItem[]
 }
