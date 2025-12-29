@@ -1,20 +1,14 @@
-import type { ContactTypeQueryResult } from '@/sanity.types'
 import type {
   ContactFormConfig,
-  FormFieldConfig,
   FormFieldsConfig
 } from '@/lib/types/components'
+import type { ContactTypeQueryResult } from '@/sanity.types'
 
 // ============================================
 // Input Types (from Sanity query results)
 // ============================================
 
 type ContactTypeFields = NonNullable<ContactTypeQueryResult>['fields']
-type SanityFormField = {
-  label: string | null
-  placeholder?: string | null
-  description: string | null
-}
 
 // ============================================
 // Field Key Type
@@ -38,33 +32,6 @@ const FIELD_KEYS: FieldKey[] = [
 ]
 
 // ============================================
-// Single Field Transformer
-// ============================================
-
-/**
- * Transforms a single Sanity form field to FormFieldConfig
- *
- * Note: `label` is guaranteed non-null by schema validation + coalesce query.
- * The fallback empty string should never be reached in production.
- *
- * @param field - Raw field data from Sanity query
- * @returns FormFieldConfig or undefined if field is missing
- */
-function toFormFieldConfig(
-  field: SanityFormField | undefined
-): FormFieldConfig | undefined {
-  if (!field) {
-    return undefined
-  }
-
-  return {
-    label: field.label ?? '', // Guaranteed by schema, fallback for safety
-    placeholder: field.placeholder ?? null,
-    description: field.description ?? null
-  }
-}
-
-// ============================================
 // Form Fields Transformer
 // ============================================
 
@@ -74,23 +41,17 @@ function toFormFieldConfig(
  * @returns FormFieldsConfig with all available fields
  */
 export function toFormFieldsConfig(
-  fields: ContactTypeFields
+  fields: NonNullable<ContactTypeFields>
 ): FormFieldsConfig {
-  if (!fields) {
-    return {}
-  }
-
-  const result: FormFieldsConfig = {}
-
-  for (const key of FIELD_KEYS) {
-    const field = fields[key] as SanityFormField | undefined
-    const config = toFormFieldConfig(field)
-    if (config) {
-      result[key] = config
+  return FIELD_KEYS.reduce((acc, key) => {
+    const field = fields[key]
+    acc[key] = {
+      label: field.label ?? '',
+      placeholder: field.placeholder ?? undefined,
+      description: field.description ?? undefined
     }
-  }
-
-  return result
+    return acc
+  }, {} as FormFieldsConfig)
 }
 
 // ============================================
@@ -107,18 +68,11 @@ export function toFormFieldsConfig(
  * @returns ContactFormConfig with title, description, and fields
  */
 export function toContactFormConfig(
-  contactType: ContactTypeQueryResult
+  contactType: NonNullable<ContactTypeQueryResult>
 ): ContactFormConfig {
-  if (!contactType) {
-    return {
-      title: '', // Should never happen - query returns null handled at page level
-      fields: {}
-    }
-  }
-
   return {
     title: contactType.title ?? '', // Guaranteed by schema, fallback for safety
-    description: contactType.description ?? null,
+    description: contactType.description,
     fields: toFormFieldsConfig(contactType.fields)
   }
 }

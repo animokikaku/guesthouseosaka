@@ -96,8 +96,8 @@ export function MoveInForm({
             <FieldGroupPlaces
               fields={{ places: 'places' }}
               form={form}
-              label={fields.places?.label ?? ''}
-              description={fields.places?.description ?? ''}
+              label={fields.places.label}
+              description={fields.places.description}
               houseTitles={houseTitles}
             />
             <form.AppField
@@ -105,8 +105,8 @@ export function MoveInForm({
               children={(field) => (
                 <field.DateField
                   orientation="responsive"
-                  label={fields.date?.label}
-                  description={fields.date?.description ?? undefined}
+                  label={fields.date.label}
+                  description={fields.date.description}
                 />
               )}
             />
@@ -116,9 +116,9 @@ export function MoveInForm({
                 <field.SelectField
                   required
                   orientation="responsive"
-                  label={fields.stayDuration?.label ?? undefined}
-                  description={fields.stayDuration?.description ?? undefined}
-                  placeholder={fields.stayDuration?.placeholder ?? undefined}
+                  label={fields.stayDuration.label}
+                  description={fields.stayDuration.description}
+                  placeholder={fields.stayDuration.placeholder}
                   options={stayDurationOptions}
                 />
               )}
@@ -134,11 +134,11 @@ export function MoveInForm({
               name="message"
               children={(field) => (
                 <field.MessageField
-                  label={fields.message?.label}
+                  label={fields.message.label}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={fields.message?.placeholder ?? undefined}
-                  description={fields.message?.description ?? undefined}
+                  placeholder={fields.message.placeholder}
+                  description={fields.message.description}
                 />
               )}
             />

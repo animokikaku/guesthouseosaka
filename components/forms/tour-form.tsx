@@ -65,8 +65,8 @@ export function TourForm({
             <FieldGroupPlaces
               fields={{ places: 'places' }}
               form={form}
-              label={fields.places?.label ?? ''}
-              description={fields.places?.description ?? ''}
+              label={fields.places.label}
+              description={fields.places.description}
               houseTitles={houseTitles}
             />
             <form.AppField
@@ -74,8 +74,8 @@ export function TourForm({
               children={(field) => (
                 <field.DateField
                   required
-                  label={fields.date?.label}
-                  description={fields.date?.description ?? undefined}
+                  label={fields.date.label}
+                  description={fields.date.description}
                   orientation="responsive"
                 />
               )}
@@ -84,8 +84,8 @@ export function TourForm({
               name="hour"
               children={(field) => (
                 <field.InputField
-                  label={fields.hour?.label}
-                  description={fields.hour?.description ?? undefined}
+                  label={fields.hour.label}
+                  description={fields.hour.description}
                   orientation="responsive"
                   className="sm:min-w-[220px]"
                   type="time"
@@ -103,11 +103,11 @@ export function TourForm({
               name="message"
               children={(field) => (
                 <field.MessageField
-                  label={fields.message?.label}
+                  label={fields.message.label}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={fields.message?.placeholder ?? undefined}
-                  description={fields.message?.description ?? undefined}
+                  placeholder={fields.message.placeholder}
+                  description={fields.message.description}
                 />
               )}
             />

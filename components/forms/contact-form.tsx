@@ -62,8 +62,8 @@ export function ContactForm({ title, description, fields }: ContactFormProps) {
                 <field.InputGroupField
                   required
                   type="text"
-                  label={fields.name?.label}
-                  placeholder={fields.name?.placeholder ?? undefined}
+                  label={fields.name.label}
+                  placeholder={fields.name.placeholder}
                   icon={<UserIcon />}
                   autoComplete="name"
                 />
@@ -75,8 +75,8 @@ export function ContactForm({ title, description, fields }: ContactFormProps) {
                 <field.InputGroupField
                   required
                   type="email"
-                  label={fields.email?.label}
-                  placeholder={fields.email?.placeholder ?? undefined}
+                  label={fields.email.label}
+                  placeholder={fields.email.placeholder}
                   icon={<MailIcon />}
                   autoComplete="email"
                 />
@@ -88,11 +88,11 @@ export function ContactForm({ title, description, fields }: ContactFormProps) {
               children={(field) => (
                 <field.MessageField
                   required
-                  label={fields.message?.label}
+                  label={fields.message.label}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={fields.message?.placeholder ?? undefined}
-                  description={fields.message?.description ?? undefined}
+                  placeholder={fields.message.placeholder}
+                  description={fields.message.description}
                 />
               )}
             />

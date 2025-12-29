@@ -1,5 +1,5 @@
-import type { PortableTextBlock } from '@portabletext/react'
 import type { SanityImageCrop, SanityImageHotspot } from '@/sanity.types'
+import type { PortableTextBlock } from '@portabletext/react'
 
 // ============================================
 // Image Types
@@ -110,26 +110,27 @@ export interface AmenityItemData {
  */
 export interface FormFieldConfig {
   label: string
-  placeholder?: string | null
-  description?: string | null
+  placeholder?: string
+  description?: string
 }
 
 /**
  * Configuration for all form fields in a contact form
- * Fields are optional since different form types use different field subsets
+ * All field keys exist because the GROQ query projection explicitly includes them
+ * (values like label/placeholder can be null if not configured in Studio)
  */
 export interface FormFieldsConfig {
-  places?: FormFieldConfig
-  date?: FormFieldConfig
-  hour?: FormFieldConfig
-  stayDuration?: FormFieldConfig
-  name?: FormFieldConfig
-  age?: FormFieldConfig
-  gender?: FormFieldConfig
-  nationality?: FormFieldConfig
-  email?: FormFieldConfig
-  phone?: FormFieldConfig
-  message?: FormFieldConfig
+  places: FormFieldConfig
+  date: FormFieldConfig
+  hour: FormFieldConfig
+  stayDuration: FormFieldConfig
+  name: FormFieldConfig
+  age: FormFieldConfig
+  gender: FormFieldConfig
+  nationality: FormFieldConfig
+  email: FormFieldConfig
+  phone: FormFieldConfig
+  message: FormFieldConfig
 }
 
 /**
@@ -143,6 +144,6 @@ export interface FormFieldsConfig {
  */
 export interface ContactFormConfig {
   title: string
-  description?: string | null
+  description: string | null
   fields: FormFieldsConfig
 }
