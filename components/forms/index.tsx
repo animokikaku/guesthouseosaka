@@ -16,7 +16,7 @@ import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
 import { HouseIdentifier, HouseIdentifierValues } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { HousesTitlesQueryResult } from '@/sanity.types'
+import { ContactTypeQueryResult, HousesTitlesQueryResult } from '@/sanity.types'
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
 import {
   CakeIcon,
@@ -63,9 +63,14 @@ export const userAccountDefaultValues = {
   phone: ''
 } satisfies ContactFormFields['account']
 
+export type FormFieldsConfig = NonNullable<ContactTypeQueryResult>['fields']
+
 export const FieldGroupUserAccount = withFieldGroup({
   defaultValues: userAccountDefaultValues,
-  render: function Render({ group }) {
+  props: {
+    config: {} as FormFieldsConfig
+  },
+  render: function Render({ group, config }) {
     const t = useTranslations('forms')
 
     return (
@@ -76,9 +81,9 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.SelectField
               required
               orientation="responsive"
-              label={t('fields.gender.label')}
-              placeholder={t('fields.gender.placeholder')}
-              description={t('fields.gender.description')}
+              label={config.gender.label ?? undefined}
+              placeholder={config.gender.placeholder ?? undefined}
+              description={config.gender.description ?? undefined}
               options={[
                 { label: t('fields.gender.options.male'), value: 'male' },
                 { label: t('fields.gender.options.female'), value: 'female' }
@@ -91,10 +96,10 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               required
-              placeholder={t('fields.name.placeholder')}
+              placeholder={config.name.placeholder ?? undefined}
               orientation="responsive"
-              description={t('fields.name.description')}
-              label={t('fields.name.label')}
+              description={config.name.description ?? undefined}
+              label={config.name.label}
               icon={<UserIcon />}
               type="text"
               autoComplete="name"
@@ -106,11 +111,11 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               required
-              description={t('fields.age.description')}
+              description={config.age.description ?? undefined}
               icon={<CakeIcon />}
               orientation="responsive"
-              placeholder={t('fields.age.placeholder')}
-              label={t('fields.age.label')}
+              placeholder={config.age.placeholder ?? undefined}
+              label={config.age.label}
               type="number"
               min={1}
               autoComplete="age"
@@ -123,11 +128,11 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.InputGroupField
               required
               orientation="responsive"
-              label={t('fields.nationality.label')}
-              description={t('fields.nationality.description')}
+              label={config.nationality.label}
+              description={config.nationality.description ?? undefined}
               icon={<GlobeIcon />}
               type="text"
-              placeholder={t('fields.nationality.placeholder')}
+              placeholder={config.nationality.placeholder ?? undefined}
             />
           )}
         />
@@ -137,10 +142,10 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.InputGroupField
               required
               orientation="responsive"
-              placeholder={t('fields.email.placeholder')}
-              description={t('fields.email.description')}
+              placeholder={config.email.placeholder ?? undefined}
+              description={config.email.description ?? undefined}
               type="email"
-              label={t('fields.email.label')}
+              label={config.email.label}
               icon={<MailIcon />}
               autoComplete="email"
             />
@@ -151,12 +156,12 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               orientation="responsive"
-              placeholder={t('fields.phone.placeholder')}
+              placeholder={config.phone.placeholder ?? undefined}
               type="tel"
-              description={t('fields.phone.description')}
+              description={config.phone.description ?? undefined}
               label={
                 <div>
-                  {t('fields.phone.label')}{' '}
+                  {config.phone.label}{' '}
                   <span className="text-muted-foreground text-xs">
                     {t('fields.phone.optional')}
                   </span>

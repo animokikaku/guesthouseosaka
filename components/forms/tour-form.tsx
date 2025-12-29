@@ -20,16 +20,20 @@ import {
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { ContactTypeQueryResult } from '@/sanity.types'
-import { useTranslations } from 'next-intl'
 
 type TourFormProps = {
   title?: NonNullable<ContactTypeQueryResult>['title']
   description?: NonNullable<ContactTypeQueryResult>['description']
+  fields: NonNullable<ContactTypeQueryResult>['fields']
   houseTitles: HouseTitles
 }
 
-export function TourForm({ title, description, houseTitles }: TourFormProps) {
-  const t = useTranslations('forms')
+export function TourForm({
+  title,
+  description,
+  fields,
+  houseTitles
+}: TourFormProps) {
   const schema = useTourFormSchema()
   const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
   const { places, account, message, date, hour, privacyPolicy } =
@@ -64,8 +68,8 @@ export function TourForm({ title, description, houseTitles }: TourFormProps) {
             <FieldGroupPlaces
               fields={{ places: 'places' }}
               form={form}
-              label={t('fields.places.label')}
-              description={t('fields.places.tour_description')}
+              label={fields.places.label ?? ''}
+              description={fields.places.description ?? ''}
               houseTitles={houseTitles}
             />
             <form.AppField
@@ -73,8 +77,8 @@ export function TourForm({ title, description, houseTitles }: TourFormProps) {
               children={(field) => (
                 <field.DateField
                   required
-                  label={t('fields.date.tour_label')}
-                  description={t('fields.date.tour_description')}
+                  label={fields.date.label}
+                  description={fields.date.description ?? undefined}
                   orientation="responsive"
                 />
               )}
@@ -83,8 +87,8 @@ export function TourForm({ title, description, houseTitles }: TourFormProps) {
               name="hour"
               children={(field) => (
                 <field.InputField
-                  label={t('fields.hour.tour_label')}
-                  description={t('fields.hour.tour_description')}
+                  label={fields.hour.label}
+                  description={fields.hour.description ?? undefined}
                   orientation="responsive"
                   className="sm:min-w-[220px]"
                   type="time"
@@ -92,17 +96,21 @@ export function TourForm({ title, description, houseTitles }: TourFormProps) {
               )}
             />
             <FieldSeparator />
-            <FieldGroupUserAccount fields="account" form={form} />
+            <FieldGroupUserAccount
+              fields="account"
+              form={form}
+              config={fields}
+            />
             <FieldSeparator />
             <form.AppField
               name="message"
               children={(field) => (
                 <field.MessageField
-                  label={t('fields.message.label')}
+                  label={fields.message.label}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={t('fields.message.contact_placeholder')}
-                  description={t('fields.message.description')}
+                  placeholder={fields.message.placeholder ?? undefined}
+                  description={fields.message.description ?? undefined}
                 />
               )}
             />

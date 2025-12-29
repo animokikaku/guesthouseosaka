@@ -1,5 +1,45 @@
 [
   {
+    "name": "formFieldConfig",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "formFieldConfig"
+          }
+        },
+        "label": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "internationalizedArrayString"
+          },
+          "optional": false
+        },
+        "placeholder": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "internationalizedArrayString"
+          },
+          "optional": true
+        },
+        "description": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "internationalizedArrayString"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "name": "extraCostItem",
     "type": "type",
     "value": {
@@ -936,6 +976,103 @@
         "value": {
           "type": "inline",
           "name": "internationalizedArrayString"
+        },
+        "optional": true
+      },
+      "fields": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
+            "places": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "date": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "hour": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "stayDuration": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "gender": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "age": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "nationality": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "phone": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "name": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "email": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            },
+            "message": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "inline",
+                "name": "formFieldConfig"
+              },
+              "optional": true
+            }
+          }
         },
         "optional": true
       }

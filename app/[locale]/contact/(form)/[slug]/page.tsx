@@ -58,7 +58,7 @@ export default async function ContactTypePage({
     return <PageEmptyState />
   }
 
-  const { title, description } = contactData
+  const { title, description, fields } = contactData
 
   // Render the appropriate form based on slug
   switch (slug) {
@@ -70,6 +70,7 @@ export default async function ContactTypePage({
         <TourForm
           title={title}
           description={description}
+          fields={fields}
           houseTitles={houseTitles}
         />
       )
@@ -82,12 +83,15 @@ export default async function ContactTypePage({
         <MoveInForm
           title={title}
           description={description}
+          fields={fields}
           houseTitles={houseTitles}
         />
       )
 
     case 'other':
-      return <ContactForm title={title} description={description} />
+      return (
+        <ContactForm title={title} description={description} fields={fields} />
+      )
 
     default:
       notFound()

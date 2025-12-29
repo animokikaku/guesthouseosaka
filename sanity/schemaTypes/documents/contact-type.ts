@@ -2,16 +2,36 @@ import { ContactTypeSchema, ContactTypeValues } from '@/lib/types'
 import { EnvelopeIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
+// Helper to create a field config
+const fieldConfig = (
+  name: string,
+  title: string,
+  options?: { hiddenFor?: string[] }
+) =>
+  defineField({
+    name,
+    title,
+    type: 'formFieldConfig',
+    hidden: options?.hiddenFor
+      ? ({ document }) => options.hiddenFor!.includes(document?.slug as string)
+      : undefined
+  })
+
 export const contactType = defineType({
   name: 'contactType',
   title: 'Contact Type',
   type: 'document',
   icon: EnvelopeIcon,
+  groups: [
+    { name: 'main', title: 'Main', default: true },
+    { name: 'fields', title: 'Form Fields' }
+  ],
   fields: [
     defineField({
       name: 'slug',
       title: 'Type',
       type: 'string',
+      group: 'main',
       validation: (rule) =>
         rule.required().custom((value) => {
           if (!ContactTypeSchema.safeParse(value).success) {
@@ -29,6 +49,7 @@ export const contactType = defineType({
       title: 'Navigation Title',
       type: 'internationalizedArrayString',
       description: 'Short title for navigation tabs (e.g., "Tour request")',
+      group: 'main',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     }),
@@ -37,7 +58,37 @@ export const contactType = defineType({
       title: 'Description',
       type: 'internationalizedArrayString',
       description: 'Brief description for navigation and form headers',
+      group: 'main',
       options: { aiAssist: { translateAction: true } }
+    }),
+    // Form field configurations
+    defineField({
+      name: 'fields',
+      title: 'Form Field Labels',
+      type: 'object',
+      group: 'fields',
+      description: 'Customize labels, placeholders, and descriptions',
+      options: { collapsible: true, collapsed: false },
+      fields: [
+        // Tour & Move-in only
+        fieldConfig('places', 'Places Selection', { hiddenFor: ['other'] }),
+        fieldConfig('date', 'Date', { hiddenFor: ['other'] }),
+        // Tour only
+        fieldConfig('hour', 'Hour', { hiddenFor: ['move-in', 'other'] }),
+        // Move-in only
+        fieldConfig('stayDuration', 'Length of Stay', {
+          hiddenFor: ['tour', 'other']
+        }),
+        // Tour & Move-in only (via FieldGroupUserAccount)
+        fieldConfig('gender', 'Gender', { hiddenFor: ['other'] }),
+        fieldConfig('age', 'Age', { hiddenFor: ['other'] }),
+        fieldConfig('nationality', 'Nationality', { hiddenFor: ['other'] }),
+        fieldConfig('phone', 'Phone', { hiddenFor: ['other'] }),
+        // All forms
+        fieldConfig('name', 'Name'),
+        fieldConfig('email', 'Email'),
+        fieldConfig('message', 'Message')
+      ]
     })
   ],
   preview: {

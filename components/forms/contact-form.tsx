@@ -18,15 +18,14 @@ import {
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
 import { ContactTypeQueryResult } from '@/sanity.types'
 import { MailIcon, UserIcon } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 
 type ContactFormProps = {
   title?: NonNullable<ContactTypeQueryResult>['title']
   description?: NonNullable<ContactTypeQueryResult>['description']
+  fields: NonNullable<ContactTypeQueryResult>['fields']
 }
 
-export function ContactForm({ title, description }: ContactFormProps) {
-  const t = useTranslations('forms')
+export function ContactForm({ title, description, fields }: ContactFormProps) {
   const schema = useGeneralInquirySchema()
   const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
   const { message, privacyPolicy, account } = contactFormDefaultValues
@@ -67,8 +66,8 @@ export function ContactForm({ title, description }: ContactFormProps) {
                 <field.InputGroupField
                   required
                   type="text"
-                  label={t('fields.name.label')}
-                  placeholder={t('fields.name.placeholder')}
+                  label={fields.name.label}
+                  placeholder={fields.name.placeholder ?? undefined}
                   icon={<UserIcon />}
                   autoComplete="name"
                 />
@@ -80,8 +79,8 @@ export function ContactForm({ title, description }: ContactFormProps) {
                 <field.InputGroupField
                   required
                   type="email"
-                  label={t('fields.email.label')}
-                  placeholder={t('fields.email.placeholder')}
+                  label={fields.email.label}
+                  placeholder={fields.email.placeholder ?? undefined}
                   icon={<MailIcon />}
                   autoComplete="email"
                 />
@@ -93,11 +92,11 @@ export function ContactForm({ title, description }: ContactFormProps) {
               children={(field) => (
                 <field.MessageField
                   required
-                  label={t('fields.message.label')}
+                  label={fields.message.label}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={t('fields.message.contact_placeholder')}
-                  description={t('fields.message.description')}
+                  placeholder={fields.message.placeholder ?? undefined}
+                  description={fields.message.description ?? undefined}
                 />
               )}
             />

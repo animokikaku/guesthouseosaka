@@ -28,12 +28,14 @@ import { useTranslations } from 'next-intl'
 type MoveInFormProps = {
   title: NonNullable<ContactTypeQueryResult>['title']
   description: NonNullable<ContactTypeQueryResult>['description']
+  fields: NonNullable<ContactTypeQueryResult>['fields']
   houseTitles: HouseTitles
 }
 
 export function MoveInForm({
   title,
   description,
+  fields,
   houseTitles
 }: MoveInFormProps) {
   const t = useTranslations('forms')
@@ -58,6 +60,7 @@ export function MoveInForm({
     onSubmit: createOnSubmit('move-in')
   })
 
+  // Stay duration options still use translations for the option labels
   const stayDurationOptions: {
     value: ContactFormFields['stayDuration']
     label: string
@@ -96,8 +99,8 @@ export function MoveInForm({
             <FieldGroupPlaces
               fields={{ places: 'places' }}
               form={form}
-              label={t('fields.places.label')}
-              description={t('fields.places.move_in_description')}
+              label={fields.places.label ?? ''}
+              description={fields.places.description ?? ''}
               houseTitles={houseTitles}
             />
             <form.AppField
@@ -105,8 +108,8 @@ export function MoveInForm({
               children={(field) => (
                 <field.DateField
                   orientation="responsive"
-                  label={t('fields.date.move_in_label')}
-                  description={t('fields.date.move_in_description')}
+                  label={fields.date.label}
+                  description={fields.date.description ?? undefined}
                 />
               )}
             />
@@ -116,25 +119,29 @@ export function MoveInForm({
                 <field.SelectField
                   required
                   orientation="responsive"
-                  label={t('fields.stay_duration.label')}
-                  description={t('fields.stay_duration.description')}
-                  placeholder={t('fields.stay_duration.placeholder')}
+                  label={fields.stayDuration.label ?? undefined}
+                  description={fields.stayDuration.description ?? undefined}
+                  placeholder={fields.stayDuration.placeholder ?? undefined}
                   options={stayDurationOptions}
                 />
               )}
             />
             <FieldSeparator />
-            <FieldGroupUserAccount fields="account" form={form} />
+            <FieldGroupUserAccount
+              fields="account"
+              form={form}
+              config={fields}
+            />
             <FieldSeparator />
             <form.AppField
               name="message"
               children={(field) => (
                 <field.MessageField
-                  label={t('fields.message.label')}
+                  label={fields.message.label}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={t('fields.message.move_in_placeholder')}
-                  description={t('fields.message.description')}
+                  placeholder={fields.message.placeholder ?? undefined}
+                  description={fields.message.description ?? undefined}
                 />
               )}
             />
