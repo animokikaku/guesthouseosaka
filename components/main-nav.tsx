@@ -19,6 +19,7 @@ import {
 import { cn } from '@/lib/utils'
 import { FileWarningIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { stegaClean } from 'next-sanity'
 import Image from 'next/image'
 import { useParams, useSelectedLayoutSegment } from 'next/navigation'
 import { useState } from 'react'
@@ -112,13 +113,13 @@ function NavigationMenuGroupItem({
                 <NavigationMenuLink data-active={house === item.key} asChild>
                   <Link href={item.href}>
                     <div className="text-sm leading-none font-medium">
-                      {item.label}
+                      {stegaClean(item.label)}
                     </div>
-                    {item.description && (
+                    {item.description ? (
                       <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-                        {item.description}
+                        {stegaClean(item.description)}
                       </p>
-                    )}
+                    ) : null}
                   </Link>
                 </NavigationMenuLink>
               </li>
@@ -164,13 +165,13 @@ function NavigationMenuGroupItem({
                       />
                     </div>
 
-                    {it.caption && (
+                    {it.caption ? (
                       <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/60 to-transparent p-4">
                         <p className="text-left text-sm leading-relaxed font-medium text-white/90">
                           {it.caption}
                         </p>
                       </div>
-                    )}
+                    ) : null}
                   </div>
                 )
               })}

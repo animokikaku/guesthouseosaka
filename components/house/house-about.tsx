@@ -2,6 +2,7 @@ import { HouseBuilding } from '@/components/house/house-building'
 import type { HouseQueryResult } from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
+import { stegaClean } from 'next-sanity'
 
 const components: PortableTextComponents = {
   block: {
@@ -46,7 +47,7 @@ export function HouseAbout({
   return (
     <section>
       <h2 className="mb-6 text-2xl font-semibold">
-        {t('heading', { house: title ?? '' })}
+        {t('heading', { house: title ? stegaClean(title) : '' })}
       </h2>
       <div className="mb-4">
         <HouseBuilding

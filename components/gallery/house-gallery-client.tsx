@@ -102,7 +102,7 @@ function CategoryThumbnail({ category }: { category: GalleryCategory }) {
           </Badge>
         </div>
       </div>
-      <span className="text-xs font-medium">{stegaClean(category.label)}</span>
+      <span className="text-xs font-medium">{category.label}</span>
     </button>
   )
 }

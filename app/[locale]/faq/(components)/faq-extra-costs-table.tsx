@@ -111,10 +111,10 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
                   key={_id}
                   className={cn(
                     'bg-secondary font-semibold',
-                    ACCENT_CLASSES[stegaClean(slug)]
+                    ACCENT_CLASSES[slug]
                   )}
                 >
-                  {title}
+                  {stegaClean(title)}
                 </TableHead>
               )
             })}
@@ -127,7 +127,7 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
                 {categoryLabels[category]}
               </TableCell>
               {houses.map(({ _id, slug }) => {
-                const value = costsByHouse[stegaClean(slug)]?.[category]
+                const value = costsByHouse[slug]?.[category]
                 return (
                   <TableCell key={_id} className="overflow-hidden">
                     {value ? (

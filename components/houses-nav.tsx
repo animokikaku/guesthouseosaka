@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { HousesNavQueryResult } from '@/sanity.types'
+import { stegaClean } from 'next-sanity'
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -22,7 +23,9 @@ export function HousesNav({
   houses,
   className,
   ...props
-}: React.ComponentProps<'div'> & { houses: HousesNavQueryResult }) {
+}: React.ComponentProps<'div'> & {
+  houses: NonNullable<HousesNavQueryResult>
+}) {
   const { setActiveTheme } = useThemeConfig()
   const isMobile = useIsMobile()
   const params = useParams()
@@ -44,7 +47,10 @@ export function HousesNav({
     <div className="relative overflow-hidden">
       <ScrollArea className="max-w-[600px] lg:max-w-none">
         <div className={cn('flex items-center', className)} {...props}>
-          {(houses ?? []).map(({ slug, title }) => {
+          {houses.map((house) => {
+            if (!house.title) return null
+            const slug = house.slug
+            const title = stegaClean(house.title)
             return (
               <Link
                 key={`house-nav-${slug}`}
@@ -56,7 +62,7 @@ export function HousesNav({
                 )}
                 scroll={!isMobile}
               >
-                {title ?? slug}
+                {title}
               </Link>
             )
           })}

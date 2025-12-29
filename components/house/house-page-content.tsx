@@ -66,7 +66,7 @@ export function HousePageContent({
       <div className="container-wrapper section-soft flex-1 pb-12">
         <div className="container max-w-6xl">
           <PageNav id="tabs">
-            <HousesNav houses={houses} />
+            {houses && houses.length > 0 ? <HousesNav houses={houses} /> : null}
           </PageNav>
           <div className="theme-container">
             <ImageBlockGallery
