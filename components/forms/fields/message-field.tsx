@@ -23,7 +23,7 @@ type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
 
 interface MessageFieldProps extends InputGroupTextareaFormProps, Orientation {
   label?: React.ReactNode
-  description?: string
+  description?: string | null
 }
 
 const MAX_LENGTH = 3000

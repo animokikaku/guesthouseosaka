@@ -13,13 +13,12 @@ import type { ContactPageQueryResult } from '@/sanity.types'
 import { ChevronRightIcon } from 'lucide-react'
 
 type ContactPage = NonNullable<ContactPageQueryResult>
-type ContactPageData = Pick<ContactPage, '_id' | '_type' | 'contactTypes'>
+type ContactPageData = Pick<ContactPage, '_id' | '_type' | 'contactTypes'> & {
+  contactTypes: NonNullable<ContactPage['contactTypes']>
+}
 
 export function ContactTypesList(props: ContactPageData) {
   const [contactTypes, attr] = useOptimistic(props, 'contactTypes')
-  if (!contactTypes || contactTypes.length === 0) {
-    return null
-  }
 
   return (
     <div
@@ -27,7 +26,6 @@ export function ContactTypesList(props: ContactPageData) {
       data-sanity={attr.list()}
     >
       {contactTypes.map(({ _key, slug, title, description }) => {
-        if (!slug) return null
         return (
           <Item
             key={_key}

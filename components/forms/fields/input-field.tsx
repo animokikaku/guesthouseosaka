@@ -19,7 +19,7 @@ type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
 
 interface InputFieldProps extends InputFormProps, Orientation {
   label?: React.ReactNode
-  description?: string
+  description?: string | null
 }
 
 export function InputField({

@@ -183,8 +183,8 @@ export const FieldGroupPlaces = withFieldGroup({
     places: [] as HouseIdentifier[]
   },
   props: {
-    label: '',
-    description: '',
+    label: '' as string | null | undefined,
+    description: '' as string | null | undefined,
     houseTitles: [] as HouseTitles
   },
   render: function Render({ group, description, label, houseTitles }) {

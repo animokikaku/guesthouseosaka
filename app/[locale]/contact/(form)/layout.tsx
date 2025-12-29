@@ -25,12 +25,10 @@ export default async function Layout({
     return null
   }
 
-  const { contactTypes } = contactPage
-
   return (
     <>
       <PageNav id="tabs">
-        <ContactNav contactTypes={contactTypes} />
+        <ContactNav contactTypes={contactPage.contactTypes} />
       </PageNav>
       <LegalNoticeProvider data={legalNotice}>{children}</LegalNoticeProvider>
     </>

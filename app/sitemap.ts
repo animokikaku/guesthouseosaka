@@ -9,7 +9,12 @@ type Pathname = keyof typeof routing.pathnames
 
 type Route =
   | '/'
-  | { pathname: Exclude<Pathname, '/[house]' | '/[house]/gallery' | '/contact/[slug]'> }
+  | {
+      pathname: Exclude<
+        Pathname,
+        '/[house]' | '/[house]/gallery' | '/contact/[slug]'
+      >
+    }
   | { pathname: '/[house]'; params: { house: string } }
   | { pathname: '/[house]/gallery'; params: { house: string } }
   | { pathname: '/contact/[slug]'; params: { slug: string } }
@@ -30,16 +35,14 @@ const houseRoutes: Route[] = HouseIdentifierValues.map((house) => ({
   params: { house }
 }))
 
-export const routes: Route[] = [...staticRoutes, ...contactTypeRoutes, ...houseRoutes]
+export const routes: Route[] = [
+  ...staticRoutes,
+  ...contactTypeRoutes,
+  ...houseRoutes
+]
 
 function buildUrl(href: Route, locale: Locale, host: string): string {
-  return new URL(
-    getPathname({
-      href: href as Parameters<typeof getPathname>[0]['href'],
-      locale
-    }),
-    host
-  ).toString()
+  return new URL(getPathname({ href, locale }), host).toString()
 }
 
 function buildAlternates(href: Route, host: string): Record<Locale, string> {
