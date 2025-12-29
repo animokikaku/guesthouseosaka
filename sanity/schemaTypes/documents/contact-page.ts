@@ -34,7 +34,9 @@ export const contactPage = defineType({
       title: 'Contact Types',
       type: 'array',
       description: 'Different ways visitors can contact you. Drag to reorder.',
-      of: [defineArrayMember({ type: 'contactType' })],
+      of: [
+        defineArrayMember({ type: 'reference', to: [{ type: 'contactType' }] })
+      ],
       group: 'content'
     }),
     defineField({

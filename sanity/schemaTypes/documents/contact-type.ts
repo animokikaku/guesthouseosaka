@@ -4,19 +4,26 @@ import { defineField, defineType } from 'sanity'
 export const contactType = defineType({
   name: 'contactType',
   title: 'Contact Type',
-  type: 'object',
+  type: 'document',
   icon: EnvelopeIcon,
   fields: [
     defineField({
-      name: 'key',
+      name: 'slug',
       title: 'Type',
       type: 'string',
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.required().custom((value) => {
+          const validSlugs = ['tour', 'move-in', 'other']
+          if (!value || !validSlugs.includes(value)) {
+            return `Must be one of: ${validSlugs.join(', ')}`
+          }
+          return true
+        }),
       options: {
         list: [
           { title: 'Tour Request', value: 'tour' },
           { title: 'Move-in Inquiry', value: 'move-in' },
-          { title: 'General Inquiry', value: 'general' }
+          { title: 'General Inquiry', value: 'other' }
         ],
         layout: 'radio'
       }
@@ -40,12 +47,17 @@ export const contactType = defineType({
   preview: {
     select: {
       title: 'title.0.value',
-      key: 'key'
+      slug: 'slug'
     },
-    prepare({ title, key }) {
+    prepare({ title, slug }) {
+      const slugLabels: Record<string, string> = {
+        tour: 'Tour Request',
+        'move-in': 'Move-in Inquiry',
+        other: 'General Inquiry'
+      }
       return {
-        title: title || 'No title',
-        subtitle: key || 'No key'
+        title: title || slugLabels[slug] || 'No title',
+        subtitle: slug || 'No slug'
       }
     }
   }

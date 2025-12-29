@@ -100,59 +100,6 @@
     }
   },
   {
-    "name": "contactType",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "contactType"
-          }
-        },
-        "key": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "union",
-            "of": [
-              {
-                "type": "string",
-                "value": "tour"
-              },
-              {
-                "type": "string",
-                "value": "move-in"
-              },
-              {
-                "type": "string",
-                "value": "general"
-              }
-            ]
-          },
-          "optional": false
-        },
-        "title": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "internationalizedArrayString"
-          },
-          "optional": false
-        },
-        "description": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "internationalizedArrayString"
-          },
-          "optional": true
-        }
-      }
-    }
-  },
-  {
     "name": "address",
     "type": "type",
     "value": {
@@ -921,6 +868,110 @@
     }
   },
   {
+    "name": "contactType",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "contactType"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "slug": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "tour"
+            },
+            {
+              "type": "string",
+              "value": "move-in"
+            },
+            {
+              "type": "string",
+              "value": "other"
+            }
+          ]
+        },
+        "optional": false
+      },
+      "title": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "internationalizedArrayString"
+        },
+        "optional": false
+      },
+      "description": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "internationalizedArrayString"
+        },
+        "optional": true
+      }
+    }
+  },
+  {
+    "type": "type",
+    "name": "contactType.reference",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_ref": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          }
+        },
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "reference"
+          }
+        },
+        "_weak": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        }
+      },
+      "dereferencesTo": "contactType"
+    }
+  },
+  {
     "name": "contactPage",
     "type": "document",
     "attributes": {
@@ -1001,7 +1052,7 @@
             },
             "rest": {
               "type": "inline",
-              "name": "contactType"
+              "name": "contactType.reference"
             }
           }
         },

@@ -5,6 +5,7 @@ import { house } from './blocks/house'
 import { amenity } from './documents/amenity'
 import { amenityCategory } from './documents/amenity-category'
 import { contactPage } from './documents/contact-page'
+import { contactType } from './documents/contact-type'
 import { faqPage } from './documents/faq-page'
 import { galleryCategory } from './documents/gallery-category'
 import homePage from './documents/home-page'
@@ -14,7 +15,6 @@ import { settings } from './documents/settings'
 // Object types
 import {
   address,
-  contactType,
   extraCostItem,
   faqItem,
   galleryImage,
@@ -33,6 +33,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     settings,
     faqPage,
     contactPage,
+    contactType,
     legalNotice,
 
     // Taxonomy
@@ -48,7 +49,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     pricingRow,
     faqItem,
     address,
-    contactType,
     pageAction,
     extraCostItem
   ]

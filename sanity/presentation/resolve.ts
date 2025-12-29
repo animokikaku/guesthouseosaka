@@ -1,11 +1,17 @@
 import { HouseIdentifier } from '@/lib/types'
 import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
 
+type ContactTypeSlug = 'tour' | 'move-in' | 'other'
+
 const l = {
   home: () => ({ title: 'Home', href: '/' }),
   house: (slug: HouseIdentifier) => ({ title: 'House', href: `/${slug}` }),
   faq: () => ({ title: 'FAQ', href: '/faq' }),
-  contact: () => ({ title: 'Contact', href: '/contact' })
+  contact: () => ({ title: 'Contact', href: '/contact' }),
+  contactType: (slug: ContactTypeSlug) => ({
+    title: 'Contact Form',
+    href: `/contact/${slug}`
+  })
 }
 
 export const resolve: PresentationPluginOptions['resolve'] = {
@@ -32,6 +38,12 @@ export const resolve: PresentationPluginOptions['resolve'] = {
       select: {},
       resolve: () => ({
         locations: [l.contact()]
+      })
+    }),
+    contactType: defineLocations({
+      select: { slug: 'slug' },
+      resolve: (doc) => ({
+        locations: [l.contact(), l.contactType(doc?.slug)]
       })
     }),
     // Settings appear on all pages (header/footer)

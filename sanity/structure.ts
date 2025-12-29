@@ -18,6 +18,7 @@ const SINGLETONS = ['settings', 'homePage', 'faqPage', 'contactPage']
 const MANAGED_TYPES = [
   ...SINGLETONS,
   'house',
+  'contactType',
   'galleryCategory',
   'amenityCategory',
   'amenity'
@@ -66,6 +67,14 @@ export const structure: StructureResolver = (S) =>
                   S.document()
                     .schemaType('contactPage')
                     .documentId('contactPage')
+                ),
+              S.listItem()
+                .title('Contact Types')
+                .icon(EnvelopeIcon)
+                .child(
+                  S.documentTypeList('contactType')
+                    .title('Contact Types')
+                    .defaultOrdering([{ field: 'slug', direction: 'asc' }])
                 )
             ])
         ),

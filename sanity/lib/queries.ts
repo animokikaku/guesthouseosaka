@@ -271,17 +271,25 @@ export const contactPageQuery = defineQuery(`*[_type == "contactPage"][0]{
   },
   "contactTypes": contactTypes[]{
     _key,
-    key,
-    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
-    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
+    ...@->{
+      _id,
+      _type,
+      slug,
+      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+      "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
+    }
   }
 }`)
 
-export const contactTypeQuery =
-  defineQuery(`*[_type == "contactPage"][0].contactTypes[key == $type][0]{
+export const contactTypeQuery = defineQuery(`*[_type == "contactType" && slug == $slug][0]{
+  _id,
+  _type,
+  slug,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
 }`)
+
+export const contactTypeSlugsQuery = defineQuery(`*[_type == "contactType"]{ slug }`)
 
 // =============================================================================
 // LEGAL NOTICE

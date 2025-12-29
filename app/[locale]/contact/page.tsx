@@ -24,9 +24,11 @@ export default async function ContactPage({
     return <PageEmptyState />
   }
 
-  const { _id, _type, contactTypes } = data
-
   return (
-    <ContactTypesList _id={_id} _type={_type} contactTypes={contactTypes} />
+    <ContactTypesList
+      _id={data._id}
+      _type={data._type}
+      contactTypes={data.contactTypes}
+    />
   )
 }
