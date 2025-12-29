@@ -7,6 +7,10 @@ export const HouseIdentifierValues = ['orange', 'apple', 'lemon'] as const
 export const HouseIdentifierSchema = z.enum(HouseIdentifierValues)
 export type HouseIdentifier = z.infer<typeof HouseIdentifierSchema>
 
+export const ContactTypeValues = ['tour', 'move-in', 'other'] as const
+export const ContactTypeSchema = z.enum(ContactTypeValues)
+export type ContactType = z.infer<typeof ContactTypeSchema>
+
 export type NavItem = {
   key: string
   href: ComponentProps<typeof Link>['href']

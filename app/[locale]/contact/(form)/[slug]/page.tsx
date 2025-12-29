@@ -1,6 +1,7 @@
 import { ContactForm, MoveInForm, TourForm } from '@/components/forms'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { routing } from '@/i18n/routing'
+import { ContactType, ContactTypeSchema } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
 import {
   contactTypeQuery,
@@ -11,11 +12,8 @@ import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
-const VALID_SLUGS = ['tour', 'move-in', 'other'] as const
-type ContactTypeSlug = (typeof VALID_SLUGS)[number]
-
-function isValidSlug(slug: string): slug is ContactTypeSlug {
-  return VALID_SLUGS.includes(slug as ContactTypeSlug)
+export function hasContactType(slug: string): slug is ContactType {
+  return ContactTypeSchema.safeParse(slug).success
 }
 
 export async function generateStaticParams() {
@@ -40,7 +38,7 @@ export default async function ContactTypePage({
   const { locale, slug } = await params
   setRequestLocale(locale as Locale)
 
-  if (!isValidSlug(slug)) {
+  if (!hasContactType(slug)) {
     notFound()
   }
 

@@ -1,27 +1,37 @@
 import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
-import {
-  HouseIdentifier,
-  HouseIdentifierSchema,
-  HouseIdentifierValues
-} from '@/lib/types'
+import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
-import { houseQuery, settingsQuery } from '@/sanity/lib/queries'
+import {
+  houseQuery,
+  houseSlugsQuery,
+  settingsQuery
+} from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
 import { hasLocale, Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { use } from 'react'
 
-export function generateStaticParams() {
-  return routing.locales.flatMap((locale) =>
-    HouseIdentifierValues.map((house) => ({ locale, house }))
-  )
-}
-
 export function hasHouse(house: string): house is HouseIdentifier {
   return HouseIdentifierSchema.safeParse(house).success
+}
+
+export async function generateStaticParams() {
+  const { data: houses } = await sanityFetch({
+    query: houseSlugsQuery,
+    perspective: 'published',
+    stega: false
+  })
+
+  if (houses.length === 0) {
+    return []
+  }
+
+  return routing.locales.flatMap((locale) =>
+    houses.map(({ slug }) => ({ locale, house: slug }))
+  )
 }
 
 export async function generateMetadata(
