@@ -1,5 +1,6 @@
 import { HouseBuilding } from '@/components/house/house-building'
-import type { HouseQueryResult } from '@/sanity.types'
+import type { BuildingData } from '@/lib/types/components'
+import type { PortableTextBlock } from '@portabletext/types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
@@ -29,10 +30,14 @@ const components: PortableTextComponents = {
   }
 }
 
-type HouseAboutProps = Pick<
-  NonNullable<HouseQueryResult>,
-  '_id' | '_type' | 'about' | 'title' | 'building' | 'slug'
->
+interface HouseAboutProps {
+  _id: string
+  _type: string
+  about: PortableTextBlock[] | null
+  title: string | null
+  building: BuildingData | null
+  slug: string
+}
 
 export function HouseAbout({
   _id,

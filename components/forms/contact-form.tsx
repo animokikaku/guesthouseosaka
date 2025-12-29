@@ -16,14 +16,10 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
-import { ContactTypeQueryResult } from '@/sanity.types'
+import type { ContactFormConfig } from '@/lib/types/components'
 import { MailIcon, UserIcon } from 'lucide-react'
 
-type ContactFormProps = {
-  title?: NonNullable<ContactTypeQueryResult>['title']
-  description?: NonNullable<ContactTypeQueryResult>['description']
-  fields: NonNullable<ContactTypeQueryResult>['fields']
-}
+type ContactFormProps = ContactFormConfig
 
 export function ContactForm({ title, description, fields }: ContactFormProps) {
   const schema = useGeneralInquirySchema()
@@ -66,8 +62,8 @@ export function ContactForm({ title, description, fields }: ContactFormProps) {
                 <field.InputGroupField
                   required
                   type="text"
-                  label={fields.name.label}
-                  placeholder={fields.name.placeholder ?? undefined}
+                  label={fields.name?.label}
+                  placeholder={fields.name?.placeholder ?? undefined}
                   icon={<UserIcon />}
                   autoComplete="name"
                 />
@@ -79,8 +75,8 @@ export function ContactForm({ title, description, fields }: ContactFormProps) {
                 <field.InputGroupField
                   required
                   type="email"
-                  label={fields.email.label}
-                  placeholder={fields.email.placeholder ?? undefined}
+                  label={fields.email?.label}
+                  placeholder={fields.email?.placeholder ?? undefined}
                   icon={<MailIcon />}
                   autoComplete="email"
                 />
@@ -92,11 +88,11 @@ export function ContactForm({ title, description, fields }: ContactFormProps) {
               children={(field) => (
                 <field.MessageField
                   required
-                  label={fields.message.label}
+                  label={fields.message?.label}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={fields.message.placeholder ?? undefined}
-                  description={fields.message.description ?? undefined}
+                  placeholder={fields.message?.placeholder ?? undefined}
+                  description={fields.message?.description ?? undefined}
                 />
               )}
             />

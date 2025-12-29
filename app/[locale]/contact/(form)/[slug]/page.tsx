@@ -1,6 +1,7 @@
 import { ContactForm, MoveInForm, TourForm } from '@/components/forms'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { routing } from '@/i18n/routing'
+import { toContactFormConfig } from '@/lib/transforms'
 import { ContactType, ContactTypeSchema } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
 import {
@@ -58,7 +59,8 @@ export default async function ContactTypePage({
     return <PageEmptyState />
   }
 
-  const { title, description, fields } = contactData
+  // Transform contact type data at page level
+  const formConfig = toContactFormConfig(contactData)
 
   // Render the appropriate form based on slug
   switch (slug) {
@@ -66,32 +68,16 @@ export default async function ContactTypePage({
       if (!houseTitles || houseTitles.length === 0) {
         return <PageEmptyState />
       }
-      return (
-        <TourForm
-          title={title}
-          description={description}
-          fields={fields}
-          houseTitles={houseTitles}
-        />
-      )
+      return <TourForm {...formConfig} houseTitles={houseTitles} />
 
     case 'move-in':
       if (!houseTitles || houseTitles.length === 0) {
         return <PageEmptyState />
       }
-      return (
-        <MoveInForm
-          title={title}
-          description={description}
-          fields={fields}
-          houseTitles={houseTitles}
-        />
-      )
+      return <MoveInForm {...formConfig} houseTitles={houseTitles} />
 
     case 'other':
-      return (
-        <ContactForm title={title} description={description} fields={fields} />
-      )
+      return <ContactForm {...formConfig} />
 
     default:
       notFound()

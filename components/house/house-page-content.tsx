@@ -13,8 +13,16 @@ import {
 import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
 import { featuredToGalleryImage, type GalleryImage } from '@/lib/gallery'
+import {
+  toAmenityItems,
+  toBuildingData,
+  toLocationData,
+  toMapData,
+  toPricingRows
+} from '@/lib/transforms/house'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import type { PortableTextBlock } from '@portabletext/types'
 import type { HouseQueryResult, HousesNavQueryResult } from '@/sanity.types'
 import { ComponentProps } from 'react'
 
@@ -84,21 +92,24 @@ export function HousePageContent({
                 _type={_type}
                 slug={slug}
                 title={title}
-                about={about}
-                building={building}
+                about={(about as PortableTextBlock[]) ?? null}
+                building={toBuildingData(building)}
               />
-              <HouseAmenities _id={_id} _type={_type} amenities={amenities} />
-              {location && map && (
-                <HouseLocation
-                  coordinates={map.coordinates}
-                  placeId={map.placeId}
-                  placeImage={map.placeImage}
-                  highlight={location.highlight}
-                  details={location.details}
-                  googleMapsUrl={map.googleMapsUrl}
-                />
-              )}
-              <HousePricing pricing={pricing} />
+              <HouseAmenities
+                _id={_id}
+                _type={_type}
+                amenities={toAmenityItems(amenities)}
+              />
+              {(() => {
+                const mapData = toMapData(map)
+                return mapData ? (
+                  <HouseLocation
+                    location={toLocationData(location)}
+                    map={mapData}
+                  />
+                ) : null
+              })()}
+              <HousePricing pricing={toPricingRows(pricing)} />
             </article>
           </div>
         </div>

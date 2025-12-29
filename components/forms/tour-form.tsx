@@ -19,12 +19,9 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
-import { ContactTypeQueryResult } from '@/sanity.types'
+import type { ContactFormConfig } from '@/lib/types/components'
 
-type TourFormProps = {
-  title?: NonNullable<ContactTypeQueryResult>['title']
-  description?: NonNullable<ContactTypeQueryResult>['description']
-  fields: NonNullable<ContactTypeQueryResult>['fields']
+interface TourFormProps extends ContactFormConfig {
   houseTitles: HouseTitles
 }
 
@@ -68,8 +65,8 @@ export function TourForm({
             <FieldGroupPlaces
               fields={{ places: 'places' }}
               form={form}
-              label={fields.places.label ?? ''}
-              description={fields.places.description ?? ''}
+              label={fields.places?.label ?? ''}
+              description={fields.places?.description ?? ''}
               houseTitles={houseTitles}
             />
             <form.AppField
@@ -77,8 +74,8 @@ export function TourForm({
               children={(field) => (
                 <field.DateField
                   required
-                  label={fields.date.label}
-                  description={fields.date.description ?? undefined}
+                  label={fields.date?.label}
+                  description={fields.date?.description ?? undefined}
                   orientation="responsive"
                 />
               )}
@@ -87,8 +84,8 @@ export function TourForm({
               name="hour"
               children={(field) => (
                 <field.InputField
-                  label={fields.hour.label}
-                  description={fields.hour.description ?? undefined}
+                  label={fields.hour?.label}
+                  description={fields.hour?.description ?? undefined}
                   orientation="responsive"
                   className="sm:min-w-[220px]"
                   type="time"
@@ -106,11 +103,11 @@ export function TourForm({
               name="message"
               children={(field) => (
                 <field.MessageField
-                  label={fields.message.label}
+                  label={fields.message?.label}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={fields.message.placeholder ?? undefined}
-                  description={fields.message.description ?? undefined}
+                  placeholder={fields.message?.placeholder ?? undefined}
+                  description={fields.message?.description ?? undefined}
                 />
               )}
             />

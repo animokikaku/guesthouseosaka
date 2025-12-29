@@ -20,8 +20,8 @@ import {
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useOptimistic } from '@/hooks/use-optimistic'
+import type { AmenityItemData } from '@/lib/types/components'
 import { groupByCategory } from '@/lib/utils/group-by-category'
-import type { HouseQueryResult } from '@/sanity.types'
 import { stegaClean } from '@sanity/client/stega'
 import { DynamicIcon, dynamicIconImports } from 'lucide-react/dynamic'
 import { useTranslations } from 'next-intl'
@@ -30,26 +30,23 @@ import { useMemo } from 'react'
 
 type IconName = keyof typeof dynamicIconImports
 
-type Amenities = NonNullable<HouseQueryResult>['amenities']
-type Amenity = NonNullable<Amenities>[number]
-
 interface HouseAmenitiesProps {
-  _id: NonNullable<HouseQueryResult>['_id']
-  _type: NonNullable<HouseQueryResult>['_type']
-  amenities: Amenities
+  _id: string
+  _type: string
+  amenities: AmenityItemData[]
 }
 
 interface AmenitiesDialogProps {
-  _id: NonNullable<HouseQueryResult>['_id']
-  _type: NonNullable<HouseQueryResult>['_type']
-  amenities: Amenities
+  _id: string
+  _type: string
+  amenities: AmenityItemData[]
   noteLabels: Record<string, string>
   trigger: React.ReactNode
   title: string
 }
 
 interface AmenityItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  amenity: Amenity
+  amenity: AmenityItemData
   noteLabel?: string
 }
 
@@ -157,7 +154,6 @@ export function HouseAmenities({ _id, _type, amenities }: HouseAmenitiesProps) {
 
   // Featured amenities derived from flat list
   const featuredAmenities = useMemo(() => {
-    if (!amenities) return []
     return amenities.filter((a) => a.featured).slice(0, 10)
   }, [amenities])
 
@@ -166,7 +162,7 @@ export function HouseAmenities({ _id, _type, amenities }: HouseAmenitiesProps) {
     ? featuredAmenities.slice(0, 5)
     : featuredAmenities
 
-  const totalAmenitiesCount = amenities?.length ?? 0
+  const totalAmenitiesCount = amenities.length
 
   return (
     <section>

@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
-import type { HouseQueryResult } from '@/sanity.types'
+import type { LocationData } from '@/lib/types/components'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import * as React from 'react'
 
@@ -50,7 +50,7 @@ const components: PortableTextComponents = {
 
 interface HouseLocationModalProps {
   children: React.ReactNode
-  details: NonNullable<NonNullable<HouseQueryResult>['location']>['details']
+  details: LocationData['details']
   title: string
 }
 
@@ -98,9 +98,7 @@ export function HouseLocationModal({
 }
 
 interface LocationSectionsProps {
-  details: NonNullable<
-    NonNullable<NonNullable<HouseQueryResult>['location']>['details']
-  >
+  details: NonNullable<LocationData['details']>
   className?: string
 }
 

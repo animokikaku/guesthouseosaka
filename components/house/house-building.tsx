@@ -1,14 +1,16 @@
 import { Link } from '@/i18n/navigation'
+import type { BuildingData } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
-import type { HouseQueryResult } from '@/sanity.types'
 import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 
-type HouseBuildingProps = Pick<
-  NonNullable<HouseQueryResult>,
-  '_id' | '_type' | 'building' | 'slug'
->
+interface HouseBuildingProps {
+  _id: string
+  _type: string
+  building: BuildingData | null
+  slug: string
+}
 
 export function HouseBuilding({
   _id,

@@ -1,0 +1,159 @@
+import type { PortableTextBlock } from '@portabletext/types'
+import type { HouseQueryResult } from '@/sanity.types'
+import type {
+  AmenityItemData,
+  BuildingData,
+  LocationData,
+  MapData,
+  PricingRowData,
+  SanityImage
+} from '@/lib/types/components'
+
+// ============================================
+// Input Types (from Sanity query results)
+// ============================================
+
+type HouseBuilding = NonNullable<HouseQueryResult>['building']
+type HouseLocation = NonNullable<HouseQueryResult>['location']
+type HouseMap = NonNullable<HouseQueryResult>['map']
+type HousePricing = NonNullable<HouseQueryResult>['pricing']
+type HouseAmenities = NonNullable<HouseQueryResult>['amenities']
+
+// ============================================
+// Building Transformer
+// ============================================
+
+/**
+ * Transforms house building data to BuildingData interface
+ * @param building - Raw building data from Sanity query
+ * @returns BuildingData with rooms, floors, and startingPrice
+ */
+export function toBuildingData(building: HouseBuilding): BuildingData {
+  if (!building) {
+    return {}
+  }
+  return {
+    rooms: building.rooms,
+    floors: building.floors,
+    startingPrice: building.startingPrice
+  }
+}
+
+// ============================================
+// Location Transformer
+// ============================================
+
+/**
+ * Transforms house location data to LocationData interface
+ * @param location - Raw location data from Sanity query
+ * @returns LocationData with highlight and details
+ */
+export function toLocationData(location: HouseLocation): LocationData {
+  if (!location) {
+    return {
+      highlight: null,
+      details: null
+    }
+  }
+  return {
+    highlight: location.highlight ?? null,
+    details: (location.details as PortableTextBlock[]) ?? null
+  }
+}
+
+// ============================================
+// Map Transformer
+// ============================================
+
+/**
+ * Transforms house map data to MapData interface
+ * @param map - Raw map data from Sanity query
+ * @returns MapData with coordinates, placeId, placeImage, and googleMapsUrl
+ *          Returns null if map data is missing or incomplete
+ */
+export function toMapData(map: HouseMap): MapData | null {
+  if (!map) {
+    return null
+  }
+
+  const { coordinates, placeId, placeImage, googleMapsUrl } = map
+
+  // Coordinates are required for map functionality
+  if (!coordinates?.lat || !coordinates?.lng) {
+    return null
+  }
+
+  const sanityImage: SanityImage = {
+    asset: placeImage?.asset
+      ? {
+          _id: placeImage.asset._ref,
+          _ref: placeImage.asset._ref,
+          _type: 'reference'
+        }
+      : null,
+    hotspot: placeImage?.hotspot ?? null,
+    crop: placeImage?.crop ?? null,
+    alt: placeImage?.alt ?? null,
+    preview: placeImage?.preview ?? null
+  }
+
+  return {
+    coordinates: {
+      lat: coordinates.lat,
+      lng: coordinates.lng
+    },
+    placeId,
+    placeImage: sanityImage,
+    googleMapsUrl: googleMapsUrl ?? null
+  }
+}
+
+// ============================================
+// Pricing Transformer
+// ============================================
+
+/**
+ * Transforms house pricing array to PricingRowData array
+ * @param pricing - Raw pricing data from Sanity query
+ * @returns Array of PricingRowData with _key, label, and content
+ */
+export function toPricingRows(pricing: HousePricing): PricingRowData[] {
+  if (!pricing) {
+    return []
+  }
+
+  return pricing.map((row) => ({
+    _key: row._key,
+    label: row.label ?? null,
+    content: (row.content as PortableTextBlock[]) ?? null
+  }))
+}
+
+// ============================================
+// Amenities Transformer
+// ============================================
+
+/**
+ * Transforms house amenities array to AmenityItemData array
+ * @param amenities - Raw amenities data from Sanity query
+ * @returns Array of AmenityItemData with category, label, icon, note, and featured
+ */
+export function toAmenityItems(amenities: HouseAmenities): AmenityItemData[] {
+  if (!amenities) {
+    return []
+  }
+
+  return amenities.map((amenity) => ({
+    _key: amenity._key,
+    label: amenity.label ?? null,
+    icon: amenity.icon,
+    note: amenity.note ?? null,
+    featured: amenity.featured ?? null,
+    category: {
+      _id: amenity.category._id,
+      key: amenity.category.key,
+      label: amenity.category.label ?? null,
+      order: amenity.category.order
+    }
+  }))
+}

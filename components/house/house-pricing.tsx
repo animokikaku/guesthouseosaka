@@ -1,4 +1,4 @@
-import type { HouseQueryResult } from '@/sanity.types'
+import type { PricingRowData } from '@/lib/types/components'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 
@@ -28,14 +28,14 @@ const components: PortableTextComponents = {
   }
 }
 
-type HousePricingProps = {
-  pricing: NonNullable<HouseQueryResult>['pricing']
+interface HousePricingProps {
+  pricing: PricingRowData[]
 }
 
 export function HousePricing({ pricing }: HousePricingProps) {
   const t = useTranslations('HousePricing')
 
-  if (!pricing || pricing.length === 0) {
+  if (pricing.length === 0) {
     return null
   }
 
