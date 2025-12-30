@@ -21,16 +21,10 @@ import {
   toMapData,
   toPricingRows
 } from '@/lib/transforms/house'
-import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HOUSE_THEME_COLORS } from '@/lib/utils/theme'
 import type { HouseQueryResult, HousesNavQueryResult } from '@/sanity.types'
 import { ComponentProps } from 'react'
-
-const THEME_COLORS: Record<HouseIdentifier, string> = {
-  apple: 'bg-red-600 dark:bg-red-500',
-  lemon: 'bg-yellow-400 dark:bg-yellow-500',
-  orange: 'bg-orange-500 dark:bg-orange-600'
-}
 
 export function HousePageContent({
   _id,
@@ -66,7 +60,7 @@ export function HousePageContent({
           <PageHeaderHeading>{title}</PageHeaderHeading>
           <PageHeaderDescription>{description}</PageHeaderDescription>
           <div
-            className={cn('mx-auto mt-6 h-1 w-24', THEME_COLORS[slug])}
+            className={cn('mx-auto mt-6 h-1 w-24', HOUSE_THEME_COLORS[slug])}
             aria-hidden="true"
           />
         </PageHeader>

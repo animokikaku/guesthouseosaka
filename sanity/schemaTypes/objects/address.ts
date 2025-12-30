@@ -23,7 +23,15 @@ export const address = defineType({
       name: 'postalCode',
       title: 'Postal Code',
       type: 'string',
-      validation: (rule) => rule.required()
+      description: 'Japanese format: XXX-XXXX',
+      validation: (rule) =>
+        rule
+          .required()
+          .regex(/^\d{3}-?\d{4}$/, {
+            name: 'postal code',
+            invert: false
+          })
+          .error('Format: XXX-XXXX (e.g., 542-0012)')
     }),
     defineField({
       name: 'country',

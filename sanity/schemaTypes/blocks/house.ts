@@ -130,7 +130,8 @@ export const house = defineType({
       type: 'array',
       group: 'gallery',
       description: 'House photos organized by category. Drag to reorder.',
-      of: [defineArrayMember({ type: 'galleryImage' })]
+      of: [defineArrayMember({ type: 'galleryImage' })],
+      validation: (rule) => rule.min(1).error('At least one gallery image is required')
     }),
 
     // ============================================
@@ -230,7 +231,8 @@ export const house = defineType({
       type: 'array',
       group: 'pricing',
       description: 'Pricing information rows with rich text content',
-      of: [defineArrayMember({ type: 'pricingRow' })]
+      of: [defineArrayMember({ type: 'pricingRow' })],
+      validation: (rule) => rule.min(1).error('At least one pricing row is required')
     }),
     defineField({
       name: 'extraCosts',
