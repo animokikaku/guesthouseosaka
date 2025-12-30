@@ -1,7 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import {
+  createGalleryCategory,
+  createGalleryItem
+} from '@/lib/transforms/__tests__/mocks'
 import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { HouseGalleryClient } from '../house-gallery-client'
-import { createGalleryItem, createGalleryCategory } from '@/lib/transforms/__tests__/mocks'
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -21,6 +24,7 @@ Object.defineProperty(window, 'matchMedia', {
 // Mock next/image
 vi.mock('next/image', () => ({
   default: ({ src, alt }: { src: string; alt: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} data-testid="gallery-image" />
   )
 }))
@@ -28,7 +32,13 @@ vi.mock('next/image', () => ({
 // Mock Sanity image utilities
 vi.mock('@/sanity/lib/image', () => ({
   urlFor: () => ({
-    width: () => ({ height: () => ({ dpr: () => ({ fit: () => ({ url: () => 'https://cdn.sanity.io/test.jpg' }) }) }) }),
+    width: () => ({
+      height: () => ({
+        dpr: () => ({
+          fit: () => ({ url: () => 'https://cdn.sanity.io/test.jpg' })
+        })
+      })
+    }),
     url: () => 'https://cdn.sanity.io/test.jpg'
   })
 }))
@@ -47,7 +57,13 @@ vi.mock('@/hooks/use-optimistic', () => ({
 
 // Mock GalleryImageButton
 vi.mock('../gallery-image-button', () => ({
-  GalleryImageButton: ({ onClick, imageProps }: { onClick: () => void; imageProps: { alt: string } }) => (
+  GalleryImageButton: ({
+    onClick,
+    imageProps
+  }: {
+    onClick: () => void
+    imageProps: { alt: string }
+  }) => (
     <button data-testid="gallery-image-button" onClick={onClick}>
       {imageProps.alt}
     </button>
@@ -66,13 +82,17 @@ describe('HouseGalleryClient', () => {
 
   describe('empty gallery', () => {
     it('renders nothing for empty gallery', () => {
-      const { container } = render(<HouseGalleryClient {...baseProps} gallery={[]} />)
+      const { container } = render(
+        <HouseGalleryClient {...baseProps} gallery={[]} />
+      )
 
       expect(container.querySelector('h3')).not.toBeInTheDocument()
     })
 
     it('renders nothing for null gallery', () => {
-      const { container } = render(<HouseGalleryClient {...baseProps} gallery={null as unknown as []} />)
+      const { container } = render(
+        <HouseGalleryClient {...baseProps} gallery={null as unknown as []} />
+      )
 
       expect(container.querySelector('h3')).not.toBeInTheDocument()
     })
@@ -80,7 +100,10 @@ describe('HouseGalleryClient', () => {
 
   describe('category rendering', () => {
     it('renders category headings', () => {
-      const category = createGalleryCategory({ key: 'bedroom', label: 'Bedroom' })
+      const category = createGalleryCategory({
+        key: 'bedroom',
+        label: 'Bedroom'
+      })
       const gallery = [
         createGalleryItem({ _key: 'img1', category }),
         createGalleryItem({ _key: 'img2', category })
@@ -88,12 +111,22 @@ describe('HouseGalleryClient', () => {
 
       render(<HouseGalleryClient {...baseProps} gallery={gallery} />)
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Bedroom')
+      expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
+        'Bedroom'
+      )
     })
 
     it('renders multiple categories', () => {
-      const bedroomCat = createGalleryCategory({ key: 'bedroom', label: 'Bedroom', order: 1 })
-      const kitchenCat = createGalleryCategory({ key: 'kitchen', label: 'Kitchen', order: 2 })
+      const bedroomCat = createGalleryCategory({
+        key: 'bedroom',
+        label: 'Bedroom',
+        order: 1
+      })
+      const kitchenCat = createGalleryCategory({
+        key: 'kitchen',
+        label: 'Kitchen',
+        order: 2
+      })
       const gallery = [
         createGalleryItem({ _key: 'img1', category: bedroomCat }),
         createGalleryItem({ _key: 'img2', category: kitchenCat })
@@ -106,8 +139,16 @@ describe('HouseGalleryClient', () => {
     })
 
     it('sorts categories by order', () => {
-      const kitchenCat = createGalleryCategory({ key: 'kitchen', label: 'Kitchen', order: 2 })
-      const bedroomCat = createGalleryCategory({ key: 'bedroom', label: 'Bedroom', order: 1 })
+      const kitchenCat = createGalleryCategory({
+        key: 'kitchen',
+        label: 'Kitchen',
+        order: 2
+      })
+      const bedroomCat = createGalleryCategory({
+        key: 'bedroom',
+        label: 'Bedroom',
+        order: 1
+      })
       const gallery = [
         createGalleryItem({ _key: 'img1', category: kitchenCat }),
         createGalleryItem({ _key: 'img2', category: bedroomCat })

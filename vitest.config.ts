@@ -11,5 +11,8 @@ export default defineConfig({
     include: ['**/__tests__/**/*.test.{ts,tsx}', '**/*.test.{ts,tsx}'],
     exclude: ['**/node_modules/**', '**/e2e/**', '**/playwright/**'],
     passWithNoTests: true,
+    coverage: {
+      exclude: ['components/ui/**'],
+    },
   },
 })
