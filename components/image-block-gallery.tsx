@@ -60,7 +60,7 @@ function GalleryGrid({
               <GalleryImageButton
                 className="col-span-2 row-span-2"
                 sizes="(min-width: 1120px) 560px, 50vw"
-                imageProps={{ ...images[0], priority: true }}
+                imageProps={{ ...images[0], preload: true }}
               />
               <GalleryImageButton
                 className="col-span-1 col-start-3 row-start-1"

@@ -4,6 +4,7 @@ import {
 } from '@sanity/orderable-document-list'
 import { ImagesIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
+import { allowedIcons } from '../../lib/allowed-icons'
 import { IconPreview } from '../../lib/icon-preview'
 
 export const galleryCategory = defineType({
@@ -27,7 +28,8 @@ export const galleryCategory = defineType({
       name: 'icon',
       title: 'Icon',
       type: 'lucide-icon',
-      description: 'Decorative icon for this category'
+      description: 'Decorative icon for this category',
+      options: { allowedIcons }
     }),
     defineField({
       name: 'label',

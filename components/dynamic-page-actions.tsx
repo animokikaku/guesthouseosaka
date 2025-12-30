@@ -4,9 +4,9 @@ import { PageActions } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
+import { Icon } from '@/lib/icons'
 import { ContactPageQueryResult, FaqPageQueryResult } from '@/sanity.types'
 import { stegaClean } from '@sanity/client/stega'
-import { DynamicIcon, type IconName } from 'lucide-react/dynamic'
 
 interface DynamicPageActionsProps {
   page:
@@ -23,7 +23,7 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
     <PageActions data-sanity={attr.list()}>
       {actions.map((action, index) => {
         const key = stegaClean(action._key)
-        const iconName = stegaClean(action.icon) as IconName
+        const iconName = stegaClean(action.icon)
         const href = stegaClean(action.href)
         const label = stegaClean(action.label)
         // First action is 'default' variant, others are 'ghost'
@@ -47,9 +47,7 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
               data-sanity={attr.item(key)}
             >
               <a href={href} target="_blank" rel="noopener noreferrer">
-                <span className="inline-flex h-4 w-4 shrink-0">
-                  <DynamicIcon name={iconName} />
-                </span>
+                <Icon name={iconName} />
                 {label}
               </a>
             </Button>
@@ -71,9 +69,7 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
                   : (href as '/')
               }
             >
-              <span className="inline-flex h-4 w-4 shrink-0">
-                <DynamicIcon name={iconName} />
-              </span>
+              <Icon name={iconName} />
               {label}
             </Link>
           </Button>

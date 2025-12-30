@@ -30,11 +30,8 @@ vi.mock('@/hooks/use-optimistic', () => ({
   ])
 }))
 
-vi.mock('lucide-react/dynamic', () => ({
-  DynamicIcon: ({ name }: { name: string }) => (
-    <span data-testid={`icon-${name}`} />
-  ),
-  dynamicIconImports: {}
+vi.mock('@/lib/icons', () => ({
+  Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />
 }))
 
 // Mock Radix UI portals for Dialog/Drawer

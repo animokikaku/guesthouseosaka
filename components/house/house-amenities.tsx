@@ -22,13 +22,11 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { useOptimistic } from '@/hooks/use-optimistic'
 import type { AmenityItemData } from '@/lib/types/components'
 import { groupByCategory } from '@/lib/utils/group-by-category'
+import { Icon } from '@/lib/icons'
 import { stegaClean } from '@sanity/client/stega'
-import { DynamicIcon, dynamicIconImports } from 'lucide-react/dynamic'
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
 import { useMemo } from 'react'
-
-type IconName = keyof typeof dynamicIconImports
 
 interface HouseAmenitiesProps {
   _id: string
@@ -51,13 +49,13 @@ interface AmenityItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function AmenityItem({ amenity, noteLabel, ...props }: AmenityItemProps) {
-  // Clean stega encoding from icon to ensure DynamicIcon works correctly
-  const iconName = stegaClean(amenity.icon) as IconName
+  // Clean stega encoding from icon
+  const iconName = stegaClean(amenity.icon)
 
   return (
     <div className="flex items-center gap-3 py-2" {...props}>
       <div className="text-muted-foreground h-5 w-5 shrink-0">
-        <DynamicIcon name={iconName} className="h-5 w-5" />
+        <Icon name={iconName} className="h-5 w-5" />
       </div>
       <div className="flex-1">
         <span className="text-foreground">{amenity.label}</span>

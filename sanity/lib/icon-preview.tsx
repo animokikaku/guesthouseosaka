@@ -1,6 +1,4 @@
-import { DynamicIcon, dynamicIconImports } from 'lucide-react/dynamic'
-
-type IconName = keyof typeof dynamicIconImports
+import { iconMap } from './icon-map'
 
 interface IconPreviewProps {
   icon?: string
@@ -9,5 +7,8 @@ interface IconPreviewProps {
 export function IconPreview({ icon }: IconPreviewProps) {
   if (!icon) return null
 
-  return <DynamicIcon name={icon as IconName} />
+  const IconComponent = iconMap[icon]
+  if (!IconComponent) return null
+
+  return <IconComponent />
 }
