@@ -86,7 +86,7 @@ describe('HouseLocation', () => {
   })
 
   describe('HouseMap integration', () => {
-    it('renders HouseMap when coordinates exist', () => {
+    it('renders HouseMap when map data exists', () => {
       render(<HouseLocation {...baseProps} />)
 
       const map = screen.getByTestId('house-map')
@@ -102,13 +102,10 @@ describe('HouseLocation', () => {
       expect(map).toHaveAttribute('data-place-id', 'ChIJA9KNRIL-AGARZtCjpPbTMCs')
     })
 
-    it('does not render HouseMap when lat is undefined', () => {
+    it('does not render HouseMap when map is null', () => {
       const props = {
         ...baseProps,
-        map: {
-          ...baseProps.map,
-          coordinates: { lat: undefined as unknown as number, lng: 135.5023 }
-        }
+        map: null
       }
 
       render(<HouseLocation {...props} />)
@@ -116,18 +113,19 @@ describe('HouseLocation', () => {
       expect(screen.queryByTestId('house-map')).not.toBeInTheDocument()
     })
 
-    it('does not render HouseMap when lng is undefined', () => {
+    it('still renders section content when map is null', () => {
       const props = {
         ...baseProps,
-        map: {
-          ...baseProps.map,
-          coordinates: { lat: 34.6937, lng: undefined as unknown as number }
-        }
+        map: null
       }
 
       render(<HouseLocation {...props} />)
 
-      expect(screen.queryByTestId('house-map')).not.toBeInTheDocument()
+      // Section heading and highlight text should still be visible
+      expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
+      expect(screen.getByText('Great location near the station')).toBeInTheDocument()
+      // Modal trigger should still be available
+      expect(screen.getByTestId('location-modal')).toBeInTheDocument()
     })
   })
 

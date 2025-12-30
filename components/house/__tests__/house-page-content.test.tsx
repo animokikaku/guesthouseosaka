@@ -298,16 +298,17 @@ describe('HousePageContent', () => {
       expect(screen.getByTestId('house-location')).toBeInTheDocument()
     })
 
-    it('does not render HouseLocation when map is null', () => {
+    it('renders HouseLocation even when map is null', () => {
       const props = createBaseProps()
       props.map = null as unknown as typeof props.map
 
       render(<HousePageContent {...props} />)
 
-      expect(screen.queryByTestId('house-location')).not.toBeInTheDocument()
+      // HouseLocation is always rendered, map handling is internal
+      expect(screen.getByTestId('house-location')).toBeInTheDocument()
     })
 
-    it('does not render HouseLocation when map coordinates are missing', () => {
+    it('renders HouseLocation even when map coordinates are missing', () => {
       const props = createBaseProps()
       props.map = {
         ...props.map,
@@ -316,7 +317,8 @@ describe('HousePageContent', () => {
 
       render(<HousePageContent {...props} />)
 
-      expect(screen.queryByTestId('house-location')).not.toBeInTheDocument()
+      // HouseLocation is always rendered, map handling is internal
+      expect(screen.getByTestId('house-location')).toBeInTheDocument()
     })
   })
 })
