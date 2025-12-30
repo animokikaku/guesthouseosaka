@@ -14,6 +14,8 @@ type HousePricing = NonNullable<HouseQueryResult>['pricing']
 type HouseAmenities = NonNullable<HouseQueryResult>['amenities']
 type HouseAmenity = NonNullable<HouseAmenities>[number]
 type HousePricingRow = NonNullable<HousePricing>[number]
+type HouseGallery = NonNullable<HouseQueryResult>['gallery']
+type HouseGalleryItem = NonNullable<HouseGallery>[number]
 
 // ============================================
 // Contact Type Fields Mock Factory
@@ -154,6 +156,137 @@ export function createAmenity(
       icon: faker.helpers.arrayElement(['globe', 'home', 'star', null]),
       order: faker.number.int({ min: 1, max: 10 })
     },
+    ...overrides
+  }
+}
+
+// ============================================
+// Sanity Image Mock Factory
+// ============================================
+
+export function createSanityImage(
+  overrides: Partial<NonNullable<HouseGalleryItem['image']>> = {}
+): NonNullable<HouseGalleryItem['image']> {
+  const imageRef = `image-${faker.string.nanoid()}-1920x1080-jpg`
+  return {
+    asset: {
+      _ref: imageRef,
+      _type: 'reference'
+    },
+    hotspot: null,
+    crop: null,
+    alt: faker.lorem.words(3),
+    preview: `data:image/jpeg;base64,${faker.string.alphanumeric(20)}`,
+    ...overrides
+  }
+}
+
+// ============================================
+// Gallery Category Mock Factory
+// ============================================
+
+export function createGalleryCategory(
+  overrides: Partial<NonNullable<HouseGalleryItem['category']>> = {}
+): NonNullable<HouseGalleryItem['category']> {
+  return {
+    _id: faker.string.uuid(),
+    key: faker.word.noun(),
+    label: faker.word.words(2),
+    order: faker.number.int({ min: 1, max: 10 }),
+    ...overrides
+  }
+}
+
+// ============================================
+// Gallery Item Mock Factory
+// ============================================
+
+export function createGalleryItem(
+  overrides: Partial<HouseGalleryItem> = {}
+): HouseGalleryItem {
+  return {
+    _key: faker.string.nanoid(),
+    image: createSanityImage(),
+    category: createGalleryCategory(),
+    ...overrides
+  }
+}
+
+// ============================================
+// Generic Categorized Item Mock Factory
+// (For testing groupByCategory utility)
+// ============================================
+
+interface CategorizedItem {
+  _key: string
+  category: { key: string; order: number | null } | null
+}
+
+export function createCategorizedItem(
+  overrides: Partial<CategorizedItem> = {}
+): CategorizedItem {
+  return {
+    _key: faker.string.nanoid(),
+    category: {
+      key: faker.word.noun(),
+      order: faker.number.int({ min: 1, max: 10 })
+    },
+    ...overrides
+  }
+}
+
+// ============================================
+// Form Data Mock Factories
+// ============================================
+
+export function createTourFormData(overrides: Record<string, unknown> = {}) {
+  const futureDate = faker.date.future()
+  return {
+    places: [faker.helpers.arrayElement(['imazato', 'taisho', 'tsuruhashi'])],
+    date: futureDate.toISOString().split('T')[0],
+    hour: `${faker.number.int({ min: 10, max: 19 })}:00`,
+    account: {
+      name: faker.person.fullName(),
+      age: String(faker.number.int({ min: 18, max: 65 })),
+      gender: faker.helpers.arrayElement(['male', 'female', 'other', 'prefer-not-to-say']),
+      nationality: faker.location.country(),
+      email: faker.internet.email(),
+      phone: faker.phone.number()
+    },
+    message: faker.lorem.paragraph(),
+    privacyPolicy: true,
+    ...overrides
+  }
+}
+
+export function createMoveInFormData(overrides: Record<string, unknown> = {}) {
+  const futureDate = faker.date.future()
+  return {
+    places: [faker.helpers.arrayElement(['imazato', 'taisho', 'tsuruhashi'])],
+    date: futureDate.toISOString().split('T')[0],
+    stayDuration: faker.helpers.arrayElement(['1-month', '3-months', 'long-term']),
+    account: {
+      name: faker.person.fullName(),
+      age: String(faker.number.int({ min: 18, max: 65 })),
+      gender: faker.helpers.arrayElement(['male', 'female', 'other', 'prefer-not-to-say']),
+      nationality: faker.location.country(),
+      email: faker.internet.email(),
+      phone: faker.phone.number()
+    },
+    message: faker.lorem.paragraph(),
+    privacyPolicy: true,
+    ...overrides
+  }
+}
+
+export function createGeneralInquiryData(overrides: Record<string, unknown> = {}) {
+  return {
+    account: {
+      name: faker.person.fullName(),
+      email: faker.internet.email()
+    },
+    message: faker.lorem.paragraphs(2),
+    privacyPolicy: true,
     ...overrides
   }
 }
