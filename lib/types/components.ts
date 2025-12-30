@@ -218,3 +218,18 @@ export interface GalleryImage {
   width: number
   height: number
 }
+
+// ============================================
+// Navigation Components
+// ============================================
+
+/**
+ * Contact navigation item for the contact page tabs
+ * Decoupled from Sanity types - only includes what the component needs
+ * @see components/contact-nav.tsx
+ */
+export interface ContactNavItem {
+  id: string
+  slug: ContactType
+  title: string
+}

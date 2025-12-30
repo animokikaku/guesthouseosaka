@@ -1,6 +1,7 @@
 import { ContactNav } from '@/components/contact-nav'
 import { PageNav } from '@/components/page-nav'
 import { LegalNoticeProvider } from '@/hooks/use-legal-notice'
+import { toContactNavItems } from '@/lib/transforms/nav'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactPageQuery, legalNoticeQuery } from '@/sanity/lib/queries'
 
@@ -25,10 +26,12 @@ export default async function Layout({
     return null
   }
 
+  const navItems = toContactNavItems(contactPage.contactTypes)
+
   return (
     <>
       <PageNav id="tabs">
-        <ContactNav contactTypes={contactPage.contactTypes} />
+        <ContactNav items={navItems} />
       </PageNav>
       <LegalNoticeProvider data={legalNotice}>{children}</LegalNoticeProvider>
     </>
