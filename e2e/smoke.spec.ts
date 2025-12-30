@@ -20,18 +20,7 @@ test.describe('Smoke Tests', () => {
     await expect(nav.first()).toBeVisible()
   })
 
-  test.describe('Internationalization', () => {
-    const locales = ['en', 'ja', 'fr'] as const
-
-    for (const locale of locales) {
-      test(`${locale} locale is accessible`, async ({ page }) => {
-        await page.goto(`/${locale}`)
-
-        // Verify the locale route loads
-        await expect(page).toHaveURL(new RegExp(`/${locale}`))
-      })
-    }
-  })
+  // Note: Locale tests are now consolidated in e2e/locales.spec.ts
 
   test.describe('Main pages load', () => {
     test('FAQ page loads', async ({ page }) => {

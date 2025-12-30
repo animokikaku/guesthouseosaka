@@ -147,22 +147,7 @@ test.describe('Homepage', () => {
     })
   })
 
-  test.describe('Locale Routes', () => {
-    const locales = ['en', 'ja', 'fr'] as const
-
-    for (const locale of locales) {
-      test(`${locale} locale homepage loads successfully`, async ({ page }) => {
-        await page.goto(`/${locale}`)
-
-        // Page should load with correct URL
-        await expect(page).toHaveURL(new RegExp(`/${locale}/?$`))
-
-        // Page should have content
-        const heading = page.getByRole('heading', { level: 1 })
-        await expect(heading).toBeVisible()
-      })
-    }
-  })
+  // Note: Locale route tests are now consolidated in e2e/locales.spec.ts
 
   test.describe('Accessibility', () => {
     test('interactive elements are keyboard accessible', async ({ page }) => {

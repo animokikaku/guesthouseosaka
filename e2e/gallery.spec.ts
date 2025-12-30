@@ -269,19 +269,5 @@ test.describe('Gallery', () => {
     })
   })
 
-  test.describe('Internationalization', () => {
-    const locales = ['en', 'ja', 'fr'] as const
-
-    for (const locale of locales) {
-      test(`gallery loads in ${locale} locale`, async ({ page }) => {
-        await page.goto(`/${locale}/${house}/gallery`)
-
-        await expect(page).toHaveURL(new RegExp(`/${locale}/${house}/gallery`))
-
-        // Gallery should have images
-        const images = page.locator('img')
-        await expect(images.first()).toBeVisible()
-      })
-    }
-  })
+  // Note: Locale tests are now consolidated in e2e/locales.spec.ts
 })

@@ -21,20 +21,7 @@ test.describe('Contact Page', () => {
     })
   })
 
-  test.describe('Internationalization', () => {
-    const locales = ['en', 'ja', 'fr'] as const
-
-    for (const locale of locales) {
-      test(`contact page loads in ${locale} locale`, async ({ page }) => {
-        await page.goto(`/${locale}/contact`)
-        await expect(page).toHaveURL(new RegExp(`/${locale}/contact`))
-
-        // Contact types should be visible
-        const links = page.locator('a[href*="/contact/"]')
-        await expect(links.first()).toBeVisible()
-      })
-    }
-  })
+  // Note: Locale tests are now consolidated in e2e/locales.spec.ts
 })
 
 test.describe('FAQ Page', () => {
@@ -85,18 +72,5 @@ test.describe('FAQ Page', () => {
     })
   })
 
-  test.describe('Internationalization', () => {
-    const locales = ['en', 'ja', 'fr'] as const
-
-    for (const locale of locales) {
-      test(`FAQ page loads in ${locale} locale`, async ({ page }) => {
-        await page.goto(`/${locale}/faq`)
-        await expect(page).toHaveURL(new RegExp(`/${locale}/faq`))
-
-        // Accordion should be visible (uses data-slot="accordion")
-        const accordion = page.locator('[data-slot="accordion"]')
-        await expect(accordion).toBeVisible()
-      })
-    }
-  })
+  // Note: Locale tests are now consolidated in e2e/locales.spec.ts
 })

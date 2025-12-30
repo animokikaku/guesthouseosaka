@@ -75,19 +75,5 @@ test.describe('House Page', () => {
     })
   })
 
-  test.describe('Internationalization', () => {
-    const locales = ['en', 'ja', 'fr'] as const
-
-    for (const locale of locales) {
-      test(`house page loads in ${locale} locale`, async ({ page }) => {
-        await page.goto(`/${locale}/${testHouse}`)
-
-        await expect(page).toHaveURL(new RegExp(`/${locale}/${testHouse}`))
-
-        // Page should have content
-        const heading = page.getByRole('heading').first()
-        await expect(heading).toBeVisible()
-      })
-    }
-  })
+  // Note: Locale tests are now consolidated in e2e/locales.spec.ts
 })
