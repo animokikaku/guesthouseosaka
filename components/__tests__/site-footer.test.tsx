@@ -1,28 +1,32 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { SiteFooter } from '../site-footer'
 import type { SettingsQueryResult } from '@/sanity.types'
+import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { SiteFooter } from '../site-footer'
 
 // Mock useOptimistic hook
 vi.mock('@/hooks/use-optimistic', () => ({
-  useOptimistic: (data: SettingsQueryResult, field: string) => [
+  useOptimistic: (data: SettingsQueryResult) => [
     data?.socialLinks ?? [],
     { list: () => '', item: () => '' }
   ]
 }))
 
-const createSettings = (overrides?: Partial<NonNullable<SettingsQueryResult>>): SettingsQueryResult => ({
+const createSettings = (
+  overrides?: Partial<NonNullable<SettingsQueryResult>>
+): SettingsQueryResult => ({
   _id: 'settings-123',
   _type: 'settings',
-  _createdAt: '2024-01-01',
-  _updatedAt: '2024-01-01',
-  _rev: 'rev-123',
+  siteName: null,
+  siteDescription: null,
   companyName: 'Guest House Osaka',
+  email: null,
+  phone: null,
+  address: null,
   socialLinks: [
     {
       _key: 'social-1',
-      platform: 'twitter',
-      url: 'https://twitter.com/example',
+      platform: 'facebook',
+      url: 'https://facebook.com/example',
       icon: '<svg></svg>'
     },
     {
@@ -85,11 +89,17 @@ describe('SiteFooter', () => {
     it('renders social links with correct href', () => {
       render(<SiteFooter settings={createSettings()} />)
 
-      const twitterLink = screen.getByRole('link', { name: 'twitter' })
-      expect(twitterLink).toHaveAttribute('href', 'https://twitter.com/example')
+      const facebookLink = screen.getByRole('link', { name: 'facebook' })
+      expect(facebookLink).toHaveAttribute(
+        'href',
+        'https://facebook.com/example'
+      )
 
       const instagramLink = screen.getByRole('link', { name: 'instagram' })
-      expect(instagramLink).toHaveAttribute('href', 'https://instagram.com/example')
+      expect(instagramLink).toHaveAttribute(
+        'href',
+        'https://instagram.com/example'
+      )
     })
   })
 
@@ -115,7 +125,13 @@ describe('SiteFooter', () => {
         <SiteFooter
           settings={createSettings({
             socialLinks: [
-              { _key: 'social-1', platform: 'twitter', url: null, icon: '<svg></svg>' }
+              // Testing runtime edge case: malformed data from CMS
+              {
+                _key: 'social-1',
+                platform: 'facebook',
+                url: '',
+                icon: '<svg></svg>'
+              }
             ]
           })}
         />
@@ -129,7 +145,12 @@ describe('SiteFooter', () => {
         <SiteFooter
           settings={createSettings({
             socialLinks: [
-              { _key: 'social-1', platform: 'twitter', url: 'https://twitter.com', icon: null }
+              {
+                _key: 'social-1',
+                platform: 'facebook',
+                url: 'https://facebook.com',
+                icon: null
+              }
             ]
           })}
         />
@@ -149,8 +170,10 @@ describe('SiteFooter', () => {
     it('social links have aria-label for platform name', () => {
       render(<SiteFooter settings={createSettings()} />)
 
-      expect(screen.getByRole('link', { name: 'twitter' })).toBeInTheDocument()
-      expect(screen.getByRole('link', { name: 'instagram' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'facebook' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('link', { name: 'instagram' })
+      ).toBeInTheDocument()
     })
   })
 })

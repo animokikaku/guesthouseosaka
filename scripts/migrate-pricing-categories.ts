@@ -54,7 +54,7 @@ async function main() {
       slug: { _type: 'slug', current: category.slug }
     }
 
-    const result = await client.createOrReplace(doc)
+    await client.createOrReplace(doc)
     console.log(`✓ Created: ${category.titles.en} (${category.slug})`)
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { GalleryModal } from '../gallery-modal'
@@ -35,11 +36,11 @@ vi.mock('@sanity/asset-utils', () => ({
   getImageDimensions: () => ({ width: 1920, height: 1080 })
 }))
 
-// Mock next/image
+// Mock next/image with simple img element for testing
 vi.mock('next/image', () => ({
-  default: ({ src, alt }: { src: string; alt: string }) => (
-    <img src={src} alt={alt} data-testid="gallery-image" />
-  )
+  default: function MockImage({ src, alt }: { src: string; alt: string }) {
+    return <img src={src} alt={alt} data-testid="gallery-image" />
+  }
 }))
 
 // Mock Radix Dialog portals

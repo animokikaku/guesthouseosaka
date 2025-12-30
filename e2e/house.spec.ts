@@ -66,7 +66,6 @@ test.describe('House Page', () => {
 
       if (linkCount > 0) {
         const firstLink = houseLinks.first()
-        const href = await firstLink.getAttribute('href')
         await firstLink.click()
 
         // Should navigate to another house page
