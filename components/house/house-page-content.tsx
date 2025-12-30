@@ -94,15 +94,10 @@ export function HousePageContent({
                 _type={_type}
                 amenities={toAmenityItems(amenities)}
               />
-              {(() => {
-                const mapData = toMapData(map)
-                return mapData ? (
-                  <HouseLocation
-                    location={toLocationData(location)}
-                    map={mapData}
-                  />
-                ) : null
-              })()}
+              <HouseLocation
+                location={toLocationData(location)}
+                map={toMapData(map)}
+              />
               <HousePricing pricing={toPricingRows(pricing)} />
             </article>
           </div>

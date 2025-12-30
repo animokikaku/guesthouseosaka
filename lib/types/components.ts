@@ -1,6 +1,6 @@
+import type { ContactType, HouseIdentifier } from '@/lib/types'
 import type { SanityImageCrop, SanityImageHotspot } from '@/sanity.types'
 import type { PortableTextBlock } from '@portabletext/react'
-import type { ContactType, HouseIdentifier } from '@/lib/types'
 
 // ============================================
 // Image Types
@@ -63,7 +63,7 @@ export interface MapData {
   coordinates: { lat: number; lng: number }
   placeId: string
   placeImage: SanityImage
-  googleMapsUrl: string | null
+  googleMapsUrl?: string
 }
 
 /**

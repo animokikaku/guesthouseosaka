@@ -39,12 +39,11 @@ const HouseMap = dynamic(
 
 interface HouseLocationProps {
   location: LocationData
-  map: MapData
+  map: MapData | null
 }
 
 export function HouseLocation({ location, map }: HouseLocationProps) {
   const { highlight, details } = location
-  const { coordinates, placeId, placeImage, googleMapsUrl } = map
   const t = useTranslations('HouseLocation')
 
   return (
@@ -56,12 +55,12 @@ export function HouseLocation({ location, map }: HouseLocationProps) {
       </p>
 
       <div className="mb-6">
-        {coordinates.lat !== undefined && coordinates.lng !== undefined && (
+        {map && (
           <HouseMap
-            center={{ lat: coordinates.lat, lng: coordinates.lng }}
-            placeId={placeId}
-            placeImage={placeImage}
-            mapsUrl={googleMapsUrl ?? undefined}
+            center={map.coordinates}
+            placeId={map.placeId}
+            placeImage={map.placeImage}
+            mapsUrl={map.googleMapsUrl}
           />
         )}
       </div>

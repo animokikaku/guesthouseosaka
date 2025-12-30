@@ -105,7 +105,7 @@ export function toMapData(map: HouseMap): MapData | null {
     },
     placeId,
     placeImage: sanityImage,
-    googleMapsUrl: googleMapsUrl ?? null
+    googleMapsUrl: googleMapsUrl ?? undefined
   }
 }
 
