@@ -15,15 +15,6 @@ declare const messages: {
     "from_overseas": "From overseas",
     "within_japan": "Within Japan"
   },
-  "FAQExtraCostsTable": {
-    "deposit": "Deposit",
-    "common_fees": "Common fees",
-    "utility_fees": "Utility fees",
-    "water_bill": "Water bill",
-    "laundromat": "Laundromat",
-    "drying_machine": "Drying machine",
-    "internet": "Internet"
-  },
   "GalleryModal": {
     "close": "Close gallery",
     "description": "Explore photos of {title}",

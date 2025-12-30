@@ -8,10 +8,12 @@ import {
 } from '@/components/ui/carousel'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import type { HousesBuildingQueryResult } from '@/sanity.types'
+import type {
+  FaqPageQueryResult,
+  HousesBuildingQueryResult
+} from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
-import { useTranslations } from 'next-intl'
 import { useEffect, useMemo, useState } from 'react'
 
 const portableTextComponents: PortableTextComponents = {
@@ -37,18 +39,6 @@ type HouseStyles = {
   headerBg: string
   border: string
 }
-
-const DEFAULT_CATEGORY_ORDER = [
-  'deposit',
-  'common-fees',
-  'utility-fees',
-  'water-bill',
-  'laundromat',
-  'drying-machine',
-  'internet'
-] as const
-
-type CategoryOrder = (typeof DEFAULT_CATEGORY_ORDER)[number]
 
 const HOUSE_STYLES: Record<HouseIdentifier, HouseStyles> = {
   orange: {
@@ -76,36 +66,27 @@ type House = Pick<
   '_id' | 'title' | 'slug' | 'extraCosts'
 >
 
+type CategoryOrder = NonNullable<FaqPageQueryResult>['categoryOrder']
+type CategoryOrderItem = NonNullable<CategoryOrder>[number]
+
+type CategoryOrderAttr = {
+  list: () => string
+  item: (key: string) => string
+}
+
 type FAQExtraCostsCardsProps = {
   houses: House[]
-  categoryOrder?: CategoryOrder[] | null
+  categoryOrder?: CategoryOrder
+  categoryOrderAttr?: CategoryOrderAttr
 }
 
 export function FAQExtraCostsCards({
   houses,
-  categoryOrder
+  categoryOrder,
+  categoryOrderAttr
 }: FAQExtraCostsCardsProps) {
-  // Use Sanity category order if provided, otherwise fall back to default
-  const effectiveCategoryOrder =
-    categoryOrder && categoryOrder.length > 0
-      ? categoryOrder
-      : DEFAULT_CATEGORY_ORDER
-  const t = useTranslations('FAQExtraCostsTable')
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
-
-  const categoryLabels = useMemo(
-    () => ({
-      deposit: t('deposit'),
-      'common-fees': t('common_fees'),
-      'utility-fees': t('utility_fees'),
-      'water-bill': t('water_bill'),
-      laundromat: t('laundromat'),
-      'drying-machine': t('drying_machine'),
-      internet: t('internet')
-    }),
-    [t]
-  )
 
   useEffect(() => {
     if (!api) return
@@ -124,7 +105,7 @@ export function FAQExtraCostsCards({
     }
   }, [api])
 
-  if (!houses || houses.length === 0) return null
+  if (!houses || houses.length === 0 || !categoryOrder?.length) return null
 
   return (
     <div className="w-full space-y-4">
@@ -138,8 +119,8 @@ export function FAQExtraCostsCards({
                 styles={HOUSE_STYLES[cleanSlug]}
                 title={stegaClean(house.title) ?? cleanSlug}
                 extraCosts={house.extraCosts}
-                categoryLabels={categoryLabels}
-                categoryOrder={effectiveCategoryOrder}
+                categoryOrder={categoryOrder}
+                categoryOrderAttr={categoryOrderAttr}
               />
             )
           })}
@@ -170,23 +151,25 @@ interface ExtraCostsCardProps {
   styles: HouseStyles | undefined
   title: string
   extraCosts: House['extraCosts']
-  categoryLabels: Record<string, string>
-  categoryOrder: readonly CategoryOrder[]
+  categoryOrder: NonNullable<CategoryOrder>
+  categoryOrderAttr?: CategoryOrderAttr
 }
 
 function ExtraCostsCard({
   styles,
   title,
   extraCosts,
-  categoryLabels,
-  categoryOrder
+  categoryOrder,
+  categoryOrderAttr
 }: ExtraCostsCardProps) {
-  // Build a lookup map: category -> cost item
+  // Build a lookup map: category slug -> cost item
   const costsByCategory = useMemo(() => {
     const map: Record<string, NonNullable<House['extraCosts']>[number]> = {}
     for (const cost of extraCosts ?? []) {
-      const category = stegaClean(cost.category)
-      map[category] = cost
+      const categorySlug = stegaClean(cost.category?.slug)
+      if (categorySlug) {
+        map[categorySlug] = cost
+      }
     }
     return map
   }, [extraCosts])
@@ -209,22 +192,28 @@ function ExtraCostsCard({
             {title}
           </h4>
         </div>
-        <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
-          {categoryOrder.map((category, index) => {
-            const cleanCategory = stegaClean(category)
-            const cost = costsByCategory[cleanCategory]
-            const categoryLabel = categoryLabels[cleanCategory]
+        <div
+          className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50"
+          data-sanity={categoryOrderAttr?.list()}
+        >
+          {categoryOrder.map((item, index) => {
+            const key = stegaClean(item._key)
+            const categorySlug = stegaClean(item.category?.slug)
+            const categoryTitle = stegaClean(item.category?.title)
+            if (!categorySlug) return null
+            const cost = costsByCategory[categorySlug]
 
             return (
               <div
-                key={cleanCategory}
+                key={key}
+                data-sanity={categoryOrderAttr?.item(key)}
                 className={cn(
                   'flex items-center justify-between gap-4 px-4 py-3',
                   index % 2 === 1 && 'bg-muted/30'
                 )}
               >
                 <span className="text-foreground text-sm font-medium">
-                  {categoryLabel}
+                  {categoryTitle}
                 </span>
                 <span className="text-foreground/70 text-right text-sm tabular-nums">
                   {cost?.value ? (

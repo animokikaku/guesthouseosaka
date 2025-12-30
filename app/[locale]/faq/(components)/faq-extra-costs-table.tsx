@@ -10,10 +10,12 @@ import {
 } from '@/components/ui/table'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import type { HousesBuildingQueryResult } from '@/sanity.types'
+import type {
+  FaqPageQueryResult,
+  HousesBuildingQueryResult
+} from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
-import { useTranslations } from 'next-intl'
 import { useMemo } from 'react'
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
@@ -21,16 +23,6 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   apple: 'text-red-600',
   lemon: 'text-yellow-600'
 }
-
-const DEFAULT_CATEGORY_ORDER = [
-  'deposit',
-  'common-fees',
-  'utility-fees',
-  'water-bill',
-  'laundromat',
-  'drying-machine',
-  'internet'
-] as const
 
 const portableTextComponents: PortableTextComponents = {
   block: {
@@ -53,56 +45,43 @@ const portableTextComponents: PortableTextComponents = {
 }
 
 type Houses = NonNullable<HousesBuildingQueryResult>
+type CategoryOrder = NonNullable<FaqPageQueryResult>['categoryOrder']
 
 type ExtraCostValue = NonNullable<Houses[number]['extraCosts']>[number]['value']
 
-type CategoryOrder = (typeof DEFAULT_CATEGORY_ORDER)[number]
+type CategoryOrderAttr = {
+  list: () => string
+  item: (key: string) => string
+}
 
 type FAQExtraCostsTableProps = {
   houses: Houses
-  categoryOrder?: CategoryOrder[] | null
+  categoryOrder?: CategoryOrder
+  categoryOrderAttr?: CategoryOrderAttr
 }
 
 export function FAQExtraCostsTable({
   houses,
-  categoryOrder
+  categoryOrder,
+  categoryOrderAttr
 }: FAQExtraCostsTableProps) {
-  // Use Sanity category order if provided, otherwise fall back to default
-  const effectiveCategoryOrder =
-    categoryOrder && categoryOrder.length > 0
-      ? categoryOrder
-      : DEFAULT_CATEGORY_ORDER
-  const t = useTranslations('FAQExtraCostsTable')
-
-  const categoryLabels = useMemo(
-    () => ({
-      deposit: t('deposit'),
-      'common-fees': t('common_fees'),
-      'utility-fees': t('utility_fees'),
-      'water-bill': t('water_bill'),
-      laundromat: t('laundromat'),
-      'drying-machine': t('drying_machine'),
-      internet: t('internet')
-    }),
-    [t]
-  )
-
-  // Build a lookup map: house slug -> category -> portable text value
+  // Build a lookup map: house slug -> category slug -> portable text value
   const costsByHouse = useMemo(() => {
     const map: Record<string, Record<string, ExtraCostValue | null>> = {}
     for (const house of houses) {
-      const slug = stegaClean(house.slug)
-      map[slug] = {}
+      const houseSlug = stegaClean(house.slug)
+      map[houseSlug] = {}
       for (const cost of house.extraCosts ?? []) {
-        // Clean category to remove stega encoding in draft mode
-        const category = stegaClean(cost.category)
-        map[slug][category] = cost.value ?? null
+        const categorySlug = stegaClean(cost.category?.slug)
+        if (categorySlug) {
+          map[houseSlug][categorySlug] = cost.value ?? null
+        }
       }
     }
     return map
   }, [houses])
 
-  if (houses.length === 0) return null
+  if (houses.length === 0 || !categoryOrder?.length) return null
 
   return (
     <div className="border-border overflow-hidden rounded-xs border">
@@ -132,17 +111,20 @@ export function FAQExtraCostsTable({
             })}
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {effectiveCategoryOrder.map((category) => {
-            const cleanCategory = stegaClean(category)
+        <TableBody data-sanity={categoryOrderAttr?.list()}>
+          {categoryOrder.map((item) => {
+            const key = stegaClean(item._key)
+            const categorySlug = stegaClean(item.category?.slug)
+            const categoryTitle = stegaClean(item.category?.title)
+            if (!categorySlug) return null
             return (
-              <TableRow key={cleanCategory}>
+              <TableRow key={key} data-sanity={categoryOrderAttr?.item(key)}>
                 <TableCell className="text-foreground font-medium whitespace-nowrap">
-                  {categoryLabels[cleanCategory]}
+                  {categoryTitle}
                 </TableCell>
                 {houses.map(({ _id, slug }) => {
                   const cleanSlug = stegaClean(slug)
-                  const value = costsByHouse[cleanSlug]?.[cleanCategory]
+                  const value = costsByHouse[cleanSlug]?.[categorySlug]
                   return (
                     <TableCell key={_id} className="overflow-hidden">
                       {value ? (

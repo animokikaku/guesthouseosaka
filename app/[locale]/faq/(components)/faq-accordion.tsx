@@ -1,7 +1,6 @@
 'use client'
 
-import { FAQExtraCostsCards } from '@/app/[locale]/faq/(components)/faq-extra-costs-cards'
-import { FAQExtraCostsTable } from '@/app/[locale]/faq/(components)/faq-extra-costs-table'
+import { FAQExtraCosts } from '@/app/[locale]/faq/(components)/faq-extra-costs'
 import {
   Accordion,
   AccordionContent,
@@ -30,7 +29,7 @@ const components: PortableTextComponents = {
 type FaqPage = NonNullable<FaqPageQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
 
-// Narrowed type for useOptimistic (avoids union with 'actions' array)
+type FaqItemsData = Pick<FaqPage, '_id' | '_type' | 'items'>
 type FaqPageData = Pick<FaqPage, '_id' | '_type' | 'items' | 'categoryOrder'>
 
 type FAQAccordionProps = {
@@ -41,7 +40,7 @@ type FAQAccordionProps = {
 export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
   const t = useTranslations('FAQAccordion')
   const formatter = useFormatter()
-  const [items, attr] = useOptimistic(faqPage, 'items')
+  const [items, itemsAttr] = useOptimistic(faqPage as FaqItemsData, 'items')
 
   if (!items) return null
 
@@ -54,7 +53,7 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
           <AccordionItem key={key} value={key}>
             <AccordionTrigger
               className="text-md sm:text-lg"
-              data-sanity={attr.item(key)}
+              data-sanity={itemsAttr.item(key)}
             >
               {question}
             </AccordionTrigger>
@@ -106,18 +105,7 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
           {t('extra_costs.question')}
         </AccordionTrigger>
         <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
-          <div className="md:hidden">
-            <FAQExtraCostsCards
-              houses={housesBuilding}
-              categoryOrder={faqPage.categoryOrder}
-            />
-          </div>
-          <div className="hidden md:block">
-            <FAQExtraCostsTable
-              houses={housesBuilding}
-              categoryOrder={faqPage.categoryOrder}
-            />
-          </div>
+          <FAQExtraCosts faqPage={faqPage} houses={housesBuilding} />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

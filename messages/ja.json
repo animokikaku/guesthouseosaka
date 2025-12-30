@@ -12,15 +12,6 @@
     "from_overseas": "海外から",
     "within_japan": "日本国内"
   },
-  "FAQExtraCostsTable": {
-    "deposit": "デポジット",
-    "common_fees": "共益費",
-    "utility_fees": "光熱費",
-    "water_bill": "水道代",
-    "laundromat": "ランドリー",
-    "drying_machine": "乾燥機",
-    "internet": "インターネット"
-  },
   "GalleryModal": {
     "close": "ギャラリーを閉じる",
     "description": "{title}の写真を見る",

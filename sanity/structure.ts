@@ -21,7 +21,8 @@ const MANAGED_TYPES = [
   'contactType',
   'galleryCategory',
   'amenityCategory',
-  'amenity'
+  'amenity',
+  'pricingCategory'
 ]
 
 export const structure: StructureResolver = (S) =>
@@ -128,6 +129,12 @@ export const structure: StructureResolver = (S) =>
                   S.documentTypeList('amenityCategory')
                     .title('Amenity Categories')
                     .defaultOrdering([{ field: 'order', direction: 'asc' }])
+                ),
+              S.listItem()
+                .title('Pricing Categories')
+                .icon(TagIcon)
+                .child(
+                  S.documentTypeList('pricingCategory').title('Pricing Categories')
                 )
             ])
         ),

@@ -223,7 +223,11 @@ export const housesBuildingQuery =
   phone,
   "extraCosts": extraCosts[]{
     _key,
-    category,
+    "category": category->{
+      _id,
+      "slug": slug.current,
+      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value)
+    },
     "value": coalesce(value[_key == $locale][0].value, value[_key == "en"][0].value)[]
   }
 }`)
@@ -238,7 +242,14 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),
   "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),
   "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),
-  categoryOrder,
+  "categoryOrder": categoryOrder[]{
+    _key,
+    "category": @->{
+      _id,
+      "slug": slug.current,
+      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value)
+    }
+  },
   "actions": actions[]{
     _key,
     icon,

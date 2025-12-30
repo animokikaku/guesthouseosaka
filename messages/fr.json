@@ -12,15 +12,6 @@
     "from_overseas": "Depuis l'étranger",
     "within_japan": "Depuis le Japon"
   },
-  "FAQExtraCostsTable": {
-    "deposit": "Caution",
-    "common_fees": "Charges comm.",
-    "utility_fees": "Charges",
-    "water_bill": "Facture d'eau",
-    "laundromat": "Laverie",
-    "drying_machine": "Sèche-linge",
-    "internet": "Internet"
-  },
   "GalleryModal": {
     "close": "Fermer la galerie",
     "description": "Découvrez les photos de {title}",

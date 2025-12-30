@@ -72,6 +72,36 @@
     }
   },
   {
+    "type": "type",
+    "name": "pricingCategory.reference",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_ref": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          }
+        },
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "reference"
+          }
+        },
+        "_weak": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        }
+      },
+      "dereferencesTo": "pricingCategory"
+    }
+  },
+  {
     "name": "extraCostItem",
     "type": "type",
     "value": {
@@ -87,37 +117,8 @@
         "category": {
           "type": "objectAttribute",
           "value": {
-            "type": "union",
-            "of": [
-              {
-                "type": "string",
-                "value": "deposit"
-              },
-              {
-                "type": "string",
-                "value": "common-fees"
-              },
-              {
-                "type": "string",
-                "value": "utility-fees"
-              },
-              {
-                "type": "string",
-                "value": "water-bill"
-              },
-              {
-                "type": "string",
-                "value": "laundromat"
-              },
-              {
-                "type": "string",
-                "value": "drying-machine"
-              },
-              {
-                "type": "string",
-                "value": "internet"
-              }
-            ]
+            "type": "inline",
+            "name": "pricingCategory.reference"
           },
           "optional": false
         },
@@ -564,6 +565,111 @@
     }
   },
   {
+    "name": "pricingCategory",
+    "type": "document",
+    "attributes": {
+      "_id": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_type": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string",
+          "value": "pricingCategory"
+        }
+      },
+      "_createdAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_updatedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "_rev": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        }
+      },
+      "title": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "internationalizedArrayString"
+        },
+        "optional": false
+      },
+      "slug": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "inline",
+          "name": "slug"
+        },
+        "optional": false
+      }
+    }
+  },
+  {
+    "name": "slug",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "slug"
+          }
+        },
+        "current": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": false
+        },
+        "source": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
+    "name": "internationalizedArrayString",
+    "type": "type",
+    "value": {
+      "type": "array",
+      "of": {
+        "type": "object",
+        "attributes": {
+          "_key": {
+            "type": "objectAttribute",
+            "value": {
+              "type": "string"
+            }
+          }
+        },
+        "rest": {
+          "type": "inline",
+          "name": "internationalizedArrayStringValue"
+        }
+      }
+    }
+  },
+  {
     "type": "type",
     "name": "amenityCategory.reference",
     "value": {
@@ -667,58 +773,6 @@
     "type": "type",
     "value": {
       "type": "string"
-    }
-  },
-  {
-    "name": "internationalizedArrayString",
-    "type": "type",
-    "value": {
-      "type": "array",
-      "of": {
-        "type": "object",
-        "attributes": {
-          "_key": {
-            "type": "objectAttribute",
-            "value": {
-              "type": "string"
-            }
-          }
-        },
-        "rest": {
-          "type": "inline",
-          "name": "internationalizedArrayStringValue"
-        }
-      }
-    }
-  },
-  {
-    "name": "slug",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "slug"
-          }
-        },
-        "current": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": false
-        },
-        "source": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          },
-          "optional": true
-        }
-      }
     }
   },
   {
@@ -1353,37 +1407,19 @@
         "value": {
           "type": "array",
           "of": {
-            "type": "union",
-            "of": [
-              {
-                "type": "string",
-                "value": "deposit"
-              },
-              {
-                "type": "string",
-                "value": "common-fees"
-              },
-              {
-                "type": "string",
-                "value": "utility-fees"
-              },
-              {
-                "type": "string",
-                "value": "water-bill"
-              },
-              {
-                "type": "string",
-                "value": "laundromat"
-              },
-              {
-                "type": "string",
-                "value": "drying-machine"
-              },
-              {
-                "type": "string",
-                "value": "internet"
+            "type": "object",
+            "attributes": {
+              "_key": {
+                "type": "objectAttribute",
+                "value": {
+                  "type": "string"
+                }
               }
-            ]
+            },
+            "rest": {
+              "type": "inline",
+              "name": "pricingCategory.reference"
+            }
           }
         },
         "optional": true

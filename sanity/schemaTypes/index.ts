@@ -8,6 +8,7 @@ import { contactPage } from './documents/contact-page'
 import { contactType } from './documents/contact-type'
 import { faqPage } from './documents/faq-page'
 import { galleryCategory } from './documents/gallery-category'
+import { pricingCategory } from './documents/pricing-category'
 import homePage from './documents/home-page'
 import { legalNotice } from './documents/legal-notice'
 import { settings } from './documents/settings'
@@ -42,6 +43,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     galleryCategory,
     amenityCategory,
     amenity,
+    pricingCategory,
 
     // Objects
     localizedImage,

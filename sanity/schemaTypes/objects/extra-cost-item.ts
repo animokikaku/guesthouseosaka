@@ -1,16 +1,6 @@
 import { defineField, defineType } from 'sanity'
 import { toPlainText } from '@portabletext/react'
 
-const EXTRA_COST_CATEGORIES = [
-  { title: 'Deposit', value: 'deposit' },
-  { title: 'Common Fees', value: 'common-fees' },
-  { title: 'Utility Fees', value: 'utility-fees' },
-  { title: 'Water Bill', value: 'water-bill' },
-  { title: 'Laundromat', value: 'laundromat' },
-  { title: 'Drying Machine', value: 'drying-machine' },
-  { title: 'Internet', value: 'internet' }
-]
-
 export const extraCostItem = defineType({
   name: 'extraCostItem',
   title: 'Extra Cost Item',
@@ -19,10 +9,8 @@ export const extraCostItem = defineType({
     defineField({
       name: 'category',
       title: 'Category',
-      type: 'string',
-      options: {
-        list: EXTRA_COST_CATEGORIES
-      },
+      type: 'reference',
+      to: [{ type: 'pricingCategory' }],
       validation: (rule) => rule.required()
     }),
     defineField({
@@ -36,15 +24,13 @@ export const extraCostItem = defineType({
   ],
   preview: {
     select: {
-      category: 'category',
+      categoryTitle: 'category.title',
       value: 'value.0.value'
     },
-    prepare({ category, value }) {
-      const categoryLabel =
-        EXTRA_COST_CATEGORIES.find((c) => c.value === category)?.title ??
-        category
+    prepare({ categoryTitle, value }) {
+      const title = categoryTitle?.[0]?.value ?? 'No category'
       return {
-        title: categoryLabel,
+        title,
         subtitle: value ? toPlainText(value) : 'No value'
       }
     }
