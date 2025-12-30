@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, type Page, test } from '@playwright/test'
 
 /**
  * Consolidated locale route tests.
@@ -15,7 +15,6 @@ import { expect, test } from '@playwright/test'
  */
 
 const LOCALES = ['en', 'ja', 'fr'] as const
-type Locale = (typeof LOCALES)[number]
 
 const ROUTES = [
   { path: '', name: 'homepage', selector: 'heading' },
@@ -51,10 +50,7 @@ test.describe('Locale Routes', () => {
 /**
  * Verify that the page loaded with appropriate content for the route type.
  */
-async function verifyPageContent(
-  page: import('@playwright/test').Page,
-  route: Route
-) {
+async function verifyPageContent(page: Page, route: Route) {
   switch (route.selector) {
     case 'heading':
       // Homepage and house pages should have a heading

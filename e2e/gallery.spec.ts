@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, type Page, test } from '@playwright/test'
 
 test.describe('Gallery', () => {
   const house = 'orange' // Use one of the valid houses: orange, apple, lemon
@@ -45,7 +45,7 @@ test.describe('Gallery', () => {
   test.describe('Modal Interaction', () => {
     // Helper to get gallery grid images (not category thumbnails)
     // Gallery images are inside .grid elements with cursor-pointer class
-    const getGalleryGridImages = (page: import('@playwright/test').Page) => {
+    const getGalleryGridImages = (page: Page) => {
       // Find clickable gallery images inside the grid (not the category thumbnail buttons)
       // The grid contains clickable div elements with cursor-pointer class and images inside
       return page.locator('.grid .cursor-pointer').filter({
@@ -54,9 +54,7 @@ test.describe('Gallery', () => {
     }
 
     // Helper to click gallery image and wait for modal to open
-    const clickGalleryImageAndWaitForModal = async (
-      page: import('@playwright/test').Page
-    ) => {
+    const clickGalleryImageAndWaitForModal = async (page: Page) => {
       const galleryImages = getGalleryGridImages(page)
       const firstImage = galleryImages.first()
 
@@ -210,16 +208,14 @@ test.describe('Gallery', () => {
 
   test.describe('Responsive Behavior', () => {
     // Helper to get gallery grid images (not category thumbnails)
-    const getGalleryGridImages = (page: import('@playwright/test').Page) => {
+    const getGalleryGridImages = (page: Page) => {
       return page.locator('.grid .cursor-pointer').filter({
         has: page.locator('img')
       })
     }
 
     // Helper to click gallery image and wait for modal to open
-    const clickGalleryImageAndWaitForModal = async (
-      page: import('@playwright/test').Page
-    ) => {
+    const clickGalleryImageAndWaitForModal = async (page: Page) => {
       const galleryImages = getGalleryGridImages(page)
       const firstImage = galleryImages.first()
 
