@@ -19,7 +19,7 @@ const { emails } = new Resend(env.RESEND_API_KEY)
 const DEFAULT_CONTACT = {
   from: 'Guest House Osaka <info@guesthouseosaka.com>',
   to: (places?: HouseIdentifier[]) => {
-    if (env.NODE_ENV === 'development') {
+    if (env.NODE_ENV !== 'production') {
       return 'dev@guesthouseosaka.com'
     }
     if (places?.length === 1) {
