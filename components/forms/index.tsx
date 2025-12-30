@@ -176,8 +176,6 @@ export const FieldGroupUserAccount = withFieldGroup({
   }
 })
 
-export type HouseTitles = NonNullable<HousesTitlesQueryResult>
-
 export const FieldGroupPlaces = withFieldGroup({
   defaultValues: {
     places: [] as HouseIdentifier[]
@@ -185,7 +183,7 @@ export const FieldGroupPlaces = withFieldGroup({
   props: {
     label: '' as string | null | undefined,
     description: '' as string | null | undefined,
-    houseTitles: [] as HouseTitles
+    houseTitles: [] as HousesTitlesQueryResult
   },
   render: function Render({ group, description, label, houseTitles }) {
     const classNames: Record<HouseIdentifier, string> = {

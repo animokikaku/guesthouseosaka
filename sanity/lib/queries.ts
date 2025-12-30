@@ -187,15 +187,15 @@ export const houseSlugsQuery =
   "slug": slug
 }`)
 
-// House titles for forms (ordered by home page houses array)
+// House titles for forms (ordered by global orderRank)
 export const housesTitlesQuery =
-  defineQuery(`*[_type == "homePage"][0].houses[]->{
+  defineQuery(`*[_type == "house"] | order(orderRank){
   "slug": slug,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value)
 }`)
 
-// Houses for navigation (header) - ordered by home page houses array
-export const housesNavQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
+// Houses for navigation (header) - ordered by global orderRank
+export const housesNavQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   slug,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
@@ -209,9 +209,9 @@ export const housesNavQuery = defineQuery(`*[_type == "homePage"][0].houses[]->{
   }
 }`)
 
-// All houses building and contact data (for FAQ page)
+// All houses building and contact data (for FAQ page) - ordered by global orderRank
 export const housesBuildingQuery =
-  defineQuery(`*[_type == "homePage"][0].houses[]->{
+  defineQuery(`*[_type == "house"] | order(orderRank){
   _id,
   _type,
   slug,

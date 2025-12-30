@@ -1,12 +1,24 @@
 import { HouseIdentifierSchema, HouseIdentifierValues } from '@/lib/types'
 import { HomeIcon } from '@sanity/icons'
-import { defineArrayMember, defineField, defineType } from 'sanity'
+import {
+  defineArrayMember,
+  defineField,
+  defineType,
+  type StringFieldProps
+} from 'sanity'
 
 export const house = defineType({
   name: 'house',
   title: 'House',
   icon: HomeIcon,
   type: 'document',
+  orderings: [
+    {
+      title: 'Global Order',
+      name: 'orderRankAsc',
+      by: [{ field: 'orderRank', direction: 'asc' }]
+    }
+  ],
   groups: [
     { name: 'identity', title: 'Identity', default: true },
     { name: 'about', title: 'About' },
@@ -18,6 +30,16 @@ export const house = defineType({
     { name: 'contact', title: 'Contact' }
   ],
   fields: [
+    // Hidden field for @sanity/orderable-document-list
+    defineField({
+      name: 'orderRank',
+      type: 'string',
+      hidden: true,
+      components: {
+        field: (props: StringFieldProps) => props.renderDefault(props)
+      }
+    }),
+
     // ============================================
     // IDENTITY GROUP
     // ============================================

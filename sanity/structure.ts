@@ -74,16 +74,15 @@ export const structure: StructureResolver = (S) =>
         ),
 
       // ============================================
-      // HOUSES
+      // HOUSES (orderable for global nav/FAQ/contact ordering)
       // ============================================
-      S.listItem()
-        .title('Houses')
-        .icon(HomeIcon)
-        .child(
-          S.documentTypeList('house')
-            .title('Houses')
-            .defaultOrdering([{ field: 'slug', direction: 'asc' }])
-        ),
+      orderableDocumentListDeskItem({
+        type: 'house',
+        title: 'Houses',
+        icon: HomeIcon,
+        S,
+        context: S.context
+      }),
 
       // ============================================
       // AMENITIES
