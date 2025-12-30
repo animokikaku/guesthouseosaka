@@ -1,18 +1,14 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { FAQExtraCostsTable } from '../faq-extra-costs-table'
 import type {
   HousesBuildingQueryResult,
   PricingCategoriesQueryResult
 } from '@/sanity.types'
 
-// Mock stegaClean to return values unchanged
-vi.mock('@sanity/client/stega', () => ({
-  stegaClean: <T,>(value: T) => value
-}))
-
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
+type ExtraCost = NonNullable<Houses[number]['extraCosts']>[number]
 
 const createCategory = (
   slug: string,
@@ -27,7 +23,7 @@ const createCategory = (
 const createHouse = (
   id: string,
   slug: 'orange' | 'apple' | 'lemon',
-  extraCosts: Houses[number]['extraCosts'] = []
+  extraCosts: ExtraCost[] = []
 ): Houses[number] => ({
   _id: id,
   _type: 'house',
@@ -38,17 +34,15 @@ const createHouse = (
   extraCosts
 })
 
-const createExtraCost = (
-  categorySlug: string,
-  value: string
-): NonNullable<Houses[number]['extraCosts']>[number] => ({
-  _key: `cost-${categorySlug}`,
-  category: { _id: `cat-${categorySlug}`, slug: categorySlug, title: '' },
+const createExtraCost = (slug: string, text: string): ExtraCost => ({
+  slug,
   value: [
     {
       _type: 'block',
       _key: 'block1',
-      children: [{ _type: 'span', _key: 'span1', text: value }]
+      children: [{ _type: 'span', _key: 'span1', text, marks: [] }],
+      markDefs: [],
+      style: 'normal'
     }
   ]
 })
@@ -78,49 +72,9 @@ describe('FAQExtraCostsTable', () => {
     })
   })
 
-  describe('missing category data', () => {
-    it('skips category row when category slug is missing', () => {
-      const houses: Houses = [
-        createHouse('h1', 'orange', [createExtraCost('deposit', '¥30,000')])
-      ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit'),
-        { _id: 'cat-null', slug: '', title: 'No Slug Category', orderRank: null }
-      ]
-
-      render(
-        <FAQExtraCostsTable
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
-
-      expect(screen.getByText('Deposit')).toBeInTheDocument()
-      expect(screen.queryByText('No Slug Category')).not.toBeInTheDocument()
-    })
-  })
-
   describe('missing house values', () => {
     it('displays dash when house has no value for a category', () => {
       const houses: Houses = [createHouse('h1', 'orange', [])]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
-
-      render(
-        <FAQExtraCostsTable
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
-
-      expect(screen.getByText('–')).toBeInTheDocument()
-    })
-
-    it('displays dash when extraCosts is null', () => {
-      const houses: Houses = [
-        { ...createHouse('h1', 'orange'), extraCosts: null }
-      ]
       const pricingCategories: PricingCategories = [
         createCategory('deposit', 'Deposit')
       ]

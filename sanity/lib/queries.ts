@@ -221,15 +221,10 @@ export const housesBuildingQuery =
     floors
   },
   phone,
-  "extraCosts": extraCosts[]{
-    _key,
-    "category": category->{
-      _id,
-      "slug": slug.current,
-      "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value)
-    },
+  "extraCosts": array::compact(extraCosts[]{
+    "slug": category->slug.current,
     "value": coalesce(value[_key == $locale][0].value, value[_key == "en"][0].value)[]
-  }
+  })
 }`)
 
 // =============================================================================

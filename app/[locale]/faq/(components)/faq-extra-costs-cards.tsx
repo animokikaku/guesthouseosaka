@@ -13,8 +13,7 @@ import type {
   PricingCategoriesQueryResult
 } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
-import { stegaClean } from '@sanity/client/stega'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const portableTextComponents: PortableTextComponents = {
   block: {
@@ -61,15 +60,11 @@ const HOUSE_STYLES: Record<HouseIdentifier, HouseStyles> = {
   }
 }
 
-type House = Pick<
-  NonNullable<HousesBuildingQueryResult>[number],
-  '_id' | 'title' | 'slug' | 'extraCosts'
->
-
+type Houses = NonNullable<HousesBuildingQueryResult>
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 
 type FAQExtraCostsCardsProps = {
-  houses: House[]
+  houses: Houses
   pricingCategories: PricingCategories
 }
 
@@ -103,18 +98,15 @@ export function FAQExtraCostsCards({
     <div className="w-full space-y-4">
       <Carousel setApi={setApi} opts={{ loop: true }}>
         <CarouselContent>
-          {houses.map((house) => {
-            const cleanSlug = stegaClean(house.slug)
-            return (
-              <ExtraCostsCard
-                key={house._id}
-                styles={HOUSE_STYLES[cleanSlug]}
-                title={stegaClean(house.title) ?? cleanSlug}
-                extraCosts={house.extraCosts}
-                pricingCategories={pricingCategories}
-              />
-            )
-          })}
+          {houses.map((house) => (
+            <ExtraCostsCard
+              key={house._id}
+              styles={HOUSE_STYLES[house.slug]}
+              title={house.title}
+              extraCosts={house.extraCosts}
+              pricingCategories={pricingCategories}
+            />
+          ))}
         </CarouselContent>
       </Carousel>
 
@@ -130,7 +122,7 @@ export function FAQExtraCostsCards({
                 ? 'bg-foreground w-6'
                 : 'bg-muted-foreground/30 w-2'
             )}
-            aria-label={`Go to ${stegaClean(title)}`}
+            aria-label={`Go to ${title}`}
           />
         ))}
       </div>
@@ -140,8 +132,8 @@ export function FAQExtraCostsCards({
 
 interface ExtraCostsCardProps {
   styles: HouseStyles | undefined
-  title: string
-  extraCosts: House['extraCosts']
+  title: string | null
+  extraCosts: Houses[number]['extraCosts']
   pricingCategories: PricingCategories
 }
 
@@ -151,18 +143,6 @@ function ExtraCostsCard({
   extraCosts,
   pricingCategories
 }: ExtraCostsCardProps) {
-  // Build a lookup map: category slug -> cost item
-  const costsByCategory = useMemo(() => {
-    const map: Record<string, NonNullable<House['extraCosts']>[number]> = {}
-    for (const cost of extraCosts ?? []) {
-      const categorySlug = stegaClean(cost.category?.slug)
-      if (categorySlug) {
-        map[categorySlug] = cost
-      }
-    }
-    return map
-  }, [extraCosts])
-
   return (
     <CarouselItem>
       <div
@@ -183,11 +163,7 @@ function ExtraCostsCard({
         </div>
         <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
           {pricingCategories.map((category, index) => {
-            const categorySlug = stegaClean(category.slug)
-            const categoryTitle = stegaClean(category.title)
-            if (!categorySlug) return null
-            const cost = costsByCategory[categorySlug]
-
+            const cost = extraCosts?.find((c) => c.slug === category.slug)
             return (
               <div
                 key={category._id}
@@ -197,7 +173,7 @@ function ExtraCostsCard({
                 )}
               >
                 <span className="text-foreground text-sm font-medium">
-                  {categoryTitle}
+                  {category.title}
                 </span>
                 <span className="text-foreground/70 text-right text-sm tabular-nums">
                   {cost?.value ? (

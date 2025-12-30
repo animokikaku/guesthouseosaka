@@ -13,8 +13,6 @@ import type {
   PricingCategoriesQueryResult
 } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
-import { stegaClean } from '@sanity/client/stega'
-import { useMemo } from 'react'
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   orange: 'text-orange-600',
@@ -45,8 +43,6 @@ const portableTextComponents: PortableTextComponents = {
 type Houses = NonNullable<HousesBuildingQueryResult>
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 
-type ExtraCostValue = NonNullable<Houses[number]['extraCosts']>[number]['value']
-
 type FAQExtraCostsTableProps = {
   houses: Houses
   pricingCategories: PricingCategories
@@ -56,22 +52,6 @@ export function FAQExtraCostsTable({
   houses,
   pricingCategories
 }: FAQExtraCostsTableProps) {
-  // Build a lookup map: house slug -> category slug -> portable text value
-  const costsByHouse = useMemo(() => {
-    const map: Record<string, Record<string, ExtraCostValue | null>> = {}
-    for (const house of houses) {
-      const houseSlug = stegaClean(house.slug)
-      map[houseSlug] = {}
-      for (const cost of house.extraCosts ?? []) {
-        const categorySlug = stegaClean(cost.category?.slug)
-        if (categorySlug) {
-          map[houseSlug][categorySlug] = cost.value ?? null
-        }
-      }
-    }
-    return map
-  }, [houses])
-
   if (houses.length === 0 || !pricingCategories?.length) return null
 
   return (
@@ -87,50 +67,45 @@ export function FAQExtraCostsTable({
           <TableRow>
             <TableHead className="bg-secondary text-foreground font-semibold" />
             {houses.map(({ _id, title, slug }) => {
-              const cleanSlug = stegaClean(slug)
               return (
                 <TableHead
                   key={_id}
                   className={cn(
                     'bg-secondary font-semibold',
-                    ACCENT_CLASSES[cleanSlug]
+                    ACCENT_CLASSES[slug]
                   )}
                 >
-                  {stegaClean(title)}
+                  {title}
                 </TableHead>
               )
             })}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pricingCategories.map((category) => {
-            const categorySlug = stegaClean(category.slug)
-            const categoryTitle = stegaClean(category.title)
-            if (!categorySlug) return null
-            return (
-              <TableRow key={category._id}>
-                <TableCell className="text-foreground font-medium whitespace-nowrap">
-                  {categoryTitle}
-                </TableCell>
-                {houses.map(({ _id, slug }) => {
-                  const cleanSlug = stegaClean(slug)
-                  const value = costsByHouse[cleanSlug]?.[categorySlug]
-                  return (
-                    <TableCell key={_id} className="overflow-hidden">
-                      {value ? (
-                        <PortableText
-                          value={value}
-                          components={portableTextComponents}
-                        />
-                      ) : (
-                        <span className="leading-relaxed">–</span>
-                      )}
-                    </TableCell>
-                  )
-                })}
-              </TableRow>
-            )
-          })}
+          {pricingCategories.map((category) => (
+            <TableRow key={category._id}>
+              <TableCell className="text-foreground font-medium whitespace-nowrap">
+                {category.title}
+              </TableCell>
+              {houses.map((house) => {
+                const cost = house.extraCosts?.find(
+                  (c) => c.slug === category.slug
+                )
+                return (
+                  <TableCell key={house._id} className="overflow-hidden">
+                    {cost?.value ? (
+                      <PortableText
+                        value={cost.value}
+                        components={portableTextComponents}
+                      />
+                    ) : (
+                      <span className="leading-relaxed">–</span>
+                    )}
+                  </TableCell>
+                )
+              })}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>
