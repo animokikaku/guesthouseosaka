@@ -130,16 +130,19 @@ export function FAQExtraCostsCards({
     <div className="w-full space-y-4">
       <Carousel setApi={setApi} opts={{ loop: true }}>
         <CarouselContent>
-          {houses.map((house) => (
-            <ExtraCostsCard
-              key={house._id}
-              styles={HOUSE_STYLES[house.slug]}
-              title={house.title ?? house.slug}
-              extraCosts={house.extraCosts}
-              categoryLabels={categoryLabels}
-              categoryOrder={effectiveCategoryOrder}
-            />
-          ))}
+          {houses.map((house) => {
+            const cleanSlug = stegaClean(house.slug)
+            return (
+              <ExtraCostsCard
+                key={house._id}
+                styles={HOUSE_STYLES[cleanSlug]}
+                title={stegaClean(house.title) ?? cleanSlug}
+                extraCosts={house.extraCosts}
+                categoryLabels={categoryLabels}
+                categoryOrder={effectiveCategoryOrder}
+              />
+            )
+          })}
         </CarouselContent>
       </Carousel>
 
@@ -208,12 +211,13 @@ function ExtraCostsCard({
         </div>
         <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
           {categoryOrder.map((category, index) => {
-            const cost = costsByCategory[category]
-            const categoryLabel = categoryLabels[category]
+            const cleanCategory = stegaClean(category)
+            const cost = costsByCategory[cleanCategory]
+            const categoryLabel = categoryLabels[cleanCategory]
 
             return (
               <div
-                key={category}
+                key={cleanCategory}
                 className={cn(
                   'flex items-center justify-between gap-4 px-4 py-3',
                   index % 2 === 1 && 'bg-muted/30'

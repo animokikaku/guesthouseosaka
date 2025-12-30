@@ -117,12 +117,13 @@ export function FAQExtraCostsTable({
           <TableRow>
             <TableHead className="bg-secondary text-foreground font-semibold" />
             {houses.map(({ _id, title, slug }) => {
+              const cleanSlug = stegaClean(slug)
               return (
                 <TableHead
                   key={_id}
                   className={cn(
                     'bg-secondary font-semibold',
-                    ACCENT_CLASSES[slug]
+                    ACCENT_CLASSES[cleanSlug]
                   )}
                 >
                   {stegaClean(title)}
@@ -132,28 +133,32 @@ export function FAQExtraCostsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {effectiveCategoryOrder.map((category) => (
-            <TableRow key={category}>
-              <TableCell className="text-foreground font-medium whitespace-nowrap">
-                {categoryLabels[category]}
-              </TableCell>
-              {houses.map(({ _id, slug }) => {
-                const value = costsByHouse[slug]?.[category]
-                return (
-                  <TableCell key={_id} className="overflow-hidden">
-                    {value ? (
-                      <PortableText
-                        value={value}
-                        components={portableTextComponents}
-                      />
-                    ) : (
-                      <span className="leading-relaxed">–</span>
-                    )}
-                  </TableCell>
-                )
-              })}
-            </TableRow>
-          ))}
+          {effectiveCategoryOrder.map((category) => {
+            const cleanCategory = stegaClean(category)
+            return (
+              <TableRow key={cleanCategory}>
+                <TableCell className="text-foreground font-medium whitespace-nowrap">
+                  {categoryLabels[cleanCategory]}
+                </TableCell>
+                {houses.map(({ _id, slug }) => {
+                  const cleanSlug = stegaClean(slug)
+                  const value = costsByHouse[cleanSlug]?.[cleanCategory]
+                  return (
+                    <TableCell key={_id} className="overflow-hidden">
+                      {value ? (
+                        <PortableText
+                          value={value}
+                          components={portableTextComponents}
+                        />
+                      ) : (
+                        <span className="leading-relaxed">–</span>
+                      )}
+                    </TableCell>
+                  )
+                })}
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
     </div>
