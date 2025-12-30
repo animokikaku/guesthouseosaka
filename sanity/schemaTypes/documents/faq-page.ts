@@ -68,6 +68,16 @@ export const faqPage = defineType({
           to: [{ type: 'pricingCategory' }]
         })
       ],
+      validation: (rule) =>
+        rule.custom((refs: Array<{ _ref: string }> | undefined) => {
+          if (!refs || refs.length === 0) return true
+          const refIds = refs.map((ref) => ref._ref)
+          const uniqueIds = new Set(refIds)
+          if (uniqueIds.size !== refIds.length) {
+            return 'Each category can only be added once'
+          }
+          return true
+        }),
       group: 'content'
     }),
     defineField({

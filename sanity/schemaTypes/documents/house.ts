@@ -242,7 +242,21 @@ export const house = defineType({
       description:
         'Additional costs shown in the FAQ section. Order is controlled on the FAQ page.',
       of: [defineArrayMember({ type: 'extraCostItem' })],
-      options: { sortable: false }
+      options: { sortable: false },
+      validation: (rule) =>
+        rule.custom(
+          (items: Array<{ category?: { _ref: string } }> | undefined) => {
+            if (!items || items.length === 0) return true
+            const categoryRefs = items
+              .map((item) => item.category?._ref)
+              .filter(Boolean)
+            const uniqueRefs = new Set(categoryRefs)
+            if (uniqueRefs.size !== categoryRefs.length) {
+              return 'Each category can only be used once'
+            }
+            return true
+          }
+        )
     }),
 
     // ============================================
