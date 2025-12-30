@@ -67,7 +67,6 @@ type House = Pick<
 >
 
 type CategoryOrder = NonNullable<FaqPageQueryResult>['categoryOrder']
-type CategoryOrderItem = NonNullable<CategoryOrder>[number]
 
 type CategoryOrderAttr = {
   list: () => string
