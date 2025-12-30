@@ -31,7 +31,7 @@ type FaqPage = NonNullable<FaqPageQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
 
 // Narrowed type for useOptimistic (avoids union with 'actions' array)
-type FaqPageData = Pick<FaqPage, '_id' | '_type' | 'items'>
+type FaqPageData = Pick<FaqPage, '_id' | '_type' | 'items' | 'categoryOrder'>
 
 type FAQAccordionProps = {
   faqPage: FaqPageData
@@ -107,10 +107,16 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
         </AccordionTrigger>
         <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
           <div className="md:hidden">
-            <FAQExtraCostsCards houses={housesBuilding} />
+            <FAQExtraCostsCards
+              houses={housesBuilding}
+              categoryOrder={faqPage.categoryOrder}
+            />
           </div>
           <div className="hidden md:block">
-            <FAQExtraCostsTable houses={housesBuilding} />
+            <FAQExtraCostsTable
+              houses={housesBuilding}
+              categoryOrder={faqPage.categoryOrder}
+            />
           </div>
         </AccordionContent>
       </AccordionItem>

@@ -22,7 +22,7 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   lemon: 'text-yellow-600'
 }
 
-const CATEGORY_ORDER = [
+const DEFAULT_CATEGORY_ORDER = [
   'deposit',
   'common-fees',
   'utility-fees',
@@ -56,11 +56,22 @@ type Houses = NonNullable<HousesBuildingQueryResult>
 
 type ExtraCostValue = NonNullable<Houses[number]['extraCosts']>[number]['value']
 
+type CategoryOrder = (typeof DEFAULT_CATEGORY_ORDER)[number]
+
 type FAQExtraCostsTableProps = {
   houses: Houses
+  categoryOrder?: CategoryOrder[] | null
 }
 
-export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
+export function FAQExtraCostsTable({
+  houses,
+  categoryOrder
+}: FAQExtraCostsTableProps) {
+  // Use Sanity category order if provided, otherwise fall back to default
+  const effectiveCategoryOrder =
+    categoryOrder && categoryOrder.length > 0
+      ? categoryOrder
+      : DEFAULT_CATEGORY_ORDER
   const t = useTranslations('FAQExtraCostsTable')
 
   const categoryLabels = useMemo(
@@ -121,7 +132,7 @@ export function FAQExtraCostsTable({ houses }: FAQExtraCostsTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {CATEGORY_ORDER.map((category) => (
+          {effectiveCategoryOrder.map((category) => (
             <TableRow key={category}>
               <TableCell className="text-foreground font-medium whitespace-nowrap">
                 {categoryLabels[category]}

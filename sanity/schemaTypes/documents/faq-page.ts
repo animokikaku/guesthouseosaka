@@ -57,6 +57,30 @@ export const faqPage = defineType({
       group: 'content'
     }),
     defineField({
+      name: 'categoryOrder',
+      title: 'Pricing Categories Order',
+      type: 'array',
+      description:
+        'Order of extra cost categories in the pricing table. Drag to reorder.',
+      of: [
+        defineArrayMember({
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Deposit', value: 'deposit' },
+              { title: 'Common Fees', value: 'common-fees' },
+              { title: 'Utility Fees', value: 'utility-fees' },
+              { title: 'Water Bill', value: 'water-bill' },
+              { title: 'Laundromat', value: 'laundromat' },
+              { title: 'Drying Machine', value: 'drying-machine' },
+              { title: 'Internet', value: 'internet' }
+            ]
+          }
+        })
+      ],
+      group: 'settings'
+    }),
+    defineField({
       name: 'metaTitle',
       title: 'Meta Title',
       type: 'internationalizedArrayString',

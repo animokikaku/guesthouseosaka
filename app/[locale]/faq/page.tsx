@@ -33,7 +33,8 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
         faqPage={{
           _id: faqPage._id,
           _type: faqPage._type,
-          items: faqPage.items
+          items: faqPage.items,
+          categoryOrder: faqPage.categoryOrder
         }}
         housesBuilding={housesBuilding}
       />

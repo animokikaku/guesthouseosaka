@@ -38,6 +38,18 @@ type HouseStyles = {
   border: string
 }
 
+const DEFAULT_CATEGORY_ORDER = [
+  'deposit',
+  'common-fees',
+  'utility-fees',
+  'water-bill',
+  'laundromat',
+  'drying-machine',
+  'internet'
+] as const
+
+type CategoryOrder = (typeof DEFAULT_CATEGORY_ORDER)[number]
+
 const HOUSE_STYLES: Record<HouseIdentifier, HouseStyles> = {
   orange: {
     text: 'text-orange-700 dark:text-orange-400',
@@ -66,9 +78,18 @@ type House = Pick<
 
 type FAQExtraCostsCardsProps = {
   houses: House[]
+  categoryOrder?: CategoryOrder[] | null
 }
 
-export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
+export function FAQExtraCostsCards({
+  houses,
+  categoryOrder
+}: FAQExtraCostsCardsProps) {
+  // Use Sanity category order if provided, otherwise fall back to default
+  const effectiveCategoryOrder =
+    categoryOrder && categoryOrder.length > 0
+      ? categoryOrder
+      : DEFAULT_CATEGORY_ORDER
   const t = useTranslations('FAQExtraCostsTable')
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
@@ -116,6 +137,7 @@ export function FAQExtraCostsCards({ houses }: FAQExtraCostsCardsProps) {
               title={house.title ?? house.slug}
               extraCosts={house.extraCosts}
               categoryLabels={categoryLabels}
+              categoryOrder={effectiveCategoryOrder}
             />
           ))}
         </CarouselContent>
@@ -146,14 +168,26 @@ interface ExtraCostsCardProps {
   title: string
   extraCosts: House['extraCosts']
   categoryLabels: Record<string, string>
+  categoryOrder: readonly CategoryOrder[]
 }
 
 function ExtraCostsCard({
   styles,
   title,
   extraCosts,
-  categoryLabels
+  categoryLabels,
+  categoryOrder
 }: ExtraCostsCardProps) {
+  // Build a lookup map: category -> cost item
+  const costsByCategory = useMemo(() => {
+    const map: Record<string, NonNullable<House['extraCosts']>[number]> = {}
+    for (const cost of extraCosts ?? []) {
+      const category = stegaClean(cost.category)
+      map[category] = cost
+    }
+    return map
+  }, [extraCosts])
+
   return (
     <CarouselItem>
       <div
@@ -173,14 +207,13 @@ function ExtraCostsCard({
           </h4>
         </div>
         <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
-          {extraCosts?.map((cost, index) => {
-            // Clean category to remove stega encoding in draft mode
-            const category = stegaClean(cost.category)
+          {categoryOrder.map((category, index) => {
+            const cost = costsByCategory[category]
             const categoryLabel = categoryLabels[category]
 
             return (
               <div
-                key={cost._key}
+                key={category}
                 className={cn(
                   'flex items-center justify-between gap-4 px-4 py-3',
                   index % 2 === 1 && 'bg-muted/30'
@@ -190,7 +223,7 @@ function ExtraCostsCard({
                   {categoryLabel}
                 </span>
                 <span className="text-foreground/70 text-right text-sm tabular-nums">
-                  {cost.value ? (
+                  {cost?.value ? (
                     <PortableText
                       value={cost.value}
                       components={portableTextComponents}
