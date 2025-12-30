@@ -1,16 +1,16 @@
 import { type SchemaTypeDefinition } from 'sanity'
 
 // Document types
-import { house } from './blocks/house'
 import { amenity } from './documents/amenity'
 import { amenityCategory } from './documents/amenity-category'
 import { contactPage } from './documents/contact-page'
 import { contactType } from './documents/contact-type'
 import { faqPage } from './documents/faq-page'
 import { galleryCategory } from './documents/gallery-category'
-import { pricingCategory } from './documents/pricing-category'
 import homePage from './documents/home-page'
+import { house } from './documents/house'
 import { legalNotice } from './documents/legal-notice'
+import { pricingCategory } from './documents/pricing-category'
 import { settings } from './documents/settings'
 
 // Object types
