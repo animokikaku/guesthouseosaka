@@ -200,3 +200,21 @@ export interface ContactTypeItem {
 export interface ContactTypesListData extends VisualEditingBase {
   contactTypes: ContactTypeItem[]
 }
+
+// ============================================
+// Gallery Components
+// ============================================
+
+/**
+ * Pre-built image data for gallery display
+ * All URLs are pre-computed, decoupling components from Sanity helpers
+ * @see components/gallery-wall.tsx
+ */
+export interface GalleryImage {
+  _key: string
+  src: string
+  alt: string | null
+  blurDataURL: string | null
+  width: number
+  height: number
+}

@@ -5,6 +5,7 @@ import { PageActions, PageHeader } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { toCollectionData } from '@/lib/transforms/collection'
+import { toGalleryImages } from '@/lib/transforms/gallery'
 import { sanityFetch } from '@/sanity/lib/live'
 import { homePageQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
@@ -91,7 +92,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
             {/* Instagram feed */}
             <div className="flex justify-center md:col-span-2 md:justify-end">
               <div className="w-full">
-                <GalleryWall images={galleryWall} />
+                <GalleryWall images={toGalleryImages(galleryWall)} />
               </div>
             </div>
           </div>

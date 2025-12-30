@@ -9,3 +9,6 @@ export {
 
 // Form transformers
 export { toContactFormConfig, toFormFieldsConfig } from './form'
+
+// Gallery transformers
+export { toGalleryImages } from './gallery'
