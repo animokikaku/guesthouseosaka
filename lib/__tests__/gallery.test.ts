@@ -64,7 +64,7 @@ describe('groupGalleryByCategory', () => {
   })
 
   it('groups images by category with count field', () => {
-    const category = createGalleryCategory({ key: 'bedroom', order: 1 })
+    const category = createGalleryCategory({ key: 'bedroom', orderRank: '0|a00000:' })
     const images = [
       createGalleryItem({ category }),
       createGalleryItem({ category }),
@@ -79,7 +79,7 @@ describe('groupGalleryByCategory', () => {
   })
 
   it('sets thumbnail to first image of category', () => {
-    const category = createGalleryCategory({ key: 'kitchen', order: 1 })
+    const category = createGalleryCategory({ key: 'kitchen', orderRank: '0|a00000:' })
     const firstImage = createSanityImage({ alt: 'First kitchen image' })
     const images = [
       createGalleryItem({ category, image: firstImage }),
@@ -93,8 +93,8 @@ describe('groupGalleryByCategory', () => {
   })
 
   it('handles mixed categories', () => {
-    const bedroomCat = createGalleryCategory({ key: 'bedroom', order: 1 })
-    const kitchenCat = createGalleryCategory({ key: 'kitchen', order: 2 })
+    const bedroomCat = createGalleryCategory({ key: 'bedroom', orderRank: '0|a00000:' })
+    const kitchenCat = createGalleryCategory({ key: 'kitchen', orderRank: '0|b00000:' })
     const images = [
       createGalleryItem({ category: bedroomCat }),
       createGalleryItem({ category: kitchenCat }),
@@ -129,7 +129,7 @@ describe('groupGalleryByCategory', () => {
   })
 
   it('preserves item order within categories', () => {
-    const category = createGalleryCategory({ key: 'room', order: 1 })
+    const category = createGalleryCategory({ key: 'room', orderRank: '0|a00000:' })
     const images = [
       createGalleryItem({ _key: 'first', category }),
       createGalleryItem({ _key: 'second', category }),

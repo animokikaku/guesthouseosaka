@@ -203,7 +203,7 @@ describe('HouseAmenities', () => {
           label: 'Wifi',
           featured: true,
           icon: 'wifi',
-          category: { _id: 'cat1', key: 'internet', label: 'Internet', icon: null, order: 1 }
+          category: { _id: 'cat1', key: 'internet', label: 'Internet', icon: null, orderRank: '0|a00000:' }
         })
       ]
 
@@ -223,7 +223,7 @@ describe('HouseAmenities', () => {
           label: 'Wifi',
           featured: true,
           icon: 'wifi',
-          category: { _id: 'cat1', key: 'internet', label: 'Internet', icon: null, order: 1 }
+          category: { _id: 'cat1', key: 'internet', label: 'Internet', icon: null, orderRank: '0|a00000:' }
         })
       ]
 
@@ -244,21 +244,21 @@ describe('HouseAmenities', () => {
           label: 'Wifi',
           featured: true,
           icon: 'wifi',
-          category: { _id: 'cat1', key: 'internet', label: 'Internet Access', icon: null, order: 1 }
+          category: { _id: 'cat1', key: 'internet', label: 'Internet Access', icon: null, orderRank: '0|a00000:' }
         }),
         createAmenity({
           _key: 'bed',
           label: 'Bed',
           featured: true,
           icon: 'bed',
-          category: { _id: 'cat2', key: 'bedroom', label: 'Bedroom', icon: null, order: 2 }
+          category: { _id: 'cat2', key: 'bedroom', label: 'Bedroom', icon: null, orderRank: '0|b00000:' }
         }),
         createAmenity({
           _key: 'router',
           label: 'Router',
           featured: true,
           icon: 'router',
-          category: { _id: 'cat1', key: 'internet', label: 'Internet Access', icon: null, order: 1 }
+          category: { _id: 'cat1', key: 'internet', label: 'Internet Access', icon: null, orderRank: '0|a00000:' }
         })
       ]
 
@@ -271,28 +271,28 @@ describe('HouseAmenities', () => {
       expect(screen.getByText('Bedroom')).toBeInTheDocument()
     })
 
-    it('sorts categories by order in modal', () => {
+    it('sorts categories by orderRank in modal', () => {
       const amenities = [
         createAmenity({
           _key: 'kitchen',
           label: 'Kitchen',
           featured: true,
           icon: 'utensils',
-          category: { _id: 'cat3', key: 'kitchen', label: 'Kitchen', icon: null, order: 3 }
+          category: { _id: 'cat3', key: 'kitchen', label: 'Kitchen', icon: null, orderRank: '0|c00000:' }
         }),
         createAmenity({
           _key: 'wifi',
           label: 'Wifi',
           featured: true,
           icon: 'wifi',
-          category: { _id: 'cat1', key: 'internet', label: 'Internet', icon: null, order: 1 }
+          category: { _id: 'cat1', key: 'internet', label: 'Internet', icon: null, orderRank: '0|a00000:' }
         }),
         createAmenity({
           _key: 'bed',
           label: 'Bed',
           featured: true,
           icon: 'bed',
-          category: { _id: 'cat2', key: 'bedroom', label: 'Bedroom', icon: null, order: 2 }
+          category: { _id: 'cat2', key: 'bedroom', label: 'Bedroom', icon: null, orderRank: '0|b00000:' }
         })
       ]
 

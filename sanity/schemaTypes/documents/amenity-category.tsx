@@ -1,3 +1,7 @@
+import {
+  orderRankField,
+  orderRankOrdering
+} from '@sanity/orderable-document-list'
 import { ComponentIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 import { IconPreview } from '../../lib/icon-preview'
@@ -33,33 +37,19 @@ export const amenityCategory = defineType({
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     }),
-    defineField({
-      name: 'order',
-      title: 'Display Order',
-      type: 'number',
-      description: 'Categories are sorted by this number (lowest first)',
-      validation: (rule) => rule.required().min(0),
-      initialValue: 0
-    })
+    orderRankField({ type: 'amenityCategory' })
   ],
-  orderings: [
-    {
-      title: 'Display Order',
-      name: 'orderAsc',
-      by: [{ field: 'order', direction: 'asc' }]
-    }
-  ],
+  orderings: [orderRankOrdering],
   preview: {
     select: {
       label: 'label.0.value',
       key: 'key.current',
-      order: 'order',
       icon: 'icon'
     },
-    prepare({ label, key, order, icon }) {
+    prepare({ label, key, icon }) {
       return {
         title: label || 'No label',
-        subtitle: `${key || 'no-key'} (order: ${order ?? 'unset'})`,
+        subtitle: key || 'no-key',
         media: <IconPreview icon={icon} />
       }
     }

@@ -91,7 +91,7 @@ export interface AmenityItemData {
     _id: string
     key: string
     label: string | null
-    order: number
+    orderRank: string | null
   }
 }
 

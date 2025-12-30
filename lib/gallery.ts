@@ -14,7 +14,7 @@ export interface GalleryCategory {
   _id: string
   key: string
   label: string | null
-  order: number | null
+  orderRank: string | null
   count: number
   thumbnail: GalleryItem['image'] | null
   items: GalleryItem[]

@@ -154,7 +154,7 @@ export function toAmenityItems(amenities: HouseAmenities): AmenityItemData[] {
       _id: amenity.category._id,
       key: amenity.category.key,
       label: amenity.category.label ?? null,
-      order: amenity.category.order
+      orderRank: amenity.category.orderRank
     }
   }))
 }

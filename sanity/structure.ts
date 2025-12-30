@@ -1,3 +1,4 @@
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 import {
   CheckmarkCircleIcon,
   CogIcon,
@@ -114,22 +115,20 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title('Categories')
             .items([
-              S.listItem()
-                .title('Gallery Categories')
-                .icon(ImagesIcon)
-                .child(
-                  S.documentTypeList('galleryCategory')
-                    .title('Gallery Categories')
-                    .defaultOrdering([{ field: 'order', direction: 'asc' }])
-                ),
-              S.listItem()
-                .title('Amenity Categories')
-                .icon(ComponentIcon)
-                .child(
-                  S.documentTypeList('amenityCategory')
-                    .title('Amenity Categories')
-                    .defaultOrdering([{ field: 'order', direction: 'asc' }])
-                ),
+              orderableDocumentListDeskItem({
+                type: 'galleryCategory',
+                title: 'Gallery Categories',
+                icon: ImagesIcon,
+                S,
+                context: S.context
+              }),
+              orderableDocumentListDeskItem({
+                type: 'amenityCategory',
+                title: 'Amenity Categories',
+                icon: ComponentIcon,
+                S,
+                context: S.context
+              }),
               S.listItem()
                 .title('Pricing Categories')
                 .icon(TagIcon)

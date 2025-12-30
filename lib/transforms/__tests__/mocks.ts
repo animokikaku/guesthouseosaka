@@ -154,7 +154,7 @@ export function createAmenity(
       key: faker.word.noun(),
       label: faker.word.noun(),
       icon: faker.helpers.arrayElement(['globe', 'home', 'star', null]),
-      order: faker.number.int({ min: 1, max: 10 })
+      orderRank: `0|${String.fromCharCode(97 + faker.number.int({ min: 0, max: 9 }))}00000:`
     },
     ...overrides
   }
@@ -192,7 +192,7 @@ export function createGalleryCategory(
     _id: faker.string.uuid(),
     key: faker.word.noun(),
     label: faker.word.words(2),
-    order: faker.number.int({ min: 1, max: 10 }),
+    orderRank: `${faker.number.int({ min: 1, max: 10 }).toString().padStart(5, '0')}|`,
     ...overrides
   }
 }
@@ -219,7 +219,7 @@ export function createGalleryItem(
 
 interface CategorizedItem {
   _key: string
-  category: { key: string; order: number | null } | null
+  category: { key: string; orderRank: string | null } | null
 }
 
 export function createCategorizedItem(
@@ -229,7 +229,7 @@ export function createCategorizedItem(
     _key: faker.string.nanoid(),
     category: {
       key: faker.word.noun(),
-      order: faker.number.int({ min: 1, max: 10 })
+      orderRank: `0|${String.fromCharCode(97 + faker.number.int({ min: 0, max: 9 }))}00000:`
     },
     ...overrides
   }

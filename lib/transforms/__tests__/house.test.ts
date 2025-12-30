@@ -205,7 +205,7 @@ describe('toAmenityItems', () => {
     expect(result[0].category._id).toBe(amenity.category._id)
     expect(result[0].category.key).toBe(amenity.category.key)
     expect(result[0].category.label).toBe(amenity.category.label)
-    expect(result[0].category.order).toBe(amenity.category.order)
+    expect(result[0].category.orderRank).toBe(amenity.category.orderRank)
   })
 
   it('returns empty array for null amenities', () => {
@@ -230,7 +230,7 @@ describe('toAmenityItems', () => {
         key: 'room',
         label: null,
         icon: null,
-        order: 1
+        orderRank: '0|a00000:'
       }
     })
 

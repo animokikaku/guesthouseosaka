@@ -128,7 +128,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       _id,
       "key": key.current,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-      order
+      orderRank
     }
   },
 
@@ -148,7 +148,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       "key": key.current,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       icon,
-      order
+      orderRank
     }
   },
 
@@ -437,11 +437,11 @@ export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
 // =============================================================================
 
 export const galleryCategoriesQuery =
-  defineQuery(`*[_type == "galleryCategory"] | order(order asc){
+  defineQuery(`*[_type == "galleryCategory"] | order(orderRank){
   _id,
   "key": key.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-  order,
+  orderRank,
   image{
     asset->{
       _id,
@@ -455,11 +455,11 @@ export const galleryCategoriesQuery =
 }`)
 
 export const amenityCategoriesQuery =
-  defineQuery(`*[_type == "amenityCategory"] | order(order asc){
+  defineQuery(`*[_type == "amenityCategory"] | order(orderRank){
   _id,
   "key": key.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-  order
+  orderRank
 }`)
 
 export const amenitiesQuery = defineQuery(`*[_type == "amenity"]{
@@ -470,6 +470,6 @@ export const amenitiesQuery = defineQuery(`*[_type == "amenity"]{
   "category": category->{
     "key": key.current,
     "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-    order
+    orderRank
   }
-} | order(category.order asc, label asc)`)
+} | order(category.orderRank, label asc)`)

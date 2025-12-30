@@ -8,7 +8,7 @@
 /** Minimum required shape for a category */
 interface BaseCategory {
   key: string
-  order: number | null
+  orderRank: string | null
 }
 
 /** Item that has an optional category property */
@@ -28,17 +28,17 @@ type GroupedCategory<T extends ItemWithCategory> = ExtractCategory<T> & {
  * Groups items by their category.key property.
  *
  * @param items - Array of items with optional category property
- * @returns Array of categories with their items, sorted by order
+ * @returns Array of categories with their items, sorted by orderRank
  *
  * @example
  * // Gallery usage
  * const categories = groupByCategory(gallery)
- * // Returns: Array<{ _id, key, label, order, items: GalleryItem[] }>
+ * // Returns: Array<{ _id, key, label, orderRank, items: GalleryItem[] }>
  *
  * @example
  * // Amenities usage
  * const categories = groupByCategory(amenities)
- * // Returns: Array<{ key, label, icon, order, items: Amenity[] }>
+ * // Returns: Array<{ key, label, icon, orderRank, items: Amenity[] }>
  */
 export function groupByCategory<T extends ItemWithCategory>(
   items: T[] | null
@@ -61,7 +61,12 @@ export function groupByCategory<T extends ItemWithCategory>(
     categoryMap.get(key)!.items.push(item)
   }
 
-  return [...categoryMap.values()].sort(
-    (a, b) => (a.order ?? 999) - (b.order ?? 999)
-  )
+  // Sort by orderRank (lexicographic string comparison)
+  // Items with null orderRank sort to the end
+  return [...categoryMap.values()].sort((a, b) => {
+    if (a.orderRank === null && b.orderRank === null) return 0
+    if (a.orderRank === null) return 1
+    if (b.orderRank === null) return -1
+    return a.orderRank.localeCompare(b.orderRank)
+  })
 }

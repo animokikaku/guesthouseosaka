@@ -120,12 +120,12 @@ describe('HouseGalleryClient', () => {
       const bedroomCat = createGalleryCategory({
         key: 'bedroom',
         label: 'Bedroom',
-        order: 1
+        orderRank: '0|a00000:'
       })
       const kitchenCat = createGalleryCategory({
         key: 'kitchen',
         label: 'Kitchen',
-        order: 2
+        orderRank: '0|b00000:'
       })
       const gallery = [
         createGalleryItem({ _key: 'img1', category: bedroomCat }),
@@ -138,16 +138,16 @@ describe('HouseGalleryClient', () => {
       expect(headings).toHaveLength(2)
     })
 
-    it('sorts categories by order', () => {
+    it('sorts categories by orderRank', () => {
       const kitchenCat = createGalleryCategory({
         key: 'kitchen',
         label: 'Kitchen',
-        order: 2
+        orderRank: '0|b00000:'
       })
       const bedroomCat = createGalleryCategory({
         key: 'bedroom',
         label: 'Bedroom',
-        order: 1
+        orderRank: '0|a00000:'
       })
       const gallery = [
         createGalleryItem({ _key: 'img1', category: kitchenCat }),

@@ -834,12 +834,12 @@
         },
         "optional": false
       },
-      "order": {
+      "orderRank": {
         "type": "objectAttribute",
         "value": {
-          "type": "number"
+          "type": "string"
         },
-        "optional": false
+        "optional": true
       }
     }
   },
@@ -902,12 +902,12 @@
         },
         "optional": false
       },
-      "order": {
+      "orderRank": {
         "type": "objectAttribute",
         "value": {
-          "type": "number"
+          "type": "string"
         },
-        "optional": false
+        "optional": true
       }
     }
   },

@@ -13,9 +13,9 @@ describe('groupByCategory', () => {
 
   it('groups items by category.key correctly', () => {
     const items = [
-      createCategorizedItem({ category: { key: 'a', order: 1 } }),
-      createCategorizedItem({ category: { key: 'b', order: 2 } }),
-      createCategorizedItem({ category: { key: 'a', order: 1 } })
+      createCategorizedItem({ category: { key: 'a', orderRank: '0|a00000:' } }),
+      createCategorizedItem({ category: { key: 'b', orderRank: '0|b00000:' } }),
+      createCategorizedItem({ category: { key: 'a', orderRank: '0|a00000:' } })
     ]
 
     const result = groupByCategory(items)
@@ -29,9 +29,9 @@ describe('groupByCategory', () => {
 
   it('skips items without category', () => {
     const items = [
-      createCategorizedItem({ category: { key: 'a', order: 1 } }),
+      createCategorizedItem({ category: { key: 'a', orderRank: '0|a00000:' } }),
       createCategorizedItem({ category: null }),
-      createCategorizedItem({ category: { key: 'a', order: 1 } })
+      createCategorizedItem({ category: { key: 'a', orderRank: '0|a00000:' } })
     ]
 
     const result = groupByCategory(items)
@@ -40,11 +40,11 @@ describe('groupByCategory', () => {
     expect(result[0].items).toHaveLength(2)
   })
 
-  it('sorts categories by order ascending', () => {
+  it('sorts categories by orderRank ascending', () => {
     const items = [
-      createCategorizedItem({ category: { key: 'c', order: 3 } }),
-      createCategorizedItem({ category: { key: 'a', order: 1 } }),
-      createCategorizedItem({ category: { key: 'b', order: 2 } })
+      createCategorizedItem({ category: { key: 'c', orderRank: '0|c00000:' } }),
+      createCategorizedItem({ category: { key: 'a', orderRank: '0|a00000:' } }),
+      createCategorizedItem({ category: { key: 'b', orderRank: '0|b00000:' } })
     ]
 
     const result = groupByCategory(items)
@@ -52,11 +52,11 @@ describe('groupByCategory', () => {
     expect(result.map((c) => c.key)).toEqual(['a', 'b', 'c'])
   })
 
-  it('handles null order values by sorting to end', () => {
+  it('handles null orderRank values by sorting to end', () => {
     const items = [
-      createCategorizedItem({ category: { key: 'nullOrder', order: null } }),
-      createCategorizedItem({ category: { key: 'a', order: 1 } }),
-      createCategorizedItem({ category: { key: 'b', order: 2 } })
+      createCategorizedItem({ category: { key: 'nullOrder', orderRank: null } }),
+      createCategorizedItem({ category: { key: 'a', orderRank: '0|a00000:' } }),
+      createCategorizedItem({ category: { key: 'b', orderRank: '0|b00000:' } })
     ]
 
     const result = groupByCategory(items)
@@ -72,7 +72,7 @@ describe('groupByCategory', () => {
           _id: 'cat-123',
           key: 'kitchen',
           label: 'Kitchen',
-          order: 1,
+          orderRank: '0|a00000:',
           icon: 'utensils'
         }
       }
@@ -84,7 +84,7 @@ describe('groupByCategory', () => {
       _id: 'cat-123',
       key: 'kitchen',
       label: 'Kitchen',
-      order: 1,
+      orderRank: '0|a00000:',
       icon: 'utensils'
     })
     expect(result[0].items).toHaveLength(1)
@@ -92,9 +92,9 @@ describe('groupByCategory', () => {
 
   it('handles duplicate category keys by merging items', () => {
     const items = [
-      createCategorizedItem({ _key: 'item1', category: { key: 'same', order: 1 } }),
-      createCategorizedItem({ _key: 'item2', category: { key: 'same', order: 1 } }),
-      createCategorizedItem({ _key: 'item3', category: { key: 'same', order: 1 } })
+      createCategorizedItem({ _key: 'item1', category: { key: 'same', orderRank: '0|a00000:' } }),
+      createCategorizedItem({ _key: 'item2', category: { key: 'same', orderRank: '0|a00000:' } }),
+      createCategorizedItem({ _key: 'item3', category: { key: 'same', orderRank: '0|a00000:' } })
     ]
 
     const result = groupByCategory(items)
