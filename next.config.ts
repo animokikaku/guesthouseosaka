@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   experimental: {
     typedEnv: true,
+    turbopackFileSystemCacheForBuild: true,
     turbopackFileSystemCacheForDev: true
   },
   images: {
