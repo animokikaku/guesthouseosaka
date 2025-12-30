@@ -240,8 +240,9 @@ export const house = defineType({
       type: 'array',
       group: 'pricing',
       description:
-        'Additional costs shown in the FAQ section (deposit, fees, utilities)',
-      of: [defineArrayMember({ type: 'extraCostItem' })]
+        'Additional costs shown in the FAQ section. Order is controlled on the FAQ page.',
+      of: [defineArrayMember({ type: 'extraCostItem' })],
+      options: { sortable: false }
     }),
 
     // ============================================
