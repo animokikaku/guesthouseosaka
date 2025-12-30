@@ -38,7 +38,7 @@ export function FAQContactTable({ houses }: FAQContactTableProps) {
             className="border-border/50 last:border-border border-none"
             key={title}
           >
-            <td className="text-muted-foreground p-2 font-sans">{title}</td>
+            <td className="text-muted-foreground p-2 font-sans text-right">{title}</td>
             <td className="p-2 text-center">
               <a
                 href={`tel:${withinJapan}`}
