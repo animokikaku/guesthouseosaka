@@ -5,40 +5,10 @@ test.describe('Gallery', () => {
   const galleryUrl = `/en/${house}/gallery`
   const houseUrl = `/en/${house}`
 
+  // Note: Gallery visibility tests (grid, categories, images) are now covered
+  // by unit tests in components/gallery/__tests__/house-gallery-client.test.tsx
+
   test.describe('Gallery Page', () => {
-    test('loads with image grid', async ({ page }) => {
-      await page.goto(galleryUrl)
-
-      // Wait for gallery page to load
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
-
-      // Check that gallery grid container exists
-      const galleryGrid = page.locator('[class*="grid"]').first()
-      await expect(galleryGrid).toBeVisible()
-
-      // Check that images are displayed
-      const images = page.locator('img')
-      await expect(images.first()).toBeVisible()
-    })
-
-    test('displays category thumbnails', async ({ page }) => {
-      await page.goto(galleryUrl)
-
-      // Wait for page to load
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
-
-      // Check for category navigation thumbnails (buttons with images)
-      const categoryButtons = page.locator('button').filter({
-        has: page.locator('img')
-      })
-
-      // If there are categories, they should be visible as thumbnail buttons
-      const count = await categoryButtons.count()
-      if (count > 0) {
-        await expect(categoryButtons.first()).toBeVisible()
-      }
-    })
-
     test('category filters scroll to sections', async ({ page }) => {
       await page.goto(galleryUrl)
 
@@ -69,26 +39,6 @@ test.describe('Gallery', () => {
         const sectionCount = await categorySections.count()
         expect(sectionCount).toBeGreaterThan(0)
       }
-    })
-
-    test('images are displayed in categories', async ({ page }) => {
-      await page.goto(galleryUrl)
-
-      // Wait for page to load
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
-
-      // Check for category headings (h3 elements)
-      const categoryHeadings = page.locator('h3')
-      const headingCount = await categoryHeadings.count()
-
-      if (headingCount > 0) {
-        // Each category section should have a heading
-        await expect(categoryHeadings.first()).toBeVisible()
-      }
-
-      // Check that gallery grid has images
-      const galleryImages = page.locator('img[alt]')
-      await expect(galleryImages.first()).toBeVisible()
     })
   })
 
