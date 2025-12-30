@@ -131,7 +131,7 @@ function AmenitiesDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="theme-container max-h-[85vh] w-3xl overflow-y-auto md:max-w-3xl">
+      <DialogContent className="theme-container max-h-[85vh] overflow-y-auto md:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="sr-only">{title}</DialogDescription>

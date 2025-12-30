@@ -99,7 +99,7 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
             )
           })}
         </CarouselContent>
-        <div className="absolute right-3 bottom-12 z-10 block rounded-sm bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">
+        <div className="absolute right-3 bottom-12 z-10 rounded bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">
           {currentIndex} / {images.length}
         </div>
       </Carousel>

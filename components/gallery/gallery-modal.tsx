@@ -147,7 +147,7 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
                 height={dimensions.height}
                 placeholder={image.preview ? 'blur' : undefined}
                 blurDataURL={image.preview ?? undefined}
-                className="max-h-screen max-w-screen object-contain select-none"
+                className="max-h-screen object-contain select-none"
                 sizes="100vw"
               />
             </CarouselItem>

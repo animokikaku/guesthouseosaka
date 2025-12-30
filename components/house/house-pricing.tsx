@@ -51,7 +51,7 @@ export function HousePricing({ pricing }: HousePricingProps) {
             <div className="bg-muted/50 border-border/50 border-b px-6 py-4 md:w-1/3 md:shrink-0 md:border-r md:border-b-0">
               <h4 className="text-foreground font-medium">{row.label}</h4>
             </div>
-            <div className="space-y-1 px-6 py-4 whitespace-pre-line md:flex-1">
+            <div className="space-y-1 px-6 py-4 md:flex-1">
               {row.content && (
                 <PortableText value={row.content} components={components} />
               )}

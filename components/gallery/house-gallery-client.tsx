@@ -119,7 +119,7 @@ function CategoryGrid({ category, attr }: CategoryGridProps) {
     <div id={category.key} className="scroll-mt-8 space-y-4">
       <h3 className="text-xl font-semibold">{category.label}</h3>
       <div
-        className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4"
         data-sanity={attr.list()}
       >
         {category.items.map((item) => (

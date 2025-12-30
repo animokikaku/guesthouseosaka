@@ -118,7 +118,7 @@ export function TourForm({
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter className="flex flex-col gap-3">
+      <CardFooter>
         <Field orientation="horizontal">
           <form.AppForm>
             <form.ResetButton />
