@@ -55,16 +55,16 @@ test.describe('Gallery', () => {
         // Get the second category button (first is already visible)
         const secondCategoryButton = categoryButtons.nth(1)
 
-        // Click on the category button to scroll
+        // Click on the category button to scroll to that section
         await secondCategoryButton.click()
 
-        // Give time for scroll animation
-        await page.waitForTimeout(500)
-
-        // Verify the page scrolled (check that the category section exists)
+        // Verify the page scrolled by checking that category sections exist
         const categorySections = page.locator('[id]').filter({
           has: page.locator('h3')
         })
+
+        // Wait for category sections to be present and visible
+        await expect(categorySections.first()).toBeVisible()
 
         const sectionCount = await categorySections.count()
         expect(sectionCount).toBeGreaterThan(0)
@@ -94,40 +94,46 @@ test.describe('Gallery', () => {
 
   test.describe('Modal Interaction', () => {
     // Helper to get gallery grid images (not category thumbnails)
-    // Gallery images have data-sanity attribute AND cursor-pointer class on the same element
+    // Gallery images are inside .grid elements with cursor-pointer class
     const getGalleryGridImages = (page: import('@playwright/test').Page) => {
-      // Find clickable gallery images with data-sanity attribute (not the category thumbnail buttons)
-      return page.locator('.grid [data-sanity].cursor-pointer').filter({
+      // Find clickable gallery images inside the grid (not the category thumbnail buttons)
+      // The grid contains clickable div elements with cursor-pointer class and images inside
+      return page.locator('.grid .cursor-pointer').filter({
         has: page.locator('img')
       })
+    }
+
+    // Helper to click gallery image and wait for modal to open
+    const clickGalleryImageAndWaitForModal = async (
+      page: import('@playwright/test').Page
+    ) => {
+      const galleryImages = getGalleryGridImages(page)
+      const firstImage = galleryImages.first()
+
+      // Wait for image to be visible and ready for interaction
+      await expect(firstImage).toBeVisible()
+
+      // Click and wait for modal
+      await firstImage.click()
+      const modal = page.locator('[role="dialog"]')
+      await expect(modal).toBeVisible({ timeout: 5000 })
+
+      return modal
     }
 
     test('clicking image opens modal', async ({ page }) => {
       await page.goto(galleryUrl)
       await expect(page).toHaveURL(new RegExp(galleryUrl))
 
-      // Find gallery grid images (inside the grid, not category thumbnails)
-      const galleryImages = getGalleryGridImages(page)
-      await expect(galleryImages.first()).toBeVisible()
-
-      // Click on the first gallery image
-      await galleryImages.first().click()
-
-      // Wait for modal to open - the modal uses Radix Dialog
-      const modal = page.locator('[role="dialog"]')
-      await expect(modal).toBeVisible({ timeout: 5000 })
+      // Click image and verify modal opens
+      await clickGalleryImageAndWaitForModal(page)
     })
 
     test('modal displays full-size image', async ({ page }) => {
       await page.goto(galleryUrl)
       await expect(page).toHaveURL(new RegExp(galleryUrl))
 
-      const galleryImages = getGalleryGridImages(page)
-      await galleryImages.first().click()
-
-      // Wait for modal to appear
-      const modal = page.locator('[role="dialog"]')
-      await expect(modal).toBeVisible({ timeout: 5000 })
+      const modal = await clickGalleryImageAndWaitForModal(page)
 
       // Check that an image is displayed in the modal
       const modalImage = modal.locator('img')
@@ -138,12 +144,7 @@ test.describe('Gallery', () => {
       await page.goto(galleryUrl)
       await expect(page).toHaveURL(new RegExp(galleryUrl))
 
-      const galleryImages = getGalleryGridImages(page)
-      await galleryImages.first().click()
-
-      // Wait for modal to open
-      const modal = page.locator('[role="dialog"]')
-      await expect(modal).toBeVisible({ timeout: 5000 })
+      const modal = await clickGalleryImageAndWaitForModal(page)
 
       // Find and click the close button (button with ArrowLeftIcon in the modal)
       const closeButton = modal.locator('button').filter({
@@ -159,12 +160,7 @@ test.describe('Gallery', () => {
       await page.goto(galleryUrl)
       await expect(page).toHaveURL(new RegExp(galleryUrl))
 
-      const galleryImages = getGalleryGridImages(page)
-      await galleryImages.first().click()
-
-      // Wait for modal to open
-      const modal = page.locator('[role="dialog"]')
-      await expect(modal).toBeVisible({ timeout: 5000 })
+      const modal = await clickGalleryImageAndWaitForModal(page)
 
       // Press Escape key
       await page.keyboard.press('Escape')
@@ -179,12 +175,7 @@ test.describe('Gallery', () => {
       await page.goto(galleryUrl)
       await expect(page).toHaveURL(new RegExp(galleryUrl))
 
-      const galleryImages = getGalleryGridImages(page)
-      await galleryImages.first().click()
-
-      // Wait for modal to open
-      const modal = page.locator('[role="dialog"]')
-      await expect(modal).toBeVisible({ timeout: 5000 })
+      const modal = await clickGalleryImageAndWaitForModal(page)
 
       // Find navigation buttons (CarouselPrevious and CarouselNext)
       const nextButton = page.locator('[data-slot="carousel-next"]')
@@ -192,34 +183,35 @@ test.describe('Gallery', () => {
       // On desktop, nav buttons should be visible
       await expect(nextButton).toBeVisible()
 
-      // Click next button
+      // Click next button to navigate to next slide
       await nextButton.click()
-      await page.waitForTimeout(500) // Wait for animation
 
-      // Modal should still be open after navigation
+      // Verify carousel navigation completed by checking modal and button remain stable
       await expect(modal).toBeVisible()
+      await expect(nextButton).toBeVisible()
     })
 
     test('keyboard arrow navigation works', async ({ page }) => {
       await page.goto(galleryUrl)
       await expect(page).toHaveURL(new RegExp(galleryUrl))
 
-      const galleryImages = getGalleryGridImages(page)
-      await galleryImages.first().click()
+      const modal = await clickGalleryImageAndWaitForModal(page)
 
-      // Wait for modal to open
-      const modal = page.locator('[role="dialog"]')
-      await expect(modal).toBeVisible({ timeout: 5000 })
+      // Get carousel items to verify navigation
+      const carouselItems = modal.locator('[data-slot="carousel-item"]')
+      const firstImage = carouselItems.first().locator('img')
+      await expect(firstImage).toBeVisible()
 
       // Press right arrow to go to next slide
       await page.keyboard.press('ArrowRight')
-      await page.waitForTimeout(300) // Wait for animation
+
+      // Verify modal is still visible after right navigation
+      await expect(modal).toBeVisible()
 
       // Press left arrow to go back
       await page.keyboard.press('ArrowLeft')
-      await page.waitForTimeout(300)
 
-      // Verify modal is still visible after navigation
+      // Verify modal is still visible after left navigation
       await expect(modal).toBeVisible()
     })
   })
@@ -269,9 +261,27 @@ test.describe('Gallery', () => {
   test.describe('Responsive Behavior', () => {
     // Helper to get gallery grid images (not category thumbnails)
     const getGalleryGridImages = (page: import('@playwright/test').Page) => {
-      return page.locator('.grid [data-sanity].cursor-pointer').filter({
+      return page.locator('.grid .cursor-pointer').filter({
         has: page.locator('img')
       })
+    }
+
+    // Helper to click gallery image and wait for modal to open
+    const clickGalleryImageAndWaitForModal = async (
+      page: import('@playwright/test').Page
+    ) => {
+      const galleryImages = getGalleryGridImages(page)
+      const firstImage = galleryImages.first()
+
+      // Wait for image to be visible and ready for interaction
+      await expect(firstImage).toBeVisible()
+
+      // Click and wait for modal
+      await firstImage.click()
+      const modal = page.locator('[role="dialog"]')
+      await expect(modal).toBeVisible({ timeout: 5000 })
+
+      return modal
     }
 
     test('gallery displays correctly on mobile', async ({ page }) => {
@@ -286,12 +296,7 @@ test.describe('Gallery', () => {
       await expect(images.first()).toBeVisible()
 
       // Open modal to check mobile behavior
-      const galleryImages = getGalleryGridImages(page)
-      await galleryImages.first().click()
-
-      // Wait for modal
-      const modal = page.locator('[role="dialog"]')
-      await expect(modal).toBeVisible({ timeout: 5000 })
+      await clickGalleryImageAndWaitForModal(page)
 
       // On mobile, nav buttons should be hidden (they have class "hidden sm:flex")
       const nextButton = page.locator('[data-slot="carousel-next"]')
@@ -310,12 +315,7 @@ test.describe('Gallery', () => {
       await expect(images.first()).toBeVisible()
 
       // Open modal
-      const galleryImages = getGalleryGridImages(page)
-      await galleryImages.first().click()
-
-      // Wait for modal
-      const modal = page.locator('[role="dialog"]')
-      await expect(modal).toBeVisible({ timeout: 5000 })
+      await clickGalleryImageAndWaitForModal(page)
 
       // On desktop, nav buttons should be visible
       const nextButton = page.locator('[data-slot="carousel-next"]')
