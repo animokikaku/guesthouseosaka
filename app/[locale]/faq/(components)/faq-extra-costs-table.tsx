@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Table,
   TableBody,
@@ -11,8 +9,8 @@ import {
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import type {
-  FaqPageQueryResult,
-  HousesBuildingQueryResult
+  HousesBuildingQueryResult,
+  PricingCategoriesQueryResult
 } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
@@ -45,25 +43,18 @@ const portableTextComponents: PortableTextComponents = {
 }
 
 type Houses = NonNullable<HousesBuildingQueryResult>
-type CategoryOrder = NonNullable<FaqPageQueryResult>['categoryOrder']
+type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 
 type ExtraCostValue = NonNullable<Houses[number]['extraCosts']>[number]['value']
 
-type CategoryOrderAttr = {
-  list: () => string
-  item: (key: string) => string
-}
-
 type FAQExtraCostsTableProps = {
   houses: Houses
-  categoryOrder?: CategoryOrder
-  categoryOrderAttr?: CategoryOrderAttr
+  pricingCategories: PricingCategories
 }
 
 export function FAQExtraCostsTable({
   houses,
-  categoryOrder,
-  categoryOrderAttr
+  pricingCategories
 }: FAQExtraCostsTableProps) {
   // Build a lookup map: house slug -> category slug -> portable text value
   const costsByHouse = useMemo(() => {
@@ -81,7 +72,7 @@ export function FAQExtraCostsTable({
     return map
   }, [houses])
 
-  if (houses.length === 0 || !categoryOrder?.length) return null
+  if (houses.length === 0 || !pricingCategories?.length) return null
 
   return (
     <div className="border-border overflow-hidden rounded-xs border">
@@ -111,14 +102,13 @@ export function FAQExtraCostsTable({
             })}
           </TableRow>
         </TableHeader>
-        <TableBody data-sanity={categoryOrderAttr?.list()}>
-          {categoryOrder.map((item) => {
-            const key = stegaClean(item._key)
-            const categorySlug = stegaClean(item.category?.slug)
-            const categoryTitle = stegaClean(item.category?.title)
+        <TableBody>
+          {pricingCategories.map((category) => {
+            const categorySlug = stegaClean(category.slug)
+            const categoryTitle = stegaClean(category.title)
             if (!categorySlug) return null
             return (
-              <TableRow key={key} data-sanity={categoryOrderAttr?.item(key)}>
+              <TableRow key={category._id}>
                 <TableCell className="text-foreground font-medium whitespace-nowrap">
                   {categoryTitle}
                 </TableCell>

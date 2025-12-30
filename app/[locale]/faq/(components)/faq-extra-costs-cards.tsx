@@ -9,8 +9,8 @@ import {
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import type {
-  FaqPageQueryResult,
-  HousesBuildingQueryResult
+  HousesBuildingQueryResult,
+  PricingCategoriesQueryResult
 } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
@@ -66,23 +66,16 @@ type House = Pick<
   '_id' | 'title' | 'slug' | 'extraCosts'
 >
 
-type CategoryOrder = NonNullable<FaqPageQueryResult>['categoryOrder']
-
-type CategoryOrderAttr = {
-  list: () => string
-  item: (key: string) => string
-}
+type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 
 type FAQExtraCostsCardsProps = {
   houses: House[]
-  categoryOrder?: CategoryOrder
-  categoryOrderAttr?: CategoryOrderAttr
+  pricingCategories: PricingCategories
 }
 
 export function FAQExtraCostsCards({
   houses,
-  categoryOrder,
-  categoryOrderAttr
+  pricingCategories
 }: FAQExtraCostsCardsProps) {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
@@ -104,7 +97,7 @@ export function FAQExtraCostsCards({
     }
   }, [api])
 
-  if (!houses || houses.length === 0 || !categoryOrder?.length) return null
+  if (!houses || houses.length === 0 || !pricingCategories?.length) return null
 
   return (
     <div className="w-full space-y-4">
@@ -118,8 +111,7 @@ export function FAQExtraCostsCards({
                 styles={HOUSE_STYLES[cleanSlug]}
                 title={stegaClean(house.title) ?? cleanSlug}
                 extraCosts={house.extraCosts}
-                categoryOrder={categoryOrder}
-                categoryOrderAttr={categoryOrderAttr}
+                pricingCategories={pricingCategories}
               />
             )
           })}
@@ -150,16 +142,14 @@ interface ExtraCostsCardProps {
   styles: HouseStyles | undefined
   title: string
   extraCosts: House['extraCosts']
-  categoryOrder: NonNullable<CategoryOrder>
-  categoryOrderAttr?: CategoryOrderAttr
+  pricingCategories: PricingCategories
 }
 
 function ExtraCostsCard({
   styles,
   title,
   extraCosts,
-  categoryOrder,
-  categoryOrderAttr
+  pricingCategories
 }: ExtraCostsCardProps) {
   // Build a lookup map: category slug -> cost item
   const costsByCategory = useMemo(() => {
@@ -191,21 +181,16 @@ function ExtraCostsCard({
             {title}
           </h4>
         </div>
-        <div
-          className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50"
-          data-sanity={categoryOrderAttr?.list()}
-        >
-          {categoryOrder.map((item, index) => {
-            const key = stegaClean(item._key)
-            const categorySlug = stegaClean(item.category?.slug)
-            const categoryTitle = stegaClean(item.category?.title)
+        <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
+          {pricingCategories.map((category, index) => {
+            const categorySlug = stegaClean(category.slug)
+            const categoryTitle = stegaClean(category.title)
             if (!categorySlug) return null
             const cost = costsByCategory[categorySlug]
 
             return (
               <div
-                key={key}
-                data-sanity={categoryOrderAttr?.item(key)}
+                key={category._id}
                 className={cn(
                   'flex items-center justify-between gap-4 px-4 py-3',
                   index % 2 === 1 && 'bg-muted/30'

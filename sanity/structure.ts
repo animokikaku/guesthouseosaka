@@ -129,12 +129,13 @@ export const structure: StructureResolver = (S) =>
                 S,
                 context: S.context
               }),
-              S.listItem()
-                .title('Pricing Categories')
-                .icon(TagIcon)
-                .child(
-                  S.documentTypeList('pricingCategory').title('Pricing Categories')
-                )
+              orderableDocumentListDeskItem({
+                type: 'pricingCategory',
+                title: 'Pricing Categories',
+                icon: TagIcon,
+                S,
+                context: S.context
+              })
             ])
         ),
 

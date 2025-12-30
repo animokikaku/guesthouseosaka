@@ -57,30 +57,6 @@ export const faqPage = defineType({
       group: 'content'
     }),
     defineField({
-      name: 'categoryOrder',
-      title: 'Pricing Categories Order',
-      type: 'array',
-      description:
-        'Order of extra cost categories in the pricing table. Drag to reorder.',
-      of: [
-        defineArrayMember({
-          type: 'reference',
-          to: [{ type: 'pricingCategory' }]
-        })
-      ],
-      validation: (rule) =>
-        rule.custom((refs: Array<{ _ref: string }> | undefined) => {
-          if (!refs || refs.length === 0) return true
-          const refIds = refs.map((ref) => ref._ref)
-          const uniqueIds = new Set(refIds)
-          if (uniqueIds.size !== refIds.length) {
-            return 'Each category can only be added once'
-          }
-          return true
-        }),
-      group: 'content'
-    }),
-    defineField({
       name: 'metaTitle',
       title: 'Meta Title',
       type: 'internationalizedArrayString',

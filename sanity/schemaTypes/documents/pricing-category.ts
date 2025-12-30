@@ -1,3 +1,7 @@
+import {
+  orderRankField,
+  orderRankOrdering
+} from '@sanity/orderable-document-list'
 import { TagIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
@@ -22,8 +26,10 @@ export const pricingCategory = defineType({
       description: 'Unique identifier for the category',
       options: { source: 'title.0.value' },
       validation: (rule) => rule.required()
-    })
+    }),
+    orderRankField({ type: 'pricingCategory' })
   ],
+  orderings: [orderRankOrdering],
   preview: {
     select: {
       title: 'title'

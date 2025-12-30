@@ -614,6 +614,13 @@
           "name": "slug"
         },
         "optional": false
+      },
+      "orderRank": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
       }
     }
   },
@@ -1399,28 +1406,6 @@
         "value": {
           "type": "inline",
           "name": "internationalizedArrayString"
-        },
-        "optional": true
-      },
-      "categoryOrder": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "array",
-          "of": {
-            "type": "object",
-            "attributes": {
-              "_key": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                }
-              }
-            },
-            "rest": {
-              "type": "inline",
-              "name": "pricingCategory.reference"
-            }
-          }
         },
         "optional": true
       },

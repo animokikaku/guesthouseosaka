@@ -10,7 +10,8 @@ import {
 import { useOptimistic } from '@/hooks/use-optimistic'
 import type {
   FaqPageQueryResult,
-  HousesBuildingQueryResult
+  HousesBuildingQueryResult,
+  PricingCategoriesQueryResult
 } from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
@@ -28,16 +29,22 @@ const components: PortableTextComponents = {
 
 type FaqPage = NonNullable<FaqPageQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
+type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 
 type FaqItemsData = Pick<FaqPage, '_id' | '_type' | 'items'>
-type FaqPageData = Pick<FaqPage, '_id' | '_type' | 'items' | 'categoryOrder'>
+type FaqPageData = Pick<FaqPage, '_id' | '_type' | 'items'>
 
 type FAQAccordionProps = {
   faqPage: FaqPageData
+  pricingCategories: PricingCategories
   housesBuilding: Houses
 }
 
-export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
+export function FAQAccordion({
+  faqPage,
+  pricingCategories,
+  housesBuilding
+}: FAQAccordionProps) {
   const t = useTranslations('FAQAccordion')
   const formatter = useFormatter()
   const [items, itemsAttr] = useOptimistic(faqPage as FaqItemsData, 'items')
@@ -105,7 +112,10 @@ export function FAQAccordion({ faqPage, housesBuilding }: FAQAccordionProps) {
           {t('extra_costs.question')}
         </AccordionTrigger>
         <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
-          <FAQExtraCosts faqPage={faqPage} houses={housesBuilding} />
+          <FAQExtraCosts
+            pricingCategories={pricingCategories}
+            houses={housesBuilding}
+          />
         </AccordionContent>
       </AccordionItem>
     </Accordion>

@@ -2,7 +2,11 @@ import { FAQAccordion } from '@/app/[locale]/faq/(components)/faq-accordion'
 import FAQCard from '@/app/[locale]/faq/(components)/faq-card'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
-import { faqPageQuery, housesBuildingQuery } from '@/sanity/lib/queries'
+import {
+  faqPageQuery,
+  housesBuildingQuery,
+  pricingCategoriesQuery
+} from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 
@@ -10,13 +14,21 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
   const { locale } = await params
   setRequestLocale(locale as Locale)
 
-  const [{ data: housesBuilding }, { data: faqPage }] = await Promise.all([
+  const [
+    { data: housesBuilding },
+    { data: faqPage },
+    { data: pricingCategories }
+  ] = await Promise.all([
     sanityFetch({
       query: housesBuildingQuery,
       params: { locale }
     }),
     sanityFetch({
       query: faqPageQuery,
+      params: { locale }
+    }),
+    sanityFetch({
+      query: pricingCategoriesQuery,
       params: { locale }
     })
   ])
@@ -33,9 +45,9 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
         faqPage={{
           _id: faqPage._id,
           _type: faqPage._type,
-          items: faqPage.items,
-          categoryOrder: faqPage.categoryOrder
+          items: faqPage.items
         }}
+        pricingCategories={pricingCategories}
         housesBuilding={housesBuilding}
       />
       <FAQCard

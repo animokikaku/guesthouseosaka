@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { FAQExtraCostsCards } from '../faq-extra-costs-cards'
 import type {
-  FaqPageQueryResult,
-  HousesBuildingQueryResult
+  HousesBuildingQueryResult,
+  PricingCategoriesQueryResult
 } from '@/sanity.types'
 
 // Mock stegaClean to return values unchanged
@@ -24,15 +24,17 @@ vi.mock('@/components/ui/carousel', () => ({
   )
 }))
 
-type CategoryOrder = NonNullable<FaqPageQueryResult>['categoryOrder']
+type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
 
 const createCategory = (
   slug: string,
   title: string
-): NonNullable<CategoryOrder>[number] => ({
-  _key: `key-${slug}`,
-  category: { _id: `cat-${slug}`, slug, title }
+): PricingCategories[number] => ({
+  _id: `cat-${slug}`,
+  slug,
+  title,
+  orderRank: `0|${slug}:`
 })
 
 const createHouse = (
@@ -67,12 +69,14 @@ const createExtraCost = (
 describe('FAQExtraCostsCards', () => {
   describe('empty states', () => {
     it('returns null when houses is undefined', () => {
-      const categoryOrder: CategoryOrder = [createCategory('deposit', 'Deposit')]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
 
       const { container } = render(
         <FAQExtraCostsCards
           houses={undefined as unknown as Houses}
-          categoryOrder={categoryOrder}
+          pricingCategories={pricingCategories}
         />
       )
 
@@ -80,30 +84,22 @@ describe('FAQExtraCostsCards', () => {
     })
 
     it('returns null when houses array is empty', () => {
-      const categoryOrder: CategoryOrder = [createCategory('deposit', 'Deposit')]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
 
       const { container } = render(
-        <FAQExtraCostsCards houses={[]} categoryOrder={categoryOrder} />
+        <FAQExtraCostsCards houses={[]} pricingCategories={pricingCategories} />
       )
 
       expect(container.firstChild).toBeNull()
     })
 
-    it('returns null when categoryOrder is undefined', () => {
+    it('returns null when pricingCategories is empty', () => {
       const houses: Houses = [createHouse('h1', 'orange')]
 
       const { container } = render(
-        <FAQExtraCostsCards houses={houses} categoryOrder={undefined} />
-      )
-
-      expect(container.firstChild).toBeNull()
-    })
-
-    it('returns null when categoryOrder is empty', () => {
-      const houses: Houses = [createHouse('h1', 'orange')]
-
-      const { container } = render(
-        <FAQExtraCostsCards houses={houses} categoryOrder={[]} />
+        <FAQExtraCostsCards houses={houses} pricingCategories={[]} />
       )
 
       expect(container.firstChild).toBeNull()
@@ -115,38 +111,36 @@ describe('FAQExtraCostsCards', () => {
       const houses: Houses = [
         createHouse('h1', 'orange', [createExtraCost('deposit', '¥30,000')])
       ]
-      const categoryOrder: CategoryOrder = [
+      const pricingCategories: PricingCategories = [
         createCategory('deposit', 'Deposit'),
-        { _key: 'no-slug', category: { _id: 'cat-null', slug: '', title: 'No Slug Category' } }
+        { _id: 'cat-null', slug: '', title: 'No Slug Category', orderRank: null }
       ]
 
-      render(<FAQExtraCostsCards houses={houses} categoryOrder={categoryOrder} />)
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
 
       expect(screen.getByText('Deposit')).toBeInTheDocument()
       expect(screen.queryByText('No Slug Category')).not.toBeInTheDocument()
-    })
-
-    it('skips category row when category is null', () => {
-      const houses: Houses = [
-        createHouse('h1', 'orange', [createExtraCost('deposit', '¥30,000')])
-      ]
-      const categoryOrder: CategoryOrder = [
-        createCategory('deposit', 'Deposit'),
-        { _key: 'null-cat', category: null } as unknown as NonNullable<CategoryOrder>[number]
-      ]
-
-      render(<FAQExtraCostsCards houses={houses} categoryOrder={categoryOrder} />)
-
-      expect(screen.getByText('Deposit')).toBeInTheDocument()
     })
   })
 
   describe('missing house values', () => {
     it('displays dash when house has no value for a category', () => {
       const houses: Houses = [createHouse('h1', 'orange', [])]
-      const categoryOrder: CategoryOrder = [createCategory('deposit', 'Deposit')]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
 
-      render(<FAQExtraCostsCards houses={houses} categoryOrder={categoryOrder} />)
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
 
       expect(screen.getByText('–')).toBeInTheDocument()
     })
@@ -155,9 +149,16 @@ describe('FAQExtraCostsCards', () => {
       const houses: Houses = [
         { ...createHouse('h1', 'orange'), extraCosts: null }
       ]
-      const categoryOrder: CategoryOrder = [createCategory('deposit', 'Deposit')]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
 
-      render(<FAQExtraCostsCards houses={houses} categoryOrder={categoryOrder} />)
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
 
       expect(screen.getByText('–')).toBeInTheDocument()
     })
@@ -170,9 +171,16 @@ describe('FAQExtraCostsCards', () => {
         createHouse('h2', 'apple'),
         createHouse('h3', 'lemon')
       ]
-      const categoryOrder: CategoryOrder = [createCategory('deposit', 'Deposit')]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
 
-      render(<FAQExtraCostsCards houses={houses} categoryOrder={categoryOrder} />)
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
 
       expect(screen.getByText('Orange House')).toBeInTheDocument()
       expect(screen.getByText('Apple House')).toBeInTheDocument()
@@ -181,12 +189,17 @@ describe('FAQExtraCostsCards', () => {
 
     it('renders category labels in each card', () => {
       const houses: Houses = [createHouse('h1', 'orange')]
-      const categoryOrder: CategoryOrder = [
+      const pricingCategories: PricingCategories = [
         createCategory('deposit', 'Deposit'),
         createCategory('internet', 'Internet')
       ]
 
-      render(<FAQExtraCostsCards houses={houses} categoryOrder={categoryOrder} />)
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
 
       expect(screen.getByText('Deposit')).toBeInTheDocument()
       expect(screen.getByText('Internet')).toBeInTheDocument()
@@ -199,12 +212,17 @@ describe('FAQExtraCostsCards', () => {
           createExtraCost('internet', 'Free')
         ])
       ]
-      const categoryOrder: CategoryOrder = [
+      const pricingCategories: PricingCategories = [
         createCategory('deposit', 'Deposit'),
         createCategory('internet', 'Internet')
       ]
 
-      render(<FAQExtraCostsCards houses={houses} categoryOrder={categoryOrder} />)
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
 
       expect(screen.getByText('¥30,000')).toBeInTheDocument()
       expect(screen.getByText('Free')).toBeInTheDocument()
@@ -218,63 +236,21 @@ describe('FAQExtraCostsCards', () => {
         createHouse('h2', 'apple'),
         createHouse('h3', 'lemon')
       ]
-      const categoryOrder: CategoryOrder = [createCategory('deposit', 'Deposit')]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
 
-      render(<FAQExtraCostsCards houses={houses} categoryOrder={categoryOrder} />)
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
 
       expect(screen.getByTestId('carousel')).toBeInTheDocument()
       expect(screen.getByTestId('carousel-content')).toBeInTheDocument()
       // 3 carousel items for 3 houses
       expect(screen.getAllByTestId('carousel-item')).toHaveLength(3)
-    })
-  })
-
-  describe('visual editing attributes', () => {
-    it('applies categoryOrderAttr.list() to card content', () => {
-      const houses: Houses = [createHouse('h1', 'orange')]
-      const categoryOrder: CategoryOrder = [createCategory('deposit', 'Deposit')]
-      const categoryOrderAttr = {
-        list: () => 'data-list-attr',
-        item: (key: string) => `data-item-${key}`
-      }
-
-      const { container } = render(
-        <FAQExtraCostsCards
-          houses={houses}
-          categoryOrder={categoryOrder}
-          categoryOrderAttr={categoryOrderAttr}
-        />
-      )
-
-      const listContainer = container.querySelector('[data-sanity="data-list-attr"]')
-      expect(listContainer).toBeInTheDocument()
-    })
-
-    it('applies categoryOrderAttr.item() to each category row', () => {
-      const houses: Houses = [createHouse('h1', 'orange')]
-      const categoryOrder: CategoryOrder = [
-        createCategory('deposit', 'Deposit'),
-        createCategory('internet', 'Internet')
-      ]
-      const categoryOrderAttr = {
-        list: () => 'data-list-attr',
-        item: (key: string) => `data-item-${key}`
-      }
-
-      const { container } = render(
-        <FAQExtraCostsCards
-          houses={houses}
-          categoryOrder={categoryOrder}
-          categoryOrderAttr={categoryOrderAttr}
-        />
-      )
-
-      expect(
-        container.querySelector('[data-sanity="data-item-key-deposit"]')
-      ).toBeInTheDocument()
-      expect(
-        container.querySelector('[data-sanity="data-item-key-internet"]')
-      ).toBeInTheDocument()
     })
   })
 })
