@@ -1,3 +1,8 @@
 
 # Use bd merge for beads JSONL files
 .beads/issues.jsonl merge=beads
+
+# Hide diffs for generated files
+.beads/issues.jsonl -diff linguist-generated=true
+sanity.types.ts -diff linguist-generated=true
+messages/en.d.json.ts -diff linguist-generated=true
