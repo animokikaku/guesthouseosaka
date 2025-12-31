@@ -30,7 +30,7 @@ const heroComponents: PortableTextComponents = {
 const collectionComponents: PortableTextComponents = {
   block: {
     h2: ({ children }) => (
-      <h2 className="text-primary leading-tighter max-w-none self-start text-2xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-4xl xl:tracking-tighter">
+      <h2 className="text-primary leading-tighter max-w-none self-start text-start text-2xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-4xl xl:tracking-tighter">
         {children}
       </h2>
     ),
