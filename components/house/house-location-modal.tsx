@@ -75,7 +75,7 @@ export function HouseLocationModal({
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription className="sr-only">{title}</DrawerDescription>
           </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-6">
+          <div className="overflow-y-auto px-4 pb-8">
             <LocationSections details={details} />
           </div>
         </DrawerContent>

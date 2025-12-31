@@ -11,6 +11,15 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger
+} from '@/components/ui/drawer'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { useLegalNotice } from '@/hooks/use-legal-notice'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useFormatter, useTranslations } from 'next-intl'
@@ -40,46 +49,70 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
   const t = useTranslations('LegalNoticeDialog')
   const formatter = useFormatter()
   const data = useLegalNotice()
+  const isMobile = useIsMobile()
 
   const lastUpdated = data?.lastUpdated
     ? new Date(data.lastUpdated)
     : new Date(Date.UTC(2025, 11, 4))
 
+  const trigger = (
+    <Button
+      variant="link"
+      size="sm"
+      className="h-auto px-0 font-medium underline-offset-4"
+    >
+      {children}
+    </Button>
+  )
+
+  const content = (
+    <div className="space-y-6 text-sm leading-6">
+      <p className="text-muted-foreground text-xs">
+        {t('last_updated', {
+          date: formatter.dateTime(lastUpdated, {
+            dateStyle: 'long'
+          })
+        })}
+      </p>
+      {data?.content ? (
+        <div className="space-y-2">
+          <PortableText
+            value={data.content}
+            components={legalContentComponents}
+          />
+        </div>
+      ) : null}
+    </div>
+  )
+
+  if (isMobile) {
+    return (
+      <Drawer>
+        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+        <DrawerContent className="max-h-[90vh]">
+          <DrawerHeader>
+            <DrawerTitle>{data?.title}</DrawerTitle>
+            <DrawerDescription className="sr-only">
+              {t('description')}
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="overflow-y-auto px-4 pb-8">{content}</div>
+        </DrawerContent>
+      </Drawer>
+    )
+  }
+
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          variant="link"
-          size="sm"
-          className="h-auto px-0 font-medium underline-offset-4"
-        >
-          {children}
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-3xl">
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="max-h-[85vh] overflow-y-auto md:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{data?.title}</DialogTitle>
           <DialogDescription className="sr-only">
             {t('description')}
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-6 text-sm leading-6">
-          <p className="text-muted-foreground text-xs">
-            {t('last_updated', {
-              date: formatter.dateTime(lastUpdated, {
-                dateStyle: 'long'
-              })
-            })}
-          </p>
-          {data?.content ? (
-            <div className="space-y-2">
-              <PortableText
-                value={data.content}
-                components={legalContentComponents}
-              />
-            </div>
-          ) : null}
-        </div>
+        {content}
         <DialogFooter className="pt-4">
           <DialogClose asChild>
             <Button variant="secondary">{t('close_button')}</Button>
