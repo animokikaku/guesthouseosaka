@@ -44,6 +44,13 @@ const createHouse = (
   slug,
   building: null,
   phone: null,
+  image: {
+    asset: null,
+    hotspot: null,
+    crop: null,
+    alt: null,
+    lqip: null
+  },
   extraCosts
 })
 

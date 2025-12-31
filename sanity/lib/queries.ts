@@ -221,6 +221,13 @@ export const housesBuildingQuery =
     floors
   },
   phone,
+  image{
+    asset,
+    hotspot,
+    crop,
+    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+    "lqip": asset->metadata.lqip
+  },
   "extraCosts": array::compact(extraCosts[]{
     "slug": category->slug.current,
     "value": coalesce(value[_key == $locale][0].value, value[_key == "en"][0].value)[]
