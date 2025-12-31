@@ -52,9 +52,13 @@ export function StickyCategoryNav({
                 key={category.key}
                 ref={isActive ? activeButtonRef : undefined}
                 type="button"
-                data-active={isActive}
                 onClick={() => scrollToCategory(category.key)}
-                className="text-muted-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground focus-visible:ring-ring/50 shrink-0 rounded-md px-3 py-1.5 text-sm font-medium outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1"
+                className={cn(
+                  'shrink-0 px-3 py-1.5 text-sm font-medium transition-colors',
+                  isActive
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-primary'
+                )}
               >
                 {category.label}
               </button>
