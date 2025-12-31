@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
@@ -45,7 +46,12 @@ const legalContentComponents: PortableTextComponents = {
   }
 }
 
-export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
+type LegalNoticeDialogProps = {
+  children: React.ReactNode
+  onAgree?: () => void
+}
+
+export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps) {
   const t = useTranslations('LegalNoticeDialog')
   const formatter = useFormatter()
   const data = useLegalNotice()
@@ -96,7 +102,16 @@ export function LegalNoticeDialog({ children }: { children: React.ReactNode }) {
               {t('description')}
             </DrawerDescription>
           </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-8">{content}</div>
+          <div className="overflow-y-auto px-4 pb-8">
+            {content}
+            {onAgree && (
+              <DrawerClose asChild>
+                <Button onClick={onAgree} className="mt-6 w-full">
+                  {t('agree_button')}
+                </Button>
+              </DrawerClose>
+            )}
+          </div>
         </DrawerContent>
       </Drawer>
     )

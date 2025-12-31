@@ -36,7 +36,9 @@ export function PrivacyPolicyField() {
             <p className="text-muted-foreground">
               {t.rich('fields.privacy_policy_agreement', {
                 link: (chunks) => (
-                  <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
+                  <LegalNoticeDialog onAgree={() => field.handleChange(true)}>
+                    {chunks}
+                  </LegalNoticeDialog>
                 )
               })}
             </p>
