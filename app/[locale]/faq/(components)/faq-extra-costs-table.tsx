@@ -58,7 +58,7 @@ export function FAQExtraCostsTable({
     <div className="border-border overflow-hidden rounded-xs border">
       <Table className="w-full table-fixed">
         <colgroup>
-          <col className="w-30" />
+          <col className="w-36" />
           {houses.map(({ _id }) => (
             <col key={_id} />
           ))}
