@@ -81,7 +81,7 @@ function CategoryThumbnail({ category }: { category: GalleryCategory }) {
           targetElement.scrollIntoView({ behavior: 'smooth' })
         }
       }}
-      className="border-primary-foreground/20 hover:border-primary-foreground/40 flex h-auto cursor-pointer flex-col gap-2 rounded-lg border p-3 transition-colors"
+      className="border-primary-foreground/20 hover:border-primary-foreground/40 flex h-auto w-[154px] shrink-0 cursor-pointer flex-col gap-2 rounded-lg border p-3 transition-colors"
     >
       <div className="relative aspect-4/3 w-32 overflow-hidden rounded-md">
         <Image
@@ -102,7 +102,7 @@ function CategoryThumbnail({ category }: { category: GalleryCategory }) {
           </Badge>
         </div>
       </div>
-      <span className="text-xs font-medium">{category.label}</span>
+      <span className="line-clamp-2 text-xs font-medium">{category.label}</span>
     </button>
   )
 }
