@@ -42,7 +42,7 @@ export function GalleryModal({ gallery, title }: GalleryModalProps) {
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-30" />
-        <Dialog.Content className="dark text-foreground bg-background sm:bg-background/50 fixed inset-0 z-40 max-w-none translate-x-0 translate-y-0 rounded-none border-0 p-0 shadow-none backdrop-blur-2xl">
+        <Dialog.Content className="text-foreground bg-background sm:bg-background/50 fixed inset-0 z-40 max-w-none translate-x-0 translate-y-0 rounded-none border-0 p-0 shadow-none backdrop-blur-2xl">
           <Dialog.Title className="sr-only">{t('title')}</Dialog.Title>
           <Dialog.Description className="sr-only">
             {t('description', { title })}
