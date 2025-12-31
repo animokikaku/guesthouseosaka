@@ -1,5 +1,5 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
-import { HouseGallery } from '@/components/gallery/house-gallery'
+import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
@@ -39,28 +39,20 @@ export default async function GalleryPage({
   return (
     <div className="bg-background text-foreground fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden">
       <div className="flex h-full w-full flex-col overflow-hidden">
-        <div className="shrink-0 p-4">
-          <Button variant="ghost" size="icon" asChild className="rounded-full">
-            <Link href={{ pathname: '/[house]', params: { house } }}>
-              <ArrowLeftIcon className="size-6" />
-              <span className="sr-only">{t('close')}</span>
-            </Link>
-          </Button>
-        </div>
-
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto scroll-smooth">
-          <div className="container-wrapper">
-            <div className="container py-8 md:py-12">
-              <HouseGallery
-                _id={data._id}
-                _type={data._type}
-                gallery={data.gallery}
-                title={data.title ?? ''}
-              />
-            </div>
-          </div>
-        </div>
+        <GalleryPageContent
+          _id={data._id}
+          _type={data._type}
+          gallery={data.gallery}
+          title={data.title ?? ''}
+          backButton={
+            <Button variant="ghost" size="icon" asChild className="shrink-0 rounded-full">
+              <Link href={{ pathname: '/[house]', params: { house } }}>
+                <ArrowLeftIcon className="size-6" />
+                <span className="sr-only">{t('close')}</span>
+              </Link>
+            </Button>
+          }
+        />
       </div>
     </div>
   )

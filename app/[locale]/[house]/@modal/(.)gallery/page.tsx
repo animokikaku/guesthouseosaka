@@ -1,6 +1,9 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
-import { HouseGallery } from '@/components/gallery/house-gallery'
-import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
+import {
+  GalleryModalCloseButton,
+  GalleryModalWrapper
+} from '@/components/gallery/gallery-modal-wrapper'
+import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery } from '@/sanity/lib/queries'
@@ -35,11 +38,12 @@ export default async function GalleryModalPage({
 
   return (
     <GalleryModalWrapper title={data.title ?? ''}>
-      <HouseGallery
+      <GalleryPageContent
         _id={data._id}
         _type={data._type}
         gallery={data.gallery}
         title={data.title ?? ''}
+        backButton={<GalleryModalCloseButton />}
       />
     </GalleryModalWrapper>
   )

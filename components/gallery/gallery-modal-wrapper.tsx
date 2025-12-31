@@ -35,20 +35,23 @@ export function GalleryModalWrapper({
             {t('description', { title })}
           </Dialog.Description>
           <div className="flex h-full w-full flex-col overflow-hidden">
-            <Dialog.Close asChild>
-              <Button variant="ghost" size="icon" className="m-4 rounded-full">
-                <ArrowLeftIcon className="size-6" />
-                <span className="sr-only">{t('close')}</span>
-              </Button>
-            </Dialog.Close>
-            <div className="flex-1 overflow-y-auto scroll-smooth">
-              <div className="container-wrapper">
-                <div className="container py-8 md:py-12">{children}</div>
-              </div>
-            </div>
+            {children}
           </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
+  )
+}
+
+export function GalleryModalCloseButton() {
+  const t = useTranslations('GalleryModal')
+
+  return (
+    <Dialog.Close asChild>
+      <Button variant="ghost" size="icon" className="shrink-0 rounded-full">
+        <ArrowLeftIcon className="size-6" />
+        <span className="sr-only">{t('close')}</span>
+      </Button>
+    </Dialog.Close>
   )
 }

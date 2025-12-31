@@ -1,0 +1,76 @@
+'use client'
+
+import { GalleryModal } from '@/components/gallery/gallery-modal'
+import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
+import { useStickyNav } from '@/hooks/use-sticky-nav'
+import { groupGalleryByCategory, type Gallery } from '@/lib/gallery'
+import type { HouseQueryResult } from '@/sanity.types'
+import * as React from 'react'
+import { HouseGalleryClient } from './house-gallery-client'
+
+type GalleryPageContentProps = {
+  _id: NonNullable<HouseQueryResult>['_id']
+  _type: NonNullable<HouseQueryResult>['_type']
+  gallery: Gallery
+  title: string
+  /** Back button element (Link or Dialog.Close) */
+  backButton: React.ReactNode
+}
+
+export function GalleryPageContent({
+  _id,
+  _type,
+  gallery,
+  title,
+  backButton
+}: GalleryPageContentProps) {
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null)
+  const [scrollContainer, setScrollContainer] =
+    React.useState<HTMLDivElement | null>(null)
+
+  // Compute categories for sticky nav
+  const categories = React.useMemo(
+    () => groupGalleryByCategory(gallery).filter((c) => c.items.length > 0),
+    [gallery]
+  )
+
+  const { isVisible, sentinelRef } = useStickyNav({ scrollContainer })
+
+  // Set scroll container after mount (needed for IntersectionObserver root)
+  React.useEffect(() => {
+    setScrollContainer(scrollContainerRef.current)
+  }, [])
+
+  return (
+    <>
+      {/* Header with back button and category nav */}
+      <div className="border-border/50 flex shrink-0 items-center gap-2 p-4 md:border-b">
+        {backButton}
+        <div className="container-wrapper min-w-0 flex-1">
+          <div className="container p-0">
+            <StickyCategoryNav categories={categories} isVisible={isVisible} />
+          </div>
+        </div>
+      </div>
+
+      {/* Scrollable Content */}
+      <div
+        ref={scrollContainerRef}
+        className="relative flex-1 overflow-y-auto scroll-smooth"
+      >
+        <div className="container-wrapper">
+          <div className="container py-8 md:py-12">
+            <HouseGalleryClient
+              _id={_id}
+              _type={_type}
+              gallery={gallery}
+              sentinelRef={sentinelRef}
+            />
+          </div>
+        </div>
+      </div>
+
+      <GalleryModal gallery={gallery} title={title} />
+    </>
+  )
+}

@@ -14,24 +14,27 @@ import type { HouseQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { stegaClean } from '@sanity/client/stega'
 import Image from 'next/image'
-import { useMemo } from 'react'
+import * as React from 'react'
 import { GalleryImageButton } from './gallery-image-button'
 
 type HouseGalleryClientProps = {
   _id: NonNullable<HouseQueryResult>['_id']
   _type: NonNullable<HouseQueryResult>['_type']
   gallery: Gallery
+  /** Ref for sentinel element (used to detect when thumbnails scroll out of view) */
+  sentinelRef?: React.RefObject<HTMLDivElement | null>
 }
 
 export function HouseGalleryClient({
   _id,
   _type,
-  gallery
+  gallery,
+  sentinelRef
 }: HouseGalleryClientProps) {
   const [data, attr] = useOptimistic({ _id, _type, gallery }, 'gallery')
 
   // Group by category for display
-  const categories = useMemo(() => groupGalleryByCategory(data), [data])
+  const categories = React.useMemo(() => groupGalleryByCategory(data), [data])
 
   // Filter out categories with no items
   const validCategories = categories.filter((c) => c.items.length > 0)
@@ -51,6 +54,8 @@ export function HouseGalleryClient({
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
+        {/* Sentinel element - when this scrolls out of view, show sticky nav */}
+        {sentinelRef && <div ref={sentinelRef} aria-hidden="true" />}
       </div>
 
       {/* All Categories Grid */}
@@ -118,7 +123,7 @@ function CategoryGrid({ category, attr }: CategoryGridProps) {
   if (category.items.length === 0) return null
 
   return (
-    <div id={category.key} className="scroll-mt-8 space-y-4">
+    <div id={category.key} className="scroll-mt-3 space-y-4">
       <h3 className="text-xl font-semibold">{category.label}</h3>
       <div
         className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4"
