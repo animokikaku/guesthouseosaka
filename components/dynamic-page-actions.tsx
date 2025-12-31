@@ -3,7 +3,7 @@
 import { PageActions } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { useOptimistic } from '@/hooks/use-optimistic'
-import { Link } from '@/i18n/navigation'
+import { Link, usePathname } from '@/i18n/navigation'
 import { Icon } from '@/lib/icons'
 import { ContactPageQueryResult, FaqPageQueryResult } from '@/sanity.types'
 import { stegaClean } from '@sanity/client/stega'
@@ -16,6 +16,7 @@ interface DynamicPageActionsProps {
 
 export function DynamicPageActions({ page }: DynamicPageActionsProps) {
   const [actions, attr] = useOptimistic(page, 'actions')
+  const currentPathname = usePathname()
 
   if (!actions || actions.length === 0) return null
 
@@ -35,7 +36,9 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
 
         // Parse href for internal links with hash
         const hasHash = href.includes('#')
-        const [pathname, hash] = href.split('#')
+        const [rawPathname, hash] = href.split('#')
+        // Handle hash-only links (e.g., "#section") by using current pathname
+        const pathname = rawPathname || currentPathname
 
         if (isExternal) {
           return (

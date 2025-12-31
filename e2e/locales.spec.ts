@@ -52,28 +52,32 @@ test.describe('Locale Routes', () => {
  */
 async function verifyPageContent(page: Page, route: Route) {
   switch (route.selector) {
-    case 'heading':
+    case 'heading': {
       // Homepage and house pages should have a heading
       const heading = page.getByRole('heading').first()
       await expect(heading).toBeVisible()
       break
+    }
 
-    case 'a[href*="/contact/"]':
+    case 'a[href*="/contact/"]': {
       // Contact page should have links to contact form types
       const contactLinks = page.locator('a[href*="/contact/"]')
       await expect(contactLinks.first()).toBeVisible()
       break
+    }
 
-    case '[data-slot="accordion"]':
+    case '[data-slot="accordion"]': {
       // FAQ page should have an accordion
       const accordion = page.locator('[data-slot="accordion"]')
       await expect(accordion).toBeVisible()
       break
+    }
 
-    case 'img':
+    case 'img': {
       // Gallery page should have images
       const images = page.locator('img')
       await expect(images.first()).toBeVisible()
       break
+    }
   }
 }

@@ -6,7 +6,7 @@ import type { LucideIcon } from 'lucide-react'
 export type IconName = (typeof allowedIcons)[number]
 
 export interface IconProps extends React.ComponentProps<LucideIcon> {
-  name: string
+  name: IconName
 }
 
 /**

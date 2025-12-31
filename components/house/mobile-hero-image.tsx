@@ -88,7 +88,7 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
                   src={src}
                   alt={image.alt ?? ''}
                   fill
-                  preload={index === 0}
+                  priority={index === 0}
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   className="object-cover"
                   sizes="(max-width: 639px) 100vw, 0"

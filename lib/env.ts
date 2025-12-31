@@ -19,9 +19,9 @@ export const env = createEnv({
         message: 'Must be a Vercel Blob Storage public URL'
       }),
     NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().min(1),
-    NEXT_PUBLIC_SANITY_API_VERSION: z.string().default('2025-12-16'),
+    NEXT_PUBLIC_SANITY_API_VERSION: z.string().min(1),
     NEXT_PUBLIC_SANITY_DATASET: z.enum(['production', 'development']),
-    NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().default('515wijoz')
+    NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1)
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,

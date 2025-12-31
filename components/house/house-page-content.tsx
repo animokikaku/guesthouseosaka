@@ -57,7 +57,7 @@ export function HousePageContent({
       <MobileHeroImage href={href} images={mobileHeroImages} />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
-          <PageHeaderHeading>{title}</PageHeaderHeading>
+          <PageHeaderHeading id={`${slug}-title`}>{title}</PageHeaderHeading>
           <PageHeaderDescription>{description}</PageHeaderDescription>
           <div
             className={cn('mx-auto mt-6 h-1 w-24', HOUSE_THEME_COLORS[slug])}

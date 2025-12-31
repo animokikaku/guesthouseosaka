@@ -109,28 +109,30 @@ describe('ContactNav', () => {
   })
 
   describe('active state', () => {
-    it('sets data-active attribute based on current segment', () => {
-      // Mock useSelectedLayoutSegment to return 'tour'
-      vi.doMock('next/navigation', async () => {
-        const actual = await vi.importActual('next/navigation')
-        return {
-          ...actual,
-          useSelectedLayoutSegment: () => 'tour'
-        }
-      })
+    it('sets data-active attribute based on current segment', async () => {
+      // Reset modules to allow re-mocking
+      vi.resetModules()
+
+      // Mock useSelectedLayoutSegment to return 'tour' before importing component
+      vi.doMock('next/navigation', () => ({
+        useSelectedLayoutSegment: () => 'tour'
+      }))
+
+      // Re-import the component after mocking
+      const { ContactNav: ContactNavWithTourActive } = await import('../contact-nav')
 
       const items: ContactNavItem[] = [
         { id: 'tour-1', slug: 'tour', title: 'Book a Tour' },
         { id: 'move-in-1', slug: 'move-in', title: 'Move In' }
       ]
-      render(<ContactNav items={items} />)
+      render(<ContactNavWithTourActive items={items} />)
 
       const tourLink = screen.getByRole('link', { name: 'Book a Tour' })
       const moveInLink = screen.getByRole('link', { name: 'Move In' })
 
-      // Both links have data-active attribute
-      expect(tourLink).toHaveAttribute('data-active')
-      expect(moveInLink).toHaveAttribute('data-active')
+      // Only tour link should have data-active="true"
+      expect(tourLink).toHaveAttribute('data-active', 'true')
+      expect(moveInLink).toHaveAttribute('data-active', 'false')
     })
   })
 

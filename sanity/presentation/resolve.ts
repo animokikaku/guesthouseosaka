@@ -3,6 +3,15 @@ import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
 
 type ContactTypeSlug = 'tour' | 'move-in' | 'other'
 
+const VALID_CONTACT_SLUGS: ContactTypeSlug[] = ['tour', 'move-in', 'other']
+
+function isContactTypeSlug(slug: unknown): slug is ContactTypeSlug {
+  return (
+    typeof slug === 'string' &&
+    VALID_CONTACT_SLUGS.includes(slug as ContactTypeSlug)
+  )
+}
+
 const l = {
   home: () => ({ title: 'Home', href: '/' }),
   house: (slug: HouseIdentifier) => ({ title: 'House', href: `/${slug}` }),
@@ -42,9 +51,13 @@ export const resolve: PresentationPluginOptions['resolve'] = {
     }),
     contactType: defineLocations({
       select: { slug: 'slug' },
-      resolve: (doc) => ({
-        locations: [l.contact(), l.contactType(doc?.slug)]
-      })
+      resolve: (doc) => {
+        if (!isContactTypeSlug(doc?.slug)) {
+          console.warn(`Invalid contact type slug: ${doc?.slug}`)
+          return { locations: [l.contact()] }
+        }
+        return { locations: [l.contact(), l.contactType(doc.slug)] }
+      }
     }),
     // Settings appear on all pages (header/footer)
     settings: defineLocations({

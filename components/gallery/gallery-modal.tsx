@@ -42,7 +42,7 @@ export function GalleryModal({ gallery, title }: GalleryModalProps) {
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-30" />
-        <Dialog.Content className="bg-background text-foreground fixed inset-0 z-40 flex items-center justify-center border-0 p-0 sm:bg-background/50 sm:backdrop-blur-2xl">
+        <Dialog.Content className="bg-background text-foreground sm:bg-background/50 fixed inset-0 z-40 flex items-center justify-center border-0 p-0 sm:backdrop-blur-2xl">
           <Dialog.Title className="sr-only">{t('title')}</Dialog.Title>
           <Dialog.Description className="sr-only">
             {t('description', { title })}
@@ -71,7 +71,7 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
 
   const imageList = gallery ?? []
   const currentAlt =
-    selectedIndex !== null
+    selectedIndex !== null && selectedIndex < imageList.length
       ? stegaClean(imageList[selectedIndex].image.alt)
       : null
 

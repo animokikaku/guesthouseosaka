@@ -6,10 +6,10 @@ type SanityDocument = {
   type: string
 }
 
-const { projectId, dataset, stega } = client.config()
-const baseUrl = typeof stega.studioUrl === 'string' ? stega.studioUrl : ''
-
 export function createDataAttribute(data: SanityDocument) {
+  const { projectId, dataset, stega } = client.config()
+  const baseUrl = typeof stega.studioUrl === 'string' ? stega.studioUrl : ''
+
   return (fieldKey: string, itemKey?: string) => {
     const path = itemKey ? `${fieldKey}[_key=="${itemKey}"]` : fieldKey
 

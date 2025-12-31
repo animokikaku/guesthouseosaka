@@ -23,9 +23,16 @@ export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
   const t = useTranslations('SiteHeader')
   const isMobile = useIsMobile()
 
-  const houseItems = (houses ?? []).map(
-    ({ slug, title, description, caption, image }) => {
-      const { icon } = assets[slug]
+  const houseItems = (houses ?? [])
+    .filter((house): house is typeof house & { slug: keyof typeof assets } => {
+      const isValidSlug = house.slug in assets
+      if (!isValidSlug) {
+        console.warn(`Missing asset for house slug: ${house.slug}`)
+      }
+      return isValidSlug
+    })
+    .map(({ slug, title, description, caption, image }) => {
+      const asset = assets[slug]
       const src = urlFor(image).width(250).height(150).dpr(2).fit('crop').url()
 
       return {
@@ -34,15 +41,14 @@ export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
         label: title ?? slug,
         description: description ?? undefined,
         caption: caption ?? undefined,
-        icon,
+        icon: asset.icon,
         background: {
           src,
           alt: image?.alt ?? '',
           blurDataURL: image?.lqip ?? undefined
         }
       }
-    }
-  )
+    })
 
   const navItems: NavItems = [
     {

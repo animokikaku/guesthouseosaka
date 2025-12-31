@@ -37,12 +37,17 @@ const GALLERY_LAYOUTS = [
  * @returns Array of GalleryImage with pre-built URLs
  */
 export function toGalleryImages(images: GalleryWallImages): GalleryImage[] {
-  return images.map((img, index) => {
+  return images.slice(0, GALLERY_LAYOUTS.length).map((img, index) => {
     const layout = GALLERY_LAYOUTS[index]
 
     return {
       _key: img._key,
-      src: urlFor(img).width(layout.width).height(layout.height).dpr(2).fit('crop').url(),
+      src: urlFor(img)
+        .width(layout.width)
+        .height(layout.height)
+        .dpr(2)
+        .fit('crop')
+        .url(),
       alt: img.alt ?? null,
       blurDataURL: img.preview ?? null,
       width: layout.width,
