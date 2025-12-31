@@ -81,7 +81,7 @@ function CategoryThumbnail({ category }: { category: GalleryCategory }) {
           targetElement.scrollIntoView({ behavior: 'smooth' })
         }
       }}
-      className="border-primary-foreground/20 hover:border-primary-foreground/40 flex h-auto w-[154px] shrink-0 cursor-pointer flex-col gap-2 rounded-lg border p-3 transition-colors"
+      className="group focus-visible:ring-ring flex h-auto w-[154px] shrink-0 cursor-pointer flex-col gap-2 rounded-lg p-3 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
     >
       <div className="relative aspect-4/3 w-32 overflow-hidden rounded-md">
         <Image
@@ -102,7 +102,9 @@ function CategoryThumbnail({ category }: { category: GalleryCategory }) {
           </Badge>
         </div>
       </div>
-      <span className="line-clamp-2 text-xs font-medium">{category.label}</span>
+      <span className="text-muted-foreground group-hover:text-foreground line-clamp-2 text-xs font-medium transition-colors">
+        {category.label}
+      </span>
     </button>
   )
 }
