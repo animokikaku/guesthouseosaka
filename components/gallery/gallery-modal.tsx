@@ -42,24 +42,22 @@ export function GalleryModal({ gallery, title }: GalleryModalProps) {
     >
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-30" />
-        <Dialog.Content className="text-foreground bg-background sm:bg-background/50 fixed inset-0 z-40 max-w-none translate-x-0 translate-y-0 rounded-none border-0 p-0 shadow-none backdrop-blur-2xl">
+        <Dialog.Content className="bg-background text-foreground fixed inset-0 z-40 flex items-center justify-center border-0 p-0 sm:bg-background/50 sm:backdrop-blur-2xl">
           <Dialog.Title className="sr-only">{t('title')}</Dialog.Title>
           <Dialog.Description className="sr-only">
             {t('description', { title })}
           </Dialog.Description>
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <GalleryModalCarousel gallery={gallery} />
-            <Dialog.Close asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-0 left-0 m-4 rounded-full"
-              >
-                <ArrowLeftIcon className="size-6" />
-                <span className="sr-only">{t('close')}</span>
-              </Button>
-            </Dialog.Close>
-          </div>
+          <GalleryModalCarousel gallery={gallery} />
+          <Dialog.Close asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-4 left-4 rounded-full"
+            >
+              <ArrowLeftIcon className="size-6" />
+              <span className="sr-only">{t('close')}</span>
+            </Button>
+          </Dialog.Close>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
