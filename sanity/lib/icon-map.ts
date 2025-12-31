@@ -4,6 +4,7 @@ import {
   Bed,
   Bike,
   BookText,
+  Building,
   Cable,
   ChefHat,
   Cigarette,
@@ -13,8 +14,11 @@ import {
   Lock,
   Mail,
   Mailbox,
+  Map,
+  MapPin,
   Microwave,
   PartyPopper,
+  PencilRuler,
   Phone,
   Plug,
   Refrigerator,
@@ -66,5 +70,9 @@ export const iconMap: Record<string, LucideIcon> = {
   'utensils-crossed': UtensilsCrossed,
   'washing-machine': WashingMachine,
   wifi: Wifi,
-  wind: Wind
+  wind: Wind,
+  building: Building,
+  'pencil-ruler': PencilRuler,
+  'map-pin': MapPin,
+  map: Map
 }

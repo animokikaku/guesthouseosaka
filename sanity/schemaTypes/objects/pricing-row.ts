@@ -1,4 +1,5 @@
 import { DocumentTextIcon } from '@sanity/icons'
+import { toPlainText } from '@portabletext/react'
 import { defineField, defineType } from 'sanity'
 
 export const pricingRow = defineType({
@@ -26,11 +27,13 @@ export const pricingRow = defineType({
   ],
   preview: {
     select: {
-      label: 'label.0.value'
+      label: 'label.0.value',
+      content: 'content.0.value'
     },
-    prepare({ label }) {
+    prepare({ label, content }) {
       return {
-        title: label || 'No label'
+        title: label || 'No label',
+        subtitle: content ? toPlainText(content) : 'No content'
       }
     }
   }

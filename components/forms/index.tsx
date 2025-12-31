@@ -33,6 +33,8 @@ export { MoveInForm } from './move-in-form'
 export { TourForm } from './tour-form'
 export { useFormSubmit } from './use-form-submit'
 
+export type HouseTitles = HousesTitlesQueryResult
+
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts()
 
