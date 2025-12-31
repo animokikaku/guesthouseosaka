@@ -15,6 +15,7 @@ reviews:
     drafts: false
     base_branches:
       - main
+    max_files: 300
   path_instructions:
     - path: "**/*.tsx"
       instructions: |
