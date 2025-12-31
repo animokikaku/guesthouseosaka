@@ -34,7 +34,15 @@ export function GalleryPageContent({
     [gallery]
   )
 
-  const { isVisible, sentinelRef } = useStickyNav({ scrollContainer })
+  const sectionIds = React.useMemo(
+    () => categories.map((c) => c.key),
+    [categories]
+  )
+
+  const { isVisible, sentinelRef, activeId } = useStickyNav({
+    sectionIds,
+    scrollContainer
+  })
 
   // Set scroll container after mount (needed for IntersectionObserver root)
   React.useEffect(() => {
@@ -48,7 +56,11 @@ export function GalleryPageContent({
         {backButton}
         <div className="container-wrapper min-w-0 flex-1">
           <div className="container p-0">
-            <StickyCategoryNav categories={categories} isVisible={isVisible} />
+            <StickyCategoryNav
+              categories={categories}
+              activeId={activeId}
+              isVisible={isVisible}
+            />
           </div>
         </div>
       </div>
