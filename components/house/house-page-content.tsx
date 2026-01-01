@@ -15,7 +15,7 @@ import { Link } from '@/i18n/navigation'
 import { featuredToGalleryImage, type GalleryImage } from '@/lib/gallery'
 import {
   toAboutContent,
-  toAmenityItems,
+  toAmenityCategories,
   toBuildingData,
   toLocationData,
   toMapData,
@@ -34,7 +34,7 @@ export function HousePageContent({
   description,
   gallery,
   featuredImage,
-  amenities,
+  amenityCategories,
   location,
   map,
   pricing,
@@ -92,7 +92,7 @@ export function HousePageContent({
               <HouseAmenities
                 documentId={_id}
                 documentType={_type}
-                amenities={toAmenityItems(amenities)}
+                amenityCategories={toAmenityCategories(amenityCategories)}
               />
               <HouseLocation
                 location={toLocationData(location)}

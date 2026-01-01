@@ -6,7 +6,8 @@ import {
   createBuilding,
   createLocation,
   createMap,
-  createAmenity,
+  createAmenityCategory,
+  createAmenityItem,
   createPricingRow,
   createGalleryItem,
   createSanityImage
@@ -22,8 +23,8 @@ vi.mock('@/components/house/house-about', () => ({
 }))
 
 vi.mock('@/components/house/house-amenities', () => ({
-  HouseAmenities: ({ amenities }: { amenities: unknown[] }) => (
-    <div data-testid="house-amenities" data-count={amenities?.length ?? 0}>
+  HouseAmenities: ({ amenityCategories }: { amenityCategories: unknown[] }) => (
+    <div data-testid="house-amenities" data-count={amenityCategories?.length ?? 0}>
       HouseAmenities
     </div>
   )
@@ -122,7 +123,12 @@ const createBaseProps = (slugOverride?: HouseSlug): Props => {
     image: createMockImage('House image'),
     gallery: [createGalleryItem({ _key: 'g1' }), createGalleryItem({ _key: 'g2' })],
     featuredImage: createSanityImage({ alt: 'Featured image' }),
-    amenities: [createAmenity({ _key: 'a1' }), createAmenity({ _key: 'a2' })],
+    amenityCategories: [
+      createAmenityCategory({
+        _key: 'cat1',
+        items: [createAmenityItem({ _key: 'a1' }), createAmenityItem({ _key: 'a2' })]
+      })
+    ],
     location: createLocation(),
     map: createMap(),
     pricing: [createPricingRow({ _key: 'p1' })],
@@ -200,11 +206,12 @@ describe('HousePageContent', () => {
       expect(about).toHaveAttribute('data-slug', 'orange')
     })
 
-    it('renders HouseAmenities with transformed amenities', () => {
+    it('renders HouseAmenities with transformed amenity categories', () => {
       render(<HousePageContent {...createBaseProps()} />)
 
       const amenities = screen.getByTestId('house-amenities')
-      expect(amenities).toHaveAttribute('data-count', '2')
+      // Count of categories, not individual items
+      expect(amenities).toHaveAttribute('data-count', '1')
     })
 
     it('renders HousePricing with transformed pricing rows', () => {

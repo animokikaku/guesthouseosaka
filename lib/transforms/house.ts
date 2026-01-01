@@ -1,6 +1,7 @@
 import type { PortableTextBlock } from '@portabletext/types'
 import type { HouseQueryResult } from '@/sanity.types'
 import type {
+  AmenityCategoryData,
   AmenityItemData,
   BuildingData,
   LocationData,
@@ -17,7 +18,7 @@ type HouseBuilding = NonNullable<HouseQueryResult>['building']
 type HouseLocation = NonNullable<HouseQueryResult>['location']
 type HouseMap = NonNullable<HouseQueryResult>['map']
 type HousePricing = NonNullable<HouseQueryResult>['pricing']
-type HouseAmenities = NonNullable<HouseQueryResult>['amenities']
+type HouseAmenityCategories = NonNullable<HouseQueryResult>['amenityCategories']
 type HouseAbout = NonNullable<HouseQueryResult>['about']
 
 // ============================================
@@ -135,27 +136,33 @@ export function toPricingRows(pricing: HousePricing): PricingRowData[] {
 // ============================================
 
 /**
- * Transforms house amenities array to AmenityItemData array
- * @param amenities - Raw amenities data from Sanity query
- * @returns Array of AmenityItemData with category, label, icon, note, and featured
+ * Transforms house amenity categories to AmenityCategoryData array
+ * @param amenityCategories - Raw amenity categories from Sanity query (nested structure)
+ * @returns Array of AmenityCategoryData with category info and items
  */
-export function toAmenityItems(amenities: HouseAmenities): AmenityItemData[] {
-  if (!amenities) {
+export function toAmenityCategories(
+  amenityCategories: HouseAmenityCategories
+): AmenityCategoryData[] {
+  if (!amenityCategories) {
     return []
   }
 
-  return amenities.map((amenity) => ({
-    _key: amenity._key,
-    label: amenity.label ?? null,
-    icon: amenity.icon,
-    note: amenity.note ?? null,
-    featured: amenity.featured ?? null,
+  return amenityCategories.map((cat) => ({
+    _key: cat._key,
     category: {
-      _id: amenity.category._id,
-      key: amenity.category.key,
-      label: amenity.category.label ?? null,
-      orderRank: amenity.category.orderRank
-    }
+      _id: cat.category._id,
+      key: cat.category.key,
+      label: cat.category.label ?? null,
+      icon: cat.category.icon ?? null,
+      orderRank: cat.category.orderRank
+    },
+    items: (cat.items ?? []).map((item) => ({
+      _key: item._key,
+      label: item.label ?? null,
+      icon: item.icon,
+      note: item.note ?? null,
+      featured: item.featured ?? null
+    }))
   }))
 }
 

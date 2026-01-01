@@ -78,7 +78,7 @@ export interface PricingRowData {
 }
 
 /**
- * Amenity item with category grouping
+ * Single amenity item within a category
  * @see components/house/house-amenities.tsx
  */
 export interface AmenityItemData {
@@ -87,12 +87,23 @@ export interface AmenityItemData {
   icon: string
   note: 'private' | 'shared' | 'coin' | null
   featured: boolean | null
+}
+
+/**
+ * Amenity category with its items
+ * New nested structure enables per-category drag-and-drop reordering
+ * @see components/house/house-amenities.tsx
+ */
+export interface AmenityCategoryData {
+  _key: string
   category: {
     _id: string
     key: string
     label: string | null
+    icon: string | null
     orderRank: string | null
   }
+  items: AmenityItemData[]
 }
 
 // ============================================

@@ -166,13 +166,14 @@ export const house = defineType({
     // AMENITIES GROUP
     // ============================================
     defineField({
-      name: 'amenities',
-      title: 'Amenities',
+      name: 'amenityCategories',
+      title: 'Amenities by Category',
       type: 'array',
       group: 'amenities',
       description:
-        'Amenities available at this house. Mark items as "featured" to show in the preview section.',
-      of: [defineArrayMember({ type: 'houseAmenity' })]
+        'Amenities grouped by category. Drag to reorder within each category.',
+      of: [defineArrayMember({ type: 'houseAmenityCategory' })],
+      options: { sortable: false }
     }),
 
     // ============================================

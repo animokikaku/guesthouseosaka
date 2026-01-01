@@ -11,8 +11,9 @@ type HouseBuilding = NonNullable<HouseQueryResult>['building']
 type HouseLocation = NonNullable<HouseQueryResult>['location']
 type HouseMap = NonNullable<HouseQueryResult>['map']
 type HousePricing = NonNullable<HouseQueryResult>['pricing']
-type HouseAmenities = NonNullable<HouseQueryResult>['amenities']
-type HouseAmenity = NonNullable<HouseAmenities>[number]
+type HouseAmenityCategories = NonNullable<HouseQueryResult>['amenityCategories']
+type HouseAmenityCategory = NonNullable<HouseAmenityCategories>[number]
+type HouseAmenityItem = NonNullable<HouseAmenityCategory['items']>[number]
 type HousePricingRow = NonNullable<HousePricing>[number]
 type HouseGallery = NonNullable<HouseQueryResult>['gallery']
 type HouseGalleryItem = NonNullable<HouseGallery>[number]
@@ -137,18 +138,27 @@ export function createPricingRow(
 }
 
 // ============================================
-// House Amenity Mock Factory
+// House Amenity Mock Factories
 // ============================================
 
-export function createAmenity(
-  overrides: Partial<HouseAmenity> = {}
-): HouseAmenity {
+export function createAmenityItem(
+  overrides: Partial<HouseAmenityItem> = {}
+): HouseAmenityItem {
   return {
     _key: faker.string.nanoid(),
     label: faker.word.noun(),
     icon: faker.helpers.arrayElement(['wifi', 'bed', 'utensils', 'bath', 'tv']),
     note: faker.helpers.arrayElement(['shared', 'private', 'coin', null]),
     featured: faker.datatype.boolean(),
+    ...overrides
+  }
+}
+
+export function createAmenityCategory(
+  overrides: Partial<HouseAmenityCategory> = {}
+): HouseAmenityCategory {
+  return {
+    _key: faker.string.nanoid(),
     category: {
       _id: faker.string.uuid(),
       key: faker.word.noun(),
@@ -156,6 +166,7 @@ export function createAmenity(
       icon: faker.helpers.arrayElement(['globe', 'home', 'star', null]),
       orderRank: `0|${String.fromCharCode(97 + faker.number.int({ min: 0, max: 9 }))}00000:`
     },
+    items: [createAmenityItem(), createAmenityItem()],
     ...overrides
   }
 }

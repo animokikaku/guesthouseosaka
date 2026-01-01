@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import {
-  toAmenityItems,
+  toAmenityCategories,
   toBuildingData,
   toLocationData,
   toMapData,
   toPricingRows
 } from '../house'
 import {
-  createAmenity,
+  createAmenityCategory,
+  createAmenityItem,
   createBuilding,
   createLocation,
   createMap,
@@ -181,64 +182,81 @@ describe('toPricingRows', () => {
   })
 })
 
-describe('toAmenityItems', () => {
-  it('transforms array of amenities preserving values', () => {
-    const amenity1 = createAmenity()
-    const amenity2 = createAmenity()
-    const amenities = [amenity1, amenity2]
+describe('toAmenityCategories', () => {
+  it('transforms array of amenity categories preserving values', () => {
+    const cat1 = createAmenityCategory()
+    const cat2 = createAmenityCategory()
+    const categories = [cat1, cat2]
 
-    const result = toAmenityItems(amenities)
+    const result = toAmenityCategories(categories)
 
     expect(result).toHaveLength(2)
-    expect(result[0]._key).toBe(amenity1._key)
-    expect(result[0].label).toBe(amenity1.label)
-    expect(result[0].icon).toBe(amenity1.icon)
-    expect(result[0].note).toBe(amenity1.note)
-    expect(result[0].featured).toBe(amenity1.featured)
+    expect(result[0]._key).toBe(cat1._key)
+    expect(result[0].category._id).toBe(cat1.category._id)
+    expect(result[0].category.key).toBe(cat1.category.key)
+    expect(result[0].category.label).toBe(cat1.category.label)
+    expect(result[0].category.icon).toBe(cat1.category.icon)
+    expect(result[0].category.orderRank).toBe(cat1.category.orderRank)
   })
 
-  it('transforms amenity category', () => {
-    const amenity = createAmenity()
+  it('transforms amenity items within categories', () => {
+    const item1 = createAmenityItem({ _key: 'item1', label: 'Wifi', icon: 'wifi' })
+    const item2 = createAmenityItem({ _key: 'item2', label: 'Bed', icon: 'bed' })
+    const cat = createAmenityCategory({ items: [item1, item2] })
 
-    const result = toAmenityItems([amenity])
+    const result = toAmenityCategories([cat])
 
-    expect(result[0].category._id).toBe(amenity.category._id)
-    expect(result[0].category.key).toBe(amenity.category.key)
-    expect(result[0].category.label).toBe(amenity.category.label)
-    expect(result[0].category.orderRank).toBe(amenity.category.orderRank)
+    expect(result[0].items).toHaveLength(2)
+    expect(result[0].items[0]._key).toBe('item1')
+    expect(result[0].items[0].label).toBe('Wifi')
+    expect(result[0].items[0].icon).toBe('wifi')
+    expect(result[0].items[1]._key).toBe('item2')
   })
 
-  it('returns empty array for null amenities', () => {
-    const result = toAmenityItems(null)
+  it('returns empty array for null amenity categories', () => {
+    const result = toAmenityCategories(null)
 
     expect(result).toEqual([])
   })
 
-  it('returns empty array for empty amenities array', () => {
-    const result = toAmenityItems([])
+  it('returns empty array for empty categories array', () => {
+    const result = toAmenityCategories([])
 
     expect(result).toEqual([])
   })
 
-  it('handles amenities with null optional fields', () => {
-    const amenity = createAmenity({
-      label: null,
-      note: null,
-      featured: null,
+  it('handles categories with null optional fields', () => {
+    const cat = createAmenityCategory({
       category: {
         _id: 'cat1',
         key: 'room',
         label: null,
         icon: null,
         orderRank: '0|a00000:'
-      }
+      },
+      items: [
+        createAmenityItem({
+          label: null,
+          note: null,
+          featured: null
+        })
+      ]
     })
 
-    const result = toAmenityItems([amenity])
+    const result = toAmenityCategories([cat])
 
-    expect(result[0].label).toBeNull()
-    expect(result[0].note).toBeNull()
-    expect(result[0].featured).toBeNull()
     expect(result[0].category.label).toBeNull()
+    expect(result[0].category.icon).toBeNull()
+    expect(result[0].items[0].label).toBeNull()
+    expect(result[0].items[0].note).toBeNull()
+    expect(result[0].items[0].featured).toBeNull()
+  })
+
+  it('handles category with empty items array', () => {
+    const cat = createAmenityCategory({ items: [] })
+
+    const result = toAmenityCategories([cat])
+
+    expect(result[0].items).toEqual([])
   })
 })

@@ -20,8 +20,10 @@ import {
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Icon } from '@/lib/icons'
-import type { AmenityItemData } from '@/lib/types/components'
-import { groupByCategory } from '@/lib/utils/group-by-category'
+import type {
+  AmenityCategoryData,
+  AmenityItemData
+} from '@/lib/types/components'
 import { stegaClean } from '@sanity/client/stega'
 import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
@@ -35,11 +37,11 @@ type DataAttributeFn = (path: string) => string
 interface HouseAmenitiesProps {
   documentId: string
   documentType: string
-  amenities: AmenityItemData[]
+  amenityCategories: AmenityCategoryData[]
 }
 
 interface AmenitiesDialogProps {
-  amenities: AmenityItemData[]
+  amenityCategories: AmenityCategoryData[]
   noteLabels: Record<string, string>
   trigger: React.ReactNode
   title: string
@@ -74,38 +76,40 @@ function AmenitiesDialog({
   noteLabels,
   trigger,
   title,
-  amenities,
+  amenityCategories,
   dataAttribute
 }: AmenitiesDialogProps) {
   const isMobile = useIsMobile()
 
-  // Group by category for display
-  const amenityCategories = useMemo(
-    () => groupByCategory(amenities),
-    [amenities]
-  )
-
-  if (!amenities) return null
+  if (!amenityCategories || amenityCategories.length === 0) return null
 
   const content = (
     <div className="space-y-8 pt-8">
-      {amenityCategories.map((category) => (
-        <div key={category.key}>
+      {amenityCategories.map((cat) => (
+        <div
+          key={cat._key}
+          data-sanity={dataAttribute?.(
+            `amenityCategories[_key=="${cat._key}"].items`
+          )}
+        >
           <h3 className="text-foreground mb-4 text-lg font-semibold">
-            {category.label}
+            {cat.category.label}
           </h3>
           <div className="grid grid-cols-1 gap-2">
-            {category.items.map((amenity) => (
+            {cat.items.map((amenity) => (
               <AmenityItem
                 key={amenity._key}
-                amenity={amenity}
+                amenity={{
+                  ...amenity,
+                  label: amenity.label ? stegaClean(amenity.label) : null
+                }}
                 noteLabel={
                   amenity.note
                     ? noteLabels[stegaClean(amenity.note)]
                     : undefined
                 }
                 data-sanity={dataAttribute?.(
-                  `amenities[_key=="${amenity._key}"]`
+                  `amenityCategories[_key=="${cat._key}"].items[_key=="${amenity._key}"]`
                 )}
               />
             ))}
@@ -147,22 +151,22 @@ function AmenitiesDialog({
 export function HouseAmenities({
   documentId,
   documentType,
-  amenities: initialAmenities
+  amenityCategories: initialCategories
 }: HouseAmenitiesProps) {
   const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
 
-  const amenities = useOptimistic<
-    AmenityItemData[],
-    SanityDocument & { amenities?: AmenityItemData[] }
-  >(initialAmenities, (currentAmenities, action) => {
-    if (action.id === documentId && action.document.amenities) {
+  const amenityCategories = useOptimistic<
+    AmenityCategoryData[],
+    SanityDocument & { amenityCategories?: AmenityCategoryData[] }
+  >(initialCategories, (currentCategories, action) => {
+    if (action.id === documentId && action.document.amenityCategories) {
       // Optimistic document only has partial data, merge with current
-      return action.document.amenities.map(
-        (item) => currentAmenities?.find((a) => a._key === item._key) ?? item
+      return action.document.amenityCategories.map(
+        (cat) => currentCategories?.find((c) => c._key === cat._key) ?? cat
       )
     }
-    return currentAmenities
+    return currentCategories
   })
 
   const dataAttribute = createDataAttribute({
@@ -176,17 +180,23 @@ export function HouseAmenities({
     coin: t('notes.coin')
   }
 
-  // Featured amenities derived from flat list
+  // Featured amenities derived from all categories
   const featuredAmenities = useMemo(() => {
-    return amenities.filter((a) => a.featured).slice(0, 10)
-  }, [amenities])
+    return amenityCategories
+      .flatMap((cat) => cat.items)
+      .filter((a) => a.featured)
+      .slice(0, 10)
+  }, [amenityCategories])
 
   // Slice to 5 on mobile
   const displayedFeatured = isMobile
     ? featuredAmenities.slice(0, 5)
     : featuredAmenities
 
-  const totalAmenitiesCount = amenities.length
+  const totalAmenitiesCount = amenityCategories.reduce(
+    (sum, cat) => sum + cat.items.length,
+    0
+  )
 
   return (
     <section>
@@ -206,7 +216,7 @@ export function HouseAmenities({
 
         <AmenitiesDialog
           title={t('heading')}
-          amenities={amenities}
+          amenityCategories={amenityCategories}
           noteLabels={noteLabels}
           dataAttribute={dataAttribute}
           trigger={

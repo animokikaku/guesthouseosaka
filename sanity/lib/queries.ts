@@ -129,23 +129,26 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     }
   },
 
-  // Amenities as flat list (grouped by category on frontend for drag-and-drop reordering)
-  "amenities": amenities[]{
+  // Amenities grouped by category (enables per-category drag-and-drop reordering)
+  "amenityCategories": amenityCategories[]{
     _key,
-    note,
-    featured,
-    "label": coalesce(
-      customLabel[_key == $locale][0].value,
-      amenity->label[_key == $locale][0].value,
-      amenity->label[_key == "en"][0].value
-    ),
-    "icon": amenity->icon,
-    "category": amenity->category->{
+    "category": category->{
       _id,
       "key": key.current,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       icon,
       orderRank
+    },
+    "items": items[]{
+      _key,
+      note,
+      featured,
+      "label": coalesce(
+        customLabel[_key == $locale][0].value,
+        amenity->label[_key == $locale][0].value,
+        amenity->label[_key == "en"][0].value
+      ),
+      "icon": amenity->icon
     }
   },
 

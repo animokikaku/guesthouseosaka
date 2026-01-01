@@ -1,6 +1,6 @@
 // House transformers
 export {
-  toAmenityItems,
+  toAmenityCategories,
   toBuildingData,
   toLocationData,
   toMapData,
