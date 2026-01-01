@@ -2,7 +2,6 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 Always use the design skill when changing the UI.
-Use 'bd' for task tracking.
 
 ## Build, Test, and Development Commands
 
