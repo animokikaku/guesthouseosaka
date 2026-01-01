@@ -159,7 +159,7 @@ export default async function LocaleLayout({
               <div className="bg-background relative z-10 flex min-h-svh flex-col">
                 <SiteHeader houses={houses} />
                 <main className="flex flex-1 flex-col">{children}</main>
-                <SiteFooter settings={settings} />
+                {settings && <SiteFooter settings={settings} />}
               </div>
               <TailwindIndicator />
               <Toaster position="top-center" />

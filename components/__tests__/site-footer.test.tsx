@@ -5,7 +5,7 @@ import { SiteFooter } from '../site-footer'
 
 const createSettings = (
   overrides?: Partial<NonNullable<SettingsQueryResult>>
-): SettingsQueryResult => ({
+): NonNullable<SettingsQueryResult> => ({
   _id: 'settings-123',
   _type: 'settings',
   siteName: null,
@@ -92,6 +92,18 @@ describe('SiteFooter', () => {
         'href',
         'https://instagram.com/example'
       )
+    })
+
+    it('renders social links with data-sanity attribute for visual editing', () => {
+      render(<SiteFooter settings={createSettings()} />)
+
+      const facebookLink = screen.getByRole('link', { name: 'Facebook' })
+      expect(facebookLink).toHaveAttribute('data-sanity')
+      expect(facebookLink.getAttribute('data-sanity')).toContain('social-1')
+
+      const instagramLink = screen.getByRole('link', { name: 'Instagram' })
+      expect(instagramLink).toHaveAttribute('data-sanity')
+      expect(instagramLink.getAttribute('data-sanity')).toContain('social-2')
     })
   })
 

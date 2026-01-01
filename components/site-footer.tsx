@@ -1,12 +1,18 @@
 import { Icon, type IconName } from '@/lib/icons'
 import type { SettingsQueryResult } from '@/sanity.types'
+import { createDataAttribute, stegaClean } from 'next-sanity'
 
 type SiteFooterProps = {
-  settings: SettingsQueryResult
+  settings: NonNullable<SettingsQueryResult>
 }
 
 export function SiteFooter({ settings }: SiteFooterProps) {
   const year = new Date().getFullYear()
+
+  const dataAttribute = createDataAttribute({
+    id: settings._id,
+    type: settings._type
+  })
 
   return (
     <footer className="group-has-[.section-soft]/body:bg-surface/40 3xl:fixed:bg-transparent group-has-[.snap-footer]/body:md:snap-end dark:bg-transparent">
@@ -16,15 +22,16 @@ export function SiteFooter({ settings }: SiteFooterProps) {
             <span className="sr-only">
               ゲストハウス大阪 ー Guest House Osaka
             </span>
-            © {year} {settings?.companyName}
+            © {year} {settings.companyName}
           </div>
           <div className="flex shrink-0 items-center gap-3">
-            {settings?.socialLinks?.map((link) => (
+            {settings.socialLinks?.map((link) => (
               <SocialLink
                 key={link._key}
                 href={link.url}
                 icon={link.icon as IconName}
                 label={link.label}
+                data-sanity={dataAttribute(`socialLinks[_key=="${link._key}"]`)}
               />
             ))}
           </div>
@@ -38,11 +45,13 @@ function SocialLink({
   href,
   icon,
   label,
+  'data-sanity': dataSanity,
   ...props
 }: {
   href: string
   icon: IconName
   label: string
+  'data-sanity'?: string
 } & React.HTMLAttributes<HTMLAnchorElement>) {
   return (
     <a
@@ -50,7 +59,8 @@ function SocialLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={label}
+      aria-label={stegaClean(label)}
+      data-sanity={dataSanity}
       {...props}
     >
       <Icon name={icon} className="size-5" />
