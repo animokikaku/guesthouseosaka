@@ -1,5 +1,3 @@
-'use client'
-
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
@@ -15,18 +13,26 @@ import Image from 'next/image'
 import * as React from 'react'
 import { GalleryImageButton } from './gallery-image-button'
 
-type HouseGalleryClientProps = {
+type DataAttributeFn = (path: string) => string
+
+type HouseGalleryProps = {
   gallery: Gallery
   /** Ref for sentinel element (used to detect when thumbnails scroll out of view) */
   sentinelRef?: React.RefObject<HTMLDivElement | null>
+  /** Data attribute helper for Sanity visual editing */
+  dataAttribute?: DataAttributeFn
 }
 
-export function HouseGalleryClient({
+export function HouseGallery({
   gallery,
-  sentinelRef
-}: HouseGalleryClientProps) {
+  sentinelRef,
+  dataAttribute
+}: HouseGalleryProps) {
   // Group by category for display
-  const categories = React.useMemo(() => groupGalleryByCategory(gallery), [gallery])
+  const categories = React.useMemo(
+    () => groupGalleryByCategory(gallery),
+    [gallery]
+  )
 
   // Filter out categories with no items
   const validCategories = categories.filter((c) => c.items.length > 0)
@@ -51,18 +57,27 @@ export function HouseGalleryClient({
       </div>
 
       {/* All Categories Grid */}
-      <div className="space-y-12">
+      <div className="space-y-12" data-sanity={dataAttribute?.('gallery')}>
         {validCategories.map((category) => (
-          <CategoryGrid key={`grid-${category.key}`} category={category} />
+          <CategoryGrid
+            key={`grid-${category.key}`}
+            category={category}
+            dataAttribute={dataAttribute}
+          />
         ))}
       </div>
     </div>
   )
 }
 
-function CategoryThumbnail({ category }: { category: GalleryCategory }) {
+type CategoryThumbnailProps = {
+  category: GalleryCategory
+}
+
+function CategoryThumbnail({ category }: CategoryThumbnailProps) {
   const thumbnail = category.thumbnail
-  if (!thumbnail) return null
+  const firstItemKey = category.items[0]?._key
+  if (!thumbnail || !firstItemKey) return null
 
   const src = urlFor(thumbnail).width(256).height(192).dpr(2).fit('crop').url()
 
@@ -104,9 +119,10 @@ function CategoryThumbnail({ category }: { category: GalleryCategory }) {
 
 type CategoryGridProps = {
   category: GalleryCategory
+  dataAttribute?: DataAttributeFn
 }
 
-function CategoryGrid({ category }: CategoryGridProps) {
+function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
   if (category.items.length === 0) return null
 
   return (
@@ -114,7 +130,11 @@ function CategoryGrid({ category }: CategoryGridProps) {
       <h3 className="text-xl font-semibold">{category.label}</h3>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
         {category.items.map((item) => (
-          <GalleryGridItem key={item._key} item={item} />
+          <GalleryGridItem
+            key={item._key}
+            item={item}
+            dataAttribute={dataAttribute}
+          />
         ))}
       </div>
     </div>
@@ -123,9 +143,10 @@ function CategoryGrid({ category }: CategoryGridProps) {
 
 type GalleryGridItemProps = {
   item: GalleryItem
+  dataAttribute?: DataAttributeFn
 }
 
-function GalleryGridItem({ item }: GalleryGridItemProps) {
+function GalleryGridItem({ item, dataAttribute }: GalleryGridItemProps) {
   const { _key, image } = item
   if (!image) return null
 
@@ -136,7 +157,7 @@ function GalleryGridItem({ item }: GalleryGridItemProps) {
       onClick={() => store.setState({ photoId: _key })}
       imageProps={{
         src,
-        alt: image.alt ?? '',
+        alt: stegaClean(image.alt) ?? '',
         width: 400,
         height: 400,
         blurDataURL: image.preview ?? undefined,
@@ -144,6 +165,7 @@ function GalleryGridItem({ item }: GalleryGridItemProps) {
       }}
       className="aspect-square rounded-lg"
       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+      data-sanity={dataAttribute?.(`gallery[_key=="${_key}"]`)}
     />
   )
 }

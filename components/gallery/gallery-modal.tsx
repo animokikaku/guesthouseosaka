@@ -1,5 +1,3 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import {
   Carousel,
@@ -22,12 +20,19 @@ import { stegaClean } from 'next-sanity'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 
+type DataAttributeFn = (path: string) => string
+
 type GalleryModalProps = {
   gallery: Gallery
   title: string
+  dataAttribute?: DataAttributeFn
 }
 
-export function GalleryModal({ gallery, title }: GalleryModalProps) {
+export function GalleryModal({
+  gallery,
+  title,
+  dataAttribute
+}: GalleryModalProps) {
   const photoId = useStore(store, (state) => state.photoId)
   const t = useTranslations('GalleryModal')
 
@@ -47,7 +52,10 @@ export function GalleryModal({ gallery, title }: GalleryModalProps) {
           <Dialog.Description className="sr-only">
             {t('description', { title })}
           </Dialog.Description>
-          <GalleryModalCarousel gallery={gallery} />
+          <GalleryModalCarousel
+            gallery={gallery}
+            dataAttribute={dataAttribute}
+          />
           <Dialog.Close asChild>
             <Button
               variant="ghost"
@@ -64,7 +72,15 @@ export function GalleryModal({ gallery, title }: GalleryModalProps) {
   )
 }
 
-function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
+type GalleryModalCarouselProps = {
+  gallery: Gallery
+  dataAttribute?: DataAttributeFn
+}
+
+function GalleryModalCarousel({
+  gallery,
+  dataAttribute
+}: GalleryModalCarouselProps) {
   const [api, setApi] = useState<CarouselApi>()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const photoId = useStore(store, (state) => state.photoId)
@@ -137,6 +153,7 @@ function GalleryModalCarousel({ gallery }: { gallery: Gallery }) {
             <CarouselItem
               key={_key}
               className="flex h-full items-center justify-center"
+              data-sanity={dataAttribute?.(`gallery[_key=="${_key}"]`)}
             >
               <Image
                 src={src}

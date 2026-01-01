@@ -40,10 +40,17 @@ export default async function GalleryPage({
     <div className="bg-background text-foreground fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden">
       <div className="flex h-full w-full flex-col overflow-hidden">
         <GalleryPageContent
+          documentId={data._id}
+          documentType={data._type}
           gallery={data.gallery}
           title={data.title ?? ''}
           backButton={
-            <Button variant="ghost" size="icon" asChild className="shrink-0 rounded-full">
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              className="shrink-0 rounded-full"
+            >
               <Link href={{ pathname: '/[house]', params: { house } }}>
                 <ArrowLeftIcon className="size-6" />
                 <span className="sr-only">{t('close')}</span>

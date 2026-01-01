@@ -1,10 +1,10 @@
+import { HouseGallery } from '@/components/gallery/house-gallery'
 import {
   createGalleryCategory,
   createGalleryItem
 } from '@/lib/transforms/__tests__/mocks'
 import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { HouseGalleryClient } from '../house-gallery-client'
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -62,23 +62,21 @@ vi.mock('../gallery-image-button', () => ({
   )
 }))
 
-describe('HouseGalleryClient', () => {
+describe('HouseGallery', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   describe('empty gallery', () => {
     it('renders nothing for empty gallery', () => {
-      const { container } = render(
-        <HouseGalleryClient gallery={[]} />
-      )
+      const { container } = render(<HouseGallery gallery={[]} />)
 
       expect(container.querySelector('h3')).not.toBeInTheDocument()
     })
 
     it('renders nothing for null gallery', () => {
       const { container } = render(
-        <HouseGalleryClient gallery={null as unknown as []} />
+        <HouseGallery gallery={null as unknown as []} />
       )
 
       expect(container.querySelector('h3')).not.toBeInTheDocument()
@@ -96,7 +94,7 @@ describe('HouseGalleryClient', () => {
         createGalleryItem({ _key: 'img2', category })
       ]
 
-      render(<HouseGalleryClient gallery={gallery} />)
+      render(<HouseGallery gallery={gallery} />)
 
       expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
         'Bedroom'
@@ -119,7 +117,7 @@ describe('HouseGalleryClient', () => {
         createGalleryItem({ _key: 'img2', category: kitchenCat })
       ]
 
-      render(<HouseGalleryClient gallery={gallery} />)
+      render(<HouseGallery gallery={gallery} />)
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings).toHaveLength(2)
@@ -141,7 +139,7 @@ describe('HouseGalleryClient', () => {
         createGalleryItem({ _key: 'img2', category: bedroomCat })
       ]
 
-      render(<HouseGalleryClient gallery={gallery} />)
+      render(<HouseGallery gallery={gallery} />)
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings[0]).toHaveTextContent('Bedroom')
@@ -158,7 +156,7 @@ describe('HouseGalleryClient', () => {
         createGalleryItem({ _key: 'img3', category })
       ]
 
-      render(<HouseGalleryClient gallery={gallery} />)
+      render(<HouseGallery gallery={gallery} />)
 
       const buttons = screen.getAllByTestId('gallery-image-button')
       expect(buttons).toHaveLength(3)
@@ -170,7 +168,7 @@ describe('HouseGalleryClient', () => {
       const category = createGalleryCategory({ key: 'room', label: 'Room' })
       const gallery = [createGalleryItem({ _key: 'img1', category })]
 
-      render(<HouseGalleryClient gallery={gallery} />)
+      render(<HouseGallery gallery={gallery} />)
 
       // Multiple buttons: thumbnail + grid item
       const buttons = screen.getAllByRole('button')

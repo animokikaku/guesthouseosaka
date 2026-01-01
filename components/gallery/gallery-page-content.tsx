@@ -1,13 +1,22 @@
 'use client'
 
 import { GalleryModal } from '@/components/gallery/gallery-modal'
+import { HouseGallery } from '@/components/gallery/house-gallery'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
 import { useStickyNav } from '@/hooks/use-sticky-nav'
-import { groupGalleryByCategory, type Gallery } from '@/lib/gallery'
+import {
+  groupGalleryByCategory,
+  type Gallery,
+  type GalleryItem
+} from '@/lib/gallery'
+import { createDataAttribute } from 'next-sanity'
+import { useOptimistic } from 'next-sanity/hooks'
 import * as React from 'react'
-import { HouseGalleryClient } from './house-gallery-client'
+import { SanityDocument } from 'sanity'
 
 type GalleryPageContentProps = {
+  documentId: string
+  documentType: string
   gallery: Gallery
   title: string
   /** Back button element (Link or Dialog.Close) */
@@ -15,10 +24,30 @@ type GalleryPageContentProps = {
 }
 
 export function GalleryPageContent({
-  gallery,
+  documentId,
+  documentType,
+  gallery: initialGallery,
   title,
   backButton
 }: GalleryPageContentProps) {
+  const gallery = useOptimistic<
+    Gallery,
+    SanityDocument & { gallery?: GalleryItem[] }
+  >(initialGallery, (currentGallery, action) => {
+    if (action.id === documentId && action.document.gallery) {
+      // Optimistic document only has partial data, merge with current
+      return action.document.gallery.map(
+        (item) => currentGallery?.find((g) => g._key === item._key) ?? item
+      )
+    }
+    return currentGallery
+  })
+
+  const dataAttribute = createDataAttribute({
+    id: documentId,
+    type: documentType
+  })
+
   const scrollContainerRef = React.useRef<HTMLDivElement>(null)
   const [scrollContainer, setScrollContainer] =
     React.useState<HTMLDivElement | null>(null)
@@ -67,12 +96,20 @@ export function GalleryPageContent({
       >
         <div className="container-wrapper">
           <div className="container py-8 md:py-12">
-            <HouseGalleryClient gallery={gallery} sentinelRef={sentinelRef} />
+            <HouseGallery
+              gallery={gallery}
+              sentinelRef={sentinelRef}
+              dataAttribute={dataAttribute}
+            />
           </div>
         </div>
       </div>
 
-      <GalleryModal gallery={gallery} title={title} />
+      <GalleryModal
+        gallery={gallery}
+        title={title}
+        dataAttribute={dataAttribute}
+      />
     </>
   )
 }
