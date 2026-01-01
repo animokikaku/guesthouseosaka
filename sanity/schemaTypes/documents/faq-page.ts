@@ -30,14 +30,6 @@ export const faqPage = defineType({
       group: 'content'
     }),
     defineField({
-      name: 'items',
-      title: 'FAQ Items',
-      type: 'array',
-      description: 'Questions and answers. Drag to reorder.',
-      of: [defineArrayMember({ type: 'faqItem' })],
-      group: 'content'
-    }),
-    defineField({
       name: 'contactSection',
       title: 'Contact Section',
       type: 'internationalizedArrayPortableText',
@@ -76,13 +68,9 @@ export const faqPage = defineType({
     })
   ],
   preview: {
-    select: {
-      items: 'items'
-    },
-    prepare({ items }) {
+    prepare() {
       return {
-        title: 'FAQ Page',
-        subtitle: `${items?.length || 0} questions`
+        title: 'FAQ Page'
       }
     }
   }

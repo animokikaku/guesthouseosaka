@@ -13,6 +13,7 @@ import type {
   PricingCategoriesQueryResult
 } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
+import { stegaClean } from 'next-sanity'
 import { useEffect, useState } from 'react'
 
 const portableTextComponents: PortableTextComponents = {
@@ -158,7 +159,7 @@ function ExtraCostsCard({
               styles?.text
             )}
           >
-            {title}
+            {stegaClean(title)}
           </h4>
         </div>
         <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">

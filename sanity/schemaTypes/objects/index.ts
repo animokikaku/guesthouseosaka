@@ -4,7 +4,6 @@ export {
   formFieldConfig,
   formFieldConfigNoPlaceholder
 } from './form-field-config'
-export { faqItem } from './faq-item'
 export { galleryImage } from './gallery-image'
 export { houseAmenity } from './house-amenity'
 export { houseAmenityCategory } from './house-amenity-category'

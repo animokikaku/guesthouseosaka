@@ -16,8 +16,8 @@ const components: PortableTextComponents = {
 }
 
 type FAQCardProps = {
-  contactSection: NonNullable<FaqPageQueryResult>['contactSection'] | null
-  contactNote: NonNullable<FaqPageQueryResult>['contactNote'] | null
+  contactSection?: NonNullable<FaqPageQueryResult>['contactSection'] | null
+  contactNote?: NonNullable<FaqPageQueryResult>['contactNote'] | null
   houses: NonNullable<HousesBuildingQueryResult>
 }
 

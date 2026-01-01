@@ -6,6 +6,7 @@ import { amenityCategory } from './documents/amenity-category'
 import { contactPage } from './documents/contact-page'
 import { contactType } from './documents/contact-type'
 import { faqPage } from './documents/faq-page'
+import { faqQuestion } from './documents/faq-question'
 import { galleryCategory } from './documents/gallery-category'
 import homePage from './documents/home-page'
 import { house } from './documents/house'
@@ -17,7 +18,6 @@ import { settings } from './documents/settings'
 import {
   address,
   extraCostItem,
-  faqItem,
   formFieldConfig,
   formFieldConfigNoPlaceholder,
   galleryImage,
@@ -45,6 +45,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     amenityCategory,
     amenity,
     pricingCategory,
+    faqQuestion,
 
     // Objects
     localizedImage,
@@ -53,7 +54,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     houseAmenityCategory,
     socialLink,
     pricingRow,
-    faqItem,
     address,
     pageAction,
     extraCostItem,

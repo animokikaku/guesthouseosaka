@@ -4,11 +4,7 @@
 declare const messages: {
   "FAQAccordion": {
     "floors_and_rooms": {
-      "format": "<floorsTag>{floors}-story building</floorsTag> with <roomsTag>{rooms} rooms</roomsTag>.",
-      "question": "How many floors and rooms?"
-    },
-    "extra_costs": {
-      "question": "What extra costs are there besides rent?"
+      "format": "<floorsTag>{floors}-story building</floorsTag> with <roomsTag>{rooms} rooms</roomsTag>."
     }
   },
   "FAQContactTable": {

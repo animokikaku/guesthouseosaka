@@ -54,12 +54,6 @@ export type Address = {
   country: string
 }
 
-export type FaqItem = {
-  _type: 'faqItem'
-  question: InternationalizedArrayString
-  answer?: InternationalizedArrayPortableText
-}
-
 export type PricingRow = {
   _type: 'pricingRow'
   label: InternationalizedArrayString
@@ -134,6 +128,30 @@ export type LocalizedImage = {
   alt: InternationalizedArrayString
 }
 
+export type FaqQuestion = {
+  _id: string
+  _type: 'faqQuestion'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  question: InternationalizedArrayString
+  answer?: InternationalizedArrayPortableText
+  componentKey?: 'floors-and-rooms' | 'extra-costs'
+  orderRank?: string
+}
+
+export type InternationalizedArrayPortableText = Array<
+  {
+    _key: string
+  } & InternationalizedArrayPortableTextValue
+>
+
+export type InternationalizedArrayString = Array<
+  {
+    _key: string
+  } & InternationalizedArrayStringValue
+>
+
 export type PricingCategory = {
   _id: string
   _type: 'pricingCategory'
@@ -150,12 +168,6 @@ export type Slug = {
   current: string
   source?: string
 }
-
-export type InternationalizedArrayString = Array<
-  {
-    _key: string
-  } & InternationalizedArrayStringValue
->
 
 export type Amenity = {
   _id: string
@@ -205,12 +217,6 @@ export type LegalNotice = {
   lastUpdated: string
   content: InternationalizedArrayPortableText
 }
-
-export type InternationalizedArrayPortableText = Array<
-  {
-    _key: string
-  } & InternationalizedArrayPortableTextValue
->
 
 export type ContactType = {
   _id: string
@@ -264,11 +270,6 @@ export type FaqPage = {
     {
       _key: string
     } & PageAction
-  >
-  items?: Array<
-    {
-      _key: string
-    } & FaqItem
   >
   contactSection: InternationalizedArrayPortableText
   contactNote?: InternationalizedArrayString
@@ -680,7 +681,6 @@ export type AllSanitySchemaTypes =
   | ExtraCostItem
   | PageAction
   | Address
-  | FaqItem
   | PricingRow
   | SocialLink
   | AmenityCategoryReference
@@ -691,15 +691,16 @@ export type AllSanitySchemaTypes =
   | GalleryImage
   | SanityImageAssetReference
   | LocalizedImage
+  | FaqQuestion
+  | InternationalizedArrayPortableText
+  | InternationalizedArrayString
   | PricingCategory
   | Slug
-  | InternationalizedArrayString
   | Amenity
   | LucideIcon
   | AmenityCategory
   | GalleryCategory
   | LegalNotice
-  | InternationalizedArrayPortableText
   | ContactType
   | ContactPage
   | FaqPage
@@ -1072,7 +1073,7 @@ export type HousesBuildingQueryResult = Array<{
 
 // Source: sanity/lib/queries.ts
 // Variable: faqPageQuery
-// Query: *[_type == "faqPage"][0]{  _id,  _type,  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),  "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),  "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),  "actions": array::compact(actions[]{    _key,    icon,    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),    href  }),  "items": array::compact(items[]{    _key,    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value)  }),  "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),  "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)}
+// Query: *[_type == "faqPage"][0]{  _id,  _type,  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),  "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),  "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),  "actions": array::compact(actions[]{    _key,    icon,    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),    href  }),  "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),  "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)}
 export type FaqPageQueryResult = {
   _id: string
   _type: 'faqPage'
@@ -1102,28 +1103,6 @@ export type FaqPageQueryResult = {
     label: string | null
     href: string
   }> | null
-  items: Array<{
-    _key: string
-    question: string | null
-    answer: Array<{
-      children?: Array<{
-        marks?: Array<string>
-        text?: string
-        _type: 'span'
-        _key: string
-      }>
-      style?: 'h1' | 'h2' | 'h3' | 'normal'
-      listItem?: 'bullet' | 'number'
-      markDefs?: Array<{
-        href?: string
-        _type: 'link'
-        _key: string
-      }>
-      level?: number
-      _type: 'block'
-      _key: string
-    }> | null
-  }> | null
   contactSection: Array<{
     children?: Array<{
       marks?: Array<string>
@@ -1144,6 +1123,34 @@ export type FaqPageQueryResult = {
   }> | null
   contactNote: string | null
 } | null
+
+// Source: sanity/lib/queries.ts
+// Variable: faqQuestionsQuery
+// Query: *[_type == "faqQuestion"] | order(orderRank) {    _id,    _type,    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value),    componentKey  }
+export type FaqQuestionsQueryResult = Array<{
+  _id: string
+  _type: 'faqQuestion'
+  question: string | null
+  answer: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'h1' | 'h2' | 'h3' | 'normal'
+    listItem?: 'bullet' | 'number'
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }> | null
+  componentKey: 'extra-costs' | 'floors-and-rooms' | null
+}>
 
 // Source: sanity/lib/queries.ts
 // Variable: contactPageMetaQuery
@@ -1422,7 +1429,8 @@ declare module '@sanity/client' {
     '*[_type == "house"] | order(orderRank){\n  "slug": slug,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value)\n}': HousesTitlesQueryResult
     '*[_type == "house"] | order(orderRank){\n  slug,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n  "caption": coalesce(caption[_key == $locale][0].value, caption[_key == "en"][0].value),\n  image{\n    asset,\n    hotspot,\n    crop,\n    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),\n    "lqip": asset->metadata.lqip\n  }\n}': HousesNavQueryResult
     '*[_type == "house"] | order(orderRank){\n  _id,\n  _type,\n  slug,\n  "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n  "building": building{\n    rooms,\n    floors\n  },\n  phone,\n  image{\n    asset,\n    hotspot,\n    crop,\n    "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),\n    "lqip": asset->metadata.lqip\n  },\n  "extraCosts": array::compact(extraCosts[]{\n    "slug": category->slug.current,\n    "value": coalesce(value[_key == $locale][0].value, value[_key == "en"][0].value)[]\n  })\n}': HousesBuildingQueryResult
-    '*[_type == "faqPage"][0]{\n  _id,\n  _type,\n  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),\n  "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),\n  "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),\n  "actions": array::compact(actions[]{\n    _key,\n    icon,\n    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n    href\n  }),\n  "items": array::compact(items[]{\n    _key,\n    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),\n    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value)\n  }),\n  "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),\n  "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)\n}': FaqPageQueryResult
+    '*[_type == "faqPage"][0]{\n  _id,\n  _type,\n  "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),\n  "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),\n  "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),\n  "actions": array::compact(actions[]{\n    _key,\n    icon,\n    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n    href\n  }),\n  "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),\n  "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)\n}': FaqPageQueryResult
+    '\n  *[_type == "faqQuestion"] | order(orderRank) {\n    _id,\n    _type,\n    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),\n    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value),\n    componentKey\n  }\n': FaqQuestionsQueryResult
     '\n  *[_type == "contactPage"][0]{\n    "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),\n    "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value)\n  }\n': ContactPageMetaQueryResult
     '{\n  "page": *[_type == "contactPage"][0]{\n    _id,\n    _type,\n    "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),\n    "actions": array::compact(actions[]{\n      _key,\n      icon,\n      "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),\n      href\n    })\n  },\n  "contactTypes": *[_type == "contactType"] | order(orderRank){\n    _id,\n    _type,\n    slug,\n    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),\n    "fields": {\n      "places": {\n        "label": coalesce(fields.places.label[_key == $locale][0].value, fields.places.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.places.placeholder[_key == $locale][0].value, fields.places.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.places.description[_key == $locale][0].value, fields.places.description[_key == "en"][0].value)\n      },\n      "date": {\n        "label": coalesce(fields.date.label[_key == $locale][0].value, fields.date.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.date.placeholder[_key == $locale][0].value, fields.date.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.date.description[_key == $locale][0].value, fields.date.description[_key == "en"][0].value)\n      },\n      "hour": {\n        "label": coalesce(fields.hour.label[_key == $locale][0].value, fields.hour.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.hour.placeholder[_key == $locale][0].value, fields.hour.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.hour.description[_key == $locale][0].value, fields.hour.description[_key == "en"][0].value)\n      },\n      "stayDuration": {\n        "label": coalesce(fields.stayDuration.label[_key == $locale][0].value, fields.stayDuration.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.stayDuration.placeholder[_key == $locale][0].value, fields.stayDuration.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.stayDuration.description[_key == $locale][0].value, fields.stayDuration.description[_key == "en"][0].value)\n      },\n      "gender": {\n        "label": coalesce(fields.gender.label[_key == $locale][0].value, fields.gender.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.gender.placeholder[_key == $locale][0].value, fields.gender.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.gender.description[_key == $locale][0].value, fields.gender.description[_key == "en"][0].value)\n      },\n      "age": {\n        "label": coalesce(fields.age.label[_key == $locale][0].value, fields.age.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.age.placeholder[_key == $locale][0].value, fields.age.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.age.description[_key == $locale][0].value, fields.age.description[_key == "en"][0].value)\n      },\n      "nationality": {\n        "label": coalesce(fields.nationality.label[_key == $locale][0].value, fields.nationality.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.nationality.placeholder[_key == $locale][0].value, fields.nationality.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.nationality.description[_key == $locale][0].value, fields.nationality.description[_key == "en"][0].value)\n      },\n      "phone": {\n        "label": coalesce(fields.phone.label[_key == $locale][0].value, fields.phone.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.phone.placeholder[_key == $locale][0].value, fields.phone.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.phone.description[_key == $locale][0].value, fields.phone.description[_key == "en"][0].value)\n      },\n      "name": {\n        "label": coalesce(fields.name.label[_key == $locale][0].value, fields.name.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.name.placeholder[_key == $locale][0].value, fields.name.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.name.description[_key == $locale][0].value, fields.name.description[_key == "en"][0].value)\n      },\n      "email": {\n        "label": coalesce(fields.email.label[_key == $locale][0].value, fields.email.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.email.placeholder[_key == $locale][0].value, fields.email.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.email.description[_key == $locale][0].value, fields.email.description[_key == "en"][0].value)\n      },\n      "message": {\n        "label": coalesce(fields.message.label[_key == $locale][0].value, fields.message.label[_key == "en"][0].value),\n        "placeholder": coalesce(fields.message.placeholder[_key == $locale][0].value, fields.message.placeholder[_key == "en"][0].value),\n        "description": coalesce(fields.message.description[_key == $locale][0].value, fields.message.description[_key == "en"][0].value)\n      }\n    }\n  }\n}': ContactPageQueryResult
     '\n  *[_type == "contactType"] | order(orderRank){\n    _id,\n    _type,\n    slug,\n    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),\n    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)\n  }\n': ContactTypesListQueryResult

@@ -13,6 +13,7 @@ import type {
   PricingCategoriesQueryResult
 } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
+import { stegaClean } from 'next-sanity'
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   orange: 'text-orange-600',
@@ -75,7 +76,7 @@ export function FAQExtraCostsTable({
                     ACCENT_CLASSES[slug]
                   )}
                 >
-                  {title}
+                  {stegaClean(title)}
                 </TableHead>
               )
             })}

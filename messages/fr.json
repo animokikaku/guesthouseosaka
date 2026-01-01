@@ -1,11 +1,7 @@
 {
   "FAQAccordion": {
     "floors_and_rooms": {
-      "format": "Bâtiment de <floorsTag>{floors} étages</floorsTag> avec <roomsTag>{rooms} chambres</roomsTag>.",
-      "question": "Combien d'étages et de chambres ?"
-    },
-    "extra_costs": {
-      "question": "Quels frais supplémentaires s'ajoutent au loyer ?"
+      "format": "Bâtiment de <floorsTag>{floors} étages</floorsTag> avec <roomsTag>{rooms} chambres</roomsTag>."
     }
   },
   "FAQContactTable": {

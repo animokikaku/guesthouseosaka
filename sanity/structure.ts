@@ -23,7 +23,8 @@ const MANAGED_TYPES = [
   'galleryCategory',
   'amenityCategory',
   'amenity',
-  'pricingCategory'
+  'pricingCategory',
+  'faqQuestion'
 ]
 
 export const structure: StructureResolver = (S) =>
@@ -62,6 +63,13 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.document().schemaType('faqPage').documentId('faqPage')
                 ),
+              orderableDocumentListDeskItem({
+                type: 'faqQuestion',
+                title: 'FAQ Questions',
+                icon: HelpCircleIcon,
+                S,
+                context: S.context
+              }),
               S.listItem()
                 .title('Contact Page')
                 .icon(EnvelopeIcon)

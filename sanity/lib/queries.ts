@@ -263,14 +263,19 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
     "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
     href
   }),
-  "items": array::compact(items[]{
-    _key,
-    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),
-    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value)
-  }),
   "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),
   "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)
 }`)
+
+export const faqQuestionsQuery = defineQuery(`
+  *[_type == "faqQuestion"] | order(orderRank) {
+    _id,
+    _type,
+    "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),
+    "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value),
+    componentKey
+  }
+`)
 
 // =============================================================================
 // CONTACT PAGE

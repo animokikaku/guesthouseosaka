@@ -4,6 +4,7 @@ import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import {
   faqPageQuery,
+  faqQuestionsQuery,
   housesBuildingQuery,
   pricingCategoriesQuery
 } from '@/sanity/lib/queries'
@@ -17,7 +18,8 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
   const [
     { data: housesBuilding },
     { data: faqPage },
-    { data: pricingCategories }
+    { data: pricingCategories },
+    { data: faqQuestions }
   ] = await Promise.all([
     sanityFetch({
       query: housesBuildingQuery,
@@ -30,23 +32,27 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
     sanityFetch({
       query: pricingCategoriesQuery,
       params: { locale }
+    }),
+    sanityFetch({
+      query: faqQuestionsQuery,
+      params: { locale }
     })
   ])
 
-  if (!faqPage?.items?.length) {
+  if (!faqQuestions?.length) {
     return <PageEmptyState />
   }
 
   return (
     <section className="mx-auto flex w-full max-w-3xl flex-col gap-12">
       <FAQAccordion
-        faqPage={{ items: faqPage.items }}
+        faqQuestions={faqQuestions}
         pricingCategories={pricingCategories}
         housesBuilding={housesBuilding}
       />
       <FAQCard
-        contactSection={faqPage.contactSection}
-        contactNote={faqPage.contactNote}
+        contactSection={faqPage?.contactSection}
+        contactNote={faqPage?.contactNote}
         houses={housesBuilding}
       />
     </section>
