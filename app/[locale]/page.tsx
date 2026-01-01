@@ -4,7 +4,6 @@ import { PageEmptyState } from '@/components/page-empty-state'
 import { PageActions, PageHeader } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
-import { toCollectionHouses } from '@/lib/transforms/collection'
 import { toGalleryImages } from '@/lib/transforms/gallery'
 import { sanityFetch } from '@/sanity/lib/live'
 import { homePageQuery } from '@/sanity/lib/queries'
@@ -110,7 +109,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
           )}
           <PageActions>
             {houses ? (
-              <Collection houses={toCollectionHouses(houses)} className="w-full pt-4" />
+              <Collection houses={houses} className="w-full pt-4" />
             ) : null}
           </PageActions>
         </PageHeader>
