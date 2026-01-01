@@ -21,6 +21,7 @@ export const house = defineType({
   ],
   groups: [
     { name: 'identity', title: 'Identity', default: true },
+    { name: 'building', title: 'Building' },
     { name: 'about', title: 'About' },
     { name: 'gallery', title: 'Gallery' },
     { name: 'amenities', title: 'Amenities' },
@@ -93,11 +94,15 @@ export const house = defineType({
       group: 'identity',
       validation: (rule) => rule.required().assetRequired()
     }),
+
+    // ============================================
+    // BUILDING GROUP
+    // ============================================
     defineField({
       name: 'building',
       title: 'Building Facts',
       type: 'object',
-      group: 'identity',
+      group: 'building',
       fields: [
         defineField({
           name: 'rooms',
@@ -153,7 +158,8 @@ export const house = defineType({
       group: 'gallery',
       description: 'House photos organized by category. Drag to reorder.',
       of: [defineArrayMember({ type: 'galleryImage' })],
-      validation: (rule) => rule.min(1).error('At least one gallery image is required')
+      validation: (rule) =>
+        rule.min(1).error('At least one gallery image is required')
     }),
 
     // ============================================
@@ -254,7 +260,8 @@ export const house = defineType({
       group: 'pricing',
       description: 'Pricing information rows with rich text content',
       of: [defineArrayMember({ type: 'pricingRow' })],
-      validation: (rule) => rule.min(1).error('At least one pricing row is required')
+      validation: (rule) =>
+        rule.min(1).error('At least one pricing row is required')
     }),
     defineField({
       name: 'extraCosts',
