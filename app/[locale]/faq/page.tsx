@@ -40,11 +40,7 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
   return (
     <section className="mx-auto flex w-full max-w-3xl flex-col gap-12">
       <FAQAccordion
-        faqPage={{
-          _id: faqPage._id,
-          _type: faqPage._type,
-          items: faqPage.items
-        }}
+        faqPage={{ items: faqPage.items }}
         pricingCategories={pricingCategories}
         housesBuilding={housesBuilding}
       />

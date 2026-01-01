@@ -39,8 +39,6 @@ export default async function GalleryModalPage({
   return (
     <GalleryModalWrapper title={data.title ?? ''}>
       <GalleryPageContent
-        _id={data._id}
-        _type={data._type}
         gallery={data.gallery}
         title={data.title ?? ''}
         backButton={<GalleryModalCloseButton />}

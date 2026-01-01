@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Item,
   ItemActions,
@@ -7,27 +5,20 @@ import {
   ItemDescription,
   ItemTitle
 } from '@/components/ui/item'
-import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
-import type { ContactTypesListData } from '@/lib/types/components'
+import type { ContactTypeItem } from '@/lib/types/components'
 import { ChevronRightIcon } from 'lucide-react'
 
-export function ContactTypesList(props: ContactTypesListData) {
-  const [contactTypes, attr] = useOptimistic(props, 'contactTypes')
+type ContactTypesListProps = {
+  contactTypes: ContactTypeItem[]
+}
 
+export function ContactTypesList({ contactTypes }: ContactTypesListProps) {
   return (
-    <div
-      className="mx-auto flex w-full flex-col gap-4"
-      data-sanity={attr.list()}
-    >
-      {contactTypes.map(({ _key, slug, title, description }) => {
+    <div className="mx-auto flex w-full flex-col gap-4">
+      {contactTypes.map(({ _id, slug, title, description }) => {
         return (
-          <Item
-            key={_key}
-            asChild
-            className="flex-1"
-            data-sanity={attr.item(_key)}
-          >
+          <Item key={_id} asChild className="flex-1">
             <Link
               href={{
                 pathname: '/contact/[slug]',

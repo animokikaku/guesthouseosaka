@@ -3,14 +3,6 @@ import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SiteFooter } from '../site-footer'
 
-// Mock useOptimistic hook
-vi.mock('@/hooks/use-optimistic', () => ({
-  useOptimistic: (data: SettingsQueryResult) => [
-    data?.socialLinks ?? [],
-    { list: () => '', item: () => '' }
-  ]
-}))
-
 const createSettings = (
   overrides?: Partial<NonNullable<SettingsQueryResult>>
 ): SettingsQueryResult => ({
@@ -25,15 +17,15 @@ const createSettings = (
   socialLinks: [
     {
       _key: 'social-1',
-      platform: 'facebook',
-      url: 'https://facebook.com/example',
-      icon: '<svg></svg>'
+      icon: 'facebook',
+      label: 'Facebook',
+      url: 'https://facebook.com/example'
     },
     {
       _key: 'social-2',
-      platform: 'instagram',
-      url: 'https://instagram.com/example',
-      icon: '<svg></svg>'
+      icon: 'instagram',
+      label: 'Instagram',
+      url: 'https://instagram.com/example'
     }
   ],
   ...overrides
@@ -89,13 +81,13 @@ describe('SiteFooter', () => {
     it('renders social links with correct href', () => {
       render(<SiteFooter settings={createSettings()} />)
 
-      const facebookLink = screen.getByRole('link', { name: 'facebook' })
+      const facebookLink = screen.getByRole('link', { name: 'Facebook' })
       expect(facebookLink).toHaveAttribute(
         'href',
         'https://facebook.com/example'
       )
 
-      const instagramLink = screen.getByRole('link', { name: 'instagram' })
+      const instagramLink = screen.getByRole('link', { name: 'Instagram' })
       expect(instagramLink).toHaveAttribute(
         'href',
         'https://instagram.com/example'
@@ -120,43 +112,24 @@ describe('SiteFooter', () => {
       expect(screen.queryAllByRole('link')).toHaveLength(0)
     })
 
-    it('skips social links with missing url', () => {
-      render(
-        <SiteFooter
-          settings={createSettings({
-            socialLinks: [
-              // Testing runtime edge case: malformed data from CMS
-              {
-                _key: 'social-1',
-                platform: 'facebook',
-                url: '',
-                icon: '<svg></svg>'
-              }
-            ]
-          })}
-        />
-      )
-
-      expect(screen.queryAllByRole('link')).toHaveLength(0)
-    })
-
-    it('skips social links with missing icon', () => {
+    it('renders social link with custom label', () => {
       render(
         <SiteFooter
           settings={createSettings({
             socialLinks: [
               {
                 _key: 'social-1',
-                platform: 'facebook',
-                url: 'https://facebook.com',
-                icon: null
+                icon: 'facebook',
+                label: 'Follow us on Facebook',
+                url: 'https://facebook.com/example'
               }
             ]
           })}
         />
       )
 
-      expect(screen.queryAllByRole('link')).toHaveLength(0)
+      // Custom label is used instead of URL-derived label
+      expect(screen.getByLabelText('Follow us on Facebook')).toBeInTheDocument()
     })
   })
 
@@ -170,9 +143,9 @@ describe('SiteFooter', () => {
     it('social links have aria-label for platform name', () => {
       render(<SiteFooter settings={createSettings()} />)
 
-      expect(screen.getByRole('link', { name: 'facebook' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Facebook' })).toBeInTheDocument()
       expect(
-        screen.getByRole('link', { name: 'instagram' })
+        screen.getByRole('link', { name: 'Instagram' })
       ).toBeInTheDocument()
     })
   })

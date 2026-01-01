@@ -47,14 +47,6 @@ vi.mock('@sanity/client/stega', () => ({
   stegaClean: (value: string) => value
 }))
 
-// Mock useOptimistic
-vi.mock('@/hooks/use-optimistic', () => ({
-  useOptimistic: (data: { gallery: unknown }, field: string) => [
-    data[field as keyof typeof data],
-    { list: () => '', item: () => '' }
-  ]
-}))
-
 // Mock GalleryImageButton
 vi.mock('../gallery-image-button', () => ({
   GalleryImageButton: ({
@@ -70,11 +62,6 @@ vi.mock('../gallery-image-button', () => ({
   )
 }))
 
-const baseProps = {
-  _id: 'house-123',
-  _type: 'house' as const
-}
-
 describe('HouseGalleryClient', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -83,7 +70,7 @@ describe('HouseGalleryClient', () => {
   describe('empty gallery', () => {
     it('renders nothing for empty gallery', () => {
       const { container } = render(
-        <HouseGalleryClient {...baseProps} gallery={[]} />
+        <HouseGalleryClient gallery={[]} />
       )
 
       expect(container.querySelector('h3')).not.toBeInTheDocument()
@@ -91,7 +78,7 @@ describe('HouseGalleryClient', () => {
 
     it('renders nothing for null gallery', () => {
       const { container } = render(
-        <HouseGalleryClient {...baseProps} gallery={null as unknown as []} />
+        <HouseGalleryClient gallery={null as unknown as []} />
       )
 
       expect(container.querySelector('h3')).not.toBeInTheDocument()
@@ -109,7 +96,7 @@ describe('HouseGalleryClient', () => {
         createGalleryItem({ _key: 'img2', category })
       ]
 
-      render(<HouseGalleryClient {...baseProps} gallery={gallery} />)
+      render(<HouseGalleryClient gallery={gallery} />)
 
       expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
         'Bedroom'
@@ -132,7 +119,7 @@ describe('HouseGalleryClient', () => {
         createGalleryItem({ _key: 'img2', category: kitchenCat })
       ]
 
-      render(<HouseGalleryClient {...baseProps} gallery={gallery} />)
+      render(<HouseGalleryClient gallery={gallery} />)
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings).toHaveLength(2)
@@ -154,7 +141,7 @@ describe('HouseGalleryClient', () => {
         createGalleryItem({ _key: 'img2', category: bedroomCat })
       ]
 
-      render(<HouseGalleryClient {...baseProps} gallery={gallery} />)
+      render(<HouseGalleryClient gallery={gallery} />)
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings[0]).toHaveTextContent('Bedroom')
@@ -171,7 +158,7 @@ describe('HouseGalleryClient', () => {
         createGalleryItem({ _key: 'img3', category })
       ]
 
-      render(<HouseGalleryClient {...baseProps} gallery={gallery} />)
+      render(<HouseGalleryClient gallery={gallery} />)
 
       const buttons = screen.getAllByTestId('gallery-image-button')
       expect(buttons).toHaveLength(3)
@@ -183,7 +170,7 @@ describe('HouseGalleryClient', () => {
       const category = createGalleryCategory({ key: 'room', label: 'Room' })
       const gallery = [createGalleryItem({ _key: 'img1', category })]
 
-      render(<HouseGalleryClient {...baseProps} gallery={gallery} />)
+      render(<HouseGalleryClient gallery={gallery} />)
 
       // Multiple buttons: thumbnail + grid item
       const buttons = screen.getAllByRole('button')

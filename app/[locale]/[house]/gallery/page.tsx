@@ -40,8 +40,6 @@ export default async function GalleryPage({
     <div className="bg-background text-foreground fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden">
       <div className="flex h-full w-full flex-col overflow-hidden">
         <GalleryPageContent
-          _id={data._id}
-          _type={data._type}
           gallery={data.gallery}
           title={data.title ?? ''}
           backButton={

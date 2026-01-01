@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Item,
   ItemContent,
@@ -8,14 +6,10 @@ import {
   ItemHeader,
   ItemTitle
 } from '@/components/ui/item'
-import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { type HouseIdentifier } from '@/lib/types'
-import type {
-  CollectionData,
-  CollectionHouseItem
-} from '@/lib/types/components'
+import type { CollectionHouseItem } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions, type SanityImageSource } from '@sanity/asset-utils'
@@ -27,25 +21,20 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   lemon: 'bg-yellow-600/50'
 }
 
-interface CollectionProps extends CollectionData {
+type CollectionProps = {
+  houses: CollectionHouseItem[]
   className?: string
 }
 
-export function Collection({ className, ...data }: CollectionProps) {
-  const [houses, attribute] = useOptimistic(data, 'houses')
-
+export function Collection({ houses, className }: CollectionProps) {
   return (
-    <ItemGroup
-      className={cn('grid gap-8 md:grid-cols-3 md:gap-8', className)}
-      data-sanity={attribute.list()}
-    >
+    <ItemGroup className={cn('grid gap-8 md:grid-cols-3 md:gap-8', className)}>
       {houses.map((house) => (
         <Item
-          key={house._key}
+          key={house._id}
           variant="default"
           role="listitem"
           className="h-full flex-col items-start p-0"
-          data-sanity={attribute.item(house._key)}
         >
           <Link
             href={{
@@ -58,7 +47,7 @@ export function Collection({ className, ...data }: CollectionProps) {
               <CollectionImage image={house.image} />
               <div
                 className={cn(
-                  'absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100',
+                  'pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100',
                   ACCENT_CLASSES[house.slug]
                 )}
               >

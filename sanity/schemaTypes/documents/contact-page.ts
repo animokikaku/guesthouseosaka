@@ -30,26 +30,6 @@ export const contactPage = defineType({
       group: 'content'
     }),
     defineField({
-      name: 'contactTypes',
-      title: 'Contact Types',
-      type: 'array',
-      description: 'Different ways visitors can contact you. Drag to reorder.',
-      of: [
-        defineArrayMember({ type: 'reference', to: [{ type: 'contactType' }] })
-      ],
-      validation: (rule) =>
-        rule.custom((refs: Array<{ _ref: string }> | undefined) => {
-          if (!refs || refs.length === 0) return true
-          const refIds = refs.map((ref) => ref._ref)
-          const uniqueIds = new Set(refIds)
-          if (uniqueIds.size !== refIds.length) {
-            return 'Each contact type can only be added once'
-          }
-          return true
-        }),
-      group: 'content'
-    }),
-    defineField({
       name: 'metaTitle',
       title: 'Meta Title',
       type: 'internationalizedArrayString',
@@ -69,13 +49,9 @@ export const contactPage = defineType({
     })
   ],
   preview: {
-    select: {
-      contactTypes: 'contactTypes'
-    },
-    prepare({ contactTypes }) {
+    prepare() {
       return {
-        title: 'Contact Page',
-        subtitle: `${contactTypes?.length || 0} contact types`
+        title: 'Contact Page'
       }
     }
   }

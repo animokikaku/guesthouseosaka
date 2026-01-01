@@ -1,6 +1,6 @@
 import { ContactTypeSchema, ContactTypeValues } from '@/lib/types'
 import { EnvelopeIcon } from '@sanity/icons'
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType, type StringFieldProps } from 'sanity'
 
 // Helper to create a field config
 const fieldConfig = (
@@ -24,11 +24,28 @@ export const contactType = defineType({
   title: 'Contact Type',
   type: 'document',
   icon: EnvelopeIcon,
+  description: 'Contact form types displayed on contact page. Drag to reorder.',
+  orderings: [
+    {
+      title: 'Global Order',
+      name: 'orderRankAsc',
+      by: [{ field: 'orderRank', direction: 'asc' }]
+    }
+  ],
   groups: [
     { name: 'main', title: 'Main', default: true },
     { name: 'fields', title: 'Form Fields' }
   ],
   fields: [
+    // Hidden field for @sanity/orderable-document-list
+    defineField({
+      name: 'orderRank',
+      type: 'string',
+      hidden: true,
+      components: {
+        field: (props: StringFieldProps) => props.renderDefault(props)
+      }
+    }),
     defineField({
       name: 'slug',
       title: 'Type',
@@ -77,7 +94,10 @@ export const contactType = defineType({
           hiddenFor: ['other'],
           noPlaceholder: true
         }),
-        fieldConfig('date', 'Date', { hiddenFor: ['other'], noPlaceholder: true }),
+        fieldConfig('date', 'Date', {
+          hiddenFor: ['other'],
+          noPlaceholder: true
+        }),
         // Tour only
         fieldConfig('hour', 'Hour', {
           hiddenFor: ['move-in', 'other'],

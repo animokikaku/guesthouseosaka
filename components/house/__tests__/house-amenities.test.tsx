@@ -23,13 +23,6 @@ vi.mock('@/hooks/use-mobile', () => ({
   useIsMobile: vi.fn(() => false)
 }))
 
-vi.mock('@/hooks/use-optimistic', () => ({
-  useOptimistic: vi.fn((data, field) => [
-    data[field],
-    { list: () => '', item: () => '' }
-  ])
-}))
-
 vi.mock('@/lib/icons', () => ({
   Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />
 }))
@@ -64,10 +57,6 @@ describe('HouseAmenities', () => {
     mockUseIsMobile.mockReturnValue(false)
   })
 
-  const baseProps = {
-    _id: 'house-123',
-    _type: 'house'
-  }
 
   describe('featured amenities display', () => {
     it('renders featured amenities on desktop (max 10)', () => {
@@ -80,7 +69,7 @@ describe('HouseAmenities', () => {
         })
       )
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       // Should display max 10 on desktop
       expect(screen.getAllByText(/Amenity \d+/)).toHaveLength(10)
@@ -98,7 +87,7 @@ describe('HouseAmenities', () => {
         })
       )
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       // Should display max 5 on mobile
       expect(screen.getAllByText(/Amenity \d+/)).toHaveLength(5)
@@ -111,7 +100,7 @@ describe('HouseAmenities', () => {
         createAmenity({ _key: 'featured-2', label: 'Featured 2', featured: true, icon: 'utensils' })
       ]
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       expect(screen.getByText('Featured 1')).toBeInTheDocument()
       expect(screen.getByText('Featured 2')).toBeInTheDocument()
@@ -125,7 +114,7 @@ describe('HouseAmenities', () => {
         createAmenity({ _key: 'a1', label: 'Wifi', featured: true, icon: 'wifi' })
       ]
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       // The heading uses t('heading') which returns 'heading' in mocked translations
       expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('heading')
@@ -142,7 +131,7 @@ describe('HouseAmenities', () => {
         })
       )
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       // Button uses show_all translation key (mocked)
       expect(screen.getByRole('button')).toHaveTextContent('show_all')
@@ -158,7 +147,7 @@ describe('HouseAmenities', () => {
         createAmenity({ _key: 'no-note', label: 'Kitchen', note: null, featured: true, icon: 'utensils' })
       ]
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       // Note labels use translation keys
       expect(screen.getByText('notes.shared')).toBeInTheDocument()
@@ -174,7 +163,7 @@ describe('HouseAmenities', () => {
         createAmenity({ _key: 'bed', label: 'Bed', icon: 'bed', featured: true })
       ]
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       expect(screen.getByTestId('icon-wifi')).toBeInTheDocument()
       expect(screen.getByTestId('icon-bed')).toBeInTheDocument()
@@ -183,7 +172,7 @@ describe('HouseAmenities', () => {
 
   describe('empty amenities', () => {
     it('handles empty amenities array', () => {
-      render(<HouseAmenities {...baseProps} amenities={[]} />)
+      render(<HouseAmenities amenities={[]} />)
 
       // Should still render section with heading and button
       expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
@@ -204,7 +193,7 @@ describe('HouseAmenities', () => {
         })
       ]
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -224,7 +213,7 @@ describe('HouseAmenities', () => {
         })
       ]
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -259,7 +248,7 @@ describe('HouseAmenities', () => {
         })
       ]
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       fireEvent.click(screen.getByRole('button'))
 
@@ -293,7 +282,7 @@ describe('HouseAmenities', () => {
         })
       ]
 
-      render(<HouseAmenities {...baseProps} amenities={amenities} />)
+      render(<HouseAmenities amenities={amenities} />)
 
       fireEvent.click(screen.getByRole('button'))
 

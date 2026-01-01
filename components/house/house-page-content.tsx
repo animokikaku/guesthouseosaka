@@ -89,11 +89,7 @@ export function HousePageContent({
                 about={toAboutContent(about)}
                 building={toBuildingData(building)}
               />
-              <HouseAmenities
-                _id={_id}
-                _type={_type}
-                amenities={toAmenityItems(amenities)}
-              />
+              <HouseAmenities amenities={toAmenityItems(amenities)} />
               <HouseLocation
                 location={toLocationData(location)}
                 map={toMapData(map)}

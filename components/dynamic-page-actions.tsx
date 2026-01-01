@@ -2,31 +2,26 @@
 
 import { PageActions } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
-import { useOptimistic } from '@/hooks/use-optimistic'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Icon } from '@/lib/icons'
-import { ContactPageQueryResult, FaqPageQueryResult } from '@/sanity.types'
-import { stegaClean } from '@sanity/client/stega'
+import { FaqPageQueryResult } from '@/sanity.types'
+
+type PageAction = NonNullable<
+  NonNullable<FaqPageQueryResult>['actions']
+>[number]
 
 interface DynamicPageActionsProps {
-  page:
-    | Pick<NonNullable<FaqPageQueryResult>, 'actions' | '_id' | '_type'>
-    | Pick<NonNullable<ContactPageQueryResult>, 'actions' | '_id' | '_type'>
+  actions: PageAction[] | null
 }
 
-export function DynamicPageActions({ page }: DynamicPageActionsProps) {
-  const [actions, attr] = useOptimistic(page, 'actions')
+export function DynamicPageActions({ actions }: DynamicPageActionsProps) {
   const currentPathname = usePathname()
 
   if (!actions || actions.length === 0) return null
 
   return (
-    <PageActions data-sanity={attr.list()}>
-      {actions.map((action, index) => {
-        const key = stegaClean(action._key)
-        const iconName = stegaClean(action.icon)
-        const href = stegaClean(action.href)
-        const label = stegaClean(action.label)
+    <PageActions>
+      {actions.map(({ _key, icon, href, label }, index) => {
         // First action is 'default' variant, others are 'ghost'
         const variant = index === 0 ? 'default' : 'ghost'
 
@@ -42,15 +37,9 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
 
         if (isExternal) {
           return (
-            <Button
-              key={key}
-              asChild
-              variant={variant}
-              size="sm"
-              data-sanity={attr.item(key)}
-            >
+            <Button key={_key} asChild variant={variant} size="sm">
               <a href={href} target="_blank" rel="noopener noreferrer">
-                <Icon name={iconName} />
+                <Icon name={icon} />
                 {label}
               </a>
             </Button>
@@ -58,13 +47,7 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
         }
 
         return (
-          <Button
-            key={key}
-            asChild
-            variant={variant}
-            size="sm"
-            data-sanity={attr.item(key)}
-          >
+          <Button key={_key} asChild variant={variant} size="sm">
             <Link
               href={
                 hasHash
@@ -72,7 +55,7 @@ export function DynamicPageActions({ page }: DynamicPageActionsProps) {
                   : (href as '/')
               }
             >
-              <Icon name={iconName} />
+              <Icon name={icon} />
               {label}
             </Link>
           </Button>

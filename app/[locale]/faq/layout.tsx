@@ -66,9 +66,7 @@ export default async function FAQLayout({
           <PortableText value={data?.header} components={headerComponents} />
         )}
         {data?.actions && data?.actions.length > 0 && (
-          <DynamicPageActions
-            page={{ _id: data._id, _type: data._type, actions: data?.actions }}
-          />
+          <DynamicPageActions actions={data.actions} />
         )}
       </PageHeader>
       <div className="container-wrapper section-soft flex-1 md:pb-12">

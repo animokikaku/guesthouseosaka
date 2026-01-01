@@ -1,6 +1,4 @@
-'use client'
-
-import { useOptimistic } from '@/hooks/use-optimistic'
+import { Icon, type IconName } from '@/lib/icons'
 import type { SettingsQueryResult } from '@/sanity.types'
 
 type SiteFooterProps = {
@@ -9,7 +7,6 @@ type SiteFooterProps = {
 
 export function SiteFooter({ settings }: SiteFooterProps) {
   const year = new Date().getFullYear()
-  const [socialLinks, attr] = useOptimistic(settings, 'socialLinks')
 
   return (
     <footer className="group-has-[.section-soft]/body:bg-surface/40 3xl:fixed:bg-transparent group-has-[.snap-footer]/body:md:snap-end dark:bg-transparent">
@@ -21,22 +18,15 @@ export function SiteFooter({ settings }: SiteFooterProps) {
             </span>
             © {year} {settings?.companyName}
           </div>
-          <div
-            className="flex shrink-0 items-center gap-3"
-            data-sanity={attr.list()}
-          >
-            {socialLinks?.map((link) => {
-              if (!link.icon || !link.url) return null
-              return (
-                <SocialLink
-                  key={link._key}
-                  data-sanity={attr.item(link._key)}
-                  href={link.url}
-                  platform={link.platform ?? 'social'}
-                  icon={link.icon}
-                />
-              )
-            })}
+          <div className="flex shrink-0 items-center gap-3">
+            {settings?.socialLinks?.map((link) => (
+              <SocialLink
+                key={link._key}
+                href={link.url}
+                icon={link.icon as IconName}
+                label={link.label}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -46,23 +36,24 @@ export function SiteFooter({ settings }: SiteFooterProps) {
 
 function SocialLink({
   href,
-  platform,
   icon,
+  label,
   ...props
 }: {
   href: string
-  platform: string
-  icon: string
+  icon: IconName
+  label: string
 } & React.HTMLAttributes<HTMLAnchorElement>) {
   return (
     <a
-      className="text-muted-foreground hover:text-foreground transition-colors [&_svg]:size-5"
+      className="text-muted-foreground hover:text-foreground transition-colors"
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={platform}
-      dangerouslySetInnerHTML={{ __html: icon }}
+      aria-label={label}
       {...props}
-    />
+    >
+      <Icon name={icon} className="size-5" />
+    </a>
   )
 }

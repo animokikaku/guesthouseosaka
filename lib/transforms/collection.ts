@@ -1,8 +1,6 @@
 import type {
-  CollectionData,
   CollectionHouseItem,
   ContactTypeItem,
-  ContactTypesListData,
   SanityImage
 } from '@/lib/types/components'
 import type { ContactPageQueryResult, HomePageQueryResult } from '@/sanity.types'
@@ -11,28 +9,14 @@ import type { ContactPageQueryResult, HomePageQueryResult } from '@/sanity.types
 // Input Types (from Sanity query results)
 // ============================================
 
-type HomePageHouses = NonNullable<NonNullable<HomePageQueryResult>['houses']>
-type HomePageHouse = HomePageHouses[number]
+type HomePageHouses = NonNullable<HomePageQueryResult>['houses']
+type HomePageHouse = NonNullable<HomePageHouses>[number]
 
 type ContactPageContactTypes = NonNullable<NonNullable<ContactPageQueryResult>['contactTypes']>
-type ContactPageContactType = ContactPageContactTypes[number]
 
 // ============================================
 // Collection Transformer
 // ============================================
-
-/**
- * Transforms a house item from Sanity query to CollectionHouseItem
- */
-function toCollectionHouseItem(house: HomePageHouse): CollectionHouseItem {
-  return {
-    _key: house._key,
-    slug: house.slug,
-    title: house.title,
-    description: house.description,
-    image: toSanityImage(house.image)
-  }
-}
 
 /**
  * Transforms Sanity image data to SanityImage interface
@@ -55,19 +39,16 @@ function toSanityImage(image: HomePageHouse['image']): SanityImage {
 }
 
 /**
- * Transforms HomePage data to CollectionData
- * @param data - Raw homepage data from Sanity query (must include _id, _type, houses)
+ * Transforms houses from Sanity query to CollectionHouseItem array
  */
-export function toCollectionData(data: {
-  _id: string
-  _type: string
-  houses: HomePageHouses
-}): CollectionData {
-  return {
-    _id: data._id,
-    _type: data._type,
-    houses: data.houses.map(toCollectionHouseItem)
-  }
+export function toCollectionHouses(houses: HomePageHouses): CollectionHouseItem[] {
+  return houses.map((house) => ({
+    _id: house._id,
+    slug: house.slug,
+    title: house.title,
+    description: house.description,
+    image: toSanityImage(house.image)
+  }))
 }
 
 // ============================================
@@ -75,29 +56,13 @@ export function toCollectionData(data: {
 // ============================================
 
 /**
- * Transforms a contact type from Sanity query to ContactTypeItem
+ * Transforms contact types from Sanity query to ContactTypeItem array
  */
-function toContactTypeItem(contactType: ContactPageContactType): ContactTypeItem {
-  return {
-    _key: contactType._key,
+export function toContactTypes(contactTypes: ContactPageContactTypes): ContactTypeItem[] {
+  return contactTypes.map((contactType) => ({
+    _id: contactType._id,
     slug: contactType.slug,
     title: contactType.title,
     description: contactType.description
-  }
-}
-
-/**
- * Transforms ContactPage data to ContactTypesListData
- * @param data - Raw contact page data from Sanity query (must include _id, _type, contactTypes)
- */
-export function toContactTypesListData(data: {
-  _id: string
-  _type: string
-  contactTypes: ContactPageContactTypes
-}): ContactTypesListData {
-  return {
-    _id: data._id,
-    _type: data._type,
-    contactTypes: data.contactTypes.map(toContactTypeItem)
-  }
+  }))
 }

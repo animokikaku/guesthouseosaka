@@ -7,7 +7,6 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
-import { useOptimistic } from '@/hooks/use-optimistic'
 import type {
   FaqPageQueryResult,
   HousesBuildingQueryResult,
@@ -31,8 +30,7 @@ type FaqPage = NonNullable<FaqPageQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 
-type FaqItemsData = Pick<FaqPage, '_id' | '_type' | 'items'>
-type FaqPageData = Pick<FaqPage, '_id' | '_type' | 'items'>
+type FaqPageData = Pick<FaqPage, 'items'>
 
 type FAQAccordionProps = {
   faqPage: FaqPageData
@@ -47,26 +45,21 @@ export function FAQAccordion({
 }: FAQAccordionProps) {
   const t = useTranslations('FAQAccordion')
   const formatter = useFormatter()
-  const [items, itemsAttr] = useOptimistic(faqPage as FaqItemsData, 'items')
+  const items = faqPage.items
 
   if (!items) return null
 
   return (
     <Accordion type="multiple">
-      {items.map((item) => {
-        const key = stegaClean(item._key)
-        const question = stegaClean(item.question)
+      {items.map(({ _key, question, answer }) => {
         return (
-          <AccordionItem key={key} value={key}>
-            <AccordionTrigger
-              className="text-md sm:text-lg"
-              data-sanity={itemsAttr.item(key)}
-            >
+          <AccordionItem key={_key} value={_key}>
+            <AccordionTrigger className="text-md sm:text-lg">
               {question}
             </AccordionTrigger>
             <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
-              {item.answer && (
-                <PortableText value={item.answer} components={components} />
+              {answer && (
+                <PortableText value={answer} components={components} />
               )}
             </AccordionContent>
           </AccordionItem>

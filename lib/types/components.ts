@@ -150,24 +150,15 @@ export interface ContactFormConfig {
 }
 
 // ============================================
-// Visual Editing Components
+// Collection Components
 // ============================================
-
-/**
- * Base interface for components that support Sanity visual editing
- * Includes _id and _type needed by useOptimistic hook
- */
-interface VisualEditingBase {
-  _id: string
-  _type: string
-}
 
 /**
  * House item in the collection grid
  * @see components/collection.tsx
  */
 export interface CollectionHouseItem {
-  _key: string
+  _id: string
   slug: HouseIdentifier
   title: string | null
   description: string | null
@@ -175,30 +166,14 @@ export interface CollectionHouseItem {
 }
 
 /**
- * Collection component data with visual editing support
- * @see components/collection.tsx
- */
-export interface CollectionData extends VisualEditingBase {
-  houses: CollectionHouseItem[]
-}
-
-/**
  * Contact type item in the navigation list
  * @see app/[locale]/contact/(components)/contact-types-list.tsx
  */
 export interface ContactTypeItem {
-  _key: string
+  _id: string
   slug: ContactType
   title: string | null
   description: string | null
-}
-
-/**
- * Contact types list data with visual editing support
- * @see app/[locale]/contact/(components)/contact-types-list.tsx
- */
-export interface ContactTypesListData extends VisualEditingBase {
-  contactTypes: ContactTypeItem[]
 }
 
 // ============================================

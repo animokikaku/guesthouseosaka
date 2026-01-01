@@ -56,12 +56,6 @@ export default defineType({
       ],
       validation: (rule) => rule.required()
     }),
-    defineField({
-      name: 'houses',
-      type: 'array',
-      of: [{ type: 'reference', to: { type: 'house' } }],
-      validation: (rule) => rule.required().length(3).unique()
-    })
   ],
   preview: {
     prepare() {

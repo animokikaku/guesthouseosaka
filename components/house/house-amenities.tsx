@@ -19,24 +19,19 @@ import {
   DrawerTrigger
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { useOptimistic } from '@/hooks/use-optimistic'
+import { Icon } from '@/lib/icons'
 import type { AmenityItemData } from '@/lib/types/components'
 import { groupByCategory } from '@/lib/utils/group-by-category'
-import { Icon } from '@/lib/icons'
 import { stegaClean } from '@sanity/client/stega'
 import { useTranslations } from 'next-intl'
 import * as React from 'react'
 import { useMemo } from 'react'
 
 interface HouseAmenitiesProps {
-  _id: string
-  _type: string
   amenities: AmenityItemData[]
 }
 
 interface AmenitiesDialogProps {
-  _id: string
-  _type: string
   amenities: AmenityItemData[]
   noteLabels: Record<string, string>
   trigger: React.ReactNode
@@ -49,13 +44,10 @@ interface AmenityItemProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 function AmenityItem({ amenity, noteLabel, ...props }: AmenityItemProps) {
-  // Clean stega encoding from icon
-  const iconName = stegaClean(amenity.icon)
-
   return (
     <div className="flex items-center gap-3 py-2" {...props}>
       <div className="text-muted-foreground h-5 w-5 shrink-0">
-        <Icon name={iconName} className="h-5 w-5" />
+        <Icon name={amenity.icon} className="h-5 w-5" />
       </div>
       <div className="flex-1">
         <span className="text-foreground">{amenity.label}</span>
@@ -72,18 +64,18 @@ function AmenityItem({ amenity, noteLabel, ...props }: AmenityItemProps) {
 function AmenitiesDialog({
   noteLabels,
   trigger,
-  _id,
-  _type,
   title,
   amenities
 }: AmenitiesDialogProps) {
   const isMobile = useIsMobile()
-  const [data, attr] = useOptimistic({ _id, _type, amenities }, 'amenities')
 
-  // Group by category for display, but data-sanity still references flat array
-  const amenityCategories = useMemo(() => groupByCategory(data), [data])
+  // Group by category for display
+  const amenityCategories = useMemo(
+    () => groupByCategory(amenities),
+    [amenities]
+  )
 
-  if (!data) return null
+  if (!amenities) return null
 
   const content = (
     <div className="space-y-8 pt-8">
@@ -92,10 +84,9 @@ function AmenitiesDialog({
           <h3 className="text-foreground mb-4 text-lg font-semibold">
             {category.label}
           </h3>
-          <div className="grid grid-cols-1 gap-2" data-sanity={attr.list()}>
+          <div className="grid grid-cols-1 gap-2">
             {category.items.map((amenity) => (
               <AmenityItem
-                data-sanity={attr.item(amenity._key)}
                 key={amenity._key}
                 amenity={amenity}
                 noteLabel={
@@ -140,7 +131,7 @@ function AmenitiesDialog({
   )
 }
 
-export function HouseAmenities({ _id, _type, amenities }: HouseAmenitiesProps) {
+export function HouseAmenities({ amenities }: HouseAmenitiesProps) {
   const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
 
@@ -180,8 +171,6 @@ export function HouseAmenities({ _id, _type, amenities }: HouseAmenitiesProps) {
 
         <AmenitiesDialog
           title={t('heading')}
-          _id={_id}
-          _type={_type}
           amenities={amenities}
           noteLabels={noteLabels}
           trigger={

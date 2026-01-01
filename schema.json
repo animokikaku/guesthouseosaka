@@ -293,29 +293,20 @@
             "value": "socialLink"
           }
         },
-        "platform": {
+        "icon": {
           "type": "objectAttribute",
           "value": {
-            "type": "union",
-            "of": [
-              {
-                "type": "string",
-                "value": "facebook"
-              },
-              {
-                "type": "string",
-                "value": "instagram"
-              }
-            ]
+            "type": "inline",
+            "name": "lucide-icon"
           },
           "optional": false
         },
-        "icon": {
+        "label": {
           "type": "objectAttribute",
           "value": {
             "type": "string"
           },
-          "optional": true
+          "optional": false
         },
         "url": {
           "type": "objectAttribute",
@@ -1035,6 +1026,13 @@
           "type": "string"
         }
       },
+      "orderRank": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "slug": {
         "type": "objectAttribute",
         "value": {
@@ -1172,36 +1170,6 @@
     }
   },
   {
-    "type": "type",
-    "name": "contactType.reference",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_ref": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          }
-        },
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "reference"
-          }
-        },
-        "_weak": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "boolean"
-          },
-          "optional": true
-        }
-      },
-      "dereferencesTo": "contactType"
-    }
-  },
-  {
     "name": "contactPage",
     "type": "document",
     "attributes": {
@@ -1261,28 +1229,6 @@
             "rest": {
               "type": "inline",
               "name": "pageAction"
-            }
-          }
-        },
-        "optional": true
-      },
-      "contactTypes": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "array",
-          "of": {
-            "type": "object",
-            "attributes": {
-              "_key": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                }
-              }
-            },
-            "rest": {
-              "type": "inline",
-              "name": "contactType.reference"
             }
           }
         },
@@ -2005,36 +1951,6 @@
     }
   },
   {
-    "type": "type",
-    "name": "house.reference",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_ref": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          }
-        },
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "reference"
-          }
-        },
-        "_weak": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "boolean"
-          },
-          "optional": true
-        }
-      },
-      "dereferencesTo": "house"
-    }
-  },
-  {
     "name": "homePage",
     "type": "document",
     "attributes": {
@@ -2175,28 +2091,6 @@
                 "name": "internationalizedArrayPortableText"
               },
               "optional": false
-            }
-          }
-        },
-        "optional": false
-      },
-      "houses": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "array",
-          "of": {
-            "type": "object",
-            "attributes": {
-              "_key": {
-                "type": "objectAttribute",
-                "value": {
-                  "type": "string"
-                }
-              }
-            },
-            "rest": {
-              "type": "inline",
-              "name": "house.reference"
             }
           }
         },

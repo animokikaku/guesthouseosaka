@@ -2,7 +2,6 @@
 
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { useOptimistic } from '@/hooks/use-optimistic'
 import {
   groupGalleryByCategory,
   type Gallery,
@@ -10,7 +9,6 @@ import {
   type GalleryItem
 } from '@/lib/gallery'
 import { store } from '@/lib/store'
-import type { HouseQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { stegaClean } from '@sanity/client/stega'
 import Image from 'next/image'
@@ -18,23 +16,17 @@ import * as React from 'react'
 import { GalleryImageButton } from './gallery-image-button'
 
 type HouseGalleryClientProps = {
-  _id: NonNullable<HouseQueryResult>['_id']
-  _type: NonNullable<HouseQueryResult>['_type']
   gallery: Gallery
   /** Ref for sentinel element (used to detect when thumbnails scroll out of view) */
   sentinelRef?: React.RefObject<HTMLDivElement | null>
 }
 
 export function HouseGalleryClient({
-  _id,
-  _type,
   gallery,
   sentinelRef
 }: HouseGalleryClientProps) {
-  const [data, attr] = useOptimistic({ _id, _type, gallery }, 'gallery')
-
   // Group by category for display
-  const categories = React.useMemo(() => groupGalleryByCategory(data), [data])
+  const categories = React.useMemo(() => groupGalleryByCategory(gallery), [gallery])
 
   // Filter out categories with no items
   const validCategories = categories.filter((c) => c.items.length > 0)
@@ -61,11 +53,7 @@ export function HouseGalleryClient({
       {/* All Categories Grid */}
       <div className="space-y-12">
         {validCategories.map((category) => (
-          <CategoryGrid
-            key={`grid-${category.key}`}
-            category={category}
-            attr={attr}
-          />
+          <CategoryGrid key={`grid-${category.key}`} category={category} />
         ))}
       </div>
     </div>
@@ -116,21 +104,17 @@ function CategoryThumbnail({ category }: { category: GalleryCategory }) {
 
 type CategoryGridProps = {
   category: GalleryCategory
-  attr: { list: () => string; item: (key: string) => string }
 }
 
-function CategoryGrid({ category, attr }: CategoryGridProps) {
+function CategoryGrid({ category }: CategoryGridProps) {
   if (category.items.length === 0) return null
 
   return (
     <div id={category.key} className="scroll-mt-3 space-y-4">
       <h3 className="text-xl font-semibold">{category.label}</h3>
-      <div
-        className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4"
-        data-sanity={attr.list()}
-      >
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
         {category.items.map((item) => (
-          <GalleryGridItem key={item._key} item={item} attr={attr} />
+          <GalleryGridItem key={item._key} item={item} />
         ))}
       </div>
     </div>
@@ -139,10 +123,9 @@ function CategoryGrid({ category, attr }: CategoryGridProps) {
 
 type GalleryGridItemProps = {
   item: GalleryItem
-  attr: { list: () => string; item: (key: string) => string }
 }
 
-function GalleryGridItem({ item, attr }: GalleryGridItemProps) {
+function GalleryGridItem({ item }: GalleryGridItemProps) {
   const { _key, image } = item
   if (!image) return null
 
@@ -150,7 +133,6 @@ function GalleryGridItem({ item, attr }: GalleryGridItemProps) {
 
   return (
     <GalleryImageButton
-      data-sanity={attr.item(_key)}
       onClick={() => store.setState({ photoId: _key })}
       imageProps={{
         src,

@@ -4,7 +4,7 @@ import { PageEmptyState } from '@/components/page-empty-state'
 import { PageActions, PageHeader } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
-import { toCollectionData } from '@/lib/transforms/collection'
+import { toCollectionHouses } from '@/lib/transforms/collection'
 import { toGalleryImages } from '@/lib/transforms/gallery'
 import { sanityFetch } from '@/sanity/lib/live'
 import { homePageQuery } from '@/sanity/lib/queries'
@@ -52,10 +52,12 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
     params: { locale }
   })
 
-  // Check for actual content, not just existence of the document
-  const hasContent = data?.houses && data.houses.length > 0
+  const { page, houses } = data ?? {}
 
-  if (!data || !hasContent) {
+  // Check for actual content, not just existence of the document
+  const hasContent = houses && houses.length > 0
+
+  if (!page || !hasContent) {
     return (
       <div className="container-wrapper flex flex-1 items-center justify-center py-12">
         <div className="mx-auto w-full max-w-2xl">
@@ -65,7 +67,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
     )
   }
 
-  const { _id, _type, hero, collection, galleryWall, houses } = data
+  const { hero, collection, galleryWall } = page
 
   return (
     <div className="snap-footer section-soft flex flex-col gap-18 md:gap-0">
@@ -108,10 +110,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
           )}
           <PageActions>
             {houses ? (
-              <Collection
-                {...toCollectionData({ _id, _type, houses })}
-                className="w-full pt-4"
-              />
+              <Collection houses={toCollectionHouses(houses)} className="w-full pt-4" />
             ) : null}
           </PageActions>
         </PageHeader>

@@ -1,4 +1,3 @@
-import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 import {
   CheckmarkCircleIcon,
   CogIcon,
@@ -10,6 +9,7 @@ import {
   ImagesIcon,
   TagIcon
 } from '@sanity/icons'
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 import type { StructureResolver } from 'sanity/structure'
 
 // Document types that are singletons (should not appear in generic lists)
@@ -95,14 +95,13 @@ export const structure: StructureResolver = (S) =>
       // ============================================
       // FORMS
       // ============================================
-      S.listItem()
-        .title('Forms')
-        .icon(EnvelopeIcon)
-        .child(
-          S.documentTypeList('contactType')
-            .title('Contact Form Types')
-            .defaultOrdering([{ field: 'slug', direction: 'asc' }])
-        ),
+      orderableDocumentListDeskItem({
+        type: 'contactType',
+        title: 'Contact',
+        icon: EnvelopeIcon,
+        S,
+        context: S.context
+      }),
 
       // ============================================
       // CATEGORIES FOLDER

@@ -40,8 +40,8 @@ export async function generateMetadata(
   })
 
   return {
-    title: contactPage?.metaTitle ?? 'Contact',
-    description: contactPage?.metaDescription ?? undefined,
+    title: contactPage?.page?.metaTitle ?? 'Contact',
+    description: contactPage?.page?.metaDescription ?? undefined,
     openGraph,
     twitter
   }
@@ -59,16 +59,16 @@ export default async function ContactLayout({
     params: { locale }
   })
 
+  const page = data?.page
+
   return (
     <>
       <PageHeader>
-        {data?.header && (
-          <PortableText value={data?.header} components={headerComponents} />
+        {page?.header && (
+          <PortableText value={page.header} components={headerComponents} />
         )}
-        {data?.actions && data?.actions.length > 0 && (
-          <DynamicPageActions
-            page={{ _id: data._id, _type: data._type, actions: data.actions }}
-          />
+        {page?.actions && page.actions.length > 0 && (
+          <DynamicPageActions actions={page.actions} />
         )}
       </PageHeader>
       <div className="container-wrapper section-soft flex-1 md:pb-12">

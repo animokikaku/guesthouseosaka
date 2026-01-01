@@ -4,13 +4,10 @@ import { GalleryModal } from '@/components/gallery/gallery-modal'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
 import { useStickyNav } from '@/hooks/use-sticky-nav'
 import { groupGalleryByCategory, type Gallery } from '@/lib/gallery'
-import type { HouseQueryResult } from '@/sanity.types'
 import * as React from 'react'
 import { HouseGalleryClient } from './house-gallery-client'
 
 type GalleryPageContentProps = {
-  _id: NonNullable<HouseQueryResult>['_id']
-  _type: NonNullable<HouseQueryResult>['_type']
   gallery: Gallery
   title: string
   /** Back button element (Link or Dialog.Close) */
@@ -18,8 +15,6 @@ type GalleryPageContentProps = {
 }
 
 export function GalleryPageContent({
-  _id,
-  _type,
   gallery,
   title,
   backButton
@@ -72,12 +67,7 @@ export function GalleryPageContent({
       >
         <div className="container-wrapper">
           <div className="container py-8 md:py-12">
-            <HouseGalleryClient
-              _id={_id}
-              _type={_type}
-              gallery={gallery}
-              sentinelRef={sentinelRef}
-            />
+            <HouseGalleryClient gallery={gallery} sentinelRef={sentinelRef} />
           </div>
         </div>
       </div>
