@@ -48,8 +48,8 @@ export function toGalleryImages(images: GalleryWallImages): GalleryImage[] {
         .dpr(2)
         .fit('crop')
         .url(),
-      alt: img.alt ?? null,
-      blurDataURL: img.preview ?? null,
+      alt: img.alt,
+      blurDataURL: img.preview,
       width: layout.width,
       height: layout.height
     }

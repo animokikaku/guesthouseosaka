@@ -1,5 +1,3 @@
-import type { PortableTextBlock } from '@portabletext/types'
-import type { HouseQueryResult } from '@/sanity.types'
 import type {
   AmenityCategoryData,
   AmenityItemData,
@@ -9,6 +7,8 @@ import type {
   PricingRowData,
   SanityImage
 } from '@/lib/types/components'
+import type { HouseQueryResult } from '@/sanity.types'
+import type { PortableTextBlock } from '@portabletext/types'
 
 // ============================================
 // Input Types (from Sanity query results)
@@ -107,7 +107,7 @@ export function toMapData(map: HouseMap): MapData | null {
     },
     placeId,
     placeImage: sanityImage,
-    googleMapsUrl: googleMapsUrl ?? undefined
+    googleMapsUrl
   }
 }
 
@@ -127,8 +127,8 @@ export function toPricingRows(pricing: HousePricing): PricingRowData[] {
 
   return pricing.map((row) => ({
     _key: row._key,
-    label: row.label ?? null,
-    content: (row.content as PortableTextBlock[]) ?? null
+    label: row.label,
+    content: row.content as PortableTextBlock[]
   }))
 }
 
@@ -153,15 +153,15 @@ export function toAmenityCategories(
     category: {
       _id: cat.category._id,
       key: cat.category.key,
-      label: cat.category.label ?? null,
-      icon: cat.category.icon ?? null,
+      label: cat.category.label,
+      icon: cat.category.icon,
       orderRank: cat.category.orderRank
     },
     items: (cat.items ?? []).map((item) => ({
       _key: item._key,
-      label: item.label ?? null,
+      label: item.label,
       icon: item.icon,
-      note: item.note ?? null,
+      note: item.note,
       featured: item.featured ?? null
     }))
   }))
@@ -183,9 +183,9 @@ export function toFeaturedAmenities(
     .filter((item): item is NonNullable<typeof item> => item !== null)
     .map((item) => ({
       _key: item._key,
-      label: item.label ?? null,
+      label: item.label,
       icon: item.icon,
-      note: item.note ?? null,
+      note: item.note,
       featured: true
     }))
 }
