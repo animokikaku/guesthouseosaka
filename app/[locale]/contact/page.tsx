@@ -8,7 +8,7 @@ import {
 import { Link } from '@/i18n/navigation'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
-import { contactPageQuery } from '@/sanity/lib/queries'
+import { contactTypesListQuery } from '@/sanity/lib/queries'
 import { ChevronRightIcon } from 'lucide-react'
 import type { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
@@ -19,18 +19,19 @@ export default async function ContactPage({
   const { locale } = await params
   setRequestLocale(locale as Locale)
 
-  const { data } = await sanityFetch({
-    query: contactPageQuery,
+  // Use separate query to avoid stega deduplication with layout
+  const { data: contactTypes } = await sanityFetch({
+    query: contactTypesListQuery,
     params: { locale }
   })
 
-  if (!data || !data.contactTypes) {
+  if (!contactTypes || contactTypes.length === 0) {
     return <PageEmptyState />
   }
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4">
-      {data.contactTypes.map(({ _id, slug, title, description }) => (
+      {contactTypes.map(({ _id, slug, title, description }) => (
         <Item key={_id} asChild className="flex-1">
           <Link
             href={{

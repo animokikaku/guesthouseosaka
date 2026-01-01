@@ -348,6 +348,17 @@ export const contactPageQuery = defineQuery(`{
   }
 }`)
 
+// Separate query for listing contact types (avoids stega deduplication with layout)
+export const contactTypesListQuery = defineQuery(`
+  *[_type == "contactType"] | order(orderRank){
+    _id,
+    _type,
+    slug,
+    "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
+    "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value)
+  }
+`)
+
 export const contactTypeQuery =
   defineQuery(`*[_type == "contactType" && slug == $slug][0]{
   _id,
