@@ -63,13 +63,6 @@ export const structure: StructureResolver = (S) =>
                 .child(
                   S.document().schemaType('faqPage').documentId('faqPage')
                 ),
-              orderableDocumentListDeskItem({
-                type: 'faqQuestion',
-                title: 'FAQ Questions',
-                icon: HelpCircleIcon,
-                S,
-                context: S.context
-              }),
               S.listItem()
                 .title('Contact Page')
                 .icon(EnvelopeIcon)
@@ -88,6 +81,17 @@ export const structure: StructureResolver = (S) =>
         type: 'house',
         title: 'Houses',
         icon: HomeIcon,
+        S,
+        context: S.context
+      }),
+
+      // ============================================
+      // FAQ QUESTIONS (orderable for FAQ page)
+      // ============================================
+      orderableDocumentListDeskItem({
+        type: 'faqQuestion',
+        title: 'FAQ',
+        icon: HelpCircleIcon,
         S,
         context: S.context
       }),

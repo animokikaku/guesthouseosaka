@@ -1,4 +1,4 @@
-import { HelpCircleIcon } from '@sanity/icons'
+import { ComponentIcon, HelpCircleIcon } from '@sanity/icons'
 import {
   orderRankField,
   orderRankOrdering
@@ -22,21 +22,24 @@ export const faqQuestion = defineType({
       name: 'answer',
       title: 'Answer',
       type: 'internationalizedArrayPortableText',
-      description:
-        'Rich text answer. Leave empty for component-based answers.',
-      options: { aiAssist: { translateAction: true } }
+      description: 'Rich text answer with formatting support.',
+      options: { aiAssist: { translateAction: true } },
+      hidden: ({ document }) => !!document?.componentKey
     }),
     defineField({
       name: 'componentKey',
       title: 'Component Key',
       type: 'string',
-      description:
-        'For special FAQ items rendered by custom components. Leave empty for standard text answers.',
+      description: 'Select a component for dynamic content.',
       options: {
         list: [
           { title: 'Floors and Rooms', value: 'floors-and-rooms' },
           { title: 'Extra Costs', value: 'extra-costs' }
         ]
+      },
+      hidden: ({ document }) => {
+        const answer = document?.answer as Array<{ value?: unknown }> | undefined
+        return answer?.some((item) => item.value) ?? false
       }
     }),
     orderRankField({ type: 'faqQuestion' })
@@ -50,7 +53,11 @@ export const faqQuestion = defineType({
     prepare({ question, componentKey }) {
       const title = question?.[0]?.value ?? 'Untitled'
       const subtitle = componentKey ? `Component: ${componentKey}` : undefined
-      return { title, subtitle }
+      return {
+        title,
+        subtitle,
+        media: componentKey ? ComponentIcon : HelpCircleIcon
+      }
     }
   }
 })
