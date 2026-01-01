@@ -28,11 +28,7 @@ export const galleryImage = defineType({
       categoryLabel: 'category.label.0.value'
     },
     prepare({ media, alt, categoryLabel }) {
-      return {
-        title: alt || 'No alt text',
-        subtitle: categoryLabel || 'No category',
-        media
-      }
+      return { title: alt, subtitle: categoryLabel, media }
     }
   }
 })
