@@ -72,7 +72,11 @@ export default async function ContactLayout({
           <PortableText value={page.header} components={headerComponents} />
         )}
         {page?.actions && page.actions.length > 0 && (
-          <DynamicPageActions actions={page.actions} />
+          <DynamicPageActions
+            documentId={page._id}
+            documentType={page._type}
+            actions={page.actions}
+          />
         )}
       </PageHeader>
       <div className="container-wrapper section-soft flex-1 md:pb-12">
