@@ -192,7 +192,8 @@ export const housesTitlesQuery =
 }`)
 
 // Houses for navigation (header) - ordered by global orderRank
-export const housesNavQuery = defineQuery(`*[_type == "house"] | order(orderRank){
+export const housesNavQuery =
+  defineQuery(`*[_type == "house"] | order(orderRank){
   slug,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
@@ -260,13 +261,20 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
 // CONTACT PAGE
 // =============================================================================
 
+// Separate query for metadata to avoid stega deduplication issues
+// (generateMetadata runs before draft mode context is established)
+export const contactPageMetaQuery = defineQuery(`
+  *[_type == "contactPage"][0]{
+    "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),
+    "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value)
+  }
+`)
+
 export const contactPageQuery = defineQuery(`{
   "page": *[_type == "contactPage"][0]{
     _id,
     _type,
     "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),
-    "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),
-    "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),
     "actions": actions[]{
       _key,
       icon,

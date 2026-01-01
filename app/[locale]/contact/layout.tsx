@@ -3,7 +3,11 @@ import { PageHeader } from '@/components/page-header'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
-import { contactPageQuery, settingsQuery } from '@/sanity/lib/queries'
+import {
+  contactPageMetaQuery,
+  contactPageQuery,
+  settingsQuery
+} from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import type { Metadata } from 'next'
 import type { Locale } from 'next-intl'
@@ -28,8 +32,8 @@ export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/contact'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
-  const [{ data: contactPage }, { data: settings }] = await Promise.all([
-    sanityFetch({ query: contactPageQuery, params: { locale } }),
+  const [{ data: contactPageMeta }, { data: settings }] = await Promise.all([
+    sanityFetch({ query: contactPageMetaQuery, params: { locale } }),
     sanityFetch({ query: settingsQuery, params: { locale } })
   ])
 
@@ -40,8 +44,8 @@ export async function generateMetadata(
   })
 
   return {
-    title: contactPage?.page?.metaTitle ?? 'Contact',
-    description: contactPage?.page?.metaDescription ?? undefined,
+    title: contactPageMeta?.metaTitle ?? 'Contact',
+    description: contactPageMeta?.metaDescription ?? undefined,
     openGraph,
     twitter
   }

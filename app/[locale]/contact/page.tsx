@@ -1,6 +1,3 @@
-import type { Locale } from 'next-intl'
-
-import { PageEmptyState } from '@/components/page-empty-state'
 import {
   Item,
   ItemActions,
@@ -9,9 +6,11 @@ import {
   ItemTitle
 } from '@/components/ui/item'
 import { Link } from '@/i18n/navigation'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactPageQuery } from '@/sanity/lib/queries'
 import { ChevronRightIcon } from 'lucide-react'
+import type { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 
 export default async function ContactPage({

@@ -136,7 +136,7 @@ function GalleryGridItem({ item }: GalleryGridItemProps) {
       onClick={() => store.setState({ photoId: _key })}
       imageProps={{
         src,
-        alt: stegaClean(image.alt) ?? '',
+        alt: image.alt ?? '',
         width: 400,
         height: 400,
         blurDataURL: image.preview ?? undefined,
