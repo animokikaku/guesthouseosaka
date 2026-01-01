@@ -25,7 +25,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
 
   // Reporter to use
-  reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
+  reporter: process.env.CI ? 'github' : 'list',
 
   // Timeout per test
   timeout: 30 * 1000,
