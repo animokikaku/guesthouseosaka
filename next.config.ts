@@ -14,7 +14,8 @@ const nextConfig: NextConfig = {
   experimental: {
     typedEnv: true,
     turbopackFileSystemCacheForBuild: true,
-    turbopackFileSystemCacheForDev: true
+    turbopackFileSystemCacheForDev: true,
+    testProxy: true
   },
   images: {
     qualities: [75, 90],

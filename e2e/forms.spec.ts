@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from 'next/experimental/testmode/playwright'
+import { mockResendAPI } from './mocks/resend'
 
 test.describe('Contact Form Tests', () => {
   // Navigate to the "Other" contact form (general inquiry)
@@ -197,21 +198,9 @@ test.describe('Contact Form Tests', () => {
   })
 
   test.describe('Form Submission', () => {
-    test('valid form can be submitted', async ({ page }) => {
-      // Mock the API route to prevent actual email sending
-      await page.route('**/contact', async (route) => {
-        const request = route.request()
-        if (request.method() === 'POST') {
-          // Return a success response
-          await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ success: true })
-          })
-        } else {
-          await route.continue()
-        }
-      })
+    test('valid form can be submitted', async ({ next, page }) => {
+      // Mock the Resend API to prevent actual email sending
+      mockResendAPI(next)
 
       // Fill all required fields
       await page.getByPlaceholder('Enter your name').fill('Test User')
@@ -241,22 +230,9 @@ test.describe('Contact Form Tests', () => {
       ])
     })
 
-    test('loading state shows while submitting', async ({ page }) => {
-      // Mock the API route to prevent actual email sending
-      await page.route('**/contact', async (route) => {
-        const request = route.request()
-        if (request.method() === 'POST') {
-          // Add a small delay to observe loading state
-          await new Promise((resolve) => setTimeout(resolve, 500))
-          await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({ success: true })
-          })
-        } else {
-          await route.continue()
-        }
-      })
+    test('loading state shows while submitting', async ({ next, page }) => {
+      // Mock the Resend API to prevent actual email sending
+      mockResendAPI(next)
 
       // Fill all required fields
       await page.getByPlaceholder('Enter your name').fill('Test User')
@@ -323,6 +299,7 @@ test.describe('Contact Form Tests', () => {
       await expect(checkbox).not.toBeChecked()
     })
   })
+
 })
 
 test.describe('Contact Page Navigation', () => {
