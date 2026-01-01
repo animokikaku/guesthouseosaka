@@ -19,6 +19,7 @@ type HouseLocation = NonNullable<HouseQueryResult>['location']
 type HouseMap = NonNullable<HouseQueryResult>['map']
 type HousePricing = NonNullable<HouseQueryResult>['pricing']
 type HouseAmenityCategories = NonNullable<HouseQueryResult>['amenityCategories']
+type HouseFeaturedAmenities = NonNullable<HouseQueryResult>['featuredAmenities']
 type HouseAbout = NonNullable<HouseQueryResult>['about']
 
 // ============================================
@@ -164,6 +165,29 @@ export function toAmenityCategories(
       featured: item.featured ?? null
     }))
   }))
+}
+
+/**
+ * Transforms featured amenities from the GROQ query to AmenityItemData array
+ * @param featuredAmenities - Raw featured amenities from Sanity query
+ * @returns Array of AmenityItemData for display
+ */
+export function toFeaturedAmenities(
+  featuredAmenities: HouseFeaturedAmenities
+): AmenityItemData[] {
+  if (!featuredAmenities) {
+    return []
+  }
+
+  return featuredAmenities
+    .filter((item): item is NonNullable<typeof item> => item !== null)
+    .map((item) => ({
+      _key: item._key,
+      label: item.label ?? null,
+      icon: item.icon,
+      note: item.note ?? null,
+      featured: true
+    }))
 }
 
 // ============================================

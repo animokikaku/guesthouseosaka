@@ -17,6 +17,7 @@ import {
   toAboutContent,
   toAmenityCategories,
   toBuildingData,
+  toFeaturedAmenities,
   toLocationData,
   toMapData,
   toPricingRows
@@ -35,6 +36,7 @@ export function HousePageContent({
   gallery,
   featuredImage,
   amenityCategories,
+  featuredAmenities,
   location,
   map,
   pricing,
@@ -93,6 +95,7 @@ export function HousePageContent({
                 documentId={_id}
                 documentType={_type}
                 amenityCategories={toAmenityCategories(amenityCategories)}
+                featuredAmenities={toFeaturedAmenities(featuredAmenities)}
               />
               <HouseLocation
                 location={toLocationData(location)}

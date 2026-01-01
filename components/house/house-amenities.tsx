@@ -29,7 +29,6 @@ import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 import { useOptimistic } from 'next-sanity/hooks'
 import * as React from 'react'
-import { useMemo } from 'react'
 import { SanityDocument } from 'sanity'
 
 type DataAttributeFn = (path: string) => string
@@ -38,6 +37,7 @@ interface HouseAmenitiesProps {
   documentId: string
   documentType: string
   amenityCategories: AmenityCategoryData[]
+  featuredAmenities: AmenityItemData[]
 }
 
 interface AmenitiesDialogProps {
@@ -151,7 +151,8 @@ function AmenitiesDialog({
 export function HouseAmenities({
   documentId,
   documentType,
-  amenityCategories: initialCategories
+  amenityCategories: initialCategories,
+  featuredAmenities
 }: HouseAmenitiesProps) {
   const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
@@ -180,15 +181,7 @@ export function HouseAmenities({
     coin: t('notes.coin')
   }
 
-  // Featured amenities derived from all categories
-  const featuredAmenities = useMemo(() => {
-    return amenityCategories
-      .flatMap((cat) => cat.items)
-      .filter((a) => a.featured)
-      .slice(0, 10)
-  }, [amenityCategories])
-
-  // Slice to 5 on mobile
+  // Featured amenities: GROQ provides max 10, slice to 5 on mobile
   const displayedFeatured = isMobile
     ? featuredAmenities.slice(0, 5)
     : featuredAmenities

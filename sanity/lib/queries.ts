@@ -13,12 +13,12 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
   email,
   phone,
   address,
-  "socialLinks": socialLinks[]{
+  "socialLinks": array::compact(socialLinks[]{
     _key,
     icon,
     label,
     url
-  }
+  })
 }`)
 
 // =============================================================================
@@ -33,7 +33,7 @@ export const homePageQuery = defineQuery(`{
       "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value),
       "ctaLabel": coalesce(ctaLabel[_key == $locale][0].value, ctaLabel[_key == "en"][0].value)
     },
-    "galleryWall": galleryWall[]{
+    "galleryWall": array::compact(galleryWall[]{
       _key,
       asset->{
         _id,
@@ -45,7 +45,7 @@ export const homePageQuery = defineQuery(`{
       crop,
       "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
       "preview": asset->metadata.lqip
-    },
+    }),
     "collection": collection{
       "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value)
     }
@@ -112,7 +112,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   "about": coalesce(about[_key == $locale][0].value, about[_key == "en"][0].value),
 
   // Gallery as flat list (grouped by category on frontend for drag-and-drop reordering)
-  "gallery": gallery[]{
+  "gallery": array::compact(gallery[]{
     _key,
     "image": image{
       asset,
@@ -127,10 +127,10 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       orderRank
     }
-  },
+  }),
 
   // Amenities grouped by category (enables per-category drag-and-drop reordering)
-  "amenityCategories": amenityCategories[]{
+  "amenityCategories": array::compact(amenityCategories[]{
     _key,
     "category": category->{
       _id,
@@ -139,7 +139,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       icon,
       orderRank
     },
-    "items": items[]{
+    "items": array::compact(items[]{
       _key,
       note,
       featured,
@@ -149,7 +149,19 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
         amenity->label[_key == "en"][0].value
       ),
       "icon": amenity->icon
-    }
+    })
+  }),
+
+  // Featured amenities (pre-computed, max 10)
+  "featuredAmenities": amenityCategories[].items[featured == true][0...10]{
+    _key,
+    note,
+    "label": coalesce(
+      customLabel[_key == $locale][0].value,
+      amenity->label[_key == $locale][0].value,
+      amenity->label[_key == "en"][0].value
+    ),
+    "icon": amenity->icon
   },
 
   // Location
@@ -174,11 +186,11 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   },
 
   // Pricing
-  "pricing": pricing[]{
+  "pricing": array::compact(pricing[]{
     _key,
     "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
     "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value)
-  }
+  })
 }`)
 
 // House slugs for static generation
@@ -245,17 +257,17 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),
   "metaTitle": coalesce(metaTitle[_key == $locale][0].value, metaTitle[_key == "en"][0].value),
   "metaDescription": coalesce(metaDescription[_key == $locale][0].value, metaDescription[_key == "en"][0].value),
-  "actions": actions[]{
+  "actions": array::compact(actions[]{
     _key,
     icon,
     "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
     href
-  },
-  "items": items[]{
+  }),
+  "items": array::compact(items[]{
     _key,
     "question": coalesce(question[_key == $locale][0].value, question[_key == "en"][0].value),
     "answer": coalesce(answer[_key == $locale][0].value, answer[_key == "en"][0].value)
-  },
+  }),
   "contactSection": coalesce(contactSection[_key == $locale][0].value, contactSection[_key == "en"][0].value),
   "contactNote": coalesce(contactNote[_key == $locale][0].value, contactNote[_key == "en"][0].value)
 }`)
@@ -278,12 +290,12 @@ export const contactPageQuery = defineQuery(`{
     _id,
     _type,
     "header": coalesce(header[_key == $locale][0].value, header[_key == "en"][0].value),
-    "actions": actions[]{
+    "actions": array::compact(actions[]{
       _key,
       icon,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       href
-    }
+    })
   },
   "contactTypes": *[_type == "contactType"] | order(orderRank){
     _id,
