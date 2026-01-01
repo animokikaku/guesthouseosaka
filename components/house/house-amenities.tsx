@@ -24,10 +24,17 @@ import type { AmenityItemData } from '@/lib/types/components'
 import { groupByCategory } from '@/lib/utils/group-by-category'
 import { stegaClean } from '@sanity/client/stega'
 import { useTranslations } from 'next-intl'
+import { createDataAttribute } from 'next-sanity'
+import { useOptimistic } from 'next-sanity/hooks'
 import * as React from 'react'
 import { useMemo } from 'react'
+import { SanityDocument } from 'sanity'
+
+type DataAttributeFn = (path: string) => string
 
 interface HouseAmenitiesProps {
+  documentId: string
+  documentType: string
   amenities: AmenityItemData[]
 }
 
@@ -36,11 +43,13 @@ interface AmenitiesDialogProps {
   noteLabels: Record<string, string>
   trigger: React.ReactNode
   title: string
+  dataAttribute?: DataAttributeFn
 }
 
 interface AmenityItemProps extends React.HTMLAttributes<HTMLDivElement> {
   amenity: AmenityItemData
   noteLabel?: string
+  'data-sanity'?: string
 }
 
 function AmenityItem({ amenity, noteLabel, ...props }: AmenityItemProps) {
@@ -65,7 +74,8 @@ function AmenitiesDialog({
   noteLabels,
   trigger,
   title,
-  amenities
+  amenities,
+  dataAttribute
 }: AmenitiesDialogProps) {
   const isMobile = useIsMobile()
 
@@ -94,6 +104,9 @@ function AmenitiesDialog({
                     ? noteLabels[stegaClean(amenity.note)]
                     : undefined
                 }
+                data-sanity={dataAttribute?.(
+                  `amenities[_key=="${amenity._key}"]`
+                )}
               />
             ))}
           </div>
@@ -131,9 +144,31 @@ function AmenitiesDialog({
   )
 }
 
-export function HouseAmenities({ amenities }: HouseAmenitiesProps) {
+export function HouseAmenities({
+  documentId,
+  documentType,
+  amenities: initialAmenities
+}: HouseAmenitiesProps) {
   const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
+
+  const amenities = useOptimistic<
+    AmenityItemData[],
+    SanityDocument & { amenities?: AmenityItemData[] }
+  >(initialAmenities, (currentAmenities, action) => {
+    if (action.id === documentId && action.document.amenities) {
+      // Optimistic document only has partial data, merge with current
+      return action.document.amenities.map(
+        (item) => currentAmenities?.find((a) => a._key === item._key) ?? item
+      )
+    }
+    return currentAmenities
+  })
+
+  const dataAttribute = createDataAttribute({
+    id: documentId,
+    type: documentType
+  })
 
   const noteLabels: Record<string, string> = {
     private: t('notes.private'),
@@ -173,6 +208,7 @@ export function HouseAmenities({ amenities }: HouseAmenitiesProps) {
           title={t('heading')}
           amenities={amenities}
           noteLabels={noteLabels}
+          dataAttribute={dataAttribute}
           trigger={
             <Button variant="outline">
               {t('show_all', {
