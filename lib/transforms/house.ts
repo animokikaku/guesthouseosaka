@@ -179,15 +179,13 @@ export function toFeaturedAmenities(
     return []
   }
 
-  return featuredAmenities
-    .filter((item): item is NonNullable<typeof item> => item !== null)
-    .map((item) => ({
-      _key: item._key,
-      label: item.label,
-      icon: item.icon,
-      note: item.note,
-      featured: true
-    }))
+  return featuredAmenities.map((item) => ({
+    _key: item._key,
+    label: item.label,
+    icon: item.icon,
+    note: item.note,
+    featured: true
+  }))
 }
 
 // ============================================

@@ -153,7 +153,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   }),
 
   // Featured amenities (pre-computed, max 10)
-  "featuredAmenities": amenityCategories[].items[featured == true][0...10]{
+  "featuredAmenities": array::compact(amenityCategories[].items[featured == true])[0...10]{
     _key,
     note,
     "label": coalesce(
