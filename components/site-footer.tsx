@@ -1,12 +1,28 @@
+'use client'
+
 import { Icon, type IconName } from '@/lib/icons'
 import type { SettingsQueryResult } from '@/sanity.types'
 import { createDataAttribute, stegaClean } from 'next-sanity'
+import { useOptimistic } from 'next-sanity/hooks'
 
 type SiteFooterProps = {
   settings: NonNullable<SettingsQueryResult>
 }
 
 export function SiteFooter({ settings }: SiteFooterProps) {
+  const links = useOptimistic<
+    NonNullable<SettingsQueryResult>['socialLinks'] | undefined,
+    NonNullable<SettingsQueryResult>
+  >(settings.socialLinks, (currentLinks, action) => {
+    if (action.id === settings._id && action.document.socialLinks) {
+      // Optimistic document only has _ref values, not resolved references
+      return action.document.socialLinks.map(
+        (link) => currentLinks?.find((l) => l._key === link._key) ?? link
+      )
+    }
+    return currentLinks
+  })
+
   const year = new Date().getFullYear()
 
   const dataAttribute = createDataAttribute({
@@ -24,8 +40,11 @@ export function SiteFooter({ settings }: SiteFooterProps) {
             </span>
             © {year} {settings.companyName}
           </div>
-          <div className="flex shrink-0 items-center gap-3">
-            {settings.socialLinks?.map((link) => (
+          <div
+            className="flex shrink-0 items-center gap-3"
+            data-sanity={dataAttribute('socialLinks')}
+          >
+            {links?.map((link) => (
               <SocialLink
                 key={link._key}
                 href={link.url}
