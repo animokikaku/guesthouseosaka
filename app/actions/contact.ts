@@ -12,6 +12,7 @@ import {
 } from '@/components/forms/schema'
 import { env } from '@/lib/env'
 import { HouseIdentifier } from '@/lib/types'
+import { headers } from 'next/headers'
 import { Resend } from 'resend'
 
 const { emails } = new Resend(env.RESEND_API_KEY)
@@ -19,13 +20,14 @@ const { emails } = new Resend(env.RESEND_API_KEY)
 const DEFAULT_CONTACT = {
   from: 'Guest House Osaka <info@guesthouseosaka.com>',
   to: (places?: HouseIdentifier[]) => {
-    if (env.NODE_ENV !== 'production') {
-      return 'dev@guesthouseosaka.com'
-    }
-    if (places?.length === 1) {
-      return `${places[0]}@guesthouseosaka.com`
-    }
-    return 'info@guesthouseosaka.com'
+    // if (env.NODE_ENV !== 'production') {
+    //   return 'dev@guesthouseosaka.com'
+    // }
+    // if (places?.length === 1) {
+    //   return `${places[0]}@guesthouseosaka.com`
+    // }
+    // return 'info@guesthouseosaka.com'
+    return 'dev@guesthouseosaka.com'
   }
 }
 
@@ -35,6 +37,12 @@ type ContactFormPayload =
   | { type: 'other'; data: GeneralInquiryFields }
 
 export async function submitContactForm({ type, data }: ContactFormPayload) {
+  // Skip sending emails during E2E tests (detected via Vercel automation bypass header)
+  const headersList = await headers()
+  if (headersList.has('x-vercel-protection-bypass')) {
+    return { id: 'e2e-skipped', object: 'email' }
+  }
+
   const { from, to } = DEFAULT_CONTACT
   const { name, email } = data.account
 
