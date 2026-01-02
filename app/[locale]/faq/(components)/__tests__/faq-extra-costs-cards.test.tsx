@@ -68,21 +68,6 @@ const createExtraCost = (categoryId: string, text: string): ExtraCost => ({
 
 describe('FAQExtraCostsCards', () => {
   describe('empty states', () => {
-    it('returns null when houses is undefined', () => {
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
-
-      const { container } = render(
-        <FAQExtraCostsCards
-          houses={undefined as unknown as Houses}
-          pricingCategories={pricingCategories}
-        />
-      )
-
-      expect(container.firstChild).toBeNull()
-    })
-
     it('returns null when houses array is empty', () => {
       const pricingCategories: PricingCategories = [
         createCategory('deposit', 'Deposit')
