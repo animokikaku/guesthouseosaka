@@ -53,9 +53,7 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
           >
             <a href={`tel:${phoneNumber}`}>
               <ItemMedia variant="image" className="size-12 rounded-sm">
-                {image?.asset && (
-                  <HouseImage image={image} alt={title ?? slug} />
-                )}
+                <HouseImage image={image} alt={title ?? slug} />
               </ItemMedia>
               <ItemContent>
                 <ItemTitle>{title ?? slug}</ItemTitle>
@@ -151,7 +149,7 @@ function HouseImage({ image, alt }: HouseImageProps) {
     <Image
       src={src}
       alt={alt}
-      placeholder={image.lqip ? "blur" : undefined}
+      placeholder={image.lqip ? 'blur' : undefined}
       blurDataURL={image.lqip ?? undefined}
       width={dimensions.width}
       height={dimensions.height}

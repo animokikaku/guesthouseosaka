@@ -53,7 +53,9 @@ export function FAQExtraCostsTable({
   houses,
   pricingCategories
 }: FAQExtraCostsTableProps) {
-  if (houses.length === 0 || !pricingCategories?.length) return null
+  if (houses.length === 0 || pricingCategories.length === 0) {
+    return null
+  }
 
   return (
     <div className="border-border overflow-hidden rounded-xs border">
