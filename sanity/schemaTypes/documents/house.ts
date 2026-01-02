@@ -191,6 +191,7 @@ export const house = defineType({
           type: 'internationalizedArrayText',
           description:
             'Key location selling point (e.g., "14 minutes walk to Namba")',
+          validation: (rule) => rule.required(),
           options: { aiAssist: { translateAction: true } }
         }),
         defineField({
@@ -199,6 +200,7 @@ export const house = defineType({
           type: 'internationalizedArrayPortableText',
           description:
             'Use H3 for section headings (e.g., "Getting Around", "Nearby") and bullet lists for items',
+          validation: (rule) => rule.required(),
           options: { aiAssist: { translateAction: true } }
         })
       ]
@@ -297,18 +299,21 @@ export const house = defineType({
       title: 'Phone Numbers',
       type: 'object',
       group: 'contact',
+      validation: (rule) => rule.required(),
       fields: [
         defineField({
           name: 'domestic',
           title: 'Domestic',
           type: 'string',
-          description: 'Phone number for calls from Japan'
+          description: 'Phone number for calls from Japan',
+          validation: (rule) => rule.required()
         }),
         defineField({
           name: 'international',
           title: 'International',
           type: 'string',
-          description: 'Phone number for calls from abroad'
+          description: 'Phone number for calls from abroad',
+          validation: (rule) => rule.required()
         })
       ]
     })

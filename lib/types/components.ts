@@ -1,4 +1,4 @@
-import type { ContactType, HouseIdentifier } from '@/lib/types'
+import type { ContactType } from '@/lib/types'
 import type { SanityImageCrop, SanityImageHotspot } from '@/sanity.types'
 import type { PortableTextBlock } from '@portabletext/react'
 

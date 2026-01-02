@@ -42,8 +42,6 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
   return (
     <ItemGroup id="phone" className="w-full gap-2 sm:hidden">
       {houses.map(({ _id, title, phone, image }) => {
-        if (!phone) return null
-
         return (
           <Item key={_id} variant="outline" asChild className="gap-3 px-3 py-3">
             <a href={`tel:${phone.international}`}>
@@ -96,7 +94,6 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
       </thead>
       <tbody className="font-mono">
         {houses.map(({ _id, title, phone }) => {
-          if (!phone) return null
           return (
             <tr
               className="border-border/50 last:border-border border-none"

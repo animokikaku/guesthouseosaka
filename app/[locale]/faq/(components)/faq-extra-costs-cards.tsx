@@ -93,7 +93,7 @@ export function FAQExtraCostsCards({
     }
   }, [api])
 
-  if (!houses || houses.length === 0 || !pricingCategories?.length) return null
+  if (houses.length === 0 || pricingCategories.length === 0) return null
 
   return (
     <div className="w-full space-y-4">

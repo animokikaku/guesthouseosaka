@@ -82,7 +82,7 @@ export type GalleryCategoryReference = {
 export type HouseGalleryCategory = {
   _type: 'houseGalleryCategory'
   category: GalleryCategoryReference
-  items?: Array<
+  items: Array<
     {
       _key: string
     } & HouseGalleryItem
@@ -99,7 +99,7 @@ export type AmenityCategoryReference = {
 export type HouseAmenityCategory = {
   _type: 'houseAmenityCategory'
   category: AmenityCategoryReference
-  items?: Array<
+  items: Array<
     {
       _key: string
     } & HouseAmenity
@@ -233,7 +233,7 @@ export type ContactType = {
   orderRank?: string
   slug: 'tour' | 'move-in' | 'other'
   title: InternationalizedArrayString
-  description?: InternationalizedArrayString
+  description: InternationalizedArrayString
   fields?: {
     places?: FormFieldConfigNoPlaceholder
     date?: FormFieldConfigNoPlaceholder
@@ -297,8 +297,8 @@ export type Settings = {
     } & SocialLink
   >
   companyName: string
-  email?: string
-  phone?: string
+  email: string
+  phone: string
   address?: Address
 }
 
@@ -332,8 +332,8 @@ export type House = {
     } & HouseAmenityCategory
   >
   location?: {
-    highlight?: InternationalizedArrayText
-    details?: InternationalizedArrayPortableText
+    highlight: InternationalizedArrayText
+    details: InternationalizedArrayPortableText
   }
   map?: {
     googleMapsUrl: string
@@ -352,9 +352,9 @@ export type House = {
       _key: string
     } & ExtraCostItem
   >
-  phone?: {
-    domestic?: string
-    international?: string
+  phone: {
+    domestic: string
+    international: string
   }
 }
 
@@ -755,8 +755,8 @@ export type SettingsQueryResult = {
   siteName: string | null
   siteDescription: string | null
   companyName: string
-  email: string | null
-  phone: string | null
+  email: string
+  phone: string
   address: Address | null
   socialLinks: Array<{
     _key: string
@@ -854,9 +854,9 @@ export type HouseQueryResult = {
     startingPrice: number
   } | null
   phone: {
-    domestic?: string
-    international?: string
-  } | null
+    domestic: string
+    international: string
+  }
   image: {
     asset: {
       _id: string
@@ -909,7 +909,7 @@ export type HouseQueryResult = {
         alt: string | null
         preview: string | null
       }
-    }> | null
+    }>
   }> | null
   galleryImages: Array<{
     _key: string
@@ -935,7 +935,7 @@ export type HouseQueryResult = {
       featured: boolean | null
       label: string | null
       icon: LucideIcon
-    }> | null
+    }>
   }> | null
   featuredAmenities: Array<{
     _key: string
@@ -1046,9 +1046,9 @@ export type HousesBuildingQueryResult = Array<{
     floors: number
   } | null
   phone: {
-    domestic?: string
-    international?: string
-  } | null
+    domestic: string
+    international: string
+  }
   image: {
     asset: SanityImageAssetReference | null
     hotspot: SanityImageHotspot | null

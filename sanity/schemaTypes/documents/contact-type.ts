@@ -78,6 +78,7 @@ export const contactType = defineType({
       type: 'internationalizedArrayString',
       description: 'Brief description for navigation and form headers',
       group: 'main',
+      validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     }),
     // Form field configurations

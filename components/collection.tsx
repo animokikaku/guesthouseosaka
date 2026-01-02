@@ -79,7 +79,7 @@ type CollectionImageProps = {
 }
 
 function CollectionImage({ image }: CollectionImageProps) {
-  if (!image?.asset) return null
+  if (!image.asset) return null
 
   const buildImage = urlFor(image)
   const dimensions = getImageDimensions(image.asset)

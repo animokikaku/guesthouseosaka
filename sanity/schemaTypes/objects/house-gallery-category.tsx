@@ -20,7 +20,7 @@ export const houseGalleryCategory = defineType({
       title: 'Photos',
       type: 'array',
       of: [defineArrayMember({ type: 'houseGalleryItem' })],
-      validation: (rule) => rule.min(1)
+      validation: (rule) => rule.required().min(1)
     })
   ],
   preview: {

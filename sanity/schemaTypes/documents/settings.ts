@@ -54,7 +54,7 @@ export const settings = defineType({
       type: 'string',
       description: 'Contact email',
       group: 'organization',
-      validation: (rule) => rule.email()
+      validation: (rule) => rule.required().email()
     }),
     defineField({
       name: 'phone',
@@ -62,7 +62,8 @@ export const settings = defineType({
       type: 'string',
       description: 'Contact phone (international format)',
       group: 'organization',
-      placeholder: '+81-6-6643-4646'
+      placeholder: '+81-6-6643-4646',
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'address',

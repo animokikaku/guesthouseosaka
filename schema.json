@@ -381,7 +381,7 @@
               }
             }
           },
-          "optional": true
+          "optional": false
         }
       }
     }
@@ -457,7 +457,7 @@
               }
             }
           },
-          "optional": true
+          "optional": false
         }
       }
     }
@@ -1173,7 +1173,7 @@
           "type": "inline",
           "name": "internationalizedArrayString"
         },
-        "optional": true
+        "optional": false
       },
       "fields": {
         "type": "objectAttribute",
@@ -1541,14 +1541,14 @@
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "phone": {
         "type": "objectAttribute",
         "value": {
           "type": "string"
         },
-        "optional": true
+        "optional": false
       },
       "address": {
         "type": "objectAttribute",
@@ -1756,7 +1756,7 @@
                 "type": "inline",
                 "name": "internationalizedArrayText"
               },
-              "optional": true
+              "optional": false
             },
             "details": {
               "type": "objectAttribute",
@@ -1764,7 +1764,7 @@
                 "type": "inline",
                 "name": "internationalizedArrayPortableText"
               },
-              "optional": true
+              "optional": false
             }
           }
         },
@@ -1871,18 +1871,18 @@
               "value": {
                 "type": "string"
               },
-              "optional": true
+              "optional": false
             },
             "international": {
               "type": "objectAttribute",
               "value": {
                 "type": "string"
               },
-              "optional": true
+              "optional": false
             }
           }
         },
-        "optional": true
+        "optional": false
       }
     }
   },

@@ -11,8 +11,8 @@ const createSettings = (
   siteName: null,
   siteDescription: null,
   companyName: 'Guest House Osaka',
-  email: null,
-  phone: null,
+  email: 'info@example.com',
+  phone: '+81-6-1234-5678',
   address: null,
   socialLinks: [
     {

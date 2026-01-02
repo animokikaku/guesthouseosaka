@@ -20,7 +20,7 @@ export const houseAmenityCategory = defineType({
       title: 'Amenities',
       type: 'array',
       of: [defineArrayMember({ type: 'houseAmenity' })],
-      validation: (rule) => rule.min(1)
+      validation: (rule) => rule.required().min(1)
     })
   ],
   preview: {

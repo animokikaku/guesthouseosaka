@@ -155,7 +155,7 @@ function GalleryModalCarousel({
         onTouchEnd={onTouchEnd}
       >
         {imageList.map(({ _key, image }) => {
-          if (!image?.asset) return null
+          if (!image.asset) return null
           const dimensions = getImageDimensions(image.asset)
           const src = urlFor(image).url()
           const alt = image.alt ? stegaClean(image.alt) : ''
@@ -164,7 +164,9 @@ function GalleryModalCarousel({
             <CarouselItem
               key={_key}
               className="flex h-full items-center justify-center"
-              data-sanity={dataAttribute?.(`galleryCategories[].items[_key=="${_key}"]`)}
+              data-sanity={dataAttribute?.(
+                `galleryCategories[].items[_key=="${_key}"]`
+              )}
             >
               <Image
                 src={src}
