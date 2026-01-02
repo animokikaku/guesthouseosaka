@@ -1,38 +1,27 @@
-import { cn } from '@/lib/utils'
-
 import { Link } from '@/i18n/navigation'
-import { HouseIdentifier } from '@/lib/types'
+import type { BuildingData } from '@/lib/types/components'
+import { cn } from '@/lib/utils'
 import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
+import { createDataAttribute } from 'next-sanity'
 
-type BuildingData = {
-  rooms: number
-  floors: number
-  monthly_price: number
+interface HouseBuildingProps {
+  _id: string
+  _type: string
+  building: BuildingData | null
+  slug: string
 }
 
-export const BUILDING_DATA: Record<HouseIdentifier, BuildingData> = {
-  apple: {
-    rooms: 24,
-    floors: 8,
-    monthly_price: 50000
-  },
-  lemon: {
-    rooms: 12,
-    floors: 7,
-    monthly_price: 50000
-  },
-  orange: {
-    rooms: 28,
-    floors: 3,
-    monthly_price: 41000
-  }
-}
-
-export function HouseBuilding({ id }: { id: HouseIdentifier }) {
-  const building = BUILDING_DATA[id]
+export function HouseBuilding({
+  _id,
+  _type,
+  building,
+  slug
+}: HouseBuildingProps) {
   const t = useTranslations('HouseBuilding')
   const formatter = useFormatter()
+
+  const dataAttribute = createDataAttribute({ id: _id, type: _type })
 
   const currency = (amount: number) =>
     formatter.number(amount, { style: 'currency', currency: 'JPY' })
@@ -42,33 +31,48 @@ export function HouseBuilding({ id }: { id: HouseIdentifier }) {
   const details = [
     {
       label: t('rooms_label'),
-      value: number(building.rooms),
+      value: number(building?.rooms ?? 0),
       icon: BedDoubleIcon
     },
     {
       label: t('floors_label'),
-      value: number(building.floors),
+      value: number(building?.floors ?? 0),
       icon: LayersIcon
     },
     {
       label: t('min_rent_label'),
-      value: currency(building.monthly_price)
+      value: currency(building?.startingPrice ?? 0)
     }
   ]
+
   const [rooms, floors, minRent] = details
 
   return (
     <div className="text-muted-foreground grid grid-cols-3 gap-2 text-center text-xs">
-      <FeatureItem label={rooms.label} value={rooms.value} Icon={rooms.icon} />
+      <FeatureItem
+        label={rooms.label}
+        value={rooms.value}
+        Icon={rooms.icon}
+        data-sanity={dataAttribute('building.rooms')}
+      />
       <FeatureItem
         label={floors.label}
         value={floors.value}
         Icon={floors.icon}
+        data-sanity={dataAttribute('building.floors')}
       />
       <Link
-        href={{ pathname: '/[house]', params: { house: id }, hash: '#pricing' }}
+        href={{
+          pathname: '/[house]',
+          params: { house: slug },
+          hash: '#pricing'
+        }}
       >
-        <FeatureItem label={minRent.label} value={minRent.value} />
+        <FeatureItem
+          label={minRent.label}
+          value={minRent.value}
+          data-sanity={dataAttribute('building.startingPrice')}
+        />
       </Link>
     </div>
   )
@@ -78,20 +82,22 @@ function FeatureItem({
   label,
   value,
   Icon,
-  className
+  className,
+  'data-sanity': dataSanity
 }: {
   label: string
   value: string | number
   Icon?: LucideIcon
   className?: string
+  'data-sanity'?: string
 }) {
   return (
     <div
-      key={label}
       className={cn(
         'border-border/60 bg-muted/40 rounded-lg border px-2 py-3',
         className
       )}
+      data-sanity={dataSanity}
     >
       <div className="text-foreground flex items-center justify-center gap-1 text-sm font-semibold">
         {Icon && <Icon className="text-primary h-4 w-4" />}

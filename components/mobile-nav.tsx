@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/popover'
 import { NavItem, NavItems, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { FileWarningIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 
@@ -88,30 +89,56 @@ export function MobileNav({
               ))}
             </div>
           </div>
-          {mobileListItems.map((item, index) => (
-            <div
+          {mobileListItems.map((listItem, index) => (
+            <MobileListSection
               key={`mobile-list-item-${index}`}
-              className="flex flex-col gap-4"
-            >
-              <div className="text-muted-foreground text-sm font-medium">
-                {item.label}
-              </div>
-              <div className="flex flex-col gap-3">
-                {item.items.map((item, index) => (
-                  <MobileLink
-                    key={index}
-                    href={item.href}
-                    onOpenChange={setOpen}
-                  >
-                    {item.label}
-                  </MobileLink>
-                ))}
-              </div>
-            </div>
+              label={listItem.label}
+              items={listItem.items}
+              onOpenChange={setOpen}
+            />
           ))}
         </div>
       </PopoverContent>
     </Popover>
+  )
+}
+
+function MobileListSection({
+  label,
+  items,
+  onOpenChange
+}: {
+  label: string
+  items: NavListItem['items']
+  onOpenChange?: (open: boolean) => void
+}) {
+  const t = useTranslations('PageEmptyState')
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="text-muted-foreground text-sm font-medium">{label}</div>
+      {items.length === 0 ? (
+        <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-amber-400/50 bg-amber-50/50 p-6 text-center dark:border-amber-600/30 dark:bg-amber-950/20">
+          <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900/50">
+            <FileWarningIcon className="size-5 text-amber-600 dark:text-amber-400" />
+          </div>
+          <div className="text-sm font-medium">{t('title')}</div>
+          <p className="text-muted-foreground text-sm">{t('description')}</p>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {items.map((item) => (
+            <MobileLink
+              key={item.key}
+              href={item.href}
+              onOpenChange={onOpenChange}
+            >
+              {item.label}
+            </MobileLink>
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 

@@ -1,63 +1,69 @@
 import { HouseBuilding } from '@/components/house/house-building'
-import { useHouseLabels } from '@/hooks/use-house-labels'
-import { HouseIdentifier } from '@/lib/types'
+import type { BuildingData } from '@/lib/types/components'
+import type { PortableTextBlock } from '@portabletext/types'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
+import { stegaClean } from 'next-sanity'
 
-export function HouseAbout({ id }: { id: HouseIdentifier }) {
+const components: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="text-foreground text-base leading-relaxed">{children}</p>
+    )
+  },
+  list: {
+    bullet: ({ children }) => <ul className="mt-4 space-y-2">{children}</ul>,
+    number: ({ children }) => (
+      <ol className="text-foreground mt-4 list-decimal space-y-2 pl-5">
+        {children}
+      </ol>
+    )
+  },
+  listItem: {
+    bullet: ({ children }) => (
+      <li className="flex items-start gap-3">
+        <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
+        <span className="text-foreground">{children}</span>
+      </li>
+    ),
+    number: ({ children }) => <li>{children}</li>
+  }
+}
+
+interface HouseAboutProps {
+  _id: string
+  _type: string
+  about: PortableTextBlock[] | null
+  title: string | null
+  building: BuildingData | null
+  slug: string
+}
+
+export function HouseAbout({
+  _id,
+  _type,
+  about,
+  title,
+  building,
+  slug
+}: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
-  const houseLabel = useHouseLabels()
-  const { name } = houseLabel(id)
-
-  const { description, specificities } = {
-    apple: {
-      description: t('houses.apple.description'),
-      specificities: [
-        t('houses.apple.highlights.0'),
-        t('houses.apple.highlights.1'),
-        t('houses.apple.highlights.2')
-      ]
-    },
-    lemon: {
-      description: t('houses.lemon.description'),
-      specificities: [
-        t('houses.lemon.highlights.0'),
-        t('houses.lemon.highlights.1'),
-        t('houses.lemon.highlights.2')
-      ]
-    },
-    orange: {
-      description: t('houses.orange.description'),
-      specificities: [
-        t('houses.orange.highlights.0'),
-        t('houses.orange.highlights.1'),
-        t('houses.orange.highlights.2')
-      ]
-    }
-  }[id]
 
   return (
     <section>
       <h2 className="mb-6 text-2xl font-semibold">
-        {t('heading', { house: name })}
+        {t('heading', { house: title ? stegaClean(title) : '' })}
       </h2>
       <div className="mb-4">
-        <HouseBuilding id={id} />
+        <HouseBuilding
+          _id={_id}
+          _type={_type}
+          slug={slug}
+          building={building}
+        />
       </div>
 
-      <p className="text-foreground text-base leading-relaxed">{description}</p>
-
-      {specificities.length > 0 && (
-        <div className="mt-4">
-          <ul className="space-y-2">
-            {specificities.map((specificity, index) => (
-              <li key={index} className="flex items-start gap-3">
-                <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
-                <span className="text-foreground">{specificity}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {about ? <PortableText value={about} components={components} /> : null}
     </section>
   )
 }

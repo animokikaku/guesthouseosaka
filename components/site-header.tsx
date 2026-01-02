@@ -6,35 +6,54 @@ import { MainNav } from '@/components/main-nav'
 import { MobileNav } from '@/components/mobile-nav'
 import { ModeSwitcher } from '@/components/mode-switcher'
 import { Button } from '@/components/ui/button'
-import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
-import { HouseIdentifierValues, NavItems } from '@/lib/types'
+import { NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HousesNavQueryResult } from '@/sanity.types'
+import { urlFor } from '@/sanity/lib/image'
+import { Settings2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
-export function SiteHeader() {
+// eslint-disable-next-line no-restricted-imports
+import NextLink from 'next/link'
+
+export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
   const t = useTranslations('SiteHeader')
-  const houseLabel = useHouseLabels()
   const isMobile = useIsMobile()
+
+  const houseItems = (houses ?? [])
+    .filter((house): house is typeof house & { slug: keyof typeof assets } => {
+      const isValidSlug = house.slug in assets
+      if (!isValidSlug) {
+        console.warn(`Missing asset for house slug: ${house.slug}`)
+      }
+      return isValidSlug
+    })
+    .map(({ slug, title, description, caption, image }) => {
+      const asset = assets[slug]
+      const src = urlFor(image).width(250).height(150).dpr(2).fit('crop').url()
+
+      return {
+        key: slug,
+        href: { pathname: '/[house]', params: { house: slug } } as const,
+        label: title ?? slug,
+        description: description ?? undefined,
+        caption: caption ?? undefined,
+        icon: asset.icon,
+        background: {
+          src,
+          alt: image?.alt ?? '',
+          blurDataURL: image?.preview ?? undefined
+        }
+      }
+    })
 
   const navItems: NavItems = [
     {
       key: 'share-houses',
-      items: HouseIdentifierValues.map((house) => {
-        const { name, summary, caption } = houseLabel(house)
-        const { icon, background } = assets[house]
-        return {
-          key: house,
-          href: { pathname: '/[house]', params: { house } },
-          label: name,
-          description: summary,
-          caption,
-          icon,
-          background
-        }
-      }),
+      items: houseItems,
       label: t('navigation.share_houses')
     },
     {
@@ -72,9 +91,14 @@ export function SiteHeader() {
           </Button>
           <MainNav items={navItems} className="hidden lg:flex" />
           <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
-            <div className="hidden w-full flex-1 md:flex md:w-auto md:flex-none"></div>
             <LanguageSwitcher size={isMobile ? 'icon-sm' : 'default'} />
             <ModeSwitcher />
+            <Button variant="ghost" size="icon" asChild>
+              <NextLink href="/studio" target="_blank">
+                <Settings2 className="size-4.5" />
+                <span className="sr-only">Sanity Studio</span>
+              </NextLink>
+            </Button>
           </div>
         </div>
       </div>

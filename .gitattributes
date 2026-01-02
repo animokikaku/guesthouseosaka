@@ -1,0 +1,3 @@
+# Hide diffs for generated files
+sanity.types.ts -diff linguist-generated=true
+messages/en.d.json.ts -diff linguist-generated=true

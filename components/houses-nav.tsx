@@ -2,31 +2,33 @@
 
 import { useThemeConfig } from '@/components/active-theme'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { useHouseLabels } from '@/hooks/use-house-labels'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
-import { HouseIdentifierValues } from '@/lib/types'
+import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HousesNavQueryResult } from '@/sanity.types'
+import { stegaClean } from 'next-sanity'
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
+const THEME_CLASSES: Record<HouseIdentifier, string> = {
+  orange:
+    'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
+  apple: 'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500',
+  lemon:
+    'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
+}
+
 export function HousesNav({
+  houses,
   className,
   ...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<'div'> & {
+  houses: NonNullable<HousesNavQueryResult>
+}) {
   const { setActiveTheme } = useThemeConfig()
-  const houseLabel = useHouseLabels()
   const isMobile = useIsMobile()
   const params = useParams()
-
-  const classNames = {
-    orange:
-      'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
-    apple:
-      'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500',
-    lemon:
-      'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
-  }
 
   useEffect(() => {
     if (params.house === 'orange') {
@@ -45,20 +47,25 @@ export function HousesNav({
     <div className="relative overflow-hidden">
       <ScrollArea className="max-w-[600px] lg:max-w-none">
         <div className={cn('flex items-center', className)} {...props}>
-          {HouseIdentifierValues.map((house) => (
-            <Link
-              key={`house-nav-${house}`}
-              href={{ pathname: '/[house]', params: { house } }}
-              data-active={house === params.house}
-              className={cn(
-                'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors',
-                classNames[house]
-              )}
-              scroll={!isMobile}
-            >
-              {houseLabel(house).name}
-            </Link>
-          ))}
+          {houses.map((house) => {
+            if (!house.title) return null
+            const slug = house.slug
+            const title = stegaClean(house.title)
+            return (
+              <Link
+                key={`house-nav-${slug}`}
+                href={{ pathname: '/[house]', params: { house: slug } }}
+                data-active={slug === params.house}
+                className={cn(
+                  'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors',
+                  THEME_CLASSES[slug]
+                )}
+                scroll={!isMobile}
+              >
+                {title}
+              </Link>
+            )
+          })}
         </div>
         <ScrollBar orientation="horizontal" className="invisible" />
       </ScrollArea>

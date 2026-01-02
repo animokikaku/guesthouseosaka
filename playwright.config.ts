@@ -1,5 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
 
+// Use process.env.PORT by default and fallback to port 3000
+const PORT = process.env.PORT || 3000
+const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`
+
 /**
  * Playwright configuration for E2E testing.
  * @see https://playwright.dev/docs/test-configuration
@@ -7,6 +11,9 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   // Directory containing test files
   testDir: './e2e',
+
+  // Look for files with .spec.ts or .e2e.ts extension
+  testMatch: '*.@(spec|e2e).ts',
 
   // Run tests in files in parallel
   fullyParallel: true,
@@ -17,35 +24,49 @@ export default defineConfig({
   // Retry on CI only
   retries: process.env.CI ? 2 : 0,
 
-  // Opt out of parallel tests on CI for stability
-  workers: process.env.CI ? 1 : undefined,
-
   // Reporter to use
-  reporter: [['html', { open: 'never' }], ['list']],
+  reporter: process.env.CI ? 'github' : 'list',
+
+  // Timeout per test
+  timeout: 30 * 1000,
+
+  expect: {
+    // Timeout for async expect matchers
+    timeout: 10 * 1000
+  },
+
+  // Run your local dev server before starting the tests (skip when using Vercel deployment)
+  webServer: process.env.BASE_URL
+    ? undefined
+    : {
+        command: 'bun run dev',
+        url: baseURL,
+        timeout: 2 * 60 * 1000,
+        reuseExistingServer: !process.env.CI
+      },
 
   // Shared settings for all the projects below
   use: {
-    // Base URL for navigation actions like `await page.goto('/')`
-    // Uses BASE_URL for Vercel deployments (via GitHub Actions), falls back to localhost
-    baseURL: process.env.BASE_URL || 'http://localhost:3000',
+    // Use baseURL for navigations
+    baseURL,
 
     // Collect trace when retrying the failed test
-    trace: 'on-first-retry',
+    trace: process.env.CI ? 'on' : 'retain-on-failure',
+
+    // Record videos on CI when test fails
+    video: process.env.CI ? 'retain-on-failure' : undefined,
 
     // Take screenshot on failure
     screenshot: 'only-on-failure',
 
     // Vercel Deployment Protection bypass headers
     // @see https://vercel.com/docs/security/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation
-    extraHTTPHeaders: {
-      ...(process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-        ? {
-            'x-vercel-protection-bypass':
-              process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-            //'x-vercel-set-bypass-cookie': 'samesitenone' // Set SameSite to None if deploying through an iframe or other indirect way.
-          }
-        : {})
-    }
+    ...(process.env.VERCEL_AUTOMATION_BYPASS_SECRET && {
+      extraHTTPHeaders: {
+        'x-vercel-protection-bypass':
+          process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+      }
+    })
   },
 
   // Configure projects for major browsers
@@ -54,21 +75,5 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] }
     }
-  ],
-
-  // Run your local dev server before starting the tests (skip when using Vercel deployment)
-  webServer: process.env.BASE_URL
-    ? undefined
-    : {
-        command: 'bun run dev',
-        url: 'http://localhost:3000',
-        reuseExistingServer: !process.env.CI,
-        timeout: 120 * 1000 // 2 minutes for Next.js to start
-      },
-
-  // Timeout settings
-  timeout: 30 * 1000, // 30 seconds per test
-  expect: {
-    timeout: 10 * 1000 // 10 seconds for assertions
-  }
+  ]
 })

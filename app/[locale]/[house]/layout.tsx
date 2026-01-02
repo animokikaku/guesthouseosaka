@@ -1,26 +1,37 @@
 import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
-import { getHouseLabel } from '@/lib/house-labels'
-import { ImagesProvider } from '@/lib/images'
 import { getOpenGraphMetadata } from '@/lib/metadata'
+import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
+import { sanityFetch } from '@/sanity/lib/live'
 import {
-  HouseIdentifier,
-  HouseIdentifierSchema,
-  HouseIdentifierValues
-} from '@/lib/types'
+  houseQuery,
+  houseSlugsQuery,
+  settingsQuery
+} from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
 import { hasLocale, Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-
-export function generateStaticParams() {
-  return routing.locales.flatMap((locale) =>
-    HouseIdentifierValues.map((house) => ({ locale, house }))
-  )
-}
+import { use } from 'react'
 
 export function hasHouse(house: string): house is HouseIdentifier {
   return HouseIdentifierSchema.safeParse(house).success
+}
+
+export async function generateStaticParams() {
+  const { data: houses } = await sanityFetch({
+    query: houseSlugsQuery,
+    perspective: 'published',
+    stega: false
+  })
+
+  if (houses.length === 0) {
+    return []
+  }
+
+  return routing.locales.flatMap((locale) =>
+    houses.map(({ slug }) => ({ locale, house: slug }))
+  )
 }
 
 export async function generateMetadata(
@@ -32,21 +43,31 @@ export async function generateMetadata(
     return undefined
   }
 
-  const houseLabel = await getHouseLabel(locale as Locale)
-  const { name: title, summary: description } = houseLabel(house)
-  const image = assets.openGraph[house].src
-  const { openGraph, twitter } = await getOpenGraphMetadata({ locale, image })
+  const [{ data }, { data: settings }] = await Promise.all([
+    sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
+    sanityFetch({ query: settingsQuery, params: { locale } })
+  ])
+
+  if (!data) {
+    return undefined
+  }
+
+  const { title, description } = data
+  const { openGraph, twitter } = getOpenGraphMetadata({
+    locale,
+    image: assets.openGraph[house].src,
+    siteName: settings?.siteName
+  })
 
   return { title, description, openGraph, twitter }
 }
 
-export default async function HouseLayout({
+export default function HouseLayout({
   children,
   modal,
   params
 }: LayoutProps<'/[locale]/[house]'>) {
-  // Ensure that the incoming `house` is valid
-  const { locale, house } = await params
+  const { locale, house } = use(params)
 
   if (!hasHouse(house)) {
     notFound()
@@ -55,10 +76,9 @@ export default async function HouseLayout({
   setRequestLocale(locale as Locale)
 
   return (
-    // ImagesProvider enables useImages() for client components
-    <ImagesProvider house={house}>
+    <>
       {children}
       {modal}
-    </ImagesProvider>
+    </>
   )
 }

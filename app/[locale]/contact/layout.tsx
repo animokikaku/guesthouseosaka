@@ -1,36 +1,54 @@
-import {
-  PageActions,
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading
-} from '@/components/page-header'
-import { Button } from '@/components/ui/button'
-import { Link } from '@/i18n/navigation'
+import { DynamicPageActions } from '@/components/dynamic-page-actions'
+import { PageHeader } from '@/components/page-header'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
-import { BookTextIcon, MailIcon, PhoneIcon } from 'lucide-react'
+import { sanityFetch } from '@/sanity/lib/live'
+import {
+  contactPageMetaQuery,
+  contactPageQuery,
+  settingsQuery
+} from '@/sanity/lib/queries'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import type { Metadata } from 'next'
 import type { Locale } from 'next-intl'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { setRequestLocale } from 'next-intl/server'
+
+const headerComponents: PortableTextComponents = {
+  block: {
+    h1: ({ children }) => (
+      <h1 className="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter">
+        {children}
+      </h1>
+    ),
+    normal: ({ children }) => (
+      <p className="text-foreground max-w-3xl text-base text-balance sm:text-lg">
+        {children}
+      </p>
+    )
+  }
+}
 
 export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/contact'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
-  const t = await getTranslations({
+  const [{ data: contactPageMeta }, { data: settings }] = await Promise.all([
+    sanityFetch({ query: contactPageMetaQuery, params: { locale } }),
+    sanityFetch({ query: settingsQuery, params: { locale } })
+  ])
+
+  const { openGraph, twitter } = getOpenGraphMetadata({
     locale: locale as Locale,
-    namespace: 'ContactLayout.meta'
+    image: assets.openGraph.contact.src,
+    siteName: settings?.siteName
   })
 
-  const { openGraph, twitter } = await getOpenGraphMetadata({
-    locale: locale as Locale,
-    image: assets.openGraph.contact.src
-  })
-
-  const title = t('title')
-  const description = t('description')
-
-  return { title, description, openGraph, twitter }
+  return {
+    title: contactPageMeta?.metaTitle ?? 'Contact',
+    description: contactPageMeta?.metaDescription ?? undefined,
+    openGraph,
+    twitter
+  }
 }
 
 export default async function ContactLayout({
@@ -39,36 +57,27 @@ export default async function ContactLayout({
 }: LayoutProps<'/[locale]/contact'>) {
   const { locale } = await params
   setRequestLocale(locale as Locale)
-  const t = await getTranslations({
-    locale: locale as Locale,
-    namespace: 'ContactLayout'
+
+  const { data } = await sanityFetch({
+    query: contactPageQuery,
+    params: { locale }
   })
+
+  const page = data?.page
 
   return (
     <>
       <PageHeader>
-        <PageHeaderHeading>{t('title')}</PageHeaderHeading>
-        <PageHeaderDescription>{t('description')}</PageHeaderDescription>
-        <PageActions>
-          <Button asChild size="sm">
-            <Link href="/contact">
-              <MailIcon />
-              {t('actions.contact')}
-            </Link>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <Link href={{ pathname: '/faq', hash: '#phone' }}>
-              <PhoneIcon />
-              {t('actions.phone')}
-            </Link>
-          </Button>
-          <Button asChild variant="ghost" size="sm">
-            <Link href="/faq">
-              <BookTextIcon />
-              {t('actions.faq')}
-            </Link>
-          </Button>
-        </PageActions>
+        {page?.header && (
+          <PortableText value={page.header} components={headerComponents} />
+        )}
+        {page?.actions && page.actions.length > 0 && (
+          <DynamicPageActions
+            documentId={page._id}
+            documentType={page._type}
+            actions={page.actions}
+          />
+        )}
       </PageHeader>
       <div className="container-wrapper section-soft flex-1 md:pb-12">
         <div className="sm:container">

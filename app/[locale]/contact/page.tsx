@@ -1,6 +1,3 @@
-import { ChevronRightIcon } from 'lucide-react'
-import { Locale } from 'next-intl'
-
 import {
   Item,
   ItemActions,
@@ -8,60 +5,58 @@ import {
   ItemDescription,
   ItemTitle
 } from '@/components/ui/item'
-import {
-  ContactNavigationKey,
-  useContactNavigation
-} from '@/hooks/use-contact-navigation'
 import { Link } from '@/i18n/navigation'
+import { PageEmptyState } from '@/components/page-empty-state'
+import { sanityFetch } from '@/sanity/lib/live'
+import { contactTypesListQuery } from '@/sanity/lib/queries'
+import { ChevronRightIcon } from 'lucide-react'
+import type { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
-import { ComponentProps, use } from 'react'
 
-export default function ContactPage({
+export default async function ContactPage({
   params
 }: PageProps<'/[locale]/contact'>) {
-  const { locale } = use(params)
-
+  const { locale } = await params
   setRequestLocale(locale as Locale)
-  const navLabel = useContactNavigation()
-  const keys: ContactNavigationKey[] = ['tour', 'move-in', 'general']
+
+  // Use separate query to avoid stega deduplication with layout
+  const { data: contactTypes } = await sanityFetch({
+    query: contactTypesListQuery,
+    params: { locale }
+  })
+
+  if (!contactTypes || contactTypes.length === 0) {
+    return <PageEmptyState />
+  }
 
   return (
     <div className="mx-auto flex w-full flex-col gap-4">
-      {keys.map((key) => {
-        const { href, title, description } = navLabel(key)
-        return (
-          <ContactLink
-            key={`contact-link-${key}`}
-            href={href}
-            title={title}
-            description={description}
-          />
-        )
-      })}
+      {contactTypes.map(({ _id, slug, title, description }) => (
+        <Item key={_id} asChild className="flex-1">
+          <Link
+            href={{
+              pathname: '/contact/[slug]',
+              params: { slug },
+              hash: '#tabs'
+            }}
+            className="flex w-full items-center gap-4"
+          >
+            <ItemContent>
+              {title && (
+                <ItemTitle className="text-lg font-medium">{title}</ItemTitle>
+              )}
+              {description && (
+                <ItemDescription className="text-md">
+                  {description}
+                </ItemDescription>
+              )}
+            </ItemContent>
+            <ItemActions>
+              <ChevronRightIcon className="size-4" aria-hidden />
+            </ItemActions>
+          </Link>
+        </Item>
+      ))}
     </div>
-  )
-}
-
-function ContactLink({
-  href,
-  title,
-  description
-}: {
-  href: ComponentProps<typeof Link>['href']
-  title: string
-  description: string
-}) {
-  return (
-    <Item asChild className="flex-1">
-      <Link href={href} className="flex w-full items-center gap-4">
-        <ItemContent>
-          <ItemTitle className="text-lg font-medium">{title}</ItemTitle>
-          <ItemDescription className="text-md">{description}</ItemDescription>
-        </ItemContent>
-        <ItemActions>
-          <ChevronRightIcon className="size-4" aria-hidden />
-        </ItemActions>
-      </Link>
-    </Item>
   )
 }

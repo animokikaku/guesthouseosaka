@@ -12,9 +12,14 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # next.js
 /.next/
+!/.next/types/
 /out/
 
 # production
@@ -43,3 +48,11 @@ next-env.d.ts
 
 # keep locally-stored public assets out of source control
 /public/images
+
+# sanity
+*.tar.gz
+dist/
+backup/
+
+# vitest html report
+html/

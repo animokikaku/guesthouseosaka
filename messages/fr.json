@@ -1,85 +1,12 @@
 {
-  "ContactLayout": {
-    "actions": {
-      "contact": "Contact",
-      "faq": "FAQ",
-      "phone": "Téléphone"
-    },
-    "description": "Nous recevons vos demandes via le formulaire de contact ou par téléphone. Dès réception, nous vous répondrons au plus vite.",
-    "meta": {
-      "description": "Contactez-nous pour toute demande ou question.",
-      "title": "Contact"
-    },
-    "title": "Entrer en contact"
-  },
   "FAQAccordion": {
-    "curfew": {
-      "answer": "Il n'y a pas de couvre-feu dans aucune maison ; merci de limiter le bruit tôt le matin et tard le soir.",
-      "question": "Y a-t-il un couvre-feu ?"
-    },
-    "extra_costs": {
-      "question": "Quels frais supplémentaires s'ajoutent au loyer ?"
-    },
     "floors_and_rooms": {
-      "format": "Bâtiment de {floors} étages avec {rooms} chambres.",
-      "question": "Combien d'étages et de chambres ?"
-    },
-    "manager_in_residence": {
-      "answer": "<strong>Orange House</strong> dispose d’un responsable sur place. <strong>Lemon House</strong> et <strong>Apple House</strong> n’en ont pas.",
-      "question": "Y a-t-il un responsable sur place ?"
-    },
-    "move_in_requirements": {
-      "answer": "Chaque maison nécessite que vous apportiez des consommables et une pièce d'identité valide.",
-      "question": "Que dois-je apporter lors de mon emménagement ?"
-    },
-    "rent_due_date": {
-      "answer": "Le loyer de <strong>Orange House</strong> est dû le 10 de chaque mois, tandis que <strong>Lemon House</strong> et <strong>Apple House</strong> paient le jour du mois correspondant à leur date d'emménagement. Par exemple, si vous emménagez le 23, le loyer est dû chaque 23.",
-      "question": "Quand dois-je payer le loyer chaque mois ?"
-    },
-    "room_occupancy": {
-      "answer": "Toutes les maisons peuvent accueillir jusqu'à 2 personnes par chambre.",
-      "question": "Combien de personnes peuvent séjourner dans une chambre ?"
+      "format": "Bâtiment de <floorsTag>{floors} étages</floorsTag> avec <roomsTag>{rooms} chambres</roomsTag>."
     }
-  },
-  "FAQCard": {
-    "description": "Si vous avez des questions, contactez-nous par e-mail ou par téléphone.",
-    "subtext": "Selon l'heure, il se peut que nous ne puissions pas répondre au téléphone.",
-    "title": "Vous avez d'autres questions ?"
   },
   "FAQContactTable": {
     "from_overseas": "Depuis l'étranger",
     "within_japan": "Depuis le Japon"
-  },
-  "FAQExtraCostsTable": {
-    "common_fees": "Charges communes",
-    "deposit": "Caution",
-    "drying_machine": "Sèche-linge",
-    "free": "Gratuit",
-    "free_wifi": "Wi-Fi gratuit",
-    "free_wifi_lan": "Wi-Fi / LAN gratuit",
-    "internet": "Internet",
-    "laundromat": "Laverie",
-    "price_per_minutes": "{price} / {minutes}",
-    "price_per_month": "{price} / mois",
-    "private_washer": "Chaque chambre dispose d'une machine à laver privée.",
-    "seasonal_rates": {
-      "spring_autumn": "Printemps/Automne : {min} – {max}",
-      "summer_winter": "Été/Hiver : {min} – {max}"
-    },
-    "utility_fees": "Charges",
-    "water_bill": "Facture d'eau"
-  },
-  "FAQLayout": {
-    "actions": {
-      "email": "E-mail",
-      "phone": "Téléphone"
-    },
-    "description": "Découvrez ici les informations essentielles pour profiter pleinement de votre séjour. Si votre question n'y figure pas, contactez-nous via le formulaire ou par téléphone.",
-    "meta": {
-      "description": "Trouvez des réponses aux questions les plus fréquemment posées sur nos maisons en commun.",
-      "title": "FAQ"
-    },
-    "title": "Foire aux questions"
   },
   "GalleryModal": {
     "close": "Fermer la galerie",
@@ -90,80 +17,10 @@
     "close": "Fermer la galerie"
   },
   "HouseAbout": {
-    "heading": "À propos de {house}",
-    "houses": {
-      "apple": {
-        "description": "Apple House place les résidents à une minute à pied de la station Daikokucho tout en restant proche de Namba. Chaque chambre privée comprend une salle de bain complète et une cuisine, offrant un confort comparable à un appartement pour les séjours moyens et longs.",
-        "highlights": [
-          "Chambres privées avec cuisine et salle de bain (11 m²)",
-          "À 14 minutes à pied de Namba",
-          "Salon avec une belle cuisine entièrement équipée"
-        ]
-      },
-      "lemon": {
-        "description": "Lemon House propose des chambres privées et quelques options en dortoir à quelques instants du cœur de Namba. Le bâtiment compact garde une ambiance intime tout en offrant tout le nécessaire pour des séjours courts ou longs.",
-        "highlights": [
-          "Chambres privées avec cuisines et salles de bain (19 m²)",
-          "Chambres spacieuses, idéales pour les couples et amis",
-          "Vie communautaire et échanges internationaux au cœur d'Osaka"
-        ]
-      },
-      "orange": {
-        "description": "Orange House est une colocation en chambres privées située dans le quartier rétro de Showachō à Abeno. Accès idéal au centre d'Osaka et échanges internationaux détendus dans notre salon de style japonais.",
-        "highlights": [
-          "Chambres privées avec cuisine (12 m²)",
-          "Réductions pour longs séjours disponibles",
-          "Salon rooftop rétro japonais (100 m²) avec vue sur Abeno Harukas"
-        ]
-      }
-    }
+    "heading": "À propos de {house}"
   },
   "HouseAmenities": {
-    "categories": {
-      "accommodation": "Chambre",
-      "bathroom": "Salle de bain",
-      "building_access": "Autres équipements",
-      "common_areas": "Espaces communs",
-      "internet_climate": "Internet et confort",
-      "kitchen_dining": "Cuisine et salle à manger",
-      "laundry": "Buanderie"
-    },
     "heading": "Ce qu'offre cet endroit",
-    "items": {
-      "air_conditioning_heating": "Climatisation et chauffage",
-      "appliances": "Autres appareils ménagers (aspirateur, fer)",
-      "bathroom_with_shower_bathtub": "Salle de bain avec douche et baignoire",
-      "bicycle_parking": "Parking à vélos",
-      "coffee_tea_corner": "Coin café et thé",
-      "dryer": "Sèche-linge",
-      "drying_space": "Espace de séchage",
-      "elevator": "Ascenseur",
-      "free_wifi": "Wi-Fi gratuit",
-      "lan_cable": "Câble LAN",
-      "furnished_rooms": "Chambres entièrement meublées ({size} m²)",
-      "kitchen": "Cuisine",
-      "large_refrigerator": "Grand réfrigérateur",
-      "lounge": "Salon",
-      "lounge_kitchen_oven": "Cuisine du lounge avec four",
-      "mailbox": "Boîte aux lettres",
-      "cluster_mailboxes": "Boîtes aux lettres collectives",
-      "door_mail_slot": "Fente de porte",
-      "microwave_toaster": "Micro-ondes et grille-pain",
-      "microwave_toaster_rice_cooker": "Micro-ondes, grille-pain et cuiseur à riz",
-      "monthly_parties": "Fêtes mensuelles",
-      "refrigerator": "Réfrigérateur",
-      "rooftop_lounge": "Salon rooftop (100 m²)",
-      "secure_entry": "Entrée sécurisée",
-      "shower": "Douche",
-      "spacious_rooms": "Chambres spacieuses (19 m²)",
-      "tableware": "Vaisselle",
-      "tv_entertainment": "TV avec Netflix, Blu-ray, câble",
-      "washing_machine": "Machine à laver",
-      "washlet_toilet": "Toilettes avec washlet",
-      "toilet": "Toilette",
-      "smoking_area": "Espace fumeur, 8ᵉ étage",
-      "rooftop_garden": "Jardin rooftop"
-    },
     "notes": {
       "coin": "Pièce",
       "private": "Privé",
@@ -176,244 +33,34 @@
     "min_rent_label": "Loyer min.",
     "rooms_label": "Chambres"
   },
-  "HouseGalleryClient": {
-    "categories": {
-      "building_features": "Caractéristiques du bâtiment",
-      "common_spaces": "Espaces communs",
-      "facilities": "Salle de bain",
-      "floor_plan": "Plan d'étage",
-      "maps": "Cartes",
-      "neighborhood": "Quartier",
-      "room": "Chambre"
-    }
-  },
   "HouseLocation": {
-    "details": {
-      "apple": {
-        "nearby": {
-          "convenience": "Supérette et bureau de poste à environ 3 minutes à pied",
-          "hundred_yen": "Magasin à 100¥ près de la station Daikokucho",
-          "supermarkets": "Supermarché 24h/24 juste à côté de la maison d'hôtes et un autre grand supermarché à environ 1 minute",
-          "sushi": "Restaurant de sushis sur tapis roulant à environ 3 minutes à pied"
-        },
-        "overview": "À seulement 1 minute à pied de la station Daikokucho (lignes Midosuji et Yotsubashi). Juste à côté d'un supermarché ouvert 24 h/24. À proximité du marché Kizu, vieux de 200 ans, et d'un grand bain public avec spa en pierre chaude. À distance de marche de Namba pour profiter de la vie nocturne sans se soucier du dernier train.",
-        "stations": {
-          "daikokucho": "Station Daikokucho (métro Midosuji et Yotsubashi), sortie 2 — environ 1 minute à pied",
-          "ebisucho": "Station Ebisucho — environ 11 minutes à pied",
-          "imamiya": "Station Imamiya / Imamiya-Ebisu — environ 7 minutes à pied",
-          "namba": "Stations Namba (diverses lignes) — environ 15 minutes à pied"
-        }
-      },
-      "lemon": {
-        "nearby": {
-          "discount_shop": "Magasin discount à environ 5 minutes à pied et autres supérettes à proximité",
-          "post_office": "Bureau de poste à environ 2 minutes à pied",
-          "supermarkets": "Supermarchés à proximité à environ 2, 4 et 6 minutes à pied"
-        },
-        "overview": "À seulement 8 minutes à pied de Namba ! Emplacement idéal pour profiter de la vie nocturne sans se soucier du dernier train. Accès facile partout à Osaka. Parfait pour le tourisme ou les séjours prolongés. Aucun couvre-feu.",
-        "stations": {
-          "namba": "Station Namba (métro ligne Midosuji), sortie 4 — environ 10 minutes à pied",
-          "nankai_namba": "Station Nankai Namba (sortie sud) — environ 8 minutes à pied",
-          "nihonbashi": "Station Nihonbashi (métro ligne Sakaisuji), sortie 10 — environ 8 minutes à pied"
-        }
-      },
-      "orange": {
-        "nearby": {
-          "harukas": "Abeno Harukas à 15 minutes à pied ; Qs Mall à 12 minutes à pied",
-          "showacho_supermarket": "Supermarché proche de la station Showacho",
-          "supermarkets": "Supermarchés à environ 5 minutes à pied"
-        },
-        "overview": "À seulement 15 minutes à pied d’Abeno Harukas, l’emblématique gratte-ciel de 300 mètres. Le quartier est proche des principales attractions de la ville et bénéficie d’un excellent accès aux transports en commun vers des lieux tels que le château d’Osaka, l’aquarium Kaiyukan, Universal Studios Japan et la tour Tsūtenkaku. Les stations les plus proches se trouvent à quelques minutes à pied. À proximité immédiate, vous trouverez également des supermarchés, des supérettes, des boutiques à 100 ¥, une salle de sport, un magasin de vélos ainsi que le bureau de l’arrondissement.",
-        "stations": {
-          "fuminosato": "Station Fuminosato (métro ligne Tanimachi), sortie 6 — 3 minutes à pied",
-          "showacho": "Station Showacho (métro ligne Midosuji), sortie 2 — 7 minutes à pied",
-          "tennoji": "Tennoji / Abenobashi — environ 15 minutes à pied"
-        }
-      }
-    },
     "heading": "Où vous vous trouverez",
-    "highlights": {
-      "apple": "À distance de marche de Namba et à une minute seulement de la station Daikokucho.",
-      "lemon": "Un accès idéal à la ligne de métro Midosuji vous relie à tout Osaka.",
-      "orange": "Un accès idéal aux lignes de métro Midosuji et Tanimachi vous relie à tout Osaka."
-    },
-    "sections": {
-      "getting_around": "Stations les plus proches",
-      "nearby": "À proximité",
-      "neighborhood": "Sites à visiter"
-    },
     "modal_trigger": "En savoir plus"
   },
   "HousePricing": {
-    "apple": {
-      "long_stay": "Réductions pour les séjours de 3 et 6 mois.",
-      "other_fees": {
-        "deposit": "Dépôt de garantie : 30 000 ¥ (remboursé à votre départ en l’absence de dommages)",
-        "common_fee": "Gestion et frais communs : 10 000 ¥ par mois",
-        "utilities": "Charges : environ 3 000 ¥ par mois (selon consommation réelle)"
-      },
-      "rent": "50 000–70 000 ¥ par mois (jusqu’à 2 personnes par chambre)",
-      "short_stay": {
-        "all_fees": "Séjours de moins de 3 mois : tous les frais sont inclus.",
-        "minimum": "Séjour minimum : 1 mois.",
-        "rate": "80 000 ¥ ~ 95 000 ¥ par mois."
-      }
-    },
-    "heading": "Tarifs",
-    "labels": {
-      "dormitory_plan": "Formule dortoir",
-      "long_stay": "Remise longue durée",
-      "other_fees": "Autres frais",
-      "rent": "Loyer",
-      "short_stay": "Court séjour"
-    },
-    "lemon": {
-      "dormitory": {
-        "details": "Mixte, 3 lits par chambre, salle de bain et cuisine partagées.",
-        "minimum": "Séjour minimum : 1 mois.",
-        "rate": "45 000 ¥ par mois (charges, gestion et frais communs inclus)"
-      },
-      "long_stay": "Réductions pour les séjours de 3 et 6 mois.",
-      "other_fees": {
-        "deposit": "Dépôt de garantie : 30 000 ¥ (remboursé à votre départ en l’absence de dommages)",
-        "service_fee": "Gestion et frais communs : 10 000 ¥ par mois",
-        "utilities": "Charges : environ 3 000 ¥ par mois (selon consommation réelle)",
-        "washing_machine": "Machine à laver : gratuit (sur le toit)"
-      },
-      "rent": "50 000–70 000 ¥ par mois (jusqu’à 2 personnes par chambre)",
-      "short_stay": {
-        "all_fees": "Séjours de moins de 3 mois : tous les frais sont inclus.",
-        "minimum": "Séjour minimum : 1 mois.",
-        "rate": "80 000 ¥ ~ 95 000 ¥ par mois."
-      }
-    },
-    "orange": {
-      "long_stay": {
-        "after_six_months": "Après 6 mois : économisez ¥5 000 chaque mois",
-        "second_month": "2e mois : économisez 1 000 ¥",
-        "third_month": "3e mois : économisez 2 000 ¥"
-      },
-      "other_fees": {
-        "deposit": "Dépôt de garantie : 30 000 ¥ (remboursé à votre départ en l'absence de dégats)",
-        "dryer": "Sèche-linge : 100 ¥ par 30 minutes",
-        "service_fee": "Frais de gestion et charges communes : 12 000 ¥ par mois",
-        "utilities": "Charges : environ 3 000–4 000 ¥ par mois (payez uniquement ce que vous consommez)",
-        "washing_machine": "Machine à laver : gratuit"
-      },
-      "rent": {
-        "base": "41 000–48 000 ¥ par mois (1 personne)",
-        "second_person": "+5 000 ¥ par mois pour une deuxième personne"
-      }
-    }
+    "heading": "Tarifs"
   },
   "ImageBlockGallery": {
-    "view_gallery": "Afficher toutes les photos"
+    "view_gallery": "Afficher toutes les photos",
+    "empty_title": "Aucune image de galerie",
+    "empty_description": "Les images de galerie sont gérées via Sanity CMS."
   },
   "LanguageSwitcher": {
     "aria_label": "Sélectionner la langue"
   },
   "LegalNoticeDialog": {
+    "agree_button": "J'accepte",
     "close_button": "Fermer",
-    "intro": {
-      "company": "Animo Kikaku Co., Ltd. (« la Société », « nous », « notre ») respecte votre vie privée et s'engage à protéger vos informations personnelles.",
-      "purpose": "Cette Politique de confidentialité explique comment nous collectons, utilisons, stockons et protégeons les informations que vous fournissez via les formulaires de contact et autres fonctionnalités de ce site Web (« le Service »)."
-    },
-    "last_updated": "Dernière mise à jour : {date}",
-    "sections": {
-      "changes": {
-        "paragraphs": [
-          "Nous pouvons mettre à jour cette politique de confidentialité de temps à autre.",
-          "Toute modification importante sera annoncée sur cette page, avec la date de mise à jour clairement indiquée."
-        ],
-        "title": "8. Modifications de cette politique"
-      },
-      "contact": {
-        "details": [
-          "Animo Kikaku Co., Ltd.",
-          "1-21-21 Hannancho, Abeno-ku, Osaka, Japon",
-          "📧 orange@guesthouseosaka.com",
-          "👤 Directeur représentant : Kenji Hisamoto"
-        ],
-        "paragraphs": [
-          "Si vous avez des questions, des préoccupations ou des demandes concernant cette politique de confidentialité ou nos pratiques de traitement des données, veuillez nous contacter à :"
-        ],
-        "title": "7. Contactez-nous"
-      },
-      "information_collected": {
-        "closing": "Nous collectons ces informations directement auprès de vous lorsque vous soumettez un formulaire ou communiquez avec nous.",
-        "list": [
-          "Détails de base : votre nom, âge, sexe, nationalité, adresse e-mail et (facultativement) numéro de téléphone",
-          "Détails de la demande : contenu du message, questions et données de soumission du formulaire",
-          "Détails d'hébergement : dates de visite ou d'emménagement souhaitées, préférences de logement"
-        ],
-        "paragraphs": [
-          "Lorsque vous nous contactez via le Service, nous pouvons collecter les informations personnelles suivantes :"
-        ],
-        "title": "1. Informations que nous collectons"
-      },
-      "retention": {
-        "paragraphs": [
-          "Nous conservons vos informations personnelles uniquement le temps nécessaire pour atteindre les objectifs décrits ci-dessus.",
-          "En général, cela signifie jusqu'à 10 ans après la fin de votre relation commerciale avec nous.",
-          "Après cette période, les informations seront supprimées ou anonymisées de manière sécurisée."
-        ],
-        "title": "3. Durée de conservation"
-      },
-      "rights": {
-        "closing": "Nous répondrons rapidement et en toute transparence à toutes les demandes légitimes conformément à la loi japonaise sur la confidentialité.",
-        "list": [
-          "Demander l'accès aux informations personnelles que nous détenons à votre sujet",
-          "Demander la correction, l'ajout ou la suppression d'informations inexactes ou obsolètes",
-          "Retirer votre consentement au traitement de vos informations (le cas échéant)"
-        ],
-        "paragraphs": [
-          "Vous avez le droit de :"
-        ],
-        "title": "5. Vos droits"
-      },
-      "security": {
-        "paragraphs": [
-          "Nous prenons des mesures techniques et organisationnelles appropriées pour protéger vos informations personnelles contre l'accès non autorisé, la perte, l'utilisation abusive, l'altération ou la divulgation.",
-          "L'accès aux données personnelles est limité au personnel autorisé uniquement."
-        ],
-        "title": "6. Mesures de sécurité"
-      },
-      "sharing": {
-        "paragraphs": [
-          "Nous ne partageons ni ne vendons vos informations personnelles à des tiers.",
-          "Vos données ne seront pas transférées hors du Japon sans votre consentement, sauf si la loi l'exige ou si cela est nécessaire pour protéger des droits légaux conformément à la loi japonaise sur la protection des informations personnelles (APPI) et aux autres réglementations applicables."
-        ],
-        "title": "4. Partage et transferts internationaux"
-      },
-      "usage": {
-        "closing": "Nous n'utilisons pas vos informations à des fins marketing sans votre consentement explicite.",
-        "list": [
-          "Répondre à vos demandes ou requêtes",
-          "Organiser des visites de propriété et gérer les procédures d'emménagement",
-          "Fournir des informations, mises à jour et assistance liées au Service",
-          "Maintenir les enregistrements internes nécessaires aux opérations commerciales et à la conformité"
-        ],
-        "paragraphs": [
-          "Nous utilisons vos informations personnelles uniquement à des fins commerciales légitimes, notamment :"
-        ],
-        "title": "2. Comment nous utilisons vos informations"
-      }
-    },
-    "title": "Politique de confidentialité"
-  },
-  "LocalePage": {
-    "hero_action": "Contactez‑nous",
-    "hero_description": "Profitez d'échanges internationaux dans les trois share houses que nous gérons à Osaka.",
-    "hero_title": "Depuis 1991, <block>trois share houses</block> à Osaka",
-    "houses_description": "Trois maisons partagées conçues pour offrir le confort de vivre au cœur d’Osaka, favoriser les échanges internationaux et créer un cadre de vie unique.",
-    "houses_title": "Bienvenue dans la share house de Guest House Osaka"
+    "description": "Politique de confidentialité et conditions d'utilisation",
+    "last_updated": "Dernière mise à jour : {date}"
   },
   "MessageField": {
     "character_counter": "{count} / {max} caractères",
     "optional_hint": "facultatif"
   },
   "MobileHeroImage": {
-    "empty_title": "Aucune image trouvée"
+    "empty_title": "Aucune image de galerie",
+    "empty_description": "Les images de galerie sont gérées via Sanity CMS."
   },
   "MobileNav": {
     "home_label": "Accueil",
@@ -429,12 +76,12 @@
     "description": "La page que vous cherchez est introuvable, nous vous suggérons de revenir à l'accueil.",
     "title": "Oups !"
   },
+  "PageEmptyState": {
+    "title": "Contenu non disponible",
+    "description": "Le contenu de cette page est géré dans Sanity CMS. Veuillez ajouter du contenu pour l'afficher ici."
+  },
   "ResetButton": {
     "label": "Réinitialiser"
-  },
-  "SiteFooter": {
-    "brand_name": "Guest House Osaka",
-    "company_name": "Animo Kikaku Co., Ltd."
   },
   "SiteHeader": {
     "logo_label": "Share House Osaka",
@@ -449,72 +96,22 @@
   },
   "forms": {
     "fields": {
-      "age": {
-        "description": "Quel âge avez-vous ?",
-        "label": "Âge",
-        "placeholder": "Saisissez votre âge"
-      },
-      "date": {
-        "move_in_description": "Quand souhaitez-vous emménager ?",
-        "move_in_label": "Date d'emménagement",
-        "tour_description": "Quand souhaitez-vous organiser une visite ?",
-        "tour_label": "Date de visite"
-      },
-      "email": {
-        "description": "Nous utiliserons cette adresse pour vous transmettre plus de détails.",
-        "label": "E-mail",
-        "placeholder": "Saisissez votre e-mail"
-      },
       "gender": {
-        "description": "Quel est votre sexe ?",
-        "label": "Genre",
         "options": {
           "female": "Femme",
           "male": "Homme"
-        },
-        "placeholder": "Sélectionnez votre sexe"
-      },
-      "hour": {
-        "tour_description": "Nos heures d'ouverture sont de 10:00 à 20:00.",
-        "tour_label": "Heure de visite"
-      },
-      "message": {
-        "contact_placeholder": "Faites-nous part de toute information ou question complémentaire.",
-        "description": "N'incluez pas d'informations sensibles telles que votre adresse personnelle ou votre numéro de carte bancaire.",
-        "label": "Message",
-        "move_in_placeholder": "Partagez toute exigence particulière pour votre emménagement ou vos questions."
-      },
-      "name": {
-        "description": "Comment devons-nous nous adresser à vous ?",
-        "label": "Nom",
-        "placeholder": "Saisissez votre nom"
-      },
-      "nationality": {
-        "description": "Faites-nous part de votre nationalité.",
-        "label": "Nationalité",
-        "placeholder": "Japonais"
+        }
       },
       "phone": {
-        "description": "Nous pourrons vous contacter à ce numéro le jour de la visite.",
-        "label": "Téléphone",
-        "optional": "(facultatif)",
-        "placeholder": "070-1234-5678"
-      },
-      "places": {
-        "label": "Lieux",
-        "move_in_description": "Dans quels lieux souhaitez-vous emménager ?",
-        "tour_description": "Quels lieux souhaitez-vous visiter ?"
+        "optional": "(facultatif)"
       },
       "privacy_policy_agreement": "En soumettant ce formulaire, vous acceptez la <link>Politique de confidentialité</link>.",
       "stay_duration": {
-        "description": "Combien de temps souhaitez-vous rester ?",
-        "label": "Durée du séjour",
         "options": {
           "long_term": "Long séjour",
           "one_month": "1 mois ou plus",
           "three_month": "3 mois ou plus"
-        },
-        "placeholder": "Choisissez une durée"
+        }
       }
     },
     "status": {
@@ -544,157 +141,6 @@
       "privacy_policy": "Vous devez accepter la politique de confidentialité.",
       "stay_duration": "Veuillez sélectionner votre durée de séjour minimale souhaitée.",
       "time_range": "L'heure doit être comprise entre 10:00 et 20:00."
-    }
-  },
-  "manifest": {
-    "description": "Fondé en 1991. Nous avons 3 share houses dans la ville d'Osaka.",
-    "name": "Share House Osaka",
-    "short_name": "SHO"
-  },
-  "useContactNavigation": {
-    "general": {
-      "description": "Des questions sur les chambres, les tarifs ou les disponibilités ? Nous sommes ravis de vous aider.",
-      "title": "Demande générale"
-    },
-    "moveIn": {
-      "description": "Prêt à emménager ? Partagez vos préférences et votre calendrier.",
-      "title": "Demande d'emménagement"
-    },
-    "tour": {
-      "description": "Réservez une visite pour découvrir nos share houses et ce que nous offrons.",
-      "title": "Demande de visite"
-    }
-  },
-  "useHouseLabels": {
-    "apple": {
-      "caption": "À 1 minute à pied de la station Daikokucho, Namba aussi facilement à pied ! Lounge chaleureux pour des échanges internationaux en toute liberté.",
-      "name": "Apple House",
-      "summary": "Chambres privées bien équipées et salon haut de gamme"
-    },
-    "lemon": {
-      "caption": "Lemon House est à 8 minutes de Namba. Accédez aux lieux nocturnes à pied sans vous soucier du dernier train.",
-      "name": "Lemon House",
-      "summary": "Share house à 8 minutes de la station de Namba"
-    },
-    "orange": {
-      "caption": "Un accès idéal au quartier rétro de Showachō. Des rencontres internationales dans notre salon.",
-      "name": "Orange House",
-      "summary": "Salon de style japonais spacieux et décontracté"
-    }
-  },
-  "useHousePhones": {
-    "apple": {
-      "domestic": "06-6131-6677",
-      "international": "+81-6-6131-6677"
-    },
-    "lemon": {
-      "domestic": "06-6627-0790",
-      "international": "+81-6-6627-0790"
-    },
-    "orange": {
-      "domestic": "06-6627-0790",
-      "international": "+81-6-6627-0790"
-    }
-  },
-  "images": {
-    "apple": {
-      "room": {
-        "wood_flooring": "Toutes les chambres ont un sol en bois.",
-        "toilet_shower_and_bathtub": "Toutes les chambres ont des toilettes, une douche et une baignoire.",
-        "kitchens": "Toutes les chambres ont des cuisines.",
-        "washing_machine_in_balcony": "Il y a une machine à laver sur le balcon."
-      },
-      "common-spaces": {
-        "rooftop": "Toit-terrasse",
-        "apple_tv_and_satellite_channels": "Vous pouvez profiter d'Apple TV et des chaînes satellite sur le grand écran de télévision.",
-        "gas_cookers_available": "3 cuisinières à gaz disponibles.",
-        "toilet_with_washlet_in_lounge": "Toilettes avec washlet dans le salon."
-      },
-      "building-features": {
-        "elevator_for_heavy_luggages": "Nous avons un ascenseur pour que vous puissiez facilement transporter des bagages lourds.",
-        "bicycle_parking_space": "Espace de stationnement pour vélos devant le bâtiment.",
-        "mailbox_at_entrance": "Boîte aux lettres à l'entrée.",
-        "view_from_rooftop_balcony": "La vue depuis le balcon du toit-terrasse"
-      },
-      "neighborhood": {
-        "hour_open_supermarket": "Supermarché ouvert 24h/24 juste à côté de la maison d'hôtes.",
-        "minute_walk_to_another_supermarket": "1 minute à pied d'un autre supermarché.",
-        "minutes_walk_to_rotating_sushi_restaurant": "3 minutes à pied d'un restaurant de sushi tournant (kuru kuru sushi).",
-        "shop_just_by_daikokucho_station": "Magasin à 100¥ juste à côté de la gare de Daikokucho.",
-        "minutes_walk_to_convenience_store": "3 minutes à pied d'un combini.",
-        "minutes_walk_to_post_office": "3 minutes à pied d'un bureau de poste.",
-        "namba_parks": "Namba Parks."
-      },
-      "floor-plan": {
-        "apple_house_floor_plan": "Plan d'étage d'Apple House"
-      }
-    },
-    "lemon": {
-      "room": {
-        "free_to_use_all_tablewares": "Vous pouvez utiliser librement toute la vaisselle.",
-        "ac_and_gas_heater": "Climatisation et chauffage au gaz",
-        "bathroom_with_sink_toilet_shower_and_bathtub": "Salle de bain avec lavabo, toilettes, douche et baignoire",
-        "kitchen_with_dishes_cutlery_cups_and_kitchenware": "Cuisine avec vaisselle, couverts, tasses et ustensiles de cuisine, réfrigérateur, micro-ondes, grille-pain, cuiseur à riz"
-      },
-      "common-spaces": {
-        "story_building_with_rooms": "Bâtiment de 7 étages avec 12 chambres",
-        "laundromat": "Laverie",
-        "rooftop": "Toit-terrasse"
-      },
-      "neighborhood": {
-        "minute_walk_from_nihonbashi_station_exit": "8 minutes à pied de la gare de Nihonbashi, sortie 8",
-        "minutes_walk_to_post_office": "2 minutes à pied d'un bureau de poste",
-        "minutes_walk_to_supermarket": "2 minutes à pied d'un supermarché",
-        "minutes_walk_to_another_supermarket": "4 minutes à pied d'un autre supermarché",
-        "minutes_walk_to_discount_shop": "5 minutes à pied d'un magasin discount",
-        "minute_walk_to_another_supermarket": "6 minutes à pied d'un autre supermarché",
-        "walking_distance_to_doguyasuji": "À distance de marche de Doguyasuji, où vous pouvez trouver toutes sortes d'équipements de cuisine",
-        "nankai_namba_station": "Gare de Nankai Namba"
-      },
-      "maps": {
-        "route_map": "Plan d'accès"
-      },
-      "floor-plan": {
-        "lemon_house_floor_plan": "Plan d'étage de Lemon House"
-      }
-    },
-    "orange": {
-      "room": {
-        "all_rooms_set_in_traditional_japanese_style": "Une chambre japonaise harmonisée dans un style rétro.",
-        "each_room_has_water_and_gas": "Chaque chambre dispose d'eau et de gaz. Il y a également une cuisinière à gaz.",
-        "closet_as_desk_with_lamp_bookshelf_and_outlets": "Le placard peut aussi servir de bureau avec lampe, étagère et plusieurs prises murales."
-      },
-      "common-spaces": {
-        "traditional_japanese_style_lounge": "Salon de style japonais rétro. 100 m² (1200 pi²). Ouvert 24h/24",
-        "tv_show_by_abc": "Nous sommes apparus dans une émission télévisée d'ABC, une chaîne de télévision japonaise",
-        "lounge_equipped_with_large_air_conditioner": "Le salon est équipé d'un grand climatiseur, très confortable que ce soit en été ou en hiver. Il y a également un évier.",
-        "large_collection_of_complete_comic_sets": "Grand choix de séries de mangas complètes à disposition.",
-        "party_at_lounge_about_every_month": "Nous organisons une fête au salon environ tous les mois.",
-        "coffee_tea_and_japanese_tea_available": "Café, thé et thé japonais disponibles dans la section de boissons gratuites."
-      },
-      "building-features": {
-        "see_abeno_harukas_from_rooftop": "Vous pouvez voir Abeno Harukas depuis le toit-terrasse",
-        "showacho_traditional_area": "Showacho est un quartier rétro bordé de maisons aux toits en tuiles japonaises."
-      },
-      "neighborhood": {
-        "supermarket_nearby_only_minutes_walk": "Supermarché à 5 minutes à pied.",
-        "supermarket_by_showacho_station": "Supermarché également juste devant la gare de Showacho.",
-        "stylish_stores_behind_station": "Derrière la gare, des boutiques tendance installées dans d'anciennes maisons de rangée rénovées.",
-        "minutes_walk_to_abeno_harukas": "15 minutes à pied d'Abeno Harukas",
-        "minutes_walk_to_biggest_shopping_mall": "12 minutes à pied du « Q's Mall », l'un des plus grands centres commerciaux d'Osaka.",
-        "hanami_cherry_blossom_festival": "Au printemps, profitez des cerisiers en fleurs au parc Momogaike."
-      },
-      "maps": {
-        "route_map": "Plan d'accès"
-      },
-      "floor-plan": {
-        "orange_house_floor_plan": "Plan d'étage d'Orange House"
-      },
-      "facilities": {
-        "shower_room_behind_curtain": "Derrière le rideau noren se trouve la douche.",
-        "shower_available_hours_for_free": "La douche est disponible 24h/24, gratuitement",
-        "equipped_with_washlet": "Équipé d'un washlet. Les sièges de toilette sont chauds et confortables même en hiver"
-      }
     }
   }
 }

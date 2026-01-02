@@ -21,7 +21,7 @@ interface ToggleGroupFieldProps extends Omit<
 > {
   label?: React.ReactNode
   options: ToggleGroupOption[]
-  description?: string
+  description?: string | null
 }
 
 export function ToggleGroupField({

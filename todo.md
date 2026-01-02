@@ -9,9 +9,8 @@
 - [x] Move down the data to each components if possible
 - [x] Focus on error field and disable browser validation for time
 - [x] Add the correct images on the home screen
-- [] Add a viewer for the home screen images
 - [x] Different og image per house
 - [x] Setup JSON-LD
 - [x] Add images captions on Crowdin
+- [x] Move gallery images and alts to Sanity (or my own DB/admin)
 - [] Enable indexing (meta.robots and robots.txt) once production is ready
-- [] Move gallery images and alts to Sanity (or my own DB/admin)

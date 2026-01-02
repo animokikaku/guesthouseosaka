@@ -1,33 +1,48 @@
 import { FAQContactTable } from '@/app/[locale]/faq/(components)/faq-contact-table'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card'
-import { useTranslations } from 'next-intl'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import type {
+  FaqPageQueryResult,
+  HousesBuildingQueryResult
+} from '@/sanity.types'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 
-export default function FAQCard() {
-  const t = useTranslations('FAQCard')
+const components: PortableTextComponents = {
+  block: {
+    h2: ({ children }) => <h2 className="text-2xl font-bold">{children}</h2>,
+    normal: ({ children }) => (
+      <p className="text-muted-foreground text-md">{children}</p>
+    )
+  }
+}
 
+type FAQCardProps = {
+  contactSection?: NonNullable<FaqPageQueryResult>['contactSection'] | null
+  contactNote?: NonNullable<FaqPageQueryResult>['contactNote'] | null
+  houses: NonNullable<HousesBuildingQueryResult>
+}
+
+export default function FAQCard({
+  contactSection,
+  contactNote,
+  houses
+}: FAQCardProps) {
   return (
     <Card>
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">{t('title')}</CardTitle>
-        <CardDescription className="text-muted-foreground text-md">
-          {t('description')}
-        </CardDescription>
+        {contactSection && (
+          <PortableText value={contactSection} components={components} />
+        )}
       </CardHeader>
       <CardContent>
         <div className="flex justify-center">
-          <FAQContactTable />
+          <FAQContactTable houses={houses} />
         </div>
       </CardContent>
-      <CardFooter className="flex items-center justify-center">
-        <div className="text-muted-foreground text-sm">＊{t('subtext')}</div>
-      </CardFooter>
+      {contactNote && (
+        <CardFooter className="flex items-center justify-center">
+          <div className="text-muted-foreground text-sm">{contactNote}</div>
+        </CardFooter>
+      )}
     </Card>
   )
 }

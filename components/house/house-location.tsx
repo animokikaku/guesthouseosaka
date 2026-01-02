@@ -1,9 +1,9 @@
 'use client'
 
 import { HouseLocationModal } from '@/components/house/house-location-modal'
-import { Skeleton } from '@/components/ui/skeleton'
-import { HouseIdentifier } from '@/lib/types'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import type { LocationData, MapData } from '@/lib/types/components'
 import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
 
@@ -37,13 +37,14 @@ const HouseMap = dynamic(
   }
 )
 
-export function HouseLocation({ id }: { id: HouseIdentifier }) {
+interface HouseLocationProps {
+  location: LocationData
+  map: MapData | null
+}
+
+export function HouseLocation({ location, map }: HouseLocationProps) {
+  const { highlight, details } = location
   const t = useTranslations('HouseLocation')
-  const highlight = {
-    orange: t('highlights.orange'),
-    apple: t('highlights.apple'),
-    lemon: t('highlights.lemon')
-  }[id]
 
   return (
     <section>
@@ -54,11 +55,18 @@ export function HouseLocation({ id }: { id: HouseIdentifier }) {
       </p>
 
       <div className="mb-6">
-        <HouseMap id={id} />
+        {map && (
+          <HouseMap
+            center={map.coordinates}
+            placeId={map.placeId}
+            placeImage={map.placeImage}
+            mapsUrl={map.googleMapsUrl}
+          />
+        )}
       </div>
 
       <div className="mt-6">
-        <HouseLocationModal id={id} title={t('heading')}>
+        <HouseLocationModal details={details} title={t('heading')}>
           <Button variant="outline">{t('modal_trigger')}</Button>
         </HouseLocationModal>
       </div>

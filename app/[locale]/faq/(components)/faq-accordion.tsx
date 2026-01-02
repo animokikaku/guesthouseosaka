@@ -1,105 +1,104 @@
-import type { ReactNode } from 'react'
+'use client'
 
-import { FAQExtraCostsTable } from '@/app/[locale]/faq/(components)/faq-extra-costs-table'
-import { BUILDING_DATA } from '@/components/house/house-building'
+import { FAQExtraCosts } from '@/app/[locale]/faq/(components)/faq-extra-costs'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
-import { useHouseLabels } from '@/hooks/use-house-labels'
-import { HouseIdentifierValues } from '@/lib/types'
+import type {
+  FaqQuestionsQueryResult,
+  HousesBuildingQueryResult,
+  PricingCategoriesQueryResult
+} from '@/sanity.types'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
+import { stegaClean } from '@sanity/client/stega'
 import { useFormatter, useTranslations } from 'next-intl'
+import { createDataAttribute } from 'next-sanity'
 
-type FaqItem = {
-  id: string
-  question: string
-  body: ReactNode
+const components: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => <p>{children}</p>
+  },
+  marks: {
+    strong: ({ children }) => <strong>{children}</strong>
+  }
 }
 
-export function FAQAccordion() {
+type FaqQuestions = NonNullable<FaqQuestionsQueryResult>
+type Houses = NonNullable<HousesBuildingQueryResult>
+type PricingCategories = NonNullable<PricingCategoriesQueryResult>
+
+type FAQAccordionProps = {
+  faqQuestions: FaqQuestions
+  pricingCategories: PricingCategories
+  housesBuilding: Houses
+}
+
+function FloorsAndRoomsContent({ houses }: { houses: Houses }) {
   const t = useTranslations('FAQAccordion')
-  const houseLabel = useHouseLabels()
   const formatter = useFormatter()
 
-  const items: FaqItem[] = [
-    {
-      id: 'room-occupancy',
-      question: t('room_occupancy.question'),
-      body: <p>{t('room_occupancy.answer')}</p>
-    },
-    {
-      id: 'rent-due-date',
-      question: t('rent_due_date.question'),
-      body: (
-        <p>
-          {t.rich('rent_due_date.answer', {
-            strong: (chunks) => <strong>{chunks}</strong>
-          })}
-        </p>
-      )
-    },
-    {
-      id: 'manager-in-residence',
-      question: t('manager_in_residence.question'),
-      body: (
-        <p>
-          {t.rich('manager_in_residence.answer', {
-            strong: (chunks) => <strong>{chunks}</strong>
-          })}
-        </p>
-      )
-    },
-    {
-      id: 'move-in-requirements',
-      question: t('move_in_requirements.question'),
-      body: <p>{t('move_in_requirements.answer')}</p>
-    },
-    {
-      id: 'curfew',
-      question: t('curfew.question'),
-      body: <p>{t('curfew.answer')}</p>
-    },
-    {
-      id: 'floors-and-rooms',
-      question: t('floors_and_rooms.question'),
-      body: (
-        <ul className="text-muted-foreground list-disc space-y-2">
-          {HouseIdentifierValues.map((id) => {
-            const { floors, rooms } = BUILDING_DATA[id]
-            return (
-              <li key={`floors-and-rooms-${id}`}>
-                <strong>{houseLabel(id).name}: </strong>
-                {t('floors_and_rooms.format', {
-                  floors: formatter.number(floors),
-                  rooms: formatter.number(rooms)
-                })}
-              </li>
-            )
-          })}
-        </ul>
-      )
-    },
-    {
-      id: 'extra-costs',
-      question: t('extra_costs.question'),
-      body: <FAQExtraCostsTable />
-    }
-  ]
+  return (
+    <ul className="text-muted-foreground list-disc space-y-2">
+      {houses.map(({ _id, _type, slug, title, building }) => {
+        if (!building) return null
+        const { floors, rooms } = building
+        const dataAttr = createDataAttribute({ id: _id, type: _type })
+        return (
+          <li key={`floors-and-rooms-${slug}`}>
+            <strong>{stegaClean(title)}: </strong>
+            {t.rich('floors_and_rooms.format', {
+              floors: formatter.number(floors),
+              rooms: formatter.number(rooms),
+              floorsTag: (chunks) => (
+                <span data-sanity={dataAttr('building.floors')}>{chunks}</span>
+              ),
+              roomsTag: (chunks) => (
+                <span data-sanity={dataAttr('building.rooms')}>{chunks}</span>
+              )
+            })}
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
 
+export function FAQAccordion({
+  faqQuestions,
+  pricingCategories,
+  housesBuilding
+}: FAQAccordionProps) {
   return (
     <Accordion type="multiple">
-      {items.map(({ body, id, question }) => (
-        <AccordionItem key={id} value={id}>
-          <AccordionTrigger className="text-md sm:text-lg">
-            {question}
-          </AccordionTrigger>
-          <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
-            {body}
-          </AccordionContent>
-        </AccordionItem>
-      ))}
+      {faqQuestions.map(({ _id, question, answer, componentKey }) => {
+        const component = componentKey ? stegaClean(componentKey) : null
+        return (
+          <AccordionItem key={_id} value={_id}>
+            <AccordionTrigger className="text-md sm:text-lg">
+              {question}
+            </AccordionTrigger>
+            <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
+              {/* Component-based content */}
+              {component === 'floors-and-rooms' && (
+                <FloorsAndRoomsContent houses={housesBuilding} />
+              )}
+              {component === 'extra-costs' && (
+                <FAQExtraCosts
+                  pricingCategories={pricingCategories}
+                  houses={housesBuilding}
+                />
+              )}
+              {/* Regular text answer */}
+              {!component && answer && (
+                <PortableText value={answer} components={components} />
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        )
+      })}
     </Accordion>
   )
 }

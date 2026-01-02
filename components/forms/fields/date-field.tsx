@@ -20,7 +20,7 @@ type InputFormProps = Omit<
 
 interface DateFieldProps extends InputFormProps {
   label?: React.ReactNode
-  description?: string
+  description?: string | null
   orientation?: 'vertical' | 'horizontal' | 'responsive'
   min?: string
   step?: number | string

@@ -3,6 +3,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -10,29 +11,60 @@ import {
 import {
   Drawer,
   DrawerContent,
+  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
+import type { LocationData } from '@/lib/types/components'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import * as React from 'react'
+
+const components: PortableTextComponents = {
+  block: {
+    h3: ({ children }) => (
+      <h3 className="text-foreground mb-4 text-lg font-semibold">{children}</h3>
+    ),
+    normal: ({ children }) => <p className="text-foreground">{children}</p>
+  },
+  list: {
+    bullet: ({ children }) => <ul className="mb-6 space-y-2">{children}</ul>,
+    number: ({ children }) => (
+      <ol className="text-foreground mb-6 list-decimal space-y-2 pl-5">
+        {children}
+      </ol>
+    )
+  },
+  listItem: {
+    bullet: ({ children }) => (
+      <li className="flex items-start gap-3">
+        <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
+        <span className="text-foreground">{children}</span>
+      </li>
+    ),
+    number: ({ children }) => <li>{children}</li>
+  }
+}
 
 interface HouseLocationModalProps {
   children: React.ReactNode
-  id: HouseIdentifier
+  details: LocationData['details']
   title: string
 }
 
 export function HouseLocationModal({
   children,
-  id,
+  details,
   title
 }: HouseLocationModalProps) {
   const [open, setOpen] = React.useState(false)
   const isMobile = useIsMobile()
+
+  if (!details) {
+    return null
+  }
 
   if (isMobile) {
     return (
@@ -41,9 +73,10 @@ export function HouseLocationModal({
         <DrawerContent className="theme-container max-h-[90vh]">
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription className="sr-only">{title}</DrawerDescription>
           </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-6">
-            <LocationSections id={id} />
+          <div className="overflow-y-auto px-4 pb-8">
+            <LocationSections details={details} />
           </div>
         </DrawerContent>
       </Drawer>
@@ -53,107 +86,26 @@ export function HouseLocationModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="theme-container max-h-[85vh] w-3xl overflow-y-auto md:max-w-3xl">
+      <DialogContent className="theme-container max-h-[85vh] overflow-y-auto md:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="sr-only">{title}</DialogDescription>
         </DialogHeader>
-
-        <LocationSections id={id} className="pt-8" />
+        <LocationSections details={details} className="pt-8" />
       </DialogContent>
     </Dialog>
   )
 }
 
 interface LocationSectionsProps {
-  id: HouseIdentifier
+  details: NonNullable<LocationData['details']>
   className?: string
 }
 
-function LocationSections({ id, className }: LocationSectionsProps) {
-  const t = useTranslations('HouseLocation')
-
-  const { stations, neighborhood, guideNeighborhood } = {
-    apple: {
-      stations: [
-        t('details.apple.stations.daikokucho'),
-        t('details.apple.stations.namba'),
-        t('details.apple.stations.ebisucho'),
-        t('details.apple.stations.imamiya')
-      ],
-      neighborhood: [
-        t('details.apple.nearby.supermarkets'),
-        t('details.apple.nearby.sushi'),
-        t('details.apple.nearby.hundred_yen'),
-        t('details.apple.nearby.convenience')
-      ],
-      guideNeighborhood: t('details.apple.overview')
-    },
-    lemon: {
-      stations: [
-        t('details.lemon.stations.nihonbashi'),
-        t('details.lemon.stations.namba'),
-        t('details.lemon.stations.nankai_namba')
-      ],
-      neighborhood: [
-        t('details.lemon.nearby.post_office'),
-        t('details.lemon.nearby.supermarkets'),
-        t('details.lemon.nearby.discount_shop')
-      ],
-      guideNeighborhood: t('details.lemon.overview')
-    },
-    orange: {
-      stations: [
-        t('details.orange.stations.showacho'),
-        t('details.orange.stations.fuminosato'),
-        t('details.orange.stations.tennoji')
-      ],
-      neighborhood: [
-        t('details.orange.nearby.supermarkets'),
-        t('details.orange.nearby.showacho_supermarket'),
-        t('details.orange.nearby.harukas')
-      ],
-      guideNeighborhood: t('details.orange.overview')
-    }
-  }[id]
-
+function LocationSections({ details, className }: LocationSectionsProps) {
   return (
-    <div className={cn('space-y-8', className)}>
-      <div>
-        <h3 className="text-foreground mb-4 text-lg font-semibold">
-          {t('sections.getting_around')}
-        </h3>
-        <ul className="space-y-2">
-          {stations.map((station) => (
-            <li key={station} className="flex items-start gap-3">
-              <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full"></div>
-              <span className="text-foreground">{station}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h3 className="text-foreground mb-4 text-lg font-semibold">
-          {t('sections.nearby')}
-        </h3>
-        <ul className="space-y-2">
-          {neighborhood.map((item) => (
-            <li key={item} className="flex items-start gap-3">
-              <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full"></div>
-              <span className="text-foreground">{item}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <h3 className="text-foreground mb-4 text-lg font-semibold">
-          {t('sections.neighborhood')}
-        </h3>
-        <p className="text-foreground leading-relaxed font-medium">
-          {guideNeighborhood}
-        </p>
-      </div>
+    <div className={cn('space-y-2', className)}>
+      <PortableText value={details} components={components} />
     </div>
   )
 }

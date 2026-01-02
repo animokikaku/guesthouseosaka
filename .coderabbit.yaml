@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: en-US
+tone_instructions: Be concise and constructive. Focus on code quality, security, and best practices.
+early_access: false
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+    max_files: 300
+  path_instructions:
+    - path: "**/*.tsx"
+      instructions: |
+        Review React components for:
+        - Proper TypeScript types (avoid 'any')
+        - Accessibility (ARIA labels, semantic HTML)
+        - Performance (unnecessary re-renders, missing memoization)
+        - Proper use of React hooks
+    - path: "sanity/**/*"
+      instructions: |
+        Review Sanity schemas for:
+        - Proper field types and validation
+        - Consistent naming conventions
+        - Appropriate use of localization patterns
+    - path: "app/**/*"
+      instructions: |
+        Review Next.js App Router code for:
+        - Proper use of server vs client components
+        - Correct metadata and SEO setup
+        - Proper error handling and loading states
+
+chat:
+  auto_reply: true

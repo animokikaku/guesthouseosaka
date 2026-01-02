@@ -1,53 +1,72 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
-import { BUILDING_DATA } from '@/components/house/house-building'
-import {
-  GOOGLE_MAPS_URLS,
-  HOUSE_ADDRESS,
-  HOUSE_CENTERS
-} from '@/components/map/location-map-constants'
-import { useHouseLabels } from '@/hooks/use-house-labels'
-import { useHousePhones } from '@/hooks/use-house-phones'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
+import { env } from '@/lib/env'
+import { urlFor } from '@/sanity/lib/image'
+import { sanityFetch } from '@/sanity/lib/live'
+import { houseQuery, housesNavQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { env } from 'process'
-import { use } from 'react'
 import { Accommodation, WithContext } from 'schema-dts'
 
-export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
-  const { locale, house } = use(params)
+export default async function HousePage({
+  params
+}: PageProps<'/[locale]/[house]'>) {
+  const { locale, house } = await params
   if (!hasHouse(house)) {
     notFound()
   }
 
   setRequestLocale(locale as Locale)
 
-  const houseLabel = useHouseLabels()
-  const housePhonesLabel = useHousePhones()
-  const { name: title, summary: description } = houseLabel(house)
+  const [{ data }, { data: houses }] = await Promise.all([
+    sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
+    sanityFetch({ query: housesNavQuery, params: { locale } })
+  ])
+
+  if (!data) {
+    return (
+      <div className="container-wrapper section-soft flex-1 pb-12">
+        <div className="mx-auto w-full max-w-2xl">
+          <PageEmptyState />
+        </div>
+      </div>
+    )
+  }
 
   const url = `${env.NEXT_PUBLIC_APP_URL}/${house}`
+  const { title, description, map, building, phone, image } = data
 
   const jsonLd: WithContext<Accommodation> = {
     '@context': 'https://schema.org',
     '@type': 'House',
     '@id': `${url}#house`,
     url: `${url}/${locale}`,
-    name: title,
-    description,
-    image: assets.openGraph[house].src,
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: HOUSE_CENTERS[house].lat,
-      longitude: HOUSE_CENTERS[house].lng
-    },
-    hasMap: GOOGLE_MAPS_URLS[house],
+    name: title ?? undefined,
+    description: description ?? undefined,
+    image: urlFor(image).width(1200).height(630).fit('crop').url(),
+    ...(map?.coordinates && {
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: map.coordinates.lat,
+        longitude: map.coordinates.lng
+      }
+    }),
+    hasMap: map?.googleMapsUrl ?? undefined,
     logo: assets.logo[house].src,
-    address: HOUSE_ADDRESS[house],
-    numberOfRooms: BUILDING_DATA[house].rooms,
-    telephone: housePhonesLabel(house).international
+    ...(map?.address && {
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: map.address.streetAddress,
+        addressLocality: map.address.locality,
+        postalCode: map.address.postalCode,
+        addressCountry: map.address.country
+      }
+    }),
+    numberOfRooms: building?.rooms,
+    telephone: phone?.international
   }
 
   return (
@@ -58,11 +77,7 @@ export default function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
           __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c')
         }}
       />
-      <HousePageContent
-        houseId={house}
-        title={title}
-        description={description}
-      />
+      <HousePageContent {...data} houses={houses} />
     </>
   )
 }

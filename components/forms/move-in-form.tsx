@@ -1,20 +1,18 @@
 /* eslint-disable react/no-children-prop */
 'use client'
 
-import { toast } from 'sonner'
-
-import { submitContactForm } from '@/app/actions/contact'
 import {
   contactFormDefaultValues,
   FieldGroupPlaces,
   FieldGroupUserAccount,
-  useAppForm
+  HouseTitles,
+  useAppForm,
+  useFormSubmit
 } from '@/components/forms'
 import {
   ContactFormFields,
   useMoveInFormSchema
 } from '@/components/forms/schema'
-import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import {
   Card,
   CardContent,
@@ -24,16 +22,22 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Field, FieldGroup, FieldSeparator } from '@/components/ui/field'
-import { useContactNavigation } from '@/hooks/use-contact-navigation'
-import { useRouter } from '@/i18n/navigation'
+import type { ContactFormConfig } from '@/lib/types/components'
 import { useTranslations } from 'next-intl'
 
-export function MoveInForm() {
+interface MoveInFormProps extends ContactFormConfig {
+  houseTitles: HouseTitles
+}
+
+export function MoveInForm({
+  title,
+  description,
+  fields,
+  houseTitles
+}: MoveInFormProps) {
   const t = useTranslations('forms')
-  const navLabel = useContactNavigation()
-  const { title, description } = navLabel('move-in')
-  const router = useRouter()
   const schema = useMoveInFormSchema()
+  const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
   const { places, date, stayDuration, account, message, privacyPolicy } =
     contactFormDefaultValues
 
@@ -49,38 +53,11 @@ export function MoveInForm() {
     validators: {
       onSubmit: schema
     },
-    onSubmitInvalid: () => {
-      const firstErrorInput = document.querySelector(
-        '[aria-invalid="true"]'
-      ) as HTMLElement | null
-      firstErrorInput?.focus()
-    },
-    onSubmit: async ({ value }) => {
-      const promise = submitContactForm({ type: 'move-in', data: value })
-
-      toast.promise(promise, {
-        loading: t('status.sending'),
-        success: () => {
-          router.push('/contact')
-          return {
-            message: t('status.success.message'),
-            description: t('status.success.description', {
-              name: value.account.name
-            })
-          }
-        },
-        error: (error) => {
-          return {
-            message: error.message || t('status.error.message'),
-            description: t('status.error.description', {
-              email: 'info@guesthouseosaka.com'
-            })
-          }
-        }
-      })
-    }
+    onSubmitInvalid,
+    onSubmit: createOnSubmit('move-in')
   })
 
+  // Stay duration options still use translations for the option labels
   const stayDurationOptions: {
     value: ContactFormFields['stayDuration']
     label: string
@@ -101,10 +78,12 @@ export function MoveInForm() {
 
   return (
     <Card className="mx-auto w-full sm:max-w-2xl">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
-      </CardHeader>
+      {(title || description) && (
+        <CardHeader>
+          {title && <CardTitle>{title}</CardTitle>}
+          {description && <CardDescription>{description}</CardDescription>}
+        </CardHeader>
+      )}
       <CardContent>
         <form
           id="move-in-form"
@@ -117,16 +96,17 @@ export function MoveInForm() {
             <FieldGroupPlaces
               fields={{ places: 'places' }}
               form={form}
-              label={t('fields.places.label')}
-              description={t('fields.places.move_in_description')}
+              label={fields.places.label}
+              description={fields.places.description}
+              houseTitles={houseTitles}
             />
             <form.AppField
               name="date"
               children={(field) => (
                 <field.DateField
                   orientation="responsive"
-                  label={t('fields.date.move_in_label')}
-                  description={t('fields.date.move_in_description')}
+                  label={fields.date.label}
+                  description={fields.date.description}
                 />
               )}
             />
@@ -136,49 +116,40 @@ export function MoveInForm() {
                 <field.SelectField
                   required
                   orientation="responsive"
-                  label={t('fields.stay_duration.label')}
-                  description={t('fields.stay_duration.description')}
-                  placeholder={t('fields.stay_duration.placeholder')}
+                  label={fields.stayDuration.label}
+                  description={fields.stayDuration.description}
+                  placeholder={fields.stayDuration.placeholder}
                   options={stayDurationOptions}
                 />
               )}
             />
             <FieldSeparator />
-            <FieldGroupUserAccount fields="account" form={form} />
+            <FieldGroupUserAccount
+              fields="account"
+              form={form}
+              config={fields}
+            />
             <FieldSeparator />
             <form.AppField
               name="message"
               children={(field) => (
                 <field.MessageField
-                  label={t('fields.message.label')}
+                  label={fields.message.label}
                   rows={6}
                   className="min-h-24 resize-none"
-                  placeholder={t('fields.message.move_in_placeholder')}
-                  description={t('fields.message.description')}
+                  placeholder={fields.message.placeholder}
+                  description={fields.message.description}
                 />
               )}
             />
             <form.AppField
               name="privacyPolicy"
-              children={(field) => (
-                <field.CheckboxField
-                  required
-                  label={
-                    <p className="text-muted-foreground">
-                      {t.rich('fields.privacy_policy_agreement', {
-                        link: (chunks) => (
-                          <LegalNoticeDialog>{chunks}</LegalNoticeDialog>
-                        )
-                      })}
-                    </p>
-                  }
-                />
-              )}
+              children={(field) => <field.PrivacyPolicyField />}
             />
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter className="flex flex-col gap-3">
+      <CardFooter>
         <Field orientation="horizontal">
           <form.AppForm>
             <form.ResetButton />
