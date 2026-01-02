@@ -15,11 +15,12 @@ import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions, type SanityImageSource } from '@sanity/asset-utils'
 import { Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { stegaClean } from 'next-sanity'
 import Image from 'next/image'
 
 type House = Pick<
   NonNullable<HousesBuildingQueryResult>[number],
-  'title' | 'slug' | 'phone' | 'image'
+  '_id' | 'title' | 'phone' | 'image'
 >
 
 type FAQContactTableProps = {
@@ -40,25 +41,19 @@ export function FAQContactTable({ houses }: FAQContactTableProps) {
 function MobilePhoneCards({ houses }: FAQContactTableProps) {
   return (
     <ItemGroup id="phone" className="w-full gap-2 sm:hidden">
-      {houses.map(({ title, slug, phone, image }) => {
-        const phoneNumber = phone?.international
-        if (!phoneNumber) return null
+      {houses.map(({ _id, title, phone, image }) => {
+        if (!phone) return null
 
         return (
-          <Item
-            key={slug}
-            variant="outline"
-            asChild
-            className="gap-3 px-3 py-3"
-          >
-            <a href={`tel:${phoneNumber}`}>
+          <Item key={_id} variant="outline" asChild className="gap-3 px-3 py-3">
+            <a href={`tel:${phone.international}`}>
               <ItemMedia variant="image" className="size-12 rounded-sm">
-                <HouseImage image={image} alt={title ?? slug} />
+                <HouseImage image={image} alt={title || ''} />
               </ItemMedia>
               <ItemContent>
-                <ItemTitle>{title ?? slug}</ItemTitle>
+                <ItemTitle>{stegaClean(title)}</ItemTitle>
                 <ItemDescription className="font-mono">
-                  {phoneNumber}
+                  {phone.international ?? 'ー'}
                 </ItemDescription>
               </ItemContent>
               <ItemActions>
@@ -83,12 +78,6 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
 function DesktopPhoneTable({ houses }: FAQContactTableProps) {
   const t = useTranslations('FAQContactTable')
 
-  const phones = houses.map(({ title, slug, phone }) => ({
-    title: title ?? slug,
-    withinJapan: phone?.domestic,
-    overseas: phone?.international
-  }))
-
   return (
     <table id="phone" className="hidden border-collapse text-sm sm:table">
       <thead>
@@ -103,32 +92,35 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
         </tr>
       </thead>
       <tbody className="font-mono">
-        {phones.map(({ title, withinJapan, overseas }) => (
-          <tr
-            className="border-border/50 last:border-border border-none"
-            key={title}
-          >
-            <td className="text-muted-foreground p-2 text-right font-sans">
-              {title}
-            </td>
-            <td className="p-2 text-center">
-              <a
-                href={`tel:${withinJapan}`}
-                className="text-foreground hover:text-primary transition-colors"
-              >
-                {withinJapan}
-              </a>
-            </td>
-            <td className="p-2 text-center">
-              <a
-                href={`tel:${overseas}`}
-                className="text-foreground hover:text-primary transition-colors"
-              >
-                {overseas}
-              </a>
-            </td>
-          </tr>
-        ))}
+        {houses.map(({ _id, title, phone }) => {
+          if (!phone) return null
+          return (
+            <tr
+              className="border-border/50 last:border-border border-none"
+              key={_id}
+            >
+              <td className="text-muted-foreground p-2 text-right font-sans">
+                {title}
+              </td>
+              <td className="p-2 text-center">
+                <a
+                  href={`tel:${phone.domestic}`}
+                  className="text-foreground hover:text-primary transition-colors"
+                >
+                  {phone.domestic ?? 'ー'}
+                </a>
+              </td>
+              <td className="p-2 text-center">
+                <a
+                  href={`tel:${phone.international}`}
+                  className="text-foreground hover:text-primary transition-colors"
+                >
+                  {phone.international ?? 'ー'}
+                </a>
+              </td>
+            </tr>
+          )
+        })}
       </tbody>
     </table>
   )
