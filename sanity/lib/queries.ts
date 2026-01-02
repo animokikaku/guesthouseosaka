@@ -113,6 +113,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
 
   // Gallery grouped by category (for gallery page - enables per-category display)
   // Sorted by category orderRank for consistent display order
+  // Filter out empty categories at query level
   "galleryCategories": array::compact(galleryCategories[]{
     _key,
     "category": category->{
@@ -131,7 +132,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
         "preview": asset->metadata.lqip
       }
     })
-  }) | order(category.orderRank),
+  })[count(items) > 0] | order(category.orderRank),
 
   // Flattened gallery images (for carousel/preview - pre-computed from sorted categories)
   "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[]{

@@ -53,18 +53,16 @@ export function getImageIndex(
 }
 
 // Transform pre-grouped data to frontend display format with computed fields
-// Note: Data is pre-sorted by orderRank in GROQ query
+// Note: Data is pre-sorted and filtered (empty categories excluded) in GROQ query
 export function toGalleryCategories(
   data: GalleryCategories | null
 ): GalleryCategory[] {
   if (!data) return []
-  return data
-    .filter((cat) => cat.items && cat.items.length > 0)
-    .map((cat) => ({
-      _key: cat._key,
-      category: cat.category,
-      count: cat.items?.length ?? 0,
-      thumbnail: cat.items?.[0]?.image ?? null,
-      items: cat.items ?? []
-    }))
+  return data.map((cat) => ({
+    _key: cat._key,
+    category: cat.category,
+    count: cat.items?.length ?? 0,
+    thumbnail: cat.items?.[0]?.image ?? null,
+    items: cat.items ?? []
+  }))
 }
