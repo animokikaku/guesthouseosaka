@@ -53,7 +53,7 @@ export function getImageIndex(
 }
 
 // Transform pre-grouped data to frontend display format with computed fields
-// Sorts by category orderRank (lexicographic) for consistent display order
+// Note: Data is pre-sorted by orderRank in GROQ query
 export function toGalleryCategories(
   data: GalleryCategories | null
 ): GalleryCategory[] {

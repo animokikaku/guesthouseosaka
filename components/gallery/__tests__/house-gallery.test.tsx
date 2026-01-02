@@ -124,17 +124,17 @@ describe('HouseGallery', () => {
       expect(headings).toHaveLength(2)
     })
 
-    it('sorts categories by orderRank (lexicographic)', () => {
-      // Categories provided in reverse order to test sorting
+    it('preserves category order from GROQ query', () => {
+      // Categories come pre-sorted by orderRank from GROQ
       const galleryCategories = [
         createGalleryCategory({
           _key: 'cat1',
-          category: { _id: 'id1', key: 'kitchen', label: 'Kitchen', orderRank: '0|b00000:' },
+          category: { _id: 'id1', key: 'bedroom', label: 'Bedroom', orderRank: '0|a00000:' },
           items: [createGalleryItem({ _key: 'img1' })]
         }),
         createGalleryCategory({
           _key: 'cat2',
-          category: { _id: 'id2', key: 'bedroom', label: 'Bedroom', orderRank: '0|a00000:' },
+          category: { _id: 'id2', key: 'kitchen', label: 'Kitchen', orderRank: '0|b00000:' },
           items: [createGalleryItem({ _key: 'img2' })]
         })
       ]

@@ -227,28 +227,6 @@ export function createGalleryCategory(
   }
 }
 
-// ============================================
-// Generic Categorized Item Mock Factory
-// (For testing groupByCategory utility)
-// ============================================
-
-interface CategorizedItem {
-  _key: string
-  category: { key: string; orderRank: string | null } | null
-}
-
-export function createCategorizedItem(
-  overrides: Partial<CategorizedItem> = {}
-): CategorizedItem {
-  return {
-    _key: faker.string.nanoid(),
-    category: {
-      key: faker.word.noun(),
-      orderRank: `0|${String.fromCharCode(97 + faker.number.int({ min: 0, max: 9 }))}00000:`
-    },
-    ...overrides
-  }
-}
 
 // ============================================
 // Form Data Mock Factories

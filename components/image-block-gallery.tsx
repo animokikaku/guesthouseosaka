@@ -9,27 +9,22 @@ import {
   EmptyTitle
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import {
-  flattenGalleryItems,
-  type FeaturedImage,
-  type GalleryCategories,
-  type GalleryItem
-} from '@/lib/gallery'
+import type { FeaturedImage, GalleryItem } from '@/lib/gallery'
 import { urlFor } from '@/sanity/lib/image'
 import { ImageIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import type { ImageProps } from 'next/image'
 import { ComponentProps } from 'react'
 
+type GalleryImages = GalleryItem[] | null
+
 type ImageBlockGalleryProps = {
   href: ComponentProps<typeof Link>['href']
-  galleryCategories: GalleryCategories
+  galleryImages: GalleryImages
   featuredImage?: FeaturedImage
 }
 
-type SanityImage =
-  | NonNullable<GalleryItem['image']>
-  | NonNullable<FeaturedImage>
+type SanityImage = NonNullable<GalleryItem['image']> | NonNullable<FeaturedImage>
 
 // Transform Sanity image to Next.js Image props
 function toImageProps(
@@ -107,16 +102,15 @@ function GalleryGrid({
 
 export async function ImageBlockGallery({
   href,
-  galleryCategories,
+  galleryImages,
   featuredImage
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
 
-  // Flatten gallery items from categories
-  const validGalleryImages = flattenGalleryItems(galleryCategories)
+  // Use pre-flattened gallery images from GROQ query
+  const validGalleryImages = galleryImages ?? []
 
   // Count total available images (featured + gallery)
-  // featuredImage is null from GROQ if no asset uploaded
   const hasFeatured = !!featuredImage
   const totalCount = (hasFeatured ? 1 : 0) + validGalleryImages.length
 
@@ -137,8 +131,6 @@ export async function ImageBlockGallery({
   }
 
   // Build display images: featured first (if available), then gallery images
-  // Request width only, let CSS object-cover handle aspect ratio
-  // Safety: We've already verified totalCount >= 5 above, so arrays are safe to access
   const firstGalleryImage = validGalleryImages[0]
   const images: Omit<ImageProps, 'fill'>[] = hasFeatured
     ? [

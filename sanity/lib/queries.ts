@@ -111,7 +111,8 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[_key == $locale][0].value, about[_key == "en"][0].value),
 
-  // Gallery grouped by category (enables per-category drag-and-drop reordering)
+  // Gallery grouped by category (for gallery page - enables per-category display)
+  // Sorted by category orderRank for consistent display order
   "galleryCategories": array::compact(galleryCategories[]{
     _key,
     "category": category->{
@@ -130,6 +131,18 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
         "preview": asset->metadata.lqip
       }
     })
+  }) | order(category.orderRank),
+
+  // Flattened gallery images (for carousel/preview - pre-computed from sorted categories)
+  "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[]{
+    _key,
+    "image": image{
+      asset,
+      hotspot,
+      crop,
+      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+      "preview": asset->metadata.lqip
+    }
   }),
 
   // Amenities grouped by category (enables per-category drag-and-drop reordering)

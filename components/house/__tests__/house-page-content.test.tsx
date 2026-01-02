@@ -9,7 +9,6 @@ import {
   createAmenityCategory,
   createAmenityItem,
   createPricingRow,
-  createGalleryCategory,
   createGalleryItem,
   createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
@@ -122,13 +121,7 @@ const createBaseProps = (slugOverride?: HouseSlug): Props => {
     caption: 'Welcome to Orange House',
     phone: { domestic: '06-1234-5678', international: '+81-6-1234-5678' },
     image: createMockImage('House image'),
-    galleryCategories: [
-      createGalleryCategory({
-        _key: 'cat1',
-        category: { _id: 'cat-id', key: 'room', label: 'Room', orderRank: '0|a:' },
-        items: [createGalleryItem({ _key: 'g1' }), createGalleryItem({ _key: 'g2' })]
-      })
-    ],
+    galleryImages: [createGalleryItem({ _key: 'g1' }), createGalleryItem({ _key: 'g2' })],
     featuredImage: createSanityImage({ alt: 'Featured image' }),
     amenityCategories: [
       createAmenityCategory({
@@ -255,9 +248,9 @@ describe('HousePageContent', () => {
       expect(mobileHero).toHaveAttribute('data-count', '2')
     })
 
-    it('handles empty galleryCategories with featured image', () => {
+    it('handles empty galleryImages with featured image', () => {
       const props = createBaseProps()
-      props.galleryCategories = null
+      props.galleryImages = null
 
       render(<HousePageContent {...props} />)
 
@@ -266,9 +259,9 @@ describe('HousePageContent', () => {
       expect(mobileHero).toHaveAttribute('data-count', '1')
     })
 
-    it('handles empty galleryCategories without featured image', () => {
+    it('handles empty galleryImages without featured image', () => {
       const props = createBaseProps()
-      props.galleryCategories = null
+      props.galleryImages = null
       props.featuredImage = null as unknown as typeof props.featuredImage
 
       render(<HousePageContent {...props} />)
