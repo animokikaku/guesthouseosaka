@@ -8,7 +8,11 @@ import {
   type CarouselApi
 } from '@/components/ui/carousel'
 import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
-import { getImageIndex, type Gallery } from '@/lib/gallery'
+import {
+  flattenGalleryItems,
+  getImageIndex,
+  type GalleryCategories
+} from '@/lib/gallery'
 import { store } from '@/lib/store'
 import { urlFor } from '@/sanity/lib/image'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -18,18 +22,18 @@ import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
 import Image from 'next/image'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 type DataAttributeFn = (path: string) => string
 
 type GalleryModalProps = {
-  gallery: Gallery
+  galleryCategories: GalleryCategories
   title: string
   dataAttribute?: DataAttributeFn
 }
 
 export function GalleryModal({
-  gallery,
+  galleryCategories,
   title,
   dataAttribute
 }: GalleryModalProps) {
@@ -53,7 +57,7 @@ export function GalleryModal({
             {t('description', { title })}
           </Dialog.Description>
           <GalleryModalCarousel
-            gallery={gallery}
+            galleryCategories={galleryCategories}
             dataAttribute={dataAttribute}
           />
           <Dialog.Close asChild>
@@ -73,25 +77,32 @@ export function GalleryModal({
 }
 
 type GalleryModalCarouselProps = {
-  gallery: Gallery
+  galleryCategories: GalleryCategories
   dataAttribute?: DataAttributeFn
 }
 
 function GalleryModalCarousel({
-  gallery,
+  galleryCategories,
   dataAttribute
 }: GalleryModalCarouselProps) {
   const [api, setApi] = useState<CarouselApi>()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const photoId = useStore(store, (state) => state.photoId)
 
-  const imageList = gallery ?? []
+  // Flatten all gallery items for carousel navigation
+  const imageList = useMemo(
+    () => flattenGalleryItems(galleryCategories),
+    [galleryCategories]
+  )
+
   const currentAlt =
     selectedIndex !== null && selectedIndex < imageList.length
       ? stegaClean(imageList[selectedIndex].image.alt)
       : null
 
-  const startIndex = photoId ? getImageIndex(imageList, photoId) : undefined
+  const startIndex = photoId
+    ? getImageIndex(galleryCategories, photoId)
+    : undefined
 
   const { onTouchStart, onTouchEnd } = useSwipeToClose({
     onClose: () => store.setState({ photoId: null })
@@ -153,7 +164,7 @@ function GalleryModalCarousel({
             <CarouselItem
               key={_key}
               className="flex h-full items-center justify-center"
-              data-sanity={dataAttribute?.(`gallery[_key=="${_key}"]`)}
+              data-sanity={dataAttribute?.(`galleryCategories[].items[_key=="${_key}"]`)}
             >
               <Image
                 src={src}

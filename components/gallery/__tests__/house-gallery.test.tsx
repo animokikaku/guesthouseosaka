@@ -1,7 +1,8 @@
 import { HouseGallery } from '@/components/gallery/house-gallery'
 import {
   createGalleryCategory,
-  createGalleryItem
+  createGalleryItem,
+  createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
 import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -68,15 +69,15 @@ describe('HouseGallery', () => {
   })
 
   describe('empty gallery', () => {
-    it('renders nothing for empty gallery', () => {
-      const { container } = render(<HouseGallery gallery={[]} />)
+    it('renders nothing for empty galleryCategories', () => {
+      const { container } = render(<HouseGallery galleryCategories={[]} />)
 
       expect(container.querySelector('h3')).not.toBeInTheDocument()
     })
 
-    it('renders nothing for null gallery', () => {
+    it('renders nothing for null galleryCategories', () => {
       const { container } = render(
-        <HouseGallery gallery={null as unknown as []} />
+        <HouseGallery galleryCategories={null as unknown as []} />
       )
 
       expect(container.querySelector('h3')).not.toBeInTheDocument()
@@ -85,16 +86,18 @@ describe('HouseGallery', () => {
 
   describe('category rendering', () => {
     it('renders category headings', () => {
-      const category = createGalleryCategory({
-        key: 'bedroom',
-        label: 'Bedroom'
-      })
-      const gallery = [
-        createGalleryItem({ _key: 'img1', category }),
-        createGalleryItem({ _key: 'img2', category })
+      const galleryCategories = [
+        createGalleryCategory({
+          _key: 'cat1',
+          category: { _id: 'id1', key: 'bedroom', label: 'Bedroom', orderRank: '0|a:' },
+          items: [
+            createGalleryItem({ _key: 'img1', image: createSanityImage({ alt: 'Image 1' }) }),
+            createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Image 2' }) })
+          ]
+        })
       ]
 
-      render(<HouseGallery gallery={gallery} />)
+      render(<HouseGallery galleryCategories={galleryCategories} />)
 
       expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
         'Bedroom'
@@ -102,44 +105,41 @@ describe('HouseGallery', () => {
     })
 
     it('renders multiple categories', () => {
-      const bedroomCat = createGalleryCategory({
-        key: 'bedroom',
-        label: 'Bedroom',
-        orderRank: '0|a00000:'
-      })
-      const kitchenCat = createGalleryCategory({
-        key: 'kitchen',
-        label: 'Kitchen',
-        orderRank: '0|b00000:'
-      })
-      const gallery = [
-        createGalleryItem({ _key: 'img1', category: bedroomCat }),
-        createGalleryItem({ _key: 'img2', category: kitchenCat })
+      const galleryCategories = [
+        createGalleryCategory({
+          _key: 'cat1',
+          category: { _id: 'id1', key: 'bedroom', label: 'Bedroom', orderRank: '0|a00000:' },
+          items: [createGalleryItem({ _key: 'img1' })]
+        }),
+        createGalleryCategory({
+          _key: 'cat2',
+          category: { _id: 'id2', key: 'kitchen', label: 'Kitchen', orderRank: '0|b00000:' },
+          items: [createGalleryItem({ _key: 'img2' })]
+        })
       ]
 
-      render(<HouseGallery gallery={gallery} />)
+      render(<HouseGallery galleryCategories={galleryCategories} />)
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings).toHaveLength(2)
     })
 
-    it('sorts categories by orderRank', () => {
-      const kitchenCat = createGalleryCategory({
-        key: 'kitchen',
-        label: 'Kitchen',
-        orderRank: '0|b00000:'
-      })
-      const bedroomCat = createGalleryCategory({
-        key: 'bedroom',
-        label: 'Bedroom',
-        orderRank: '0|a00000:'
-      })
-      const gallery = [
-        createGalleryItem({ _key: 'img1', category: kitchenCat }),
-        createGalleryItem({ _key: 'img2', category: bedroomCat })
+    it('sorts categories by orderRank (lexicographic)', () => {
+      // Categories provided in reverse order to test sorting
+      const galleryCategories = [
+        createGalleryCategory({
+          _key: 'cat1',
+          category: { _id: 'id1', key: 'kitchen', label: 'Kitchen', orderRank: '0|b00000:' },
+          items: [createGalleryItem({ _key: 'img1' })]
+        }),
+        createGalleryCategory({
+          _key: 'cat2',
+          category: { _id: 'id2', key: 'bedroom', label: 'Bedroom', orderRank: '0|a00000:' },
+          items: [createGalleryItem({ _key: 'img2' })]
+        })
       ]
 
-      render(<HouseGallery gallery={gallery} />)
+      render(<HouseGallery galleryCategories={galleryCategories} />)
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings[0]).toHaveTextContent('Bedroom')
@@ -149,14 +149,19 @@ describe('HouseGallery', () => {
 
   describe('gallery grid', () => {
     it('renders image buttons for each gallery item', () => {
-      const category = createGalleryCategory({ key: 'room', label: 'Room' })
-      const gallery = [
-        createGalleryItem({ _key: 'img1', category }),
-        createGalleryItem({ _key: 'img2', category }),
-        createGalleryItem({ _key: 'img3', category })
+      const galleryCategories = [
+        createGalleryCategory({
+          _key: 'cat1',
+          category: { _id: 'id1', key: 'room', label: 'Room', orderRank: '0|a:' },
+          items: [
+            createGalleryItem({ _key: 'img1', image: createSanityImage({ alt: 'Image 1' }) }),
+            createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Image 2' }) }),
+            createGalleryItem({ _key: 'img3', image: createSanityImage({ alt: 'Image 3' }) })
+          ]
+        })
       ]
 
-      render(<HouseGallery gallery={gallery} />)
+      render(<HouseGallery galleryCategories={galleryCategories} />)
 
       const buttons = screen.getAllByTestId('gallery-image-button')
       expect(buttons).toHaveLength(3)
@@ -165,10 +170,15 @@ describe('HouseGallery', () => {
 
   describe('category thumbnails', () => {
     it('renders category thumbnail buttons', () => {
-      const category = createGalleryCategory({ key: 'room', label: 'Room' })
-      const gallery = [createGalleryItem({ _key: 'img1', category })]
+      const galleryCategories = [
+        createGalleryCategory({
+          _key: 'cat1',
+          category: { _id: 'id1', key: 'room', label: 'Room', orderRank: '0|a:' },
+          items: [createGalleryItem({ _key: 'img1' })]
+        })
+      ]
 
-      render(<HouseGallery gallery={gallery} />)
+      render(<HouseGallery galleryCategories={galleryCategories} />)
 
       // Multiple buttons: thumbnail + grid item
       const buttons = screen.getAllByRole('button')

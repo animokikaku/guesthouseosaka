@@ -287,6 +287,106 @@
     }
   },
   {
+    "name": "houseGalleryItem",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "houseGalleryItem"
+          }
+        },
+        "image": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "localizedImage"
+          },
+          "optional": false
+        }
+      }
+    }
+  },
+  {
+    "type": "type",
+    "name": "galleryCategory.reference",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_ref": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          }
+        },
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "reference"
+          }
+        },
+        "_weak": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "boolean"
+          },
+          "optional": true
+        }
+      },
+      "dereferencesTo": "galleryCategory"
+    }
+  },
+  {
+    "name": "houseGalleryCategory",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "houseGalleryCategory"
+          }
+        },
+        "category": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "galleryCategory.reference"
+          },
+          "optional": false
+        },
+        "items": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "array",
+            "of": {
+              "type": "object",
+              "attributes": {
+                "_key": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              },
+              "rest": {
+                "type": "inline",
+                "name": "houseGalleryItem"
+              }
+            }
+          },
+          "optional": true
+        }
+      }
+    }
+  },
+  {
     "type": "type",
     "name": "amenityCategory.reference",
     "value": {
@@ -448,68 +548,6 @@
             "name": "internationalizedArrayString"
           },
           "optional": true
-        }
-      }
-    }
-  },
-  {
-    "type": "type",
-    "name": "galleryCategory.reference",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_ref": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string"
-          }
-        },
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "reference"
-          }
-        },
-        "_weak": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "boolean"
-          },
-          "optional": true
-        }
-      },
-      "dereferencesTo": "galleryCategory"
-    }
-  },
-  {
-    "name": "galleryImage",
-    "type": "type",
-    "value": {
-      "type": "object",
-      "attributes": {
-        "_type": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "string",
-            "value": "galleryImage"
-          }
-        },
-        "image": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "localizedImage"
-          },
-          "optional": false
-        },
-        "category": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "inline",
-            "name": "galleryCategory.reference"
-          },
-          "optional": false
         }
       }
     }
@@ -1687,7 +1725,7 @@
         },
         "optional": true
       },
-      "gallery": {
+      "galleryCategories": {
         "type": "objectAttribute",
         "value": {
           "type": "array",
@@ -1703,7 +1741,7 @@
             },
             "rest": {
               "type": "inline",
-              "name": "galleryImage"
+              "name": "houseGalleryCategory"
             }
           }
         },

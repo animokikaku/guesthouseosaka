@@ -20,9 +20,10 @@ import {
   extraCostItem,
   formFieldConfig,
   formFieldConfigNoPlaceholder,
-  galleryImage,
   houseAmenity,
   houseAmenityCategory,
+  houseGalleryCategory,
+  houseGalleryItem,
   localizedImage,
   pageAction,
   pricingRow,
@@ -49,9 +50,10 @@ export const schema: { types: SchemaTypeDefinition[] } = {
 
     // Objects
     localizedImage,
-    galleryImage,
     houseAmenity,
     houseAmenityCategory,
+    houseGalleryCategory,
+    houseGalleryItem,
     socialLink,
     pricingRow,
     address,

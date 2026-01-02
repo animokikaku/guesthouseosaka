@@ -12,7 +12,11 @@ import {
 } from '@/components/page-header'
 import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
-import { featuredToGalleryImage, type GalleryImage } from '@/lib/gallery'
+import {
+  featuredToGalleryImage,
+  flattenGalleryItems,
+  type GalleryImage
+} from '@/lib/gallery'
 import {
   toAboutContent,
   toAmenityCategories,
@@ -33,7 +37,7 @@ export function HousePageContent({
   slug,
   title,
   description,
-  gallery,
+  galleryCategories,
   featuredImage,
   amenityCategories,
   featuredAmenities,
@@ -49,10 +53,11 @@ export function HousePageContent({
     params: { house: slug }
   }
 
-  // Build mobile hero images: featured first (if present), then gallery images
+  // Build mobile hero images: featured first (if present), then flattened gallery images
+  const flatGalleryItems = flattenGalleryItems(galleryCategories)
   const mobileHeroImages: GalleryImage[] = featuredImage?.asset
-    ? [featuredToGalleryImage(featuredImage), ...(gallery ?? [])]
-    : (gallery ?? [])
+    ? [featuredToGalleryImage(featuredImage), ...flatGalleryItems]
+    : flatGalleryItems
 
   return (
     <>
@@ -75,7 +80,7 @@ export function HousePageContent({
           <div className="theme-container">
             <ImageBlockGallery
               href={href}
-              gallery={gallery}
+              galleryCategories={galleryCategories}
               featuredImage={featuredImage}
             />
             <article

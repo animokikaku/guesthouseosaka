@@ -42,7 +42,7 @@ export default async function GalleryPage({
         <GalleryPageContent
           documentId={data._id}
           documentType={data._type}
-          gallery={data.gallery}
+          galleryCategories={data.galleryCategories}
           title={data.title ?? ''}
           backButton={
             <Button

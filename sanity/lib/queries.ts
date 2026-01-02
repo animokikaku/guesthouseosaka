@@ -33,7 +33,7 @@ export const homePageQuery = defineQuery(`{
       "content": coalesce(content[_key == $locale][0].value, content[_key == "en"][0].value),
       "ctaLabel": coalesce(ctaLabel[_key == $locale][0].value, ctaLabel[_key == "en"][0].value)
     },
-    "galleryWall": array::compact(galleryWall[]{
+    "galleryWall": array::compact(galleryWall[0...6]{
       _key,
       asset->{
         _id,
@@ -111,22 +111,25 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[_key == $locale][0].value, about[_key == "en"][0].value),
 
-  // Gallery as flat list (grouped by category on frontend for drag-and-drop reordering)
-  "gallery": array::compact(gallery[]{
+  // Gallery grouped by category (enables per-category drag-and-drop reordering)
+  "galleryCategories": array::compact(galleryCategories[]{
     _key,
-    "image": image{
-      asset,
-      hotspot,
-      crop,
-      "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
-      "preview": asset->metadata.lqip
-    },
     "category": category->{
       _id,
       "key": key.current,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       orderRank
-    }
+    },
+    "items": array::compact(items[]{
+      _key,
+      "image": image{
+        asset,
+        hotspot,
+        crop,
+        "alt": coalesce(alt[_key == $locale][0].value, alt[_key == "en"][0].value),
+        "preview": asset->metadata.lqip
+      }
+    })
   }),
 
   // Amenities grouped by category (enables per-category drag-and-drop reordering)

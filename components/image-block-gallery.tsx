@@ -9,7 +9,12 @@ import {
   EmptyTitle
 } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import type { FeaturedImage, Gallery, GalleryItem } from '@/lib/gallery'
+import {
+  flattenGalleryItems,
+  type FeaturedImage,
+  type GalleryCategories,
+  type GalleryItem
+} from '@/lib/gallery'
 import { urlFor } from '@/sanity/lib/image'
 import { ImageIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
@@ -18,7 +23,7 @@ import { ComponentProps } from 'react'
 
 type ImageBlockGalleryProps = {
   href: ComponentProps<typeof Link>['href']
-  gallery: Gallery
+  galleryCategories: GalleryCategories
   featuredImage?: FeaturedImage
 }
 
@@ -102,13 +107,13 @@ function GalleryGrid({
 
 export async function ImageBlockGallery({
   href,
-  gallery,
+  galleryCategories,
   featuredImage
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
 
-  // Gallery images are already filtered by GROQ (defined(image.asset))
-  const validGalleryImages = gallery ?? []
+  // Flatten gallery items from categories
+  const validGalleryImages = flattenGalleryItems(galleryCategories)
 
   // Count total available images (featured + gallery)
   // featuredImage is null from GROQ if no asset uploaded

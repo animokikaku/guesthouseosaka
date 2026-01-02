@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { GalleryModal } from '../gallery-modal'
-import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
+import { createGalleryCategory, createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 import { store } from '@/lib/store'
 
 // Mock matchMedia for carousel
@@ -78,10 +78,15 @@ vi.mock('@/components/ui/carousel', () => ({
 }))
 
 describe('GalleryModal', () => {
-  const gallery = [
-    createGalleryItem({ _key: 'img1', image: createSanityImage({ alt: 'First image' }) }),
-    createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Second image' }) }),
-    createGalleryItem({ _key: 'img3', image: createSanityImage({ alt: 'Third image' }) })
+  const galleryCategories = [
+    createGalleryCategory({
+      _key: 'cat1',
+      items: [
+        createGalleryItem({ _key: 'img1', image: createSanityImage({ alt: 'First image' }) }),
+        createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Second image' }) }),
+        createGalleryItem({ _key: 'img3', image: createSanityImage({ alt: 'Third image' }) })
+      ]
+    })
   ]
 
   beforeEach(() => {
@@ -93,7 +98,7 @@ describe('GalleryModal', () => {
     it('renders nothing when photoId is null', () => {
       store.setState({ photoId: null })
 
-      const { container } = render(<GalleryModal gallery={gallery} title="Test Gallery" />)
+      const { container } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       expect(container.querySelector('[role="dialog"]')).not.toBeInTheDocument()
     })
@@ -101,7 +106,7 @@ describe('GalleryModal', () => {
     it('renders dialog when photoId is set', () => {
       store.setState({ photoId: 'img1' })
 
-      render(<GalleryModal gallery={gallery} title="Test Gallery" />)
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       expect(screen.getByRole('dialog')).toBeInTheDocument()
     })
@@ -109,7 +114,7 @@ describe('GalleryModal', () => {
     it('closes dialog when close button is clicked', () => {
       store.setState({ photoId: 'img1' })
 
-      render(<GalleryModal gallery={gallery} title="Test Gallery" />)
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       const closeButton = screen.getByRole('button', { name: /close/i })
       fireEvent.click(closeButton)
@@ -122,7 +127,7 @@ describe('GalleryModal', () => {
     it('has accessible dialog title', () => {
       store.setState({ photoId: 'img1' })
 
-      render(<GalleryModal gallery={gallery} title="Test Gallery" />)
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // The title is sr-only but present
       expect(screen.getByText('title')).toBeInTheDocument()
@@ -131,7 +136,7 @@ describe('GalleryModal', () => {
     it('has accessible dialog description', () => {
       store.setState({ photoId: 'img1' })
 
-      render(<GalleryModal gallery={gallery} title="Test Gallery" />)
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // The description uses translation key with title param
       expect(screen.getByText('description')).toBeInTheDocument()
@@ -140,7 +145,7 @@ describe('GalleryModal', () => {
     it('has accessible close button', () => {
       store.setState({ photoId: 'img1' })
 
-      render(<GalleryModal gallery={gallery} title="Test Gallery" />)
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument()
     })
@@ -150,7 +155,7 @@ describe('GalleryModal', () => {
     it('renders close button with icon', () => {
       store.setState({ photoId: 'img1' })
 
-      render(<GalleryModal gallery={gallery} title="Test Gallery" />)
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // Close button should have the arrow icon
       const closeButton = screen.getByRole('button', { name: /close/i })

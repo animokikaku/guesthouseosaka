@@ -5,9 +5,9 @@ import { HouseGallery } from '@/components/gallery/house-gallery'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
 import { useStickyNav } from '@/hooks/use-sticky-nav'
 import {
-  groupGalleryByCategory,
-  type Gallery,
-  type GalleryItem
+  toGalleryCategories,
+  type GalleryCategories,
+  type GalleryCategoryData
 } from '@/lib/gallery'
 import { createDataAttribute } from 'next-sanity'
 import { useOptimistic } from 'next-sanity/hooks'
@@ -17,7 +17,7 @@ import { SanityDocument } from 'sanity'
 type GalleryPageContentProps = {
   documentId: string
   documentType: string
-  gallery: Gallery
+  galleryCategories: GalleryCategories
   title: string
   /** Back button element (Link or Dialog.Close) */
   backButton: React.ReactNode
@@ -26,21 +26,21 @@ type GalleryPageContentProps = {
 export function GalleryPageContent({
   documentId,
   documentType,
-  gallery: initialGallery,
+  galleryCategories: initialGalleryCategories,
   title,
   backButton
 }: GalleryPageContentProps) {
-  const gallery = useOptimistic<
-    Gallery,
-    SanityDocument & { gallery?: GalleryItem[] }
-  >(initialGallery, (currentGallery, action) => {
-    if (action.id === documentId && action.document.gallery) {
+  const galleryCategories = useOptimistic<
+    GalleryCategories,
+    SanityDocument & { galleryCategories?: GalleryCategoryData[] }
+  >(initialGalleryCategories, (current, action) => {
+    if (action.id === documentId && action.document.galleryCategories) {
       // Optimistic document only has partial data, merge with current
-      return action.document.gallery.map(
-        (item) => currentGallery?.find((g) => g._key === item._key) ?? item
+      return action.document.galleryCategories.map(
+        (cat) => current?.find((c) => c._key === cat._key) ?? cat
       )
     }
-    return currentGallery
+    return current
   })
 
   const dataAttribute = createDataAttribute({
@@ -54,12 +54,12 @@ export function GalleryPageContent({
 
   // Compute categories for sticky nav
   const categories = React.useMemo(
-    () => groupGalleryByCategory(gallery).filter((c) => c.items.length > 0),
-    [gallery]
+    () => toGalleryCategories(galleryCategories),
+    [galleryCategories]
   )
 
   const sectionIds = React.useMemo(
-    () => categories.map((c) => c.key),
+    () => categories.map((c) => c.category.key),
     [categories]
   )
 
@@ -97,7 +97,7 @@ export function GalleryPageContent({
         <div className="container-wrapper">
           <div className="container py-8 md:py-12">
             <HouseGallery
-              gallery={gallery}
+              galleryCategories={galleryCategories}
               sentinelRef={sentinelRef}
               dataAttribute={dataAttribute}
             />
@@ -106,7 +106,7 @@ export function GalleryPageContent({
       </div>
 
       <GalleryModal
-        gallery={gallery}
+        galleryCategories={galleryCategories}
         title={title}
         dataAttribute={dataAttribute}
       />

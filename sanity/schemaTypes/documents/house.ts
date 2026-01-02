@@ -152,14 +152,14 @@ export const house = defineType({
         'Optional image displayed first in gallery grids (mobile carousel and desktop block gallery)'
     }),
     defineField({
-      name: 'gallery',
-      title: 'Gallery Images',
+      name: 'galleryCategories',
+      title: 'Photos by Category',
       type: 'array',
       group: 'gallery',
-      description: 'House photos organized by category. Drag to reorder.',
-      of: [defineArrayMember({ type: 'galleryImage' })],
-      validation: (rule) =>
-        rule.min(1).error('At least one gallery image is required')
+      description:
+        'Photos grouped by category. Drag to reorder within each category.',
+      of: [defineArrayMember({ type: 'houseGalleryCategory' })],
+      options: { sortable: false }
     }),
 
     // ============================================

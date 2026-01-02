@@ -15,8 +15,9 @@ type HouseAmenityCategories = NonNullable<HouseQueryResult>['amenityCategories']
 type HouseAmenityCategory = NonNullable<HouseAmenityCategories>[number]
 type HouseAmenityItem = NonNullable<HouseAmenityCategory['items']>[number]
 type HousePricingRow = NonNullable<HousePricing>[number]
-type HouseGallery = NonNullable<HouseQueryResult>['gallery']
-type HouseGalleryItem = NonNullable<HouseGallery>[number]
+type HouseGalleryCategories = NonNullable<HouseQueryResult>['galleryCategories']
+type HouseGalleryCategory = NonNullable<HouseGalleryCategories>[number]
+type HouseGalleryItem = NonNullable<HouseGalleryCategory['items']>[number]
 
 // ============================================
 // Contact Type Fields Mock Factory
@@ -193,23 +194,7 @@ export function createSanityImage(
 }
 
 // ============================================
-// Gallery Category Mock Factory
-// ============================================
-
-export function createGalleryCategory(
-  overrides: Partial<NonNullable<HouseGalleryItem['category']>> = {}
-): NonNullable<HouseGalleryItem['category']> {
-  return {
-    _id: faker.string.uuid(),
-    key: faker.word.noun(),
-    label: faker.word.words(2),
-    orderRank: `${faker.number.int({ min: 1, max: 10 }).toString().padStart(5, '0')}|`,
-    ...overrides
-  }
-}
-
-// ============================================
-// Gallery Item Mock Factory
+// Gallery Item Mock Factory (for items within a category)
 // ============================================
 
 export function createGalleryItem(
@@ -218,7 +203,26 @@ export function createGalleryItem(
   return {
     _key: faker.string.nanoid(),
     image: createSanityImage(),
-    category: createGalleryCategory(),
+    ...overrides
+  }
+}
+
+// ============================================
+// Gallery Category Mock Factory (container with items)
+// ============================================
+
+export function createGalleryCategory(
+  overrides: Partial<HouseGalleryCategory> = {}
+): HouseGalleryCategory {
+  return {
+    _key: faker.string.nanoid(),
+    category: {
+      _id: faker.string.uuid(),
+      key: faker.word.noun(),
+      label: faker.word.words(2),
+      orderRank: `${faker.number.int({ min: 1, max: 10 }).toString().padStart(5, '0')}|`
+    },
+    items: [createGalleryItem(), createGalleryItem()],
     ...overrides
   }
 }

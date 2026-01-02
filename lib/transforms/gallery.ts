@@ -37,7 +37,8 @@ const GALLERY_LAYOUTS = [
  * @returns Array of GalleryImage with pre-built URLs
  */
 export function toGalleryImages(images: GalleryWallImages): GalleryImage[] {
-  return images.slice(0, GALLERY_LAYOUTS.length).map((img, index) => {
+  // Query already limits to 6 images via galleryWall[0...6]
+  return images.map((img, index) => {
     const layout = GALLERY_LAYOUTS[index]
 
     return {

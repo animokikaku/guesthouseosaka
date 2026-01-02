@@ -1,20 +1,24 @@
-import { groupByCategory } from '@/lib/utils/group-by-category'
 import type { HouseQueryResult } from '@/sanity.types'
 
-// Types from Sanity query result - flat gallery array with category info
-export type Gallery = NonNullable<HouseQueryResult>['gallery']
-export type GalleryItem = NonNullable<Gallery>[number]
+// Types from Sanity query result - gallery is now pre-grouped by category
+export type GalleryCategories =
+  NonNullable<HouseQueryResult>['galleryCategories']
+export type GalleryCategoryData = NonNullable<GalleryCategories>[number]
+export type GalleryItem = NonNullable<GalleryCategoryData['items']>[number]
 export type FeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
 
 // Minimal type for components that only need _key and image (e.g., MobileHeroImage carousel)
 export type GalleryImage = Pick<GalleryItem, '_key' | 'image'>
 
-// Grouped category type for frontend display (extends base grouping with computed fields)
+// Category with computed fields for frontend display
 export interface GalleryCategory {
-  _id: string
-  key: string
-  label: string | null
-  orderRank: string | null
+  _key: string
+  category: {
+    _id: string
+    key: string
+    label: string | null
+    orderRank: string | null
+  }
   count: number
   thumbnail: GalleryItem['image'] | null
   items: GalleryItem[]
@@ -30,22 +34,37 @@ export function featuredToGalleryImage(
   }
 }
 
-// Get index of image by key
-export function getImageIndex(images: GalleryItem[], photoKey: string): number {
-  const index = images.findIndex((img) => img._key === photoKey)
+// Flatten all gallery items from categories (for modal navigation)
+export function flattenGalleryItems(
+  categories: GalleryCategories | null
+): GalleryItem[] {
+  if (!categories) return []
+  return categories.flatMap((cat) => cat.items ?? [])
+}
+
+// Get index of image by key across all categories
+export function getImageIndex(
+  categories: GalleryCategories | null,
+  photoKey: string
+): number {
+  const items = flattenGalleryItems(categories)
+  const index = items.findIndex((img) => img._key === photoKey)
   return index >= 0 ? index : 0
 }
 
-// Group gallery items by category (for frontend display)
-// Uses generic utility and adds computed fields (count, thumbnail)
-export function groupGalleryByCategory(
-  gallery: Gallery | null
+// Transform pre-grouped data to frontend display format with computed fields
+// Sorts by category orderRank (lexicographic) for consistent display order
+export function toGalleryCategories(
+  data: GalleryCategories | null
 ): GalleryCategory[] {
-  const grouped = groupByCategory(gallery)
-  return grouped.map((category) => ({
-    ...category,
-    _id: category._id ?? '',
-    count: category.items.length,
-    thumbnail: category.items[0]?.image ?? null
-  }))
+  if (!data) return []
+  return data
+    .filter((cat) => cat.items && cat.items.length > 0)
+    .map((cat) => ({
+      _key: cat._key,
+      category: cat.category,
+      count: cat.items?.length ?? 0,
+      thumbnail: cat.items?.[0]?.image ?? null,
+      items: cat.items ?? []
+    }))
 }
