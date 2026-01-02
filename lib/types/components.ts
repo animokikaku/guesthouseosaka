@@ -155,22 +155,6 @@ export interface ContactFormConfig {
   fields: FormFieldsConfig
 }
 
-// ============================================
-// Collection Components
-// ============================================
-
-/**
- * House item in the collection grid
- * @see components/collection.tsx
- */
-export interface CollectionHouseItem {
-  _id: string
-  slug: HouseIdentifier
-  title: string | null
-  description: string | null
-  image: SanityImage
-}
-
 /**
  * Contact type item in the navigation list
  * @see app/[locale]/contact/(components)/contact-types-list.tsx

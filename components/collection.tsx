@@ -9,11 +9,13 @@ import {
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { type HouseIdentifier } from '@/lib/types'
-import type { CollectionHouseItem } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
+import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
-import { getImageDimensions, type SanityImageSource } from '@sanity/asset-utils'
+import { getImageDimensions } from '@sanity/asset-utils'
 import Image from 'next/image'
+
+type House = NonNullable<HomePageQueryResult['houses']>[number]
 
 const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
   orange: 'bg-orange-600/50',
@@ -22,7 +24,7 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
 }
 
 type CollectionProps = {
-  houses: CollectionHouseItem[]
+  houses: House[]
   className?: string
 }
 
@@ -72,13 +74,15 @@ export function Collection({ houses, className }: CollectionProps) {
   )
 }
 
-type CollectionImageProps = Pick<CollectionHouseItem, 'image'>
+type CollectionImageProps = {
+  image: House['image']
+}
 
 function CollectionImage({ image }: CollectionImageProps) {
-  if (!image.asset) return null
+  if (!image?.asset) return null
 
   const buildImage = urlFor(image)
-  const dimensions = getImageDimensions(image.asset as SanityImageSource)
+  const dimensions = getImageDimensions(image.asset)
   const alt = image.alt || ''
   const blurDataURL = image.preview || undefined
   const placeholder = image.preview ? 'blur' : undefined
