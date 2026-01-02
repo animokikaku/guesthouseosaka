@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest'
+import { LocationData } from '@/lib/types/components'
 import { render, screen } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 import { HouseLocation } from '../house-location'
 
 // Mock next/dynamic to render synchronously
@@ -24,19 +25,25 @@ vi.mock('next/dynamic', () => ({
   }
 }))
 
-// Mock HouseLocationModal
+// Mock HouseLocationModal - matches real component behavior
 vi.mock('@/components/house/house-location-modal', () => ({
   HouseLocationModal: ({
     children,
     details
   }: {
     children: React.ReactNode
-    details: unknown
-  }) => (
-    <div data-testid="location-modal" data-details-count={Array.isArray(details) ? details.length : 0}>
-      {children}
-    </div>
-  )
+    details: LocationData['details']
+  }) => {
+    if (!details) return null
+    return (
+      <div
+        data-testid="location-modal"
+        data-details-count={details.length}
+      >
+        {children}
+      </div>
+    )
+  }
 }))
 
 const mockPlaceImage = {
@@ -52,7 +59,14 @@ const mockDetails = [
     _type: 'block' as const,
     _key: 'd1',
     style: 'normal' as const,
-    children: [{ _type: 'span' as const, _key: 's1', text: 'Near train station', marks: [] }],
+    children: [
+      {
+        _type: 'span' as const,
+        _key: 's1',
+        text: 'Near train station',
+        marks: []
+      }
+    ],
     markDefs: []
   }
 ]
@@ -81,7 +95,9 @@ describe('HouseLocation', () => {
     it('renders highlight text', () => {
       render(<HouseLocation {...baseProps} />)
 
-      expect(screen.getByText('Great location near the station')).toBeInTheDocument()
+      expect(
+        screen.getByText('Great location near the station')
+      ).toBeInTheDocument()
     })
   })
 
@@ -99,7 +115,10 @@ describe('HouseLocation', () => {
       render(<HouseLocation {...baseProps} />)
 
       const map = screen.getByTestId('house-map')
-      expect(map).toHaveAttribute('data-place-id', 'ChIJA9KNRIL-AGARZtCjpPbTMCs')
+      expect(map).toHaveAttribute(
+        'data-place-id',
+        'ChIJA9KNRIL-AGARZtCjpPbTMCs'
+      )
     })
 
     it('does not render HouseMap when map is null', () => {
@@ -123,7 +142,9 @@ describe('HouseLocation', () => {
 
       // Section heading and highlight text should still be visible
       expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
-      expect(screen.getByText('Great location near the station')).toBeInTheDocument()
+      expect(
+        screen.getByText('Great location near the station')
+      ).toBeInTheDocument()
       // Modal trigger should still be available
       expect(screen.getByTestId('location-modal')).toBeInTheDocument()
     })
@@ -137,7 +158,7 @@ describe('HouseLocation', () => {
       expect(screen.getByRole('button')).toBeInTheDocument()
     })
 
-    it('disables button when details is empty', () => {
+    it('renders modal with empty details', () => {
       const props = {
         ...baseProps,
         location: {
@@ -148,10 +169,10 @@ describe('HouseLocation', () => {
 
       render(<HouseLocation {...props} />)
 
-      expect(screen.getByRole('button')).toBeDisabled()
+      expect(screen.getByTestId('location-modal')).toBeInTheDocument()
     })
 
-    it('disables button when details is null', () => {
+    it('does not render modal when details is null', () => {
       const props = {
         ...baseProps,
         location: {
@@ -162,13 +183,7 @@ describe('HouseLocation', () => {
 
       render(<HouseLocation {...props} />)
 
-      expect(screen.getByRole('button')).toBeDisabled()
-    })
-
-    it('enables button when details has items', () => {
-      render(<HouseLocation {...baseProps} />)
-
-      expect(screen.getByRole('button')).not.toBeDisabled()
+      expect(screen.queryByTestId('location-modal')).not.toBeInTheDocument()
     })
   })
 

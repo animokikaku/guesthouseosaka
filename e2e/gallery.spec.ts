@@ -13,7 +13,7 @@ test.describe('Gallery', () => {
       await page.goto(galleryUrl)
 
       // Wait for page to load
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       // Find category thumbnail buttons
       const categoryButtons = page.locator('button').filter({
@@ -71,7 +71,7 @@ test.describe('Gallery', () => {
 
     test('clicking image opens modal', async ({ page }) => {
       await page.goto(galleryUrl)
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       // Click image and verify modal opens
       await clickGalleryImageAndWaitForModal(page)
@@ -79,7 +79,7 @@ test.describe('Gallery', () => {
 
     test('modal displays full-size image', async ({ page }) => {
       await page.goto(galleryUrl)
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       const modal = await clickGalleryImageAndWaitForModal(page)
 
@@ -90,7 +90,7 @@ test.describe('Gallery', () => {
 
     test('close button works', async ({ page }) => {
       await page.goto(galleryUrl)
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       const modal = await clickGalleryImageAndWaitForModal(page)
 
@@ -106,7 +106,7 @@ test.describe('Gallery', () => {
 
     test('Escape key closes modal', async ({ page }) => {
       await page.goto(galleryUrl)
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       const modal = await clickGalleryImageAndWaitForModal(page)
 
@@ -121,7 +121,7 @@ test.describe('Gallery', () => {
       // Set desktop viewport to ensure nav buttons are visible
       await page.setViewportSize({ width: 1280, height: 800 })
       await page.goto(galleryUrl)
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       const modal = await clickGalleryImageAndWaitForModal(page)
 
@@ -141,7 +141,7 @@ test.describe('Gallery', () => {
 
     test('keyboard arrow navigation works', async ({ page }) => {
       await page.goto(galleryUrl)
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       const modal = await clickGalleryImageAndWaitForModal(page)
 
@@ -169,7 +169,7 @@ test.describe('Gallery', () => {
       await page.goto(houseUrl)
 
       // Wait for house page to load
-      await expect(page).toHaveURL(new RegExp(houseUrl))
+      await expect(page).toHaveURL(houseUrl)
 
       // Find the "View gallery" button or gallery link (on desktop)
       // The gallery block is hidden on mobile (sm:flex)
@@ -188,7 +188,7 @@ test.describe('Gallery', () => {
         await viewGalleryButton.first().click()
 
         // Wait for gallery to load (either as modal or full page)
-        await page.waitForURL(new RegExp(`${house}/gallery`), {
+        await page.waitForURL(`${house}/gallery`, {
           timeout: 10000
         })
       }
@@ -198,7 +198,7 @@ test.describe('Gallery', () => {
       // Direct navigation to gallery page
       await page.goto(galleryUrl)
 
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       // Verify gallery content is present
       const images = page.locator('img')
@@ -235,7 +235,7 @@ test.describe('Gallery', () => {
       await page.setViewportSize({ width: 375, height: 667 })
 
       await page.goto(galleryUrl)
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       // Gallery grid should still be visible
       const images = page.locator('img')
@@ -254,7 +254,7 @@ test.describe('Gallery', () => {
       await page.setViewportSize({ width: 1280, height: 800 })
 
       await page.goto(galleryUrl)
-      await expect(page).toHaveURL(new RegExp(galleryUrl))
+      await expect(page).toHaveURL(galleryUrl)
 
       // Gallery grid should be visible
       const images = page.locator('img')

@@ -34,7 +34,7 @@ export const contactPage = defineType({
       title: 'Meta Title',
       type: 'internationalizedArrayString',
       description: 'SEO title for browser tabs and search results',
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().max(60),
       options: { aiAssist: { translateAction: true } },
       group: 'settings'
     }),
@@ -43,7 +43,7 @@ export const contactPage = defineType({
       title: 'Meta Description',
       type: 'internationalizedArrayString',
       description: 'SEO description for search results',
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().max(155),
       options: { aiAssist: { translateAction: true } },
       group: 'settings'
     })

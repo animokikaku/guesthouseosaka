@@ -132,8 +132,7 @@ export const contactType = defineType({
         other: 'General Inquiry'
       }
       return {
-        title: title || slugLabels[slug] || 'No title',
-        subtitle: slug || 'No slug'
+        title: title || slugLabels[slug]
       }
     }
   }

@@ -25,7 +25,7 @@ import {
 import { cn } from '@/lib/utils'
 import { HOUSE_THEME_COLORS } from '@/lib/utils/theme'
 import type { HouseQueryResult, HousesNavQueryResult } from '@/sanity.types'
-import { ComponentProps } from 'react'
+import type { ComponentProps } from 'react'
 
 export function HousePageContent({
   _id,
@@ -70,7 +70,7 @@ export function HousePageContent({
       <div className="container-wrapper section-soft flex-1 pb-12">
         <div className="container max-w-6xl">
           <PageNav id="tabs">
-            {houses && houses.length > 0 ? <HousesNav houses={houses} /> : null}
+            <HousesNav houses={houses} />
           </PageNav>
           <div className="theme-container">
             <ImageBlockGallery

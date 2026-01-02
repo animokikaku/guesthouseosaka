@@ -62,7 +62,7 @@ export function HouseLocationModal({
   const [open, setOpen] = React.useState(false)
   const isMobile = useIsMobile()
 
-  if (!details || details.length === 0) {
+  if (!details) {
     return null
   }
 

@@ -95,10 +95,11 @@ function GalleryModalCarousel({
     [galleryCategories]
   )
 
-  const currentAlt =
-    selectedIndex !== null && selectedIndex < imageList.length
+  const currentAlt = useMemo(() => {
+    return selectedIndex !== null && selectedIndex < imageList.length
       ? stegaClean(imageList[selectedIndex].image.alt)
       : null
+  }, [selectedIndex, imageList])
 
   const startIndex = photoId
     ? getImageIndex(galleryCategories, photoId)

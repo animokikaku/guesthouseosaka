@@ -57,6 +57,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
   const data = useLegalNotice()
   const isMobile = useIsMobile()
 
+  // Fallback to initial policy publication date if lastUpdated is not set
   const lastUpdated = data?.lastUpdated
     ? new Date(data.lastUpdated)
     : new Date(Date.UTC(2025, 11, 4))

@@ -22,10 +22,12 @@ vi.mock('@/i18n/navigation', () => ({
   Link: ({
     children,
     href,
+    scroll: _scroll,
     ...props
   }: {
     children: React.ReactNode
     href: { pathname: string; params: { slug: string }; hash: string }
+    scroll?: boolean
     [key: string]: unknown
   }) => (
     <a href={`/contact/${href.params.slug}${href.hash}`} {...props}>

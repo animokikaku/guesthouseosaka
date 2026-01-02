@@ -14,10 +14,8 @@ test.describe('Contact Page', () => {
 
       // Click the first contact type link (tour)
       const tourLink = page.locator('a[href*="/contact/tour"]')
-      if ((await tourLink.count()) > 0) {
-        await tourLink.click()
-        await expect(page).toHaveURL(/\/en\/contact\/tour/)
-      }
+      await tourLink.click()
+      await expect(page).toHaveURL(/\/en\/contact\/tour/)
     })
   })
 

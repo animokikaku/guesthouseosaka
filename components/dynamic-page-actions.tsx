@@ -67,7 +67,7 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
                 rel="noopener noreferrer"
                 data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
               >
-                <Icon name={icon} />
+                <Icon name={icon} aria-hidden="true" />
                 {stegaClean(label)}
               </a>
             </Button>

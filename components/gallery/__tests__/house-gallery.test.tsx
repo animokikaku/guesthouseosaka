@@ -24,7 +24,7 @@ Object.defineProperty(window, 'matchMedia', {
 
 // Mock next/image
 vi.mock('next/image', () => ({
-  default: ({ src, alt }: { src: string; alt: string }) => (
+  default: ({ src, alt }: { src: string; alt: string }): React.ReactElement => (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} data-testid="gallery-image" />
   )
@@ -91,8 +91,14 @@ describe('HouseGallery', () => {
           _key: 'cat1',
           category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a:' },
           items: [
-            createGalleryItem({ _key: 'img1', image: createSanityImage({ alt: 'Image 1' }) }),
-            createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Image 2' }) })
+            createGalleryItem({
+              _key: 'img1',
+              image: createSanityImage({ alt: 'Image 1' })
+            }),
+            createGalleryItem({
+              _key: 'img2',
+              image: createSanityImage({ alt: 'Image 2' })
+            })
           ]
         })
       ]
@@ -154,9 +160,18 @@ describe('HouseGallery', () => {
           _key: 'cat1',
           category: { _id: 'id1', label: 'Room', orderRank: '0|a:' },
           items: [
-            createGalleryItem({ _key: 'img1', image: createSanityImage({ alt: 'Image 1' }) }),
-            createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Image 2' }) }),
-            createGalleryItem({ _key: 'img3', image: createSanityImage({ alt: 'Image 3' }) })
+            createGalleryItem({
+              _key: 'img1',
+              image: createSanityImage({ alt: 'Image 1' })
+            }),
+            createGalleryItem({
+              _key: 'img2',
+              image: createSanityImage({ alt: 'Image 2' })
+            }),
+            createGalleryItem({
+              _key: 'img3',
+              image: createSanityImage({ alt: 'Image 3' })
+            })
           ]
         })
       ]
@@ -181,8 +196,9 @@ describe('HouseGallery', () => {
       render(<HouseGallery galleryCategories={galleryCategories} />)
 
       // Multiple buttons: thumbnail + grid item
+      // Should have 2 buttons: 1 category thumbnail + 1 grid item
       const buttons = screen.getAllByRole('button')
-      expect(buttons.length).toBeGreaterThan(0)
+      expect(buttons).toHaveLength(2)
     })
   })
 })

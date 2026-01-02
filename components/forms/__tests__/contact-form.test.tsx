@@ -34,7 +34,7 @@ vi.mock('@/components/legal-notice-dialog', () => ({
 
 const baseProps = {
   title: 'Contact Us',
-  description: 'Send us a message' as string | null,
+  description: 'Send us a message',
   fields: {
     places: { label: 'Places' },
     date: { label: 'Date' },

@@ -149,10 +149,5 @@ export default defineConfig({
         })
       ]
     })
-    // documentInternationalization({
-    //   supportedLanguages: languages,
-    //   languageField: LocaleField.name,
-    //   schemaTypes: []
-    // })
   ]
 })

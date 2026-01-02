@@ -1,7 +1,7 @@
+import type { PricingRowData } from '@/lib/types/components'
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { HousePricing } from '../house-pricing'
-import type { PricingRowData } from '@/lib/types/components'
 
 // Test data with no content
 const mockPricing: PricingRowData[] = [
@@ -20,7 +20,9 @@ const mockPricingWithContent: PricingRowData[] = [
         _type: 'block',
         _key: 'block1',
         style: 'normal',
-        children: [{ _type: 'span', _key: 'span1', text: '45,000 JPY', marks: [] }],
+        children: [
+          { _type: 'span', _key: 'span1', text: '45,000 JPY', marks: [] }
+        ],
         markDefs: []
       }
     ] as PricingRowData['content']
@@ -33,7 +35,9 @@ const mockPricingWithContent: PricingRowData[] = [
         _type: 'block',
         _key: 'block2',
         style: 'normal',
-        children: [{ _type: 'span', _key: 'span2', text: '1 month', marks: [] }],
+        children: [
+          { _type: 'span', _key: 'span2', text: '1 month', marks: [] }
+        ],
         markDefs: []
       }
     ] as PricingRowData['content']
@@ -61,7 +65,9 @@ const mockPricingWithBulletList: PricingRowData[] = [
         style: 'normal',
         listItem: 'bullet',
         level: 1,
-        children: [{ _type: 'span', _key: 's2', text: 'Electricity', marks: [] }],
+        children: [
+          { _type: 'span', _key: 's2', text: 'Electricity', marks: [] }
+        ],
         markDefs: []
       }
     ] as PricingRowData['content']
@@ -80,7 +86,9 @@ const mockPricingWithNumberedList: PricingRowData[] = [
         style: 'normal',
         listItem: 'number',
         level: 1,
-        children: [{ _type: 'span', _key: 's1', text: 'Submit application', marks: [] }],
+        children: [
+          { _type: 'span', _key: 's1', text: 'Submit application', marks: [] }
+        ],
         markDefs: []
       },
       {
@@ -89,7 +97,9 @@ const mockPricingWithNumberedList: PricingRowData[] = [
         style: 'normal',
         listItem: 'number',
         level: 1,
-        children: [{ _type: 'span', _key: 's2', text: 'Pay deposit', marks: [] }],
+        children: [
+          { _type: 'span', _key: 's2', text: 'Pay deposit', marks: [] }
+        ],
         markDefs: []
       }
     ] as PricingRowData['content']

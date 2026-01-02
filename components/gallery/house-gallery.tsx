@@ -1,3 +1,4 @@
+import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
@@ -11,7 +12,6 @@ import { urlFor } from '@/sanity/lib/image'
 import { stegaClean } from '@sanity/client/stega'
 import Image from 'next/image'
 import * as React from 'react'
-import { GalleryImageButton } from './gallery-image-button'
 
 type DataAttributeFn = (path: string) => string
 

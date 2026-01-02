@@ -279,22 +279,13 @@ describe('HousePageContent', () => {
       expect(nav).toHaveAttribute('data-count', '2')
     })
 
-    it('does not render HousesNav when houses is empty', () => {
+    it('renders HousesNav with empty houses array', () => {
       const props = createBaseProps()
       props.houses = []
 
       render(<HousePageContent {...props} />)
 
-      expect(screen.queryByTestId('houses-nav')).not.toBeInTheDocument()
-    })
-
-    it('does not render HousesNav when houses is null', () => {
-      const props = createBaseProps()
-      props.houses = null as unknown as typeof props.houses
-
-      render(<HousePageContent {...props} />)
-
-      expect(screen.queryByTestId('houses-nav')).not.toBeInTheDocument()
+      expect(screen.getByTestId('houses-nav')).toBeInTheDocument()
     })
   })
 

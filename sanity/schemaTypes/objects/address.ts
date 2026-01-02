@@ -27,7 +27,7 @@ export const address = defineType({
       validation: (rule) =>
         rule
           .required()
-          .regex(/^\d{3}-?\d{4}$/, {
+          .regex(/^\d{3}-\d{4}$/, {
             name: 'postal code',
             invert: false
           })

@@ -62,15 +62,12 @@ test.describe('House Page', () => {
       // Find another house link in the navigation and click it
       const tabsNav = page.locator('#tabs')
       const houseLinks = tabsNav.getByRole('link')
-      const linkCount = await houseLinks.count()
 
-      if (linkCount > 0) {
-        const firstLink = houseLinks.first()
-        await firstLink.click()
+      const firstLink = houseLinks.first()
+      await firstLink.click()
 
-        // Should navigate to another house page
-        await expect(page).toHaveURL(new RegExp(`/en/(orange|apple|lemon)`))
-      }
+      // Should navigate to another house page
+      await expect(page).toHaveURL(new RegExp(`/en/(orange|apple|lemon)`))
     })
   })
 

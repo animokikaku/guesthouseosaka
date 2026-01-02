@@ -29,6 +29,7 @@ export function ContactNav({ className, items, ...props }: ContactNavProps) {
                 params: { slug },
                 hash: '#tabs'
               }}
+              aria-current={segment === slug ? 'page' : undefined}
               data-active={segment === slug}
               className={cn(
                 'text-muted-foreground hover:text-primary data-[active=true]:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors'

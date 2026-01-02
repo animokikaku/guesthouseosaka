@@ -63,7 +63,11 @@ export const settings = defineType({
       description: 'Contact phone (international format)',
       group: 'organization',
       placeholder: '+81-6-6643-4646',
-      validation: (rule) => rule.required()
+      validation: (rule) =>
+        rule.required().regex(/^\+[\d\-\s]+$/, {
+          name: 'phone',
+          invert: false
+        })
     }),
     defineField({
       name: 'address',

@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { TourForm } from '../tour-form'
 
 // Mock matchMedia
@@ -34,7 +34,7 @@ vi.mock('@/components/legal-notice-dialog', () => ({
 
 const baseProps = {
   title: 'Book a Tour',
-  description: 'Schedule your visit' as string | null,
+  description: 'Schedule your visit',
   houseTitles: [
     { slug: 'orange' as const, title: 'Orange House' },
     { slug: 'apple' as const, title: 'Apple House' },
@@ -51,7 +51,11 @@ const baseProps = {
     nationality: { label: 'Nationality', placeholder: 'Enter nationality' },
     email: { label: 'Your Email', placeholder: 'Enter email' },
     phone: { label: 'Phone', placeholder: 'Enter phone' },
-    message: { label: 'Message', placeholder: 'Additional notes', description: 'Optional' }
+    message: {
+      label: 'Message',
+      placeholder: 'Additional notes',
+      description: 'Optional'
+    }
   }
 }
 

@@ -82,9 +82,9 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.SelectField
               required
               orientation="responsive"
-              label={config.gender?.label ?? undefined}
-              placeholder={config.gender?.placeholder ?? undefined}
-              description={config.gender?.description ?? undefined}
+              label={config.gender?.label}
+              placeholder={config.gender?.placeholder}
+              description={config.gender?.description}
               options={[
                 { label: t('fields.gender.options.male'), value: 'male' },
                 { label: t('fields.gender.options.female'), value: 'female' }
@@ -97,9 +97,9 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               required
-              placeholder={config.name?.placeholder ?? undefined}
+              placeholder={config.name?.placeholder}
               orientation="responsive"
-              description={config.name?.description ?? undefined}
+              description={config.name?.description}
               label={config.name?.label}
               icon={<UserIcon />}
               type="text"
@@ -112,10 +112,10 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               required
-              description={config.age?.description ?? undefined}
+              description={config.age?.description}
               icon={<CakeIcon />}
               orientation="responsive"
-              placeholder={config.age?.placeholder ?? undefined}
+              placeholder={config.age?.placeholder}
               label={config.age?.label}
               type="number"
               min={1}
@@ -130,10 +130,10 @@ export const FieldGroupUserAccount = withFieldGroup({
               required
               orientation="responsive"
               label={config.nationality?.label}
-              description={config.nationality?.description ?? undefined}
+              description={config.nationality?.description}
               icon={<GlobeIcon />}
               type="text"
-              placeholder={config.nationality?.placeholder ?? undefined}
+              placeholder={config.nationality?.placeholder}
             />
           )}
         />
@@ -143,8 +143,8 @@ export const FieldGroupUserAccount = withFieldGroup({
             <field.InputGroupField
               required
               orientation="responsive"
-              placeholder={config.email?.placeholder ?? undefined}
-              description={config.email?.description ?? undefined}
+              placeholder={config.email?.placeholder}
+              description={config.email?.description}
               type="email"
               label={config.email?.label}
               icon={<MailIcon />}
@@ -157,9 +157,9 @@ export const FieldGroupUserAccount = withFieldGroup({
           children={(field) => (
             <field.InputGroupField
               orientation="responsive"
-              placeholder={config.phone?.placeholder ?? undefined}
+              placeholder={config.phone?.placeholder}
               type="tel"
-              description={config.phone?.description ?? undefined}
+              description={config.phone?.description}
               label={
                 <div>
                   {config.phone?.label}{' '}

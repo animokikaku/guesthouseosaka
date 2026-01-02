@@ -1,11 +1,6 @@
 import { HouseIdentifierSchema, HouseIdentifierValues } from '@/lib/types'
 import { HomeIcon } from '@sanity/icons'
-import {
-  defineArrayMember,
-  defineField,
-  defineType,
-  type StringFieldProps
-} from 'sanity'
+import { defineArrayMember, defineField, defineType } from 'sanity'
 
 export const house = defineType({
   name: 'house',
@@ -35,10 +30,7 @@ export const house = defineType({
     defineField({
       name: 'orderRank',
       type: 'string',
-      hidden: true,
-      components: {
-        field: (props: StringFieldProps) => props.renderDefault(props)
-      }
+      hidden: true
     }),
 
     // ============================================

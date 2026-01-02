@@ -1,9 +1,8 @@
 import { HouseIdentifier } from '@/lib/types'
 import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
 
-type ContactTypeSlug = 'tour' | 'move-in' | 'other'
-
-const VALID_CONTACT_SLUGS: ContactTypeSlug[] = ['tour', 'move-in', 'other']
+const VALID_CONTACT_SLUGS = ['tour', 'move-in', 'other'] as const
+type ContactTypeSlug = (typeof VALID_CONTACT_SLUGS)[number]
 
 function isContactTypeSlug(slug: unknown): slug is ContactTypeSlug {
   return (

@@ -38,6 +38,7 @@ export function StickyCategoryNav({
 
   return (
     <nav
+      aria-label="Gallery categories"
       className={cn(
         'min-w-0 flex-1 transition-opacity duration-200',
         isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
@@ -52,6 +53,7 @@ export function StickyCategoryNav({
                 key={cat._id}
                 ref={isActive ? activeButtonRef : undefined}
                 type="button"
+                aria-current={isActive ? 'true' : undefined}
                 onClick={() => scrollToCategory(cat._id)}
                 className={cn(
                   'shrink-0 px-3 py-1.5 text-sm font-medium transition-colors',

@@ -67,9 +67,7 @@ export function HouseLocation({ location, map }: HouseLocationProps) {
 
       <div className="mt-6">
         <HouseLocationModal details={details} title={t('heading')}>
-          <Button variant="outline" disabled={!details || details.length === 0}>
-            {t('modal_trigger')}
-          </Button>
+          <Button variant="outline">{t('modal_trigger')}</Button>
         </HouseLocationModal>
       </div>
     </section>

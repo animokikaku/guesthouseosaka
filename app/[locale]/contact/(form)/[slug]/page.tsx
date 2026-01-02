@@ -64,22 +64,23 @@ export default async function ContactTypePage({
 
   // Render the appropriate form based on slug
   switch (slug) {
-    case 'tour':
+    case 'tour': {
       if (!houseTitles || houseTitles.length === 0) {
         return <PageEmptyState />
       }
       return <TourForm {...formConfig} houseTitles={houseTitles} />
-
-    case 'move-in':
+    }
+    case 'move-in': {
       if (!houseTitles || houseTitles.length === 0) {
         return <PageEmptyState />
       }
       return <MoveInForm {...formConfig} houseTitles={houseTitles} />
-
-    case 'other':
+    }
+    case 'other': {
       return <ContactForm {...formConfig} />
-
-    default:
-      notFound()
+    }
+    default: {
+      return <PageEmptyState />
+    }
   }
 }

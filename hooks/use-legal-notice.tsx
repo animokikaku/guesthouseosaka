@@ -22,5 +22,9 @@ export function LegalNoticeProvider({
 }
 
 export function useLegalNotice(): LegalNoticeData | null {
-  return useContext(LegalNoticeContext)
+  const context = useContext(LegalNoticeContext)
+  if (context === undefined) {
+    throw new Error('useLegalNotice must be used within LegalNoticeProvider')
+  }
+  return context
 }

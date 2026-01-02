@@ -93,7 +93,6 @@ function FeatureItem({
 }) {
   return (
     <div
-      key={label}
       className={cn(
         'border-border/60 bg-muted/40 rounded-lg border px-2 py-3',
         className

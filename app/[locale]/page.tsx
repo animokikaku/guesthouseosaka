@@ -108,9 +108,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
             />
           )}
           <PageActions>
-            {houses ? (
-              <Collection houses={houses} className="w-full pt-4" />
-            ) : null}
+            <Collection houses={houses} className="w-full pt-4" />
           </PageActions>
         </PageHeader>
       </section>

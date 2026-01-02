@@ -33,7 +33,7 @@ export function PrivacyPolicyField() {
             htmlFor={`form-tanstack-checkbox-${field.name}`}
             className="text-muted-foreground font-normal"
           >
-            <p className="text-muted-foreground">
+            <span className="text-muted-foreground">
               {t.rich('fields.privacy_policy_agreement', {
                 link: (chunks) => (
                   <LegalNoticeDialog onAgree={() => field.handleChange(true)}>
@@ -41,7 +41,7 @@ export function PrivacyPolicyField() {
                   </LegalNoticeDialog>
                 )
               })}
-            </p>
+            </span>
           </FieldLabel>
         </Field>
       </FieldGroup>

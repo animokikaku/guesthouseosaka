@@ -18,8 +18,6 @@ export function HouseMarker({
   mapsUrl,
   ...markerProps
 }: HouseMarkerProps) {
-  // Use provided center or fallback to constants
-
   return (
     <AdvancedMarker
       className={cn('transition-transform duration-200 ease-in-out', className)}

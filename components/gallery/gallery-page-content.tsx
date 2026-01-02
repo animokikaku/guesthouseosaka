@@ -93,6 +93,8 @@ export function GalleryPageContent({
       <div
         ref={scrollContainerRef}
         className="relative flex-1 overflow-y-auto scroll-smooth"
+        role="main"
+        aria-label="Gallery Content"
       >
         <div className="container-wrapper">
           <div className="container py-8 md:py-12">

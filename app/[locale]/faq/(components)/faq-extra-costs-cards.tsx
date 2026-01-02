@@ -144,6 +144,9 @@ function ExtraCostsCard({
   extraCosts,
   pricingCategories
 }: ExtraCostsCardProps) {
+  const costsByCategory = new Map(
+    extraCosts?.map((c) => [c.categoryId, c.value]) ?? []
+  )
   return (
     <CarouselItem>
       <div
@@ -164,7 +167,7 @@ function ExtraCostsCard({
         </div>
         <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
           {pricingCategories.map((category, index) => {
-            const cost = extraCosts?.find((c) => c.categoryId === category._id)
+            const cost = costsByCategory.get(category._id)
             return (
               <div
                 key={category._id}
@@ -177,9 +180,9 @@ function ExtraCostsCard({
                   {category.title}
                 </span>
                 <span className="text-foreground/70 text-right text-sm tabular-nums">
-                  {cost?.value ? (
+                  {cost ? (
                     <PortableText
-                      value={cost.value}
+                      value={cost}
                       components={portableTextComponents}
                     />
                   ) : (
