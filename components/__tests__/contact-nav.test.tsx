@@ -22,7 +22,8 @@ vi.mock('@/i18n/navigation', () => ({
   Link: ({
     children,
     href,
-    scroll: _scroll,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    scroll,
     ...props
   }: {
     children: React.ReactNode

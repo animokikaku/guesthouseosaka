@@ -188,7 +188,7 @@ test.describe('Gallery', () => {
         await viewGalleryButton.first().click()
 
         // Wait for gallery to load (either as modal or full page)
-        await page.waitForURL(`${house}/gallery`, {
+        await page.waitForURL(galleryUrl, {
           timeout: 10000
         })
       }

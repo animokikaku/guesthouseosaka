@@ -98,8 +98,11 @@ test.describe('Contact Form Tests', () => {
       // Blur to trigger validation
       await messageField.blur()
 
-      // Wait a moment for validation to complete
-      await page.waitForTimeout(100)
+      // Verify no validation errors are visible after valid input
+      const errorMessages = page.locator(
+        '[role="alert"][data-slot="field-error"]'
+      )
+      await expect(errorMessages).toHaveCount(0)
     })
 
     test('message must be at least 5 characters', async ({ page }) => {
