@@ -26,12 +26,61 @@ const languages = locales.map(({ name, label }) => ({
   title: label
 }))
 
+// Document types that cannot be deleted (essential/singleton documents)
+const protectedDocumentTypes = [
+  'homePage',
+  'faqPage',
+  'contactPage',
+  'house',
+  'contactType',
+  'legalNotice',
+  'settings',
+  // Taxonomy (referenced by houses)
+  'galleryCategory',
+  'amenityCategory',
+  'pricingCategory'
+]
+
+// Document types where new documents cannot be created (singletons/fixed set)
+const noCreateDocumentTypes = [
+  'homePage',
+  'faqPage',
+  'contactPage',
+  'settings',
+  'contactType',
+  'house',
+  'legalNotice'
+]
+
 export default defineConfig({
   basePath: '/studio',
   projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: env.NEXT_PUBLIC_SANITY_DATASET,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
+  document: {
+    actions: (prev, context) => {
+      let actions = prev
+
+      // Remove delete action for protected document types
+      if (protectedDocumentTypes.includes(context.schemaType)) {
+        actions = actions.filter((action) => action.action !== 'delete')
+      }
+
+      // Remove duplicate action for types with fixed document sets
+      if (noCreateDocumentTypes.includes(context.schemaType)) {
+        actions = actions.filter((action) => action.action !== 'duplicate')
+      }
+
+      return actions
+    },
+    // Hide certain types from the "Create new document" menu
+    newDocumentOptions: (prev) => {
+      return prev.filter(
+        (option) => !noCreateDocumentTypes.includes(option.templateId)
+      )
+    }
+  },
   plugins: [
     languageFilter({
       supportedLanguages: languages,

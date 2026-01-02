@@ -7,13 +7,20 @@ import {
   HelpCircleIcon,
   HomeIcon,
   ImagesIcon,
+  LockIcon,
   TagIcon
 } from '@sanity/icons'
 import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 import type { StructureResolver } from 'sanity/structure'
 
 // Document types that are singletons (should not appear in generic lists)
-const SINGLETONS = ['settings', 'homePage', 'faqPage', 'contactPage']
+const SINGLETONS = [
+  'settings',
+  'homePage',
+  'faqPage',
+  'contactPage',
+  'legalNotice'
+]
 
 // Document types managed in folders (should not appear in generic lists)
 const MANAGED_TYPES = [
@@ -70,6 +77,14 @@ export const structure: StructureResolver = (S) =>
                   S.document()
                     .schemaType('contactPage')
                     .documentId('contactPage')
+                ),
+              S.listItem()
+                .title('Legal Notice')
+                .icon(LockIcon)
+                .child(
+                  S.document()
+                    .schemaType('legalNotice')
+                    .documentId('194fe0df-1789-48fd-9d6c-43e02b92c654')
                 )
             ])
         ),
