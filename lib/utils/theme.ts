@@ -9,10 +9,3 @@ export const HOUSE_THEME_COLORS: Record<HouseIdentifier, string> = {
   lemon: 'bg-yellow-400 dark:bg-yellow-500',
   orange: 'bg-orange-500 dark:bg-orange-600'
 }
-
-/**
- * Get the theme color class for a house
- */
-export function getHouseThemeColor(slug: HouseIdentifier): string {
-  return HOUSE_THEME_COLORS[slug]
-}

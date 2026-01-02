@@ -384,39 +384,6 @@ export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
 // TAXONOMY QUERIES
 // =============================================================================
 
-export const galleryCategoriesQuery = defineQuery(`*[_type == "galleryCategory"] | order(orderRank){
-  _id,
-  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-  orderRank,
-  image{
-    asset->{
-      _id,
-      url,
-      "dimensions": metadata.dimensions,
-      "lqip": metadata.lqip
-    },
-    hotspot,
-    crop
-  }
-}`)
-
-export const amenityCategoriesQuery = defineQuery(`*[_type == "amenityCategory"] | order(orderRank){
-  _id,
-  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-  orderRank
-}`)
-
-export const amenitiesQuery = defineQuery(`*[_type == "amenity"]{
-  _id,
-  "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-  icon,
-  "category": category->{
-    _id,
-    "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
-    orderRank
-  }
-} | order(category.orderRank, label asc)`)
-
 export const pricingCategoriesQuery = defineQuery(`*[_type == "pricingCategory"] | order(orderRank){
   _id,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),

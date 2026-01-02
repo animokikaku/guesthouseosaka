@@ -1,0 +1,50 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "labels": ["dependencies"],
+  "automerge": true,
+  "automergeType": "pr",
+  "platformAutomerge": true,
+  "packageRules": [
+    {
+      "description": "Auto-merge patch and minor updates",
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true
+    },
+    {
+      "description": "Require manual review for major updates",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "description": "Group Radix UI packages",
+      "groupName": "radix-ui",
+      "matchPackagePatterns": ["^@radix-ui/"]
+    },
+    {
+      "description": "Group Sanity packages",
+      "groupName": "sanity",
+      "matchPackagePatterns": ["^@sanity/", "^sanity$"]
+    },
+    {
+      "description": "Group Next.js packages",
+      "groupName": "next.js",
+      "matchPackagePatterns": ["^next$", "^@next/", "^eslint-config-next$"]
+    },
+    {
+      "description": "Group TanStack packages",
+      "groupName": "tanstack",
+      "matchPackagePatterns": ["^@tanstack/"]
+    },
+    {
+      "description": "Group testing packages",
+      "groupName": "testing",
+      "matchPackagePatterns": ["^vitest", "^@vitest/", "^@playwright/", "^playwright$"]
+    },
+    {
+      "description": "Group TypeScript and types",
+      "groupName": "typescript",
+      "matchPackagePatterns": ["^typescript$", "^@types/"]
+    }
+  ]
+}

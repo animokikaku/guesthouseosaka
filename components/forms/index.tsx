@@ -35,10 +35,12 @@ export { useFormSubmit } from './use-form-submit'
 
 export type HouseTitles = HousesTitlesQueryResult
 
-export const { fieldContext, formContext, useFieldContext, useFormContext } =
+const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts()
 
-export const { useAppForm, withForm, withFieldGroup } = createFormHook({
+export { useFieldContext, useFormContext }
+
+export const { useAppForm, withFieldGroup } = createFormHook({
   fieldContext,
   formContext,
   fieldComponents: {
@@ -57,7 +59,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   }
 })
 
-export const userAccountDefaultValues = {
+const userAccountDefaultValues = {
   name: '',
   age: '',
   gender: '' as 'male' | 'female',

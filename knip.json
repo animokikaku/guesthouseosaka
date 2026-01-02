@@ -1,5 +1,20 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["sanity.cli.ts"],
+  "ignore": [
+    "global.ts",
+    "messages/*.d.json.ts",
+    "sanity.types.ts",
+    "components/ui/**",
+    "lib/transforms/__tests__/mocks.ts"
+  ],
+  "ignoreBinaries": ["crowdin"],
+  "ignoreDependencies": [
+    "@sanity/client",
+    "@sanity/icons",
+    "@portabletext/types",
+    "postcss"
+  ],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true

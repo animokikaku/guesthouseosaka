@@ -155,17 +155,6 @@ export interface ContactFormConfig {
   fields: FormFieldsConfig
 }
 
-/**
- * Contact type item in the navigation list
- * @see app/[locale]/contact/(components)/contact-types-list.tsx
- */
-export interface ContactTypeItem {
-  _id: string
-  slug: ContactType
-  title: string | null
-  description: string | null
-}
-
 // ============================================
 // Gallery Components
 // ============================================
