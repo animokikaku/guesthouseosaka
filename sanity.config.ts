@@ -67,9 +67,12 @@ export default defineConfig({
         actions = actions.filter((action) => action.action !== 'delete')
       }
 
-      // Remove duplicate action for types with fixed document sets
+      // Remove duplicate and unpublish actions for singletons/fixed document sets
       if (noCreateDocumentTypes.includes(context.schemaType)) {
-        actions = actions.filter((action) => action.action !== 'duplicate')
+        actions = actions.filter(
+          (action) =>
+            action.action !== 'duplicate' && action.action !== 'unpublish'
+        )
       }
 
       return actions
