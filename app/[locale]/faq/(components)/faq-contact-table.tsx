@@ -16,7 +16,7 @@ import { getImageDimensions, type SanityImageSource } from '@sanity/asset-utils'
 import { Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
-import Image from 'next/image'
+import { default as Image } from 'next/image'
 
 type House = Pick<
   NonNullable<HousesBuildingQueryResult>[number],
@@ -48,7 +48,10 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
           <Item key={_id} variant="outline" asChild className="gap-3 px-3 py-3">
             <a href={`tel:${phone.international}`}>
               <ItemMedia variant="image" className="size-12 rounded-sm">
-                <HouseImage image={image} alt={title || ''} />
+                <HouseImage
+                  image={image}
+                  alt={image.alt ? stegaClean(image.alt) : ''}
+                />
               </ItemMedia>
               <ItemContent>
                 <ItemTitle>{stegaClean(title)}</ItemTitle>
@@ -100,7 +103,7 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
               key={_id}
             >
               <td className="text-muted-foreground p-2 text-right font-sans">
-                {title}
+                {stegaClean(title)}
               </td>
               <td className="p-2 text-center">
                 <a
