@@ -89,7 +89,7 @@ describe('HouseGallery', () => {
       const galleryCategories = [
         createGalleryCategory({
           _key: 'cat1',
-          category: { _id: 'id1', slug: 'bedroom', label: 'Bedroom', orderRank: '0|a:' },
+          category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a:' },
           items: [
             createGalleryItem({ _key: 'img1', image: createSanityImage({ alt: 'Image 1' }) }),
             createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Image 2' }) })
@@ -108,12 +108,12 @@ describe('HouseGallery', () => {
       const galleryCategories = [
         createGalleryCategory({
           _key: 'cat1',
-          category: { _id: 'id1', slug: 'bedroom', label: 'Bedroom', orderRank: '0|a00000:' },
+          category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a00000:' },
           items: [createGalleryItem({ _key: 'img1' })]
         }),
         createGalleryCategory({
           _key: 'cat2',
-          category: { _id: 'id2', slug: 'kitchen', label: 'Kitchen', orderRank: '0|b00000:' },
+          category: { _id: 'id2', label: 'Kitchen', orderRank: '0|b00000:' },
           items: [createGalleryItem({ _key: 'img2' })]
         })
       ]
@@ -129,12 +129,12 @@ describe('HouseGallery', () => {
       const galleryCategories = [
         createGalleryCategory({
           _key: 'cat1',
-          category: { _id: 'id1', slug: 'bedroom', label: 'Bedroom', orderRank: '0|a00000:' },
+          category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a00000:' },
           items: [createGalleryItem({ _key: 'img1' })]
         }),
         createGalleryCategory({
           _key: 'cat2',
-          category: { _id: 'id2', slug: 'kitchen', label: 'Kitchen', orderRank: '0|b00000:' },
+          category: { _id: 'id2', label: 'Kitchen', orderRank: '0|b00000:' },
           items: [createGalleryItem({ _key: 'img2' })]
         })
       ]
@@ -152,7 +152,7 @@ describe('HouseGallery', () => {
       const galleryCategories = [
         createGalleryCategory({
           _key: 'cat1',
-          category: { _id: 'id1', slug: 'room', label: 'Room', orderRank: '0|a:' },
+          category: { _id: 'id1', label: 'Room', orderRank: '0|a:' },
           items: [
             createGalleryItem({ _key: 'img1', image: createSanityImage({ alt: 'Image 1' }) }),
             createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Image 2' }) }),
@@ -173,7 +173,7 @@ describe('HouseGallery', () => {
       const galleryCategories = [
         createGalleryCategory({
           _key: 'cat1',
-          category: { _id: 'id1', slug: 'room', label: 'Room', orderRank: '0|a:' },
+          category: { _id: 'id1', label: 'Room', orderRank: '0|a:' },
           items: [createGalleryItem({ _key: 'img1' })]
         })
       ]

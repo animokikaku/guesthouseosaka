@@ -14,7 +14,6 @@ export type GalleryImage = Pick<GalleryItem, '_key' | 'image'>
 export interface GalleryCategory {
   _key: string
   _id: string
-  slug: string
   label: string | null
   count: number
   thumbnail: GalleryItem['image'] | null
@@ -58,7 +57,6 @@ export function toGalleryCategories(
   return data.map((cat) => ({
     _key: cat._key,
     _id: cat.category._id,
-    slug: cat.category.slug,
     label: cat.category.label,
     count: cat.items?.length ?? 0,
     thumbnail: cat.items?.[0]?.image ?? null,

@@ -24,13 +24,12 @@ type Houses = NonNullable<HousesBuildingQueryResult>
 type ExtraCost = NonNullable<Houses[number]['extraCosts']>[number]
 
 const createCategory = (
-  slug: string,
+  id: string,
   title: string
 ): PricingCategories[number] => ({
-  _id: `cat-${slug}`,
-  slug,
+  _id: id,
   title,
-  orderRank: `0|${slug}:`
+  orderRank: `0|${id}:`
 })
 
 const createHouse = (
@@ -54,8 +53,8 @@ const createHouse = (
   extraCosts
 })
 
-const createExtraCost = (slug: string, text: string): ExtraCost => ({
-  slug,
+const createExtraCost = (categoryId: string, text: string): ExtraCost => ({
+  categoryId,
   value: [
     {
       _type: 'block',

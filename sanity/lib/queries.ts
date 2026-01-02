@@ -118,7 +118,6 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     _key,
     "category": category->{
       _id,
-      "slug": slug.current,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       orderRank
     },
@@ -152,7 +151,6 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     _key,
     "category": category->{
       _id,
-      "slug": slug.current,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       icon,
       orderRank
@@ -260,7 +258,7 @@ export const housesBuildingQuery =
     "lqip": asset->metadata.lqip
   },
   "extraCosts": array::compact(extraCosts[]{
-    "slug": category->slug.current,
+    "categoryId": category->_id,
     "value": coalesce(value[_key == $locale][0].value, value[_key == "en"][0].value)[]
   })
 }`)
@@ -486,7 +484,6 @@ export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
 export const galleryCategoriesQuery =
   defineQuery(`*[_type == "galleryCategory"] | order(orderRank){
   _id,
-  "slug": slug.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
   orderRank,
   image{
@@ -504,18 +501,16 @@ export const galleryCategoriesQuery =
 export const amenityCategoriesQuery =
   defineQuery(`*[_type == "amenityCategory"] | order(orderRank){
   _id,
-  "slug": slug.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
   orderRank
 }`)
 
 export const amenitiesQuery = defineQuery(`*[_type == "amenity"]{
   _id,
-  "slug": slug.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
   icon,
   "category": category->{
-    "slug": slug.current,
+    _id,
     "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
     orderRank
   }
@@ -524,7 +519,6 @@ export const amenitiesQuery = defineQuery(`*[_type == "amenity"]{
 export const pricingCategoriesQuery =
   defineQuery(`*[_type == "pricingCategory"] | order(orderRank){
   _id,
-  "slug": slug.current,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   orderRank
 }`)

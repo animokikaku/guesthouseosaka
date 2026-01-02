@@ -193,7 +193,6 @@ describe('toAmenityCategories', () => {
     expect(result).toHaveLength(2)
     expect(result[0]._key).toBe(cat1._key)
     expect(result[0]._id).toBe(cat1.category._id)
-    expect(result[0].slug).toBe(cat1.category.slug)
     expect(result[0].label).toBe(cat1.category.label)
     expect(result[0].icon).toBe(cat1.category.icon)
   })
@@ -228,7 +227,6 @@ describe('toAmenityCategories', () => {
     const cat = createAmenityCategory({
       category: {
         _id: 'cat1',
-        slug: 'room',
         label: null,
         icon: null,
         orderRank: '0|a00000:'

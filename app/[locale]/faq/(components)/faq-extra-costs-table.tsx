@@ -92,7 +92,7 @@ export function FAQExtraCostsTable({
               </TableCell>
               {houses.map((house) => {
                 const cost = house.extraCosts?.find(
-                  (c) => c.slug === category.slug
+                  (c) => c.categoryId === category._id
                 )
                 return (
                   <TableCell key={house._id} className="overflow-hidden">

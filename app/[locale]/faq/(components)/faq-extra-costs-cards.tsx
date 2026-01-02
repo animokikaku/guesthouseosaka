@@ -164,7 +164,7 @@ function ExtraCostsCard({
         </div>
         <div className="divide-border/50 divide-y bg-white dark:bg-zinc-900/50">
           {pricingCategories.map((category, index) => {
-            const cost = extraCosts?.find((c) => c.slug === category.slug)
+            const cost = extraCosts?.find((c) => c.categoryId === category._id)
             return (
               <div
                 key={category._id}

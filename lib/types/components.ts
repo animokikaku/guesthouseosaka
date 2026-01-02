@@ -96,7 +96,6 @@ export interface AmenityItemData {
 export interface AmenityCategoryData {
   _key: string
   _id: string
-  slug: string
   label: string | null
   icon: string | null
   items: AmenityItemData[]

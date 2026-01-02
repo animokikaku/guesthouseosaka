@@ -42,7 +42,7 @@ export function HouseGallery({
           <div className="flex gap-2 pb-4">
             {categories.map((category) => (
               <CategoryThumbnail
-                key={`thumbnail-${category.slug}`}
+                key={`thumbnail-${category._id}`}
                 category={category}
               />
             ))}
@@ -57,7 +57,7 @@ export function HouseGallery({
       <div className="space-y-12">
         {categories.map((category) => (
           <CategoryGrid
-            key={`grid-${category.slug}`}
+            key={`grid-${category._id}`}
             category={category}
             dataAttribute={dataAttribute}
           />
@@ -81,7 +81,7 @@ function CategoryThumbnail({ category }: CategoryThumbnailProps) {
   return (
     <button
       onClick={() => {
-        const targetElement = document.getElementById(category.slug)
+        const targetElement = document.getElementById(category._id)
         if (targetElement) {
           targetElement.scrollIntoView({ behavior: 'smooth' })
         }
@@ -124,7 +124,7 @@ function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
 
   return (
     <div
-      id={category.slug}
+      id={category._id}
       className="scroll-mt-3 space-y-4"
       data-sanity={dataAttribute?.(
         `galleryCategories[_key=="${category._key}"]`

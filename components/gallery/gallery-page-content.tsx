@@ -59,7 +59,7 @@ export function GalleryPageContent({
   )
 
   const sectionIds = React.useMemo(
-    () => categories.map((c) => c.slug),
+    () => categories.map((c) => c._id),
     [categories]
   )
 

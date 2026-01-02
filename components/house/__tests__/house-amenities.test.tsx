@@ -66,7 +66,6 @@ function toAmenityCategoryData(
   return {
     _key: cat._key,
     _id: cat.category._id,
-    slug: cat.category.slug,
     label: cat.category.label ?? null,
     icon: cat.category.icon ?? null,
     items: (cat.items ?? []).map((item: ReturnType<typeof createAmenityItem>) => ({
@@ -100,7 +99,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'room', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
             items: Array.from({ length: 15 }, (_, i) =>
               createAmenityItem({
                 _key: `amenity-${i}`,
@@ -140,7 +139,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'room', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
             items: Array.from({ length: 15 }, (_, i) =>
               createAmenityItem({
                 _key: `amenity-${i}`,
@@ -175,7 +174,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'room', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
             items: [
               createAmenityItem({ _key: 'featured-1', label: 'Featured 1', featured: true, icon: 'wifi' }),
               createAmenityItem({ _key: 'not-featured', label: 'Not Featured', featured: false, icon: 'bed' }),
@@ -246,7 +245,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'room', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
             items
           })
         )
@@ -277,7 +276,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'room', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
             items: [
               createAmenityItem({ _key: 'shared-wifi', label: 'Wifi', note: 'shared', featured: true, icon: 'wifi' }),
               createAmenityItem({ _key: 'private-bath', label: 'Bath', note: 'private', featured: true, icon: 'bath' }),
@@ -313,7 +312,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'room', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
             items: [
               createAmenityItem({ _key: 'wifi', label: 'Wifi', icon: 'wifi', featured: true }),
               createAmenityItem({ _key: 'bed', label: 'Bed', icon: 'bed', featured: true })
@@ -361,7 +360,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'internet', label: 'Internet', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Internet', icon: null, orderRank: '0|a00000:' },
             items: [createAmenityItem({ _key: 'wifi', label: 'Wifi', featured: true, icon: 'wifi' })]
           })
         )
@@ -390,7 +389,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'internet', label: 'Internet', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Internet', icon: null, orderRank: '0|a00000:' },
             items: [createAmenityItem({ _key: 'wifi', label: 'Wifi', featured: true, icon: 'wifi' })]
           })
         )
@@ -422,7 +421,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'internet', label: 'Internet Access', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Internet Access', icon: null, orderRank: '0|a00000:' },
             items: [
               createAmenityItem({ _key: 'wifi', label: 'Wifi', featured: true, icon: 'wifi' }),
               createAmenityItem({ _key: 'router', label: 'Router', featured: true, icon: 'router' })
@@ -432,7 +431,7 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat2',
-            category: { _id: 'c2', slug: 'bedroom', label: 'Bedroom', icon: null, orderRank: '0|b00000:' },
+            category: { _id: 'c2', label: 'Bedroom', icon: null, orderRank: '0|b00000:' },
             items: [createAmenityItem({ _key: 'bed', label: 'Bed', featured: true, icon: 'bed' })]
           })
         )
@@ -463,21 +462,21 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', slug: 'internet', label: 'Internet', icon: null, orderRank: '0|a00000:' },
+            category: { _id: 'c1', label: 'Internet', icon: null, orderRank: '0|a00000:' },
             items: [createAmenityItem({ _key: 'wifi', label: 'Wifi', featured: true, icon: 'wifi' })]
           })
         ),
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat2',
-            category: { _id: 'c2', slug: 'bedroom', label: 'Bedroom', icon: null, orderRank: '0|b00000:' },
+            category: { _id: 'c2', label: 'Bedroom', icon: null, orderRank: '0|b00000:' },
             items: [createAmenityItem({ _key: 'bed', label: 'Bed', featured: true, icon: 'bed' })]
           })
         ),
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat3',
-            category: { _id: 'c3', slug: 'kitchen', label: 'Kitchen', icon: null, orderRank: '0|c00000:' },
+            category: { _id: 'c3', label: 'Kitchen', icon: null, orderRank: '0|c00000:' },
             items: [createAmenityItem({ _key: 'kitchen', label: 'Kitchen', featured: true, icon: 'utensils' })]
           })
         )

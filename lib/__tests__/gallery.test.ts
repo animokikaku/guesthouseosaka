@@ -142,7 +142,7 @@ describe('toGalleryCategories', () => {
     const categories = [
       createGalleryCategory({
         _key: 'cat1',
-        category: { _id: 'id1', slug: 'bedroom', label: 'Bedroom', orderRank: '0|a:' },
+        category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a:' },
         items: [
           createGalleryItem(),
           createGalleryItem(),
@@ -155,7 +155,7 @@ describe('toGalleryCategories', () => {
 
     expect(result).toHaveLength(1)
     expect(result[0].count).toBe(3)
-    expect(result[0].slug).toBe('bedroom')
+    expect(result[0]._id).toBe('id1')
   })
 
   it('sets thumbnail to first image of category', () => {
@@ -197,12 +197,12 @@ describe('toGalleryCategories', () => {
     const categories = [
       createGalleryCategory({
         _key: 'first',
-        category: { _id: '1', slug: 'a', label: 'A', orderRank: '0|a:' },
+        category: { _id: '1', label: 'A', orderRank: '0|a:' },
         items: [createGalleryItem()]
       }),
       createGalleryCategory({
         _key: 'second',
-        category: { _id: '2', slug: 'b', label: 'B', orderRank: '0|b:' },
+        category: { _id: '2', label: 'B', orderRank: '0|b:' },
         items: [createGalleryItem()]
       })
     ]

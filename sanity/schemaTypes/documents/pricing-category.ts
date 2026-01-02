@@ -12,14 +12,6 @@ export const pricingCategory = defineType({
   icon: TagIcon,
   fields: [
     defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      description: 'Unique identifier for the category',
-      options: { source: 'title.0.value', maxLength: 50 },
-      validation: (rule) => rule.required()
-    }),
-    defineField({
       name: 'title',
       title: 'Title',
       type: 'internationalizedArrayString',

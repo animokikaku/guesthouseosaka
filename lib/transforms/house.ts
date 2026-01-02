@@ -153,7 +153,6 @@ export function toAmenityCategories(
   return amenityCategories.map((cat) => ({
     _key: cat._key,
     _id: cat.category._id,
-    slug: cat.category.slug,
     label: cat.category.label,
     icon: cat.category.icon,
     items: (cat.items ?? []).map((item) => ({

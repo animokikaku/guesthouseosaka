@@ -162,7 +162,6 @@ export function createAmenityCategory(
     _key: faker.string.nanoid(),
     category: {
       _id: faker.string.uuid(),
-      slug: faker.word.noun(),
       label: faker.word.noun(),
       icon: faker.helpers.arrayElement(['globe', 'home', 'star', null]),
       orderRank: `0|${String.fromCharCode(97 + faker.number.int({ min: 0, max: 9 }))}00000:`
@@ -218,7 +217,6 @@ export function createGalleryCategory(
     _key: faker.string.nanoid(),
     category: {
       _id: faker.string.uuid(),
-      slug: faker.word.noun(),
       label: faker.word.words(2),
       orderRank: `${faker.number.int({ min: 1, max: 10 }).toString().padStart(5, '0')}|`
     },
