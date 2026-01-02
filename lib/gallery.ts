@@ -10,15 +10,12 @@ export type FeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
 // Minimal type for components that only need _key and image (e.g., MobileHeroImage carousel)
 export type GalleryImage = Pick<GalleryItem, '_key' | 'image'>
 
-// Category with computed fields for frontend display
+// Category with computed fields for frontend display (flattened structure)
 export interface GalleryCategory {
   _key: string
-  category: {
-    _id: string
-    key: string
-    label: string | null
-    orderRank: string | null
-  }
+  _id: string
+  slug: string
+  label: string | null
   count: number
   thumbnail: GalleryItem['image'] | null
   items: GalleryItem[]
@@ -60,7 +57,9 @@ export function toGalleryCategories(
   if (!data) return []
   return data.map((cat) => ({
     _key: cat._key,
-    category: cat.category,
+    _id: cat.category._id,
+    slug: cat.category.slug,
+    label: cat.category.label,
     count: cat.items?.length ?? 0,
     thumbnail: cat.items?.[0]?.image ?? null,
     items: cat.items ?? []

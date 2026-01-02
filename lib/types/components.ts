@@ -79,6 +79,7 @@ export interface PricingRowData {
 
 /**
  * Single amenity item within a category
+ * Note: `featured` filtering is done in GROQ query, not needed on frontend
  * @see components/house/house-amenities.tsx
  */
 export interface AmenityItemData {
@@ -86,23 +87,18 @@ export interface AmenityItemData {
   label: string | null
   icon: string
   note: 'private' | 'shared' | 'coin' | null
-  featured: boolean | null
 }
 
 /**
- * Amenity category with its items
- * New nested structure enables per-category drag-and-drop reordering
+ * Amenity category with its items (flattened structure)
  * @see components/house/house-amenities.tsx
  */
 export interface AmenityCategoryData {
   _key: string
-  category: {
-    _id: string
-    key: string
-    label: string | null
-    icon: string | null
-    orderRank: string | null
-  }
+  _id: string
+  slug: string
+  label: string | null
+  icon: string | null
   items: AmenityItemData[]
 }
 

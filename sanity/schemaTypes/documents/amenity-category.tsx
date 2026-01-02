@@ -1,8 +1,8 @@
+import { ComponentIcon } from '@sanity/icons'
 import {
   orderRankField,
   orderRankOrdering
 } from '@sanity/orderable-document-list'
-import { ComponentIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 import { allowedIcons } from '../../lib/allowed-icons'
 import { IconPreview } from '../../lib/icon-preview'
@@ -14,15 +14,12 @@ export const amenityCategory = defineType({
   icon: ComponentIcon,
   fields: [
     defineField({
-      name: 'key',
-      title: 'Key',
+      name: 'slug',
+      title: 'Slug',
       type: 'slug',
       description: 'Unique identifier (e.g., "kitchen-dining", "bathroom")',
       validation: (rule) => rule.required(),
-      options: {
-        source: 'label.0.value',
-        maxLength: 50
-      }
+      options: { source: 'label.0.value', maxLength: 50 }
     }),
     defineField({
       name: 'icon',
@@ -45,13 +42,13 @@ export const amenityCategory = defineType({
   preview: {
     select: {
       label: 'label.0.value',
-      key: 'key.current',
+      slug: 'slug.current',
       icon: 'icon'
     },
-    prepare({ label, key, icon }) {
+    prepare({ label, slug, icon }) {
       return {
         title: label || 'No label',
-        subtitle: key || 'no-key',
+        subtitle: slug || 'no-slug',
         media: <IconPreview icon={icon} />
       }
     }

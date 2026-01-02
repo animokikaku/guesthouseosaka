@@ -46,13 +46,13 @@ export function StickyCategoryNav({
       <ScrollArea className="w-full">
         <div className="flex gap-1">
           {categories.map((cat) => {
-            const isActive = cat.category.key === activeId
+            const isActive = cat.slug === activeId
             return (
               <button
-                key={cat.category.key}
+                key={cat.slug}
                 ref={isActive ? activeButtonRef : undefined}
                 type="button"
-                onClick={() => scrollToCategory(cat.category.key)}
+                onClick={() => scrollToCategory(cat.slug)}
                 className={cn(
                   'shrink-0 px-3 py-1.5 text-sm font-medium transition-colors',
                   isActive
@@ -60,7 +60,7 @@ export function StickyCategoryNav({
                     : 'text-muted-foreground hover:text-primary'
                 )}
               >
-                {cat.category.label}
+                {cat.label}
               </button>
             )
           })}

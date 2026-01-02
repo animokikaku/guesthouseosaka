@@ -142,7 +142,7 @@ describe('toGalleryCategories', () => {
     const categories = [
       createGalleryCategory({
         _key: 'cat1',
-        category: { _id: 'id1', key: 'bedroom', label: 'Bedroom', orderRank: '0|a:' },
+        category: { _id: 'id1', slug: 'bedroom', label: 'Bedroom', orderRank: '0|a:' },
         items: [
           createGalleryItem(),
           createGalleryItem(),
@@ -155,7 +155,7 @@ describe('toGalleryCategories', () => {
 
     expect(result).toHaveLength(1)
     expect(result[0].count).toBe(3)
-    expect(result[0].category.key).toBe('bedroom')
+    expect(result[0].slug).toBe('bedroom')
   })
 
   it('sets thumbnail to first image of category', () => {
@@ -175,7 +175,8 @@ describe('toGalleryCategories', () => {
     expect(result[0].thumbnail).toBe(firstImage)
   })
 
-  it('filters out categories with empty items', () => {
+  it('handles categories with empty items (filtering is done at GROQ level)', () => {
+    // Empty categories are filtered by GROQ query, but transform still handles them gracefully
     const categories = [
       createGalleryCategory({ _key: 'empty', items: [] }),
       createGalleryCategory({
@@ -186,20 +187,22 @@ describe('toGalleryCategories', () => {
 
     const result = toGalleryCategories(categories)
 
-    expect(result).toHaveLength(1)
-    expect(result[0]._key).toBe('hasItems')
+    // Both categories are transformed (GROQ filters before this)
+    expect(result).toHaveLength(2)
+    expect(result[0].count).toBe(0)
+    expect(result[1].count).toBe(1)
   })
 
   it('preserves category order', () => {
     const categories = [
       createGalleryCategory({
         _key: 'first',
-        category: { _id: '1', key: 'a', label: 'A', orderRank: '0|a:' },
+        category: { _id: '1', slug: 'a', label: 'A', orderRank: '0|a:' },
         items: [createGalleryItem()]
       }),
       createGalleryCategory({
         _key: 'second',
-        category: { _id: '2', key: 'b', label: 'B', orderRank: '0|b:' },
+        category: { _id: '2', slug: 'b', label: 'B', orderRank: '0|b:' },
         items: [createGalleryItem()]
       })
     ]

@@ -15,10 +15,7 @@ export const amenity = defineType({
       type: 'slug',
       description: 'Unique identifier (e.g., "wifi", "air-conditioning")',
       validation: (rule) => rule.required(),
-      options: {
-        source: 'label.0.value',
-        maxLength: 50
-      }
+      options: { source: 'label.0.value', maxLength: 50 }
     }),
     defineField({
       name: 'label',

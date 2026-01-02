@@ -1,8 +1,8 @@
+import { TagIcon } from '@sanity/icons'
 import {
   orderRankField,
   orderRankOrdering
 } from '@sanity/orderable-document-list'
-import { TagIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
 export const pricingCategory = defineType({
@@ -12,20 +12,21 @@ export const pricingCategory = defineType({
   icon: TagIcon,
   fields: [
     defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'internationalizedArrayString',
-      description: 'The display name of the category (e.g., "Deposit", "Common Fees")',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
-    }),
-    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
       description: 'Unique identifier for the category',
-      options: { source: 'title.0.value' },
+      options: { source: 'title.0.value', maxLength: 50 },
       validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'title',
+      title: 'Title',
+      type: 'internationalizedArrayString',
+      description:
+        'The display name of the category (e.g., "Deposit", "Common Fees")',
+      validation: (rule) => rule.required(),
+      options: { aiAssist: { translateAction: true } }
     }),
     orderRankField({ type: 'pricingCategory' })
   ],

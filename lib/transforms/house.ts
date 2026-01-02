@@ -138,6 +138,8 @@ export function toPricingRows(pricing: HousePricing): PricingRowData[] {
 
 /**
  * Transforms house amenity categories to AmenityCategoryData array
+ * Note: GROQ query uses array::compact so items won't be null at runtime,
+ * but generated types (from schema) still require the fallback for type safety
  * @param amenityCategories - Raw amenity categories from Sanity query (nested structure)
  * @returns Array of AmenityCategoryData with category info and items
  */
@@ -150,25 +152,22 @@ export function toAmenityCategories(
 
   return amenityCategories.map((cat) => ({
     _key: cat._key,
-    category: {
-      _id: cat.category._id,
-      key: cat.category.key,
-      label: cat.category.label,
-      icon: cat.category.icon,
-      orderRank: cat.category.orderRank
-    },
+    _id: cat.category._id,
+    slug: cat.category.slug,
+    label: cat.category.label,
+    icon: cat.category.icon,
     items: (cat.items ?? []).map((item) => ({
       _key: item._key,
       label: item.label,
       icon: item.icon,
-      note: item.note,
-      featured: item.featured ?? null
+      note: item.note
     }))
   }))
 }
 
 /**
  * Transforms featured amenities from the GROQ query to AmenityItemData array
+ * Note: GROQ already filters [featured == true], so no need to set featured here
  * @param featuredAmenities - Raw featured amenities from Sanity query
  * @returns Array of AmenityItemData for display
  */
@@ -183,8 +182,7 @@ export function toFeaturedAmenities(
     _key: item._key,
     label: item.label,
     icon: item.icon,
-    note: item.note,
-    featured: true
+    note: item.note
   }))
 }
 

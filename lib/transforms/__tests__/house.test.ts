@@ -192,11 +192,10 @@ describe('toAmenityCategories', () => {
 
     expect(result).toHaveLength(2)
     expect(result[0]._key).toBe(cat1._key)
-    expect(result[0].category._id).toBe(cat1.category._id)
-    expect(result[0].category.key).toBe(cat1.category.key)
-    expect(result[0].category.label).toBe(cat1.category.label)
-    expect(result[0].category.icon).toBe(cat1.category.icon)
-    expect(result[0].category.orderRank).toBe(cat1.category.orderRank)
+    expect(result[0]._id).toBe(cat1.category._id)
+    expect(result[0].slug).toBe(cat1.category.slug)
+    expect(result[0].label).toBe(cat1.category.label)
+    expect(result[0].icon).toBe(cat1.category.icon)
   })
 
   it('transforms amenity items within categories', () => {
@@ -229,7 +228,7 @@ describe('toAmenityCategories', () => {
     const cat = createAmenityCategory({
       category: {
         _id: 'cat1',
-        key: 'room',
+        slug: 'room',
         label: null,
         icon: null,
         orderRank: '0|a00000:'
@@ -245,11 +244,10 @@ describe('toAmenityCategories', () => {
 
     const result = toAmenityCategories([cat])
 
-    expect(result[0].category.label).toBeNull()
-    expect(result[0].category.icon).toBeNull()
+    expect(result[0].label).toBeNull()
+    expect(result[0].icon).toBeNull()
     expect(result[0].items[0].label).toBeNull()
     expect(result[0].items[0].note).toBeNull()
-    expect(result[0].items[0].featured).toBeNull()
   })
 
   it('handles category with empty items array', () => {

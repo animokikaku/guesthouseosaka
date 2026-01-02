@@ -118,7 +118,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     _key,
     "category": category->{
       _id,
-      "key": key.current,
+      "slug": slug.current,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       orderRank
     },
@@ -147,11 +147,12 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   }),
 
   // Amenities grouped by category (enables per-category drag-and-drop reordering)
+  // Filter out empty categories at query level
   "amenityCategories": array::compact(amenityCategories[]{
     _key,
     "category": category->{
       _id,
-      "key": key.current,
+      "slug": slug.current,
       "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
       icon,
       orderRank
@@ -167,7 +168,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       ),
       "icon": amenity->icon
     })
-  }),
+  })[count(items) > 0],
 
   // Featured amenities (pre-computed, max 10)
   "featuredAmenities": array::compact(amenityCategories[].items[featured == true])[0...10]{
@@ -485,7 +486,7 @@ export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
 export const galleryCategoriesQuery =
   defineQuery(`*[_type == "galleryCategory"] | order(orderRank){
   _id,
-  "key": key.current,
+  "slug": slug.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
   orderRank,
   image{
@@ -503,18 +504,18 @@ export const galleryCategoriesQuery =
 export const amenityCategoriesQuery =
   defineQuery(`*[_type == "amenityCategory"] | order(orderRank){
   _id,
-  "key": key.current,
+  "slug": slug.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
   orderRank
 }`)
 
 export const amenitiesQuery = defineQuery(`*[_type == "amenity"]{
   _id,
-  "key": key.current,
+  "slug": slug.current,
   "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
   icon,
   "category": category->{
-    "key": key.current,
+    "slug": slug.current,
     "label": coalesce(label[_key == $locale][0].value, label[_key == "en"][0].value),
     orderRank
   }

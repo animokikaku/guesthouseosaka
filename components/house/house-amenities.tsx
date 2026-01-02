@@ -93,7 +93,7 @@ function AmenitiesDialog({
           )}
         >
           <h3 className="text-foreground mb-4 text-lg font-semibold">
-            {cat.category.label}
+            {cat.label}
           </h3>
           <div className="grid grid-cols-1 gap-2">
             {cat.items.map((amenity) => (
