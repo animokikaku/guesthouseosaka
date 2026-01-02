@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/item'
 import type { HousesBuildingQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
-import { getImageDimensions, type SanityImageSource } from '@sanity/asset-utils'
+import { getImageDimensions } from '@sanity/asset-utils'
 import { Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
@@ -137,15 +137,15 @@ type HouseImageProps = {
 function HouseImage({ image, alt }: HouseImageProps) {
   if (!image.asset) return null
 
-  const dimensions = getImageDimensions(image.asset as SanityImageSource)
+  const dimensions = getImageDimensions(image.asset)
   const src = urlFor(image).fit('crop').width(96).height(96).url()
 
   return (
     <Image
       src={src}
       alt={alt}
-      placeholder={image.lqip ? 'blur' : undefined}
-      blurDataURL={image.lqip ?? undefined}
+      placeholder={image.preview ? 'blur' : undefined}
+      blurDataURL={image.preview ?? undefined}
       width={dimensions.width}
       height={dimensions.height}
       className="size-full object-cover"

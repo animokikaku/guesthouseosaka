@@ -45,7 +45,7 @@ export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
         background: {
           src,
           alt: image?.alt ?? '',
-          blurDataURL: image?.lqip ?? undefined
+          blurDataURL: image?.preview ?? undefined
         }
       }
     })

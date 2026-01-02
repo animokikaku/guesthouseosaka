@@ -48,7 +48,7 @@ const createHouse = (
     hotspot: null,
     crop: null,
     alt: null,
-    lqip: null
+    preview: null
   },
   extraCosts
 })
