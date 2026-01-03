@@ -109,9 +109,10 @@ function GalleryModalCarousel({
       : null
   }, [selectedIndex, imageList])
 
+  // Use selectedIndex as fallback to preserve position during close animation
   const startIndex = photoId
     ? getImageIndex(galleryCategories, photoId)
-    : undefined
+    : (selectedIndex ?? 0)
 
   const { onTouchStart, onTouchEnd } = useSwipeToClose({
     onClose: () => store.setState({ photoId: null })
