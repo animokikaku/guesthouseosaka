@@ -7,6 +7,14 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from '@/components/ui/carousel'
+import {
+  Dialog,
+  DialogClose,
+  DialogDescription,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle
+} from '@/components/ui/dialog'
 import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
 import {
   flattenGalleryItems,
@@ -15,7 +23,7 @@ import {
 } from '@/lib/gallery'
 import { store } from '@/lib/store'
 import { urlFor } from '@/sanity/lib/image'
-import * as Dialog from '@radix-ui/react-dialog'
+import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { getImageDimensions } from '@sanity/asset-utils'
 import { useStore } from '@tanstack/react-form'
 import { ArrowLeftIcon } from 'lucide-react'
@@ -41,7 +49,7 @@ export function GalleryModal({
   const t = useTranslations('GalleryModal')
 
   return (
-    <Dialog.Root
+    <Dialog
       open={photoId !== null}
       onOpenChange={(open) => {
         if (!open) {
@@ -49,18 +57,18 @@ export function GalleryModal({
         }
       }}
     >
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-30" />
-        <Dialog.Content className="bg-background text-foreground sm:bg-background/50 fixed inset-0 z-40 flex items-center justify-center border-0 p-0 sm:backdrop-blur-2xl">
-          <Dialog.Title className="sr-only">{t('title')}</Dialog.Title>
-          <Dialog.Description className="sr-only">
+      <DialogPortal>
+        <DialogOverlay className="z-30 bg-transparent" />
+        <DialogPrimitive.Content className="bg-background text-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 sm:bg-background/50 fixed inset-0 z-40 flex items-center justify-center border-0 p-0 duration-200 sm:backdrop-blur-2xl">
+          <DialogTitle className="sr-only">{t('title')}</DialogTitle>
+          <DialogDescription className="sr-only">
             {t('description', { title })}
-          </Dialog.Description>
+          </DialogDescription>
           <GalleryModalCarousel
             galleryCategories={galleryCategories}
             dataAttribute={dataAttribute}
           />
-          <Dialog.Close asChild>
+          <DialogClose asChild>
             <Button
               variant="ghost"
               size="icon"
@@ -69,10 +77,10 @@ export function GalleryModal({
               <ArrowLeftIcon className="size-6" />
               <span className="sr-only">{t('close')}</span>
             </Button>
-          </Dialog.Close>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+          </DialogClose>
+        </DialogPrimitive.Content>
+      </DialogPortal>
+    </Dialog>
   )
 }
 
