@@ -28,7 +28,10 @@ export function HousePricing({ pricing }: HousePricingProps) {
             </div>
             <div className="space-y-1 px-6 py-4 md:flex-1">
               {row.content && (
-                <PortableText value={row.content} components={compactPortableText} />
+                <PortableText
+                  value={row.content}
+                  components={compactPortableText}
+                />
               )}
             </div>
           </div>

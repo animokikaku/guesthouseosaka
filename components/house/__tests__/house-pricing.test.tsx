@@ -158,6 +158,21 @@ describe('HousePricing', () => {
   })
 
   describe('PortableText content rendering', () => {
+    it('does not render content when content is null', () => {
+      render(<HousePricing pricing={mockPricing} />)
+
+      // mockPricing has null content, verify no list elements are rendered
+      expect(screen.queryByRole('list')).not.toBeInTheDocument()
+
+      // Verify the content containers are empty (only contain whitespace)
+      const labels = screen.getAllByRole('heading', { level: 4 })
+      labels.forEach((label) => {
+        const row = label.closest('div')?.parentElement
+        const contentArea = row?.querySelector('div:last-child')
+        expect(contentArea?.textContent?.trim()).toBe('')
+      })
+    })
+
     it('renders block content', () => {
       render(<HousePricing pricing={mockPricingWithContent} />)
 
