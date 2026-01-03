@@ -8,6 +8,6 @@ export const client = createClient({
   projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: env.NEXT_PUBLIC_SANITY_DATASET,
   apiVersion: env.NEXT_PUBLIC_SANITY_API_VERSION,
-  useCdn: process.env.NODE_ENV === 'production', // Set to false if statically generating pages, using ISR or tag-based revalidation,
+  useCdn: false, // Disabled for static generation and tag-based revalidation
   stega: { studioUrl: '/studio' }
 })
