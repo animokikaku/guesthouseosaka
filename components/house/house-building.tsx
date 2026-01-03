@@ -1,3 +1,6 @@
+'use client'
+
+import { useHouseDocument } from '@/components/house/house-context'
 import { Link } from '@/i18n/navigation'
 import type { BuildingData } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
@@ -6,22 +9,15 @@ import { useFormatter, useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 
 interface HouseBuildingProps {
-  _id: string
-  _type: string
   building: BuildingData | null
-  slug: string
 }
 
-export function HouseBuilding({
-  _id,
-  _type,
-  building,
-  slug
-}: HouseBuildingProps) {
+export function HouseBuilding({ building }: HouseBuildingProps) {
+  const { id, type, slug } = useHouseDocument()
   const t = useTranslations('HouseBuilding')
   const formatter = useFormatter()
 
-  const dataAttribute = createDataAttribute({ id: _id, type: _type })
+  const dataAttribute = createDataAttribute({ id, type })
 
   const currency = (amount: number) =>
     formatter.number(amount, { style: 'currency', currency: 'JPY' })

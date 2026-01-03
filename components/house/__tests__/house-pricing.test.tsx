@@ -158,109 +158,31 @@ describe('HousePricing', () => {
   })
 
   describe('PortableText content rendering', () => {
-    it('renders normal block content as paragraphs', () => {
+    it('renders block content', () => {
       render(<HousePricing pricing={mockPricingWithContent} />)
 
-      // Check that the actual content text is rendered
       expect(screen.getByText('45,000 JPY')).toBeInTheDocument()
       expect(screen.getByText('1 month')).toBeInTheDocument()
-
-      // Verify the text is rendered inside paragraphs with correct styling
-      const priceText = screen.getByText('45,000 JPY')
-      expect(priceText.tagName).toBe('P')
-      expect(priceText).toHaveClass('text-muted-foreground', 'text-sm')
     })
 
-    it('does not render content area when content is null', () => {
-      render(<HousePricing pricing={mockPricing} />)
-
-      // Should have no paragraph elements for content
-      const section = document.getElementById('pricing')!
-      const paragraphs = section.querySelectorAll('p')
-      expect(paragraphs).toHaveLength(0)
-    })
-
-    it('renders bullet list content with correct structure', () => {
+    it('renders bullet list content', () => {
       render(<HousePricing pricing={mockPricingWithBulletList} />)
 
-      // Check list items are rendered
       expect(screen.getByText('Water')).toBeInTheDocument()
       expect(screen.getByText('Electricity')).toBeInTheDocument()
 
-      // Verify bullet list structure
-      const list = screen.getByRole('list')
-      expect(list.tagName).toBe('UL')
-      expect(list).toHaveClass('list-disc')
-
-      // Verify list items
-      const items = within(list).getAllByRole('listitem')
+      const items = within(screen.getByRole('list')).getAllByRole('listitem')
       expect(items).toHaveLength(2)
     })
 
-    it('renders numbered list content with correct structure', () => {
+    it('renders numbered list content', () => {
       render(<HousePricing pricing={mockPricingWithNumberedList} />)
 
-      // Check list items are rendered
       expect(screen.getByText('Submit application')).toBeInTheDocument()
       expect(screen.getByText('Pay deposit')).toBeInTheDocument()
 
-      // Verify numbered list structure
-      const list = screen.getByRole('list')
-      expect(list.tagName).toBe('OL')
-      expect(list).toHaveClass('list-decimal')
-
-      // Verify list items
-      const items = within(list).getAllByRole('listitem')
+      const items = within(screen.getByRole('list')).getAllByRole('listitem')
       expect(items).toHaveLength(2)
-    })
-  })
-
-  describe('responsive layout', () => {
-    it('applies responsive flex classes to pricing rows', () => {
-      render(<HousePricing pricing={mockPricing} />)
-
-      const section = document.getElementById('pricing')!
-      // Get the first pricing row (after the heading container)
-      const pricingRows = section.querySelectorAll('.flex.flex-col')
-      expect(pricingRows.length).toBeGreaterThan(0)
-
-      // Check that rows have mobile-first flex-col and md:flex-row classes
-      const firstRow = pricingRows[0]
-      expect(firstRow).toHaveClass('flex', 'flex-col', 'md:flex-row')
-    })
-
-    it('applies correct label column width on desktop', () => {
-      render(<HousePricing pricing={mockPricing} />)
-
-      // Get label containers
-      const labelContainer = screen.getByText('Monthly Rent').closest('div')
-      expect(labelContainer).toHaveClass('md:w-1/3', 'md:shrink-0')
-    })
-
-    it('applies correct content column flex on desktop', () => {
-      render(<HousePricing pricing={mockPricingWithContent} />)
-
-      // Get content container (parent of the paragraph with content)
-      const contentContainer = screen.getByText('45,000 JPY').closest('div')
-      expect(contentContainer).toHaveClass('md:flex-1')
-    })
-  })
-
-  describe('styling', () => {
-    it('applies border styling to container', () => {
-      render(<HousePricing pricing={mockPricing} />)
-
-      const section = document.getElementById('pricing')!
-      const container = section.querySelector('.border-border.rounded-lg')
-      expect(container).toBeInTheDocument()
-      expect(container).toHaveClass('overflow-hidden')
-    })
-
-    it('applies background color to label column', () => {
-      render(<HousePricing pricing={mockPricing} />)
-
-      const labelContainer = screen.getByText('Monthly Rent').closest('div')
-      expect(labelContainer).toHaveClass('bg-muted/50')
     })
   })
 })

@@ -15,8 +15,8 @@ import {
 
 // Mock all child components to focus on integration logic
 vi.mock('@/components/house/house-about', () => ({
-  HouseAbout: ({ title, slug }: { title: string; slug: string }) => (
-    <div data-testid="house-about" data-title={title} data-slug={slug}>
+  HouseAbout: ({ title }: { title: string }) => (
+    <div data-testid="house-about" data-title={title}>
       HouseAbout
     </div>
   )
@@ -203,7 +203,6 @@ describe('HousePageContent', () => {
 
       const about = screen.getByTestId('house-about')
       expect(about).toHaveAttribute('data-title', 'Orange House')
-      expect(about).toHaveAttribute('data-slug', 'orange')
     })
 
     it('renders HouseAmenities with transformed amenity categories', () => {

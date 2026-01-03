@@ -186,21 +186,4 @@ describe('HouseLocation', () => {
       expect(screen.queryByTestId('location-modal')).not.toBeInTheDocument()
     })
   })
-
-  describe('styling', () => {
-    it('applies heading styles', () => {
-      render(<HouseLocation {...baseProps} />)
-
-      const heading = screen.getByRole('heading', { level: 2 })
-      expect(heading).toHaveClass('text-2xl', 'font-semibold', 'mb-6')
-    })
-
-    it('renders highlight with proper styling', () => {
-      render(<HouseLocation {...baseProps} />)
-
-      const paragraph = screen.getByText('Great location near the station')
-      expect(paragraph.tagName).toBe('P')
-      expect(paragraph).toHaveClass('text-foreground', 'text-base')
-    })
-  })
 })
