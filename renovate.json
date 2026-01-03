@@ -24,7 +24,7 @@
     {
       "description": "Group Sanity packages",
       "groupName": "sanity",
-      "matchPackagePatterns": ["^@sanity/", "^sanity$"]
+      "matchPackagePatterns": ["^@sanity/", "^sanity$", "^next-sanity$"]
     },
     {
       "description": "Group Next.js packages",
