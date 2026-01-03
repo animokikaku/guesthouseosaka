@@ -43,7 +43,7 @@ export default async function GalleryModalPage({
         documentType={data._type}
         galleryCategories={data.galleryCategories}
         title={data.title ?? ''}
-        backButton={<GalleryModalCloseButton />}
+        backButton={<GalleryModalCloseButton house={house} />}
       />
     </GalleryModalWrapper>
   )
