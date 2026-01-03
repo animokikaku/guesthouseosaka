@@ -1,23 +1,9 @@
 'use client'
 
+import { useHouseDocument } from '@/components/house/house-context'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger
-} from '@/components/ui/drawer'
+import { ResponsiveModal } from '@/components/ui/responsive-modal'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Icon } from '@/lib/icons'
 import type {
@@ -34,8 +20,6 @@ import { SanityDocument } from 'sanity'
 type DataAttributeFn = (path: string) => string
 
 interface HouseAmenitiesProps {
-  documentId: string
-  documentType: string
   amenityCategories: AmenityCategoryData[]
   featuredAmenities: AmenityItemData[]
 }
@@ -79,81 +63,52 @@ function AmenitiesDialog({
   amenityCategories,
   dataAttribute
 }: AmenitiesDialogProps) {
-  const isMobile = useIsMobile()
-
   if (!amenityCategories || amenityCategories.length === 0) return null
 
-  const content = (
-    <div className="space-y-8 pt-8">
-      {amenityCategories.map((cat) => (
-        <div
-          key={cat._key}
-          data-sanity={dataAttribute?.(
-            `amenityCategories[_key=="${cat._key}"].items`
-          )}
-        >
-          <h3 className="text-foreground mb-4 text-lg font-semibold">
-            {cat.label}
-          </h3>
-          <div className="grid grid-cols-1 gap-2">
-            {cat.items.map((amenity) => (
-              <AmenityItem
-                key={amenity._key}
-                amenity={{
-                  ...amenity,
-                  label: amenity.label ? stegaClean(amenity.label) : null
-                }}
-                noteLabel={
-                  amenity.note
-                    ? noteLabels[stegaClean(amenity.note)]
-                    : undefined
-                }
-                data-sanity={dataAttribute?.(
-                  `amenityCategories[_key=="${cat._key}"].items[_key=="${amenity._key}"]`
-                )}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-
-  if (isMobile) {
-    return (
-      <Drawer>
-        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-        <DrawerContent className="theme-container max-h-[90vh]">
-          <DrawerHeader>
-            <DrawerTitle>{title}</DrawerTitle>
-            <DrawerDescription className="sr-only">{title}</DrawerDescription>
-          </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-8">{content}</div>
-        </DrawerContent>
-      </Drawer>
-    )
-  }
-
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="theme-container max-h-[85vh] overflow-y-auto md:max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="sr-only">{title}</DialogDescription>
-        </DialogHeader>
-        {content}
-      </DialogContent>
-    </Dialog>
+    <ResponsiveModal trigger={trigger} title={title} contentClassName="pt-8">
+      <div className="space-y-8">
+        {amenityCategories.map((cat) => (
+          <div
+            key={cat._key}
+            data-sanity={dataAttribute?.(
+              `amenityCategories[_key=="${cat._key}"].items`
+            )}
+          >
+            <h3 className="text-foreground mb-4 text-lg font-semibold">
+              {cat.label}
+            </h3>
+            <div className="grid grid-cols-1 gap-2">
+              {cat.items.map((amenity) => (
+                <AmenityItem
+                  key={amenity._key}
+                  amenity={{
+                    ...amenity,
+                    label: amenity.label ? stegaClean(amenity.label) : null
+                  }}
+                  noteLabel={
+                    amenity.note
+                      ? noteLabels[stegaClean(amenity.note)]
+                      : undefined
+                  }
+                  data-sanity={dataAttribute?.(
+                    `amenityCategories[_key=="${cat._key}"].items[_key=="${amenity._key}"]`
+                  )}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </ResponsiveModal>
   )
 }
 
 export function HouseAmenities({
-  documentId,
-  documentType,
   amenityCategories: initialCategories,
   featuredAmenities
 }: HouseAmenitiesProps) {
+  const { id, type } = useHouseDocument()
   const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
 
@@ -161,7 +116,7 @@ export function HouseAmenities({
     AmenityCategoryData[],
     SanityDocument & { amenityCategories?: AmenityCategoryData[] }
   >(initialCategories, (currentCategories, action) => {
-    if (action.id === documentId && action.document.amenityCategories) {
+    if (action.id === id && action.document.amenityCategories) {
       // Optimistic document only has partial data, merge with current
       return action.document.amenityCategories.map(
         (cat) => currentCategories?.find((c) => c._key === cat._key) ?? cat
@@ -170,10 +125,7 @@ export function HouseAmenities({
     return currentCategories
   })
 
-  const dataAttribute = createDataAttribute({
-    id: documentId,
-    type: documentType
-  })
+  const dataAttribute = createDataAttribute({ id, type })
 
   const noteLabels: Record<string, string> = {
     private: t('notes.private'),

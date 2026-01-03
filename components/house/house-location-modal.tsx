@@ -1,52 +1,10 @@
 'use client'
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog'
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger
-} from '@/components/ui/drawer'
-import { useIsMobile } from '@/hooks/use-mobile'
-import { cn } from '@/lib/utils'
+import { ResponsiveModal } from '@/components/ui/responsive-modal'
+import { locationPortableText } from '@/lib/portable-text'
 import type { LocationData } from '@/lib/types/components'
-import { PortableText, type PortableTextComponents } from '@portabletext/react'
+import { PortableText } from '@portabletext/react'
 import * as React from 'react'
-
-const components: PortableTextComponents = {
-  block: {
-    h3: ({ children }) => (
-      <h3 className="text-foreground mb-4 text-lg font-semibold">{children}</h3>
-    ),
-    normal: ({ children }) => <p className="text-foreground">{children}</p>
-  },
-  list: {
-    bullet: ({ children }) => <ul className="mb-6 space-y-2">{children}</ul>,
-    number: ({ children }) => (
-      <ol className="text-foreground mb-6 list-decimal space-y-2 pl-5">
-        {children}
-      </ol>
-    )
-  },
-  listItem: {
-    bullet: ({ children }) => (
-      <li className="flex items-start gap-3">
-        <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
-        <span className="text-foreground">{children}</span>
-      </li>
-    ),
-    number: ({ children }) => <li>{children}</li>
-  }
-}
 
 interface HouseLocationModalProps {
   children: React.ReactNode
@@ -60,52 +18,32 @@ export function HouseLocationModal({
   title
 }: HouseLocationModalProps) {
   const [open, setOpen] = React.useState(false)
-  const isMobile = useIsMobile()
 
   if (!details) {
     return null
   }
 
-  if (isMobile) {
-    return (
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger asChild>{children}</DrawerTrigger>
-        <DrawerContent className="theme-container max-h-[90vh]">
-          <DrawerHeader>
-            <DrawerTitle>{title}</DrawerTitle>
-            <DrawerDescription className="sr-only">{title}</DrawerDescription>
-          </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-8">
-            <LocationSections details={details} />
-          </div>
-        </DrawerContent>
-      </Drawer>
-    )
-  }
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="theme-container max-h-[85vh] overflow-y-auto md:max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="sr-only">{title}</DialogDescription>
-        </DialogHeader>
-        <LocationSections details={details} className="pt-8" />
-      </DialogContent>
-    </Dialog>
+    <ResponsiveModal
+      trigger={children}
+      title={title}
+      open={open}
+      onOpenChange={setOpen}
+      contentClassName="pt-8"
+    >
+      <LocationSections details={details} />
+    </ResponsiveModal>
   )
 }
 
 interface LocationSectionsProps {
   details: NonNullable<LocationData['details']>
-  className?: string
 }
 
-function LocationSections({ details, className }: LocationSectionsProps) {
+function LocationSections({ details }: LocationSectionsProps) {
   return (
-    <div className={cn('space-y-2', className)}>
-      <PortableText value={details} components={components} />
+    <div className="space-y-2">
+      <PortableText value={details} components={locationPortableText} />
     </div>
   )
 }

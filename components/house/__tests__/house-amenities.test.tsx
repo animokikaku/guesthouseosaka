@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { HouseAmenities } from '../house-amenities'
+import { HouseProvider } from '../house-context'
 import {
   createAmenityCategory,
   createAmenityItem
@@ -53,10 +54,14 @@ vi.mock('vaul', async () => {
 
 import { useIsMobile } from '@/hooks/use-mobile'
 
-const defaultProps = {
-  documentId: 'house-test',
-  documentType: 'house',
-  featuredAmenities: [] as ReturnType<typeof toAmenityCategoryData>['items']
+const providerProps = {
+  id: 'house-test',
+  type: 'house',
+  slug: 'orange' as const
+}
+
+function renderWithProvider(ui: React.ReactElement) {
+  return render(<HouseProvider {...providerProps}>{ui}</HouseProvider>)
 }
 
 // Helper to create amenity category data matching component's expected type
@@ -112,9 +117,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -152,9 +156,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -184,9 +187,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -212,9 +214,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -251,9 +252,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -287,9 +287,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -321,9 +320,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -336,12 +334,8 @@ describe('HouseAmenities', () => {
 
   describe('empty amenities', () => {
     it('handles empty amenity categories array', () => {
-      render(
-        <HouseAmenities
-          {...defaultProps}
-          amenityCategories={[]}
-          featuredAmenities={[]}
-        />
+      renderWithProvider(
+        <HouseAmenities amenityCategories={[]} featuredAmenities={[]} />
       )
 
       // Should render section with heading
@@ -366,9 +360,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -395,9 +388,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -437,9 +429,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />
@@ -482,9 +473,8 @@ describe('HouseAmenities', () => {
         )
       ]
 
-      render(
+      renderWithProvider(
         <HouseAmenities
-          {...defaultProps}
           amenityCategories={categories}
           featuredAmenities={featuredAmenities}
         />

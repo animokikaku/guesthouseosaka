@@ -3,9 +3,10 @@ import { HousePageContent } from '@/components/house'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
 import { env } from '@/lib/env'
+import { getHouse } from '@/sanity/lib/cached-queries'
 import { urlFor } from '@/sanity/lib/image'
 import { sanityFetch } from '@/sanity/lib/live'
-import { houseQuery, housesNavQuery } from '@/sanity/lib/queries'
+import { housesNavQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -22,7 +23,7 @@ export default async function HousePage({
   setRequestLocale(locale as Locale)
 
   const [{ data }, { data: houses }] = await Promise.all([
-    sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
+    getHouse(locale, house),
     sanityFetch({ query: housesNavQuery, params: { locale } })
   ])
 

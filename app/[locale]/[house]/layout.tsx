@@ -2,12 +2,9 @@ import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
+import { getHouse } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
-import {
-  houseQuery,
-  houseSlugsQuery,
-  settingsQuery
-} from '@/sanity/lib/queries'
+import { houseSlugsQuery, settingsQuery } from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
 import { hasLocale, Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
@@ -44,7 +41,7 @@ export async function generateMetadata(
   }
 
   const [{ data }, { data: settings }] = await Promise.all([
-    sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
+    getHouse(locale, house),
     sanityFetch({ query: settingsQuery, params: { locale } })
   ])
 

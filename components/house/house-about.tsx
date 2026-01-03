@@ -1,69 +1,34 @@
+'use client'
+
 import { HouseBuilding } from '@/components/house/house-building'
+import { defaultPortableText } from '@/lib/portable-text'
 import type { BuildingData } from '@/lib/types/components'
+import { PortableText } from '@portabletext/react'
 import type { PortableTextBlock } from '@portabletext/types'
-import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
 
-const components: PortableTextComponents = {
-  block: {
-    normal: ({ children }) => (
-      <p className="text-foreground text-base leading-relaxed">{children}</p>
-    )
-  },
-  list: {
-    bullet: ({ children }) => <ul className="mt-4 space-y-2">{children}</ul>,
-    number: ({ children }) => (
-      <ol className="text-foreground mt-4 list-decimal space-y-2 pl-5">
-        {children}
-      </ol>
-    )
-  },
-  listItem: {
-    bullet: ({ children }) => (
-      <li className="flex items-start gap-3">
-        <div className="bg-primary mt-2 h-2 w-2 shrink-0 rounded-full" />
-        <span className="text-foreground">{children}</span>
-      </li>
-    ),
-    number: ({ children }) => <li>{children}</li>
-  }
-}
-
 interface HouseAboutProps {
-  _id: string
-  _type: string
   about: PortableTextBlock[] | null
   title: string | null
   building: BuildingData | null
-  slug: string
 }
 
-export function HouseAbout({
-  _id,
-  _type,
-  about,
-  title,
-  building,
-  slug
-}: HouseAboutProps) {
+export function HouseAbout({ about, title, building }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
 
   return (
-    <section>
-      <h2 className="mb-6 text-2xl font-semibold">
+    <section aria-labelledby="house-about-title">
+      <h2 id="house-about-title" className="mb-6 text-2xl font-semibold">
         {t('heading', { house: title ? stegaClean(title) : '' })}
       </h2>
       <div className="mb-4">
-        <HouseBuilding
-          _id={_id}
-          _type={_type}
-          slug={slug}
-          building={building}
-        />
+        <HouseBuilding building={building} />
       </div>
 
-      {about ? <PortableText value={about} components={components} /> : null}
+      {about ? (
+        <PortableText value={about} components={defaultPortableText} />
+      ) : null}
     </section>
   )
 }

@@ -1,5 +1,6 @@
 import { HouseAbout } from '@/components/house/house-about'
 import { HouseAmenities } from '@/components/house/house-amenities'
+import { HouseProvider } from '@/components/house/house-context'
 import { HouseLocation } from '@/components/house/house-location'
 import { HousePricing } from '@/components/house/house-pricing'
 import { MobileHeroImage } from '@/components/house/mobile-hero-image'
@@ -78,31 +79,28 @@ export function HousePageContent({
               galleryImages={galleryImages}
               featuredImage={featuredImage}
             />
-            <article
-              id={slug}
-              aria-labelledby={`${slug}-title`}
-              className="space-y-12 pt-8"
-            >
-              <HouseAbout
-                _id={_id}
-                _type={_type}
-                slug={slug}
-                title={title}
-                about={toAboutContent(about)}
-                building={toBuildingData(building)}
-              />
-              <HouseAmenities
-                documentId={_id}
-                documentType={_type}
-                amenityCategories={toAmenityCategories(amenityCategories)}
-                featuredAmenities={toFeaturedAmenities(featuredAmenities)}
-              />
-              <HouseLocation
-                location={toLocationData(location)}
-                map={toMapData(map)}
-              />
-              <HousePricing pricing={toPricingRows(pricing)} />
-            </article>
+            <HouseProvider id={_id} type={_type} slug={slug}>
+              <article
+                id={slug}
+                aria-labelledby={`${slug}-title`}
+                className="space-y-12 pt-8"
+              >
+                <HouseAbout
+                  title={title}
+                  about={toAboutContent(about)}
+                  building={toBuildingData(building)}
+                />
+                <HouseAmenities
+                  amenityCategories={toAmenityCategories(amenityCategories)}
+                  featuredAmenities={toFeaturedAmenities(featuredAmenities)}
+                />
+                <HouseLocation
+                  location={toLocationData(location)}
+                  map={toMapData(map)}
+                />
+                <HousePricing pricing={toPricingRows(pricing)} />
+              </article>
+            </HouseProvider>
           </div>
         </div>
       </div>
