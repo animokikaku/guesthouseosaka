@@ -69,33 +69,29 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
   const { hero, collection, galleryWall } = page
 
   return (
-    <div className="snap-footer section-soft flex flex-col gap-18 md:gap-0">
-      <section className="relative flex snap-none items-center justify-center py-8 md:min-h-[calc(100dvh-var(--header-height))] md:snap-end md:py-0">
-        <div className="container-wrapper w-full max-w-7xl">
-          <div className="grid items-center gap-12 md:grid-cols-3">
-            {/* Text content */}
-            <PageHeader className="md:items-start md:text-left">
-              {hero.content && (
-                <PortableText
-                  value={hero.content}
-                  components={heroComponents}
-                />
-              )}
-              {hero.ctaLabel && (
-                <PageActions className="md:justify-start">
-                  <Button asChild size="lg">
-                    <Link href="/contact">{hero.ctaLabel}</Link>
-                  </Button>
-                </PageActions>
-              )}
-            </PageHeader>
+    <div className="snap-footer section-soft flex flex-col">
+      <section className="container-wrapper relative flex h-[calc(100dvh-var(--header-height))] max-w-7xl snap-none items-center justify-center md:h-auto md:min-h-[calc(100dvh-var(--header-height))] md:snap-end py-8 md:py-0">
+        <div className="container flex flex-col items-center gap-12 md:gap-8 md:flex-row md:items-center">
+          {/* Text content - expands to fill available space */}
+          <PageHeader className="md:flex-1 md:items-start p-0 md:p-0 lg:p-0 md:text-left">
+            {hero.content && (
+              <PortableText
+                value={hero.content}
+                components={heroComponents}
+              />
+            )}
+            {hero.ctaLabel && (
+              <PageActions className="md:justify-start">
+                <Button asChild size="lg">
+                  <Link href="/contact">{hero.ctaLabel}</Link>
+                </Button>
+              </PageActions>
+            )}
+          </PageHeader>
 
-            {/* Instagram feed */}
-            <div className="flex justify-center md:col-span-2 md:justify-end">
-              <div className="w-full">
-                <GalleryWall images={toGalleryImages(galleryWall)} />
-              </div>
-            </div>
+          {/* Gallery wall - sized to give header more room */}
+          <div className="w-full shrink-0 md:w-3/5">
+            <GalleryWall images={toGalleryImages(galleryWall)} />
           </div>
         </div>
       </section>
