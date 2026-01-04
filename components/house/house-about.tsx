@@ -1,6 +1,11 @@
 'use client'
 
 import { HouseBuilding } from '@/components/house/house-building'
+import {
+  HouseSection,
+  HouseSectionContent,
+  HouseSectionHeading
+} from '@/components/house/house-section'
 import { defaultPortableText } from '@/lib/portable-text'
 import type { BuildingData } from '@/lib/types/components'
 import { PortableText } from '@portabletext/react'
@@ -18,17 +23,16 @@ export function HouseAbout({ about, title, building }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
 
   return (
-    <section aria-labelledby="house-about-title">
-      <h2 id="house-about-title" className="mb-6 text-2xl font-semibold">
+    <HouseSection id="about" aria-labelledby="about-title">
+      <HouseSectionHeading id="about-title">
         {t('heading', { house: title ? stegaClean(title) : '' })}
-      </h2>
-      <div className="mb-4">
+      </HouseSectionHeading>
+      <HouseSectionContent className="space-y-4">
         <HouseBuilding building={building} />
-      </div>
-
-      {about ? (
-        <PortableText value={about} components={defaultPortableText} />
-      ) : null}
-    </section>
+        {about ? (
+          <PortableText value={about} components={defaultPortableText} />
+        ) : null}
+      </HouseSectionContent>
+    </HouseSection>
   )
 }
