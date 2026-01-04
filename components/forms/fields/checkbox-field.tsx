@@ -1,6 +1,6 @@
 'use client'
 
-import { useFieldContext } from '@/components/forms'
+import { useFieldValidation } from '@/components/forms/hooks'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
   Field,
@@ -29,8 +29,7 @@ export function CheckboxField({
   legend,
   ...props
 }: CheckboxFieldProps) {
-  const field = useFieldContext<boolean>()
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const { field, isInvalid, errors } = useFieldValidation<boolean>()
 
   return (
     <FieldSet data-invalid={isInvalid}>
@@ -55,7 +54,7 @@ export function CheckboxField({
           </FieldLabel>
         </Field>
       </FieldGroup>
-      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+      {isInvalid && <FieldError errors={errors} />}
     </FieldSet>
   )
 }

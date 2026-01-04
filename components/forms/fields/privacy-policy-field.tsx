@@ -1,6 +1,6 @@
 'use client'
 
-import { useFieldContext } from '@/components/forms'
+import { useFieldValidation } from '@/components/forms/hooks'
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -13,9 +13,8 @@ import {
 import { useTranslations } from 'next-intl'
 
 export function PrivacyPolicyField() {
-  const field = useFieldContext<boolean>()
+  const { field, isInvalid, errors } = useFieldValidation<boolean>()
   const t = useTranslations('forms')
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
 
   return (
     <FieldSet data-invalid={isInvalid}>
@@ -45,7 +44,7 @@ export function PrivacyPolicyField() {
           </FieldLabel>
         </Field>
       </FieldGroup>
-      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+      {isInvalid && <FieldError errors={errors} />}
     </FieldSet>
   )
 }
