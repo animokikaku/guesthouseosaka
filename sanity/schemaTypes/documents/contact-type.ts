@@ -33,7 +33,7 @@ export const contactType = defineType({
     }
   ],
   groups: [
-    { name: 'main', title: 'Main', default: true },
+    { name: 'main', title: 'Main' },
     { name: 'fields', title: 'Form Fields' }
   ],
   fields: [
