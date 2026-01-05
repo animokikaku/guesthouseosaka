@@ -10,8 +10,7 @@ type CategoryThumbnailProps = {
 
 export function CategoryThumbnail({ category }: CategoryThumbnailProps) {
   const thumbnail = category.thumbnail
-  const firstItemKey = category.items[0]?._key
-  if (!thumbnail || !firstItemKey) return null
+  if (category.items.length === 0 || !thumbnail) return null
 
   const src = urlFor(thumbnail).width(256).height(192).dpr(2).fit('crop').url()
 
@@ -40,7 +39,7 @@ export function CategoryThumbnail({ category }: CategoryThumbnailProps) {
             variant="secondary"
             className="min-w-7 rounded-none rounded-tl-md rounded-br-md text-xs"
           >
-            {category.count}
+            {category.items.length}
           </Badge>
         </div>
       </div>
