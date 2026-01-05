@@ -7,7 +7,26 @@
 /* Hide internationalized array language rows when their content area is empty */
 /* Target only the specific language row structure with direct child combinators */
 [data-ui='Flex'][width='fill'][style*='position: relative']:has(
-    > [data-ui='Box'] > [data-ui='Card'] [data-ui='Flex'] > [data-ui='Card'] > div[style*='min-width']:empty
+    > [data-ui='Box']
+      > [data-ui='Card']
+      [data-ui='Flex']
+      > [data-ui='Card']
+      > div[style*='min-width']:empty
   ) {
+  display: none !important;
+}
+
+/* Hide the remove buttons for language items in internationalized arrays */
+[data-ui='Flex'][width='fill'][style*='position: relative']
+  [data-ui='Stack']
+  > [data-ui='Flex']
+  > [data-ui='Card']
+  > button:has([data-sanity-icon='remove-circle']),
+[data-ui='Flex'][width='fill'][style*='position: relative']
+  [data-ui='Stack']
+  > [data-ui='Flex']
+  > [data-ui='Card']
+  > span
+  > button:has([data-sanity-icon='remove-circle']) {
   display: none !important;
 }

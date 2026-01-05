@@ -15,7 +15,7 @@ export const house = defineType({
     }
   ],
   groups: [
-    { name: 'overview', title: 'Overview' },
+    { name: 'overview', title: 'Overview', default: true },
     { name: 'content', title: 'Content' },
     { name: 'amenities', title: 'Amenities' },
     { name: 'location', title: 'Location' },
