@@ -102,22 +102,18 @@ export default async function LocaleLayout({
     '@type': 'Organization',
     '@id': `${url}/#organization`,
     name: 'Guest House Osaka',
-    legalName: settings?.companyName ?? '株式会社アニモ企画',
     alternateName: 'ゲストハウス大阪',
-    telephone: settings?.phone ?? undefined,
-    email: settings?.email ?? undefined,
     logo: assets.logo.sho.src,
-    sameAs: settings?.socialLinks?.map((link) => link.url),
-    address: settings?.address
-      ? {
-          '@type': 'PostalAddress',
-          streetAddress: settings.address.streetAddress,
-          addressLocality: settings.address.locality,
-          postalCode: settings.address.postalCode,
-          addressCountry: settings.address.country
-        }
-      : undefined,
-    image: assets.openGraph.home.src
+    image: assets.openGraph.home.src,
+    ...(settings && {
+      legalName: settings.companyName,
+      telephone: settings.phone,
+      email: settings.email,
+      sameAs: settings.socialLinks?.map((link) => link.url),
+      address: settings.address
+        ? { '@type': 'PostalAddress', ...settings.address }
+        : undefined
+    })
   }
 
   return (

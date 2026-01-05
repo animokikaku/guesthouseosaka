@@ -67,7 +67,7 @@ export default async function HousePage({
       }
     }),
     numberOfRooms: building?.rooms,
-    telephone: phone?.international
+    telephone: phone.international
   }
 
   return (
