@@ -1,8 +1,10 @@
 'use client'
 
 /**
- * This configuration is used to for the Sanity Studio that’s mounted on the `/app/studio/[[...tool]]/page.tsx` route
+ * This configuration is used to for the Sanity Studio that's mounted on the `/app/studio/[[...tool]]/page.tsx` route
  */
+
+import './sanity/studio.css'
 
 import { assist } from '@sanity/assist'
 import { languageFilter } from '@sanity/language-filter'

@@ -1,0 +1,13 @@
+/**
+ * Workaround for language-filter plugin not properly hiding container elements
+ * @see https://github.com/sanity-io/language-filter/issues/66
+ * @see https://github.com/sanity-io/sanity-plugin-internationalized-array/issues/42
+ */
+
+/* Hide internationalized array language rows when their content area is empty */
+/* Target only the specific language row structure with direct child combinators */
+[data-ui='Flex'][width='fill'][style*='position: relative']:has(
+    > [data-ui='Box'] > [data-ui='Card'] [data-ui='Flex'] > [data-ui='Card'] > div[style*='min-width']:empty
+  ) {
+  display: none !important;
+}
