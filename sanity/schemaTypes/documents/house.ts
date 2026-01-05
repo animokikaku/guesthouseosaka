@@ -15,15 +15,11 @@ export const house = defineType({
     }
   ],
   groups: [
-    { name: 'identity', title: 'Identity' },
-    { name: 'building', title: 'Building' },
-    { name: 'about', title: 'About' },
-    { name: 'gallery', title: 'Gallery' },
+    { name: 'overview', title: 'Overview' },
+    { name: 'content', title: 'Content' },
     { name: 'amenities', title: 'Amenities' },
     { name: 'location', title: 'Location' },
-    { name: 'map', title: 'Map' },
-    { name: 'pricing', title: 'Pricing' },
-    { name: 'contact', title: 'Contact' }
+    { name: 'business', title: 'Pricing & Contact' }
   ],
   fields: [
     // Hidden field for @sanity/orderable-document-list
@@ -34,13 +30,13 @@ export const house = defineType({
     }),
 
     // ============================================
-    // IDENTITY GROUP
+    // OVERVIEW GROUP
     // ============================================
     defineField({
       name: 'slug',
       title: 'House ID',
       type: 'string',
-      group: 'identity',
+      group: 'overview',
       description: 'Unique identifier for this house',
       options: {
         list: [...HouseIdentifierValues],
@@ -58,7 +54,7 @@ export const house = defineType({
       name: 'title',
       title: 'Title',
       type: 'internationalizedArrayString',
-      group: 'identity',
+      group: 'overview',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     }),
@@ -66,7 +62,7 @@ export const house = defineType({
       name: 'description',
       title: 'Description',
       type: 'internationalizedArrayText',
-      group: 'identity',
+      group: 'overview',
       description: 'Main description shown on the house page',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
@@ -75,7 +71,7 @@ export const house = defineType({
       name: 'caption',
       title: 'Navigation Caption',
       type: 'internationalizedArrayText',
-      group: 'identity',
+      group: 'overview',
       description: 'Short description shown in navigation dropdown',
       options: { aiAssist: { translateAction: true } }
     }),
@@ -83,42 +79,36 @@ export const house = defineType({
       name: 'image',
       title: 'Hero Image',
       type: 'localizedImage',
-      group: 'identity',
+      group: 'overview',
       validation: (rule) => rule.required().assetRequired()
     }),
 
-    // ============================================
-    // BUILDING GROUP
-    // ============================================
     defineField({
       name: 'building',
       title: 'Building Facts',
       type: 'houseBuilding',
-      group: 'building'
+      group: 'overview'
     }),
 
     // ============================================
-    // ABOUT GROUP
+    // CONTENT GROUP
     // ============================================
     defineField({
       name: 'about',
       title: 'About Section',
       type: 'internationalizedArrayPortableText',
-      group: 'about',
+      group: 'content',
       description:
         'Detailed description and highlights of the house. Use bullet points for key features.',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     }),
 
-    // ============================================
-    // GALLERY GROUP
-    // ============================================
     defineField({
       name: 'featuredImage',
       title: 'Featured Image',
       type: 'localizedImage',
-      group: 'gallery',
+      group: 'content',
       description:
         'Optional image displayed first in gallery grids (mobile carousel and desktop block gallery)'
     }),
@@ -126,7 +116,7 @@ export const house = defineType({
       name: 'galleryCategories',
       title: 'Photos by Category',
       type: 'array',
-      group: 'gallery',
+      group: 'content',
       description:
         'Photos grouped by category. Drag to reorder within each category.',
       of: [defineArrayMember({ type: 'houseGalleryCategory' })],
@@ -156,25 +146,21 @@ export const house = defineType({
       type: 'houseLocation',
       group: 'location'
     }),
-
-    // ============================================
-    // MAP GROUP
-    // ============================================
     defineField({
       name: 'map',
       title: 'Map',
       type: 'houseMap',
-      group: 'map'
+      group: 'location'
     }),
 
     // ============================================
-    // PRICING GROUP
+    // PRICING & CONTACT GROUP
     // ============================================
     defineField({
       name: 'pricing',
       title: 'Pricing',
       type: 'array',
-      group: 'pricing',
+      group: 'business',
       description: 'Pricing information rows with rich text content',
       of: [defineArrayMember({ type: 'pricingRow' })],
       validation: (rule) =>
@@ -184,7 +170,7 @@ export const house = defineType({
       name: 'extraCosts',
       title: 'Extra Costs',
       type: 'array',
-      group: 'pricing',
+      group: 'business',
       description:
         'Additional costs shown in the FAQ section. Order is controlled on the FAQ page.',
       of: [defineArrayMember({ type: 'extraCostItem' })],
@@ -205,14 +191,11 @@ export const house = defineType({
         )
     }),
 
-    // ============================================
-    // CONTACT GROUP
-    // ============================================
     defineField({
       name: 'phone',
       title: 'Phone Numbers',
       type: 'housePhone',
-      group: 'contact',
+      group: 'business',
       validation: (rule) => rule.required()
     })
   ],
