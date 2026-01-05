@@ -18,7 +18,11 @@ import { routing } from '@/i18n/routing'
 import { env } from '@/lib/env'
 import { locales } from '@/sanity/config'
 import { resolve } from '@/sanity/presentation/resolve'
-import { schema } from '@/sanity/schemaTypes'
+import {
+  type DocumentTypeName,
+  documentTypes,
+  schema
+} from '@/sanity/schemaTypes'
 import { structure } from '@/sanity/structure'
 
 const languages = locales.map(({ name, label }) => ({
@@ -27,7 +31,7 @@ const languages = locales.map(({ name, label }) => ({
 }))
 
 // Document types that cannot be deleted (essential/singleton documents)
-const protectedDocumentTypes = [
+const protectedDocumentTypes: string[] = [
   'homePage',
   'faqPage',
   'contactPage',
@@ -39,10 +43,10 @@ const protectedDocumentTypes = [
   'galleryCategory',
   'amenityCategory',
   'pricingCategory'
-]
+] satisfies DocumentTypeName[]
 
 // Document types where new documents cannot be created (singletons/fixed set)
-const noCreateDocumentTypes = [
+const noCreateDocumentTypes: string[] = [
   'homePage',
   'faqPage',
   'contactPage',
@@ -50,7 +54,7 @@ const noCreateDocumentTypes = [
   'contactType',
   'house',
   'legalNotice'
-]
+] satisfies DocumentTypeName[]
 
 export default defineConfig({
   basePath: '/studio',
@@ -64,14 +68,13 @@ export default defineConfig({
 
       // Remove delete action for protected document types
       if (protectedDocumentTypes.includes(context.schemaType)) {
-        actions = actions.filter((action) => action.action !== 'delete')
+        actions = actions.filter(({ action }) => action !== 'delete')
       }
 
       // Remove duplicate and unpublish actions for singletons/fixed document sets
       if (noCreateDocumentTypes.includes(context.schemaType)) {
         actions = actions.filter(
-          (action) =>
-            action.action !== 'duplicate' && action.action !== 'unpublish'
+          ({ action }) => action !== 'duplicate' && action !== 'unpublish'
         )
       }
 
@@ -80,7 +83,7 @@ export default defineConfig({
     // Hide certain types from the "Create new document" menu
     newDocumentOptions: (prev) => {
       return prev.filter(
-        (option) => !noCreateDocumentTypes.includes(option.templateId)
+        ({ templateId }) => !noCreateDocumentTypes.includes(templateId)
       )
     }
   },
@@ -88,17 +91,7 @@ export default defineConfig({
     languageFilter({
       supportedLanguages: languages,
       defaultLanguages: [],
-      documentTypes: [
-        'homePage',
-        'house',
-        'settings',
-        'faqPage',
-        'contactPage',
-        'amenity',
-        'amenityCategory',
-        'galleryCategory',
-        'contactType'
-      ],
+      documentTypes: documentTypes.map(({ name }) => name),
       filterField: (enclosingType, member, selectedLanguageIds) => {
         // Filter internationalized arrays
         if (
@@ -135,16 +128,7 @@ export default defineConfig({
     assist({
       translate: {
         field: {
-          documentTypes: [
-            'homePage',
-            'house',
-            'settings',
-            'faqPage',
-            'contactPage',
-            'amenity',
-            'amenityCategory',
-            'galleryCategory'
-          ],
+          documentTypes: documentTypes.map(({ name }) => name),
           languages
         }
       }

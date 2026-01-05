@@ -34,40 +34,42 @@ import {
   socialLink
 } from './objects'
 
+export const documentTypes = [
+  homePage,
+  house,
+  settings,
+  faqPage,
+  contactPage,
+  contactType,
+  legalNotice,
+  galleryCategory,
+  amenityCategory,
+  amenity,
+  pricingCategory,
+  faqQuestion
+] as const
+
+const objectTypes = [
+  localizedImage,
+  houseAmenity,
+  houseAmenityCategory,
+  houseBuilding,
+  houseGalleryCategory,
+  houseGalleryItem,
+  houseLocation,
+  houseMap,
+  housePhone,
+  socialLink,
+  pricingRow,
+  address,
+  pageAction,
+  extraCostItem,
+  formFieldConfig,
+  formFieldConfigNoPlaceholder
+] as const
+
+export type DocumentTypeName = (typeof documentTypes)[number]['name']
+
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [
-    // Documents
-    homePage,
-    house,
-    settings,
-    faqPage,
-    contactPage,
-    contactType,
-    legalNotice,
-
-    // Taxonomy
-    galleryCategory,
-    amenityCategory,
-    amenity,
-    pricingCategory,
-    faqQuestion,
-
-    // Objects
-    localizedImage,
-    houseAmenity,
-    houseAmenityCategory,
-    houseBuilding,
-    houseGalleryCategory,
-    houseGalleryItem,
-    houseLocation,
-    houseMap,
-    housePhone,
-    socialLink,
-    pricingRow,
-    address,
-    pageAction,
-    extraCostItem,
-    formFieldConfig,
-    formFieldConfigNoPlaceholder
-  ]
+  types: [...documentTypes, ...objectTypes]
 }
