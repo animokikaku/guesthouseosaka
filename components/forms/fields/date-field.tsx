@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { useFieldContext } from '@/components/forms'
+import { useFieldValidation } from '@/components/forms/hooks'
 import {
   Field,
   FieldContent,
@@ -33,8 +33,7 @@ export function DateField({
   className,
   ...props
 }: DateFieldProps) {
-  const field = useFieldContext<string>()
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const { field, isInvalid, errors } = useFieldValidation<string>()
 
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
@@ -45,7 +44,7 @@ export function DateField({
           </FieldLabel>
         )}
         {description && <FieldDescription>{description}</FieldDescription>}
-        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+        {isInvalid && <FieldError errors={errors} />}
       </FieldContent>
       <Input
         type="date"

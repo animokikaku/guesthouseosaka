@@ -1,6 +1,6 @@
 'use client'
 
-import { useFieldContext } from '@/components/forms'
+import { useFieldValidation } from '@/components/forms/hooks'
 import {
   Field,
   FieldContent,
@@ -28,8 +28,7 @@ export function InputField({
   orientation,
   ...props
 }: InputFieldProps) {
-  const field = useFieldContext<string>()
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const { field, isInvalid, errors } = useFieldValidation<string>()
 
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
@@ -40,7 +39,7 @@ export function InputField({
           </FieldLabel>
         )}
         {description && <FieldDescription>{description}</FieldDescription>}
-        {isInvalid && <FieldError errors={field.state.meta.errors} />}
+        {isInvalid && <FieldError errors={errors} />}
       </FieldContent>
       <Input
         id={`form-tanstack-input-${field.name}`}

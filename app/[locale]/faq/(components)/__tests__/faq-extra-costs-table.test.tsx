@@ -29,7 +29,7 @@ const createHouse = (
   title: `${slug.charAt(0).toUpperCase() + slug.slice(1)} House`,
   slug,
   building: null,
-  phone: { domestic: '06-1234-5678', international: '+81-6-1234-5678' },
+  phone: { _type: 'housePhone', domestic: '06-1234-5678', international: '+81-6-1234-5678' },
   image: {
     asset: null,
     hotspot: null,

@@ -2,7 +2,7 @@ import { ImageField } from '@/sanity/schemaTypes/fields/image'
 import { HomeIcon } from 'lucide-react'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
-export default defineType({
+export const homePage = defineType({
   name: 'homePage',
   icon: HomeIcon,
   type: 'document',

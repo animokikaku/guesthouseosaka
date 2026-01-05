@@ -1,15 +1,15 @@
-import { describe, it, expect } from 'vitest'
+import {
+  createGalleryCategory,
+  createGalleryItem,
+  createSanityImage
+} from '@/lib/transforms/__tests__/mocks'
+import { describe, expect, it } from 'vitest'
 import {
   featuredToGalleryImage,
   flattenGalleryItems,
   getImageIndex,
   toGalleryCategories
 } from '../gallery'
-import {
-  createGalleryItem,
-  createGalleryCategory,
-  createSanityImage
-} from '@/lib/transforms/__tests__/mocks'
 
 describe('featuredToGalleryImage', () => {
   it('converts featured image with _key: "featured"', () => {
@@ -143,18 +143,14 @@ describe('toGalleryCategories', () => {
       createGalleryCategory({
         _key: 'cat1',
         category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a:' },
-        items: [
-          createGalleryItem(),
-          createGalleryItem(),
-          createGalleryItem()
-        ]
+        items: [createGalleryItem(), createGalleryItem(), createGalleryItem()]
       })
     ]
 
     const result = toGalleryCategories(categories)
 
     expect(result).toHaveLength(1)
-    expect(result[0].count).toBe(3)
+    expect(result[0].items).toHaveLength(3)
     expect(result[0]._id).toBe('id1')
   })
 
@@ -189,8 +185,8 @@ describe('toGalleryCategories', () => {
 
     // Both categories are transformed (GROQ filters before this)
     expect(result).toHaveLength(2)
-    expect(result[0].count).toBe(0)
-    expect(result[1].count).toBe(1)
+    expect(result[0].items).toHaveLength(0)
+    expect(result[1].items).toHaveLength(1)
   })
 
   it('preserves category order', () => {

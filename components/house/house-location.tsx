@@ -1,6 +1,11 @@
 'use client'
 
 import { HouseLocationModal } from '@/components/house/house-location-modal'
+import {
+  HouseSection,
+  HouseSectionContent,
+  HouseSectionHeading
+} from '@/components/house/house-section'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { LocationData, MapData } from '@/lib/types/components'
@@ -47,14 +52,12 @@ export function HouseLocation({ location, map }: HouseLocationProps) {
   const t = useTranslations('HouseLocation')
 
   return (
-    <section>
-      <h2 className="mb-6 text-2xl font-semibold">{t('heading')}</h2>
-
-      <p className="text-foreground mb-6 text-base leading-relaxed">
-        {highlight}
-      </p>
-
-      <div className="mb-6">
+    <HouseSection id="location" aria-labelledby="location-title">
+      <HouseSectionHeading id="location-title">
+        {t('heading')}
+      </HouseSectionHeading>
+      <HouseSectionContent>
+        <p className="text-foreground text-base leading-relaxed">{highlight}</p>
         {map && (
           <HouseMap
             center={map.coordinates}
@@ -63,13 +66,10 @@ export function HouseLocation({ location, map }: HouseLocationProps) {
             mapsUrl={map.googleMapsUrl}
           />
         )}
-      </div>
-
-      <div className="mt-6">
         <HouseLocationModal details={details} title={t('heading')}>
           <Button variant="outline">{t('modal_trigger')}</Button>
         </HouseLocationModal>
-      </div>
-    </section>
+      </HouseSectionContent>
+    </HouseSection>
   )
 }

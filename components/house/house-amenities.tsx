@@ -1,6 +1,11 @@
 'use client'
 
 import { useHouseDocument } from '@/components/house/house-context'
+import {
+  HouseSection,
+  HouseSectionContent,
+  HouseSectionHeading
+} from '@/components/house/house-section'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ResponsiveModal } from '@/components/ui/responsive-modal'
@@ -144,9 +149,11 @@ export function HouseAmenities({
   )
 
   return (
-    <section>
-      <h2 className="mb-6 text-2xl font-semibold">{t('heading')}</h2>
-      <div className="space-y-6">
+    <HouseSection id="amenities" aria-labelledby="amenities-title">
+      <HouseSectionHeading id="amenities-title">
+        {t('heading')}
+      </HouseSectionHeading>
+      <HouseSectionContent>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {displayedFeatured.map((amenity) => (
             <AmenityItem
@@ -172,7 +179,7 @@ export function HouseAmenities({
             </Button>
           }
         />
-      </div>
-    </section>
+      </HouseSectionContent>
+    </HouseSection>
   )
 }

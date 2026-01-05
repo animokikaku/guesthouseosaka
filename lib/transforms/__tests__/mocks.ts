@@ -68,6 +68,7 @@ export function createBuilding(
   overrides: Partial<NonNullable<HouseBuilding>> = {}
 ): NonNullable<HouseBuilding> {
   return {
+    _type: 'houseBuilding',
     rooms: faker.number.int({ min: 1, max: 20 }),
     floors: faker.number.int({ min: 1, max: 5 }),
     startingPrice: faker.number.int({ min: 30000, max: 80000 }),

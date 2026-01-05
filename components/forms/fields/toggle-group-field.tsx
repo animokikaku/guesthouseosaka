@@ -1,4 +1,4 @@
-import { useFieldContext } from '@/components/forms'
+import { useFieldValidation } from '@/components/forms/hooks'
 import {
   FieldDescription,
   FieldError,
@@ -31,8 +31,7 @@ export function ToggleGroupField({
   className,
   ...props
 }: ToggleGroupFieldProps) {
-  const field = useFieldContext<string[]>()
-  const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid
+  const { field, isInvalid, errors } = useFieldValidation<string[]>()
 
   return (
     <FieldSet data-invalid={isInvalid}>
@@ -61,7 +60,7 @@ export function ToggleGroupField({
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
-      {isInvalid && <FieldError errors={field.state.meta.errors} />}
+      {isInvalid && <FieldError errors={errors} />}
     </FieldSet>
   )
 }

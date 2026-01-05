@@ -15,7 +15,6 @@ export interface GalleryCategory {
   _key: string
   _id: string
   label: string | null
-  count: number
   thumbnail: GalleryItem['image'] | null
   items: GalleryItem[]
 }
@@ -58,7 +57,6 @@ export function toGalleryCategories(
     _key: cat._key,
     _id: cat.category._id,
     label: cat.category.label,
-    count: cat.items?.length ?? 0,
     thumbnail: cat.items?.[0]?.image ?? null,
     items: cat.items ?? []
   }))
