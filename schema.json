@@ -287,6 +287,122 @@
     }
   },
   {
+    "name": "housePhone",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "housePhone"
+          }
+        },
+        "domestic": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": false
+        },
+        "international": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": false
+        }
+      }
+    }
+  },
+  {
+    "name": "houseMap",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "houseMap"
+          }
+        },
+        "googleMapsUrl": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": false
+        },
+        "placeId": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": false
+        },
+        "placeImage": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "localizedImage"
+          },
+          "optional": false
+        },
+        "coordinates": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "geopoint"
+          },
+          "optional": false
+        },
+        "address": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "address"
+          },
+          "optional": false
+        }
+      }
+    }
+  },
+  {
+    "name": "houseLocation",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "houseLocation"
+          }
+        },
+        "highlight": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "internationalizedArrayText"
+          },
+          "optional": false
+        },
+        "details": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "internationalizedArrayPortableText"
+          },
+          "optional": false
+        }
+      }
+    }
+  },
+  {
     "name": "houseGalleryItem",
     "type": "type",
     "value": {
@@ -380,6 +496,43 @@
                 "name": "houseGalleryItem"
               }
             }
+          },
+          "optional": false
+        }
+      }
+    }
+  },
+  {
+    "name": "houseBuilding",
+    "type": "type",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "houseBuilding"
+          }
+        },
+        "rooms": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": false
+        },
+        "floors": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": false
+        },
+        "startingPrice": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
           },
           "optional": false
         }
@@ -1658,30 +1811,8 @@
       "building": {
         "type": "objectAttribute",
         "value": {
-          "type": "object",
-          "attributes": {
-            "rooms": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "number"
-              },
-              "optional": false
-            },
-            "floors": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "number"
-              },
-              "optional": false
-            },
-            "startingPrice": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "number"
-              },
-              "optional": false
-            }
-          }
+          "type": "inline",
+          "name": "houseBuilding"
         },
         "optional": true
       },
@@ -1748,72 +1879,16 @@
       "location": {
         "type": "objectAttribute",
         "value": {
-          "type": "object",
-          "attributes": {
-            "highlight": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "internationalizedArrayText"
-              },
-              "optional": false
-            },
-            "details": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "internationalizedArrayPortableText"
-              },
-              "optional": false
-            }
-          }
+          "type": "inline",
+          "name": "houseLocation"
         },
         "optional": true
       },
       "map": {
         "type": "objectAttribute",
         "value": {
-          "type": "object",
-          "attributes": {
-            "googleMapsUrl": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "string"
-              },
-              "optional": false
-            },
-            "placeId": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "string"
-              },
-              "optional": false
-            },
-            "placeImage": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "localizedImage"
-              },
-              "optional": false
-            },
-            "coordinates": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "geopoint"
-              },
-              "optional": false
-            },
-            "address": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "inline",
-                "name": "address"
-              },
-              "optional": false
-            }
-          }
+          "type": "inline",
+          "name": "houseMap"
         },
         "optional": true
       },
@@ -1864,23 +1939,8 @@
       "phone": {
         "type": "objectAttribute",
         "value": {
-          "type": "object",
-          "attributes": {
-            "domestic": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "string"
-              },
-              "optional": false
-            },
-            "international": {
-              "type": "objectAttribute",
-              "value": {
-                "type": "string"
-              },
-              "optional": false
-            }
-          }
+          "type": "inline",
+          "name": "housePhone"
         },
         "optional": false
       }

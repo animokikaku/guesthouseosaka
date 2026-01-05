@@ -67,6 +67,27 @@ export type SocialLink = {
   url: string
 }
 
+export type HousePhone = {
+  _type: 'housePhone'
+  domestic: string
+  international: string
+}
+
+export type HouseMap = {
+  _type: 'houseMap'
+  googleMapsUrl: string
+  placeId: string
+  placeImage: LocalizedImage
+  coordinates: Geopoint
+  address: Address
+}
+
+export type HouseLocation = {
+  _type: 'houseLocation'
+  highlight: InternationalizedArrayText
+  details: InternationalizedArrayPortableText
+}
+
 export type HouseGalleryItem = {
   _type: 'houseGalleryItem'
   image: LocalizedImage
@@ -87,6 +108,13 @@ export type HouseGalleryCategory = {
       _key: string
     } & HouseGalleryItem
   >
+}
+
+export type HouseBuilding = {
+  _type: 'houseBuilding'
+  rooms: number
+  floors: number
+  startingPrice: number
 }
 
 export type AmenityCategoryReference = {
@@ -314,11 +342,7 @@ export type House = {
   description: InternationalizedArrayText
   caption?: InternationalizedArrayText
   image: LocalizedImage
-  building?: {
-    rooms: number
-    floors: number
-    startingPrice: number
-  }
+  building?: HouseBuilding
   about: InternationalizedArrayPortableText
   featuredImage?: LocalizedImage
   galleryCategories?: Array<
@@ -331,17 +355,8 @@ export type House = {
       _key: string
     } & HouseAmenityCategory
   >
-  location?: {
-    highlight: InternationalizedArrayText
-    details: InternationalizedArrayPortableText
-  }
-  map?: {
-    googleMapsUrl: string
-    placeId: string
-    placeImage: LocalizedImage
-    coordinates: Geopoint
-    address: Address
-  }
+  location?: HouseLocation
+  map?: HouseMap
   pricing?: Array<
     {
       _key: string
@@ -352,10 +367,7 @@ export type House = {
       _key: string
     } & ExtraCostItem
   >
-  phone: {
-    domestic: string
-    international: string
-  }
+  phone: HousePhone
 }
 
 export type Geopoint = {
@@ -689,9 +701,13 @@ export type AllSanitySchemaTypes =
   | Address
   | PricingRow
   | SocialLink
+  | HousePhone
+  | HouseMap
+  | HouseLocation
   | HouseGalleryItem
   | GalleryCategoryReference
   | HouseGalleryCategory
+  | HouseBuilding
   | AmenityCategoryReference
   | HouseAmenityCategory
   | AmenityReference
@@ -848,15 +864,8 @@ export type HouseQueryResult = {
   title: string | null
   description: string | null
   caption: string | null
-  building: {
-    rooms: number
-    floors: number
-    startingPrice: number
-  } | null
-  phone: {
-    domestic: string
-    international: string
-  }
+  building: HouseBuilding | null
+  phone: HousePhone
   image: {
     asset: {
       _id: string
@@ -1045,10 +1054,7 @@ export type HousesBuildingQueryResult = Array<{
     rooms: number
     floors: number
   } | null
-  phone: {
-    domestic: string
-    international: string
-  }
+  phone: HousePhone
   image: {
     asset: SanityImageAssetReference | null
     hotspot: SanityImageHotspot | null

@@ -3,10 +3,36 @@ import {
   HouseSectionContent,
   HouseSectionHeading
 } from '@/components/house/house-section'
-import { compactPortableText } from '@/lib/portable-text'
 import type { PricingRowData } from '@/lib/types/components'
+import type { PortableTextComponents } from '@portabletext/react'
 import { PortableText } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
+
+const portableTextComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="text-muted-foreground whitespace-pre-line text-sm">
+        {children}
+      </p>
+    )
+  },
+  list: {
+    bullet: ({ children }) => (
+      <ul className="text-muted-foreground list-disc space-y-1 pl-3 text-sm">
+        {children}
+      </ul>
+    ),
+    number: ({ children }) => (
+      <ol className="text-muted-foreground list-decimal space-y-1 pl-3 text-sm">
+        {children}
+      </ol>
+    )
+  },
+  listItem: {
+    bullet: ({ children }) => <li>{children}</li>,
+    number: ({ children }) => <li>{children}</li>
+  }
+}
 
 interface HousePricingProps {
   pricing: PricingRowData[]
@@ -38,7 +64,7 @@ export function HousePricing({ pricing }: HousePricingProps) {
                 {row.content && (
                   <PortableText
                     value={row.content}
-                    components={compactPortableText}
+                    components={portableTextComponents}
                   />
                 )}
               </div>

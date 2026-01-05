@@ -93,29 +93,8 @@ export const house = defineType({
     defineField({
       name: 'building',
       title: 'Building Facts',
-      type: 'object',
-      group: 'building',
-      fields: [
-        defineField({
-          name: 'rooms',
-          title: 'Number of Rooms',
-          type: 'number',
-          validation: (rule) => rule.required().min(1)
-        }),
-        defineField({
-          name: 'floors',
-          title: 'Number of Floors',
-          type: 'number',
-          validation: (rule) => rule.required().min(1)
-        }),
-        defineField({
-          name: 'startingPrice',
-          title: 'Starting Price (JPY)',
-          type: 'number',
-          description: 'Monthly rent starting from',
-          validation: (rule) => rule.required().min(0)
-        })
-      ]
+      type: 'houseBuilding',
+      group: 'building'
     }),
 
     // ============================================
@@ -174,28 +153,8 @@ export const house = defineType({
     defineField({
       name: 'location',
       title: 'Location',
-      type: 'object',
-      group: 'location',
-      fields: [
-        defineField({
-          name: 'highlight',
-          title: 'Location Highlight',
-          type: 'internationalizedArrayText',
-          description:
-            'Key location selling point (e.g., "14 minutes walk to Namba")',
-          validation: (rule) => rule.required(),
-          options: { aiAssist: { translateAction: true } }
-        }),
-        defineField({
-          name: 'details',
-          title: 'Location Details',
-          type: 'internationalizedArrayPortableText',
-          description:
-            'Use H3 for section headings (e.g., "Getting Around", "Nearby") and bullet lists for items',
-          validation: (rule) => rule.required(),
-          options: { aiAssist: { translateAction: true } }
-        })
-      ]
+      type: 'houseLocation',
+      group: 'location'
     }),
 
     // ============================================
@@ -204,45 +163,8 @@ export const house = defineType({
     defineField({
       name: 'map',
       title: 'Map',
-      type: 'object',
-      group: 'map',
-      description: 'Google Maps configuration and address for JSON-LD',
-      fields: [
-        defineField({
-          name: 'googleMapsUrl',
-          title: 'Google Maps URL',
-          type: 'url',
-          description: 'Direct link to Google Maps',
-          validation: (rule) => rule.required()
-        }),
-        defineField({
-          name: 'placeId',
-          title: 'Google Place ID',
-          type: 'string',
-          description: 'Google Maps Place ID for embedded maps',
-          validation: (rule) => rule.required()
-        }),
-        defineField({
-          name: 'placeImage',
-          title: 'Place Image',
-          type: 'localizedImage',
-          description: 'Image for Google Maps Place card',
-          validation: (rule) => rule.required().assetRequired()
-        }),
-        defineField({
-          name: 'coordinates',
-          title: 'Coordinates',
-          type: 'geopoint',
-          description: 'Pin location on the map',
-          validation: (rule) => rule.required()
-        }),
-        defineField({
-          name: 'address',
-          title: 'Address',
-          type: 'address',
-          validation: (rule) => rule.required()
-        })
-      ]
+      type: 'houseMap',
+      group: 'map'
     }),
 
     // ============================================
@@ -289,25 +211,9 @@ export const house = defineType({
     defineField({
       name: 'phone',
       title: 'Phone Numbers',
-      type: 'object',
+      type: 'housePhone',
       group: 'contact',
-      validation: (rule) => rule.required(),
-      fields: [
-        defineField({
-          name: 'domestic',
-          title: 'Domestic',
-          type: 'string',
-          description: 'Phone number for calls from Japan',
-          validation: (rule) => rule.required()
-        }),
-        defineField({
-          name: 'international',
-          title: 'International',
-          type: 'string',
-          description: 'Phone number for calls from abroad',
-          validation: (rule) => rule.required()
-        })
-      ]
+      validation: (rule) => rule.required()
     })
   ],
   preview: {
