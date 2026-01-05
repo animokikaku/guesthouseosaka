@@ -33,6 +33,7 @@ declare namespace __next_route_internal_types__ {
 
   type StaticRoutes = 
     | `/`
+    | `/api/draft-mode/disable`
     | `/api/draft-mode/enable`
   type DynamicRoutes<T extends string = string> = 
     | `/${SafeSlug<T>}`

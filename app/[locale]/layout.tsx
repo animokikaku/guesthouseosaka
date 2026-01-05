@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation'
 import '@/app/globals.css'
 import { ActiveThemeProvider } from '@/components/active-theme'
 import { Analytics } from '@/components/analytics'
+import { DraftModeIndicator } from '@/components/draft-mode-indicator'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -162,7 +163,12 @@ export default async function LocaleLayout({
               <Analytics />
               <SpeedInsights />
               <SanityLive />
-              {(await draftMode()).isEnabled && <VisualEditing />}
+              {(await draftMode()).isEnabled && (
+                <>
+                  <VisualEditing />
+                  <DraftModeIndicator />
+                </>
+              )}
             </NextIntlClientProvider>
           </ActiveThemeProvider>
         </ThemeProvider>
