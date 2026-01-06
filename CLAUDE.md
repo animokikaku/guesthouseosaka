@@ -57,9 +57,8 @@ bunx prettier --write .  # Format code
 ### Sanity Workflow
 
 1. Edit schemas in `sanity/schemaTypes/`
-2. Deploy schema: `bunx sanity schema deploy`
-3. Regenerate types: `bun run typegen`
-4. Use MCP tools for content operations when available
+2. Regenerate types: `bun run typegen`
+3. Use MCP tools for content operations when available
 
 ### Code Style
 

@@ -80,6 +80,5 @@ NEXT_PUBLIC_BLOB_STORAGE_URL=
 ## Sanity Workflow
 
 1. Edit schemas in `sanity/schemaTypes/`
-2. Deploy schema: `bunx sanity schema deploy`
-3. Regenerate types: `bun run typegen`
-4. Access Studio at `/studio`
+2. Regenerate types: `bun run typegen`
+3. Access Studio at `/studio`
