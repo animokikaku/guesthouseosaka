@@ -281,8 +281,18 @@ describe('GalleryModal', () => {
         carouselSetApiCallback?.(mockApi)
       })
 
-      // Unmount should complete without errors
-      expect(() => unmount()).not.toThrow()
+      unmount()
+
+      // Reset call counts after unmount
+      mockApi.scrollPrev.mockClear()
+      mockApi.scrollNext.mockClear()
+
+      // Dispatch key events after unmount - should not trigger scroll
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
+
+      expect(mockApi.scrollPrev).not.toHaveBeenCalled()
+      expect(mockApi.scrollNext).not.toHaveBeenCalled()
     })
   })
 

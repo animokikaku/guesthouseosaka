@@ -217,6 +217,7 @@ describe('HouseLocation', () => {
 
       // Should have the main container with flex layout
       const mainContainer = skeletonContainer.firstChild as HTMLElement
+      expect(mainContainer).not.toBeNull()
       expect(mainContainer).toBeInTheDocument()
 
       // Should have skeleton elements for loading state
@@ -229,6 +230,7 @@ describe('HouseLocation', () => {
 
       // Should have place details section (left) and map section (right)
       const mainContainer = skeletonContainer.firstChild as HTMLElement
+      expect(mainContainer).not.toBeNull()
       expect(mainContainer.children.length).toBe(2)
     })
 
