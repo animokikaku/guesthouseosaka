@@ -11,8 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci:
-    name: CI
+  unit-test:
+    name: Unit Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
