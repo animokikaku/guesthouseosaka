@@ -1,53 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { createContext } from 'react'
+import {
+  createMockFieldApi,
+  createFieldContext,
+  FieldContextWrapper,
+  type MockFieldApi
+} from './test-utils'
 
-interface MockFieldState {
-  value: string
-  meta: {
-    isTouched: boolean
-    isValid: boolean
-    errors: Array<{ message: string }>
-  }
-}
-
-interface MockFieldApi {
-  name: string
-  state: MockFieldState
-  handleChange: ReturnType<typeof vi.fn>
-  handleBlur: ReturnType<typeof vi.fn>
-}
-
-function createMockFieldState(
-  overrides: {
-    value?: string
-    isTouched?: boolean
-    isValid?: boolean
-    errors?: Array<{ message: string }>
-  } = {}
-): MockFieldState {
-  return {
-    value: overrides.value ?? '',
-    meta: {
-      isTouched: overrides.isTouched ?? false,
-      isValid: overrides.isValid ?? true,
-      errors: overrides.errors ?? []
-    }
-  }
-}
-
-function createMockFieldApi(
-  overrides: Parameters<typeof createMockFieldState>[0] = {}
-): MockFieldApi {
-  return {
-    name: 'testInput',
-    state: createMockFieldState(overrides),
-    handleChange: vi.fn(),
-    handleBlur: vi.fn()
-  }
-}
-
-const testFieldContext = createContext<MockFieldApi | null>(null)
+const testFieldContext = createFieldContext<string>()
 
 vi.mock('@/components/forms', async () => {
   const React = await import('react')
@@ -58,17 +18,14 @@ vi.mock('@/components/forms', async () => {
 
 import { InputField } from '../input-field'
 
-function FieldContextWrapper({
-  children,
-  fieldApi
-}: {
-  children: React.ReactNode
-  fieldApi: MockFieldApi
-}) {
-  return (
-    <testFieldContext.Provider value={fieldApi}>
-      {children}
-    </testFieldContext.Provider>
+function renderWithContext(
+  ui: React.ReactElement,
+  fieldApi: MockFieldApi<string>
+) {
+  return render(
+    <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
+      {ui}
+    </FieldContextWrapper>
   )
 }
 
@@ -79,50 +36,37 @@ describe('InputField', () => {
 
   describe('rendering', () => {
     it('renders input with label', () => {
-      const fieldApi = createMockFieldApi()
+      const fieldApi = createMockFieldApi('testInput', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Email" />, fieldApi)
 
       expect(screen.getByRole('textbox')).toBeInTheDocument()
       expect(screen.getByText('Email')).toBeInTheDocument()
     })
 
     it('renders input without label', () => {
-      const fieldApi = createMockFieldApi()
+      const fieldApi = createMockFieldApi('testInput', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField />, fieldApi)
 
       expect(screen.getByRole('textbox')).toBeInTheDocument()
     })
 
     it('renders input with description', () => {
-      const fieldApi = createMockFieldApi()
+      const fieldApi = createMockFieldApi('testInput', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" description="Enter your email address" />
-        </FieldContextWrapper>
+      renderWithContext(
+        <InputField label="Email" description="Enter your email address" />,
+        fieldApi
       )
 
       expect(screen.getByText('Enter your email address')).toBeInTheDocument()
     })
 
     it('associates label with input via htmlFor', () => {
-      const fieldApi = createMockFieldApi()
+      const fieldApi = createMockFieldApi('testInput', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Email" />, fieldApi)
 
       const input = screen.getByRole('textbox')
       expect(input).toHaveAttribute('id', 'form-tanstack-input-testInput')
@@ -137,25 +81,19 @@ describe('InputField', () => {
 
   describe('value handling', () => {
     it('renders with initial value', () => {
-      const fieldApi = createMockFieldApi({ value: 'test@example.com' })
+      const fieldApi = createMockFieldApi('testInput', '', {
+        value: 'test@example.com'
+      })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Email" />, fieldApi)
 
       expect(screen.getByRole('textbox')).toHaveValue('test@example.com')
     })
 
     it('renders empty when value is empty string', () => {
-      const fieldApi = createMockFieldApi({ value: '' })
+      const fieldApi = createMockFieldApi('testInput', '', { value: '' })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Email" />, fieldApi)
 
       expect(screen.getByRole('textbox')).toHaveValue('')
     })
@@ -163,13 +101,9 @@ describe('InputField', () => {
 
   describe('onChange handler', () => {
     it('calls handleChange when input value changes', () => {
-      const fieldApi = createMockFieldApi()
+      const fieldApi = createMockFieldApi('testInput', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Email" />, fieldApi)
 
       const input = screen.getByRole('textbox')
       fireEvent.change(input, { target: { value: 'test@example.com' } })
@@ -178,13 +112,9 @@ describe('InputField', () => {
     })
 
     it('calls handleBlur when input loses focus', () => {
-      const fieldApi = createMockFieldApi()
+      const fieldApi = createMockFieldApi('testInput', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Email" />, fieldApi)
 
       const input = screen.getByRole('textbox')
       fireEvent.blur(input)
@@ -195,50 +125,38 @@ describe('InputField', () => {
 
   describe('error state display', () => {
     it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi({
+      const fieldApi = createMockFieldApi('testInput', '', {
         isTouched: false,
         isValid: false,
         errors: [{ message: 'This field is required' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Email" />, fieldApi)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
     it('shows error when field is touched and invalid', () => {
-      const fieldApi = createMockFieldApi({
+      const fieldApi = createMockFieldApi('testInput', '', {
         isTouched: true,
         isValid: false,
         errors: [{ message: 'This field is required' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Email" />, fieldApi)
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
       expect(screen.getByText('This field is required')).toBeInTheDocument()
     })
 
     it('sets aria-invalid when field is touched and invalid', () => {
-      const fieldApi = createMockFieldApi({
+      const fieldApi = createMockFieldApi('testInput', '', {
         isTouched: true,
         isValid: false,
         errors: [{ message: 'Required' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Email" />, fieldApi)
 
       const input = screen.getByRole('textbox')
       expect(input).toHaveAttribute('aria-invalid', 'true')
@@ -247,13 +165,9 @@ describe('InputField', () => {
 
   describe('input types', () => {
     it('passes through type prop', () => {
-      const fieldApi = createMockFieldApi()
+      const fieldApi = createMockFieldApi('testInput', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Password" type="password" />
-        </FieldContextWrapper>
-      )
+      renderWithContext(<InputField label="Password" type="password" />, fieldApi)
 
       expect(screen.getByLabelText('Password')).toHaveAttribute(
         'type',
@@ -262,12 +176,11 @@ describe('InputField', () => {
     })
 
     it('passes through placeholder prop', () => {
-      const fieldApi = createMockFieldApi()
+      const fieldApi = createMockFieldApi('testInput', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi}>
-          <InputField label="Email" placeholder="Enter email" />
-        </FieldContextWrapper>
+      renderWithContext(
+        <InputField label="Email" placeholder="Enter email" />,
+        fieldApi
       )
 
       expect(screen.getByRole('textbox')).toHaveAttribute(
