@@ -1,9 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, act } from '@testing-library/react'
-import { GalleryModal } from '../gallery-modal'
-import { createGalleryCategory, createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 import { store } from '@/lib/store'
+import {
+  type CarouselMockState,
+  type MockCarouselApi,
+  createMockCarouselApi,
+  resetCarouselMockState
+} from '@/lib/__tests__/utils/carousel-mock'
 
 // Mock matchMedia for carousel
 Object.defineProperty(window, 'matchMedia', {
@@ -18,6 +22,17 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn()
   }))
+})
+
+// Use vi.hoisted to create state that can be used in vi.mock
+const { carouselState } = vi.hoisted(() => {
+  const state: CarouselMockState = {
+    mockApi: null,
+    apiCallbacks: new Map(),
+    setApiCallback: null,
+    currentSelectedIndex: 0
+  }
+  return { carouselState: state }
 })
 
 // Mock next-sanity
@@ -52,21 +67,17 @@ vi.mock('@radix-ui/react-dialog', async () => {
   }
 })
 
-// Store setApi callback for later use in tests
-let carouselSetApiCallback: ((api: unknown) => void) | null = null
-
-// Mock carousel with simpler implementation that supports setApi
+// Mock carousel with state capture
 vi.mock('@/components/ui/carousel', () => ({
   Carousel: ({
     children,
     setApi
   }: {
     children: React.ReactNode
-    setApi?: (api: unknown) => void
+    setApi?: (api: MockCarouselApi) => void
   }) => {
-    // Store the setApi callback for triggering in tests
     if (setApi) {
-      carouselSetApiCallback = setApi
+      carouselState.setApiCallback = setApi
     }
     return <div data-testid="carousel">{children}</div>
   },
@@ -79,7 +90,11 @@ vi.mock('@/components/ui/carousel', () => ({
     onTouchStart?: React.TouchEventHandler
     onTouchEnd?: React.TouchEventHandler
   }) => (
-    <div data-testid="carousel-content" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+    <div
+      data-testid="carousel-content"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       {children}
     </div>
   ),
@@ -90,37 +105,9 @@ vi.mock('@/components/ui/carousel', () => ({
   CarouselPrevious: () => <button data-testid="carousel-prev">Previous</button>
 }))
 
-// Create mock carousel API
-type MockCarouselApi = {
-  selectedScrollSnap: () => number
-  scrollPrev: ReturnType<typeof vi.fn>
-  scrollNext: ReturnType<typeof vi.fn>
-  on: (event: string, callback: () => void) => void
-  off: (event: string, callback: () => void) => void
-}
-
-let mockApi: MockCarouselApi | null = null
-let apiCallbacks: Map<string, (() => void)[]> = new Map()
-let currentSelectedIndex = 0
-
-function createMockCarouselApi(): MockCarouselApi {
-  return {
-    selectedScrollSnap: () => currentSelectedIndex,
-    scrollPrev: vi.fn(),
-    scrollNext: vi.fn(),
-    on: vi.fn((event: string, callback: () => void) => {
-      const callbacks = apiCallbacks.get(event) || []
-      callbacks.push(callback)
-      apiCallbacks.set(event, callbacks)
-    }),
-    off: vi.fn((event: string, callback: () => void) => {
-      const callbacks = apiCallbacks.get(event) || []
-      const index = callbacks.indexOf(callback)
-      if (index > -1) callbacks.splice(index, 1)
-      apiCallbacks.set(event, callbacks)
-    })
-  }
-}
+// Import component after mocks
+import { GalleryModal } from '../gallery-modal'
+import { createGalleryCategory, createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 
 describe('GalleryModal', () => {
   const galleryCategories = [
@@ -137,10 +124,7 @@ describe('GalleryModal', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     store.setState({ photoId: null })
-    mockApi = null
-    apiCallbacks = new Map()
-    carouselSetApiCallback = null
-    currentSelectedIndex = 0
+    resetCarouselMockState(carouselState)
   })
 
   describe('open/close state', () => {
@@ -220,16 +204,16 @@ describe('GalleryModal', () => {
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // Set up the mock API and wrap in act to ensure React processes state update
-      mockApi = createMockCarouselApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        carouselSetApiCallback?.(mockApi)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
       // Dispatch ArrowLeft key event
       const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' })
       document.dispatchEvent(event)
 
-      expect(mockApi.scrollPrev).toHaveBeenCalled()
+      expect(carouselState.mockApi.scrollPrev).toHaveBeenCalled()
     })
 
     it('calls scrollNext on ArrowRight key press', () => {
@@ -238,16 +222,16 @@ describe('GalleryModal', () => {
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // Set up the mock API and wrap in act to ensure React processes state update
-      mockApi = createMockCarouselApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        carouselSetApiCallback?.(mockApi)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
       // Dispatch ArrowRight key event
       const event = new KeyboardEvent('keydown', { key: 'ArrowRight' })
       document.dispatchEvent(event)
 
-      expect(mockApi.scrollNext).toHaveBeenCalled()
+      expect(carouselState.mockApi.scrollNext).toHaveBeenCalled()
     })
 
     it('does not scroll on other key presses', () => {
@@ -256,9 +240,9 @@ describe('GalleryModal', () => {
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // Set up the mock API and wrap in act to ensure React processes state update
-      mockApi = createMockCarouselApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        carouselSetApiCallback?.(mockApi)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
       // Dispatch other key events
@@ -266,8 +250,8 @@ describe('GalleryModal', () => {
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Space' }))
 
-      expect(mockApi.scrollPrev).not.toHaveBeenCalled()
-      expect(mockApi.scrollNext).not.toHaveBeenCalled()
+      expect(carouselState.mockApi.scrollPrev).not.toHaveBeenCalled()
+      expect(carouselState.mockApi.scrollNext).not.toHaveBeenCalled()
     })
 
     it('removes keyboard event listener on unmount', () => {
@@ -276,23 +260,23 @@ describe('GalleryModal', () => {
       const { unmount } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // Set up the mock API
-      mockApi = createMockCarouselApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        carouselSetApiCallback?.(mockApi)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
       unmount()
 
       // Reset call counts after unmount
-      mockApi.scrollPrev.mockClear()
-      mockApi.scrollNext.mockClear()
+      carouselState.mockApi.scrollPrev.mockClear()
+      carouselState.mockApi.scrollNext.mockClear()
 
       // Dispatch key events after unmount - should not trigger scroll
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
 
-      expect(mockApi.scrollPrev).not.toHaveBeenCalled()
-      expect(mockApi.scrollNext).not.toHaveBeenCalled()
+      expect(carouselState.mockApi.scrollPrev).not.toHaveBeenCalled()
+      expect(carouselState.mockApi.scrollNext).not.toHaveBeenCalled()
     })
   })
 
@@ -302,12 +286,12 @@ describe('GalleryModal', () => {
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
-      mockApi = createMockCarouselApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        carouselSetApiCallback?.(mockApi)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
-      expect(mockApi.on).toHaveBeenCalledWith('select', expect.any(Function))
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith('select', expect.any(Function))
     })
 
     it('cleans up select event handler on unmount', () => {
@@ -315,35 +299,14 @@ describe('GalleryModal', () => {
 
       const { unmount } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
-      mockApi = createMockCarouselApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        carouselSetApiCallback?.(mockApi)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
       unmount()
 
-      expect(mockApi.off).toHaveBeenCalledWith('select', expect.any(Function))
-    })
-
-    it('updates selected index when select event fires', () => {
-      store.setState({ photoId: 'img1' })
-
-      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
-
-      mockApi = createMockCarouselApi()
-      act(() => {
-        carouselSetApiCallback?.(mockApi)
-      })
-
-      // Simulate selecting a different slide
-      currentSelectedIndex = 2
-      act(() => {
-        apiCallbacks.get('select')?.forEach((cb) => cb())
-      })
-
-      // The component should have updated its internal state
-      // We can verify this indirectly by checking the mockApi.selectedScrollSnap was designed to return the new index
-      expect(mockApi.selectedScrollSnap()).toBe(2)
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith('select', expect.any(Function))
     })
   })
 })

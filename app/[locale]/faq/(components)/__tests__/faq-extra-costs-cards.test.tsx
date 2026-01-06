@@ -1,47 +1,28 @@
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { FAQExtraCostsCards } from '../faq-extra-costs-cards'
 import type {
   HousesBuildingQueryResult,
   PricingCategoriesQueryResult
 } from '@/sanity.types'
+import {
+  type CarouselMockState,
+  type MockCarouselApi,
+  createMockCarouselApi,
+  resetCarouselMockState
+} from '@/lib/__tests__/utils/carousel-mock'
 
-// Create a mock API factory with proper type
-type MockCarouselApi = {
-  selectedScrollSnap: () => number
-  scrollTo: (index: number) => void
-  on: (event: string, callback: () => void) => void
-  off: (event: string, callback: () => void) => void
-}
-
-let mockApi: MockCarouselApi | null = null
-let apiCallbacks: Map<string, (() => void)[]> = new Map()
-let setApiCallback: ((api: MockCarouselApi) => void) | null = null
-let currentSelectedIndex = 0
-
-function createMockApi(): MockCarouselApi {
-  return {
-    selectedScrollSnap: () => currentSelectedIndex,
-    scrollTo: vi.fn((index: number) => {
-      currentSelectedIndex = index
-      // Trigger select callbacks
-      apiCallbacks.get('select')?.forEach((cb) => cb())
-    }),
-    on: vi.fn((event: string, callback: () => void) => {
-      const callbacks = apiCallbacks.get(event) || []
-      callbacks.push(callback)
-      apiCallbacks.set(event, callbacks)
-    }),
-    off: vi.fn((event: string, callback: () => void) => {
-      const callbacks = apiCallbacks.get(event) || []
-      const index = callbacks.indexOf(callback)
-      if (index > -1) callbacks.splice(index, 1)
-      apiCallbacks.set(event, callbacks)
-    })
+// Use vi.hoisted to create state that can be used in vi.mock
+const { carouselState } = vi.hoisted(() => {
+  const state: CarouselMockState = {
+    mockApi: null,
+    apiCallbacks: new Map(),
+    setApiCallback: null,
+    currentSelectedIndex: 0
   }
-}
+  return { carouselState: state }
+})
 
-// Mock the Carousel components with API support
+// Mock the Carousel components with state capture
 vi.mock('@/components/ui/carousel', () => ({
   Carousel: ({
     children,
@@ -50,9 +31,8 @@ vi.mock('@/components/ui/carousel', () => ({
     children: React.ReactNode
     setApi?: (api: MockCarouselApi) => void
   }) => {
-    // Store the setApi callback for triggering later
     if (setApi) {
-      setApiCallback = setApi
+      carouselState.setApiCallback = setApi
     }
     return <div data-testid="carousel">{children}</div>
   },
@@ -63,6 +43,9 @@ vi.mock('@/components/ui/carousel', () => ({
     <div data-testid="carousel-item">{children}</div>
   )
 }))
+
+// Import component after mocks
+import { FAQExtraCostsCards } from '../faq-extra-costs-cards'
 
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
@@ -114,10 +97,7 @@ const createExtraCost = (categoryId: string, text: string): ExtraCost => ({
 describe('FAQExtraCostsCards', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockApi = null
-    apiCallbacks = new Map()
-    setApiCallback = null
-    currentSelectedIndex = 0
+    resetCarouselMockState(carouselState)
   })
 
   describe('empty states', () => {
@@ -294,16 +274,16 @@ describe('FAQExtraCostsCards', () => {
       )
 
       // Simulate API being set after render
-      mockApi = createMockApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        setApiCallback?.(mockApi!)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
       // Click on the second navigation dot
       const appleButton = screen.getByLabelText('Go to Apple House')
       fireEvent.click(appleButton)
 
-      expect(mockApi.scrollTo).toHaveBeenCalledWith(1)
+      expect(carouselState.mockApi.scrollTo).toHaveBeenCalledWith(1)
     })
   })
 
@@ -324,14 +304,14 @@ describe('FAQExtraCostsCards', () => {
         />
       )
 
-      mockApi = createMockApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        setApiCallback?.(mockApi!)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
       // Verify event handlers were registered
-      expect(mockApi.on).toHaveBeenCalledWith('select', expect.any(Function))
-      expect(mockApi.on).toHaveBeenCalledWith('reInit', expect.any(Function))
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith('select', expect.any(Function))
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith('reInit', expect.any(Function))
     })
 
     it('updates current index when select event fires', () => {
@@ -351,9 +331,9 @@ describe('FAQExtraCostsCards', () => {
         />
       )
 
-      mockApi = createMockApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        setApiCallback?.(mockApi!)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
       // Initial state: first dot should be active (w-6 class)
@@ -367,8 +347,8 @@ describe('FAQExtraCostsCards', () => {
 
       // Simulate scrolling to second item
       act(() => {
-        currentSelectedIndex = 1
-        apiCallbacks.get('select')?.forEach((cb) => cb())
+        carouselState.currentSelectedIndex = 1
+        carouselState.apiCallbacks.get('select')?.forEach((cb) => cb())
       })
 
       // After selection: second dot should now be active
@@ -393,16 +373,16 @@ describe('FAQExtraCostsCards', () => {
         />
       )
 
-      mockApi = createMockApi()
+      carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
-        setApiCallback?.(mockApi!)
+        carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
       unmount()
 
       // Verify off was called to clean up handlers
-      expect(mockApi.off).toHaveBeenCalledWith('select', expect.any(Function))
-      expect(mockApi.off).toHaveBeenCalledWith('reInit', expect.any(Function))
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith('select', expect.any(Function))
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith('reInit', expect.any(Function))
     })
   })
 })

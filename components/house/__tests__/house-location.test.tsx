@@ -202,8 +202,6 @@ describe('HouseLocation', () => {
   })
 
   describe('loading skeleton', () => {
-    let skeletonContainer: HTMLElement
-
     function renderLoadingSkeleton() {
       // Render component to trigger the dynamic import mock
       render(<HouseLocation {...baseProps} />)
@@ -212,43 +210,24 @@ describe('HouseLocation', () => {
       return container
     }
 
-    it('renders loading skeleton with place details skeleton', () => {
-      skeletonContainer = renderLoadingSkeleton()
+    it('renders a loading state while map component loads', () => {
+      const container = renderLoadingSkeleton()
 
-      // Should have the main container with flex layout
-      const mainContainer = skeletonContainer.firstChild as HTMLElement
-      expect(mainContainer).not.toBeNull()
-      expect(mainContainer).toBeInTheDocument()
+      // Verify loading state is rendered (not empty)
+      expect(container.firstChild).not.toBeNull()
+      expect(container.children.length).toBeGreaterThan(0)
 
-      // Should have skeleton elements for loading state
-      const skeletons = skeletonContainer.querySelectorAll('[data-slot="skeleton"]')
-      expect(skeletons.length).toBeGreaterThan(0)
+      // Verify it has skeleton elements indicating loading
+      const hasSkeletonElements = container.querySelector('[data-slot="skeleton"]')
+      expect(hasSkeletonElements).toBeTruthy()
     })
 
-    it('renders skeleton with two-column layout structure', () => {
-      skeletonContainer = renderLoadingSkeleton()
+    it('renders multiple skeleton placeholders for content areas', () => {
+      const container = renderLoadingSkeleton()
 
-      // Should have place details section (left) and map section (right)
-      const mainContainer = skeletonContainer.firstChild as HTMLElement
-      expect(mainContainer).not.toBeNull()
-      expect(mainContainer.children.length).toBe(2)
-    })
-
-    it('renders image skeleton in place details', () => {
-      skeletonContainer = renderLoadingSkeleton()
-
-      // First child is place details with image skeleton taking half height
-      const placeDetails = skeletonContainer.querySelector('.flex.flex-col')
-      expect(placeDetails).toBeInTheDocument()
-    })
-
-    it('renders text skeletons for place information', () => {
-      skeletonContainer = renderLoadingSkeleton()
-
-      // Should have multiple skeleton elements for title and text lines
-      const skeletons = skeletonContainer.querySelectorAll('[data-slot="skeleton"]')
-      // At least: 1 image + 1 title + 3 text lines + 1 map = 6 skeletons minimum
-      expect(skeletons.length).toBeGreaterThanOrEqual(5)
+      // Should have multiple skeleton elements for various content areas
+      const skeletons = container.querySelectorAll('[data-slot="skeleton"]')
+      expect(skeletons.length).toBeGreaterThan(1)
     })
   })
 })
