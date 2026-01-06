@@ -16,6 +16,7 @@ export default defineConfig({
         'components/ui/**',
         '**/__tests__/utils/**',
         '**/__tests__/mocks/**',
+        '**/__tests__/mocks.{ts,tsx}',
         '**/__mocks__/**',
       ],
     },
