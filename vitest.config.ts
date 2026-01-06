@@ -12,7 +12,12 @@ export default defineConfig({
     exclude: ['**/node_modules/**', '**/e2e/**', '**/playwright/**'],
     passWithNoTests: true,
     coverage: {
-      exclude: ['components/ui/**'],
+      exclude: [
+        'components/ui/**',
+        '**/__tests__/utils/**',
+        '**/__tests__/mocks/**',
+        '**/__mocks__/**',
+      ],
     },
   },
 })
