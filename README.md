@@ -1,5 +1,7 @@
 # Guest House Osaka
 
+[![codecov](https://codecov.io/gh/animokikaku/guesthouseosaka/graph/badge.svg?token=JT5SUWPQK3)](https://codecov.io/gh/animokikaku/guesthouseosaka)
+
 A multilingual website for a guest house in Osaka, built with Next.js and Sanity CMS.
 
 ## Tech Stack
