@@ -275,25 +275,14 @@ describe('GalleryModal', () => {
 
       const { unmount } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
-      // Set up the mock API and wrap in act to ensure React processes state update
+      // Set up the mock API
       mockApi = createMockCarouselApi()
       act(() => {
         carouselSetApiCallback?.(mockApi)
       })
 
-      unmount()
-
-      // After unmount, key events should not call the API
-      // Reset the mock to verify no additional calls
-      mockApi.scrollPrev.mockClear()
-      mockApi.scrollNext.mockClear()
-
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
-
-      // Note: The event listeners are removed, so these shouldn't be called
-      // But since we're using a mock, we can't verify the removal directly
-      // The test mainly ensures no errors occur on unmount
+      // Unmount should complete without errors
+      expect(() => unmount()).not.toThrow()
     })
   })
 

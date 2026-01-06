@@ -247,12 +247,24 @@ describe('CategoryThumbnail', () => {
   })
 
   describe('accessibility', () => {
-    it('renders as a button', () => {
+    it('renders as a button for keyboard accessibility', () => {
       const category = createCategory()
 
       render(<CategoryThumbnail category={category} />)
 
-      expect(screen.getByRole('button')).toBeInTheDocument()
+      // Native button elements are keyboard accessible (Enter/Space trigger click)
+      const button = screen.getByRole('button')
+      expect(button).toBeInTheDocument()
+      expect(button.tagName).toBe('BUTTON')
+    })
+
+    it('has focus-visible ring styles for keyboard navigation', () => {
+      const category = createCategory()
+
+      render(<CategoryThumbnail category={category} />)
+
+      const button = screen.getByRole('button')
+      expect(button).toHaveClass('focus-visible:ring-2')
     })
   })
 })

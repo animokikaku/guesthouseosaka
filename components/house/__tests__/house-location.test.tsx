@@ -3,9 +3,10 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 // Use vi.hoisted to declare variables that will be used in mocks
-const { mockStorage } = vi.hoisted(() => ({
-  mockStorage: { loadingFn: null as (() => React.ReactNode) | null }
-}))
+const { mockStorage } = vi.hoisted(() => {
+  const storage: { loadingFn: (() => React.ReactNode) | null } = { loadingFn: null }
+  return { mockStorage: storage }
+})
 
 // Mock next/dynamic to render synchronously and capture loading function
 vi.mock('next/dynamic', () => ({
@@ -201,53 +202,49 @@ describe('HouseLocation', () => {
   })
 
   describe('loading skeleton', () => {
-    it('renders loading skeleton with place details skeleton', () => {
+    let skeletonContainer: HTMLElement
+
+    function renderLoadingSkeleton() {
       // Render component to trigger the dynamic import mock
       render(<HouseLocation {...baseProps} />)
-
-      // Render the captured loading function
       expect(mockStorage.loadingFn).not.toBeNull()
       const { container } = render(<>{mockStorage.loadingFn?.()}</>)
+      return container
+    }
+
+    it('renders loading skeleton with place details skeleton', () => {
+      skeletonContainer = renderLoadingSkeleton()
 
       // Should have the main container with flex layout
-      const mainContainer = container.firstChild as HTMLElement
+      const mainContainer = skeletonContainer.firstChild as HTMLElement
       expect(mainContainer).toBeInTheDocument()
 
       // Should have skeleton elements for loading state
-      const skeletons = container.querySelectorAll('[data-slot="skeleton"]')
+      const skeletons = skeletonContainer.querySelectorAll('[data-slot="skeleton"]')
       expect(skeletons.length).toBeGreaterThan(0)
     })
 
     it('renders skeleton with two-column layout structure', () => {
-      render(<HouseLocation {...baseProps} />)
-
-      expect(mockStorage.loadingFn).not.toBeNull()
-      const { container } = render(<>{mockStorage.loadingFn?.()}</>)
+      skeletonContainer = renderLoadingSkeleton()
 
       // Should have place details section (left) and map section (right)
-      const mainContainer = container.firstChild as HTMLElement
+      const mainContainer = skeletonContainer.firstChild as HTMLElement
       expect(mainContainer.children.length).toBe(2)
     })
 
     it('renders image skeleton in place details', () => {
-      render(<HouseLocation {...baseProps} />)
-
-      expect(mockStorage.loadingFn).not.toBeNull()
-      const { container } = render(<>{mockStorage.loadingFn?.()}</>)
+      skeletonContainer = renderLoadingSkeleton()
 
       // First child is place details with image skeleton taking half height
-      const placeDetails = container.querySelector('.flex.flex-col')
+      const placeDetails = skeletonContainer.querySelector('.flex.flex-col')
       expect(placeDetails).toBeInTheDocument()
     })
 
     it('renders text skeletons for place information', () => {
-      render(<HouseLocation {...baseProps} />)
-
-      expect(mockStorage.loadingFn).not.toBeNull()
-      const { container } = render(<>{mockStorage.loadingFn?.()}</>)
+      skeletonContainer = renderLoadingSkeleton()
 
       // Should have multiple skeleton elements for title and text lines
-      const skeletons = container.querySelectorAll('[data-slot="skeleton"]')
+      const skeletons = skeletonContainer.querySelectorAll('[data-slot="skeleton"]')
       // At least: 1 image + 1 title + 3 text lines + 1 map = 6 skeletons minimum
       expect(skeletons.length).toBeGreaterThanOrEqual(5)
     })

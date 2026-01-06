@@ -356,18 +356,25 @@ describe('FAQExtraCostsCards', () => {
         setApiCallback?.(mockApi!)
       })
 
+      // Initial state: first dot should be active (w-6 class)
+      const dots = screen.getAllByRole('button').filter(
+        (btn) => btn.getAttribute('aria-label')?.startsWith('Go to')
+      )
+      expect(dots).toHaveLength(3)
+      expect(dots[0]).toHaveClass('w-6')
+      expect(dots[1]).toHaveClass('w-2')
+      expect(dots[2]).toHaveClass('w-2')
+
       // Simulate scrolling to second item
       act(() => {
         currentSelectedIndex = 1
         apiCallbacks.get('select')?.forEach((cb) => cb())
       })
 
-      // The active dot should have changed (wider class)
-      const dots = screen.getAllByRole('button').filter(
-        (btn) => btn.getAttribute('aria-label')?.startsWith('Go to')
-      )
-      // We can't easily check CSS classes in jsdom, but we can verify the buttons exist
-      expect(dots).toHaveLength(3)
+      // After selection: second dot should now be active
+      expect(dots[0]).toHaveClass('w-2')
+      expect(dots[1]).toHaveClass('w-6')
+      expect(dots[2]).toHaveClass('w-2')
     })
 
     it('cleans up event handlers on unmount', () => {

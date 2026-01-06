@@ -86,7 +86,7 @@ describe('GalleryGridItem', () => {
 
   describe('empty states', () => {
     it('returns null when image is null', () => {
-      const item = createGalleryItem({ image: null as unknown as GalleryItem['image'] })
+      const item = { ...createGalleryItem(), image: null } as unknown as GalleryItem
 
       const { container } = render(
         <GalleryGridItem item={item} categoryKey="cat1" />
