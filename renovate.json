@@ -2,6 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "labels": ["dependencies"],
+  "rangeStrategy": "bump",
   "automerge": true,
   "automergeType": "pr",
   "platformAutomerge": true,
