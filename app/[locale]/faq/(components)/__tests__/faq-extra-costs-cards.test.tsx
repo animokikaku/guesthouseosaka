@@ -1,16 +1,41 @@
-import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
-import { FAQExtraCostsCards } from '../faq-extra-costs-cards'
+import { render, screen, fireEvent, act } from '@testing-library/react'
+import { describe, expect, it, vi, beforeEach } from 'vitest'
 import type {
   HousesBuildingQueryResult,
   PricingCategoriesQueryResult
 } from '@/sanity.types'
+import {
+  type CarouselMockState,
+  type MockCarouselApi,
+  createMockCarouselApi,
+  resetCarouselMockState
+} from '@/lib/__tests__/utils/carousel-mock'
 
-// Mock the Carousel components to avoid embla-carousel complexity
+// Use vi.hoisted to create state that can be used in vi.mock
+const { carouselState } = vi.hoisted(() => {
+  const state: CarouselMockState = {
+    mockApi: null,
+    apiCallbacks: new Map(),
+    setApiCallback: null,
+    currentSelectedIndex: 0
+  }
+  return { carouselState: state }
+})
+
+// Mock the Carousel components with state capture
 vi.mock('@/components/ui/carousel', () => ({
-  Carousel: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="carousel">{children}</div>
-  ),
+  Carousel: ({
+    children,
+    setApi
+  }: {
+    children: React.ReactNode
+    setApi?: (api: MockCarouselApi) => void
+  }) => {
+    if (setApi) {
+      carouselState.setApiCallback = setApi
+    }
+    return <div data-testid="carousel">{children}</div>
+  },
   CarouselContent: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="carousel-content">{children}</div>
   ),
@@ -18,6 +43,9 @@ vi.mock('@/components/ui/carousel', () => ({
     <div data-testid="carousel-item">{children}</div>
   )
 }))
+
+// Import component after mocks
+import { FAQExtraCostsCards } from '../faq-extra-costs-cards'
 
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
@@ -67,6 +95,11 @@ const createExtraCost = (categoryId: string, text: string): ExtraCost => ({
 })
 
 describe('FAQExtraCostsCards', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    resetCarouselMockState(carouselState)
+  })
+
   describe('empty states', () => {
     it('returns null when houses array is empty', () => {
       const pricingCategories: PricingCategories = [
@@ -196,6 +229,160 @@ describe('FAQExtraCostsCards', () => {
       expect(screen.getByTestId('carousel-content')).toBeInTheDocument()
       // 3 carousel items for 3 houses
       expect(screen.getAllByTestId('carousel-item')).toHaveLength(3)
+    })
+  })
+
+  describe('navigation dots', () => {
+    it('renders navigation dots for each house', () => {
+      const houses: Houses = [
+        createHouse('h1', 'orange'),
+        createHouse('h2', 'apple'),
+        createHouse('h3', 'lemon')
+      ]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
+
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
+
+      // Should have navigation dots with aria-labels
+      expect(screen.getByLabelText('Go to Orange House')).toBeInTheDocument()
+      expect(screen.getByLabelText('Go to Apple House')).toBeInTheDocument()
+      expect(screen.getByLabelText('Go to Lemon House')).toBeInTheDocument()
+    })
+
+    it('calls api.scrollTo when navigation dot is clicked', () => {
+      const houses: Houses = [
+        createHouse('h1', 'orange'),
+        createHouse('h2', 'apple'),
+        createHouse('h3', 'lemon')
+      ]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
+
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
+
+      // Simulate API being set after render
+      carouselState.mockApi = createMockCarouselApi(carouselState)
+      act(() => {
+        carouselState.setApiCallback?.(carouselState.mockApi!)
+      })
+
+      // Click on the second navigation dot
+      const appleButton = screen.getByLabelText('Go to Apple House')
+      fireEvent.click(appleButton)
+
+      expect(carouselState.mockApi.scrollTo).toHaveBeenCalledWith(1)
+    })
+  })
+
+  describe('carousel API integration', () => {
+    it('registers select and reInit event handlers', () => {
+      const houses: Houses = [
+        createHouse('h1', 'orange'),
+        createHouse('h2', 'apple')
+      ]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
+
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
+
+      carouselState.mockApi = createMockCarouselApi(carouselState)
+      act(() => {
+        carouselState.setApiCallback?.(carouselState.mockApi!)
+      })
+
+      // Verify event handlers were registered
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith('select', expect.any(Function))
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith('reInit', expect.any(Function))
+    })
+
+    it('updates current index when select event fires', () => {
+      const houses: Houses = [
+        createHouse('h1', 'orange'),
+        createHouse('h2', 'apple'),
+        createHouse('h3', 'lemon')
+      ]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
+
+      render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
+
+      carouselState.mockApi = createMockCarouselApi(carouselState)
+      act(() => {
+        carouselState.setApiCallback?.(carouselState.mockApi!)
+      })
+
+      // Initial state: first dot should be active (w-6 class)
+      const dots = screen.getAllByRole('button').filter(
+        (btn) => btn.getAttribute('aria-label')?.startsWith('Go to')
+      )
+      expect(dots).toHaveLength(3)
+      expect(dots[0]).toHaveClass('w-6')
+      expect(dots[1]).toHaveClass('w-2')
+      expect(dots[2]).toHaveClass('w-2')
+
+      // Simulate scrolling to second item
+      act(() => {
+        carouselState.currentSelectedIndex = 1
+        carouselState.apiCallbacks.get('select')?.forEach((cb) => cb())
+      })
+
+      // After selection: second dot should now be active
+      expect(dots[0]).toHaveClass('w-2')
+      expect(dots[1]).toHaveClass('w-6')
+      expect(dots[2]).toHaveClass('w-2')
+    })
+
+    it('cleans up event handlers on unmount', () => {
+      const houses: Houses = [
+        createHouse('h1', 'orange'),
+        createHouse('h2', 'apple')
+      ]
+      const pricingCategories: PricingCategories = [
+        createCategory('deposit', 'Deposit')
+      ]
+
+      const { unmount } = render(
+        <FAQExtraCostsCards
+          houses={houses}
+          pricingCategories={pricingCategories}
+        />
+      )
+
+      carouselState.mockApi = createMockCarouselApi(carouselState)
+      act(() => {
+        carouselState.setApiCallback?.(carouselState.mockApi!)
+      })
+
+      unmount()
+
+      // Verify off was called to clean up handlers
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith('select', expect.any(Function))
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith('reInit', expect.any(Function))
     })
   })
 })

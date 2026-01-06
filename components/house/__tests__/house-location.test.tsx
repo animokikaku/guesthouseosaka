@@ -1,11 +1,23 @@
 import { LocationData } from '@/lib/types/components'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { HouseLocation } from '../house-location'
 
-// Mock next/dynamic to render synchronously
+// Use vi.hoisted to declare variables that will be used in mocks
+const { mockStorage } = vi.hoisted(() => {
+  const storage: { loadingFn: (() => React.ReactNode) | null } = { loadingFn: null }
+  return { mockStorage: storage }
+})
+
+// Mock next/dynamic to render synchronously and capture loading function
 vi.mock('next/dynamic', () => ({
-  default: () => {
+  default: (
+    _importFn: () => Promise<unknown>,
+    options?: { loading?: () => React.ReactNode }
+  ) => {
+    // Capture the loading function for testing
+    if (options?.loading) {
+      mockStorage.loadingFn = options.loading
+    }
     // Return a mock HouseMap component
     return function MockHouseMap(props: {
       center: { lat: number; lng: number }
@@ -24,6 +36,8 @@ vi.mock('next/dynamic', () => ({
     }
   }
 }))
+
+import { HouseLocation } from '../house-location'
 
 // Mock HouseLocationModal - matches real component behavior
 vi.mock('@/components/house/house-location-modal', () => ({
@@ -184,6 +198,36 @@ describe('HouseLocation', () => {
       render(<HouseLocation {...props} />)
 
       expect(screen.queryByTestId('location-modal')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('loading skeleton', () => {
+    function renderLoadingSkeleton() {
+      // Render component to trigger the dynamic import mock
+      render(<HouseLocation {...baseProps} />)
+      expect(mockStorage.loadingFn).not.toBeNull()
+      const { container } = render(<>{mockStorage.loadingFn?.()}</>)
+      return container
+    }
+
+    it('renders a loading state while map component loads', () => {
+      const container = renderLoadingSkeleton()
+
+      // Verify loading state is rendered (not empty)
+      expect(container.firstChild).not.toBeNull()
+      expect(container.children.length).toBeGreaterThan(0)
+
+      // Verify it has skeleton elements indicating loading
+      const hasSkeletonElements = container.querySelector('[data-slot="skeleton"]')
+      expect(hasSkeletonElements).toBeTruthy()
+    })
+
+    it('renders multiple skeleton placeholders for content areas', () => {
+      const container = renderLoadingSkeleton()
+
+      // Should have multiple skeleton elements for various content areas
+      const skeletons = container.querySelectorAll('[data-slot="skeleton"]')
+      expect(skeletons.length).toBeGreaterThan(1)
     })
   })
 })
