@@ -19,32 +19,37 @@
     {
       "description": "Group Radix UI packages",
       "groupName": "radix-ui",
-      "matchPackagePatterns": ["^@radix-ui/"]
+      "matchPackageNames": ["/^@radix-ui//"]
     },
     {
       "description": "Group Sanity packages",
       "groupName": "sanity",
-      "matchPackagePatterns": ["^@sanity/", "^sanity$", "^next-sanity$"]
+      "matchPackageNames": ["/^@sanity//", "/^sanity$/", "/^next-sanity$/"]
     },
     {
       "description": "Group Next.js packages",
       "groupName": "next.js",
-      "matchPackagePatterns": ["^next$", "^@next/", "^eslint-config-next$"]
+      "matchPackageNames": ["/^next$/", "/^@next//", "/^eslint-config-next$/"]
     },
     {
       "description": "Group TanStack packages",
       "groupName": "tanstack",
-      "matchPackagePatterns": ["^@tanstack/"]
+      "matchPackageNames": ["/^@tanstack//"]
     },
     {
       "description": "Group testing packages",
       "groupName": "testing",
-      "matchPackagePatterns": ["^vitest", "^@vitest/", "^@playwright/", "^playwright$"]
+      "matchPackageNames": [
+        "/^vitest/",
+        "/^@vitest//",
+        "/^@playwright//",
+        "/^playwright$/"
+      ]
     },
     {
       "description": "Group TypeScript and types",
       "groupName": "typescript",
-      "matchPackagePatterns": ["^typescript$", "^@types/"]
+      "matchPackageNames": ["/^typescript$/", "/^@types//"]
     }
   ]
 }
