@@ -51,6 +51,7 @@ jobs:
               /bun\.lock$/
             ];
 
+            // Exclude test files - they don't affect E2E behavior
             const testPatterns = [
               /__tests__\//,
               /\.test\.[tj]sx?$/,
