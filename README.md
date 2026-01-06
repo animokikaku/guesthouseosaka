@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Guest House Osaka
+
+A multilingual website for a guest house in Osaka, built with Next.js and Sanity CMS.
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **CMS**: Sanity v5 with embedded Studio at `/studio`
+- **Styling**: Tailwind CSS v4
+- **i18n**: next-intl (English, Japanese, French)
+- **Forms**: TanStack React Form + Zod validation
+- **UI Components**: Radix UI primitives (shadcn/ui)
+- **Email**: Resend + React Email
+- **Maps**: Google Maps via @vis.gl/react-google-maps
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install    # Install dependencies
+bun dev        # Start dev server at http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Command           | Description                        |
+| ----------------- | ---------------------------------- |
+| `bun dev`         | Start development server           |
+| `bun run build`   | Production build                   |
+| `bun lint`        | Run ESLint                         |
+| `bun run typegen` | Regenerate Sanity TypeScript types |
+| `bun test`        | Run unit tests (Vitest)            |
+| `bun test:e2e`    | Run E2E tests (Playwright)         |
+| `bun run knip`    | Detect unused code/dependencies    |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
 
-## Learn More
+```
+app/
+  [locale]/           # Locale-based routing (en, ja, fr)
+    [house]/          # Dynamic house pages with gallery
+    contact/          # Contact forms
+    faq/              # FAQ page
+  studio/             # Embedded Sanity Studio
+  api/                # API routes
 
-To learn more about Next.js, take a look at the following resources:
+components/
+  forms/              # Form components
+  gallery/            # Gallery components
+  house/              # House-specific components
+  map/                # Google Maps integration
+  ui/                 # Radix-based UI primitives
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+sanity/
+  schemaTypes/        # Sanity document and object schemas
+  lib/                # GROQ queries and utilities
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+messages/             # Translation files (en.json, ja.json, fr.json)
+```
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create a `.env.local` file with:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```env
+# Sanity
+NEXT_PUBLIC_SANITY_PROJECT_ID=
+NEXT_PUBLIC_SANITY_DATASET=
+SANITY_API_READ_TOKEN=
+
+# Email
+RESEND_API_KEY=
+
+# Google Maps
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
+
+# Blob Storage
+NEXT_PUBLIC_BLOB_STORAGE_URL=
+```
+
+## Sanity Workflow
+
+1. Edit schemas in `sanity/schemaTypes/`
+2. Deploy schema: `bunx sanity schema deploy`
+3. Regenerate types: `bun run typegen`
+4. Access Studio at `/studio`
