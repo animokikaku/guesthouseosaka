@@ -3,6 +3,23 @@ import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SiteFooter } from '../site-footer'
 
+type OptimisticReducer = (
+  currentLinks: NonNullable<SettingsQueryResult>['socialLinks'] | undefined,
+  action: { id: string; document: Partial<NonNullable<SettingsQueryResult>> }
+) => NonNullable<SettingsQueryResult>['socialLinks'] | undefined
+
+let capturedReducer: OptimisticReducer | null = null
+
+vi.mock('next-sanity/hooks', () => ({
+  useOptimistic: <T, A>(
+    initialValue: T,
+    reducer: (current: T, action: A) => T
+  ) => {
+    capturedReducer = reducer as unknown as OptimisticReducer
+    return initialValue
+  }
+}))
+
 const createSettings = (
   overrides?: Partial<NonNullable<SettingsQueryResult>>
 ): NonNullable<SettingsQueryResult> => ({
@@ -159,6 +176,77 @@ describe('SiteFooter', () => {
       expect(
         screen.getByRole('link', { name: 'Instagram' })
       ).toBeInTheDocument()
+    })
+  })
+
+  describe('optimistic updates', () => {
+    const currentLinks = [
+      {
+        _key: 'social-1',
+        icon: 'facebook',
+        label: 'Facebook',
+        url: 'https://facebook.com/example'
+      },
+      {
+        _key: 'social-2',
+        icon: 'instagram',
+        label: 'Instagram',
+        url: 'https://instagram.com/example'
+      }
+    ]
+
+    beforeEach(() => {
+      capturedReducer = null
+    })
+
+    it('returns updated links when action matches settings id', () => {
+      const settings = createSettings()
+      render(<SiteFooter settings={settings} />)
+
+      expect(capturedReducer).not.toBeNull()
+
+      const newLinks = [
+        { _key: 'social-1', icon: 'facebook', label: 'FB', url: 'https://fb.com' },
+        { _key: 'social-3', icon: 'twitter', label: 'Twitter', url: 'https://twitter.com' }
+      ]
+
+      const result = capturedReducer!(currentLinks, {
+        id: settings._id,
+        document: { socialLinks: newLinks }
+      })
+
+      // Should merge: existing link with _key 'social-1' is found, 'social-3' uses action link
+      expect(result).toHaveLength(2)
+      expect(result![0]).toEqual(currentLinks[0]) // Found in currentLinks
+      expect(result![1]).toEqual(newLinks[1]) // Not found, uses action link
+    })
+
+    it('returns current links when action id does not match', () => {
+      const settings = createSettings()
+      render(<SiteFooter settings={settings} />)
+
+      expect(capturedReducer).not.toBeNull()
+
+      const result = capturedReducer!(currentLinks, {
+        id: 'different-id',
+        document: { socialLinks: [] }
+      })
+
+      expect(result).toBe(currentLinks)
+    })
+
+    it('returns current links when action has no socialLinks', () => {
+      const settings = createSettings()
+      render(<SiteFooter settings={settings} />)
+
+      expect(capturedReducer).not.toBeNull()
+
+      const result = capturedReducer!(currentLinks, {
+        id: settings._id,
+        document: {}
+      })
+
+      expect(result).toBe(currentLinks)
     })
   })
 })
