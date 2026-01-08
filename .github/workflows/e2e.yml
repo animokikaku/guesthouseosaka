@@ -9,7 +9,7 @@ on:
 jobs:
   check-changes:
     name: Check Changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     # Skip for deployment_status events - we only need this for push/PR
     if: github.event_name != 'deployment_status'
     outputs:
@@ -68,7 +68,7 @@ jobs:
 
   e2e-skip:
     name: E2E Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: check-changes
     if: needs.check-changes.outputs.needs_e2e == 'false'
     steps:
@@ -77,7 +77,7 @@ jobs:
 
   e2e-run:
     name: E2E Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
     timeout-minutes: 10
     env:
