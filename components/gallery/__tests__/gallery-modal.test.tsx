@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import { store } from '@/lib/store'
 import {
@@ -121,10 +121,24 @@ describe('GalleryModal', () => {
     })
   ]
 
+  // Suppress React act() warnings from Radix Dialog internal state updates
+  // These warnings come from third-party library internals (FocusScope, Presence, DismissableLayer)
+  const originalError = console.error
   beforeEach(() => {
     vi.clearAllMocks()
     store.setState({ photoId: null })
     resetCarouselMockState(carouselState)
+    console.error = (...args: unknown[]) => {
+      const message = args[0]
+      if (typeof message === 'string' && message.includes('was not wrapped in act')) {
+        return
+      }
+      originalError.apply(console, args)
+    }
+  })
+
+  afterEach(() => {
+    console.error = originalError
   })
 
   describe('open/close state', () => {
