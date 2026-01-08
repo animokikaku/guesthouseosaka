@@ -7,7 +7,7 @@ permissions: write-all
 
 jobs:
   crowdin-download:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
