@@ -64,7 +64,7 @@
     "sanity-plugin-lucide-icon-picker": "^1.0.3",
     "schema-dts": "^1.1.5",
     "sonner": "^2.0.7",
-    "styled-components": "^6.3.2",
+    "styled-components": "^6.3.3",
     "tailwind-merge": "^3.4.0",
     "validator": "^13.15.26",
     "vaul": "^1.1.2",
