@@ -43,7 +43,7 @@ export function Collection({ houses, className }: CollectionProps) {
               pathname: '/[house]' as const,
               params: { house: house.slug }
             }}
-            className="group block w-full"
+            className="group block w-full rounded-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <ItemHeader className="relative overflow-hidden rounded-sm">
               <CollectionImage image={house.image} />
@@ -108,7 +108,7 @@ function CollectionImage({ image }: CollectionImageProps) {
         height={800}
         blurDataURL={blurDataURL}
         placeholder={placeholder}
-        className="hidden aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] md:block"
+        className="hidden aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] group-focus-visible:scale-[1.02] md:block"
       />
     </>
   )
