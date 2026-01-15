@@ -19,6 +19,12 @@ const THEME_CLASSES: Record<HouseIdentifier, string> = {
     'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
 }
 
+const HOUSE_THEMES: Record<HouseIdentifier, string> = {
+  orange: 'orange',
+  apple: 'red',
+  lemon: 'yellow'
+}
+
 export function HousesNav({
   houses,
   className,
@@ -31,13 +37,8 @@ export function HousesNav({
   const params = useParams()
 
   useEffect(() => {
-    if (params.house === 'orange') {
-      setActiveTheme('orange')
-    } else if (params.house === 'apple') {
-      setActiveTheme('red')
-    } else if (params.house === 'lemon') {
-      setActiveTheme('yellow')
-    }
+    const theme = HOUSE_THEMES[params.house as HouseIdentifier]
+    if (theme) setActiveTheme(theme)
     return () => {
       setActiveTheme('default')
     }

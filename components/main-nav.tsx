@@ -44,7 +44,7 @@ function PreviewImageItem({ item: it, isActive }: PreviewImageItemProps) {
         alt={it.background.alt}
         placeholder={it.background.blurDataURL ? 'blur' : undefined}
         blurDataURL={it.background.blurDataURL}
-        loading={isActive ? 'eager' : 'lazy'}
+        loading="lazy"
         priority={isActive}
         fill
         sizes="250px"
