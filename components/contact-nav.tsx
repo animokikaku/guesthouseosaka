@@ -32,7 +32,7 @@ export function ContactNav({ className, items, ...props }: ContactNavProps) {
               aria-current={segment === slug ? 'page' : undefined}
               data-active={segment === slug}
               className={cn(
-                'text-muted-foreground hover:text-primary data-[active=true]:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors'
+                'text-muted-foreground hover:text-primary data-[active=true]:text-primary flex h-7 shrink-0 items-center justify-center rounded-md px-4 text-center text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset'
               )}
               scroll={!isMobile}
             >

@@ -10,6 +10,10 @@ reviews:
   poem: false
   review_status: true
   collapse_walkthrough: false
+  path_filters:
+    - "!.claude/**"
+    - "!.cursor/**"
+    - "!.codex/**"
   tools:
     ast_grep:
       enabled: true

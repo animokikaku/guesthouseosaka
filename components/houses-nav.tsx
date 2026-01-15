@@ -19,6 +19,12 @@ const THEME_CLASSES: Record<HouseIdentifier, string> = {
     'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
 }
 
+const HOUSE_THEMES: Record<HouseIdentifier, string> = {
+  orange: 'orange',
+  apple: 'red',
+  lemon: 'yellow'
+}
+
 export function HousesNav({
   houses,
   className,
@@ -31,13 +37,8 @@ export function HousesNav({
   const params = useParams()
 
   useEffect(() => {
-    if (params.house === 'orange') {
-      setActiveTheme('orange')
-    } else if (params.house === 'apple') {
-      setActiveTheme('red')
-    } else if (params.house === 'lemon') {
-      setActiveTheme('yellow')
-    }
+    const theme = HOUSE_THEMES[params.house as HouseIdentifier]
+    if (theme) setActiveTheme(theme)
     return () => {
       setActiveTheme('default')
     }
@@ -55,9 +56,10 @@ export function HousesNav({
               <Link
                 key={`house-nav-${slug}`}
                 href={{ pathname: '/[house]', params: { house: slug } }}
+                aria-current={slug === params.house ? 'page' : undefined}
                 data-active={slug === params.house}
                 className={cn(
-                  'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors',
+                  'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center rounded-md px-4 text-center text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset',
                   THEME_CLASSES[slug]
                 )}
                 scroll={!isMobile}

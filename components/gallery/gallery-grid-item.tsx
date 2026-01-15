@@ -24,7 +24,15 @@ export function GalleryGridItem({
 
   return (
     <GalleryImageButton
+      role="button"
+      tabIndex={0}
       onClick={() => store.setState({ photoId: _key })}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          store.setState({ photoId: _key })
+        }
+      }}
       imageProps={{
         src,
         alt: stegaClean(image.alt) ?? '',

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook } from '@testing-library/react'
-import { useIsMobile } from '../use-mobile'
+import { useIsMobile, getServerSnapshot, getSnapshot } from '../use-mobile'
 
 describe('useIsMobile', () => {
   const originalInnerWidth = window.innerWidth
@@ -63,5 +63,42 @@ describe('useIsMobile', () => {
     unmount()
 
     expect(removeEventListenerSpy).toHaveBeenCalledWith('change', expect.any(Function))
+  })
+})
+
+describe('getServerSnapshot', () => {
+  it('returns false for SSR compatibility', () => {
+    expect(getServerSnapshot()).toBe(false)
+  })
+})
+
+describe('getSnapshot', () => {
+  const originalInnerWidth = window.innerWidth
+
+  afterEach(() => {
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      value: originalInnerWidth
+    })
+  })
+
+  it('returns true when window width < 768', () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, value: 500 })
+    expect(getSnapshot()).toBe(true)
+  })
+
+  it('returns false when window width >= 768', () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, value: 1024 })
+    expect(getSnapshot()).toBe(false)
+  })
+
+  it('returns false at exactly 768px', () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, value: 768 })
+    expect(getSnapshot()).toBe(false)
+  })
+
+  it('returns true at 767px', () => {
+    Object.defineProperty(window, 'innerWidth', { writable: true, value: 767 })
+    expect(getSnapshot()).toBe(true)
   })
 })

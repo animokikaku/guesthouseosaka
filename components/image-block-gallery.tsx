@@ -55,12 +55,12 @@ function GalleryGrid({
     <div className="hidden justify-center sm:flex">
       <div className="w-full">
         <div className="relative aspect-2/1 min-h-[300px] overflow-hidden rounded-xl lg:aspect-7/3">
-          <Link href={href} className="block h-full w-full">
+          <Link href={href} tabIndex={-1} className="block h-full w-full">
             <div className="grid h-full w-full grid-cols-4 grid-rows-2 gap-0.5">
               <GalleryImageButton
                 className="col-span-2 row-span-2"
                 sizes="(min-width: 1120px) 560px, 50vw"
-                imageProps={{ ...images[0], preload: true }}
+                imageProps={{ ...images[0], priority: true }}
               />
               <GalleryImageButton
                 className="col-span-1 col-start-3 row-start-1"
