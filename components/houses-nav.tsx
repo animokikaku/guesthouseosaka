@@ -58,7 +58,7 @@ export function HousesNav({
                 aria-current={slug === params.house ? 'page' : undefined}
                 data-active={slug === params.house}
                 className={cn(
-                  'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors',
+                  'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center rounded-md px-4 text-center text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset',
                   THEME_CLASSES[slug]
                 )}
                 scroll={!isMobile}
