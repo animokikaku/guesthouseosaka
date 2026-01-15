@@ -237,9 +237,9 @@ test.describe('Gallery', () => {
       await page.goto(galleryUrl)
       await expect(page).toHaveURL(galleryUrl)
 
-      // Gallery grid should still be visible
-      const images = page.locator('img')
-      await expect(images.first()).toBeVisible()
+      // Wait for gallery grid images to be visible
+      const galleryImages = getGalleryGridImages(page)
+      await expect(galleryImages.first()).toBeVisible()
 
       // Open modal to check mobile behavior
       await clickGalleryImageAndWaitForModal(page)
@@ -256,9 +256,9 @@ test.describe('Gallery', () => {
       await page.goto(galleryUrl)
       await expect(page).toHaveURL(galleryUrl)
 
-      // Gallery grid should be visible
-      const images = page.locator('img')
-      await expect(images.first()).toBeVisible()
+      // Wait for gallery grid images to be visible
+      const galleryImages = getGalleryGridImages(page)
+      await expect(galleryImages.first()).toBeVisible()
 
       // Open modal
       await clickGalleryImageAndWaitForModal(page)
