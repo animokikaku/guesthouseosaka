@@ -55,6 +55,7 @@ export function HousesNav({
               <Link
                 key={`house-nav-${slug}`}
                 href={{ pathname: '/[house]', params: { house: slug } }}
+                aria-current={slug === params.house ? 'page' : undefined}
                 data-active={slug === params.house}
                 className={cn(
                   'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center px-4 text-center text-base font-medium transition-colors',

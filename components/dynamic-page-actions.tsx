@@ -89,7 +89,7 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
                   : (href as '/')
               }
             >
-              <Icon name={icon} />
+              <Icon name={icon} aria-hidden="true" />
               {stegaClean(label)}
             </Link>
           </Button>
