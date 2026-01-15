@@ -53,6 +53,7 @@ export function StickyCategoryNav({
                 key={cat._id}
                 ref={isActive ? activeButtonRef : undefined}
                 type="button"
+                tabIndex={isVisible ? 0 : -1}
                 aria-current={isActive ? 'true' : undefined}
                 onClick={() => scrollToCategory(cat._id)}
                 className={cn(

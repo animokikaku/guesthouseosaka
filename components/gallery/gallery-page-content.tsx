@@ -102,6 +102,7 @@ export function GalleryPageContent({
               galleryCategories={galleryCategories}
               sentinelRef={sentinelRef}
               dataAttribute={dataAttribute}
+              stickyNavVisible={isVisible}
             />
           </div>
         </div>

@@ -12,12 +12,15 @@ type HouseGalleryProps = {
   sentinelRef?: React.RefObject<HTMLDivElement | null>
   /** Data attribute helper for Sanity visual editing */
   dataAttribute?: DataAttributeFn
+  /** Whether the sticky nav is visible (thumbnails should be removed from tab order) */
+  stickyNavVisible?: boolean
 }
 
 export function HouseGallery({
   galleryCategories,
   sentinelRef,
-  dataAttribute
+  dataAttribute,
+  stickyNavVisible = false
 }: HouseGalleryProps) {
   // Transform to display format with computed fields
   const categories = React.useMemo(
@@ -35,6 +38,7 @@ export function HouseGallery({
               <CategoryThumbnail
                 key={`thumbnail-${category._id}`}
                 category={category}
+                tabIndex={stickyNavVisible ? -1 : 0}
               />
             ))}
           </div>
