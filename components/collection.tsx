@@ -12,7 +12,6 @@ import { type HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
-import { getImageDimensions } from '@sanity/asset-utils'
 import Image from 'next/image'
 
 type House = NonNullable<HomePageQueryResult['houses']>[number]
@@ -81,28 +80,24 @@ type CollectionImageProps = {
 function CollectionImage({ image }: CollectionImageProps) {
   if (!image.asset) return null
 
-  const buildImage = urlFor(image)
-  const dimensions = getImageDimensions(image.asset)
   const alt = image.alt || ''
   const blurDataURL = image.preview || undefined
   const placeholder = image.preview ? 'blur' : undefined
-  const width = dimensions.width
-  const height = dimensions.height
 
   return (
     <>
       <Image
-        src={buildImage.url()}
+        src={urlFor(image).fit('crop').width(800).height(400).url()}
         alt={alt}
-        width={width}
-        height={height}
+        width={800}
+        height={400}
         blurDataURL={blurDataURL}
         placeholder={placeholder}
         quality={90}
         className="block aspect-2/1 w-full object-cover md:hidden"
       />
       <Image
-        src={buildImage.fit('crop').width(800).height(800).url()}
+        src={urlFor(image).fit('crop').width(800).height(800).url()}
         alt={alt}
         width={800}
         height={800}
