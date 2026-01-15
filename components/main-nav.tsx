@@ -24,6 +24,55 @@ import Image from 'next/image'
 import { useParams, useSelectedLayoutSegment } from 'next/navigation'
 import { useState } from 'react'
 
+interface PreviewImageItemProps {
+  item: NavGroupItem
+  isActive: boolean
+}
+
+function PreviewImageItem({ item: it, isActive }: PreviewImageItemProps) {
+  return (
+    <div
+      data-active={isActive}
+      aria-hidden={!isActive}
+      className={cn(
+        'absolute inset-0 transition-opacity duration-300',
+        isActive ? 'opacity-100' : 'pointer-events-none opacity-0'
+      )}
+    >
+      <Image
+        src={it.background.src}
+        alt={it.background.alt}
+        placeholder={it.background.blurDataURL ? 'blur' : undefined}
+        blurDataURL={it.background.blurDataURL}
+        loading={isActive ? 'eager' : 'lazy'}
+        priority={isActive}
+        fill
+        sizes="250px"
+        className="h-full w-full object-cover opacity-90"
+      />
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        <Image
+          src={it.icon.src}
+          alt={it.icon.alt}
+          width={40}
+          height={40}
+          loading={isActive ? 'eager' : 'lazy'}
+          className="h-10 w-10 object-contain opacity-50 drop-shadow-lg"
+        />
+      </div>
+
+      {it.caption ? (
+        <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/60 to-transparent p-4">
+          <p className="text-left text-sm leading-relaxed font-medium text-white/90">
+            {it.caption}
+          </p>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
 export function MainNav({
   items,
   ...props
@@ -128,53 +177,13 @@ function NavigationMenuGroupItem({
 
           <li className="row-span-3">
             <div className="group relative h-full w-full overflow-hidden rounded-md">
-              {items.map((it, idx) => {
-                const isActive = it.key === item?.key
-                return (
-                  <div
-                    key={`preview-${idx}`}
-                    data-active={isActive}
-                    aria-hidden={!isActive}
-                    className={cn(
-                      'absolute inset-0 transition-opacity duration-300',
-                      isActive ? 'opacity-100' : 'pointer-events-none opacity-0'
-                    )}
-                  >
-                    <Image
-                      src={it.background.src}
-                      alt={it.background.alt}
-                      placeholder={
-                        it.background.blurDataURL ? 'blur' : undefined
-                      }
-                      blurDataURL={it.background.blurDataURL}
-                      loading={isActive ? 'eager' : 'lazy'}
-                      {...(isActive ? { preload: true } : {})}
-                      fill
-                      sizes="250px"
-                      className="h-full w-full object-cover opacity-90"
-                    />
-
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Image
-                        src={it.icon.src}
-                        alt={it.icon.alt}
-                        width={40}
-                        height={40}
-                        loading={isActive ? 'eager' : 'lazy'}
-                        className="h-10 w-10 object-contain opacity-50 drop-shadow-lg"
-                      />
-                    </div>
-
-                    {it.caption ? (
-                      <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/60 to-transparent p-4">
-                        <p className="text-left text-sm leading-relaxed font-medium text-white/90">
-                          {it.caption}
-                        </p>
-                      </div>
-                    ) : null}
-                  </div>
-                )
-              })}
+              {items.map((it) => (
+                <PreviewImageItem
+                  key={it.key}
+                  item={it}
+                  isActive={it.key === item?.key}
+                />
+              ))}
             </div>
           </li>
         </ul>

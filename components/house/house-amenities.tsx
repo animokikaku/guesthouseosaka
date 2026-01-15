@@ -19,7 +19,6 @@ import { stegaClean } from '@sanity/client/stega'
 import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 import { useOptimistic } from 'next-sanity/hooks'
-import * as React from 'react'
 import { SanityDocument } from 'sanity'
 
 type DataAttributeFn = (path: string) => string
