@@ -7,7 +7,7 @@ import { Icon } from '@/lib/icons'
 import { FaqPageQueryResult } from '@/sanity.types'
 import { createDataAttribute, stegaClean } from 'next-sanity'
 import { useOptimistic } from 'next-sanity/hooks'
-import { SanityDocument } from 'sanity'
+import type { SanityDocument } from 'sanity'
 
 type PageAction = NonNullable<
   NonNullable<FaqPageQueryResult>['actions']

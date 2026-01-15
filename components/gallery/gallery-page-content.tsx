@@ -12,7 +12,7 @@ import {
 import { createDataAttribute } from 'next-sanity'
 import { useOptimistic } from 'next-sanity/hooks'
 import * as React from 'react'
-import { SanityDocument } from 'sanity'
+import type { SanityDocument } from 'sanity'
 
 type GalleryPageContentProps = {
   documentId: string

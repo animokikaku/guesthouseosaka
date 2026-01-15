@@ -94,7 +94,7 @@ export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
             <LanguageSwitcher size={isMobile ? 'icon-sm' : 'default'} />
             <ModeSwitcher />
             <Button variant="ghost" size="icon" asChild>
-              <NextLink href="/studio" target="_blank">
+              <NextLink href="/studio" target="_blank" prefetch={false}>
                 <Settings2 className="size-4.5" />
                 <span className="sr-only">Sanity Studio</span>
               </NextLink>

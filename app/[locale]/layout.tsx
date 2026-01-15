@@ -120,8 +120,6 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://cdn.sanity.io" />
-        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
