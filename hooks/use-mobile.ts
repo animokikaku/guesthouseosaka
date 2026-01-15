@@ -8,11 +8,11 @@ function subscribe(callback: () => void) {
   return () => mql.removeEventListener('change', callback)
 }
 
-function getSnapshot() {
+export function getSnapshot() {
   return window.innerWidth < MOBILE_BREAKPOINT
 }
 
-function getServerSnapshot() {
+export function getServerSnapshot() {
   return false
 }
 
