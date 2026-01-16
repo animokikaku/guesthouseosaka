@@ -1,6 +1,13 @@
 'use client'
 
 import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty'
+import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
@@ -133,13 +140,15 @@ function NavigationMenuGroupItem({
           {title}
         </NavigationMenuTrigger>
         <NavigationMenuContent>
-          <div className="flex w-[300px] flex-col items-center justify-center gap-3 p-6 text-center">
-            <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900/50">
-              <FileWarningIcon className="size-5 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div className="text-sm font-medium">{t('title')}</div>
-            <p className="text-muted-foreground text-sm">{t('description')}</p>
-          </div>
+          <Empty className="w-[300px] gap-3 border-none p-6">
+            <EmptyHeader className="gap-1">
+              <EmptyMedia variant="warning">
+                <FileWarningIcon />
+              </EmptyMedia>
+              <EmptyTitle className="text-sm">{t('title')}</EmptyTitle>
+              <EmptyDescription>{t('description')}</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
         </NavigationMenuContent>
       </NavigationMenuItem>
     )

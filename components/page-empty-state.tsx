@@ -36,11 +36,8 @@ export function PageEmptyState({
       )}
     >
       <EmptyHeader>
-        <EmptyMedia
-          variant="icon"
-          className="bg-amber-100 dark:bg-amber-900/50"
-        >
-          <FileWarningIcon className="text-amber-600 dark:text-amber-400" />
+        <EmptyMedia variant="warning">
+          <FileWarningIcon />
         </EmptyMedia>
         <EmptyTitle>{title ?? t('title')}</EmptyTitle>
         <EmptyDescription>{description ?? t('description')}</EmptyDescription>

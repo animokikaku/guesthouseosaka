@@ -16,15 +16,6 @@ export type CarouselMockState = {
   currentSelectedIndex: number
 }
 
-export function createCarouselMockState(): CarouselMockState {
-  return {
-    mockApi: null,
-    apiCallbacks: new Map(),
-    setApiCallback: null,
-    currentSelectedIndex: 0
-  }
-}
-
 export function createMockCarouselApi(state: CarouselMockState): MockCarouselApi {
   return {
     selectedScrollSnap: () => state.currentSelectedIndex,

@@ -17,7 +17,7 @@ export interface MockFieldApi<T> {
   handleBlur: ReturnType<typeof vi.fn>
 }
 
-export function createMockFieldState<T>(
+function createMockFieldState<T>(
   defaultValue: T,
   overrides: {
     value?: T
