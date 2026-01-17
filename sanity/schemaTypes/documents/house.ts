@@ -38,6 +38,8 @@ export const house = defineType({
       type: 'string',
       group: 'overview',
       description: 'Unique identifier for this house',
+      hidden: true,
+      readOnly: true,
       options: {
         list: [...HouseIdentifierValues],
         layout: 'dropdown'

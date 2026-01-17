@@ -97,7 +97,8 @@ export const structure: StructureResolver = (S) =>
         title: 'Houses',
         icon: HomeIcon,
         S,
-        context: S.context
+        context: S.context,
+        createIntent: false
       }),
 
       // ============================================
