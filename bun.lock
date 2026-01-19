@@ -39,7 +39,7 @@
         "lucide-react": "^0.562.0",
         "next": "^16.1.3",
         "next-intl": "^4.7.0",
-        "next-sanity": "^12.0.12",
+        "next-sanity": "^12.0.13",
         "next-themes": "^0.4.6",
         "react": "^19.2.3",
         "react-dom": "^19.2.3",
@@ -1875,7 +1875,7 @@
 
     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
 
-    "groq": ["groq@5.3.0", "", {}, "sha512-0rKKtHdO/yXf5ICmt5IuGN18E18S2eKFqi/QRgLRpYV71OirD3dVYiryDqx2sL4L5ASmzARqw/NdXdeOYJ1K8w=="],
+    "groq": ["groq@5.4.0", "", {}, "sha512-XrqvE7n/a62zxi6rbaqVcPMyStJ1IlDBK+eaxzThaovqjOUviazlCl/9WFuryPxenEkX8GYaw9FvE1orZErGig=="],
 
     "groq-js": ["groq-js@1.25.0", "", { "dependencies": { "debug": "^4.3.4" } }, "sha512-ShVrNkIg/IRxyyNQoh1orC/UD8FIUSKwwV5BKF4opIaoPCPeI0V/iFQL4jgB8ve67f5LZkDlmd4PCMT7I+3swA=="],
 
@@ -2267,7 +2267,7 @@
 
     "next-intl-swc-plugin-extractor": ["next-intl-swc-plugin-extractor@4.7.0", "", {}, "sha512-iAqflu2FWdQMWhwB0B2z52X7LmEpvnMNJXqVERZQ7bK5p9iqQLu70ur6Ka6NfiXLxfb+AeAkUX5qIciQOg+87A=="],
 
-    "next-sanity": ["next-sanity@12.0.12", "", { "dependencies": { "@portabletext/react": "^6.0.2", "@sanity/client": "^7.14.0", "@sanity/comlink": "^4.0.1", "@sanity/presentation-comlink": "^2.0.1", "@sanity/preview-url-secret": "^4.0.2", "@sanity/visual-editing": "^5.1.0", "dequal": "^2.0.3", "groq": "^5.3.0", "history": "^5.3.0", "server-only": "^0.0.1" }, "peerDependencies": { "next": "^16.0.0-0", "react": "^19.2.3", "react-dom": "^19.2.3", "sanity": "^5.3.0", "styled-components": "^6.1" } }, "sha512-Ba42lRHyllNr9LywA+OkpGnYn4lDZm2JtGrLQLaVsLy/GkZCGvuf5bsjRRhHmMUKgVlCtSCLjAd1N+S4BKNGhg=="],
+    "next-sanity": ["next-sanity@12.0.13", "", { "dependencies": { "@portabletext/react": "^6.0.2", "@sanity/client": "^7.14.0", "@sanity/comlink": "^4.0.1", "@sanity/presentation-comlink": "^2.0.1", "@sanity/preview-url-secret": "^4.0.2", "@sanity/visual-editing": "^5.1.0", "dequal": "^2.0.3", "groq": "^5.4.0", "history": "^5.3.0", "server-only": "^0.0.1" }, "peerDependencies": { "next": "^16.0.0-0", "react": "^19.2.3", "react-dom": "^19.2.3", "sanity": "^5.4.0", "styled-components": "^6.1" } }, "sha512-LFK4/s/SoQZN//yJ5c0cLr4MzgJeTTkNvtqPAXhtl0yjIVT1sSzDgF/UScbEgBeZa7+aYXbqiqLoWUqBN6F1wA=="],
 
     "next-themes": ["next-themes@0.4.6", "", { "peerDependencies": { "react": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc", "react-dom": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc" } }, "sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA=="],
 
@@ -3134,8 +3134,6 @@
     "@sanity/cli-test/@sanity/cli-core": ["@sanity/cli-core@0.1.0-alpha.5", "", { "dependencies": { "@inquirer/prompts": "^8.1.0", "@oclif/core": "^4.8.0", "@sanity/client": "^7.14.0", "@sanity/types": "^5.2.0", "babel-plugin-react-compiler": "^1.0.0", "chalk": "^5.6.2", "configstore": "^7.0.0", "debug": "^4.4.3", "get-tsconfig": "^4.13.0", "import-meta-resolve": "^4.1.0", "jsdom": "^27.4.0", "json-lexer": "^1.2.0", "log-symbols": "^7.0.1", "ora": "^9.0.0", "tsx": "^4.21.0", "vite": "^7.3.0", "vite-node": "^3.0.8", "zod": "^4.3.5" } }, "sha512-iBPF7Sd9Ah/7w7nSu8zC9QoyIa9ecek1JK/QEJ+N/YW7poZMInc+1PyCC3vecB5Ug3SCoAP3McJHOPdFR9PqeA=="],
 
     "@sanity/cli-test/ansis": ["ansis@4.2.0", "", {}, "sha512-HqZ5rWlFjGiV0tDm3UxxgNRqsOTniqoKZu0pIAfh7TZQMGuZK+hH0drySty0si0QXj1ieop4+SkSfPZBPPkHig=="],
-
-    "@sanity/codegen/groq": ["groq@5.4.0", "", {}, "sha512-XrqvE7n/a62zxi6rbaqVcPMyStJ1IlDBK+eaxzThaovqjOUviazlCl/9WFuryPxenEkX8GYaw9FvE1orZErGig=="],
 
     "@sanity/codegen/tsconfig-paths": ["tsconfig-paths@4.2.0", "", { "dependencies": { "json5": "^2.2.2", "minimist": "^1.2.6", "strip-bom": "^3.0.0" } }, "sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg=="],
 
