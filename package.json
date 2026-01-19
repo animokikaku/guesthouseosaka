@@ -58,7 +58,7 @@
     "next-themes": "^0.4.6",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "resend": "^6.7.0",
+    "resend": "^6.8.0",
     "sanity": "^5.4.0",
     "sanity-plugin-internationalized-array": "^3.2.2",
     "sanity-plugin-lucide-icon-picker": "^1.0.3",
