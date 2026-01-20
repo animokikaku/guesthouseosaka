@@ -12,7 +12,6 @@ import {
 } from '@/components/forms/schema'
 import { env } from '@/lib/env'
 import { HouseIdentifier } from '@/lib/types'
-import { headers } from 'next/headers'
 import { Resend } from 'resend'
 
 const { emails } = new Resend(env.RESEND_API_KEY)
@@ -36,10 +35,9 @@ type ContactFormPayload =
   | { type: 'other'; data: GeneralInquiryFields }
 
 export async function submitContactForm({ type, data }: ContactFormPayload) {
-  // Skip sending emails during E2E tests (detected via Vercel automation bypass header)
-  const headersList = await headers()
-  if (headersList.has('x-vercel-protection-bypass')) {
-    return { id: 'e2e-skipped', object: 'email' }
+  // Skip sending emails in CI (e2e tests)
+  if (process.env.CI) {
+    return { id: 'ci-skipped', object: 'email' }
   }
 
   const { from, to } = DEFAULT_CONTACT

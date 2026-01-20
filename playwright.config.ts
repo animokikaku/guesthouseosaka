@@ -57,16 +57,7 @@ export default defineConfig({
     video: process.env.CI ? 'retain-on-failure' : undefined,
 
     // Take screenshot on failure
-    screenshot: 'only-on-failure',
-
-    // Vercel Deployment Protection bypass headers
-    // @see https://vercel.com/docs/security/deployment-protection/methods-to-bypass-deployment-protection/protection-bypass-automation
-    ...(process.env.VERCEL_AUTOMATION_BYPASS_SECRET && {
-      extraHTTPHeaders: {
-        'x-vercel-protection-bypass':
-          process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-      }
-    })
+    screenshot: 'only-on-failure'
   },
 
   // Configure projects for major browsers
