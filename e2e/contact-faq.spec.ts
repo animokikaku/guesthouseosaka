@@ -12,10 +12,13 @@ test.describe('Contact Page', () => {
     }) => {
       await page.goto('/en/contact')
 
-      // Click the first contact type link (tour)
+      // Wait for link to be visible and click
       const tourLink = page.locator('a[href*="/contact/tour"]')
-      await tourLink.click()
-      await expect(page).toHaveURL(/\/en\/contact\/tour/)
+      await expect(tourLink).toBeVisible()
+      await Promise.all([
+        page.waitForURL(/\/en\/contact\/tour/),
+        tourLink.click()
+      ])
     })
   })
 
