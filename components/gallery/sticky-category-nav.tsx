@@ -29,12 +29,12 @@ export function StickyCategoryNav({
     }
   }, [activeId])
 
-  const scrollToCategory = (key: string) => {
+  const scrollToCategory = React.useCallback((key: string) => {
     const element = document.getElementById(key)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
     }
-  }
+  }, [])
 
   return (
     <nav

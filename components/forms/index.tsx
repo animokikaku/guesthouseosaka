@@ -1,7 +1,8 @@
 /* eslint-disable react/no-children-prop */
 'use client'
 
-import { ResetButton, SubmitButton } from '@/components/forms/components'
+import { ResetButton } from '@/components/forms/components/reset-button'
+import { SubmitButton } from '@/components/forms/components/submit-button'
 import {
   CheckboxField,
   DateField,
@@ -12,13 +13,19 @@ import {
   SelectField,
   ToggleGroupField
 } from '@/components/forms/fields'
+import {
+  fieldContext,
+  formContext,
+  useFieldContext,
+  useFormContext
+} from '@/components/forms/form-context'
 import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
 import { HouseIdentifier, HouseIdentifierValues } from '@/lib/types'
 import type { FormFieldsConfig } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
 import { HousesTitlesQueryResult } from '@/sanity.types'
-import { createFormHook, createFormHookContexts } from '@tanstack/react-form'
+import { createFormHook } from '@tanstack/react-form'
 import {
   CakeIcon,
   GlobeIcon,
@@ -34,9 +41,6 @@ export { TourForm } from './tour-form'
 export { useFormSubmit } from './use-form-submit'
 
 export type HouseTitles = HousesTitlesQueryResult
-
-const { fieldContext, formContext, useFieldContext, useFormContext } =
-  createFormHookContexts()
 
 export { useFieldContext, useFormContext }
 

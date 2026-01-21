@@ -1,4 +1,4 @@
-import { useFormContext } from '@/components/forms'
+import { useFormContext } from '@/components/forms/form-context'
 import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 

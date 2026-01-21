@@ -1,6 +1,6 @@
 'use client'
 
-import { useFieldContext } from '@/components/forms'
+import { useFieldContext } from '@/components/forms/form-context'
 
 /**
  * Hook that provides field context with computed validation state.

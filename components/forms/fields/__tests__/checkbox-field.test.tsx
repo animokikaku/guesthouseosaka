@@ -69,8 +69,8 @@ function createMockFieldApi(
 // Create a test field context - this needs to be accessible in the mock
 const testFieldContext = createContext<MockFieldApi | null>(null)
 
-// Mock the forms module to provide our test context
-vi.mock('@/components/forms', async () => {
+// Mock the form-context module to provide our test context
+vi.mock('@/components/forms/form-context', async () => {
   const React = await import('react')
   return {
     useFieldContext: () => React.useContext(testFieldContext)

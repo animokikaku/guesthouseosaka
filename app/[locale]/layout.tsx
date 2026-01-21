@@ -18,13 +18,47 @@ import { META_THEME_COLORS } from '@/lib/config'
 import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
+import { NavGroupItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HousesNavQueryResult } from '@/sanity.types'
+import { urlFor } from '@/sanity/lib/image'
 import { sanityFetch, SanityLive } from '@/sanity/lib/live'
 import { housesNavQuery, settingsQuery } from '@/sanity/lib/queries'
 import { type Metadata } from 'next'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import { draftMode } from 'next/headers'
 import { Organization, WithContext } from 'schema-dts'
+
+function transformHousesToNavItems(
+  houses: HousesNavQueryResult
+): NavGroupItem[] {
+  return (houses ?? [])
+    .filter((house): house is typeof house & { slug: keyof typeof assets } => {
+      const isValidSlug = house.slug in assets
+      if (!isValidSlug) {
+        console.warn(`Missing asset for house slug: ${house.slug}`)
+      }
+      return isValidSlug
+    })
+    .map(({ slug, title, description, caption, image }) => {
+      const asset = assets[slug]
+      const src = urlFor(image).width(250).height(150).dpr(2).fit('crop').url()
+
+      return {
+        key: slug,
+        href: { pathname: '/[house]', params: { house: slug } } as const,
+        label: title ?? slug,
+        description: description ?? undefined,
+        caption: caption ?? undefined,
+        icon: asset.icon,
+        background: {
+          src,
+          alt: image?.alt ?? '',
+          blurDataURL: image?.preview ?? undefined
+        }
+      }
+    })
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -98,6 +132,9 @@ export default async function LocaleLayout({
     sanityFetch({ query: housesNavQuery, params: { locale } })
   ])
 
+  // Transform houses data server-side to reduce client-side work
+  const houseItems = transformHousesToNavItems(houses)
+
   const jsonLd: WithContext<Organization> = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -152,7 +189,7 @@ export default async function LocaleLayout({
           <ActiveThemeProvider initialTheme="default">
             <NextIntlClientProvider>
               <div className="bg-background relative z-10 flex min-h-svh flex-col">
-                <SiteHeader houses={houses} />
+                <SiteHeader houseItems={houseItems} />
                 <main className="flex flex-1 flex-col">{children}</main>
                 {settings && <SiteFooter settings={settings} />}
               </div>

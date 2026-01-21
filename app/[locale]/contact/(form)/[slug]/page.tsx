@@ -1,4 +1,6 @@
-import { ContactForm, MoveInForm, TourForm } from '@/components/forms'
+import { ContactForm } from '@/components/forms/contact-form'
+import { MoveInForm } from '@/components/forms/move-in-form'
+import { TourForm } from '@/components/forms/tour-form'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { routing } from '@/i18n/routing'
 import { toContactFormConfig } from '@/lib/transforms'

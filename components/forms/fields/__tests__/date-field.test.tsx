@@ -9,7 +9,7 @@ import {
 
 const testFieldContext = createFieldContext<string>()
 
-vi.mock('@/components/forms', async () => {
+vi.mock('@/components/forms/form-context', async () => {
   const React = await import('react')
   return {
     useFieldContext: () => React.useContext(testFieldContext)
