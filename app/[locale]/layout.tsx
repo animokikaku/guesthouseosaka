@@ -1,4 +1,5 @@
 import { routing } from '@/i18n/routing'
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
@@ -6,7 +7,6 @@ import { notFound } from 'next/navigation'
 
 import '@/app/globals.css'
 import { ActiveThemeProvider } from '@/components/active-theme'
-import { Analytics } from '@/components/analytics'
 import { DraftModeIndicator } from '@/components/draft-mode-indicator'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
