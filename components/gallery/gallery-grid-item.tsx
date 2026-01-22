@@ -42,6 +42,10 @@ export function GalleryGridItem({
         placeholder: image.preview ? 'blur' : undefined
       }}
       className="aspect-square rounded-lg"
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: '0 400px'
+      }}
       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
       data-sanity={dataAttribute?.(
         `galleryCategories[_key=="${categoryKey}"].items[_key=="${_key}"]`

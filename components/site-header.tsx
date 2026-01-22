@@ -8,47 +8,21 @@ import { ModeSwitcher } from '@/components/mode-switcher'
 import { Button } from '@/components/ui/button'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
-import { assets } from '@/lib/assets'
-import { NavItems } from '@/lib/types'
+import { NavGroupItem, NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { HousesNavQueryResult } from '@/sanity.types'
-import { urlFor } from '@/sanity/lib/image'
 import { Settings2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 // eslint-disable-next-line no-restricted-imports
 import NextLink from 'next/link'
 
-export function SiteHeader({ houses }: { houses: HousesNavQueryResult }) {
+export function SiteHeader({
+  houseItems
+}: {
+  houseItems: NavGroupItem[]
+}) {
   const t = useTranslations('SiteHeader')
   const isMobile = useIsMobile()
-
-  const houseItems = (houses ?? [])
-    .filter((house): house is typeof house & { slug: keyof typeof assets } => {
-      const isValidSlug = house.slug in assets
-      if (!isValidSlug) {
-        console.warn(`Missing asset for house slug: ${house.slug}`)
-      }
-      return isValidSlug
-    })
-    .map(({ slug, title, description, caption, image }) => {
-      const asset = assets[slug]
-      const src = urlFor(image).width(250).height(150).dpr(2).fit('crop').url()
-
-      return {
-        key: slug,
-        href: { pathname: '/[house]', params: { house: slug } } as const,
-        label: title ?? slug,
-        description: description ?? undefined,
-        caption: caption ?? undefined,
-        icon: asset.icon,
-        background: {
-          src,
-          alt: image?.alt ?? '',
-          blurDataURL: image?.preview ?? undefined
-        }
-      }
-    })
 
   const navItems: NavItems = [
     {

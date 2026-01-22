@@ -10,8 +10,8 @@ interface MockFormApi {
 
 const testFormContext = createContext<MockFormApi | null>(null)
 
-// Mock the forms module to provide our test context
-vi.mock('@/components/forms', async () => {
+// Mock the form-context module to provide our test context
+vi.mock('@/components/forms/form-context', async () => {
   const React = await import('react')
   return {
     useFormContext: () => React.useContext(testFormContext)

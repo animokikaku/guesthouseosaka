@@ -1,4 +1,5 @@
 import { routing } from '@/i18n/routing'
+import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
@@ -6,7 +7,6 @@ import { notFound } from 'next/navigation'
 
 import '@/app/globals.css'
 import { ActiveThemeProvider } from '@/components/active-theme'
-import { Analytics } from '@/components/analytics'
 import { DraftModeIndicator } from '@/components/draft-mode-indicator'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
@@ -18,6 +18,7 @@ import { META_THEME_COLORS } from '@/lib/config'
 import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
+import { toHouseNavItems } from '@/lib/transforms/nav'
 import { cn } from '@/lib/utils'
 import { sanityFetch, SanityLive } from '@/sanity/lib/live'
 import { housesNavQuery, settingsQuery } from '@/sanity/lib/queries'
@@ -98,6 +99,9 @@ export default async function LocaleLayout({
     sanityFetch({ query: housesNavQuery, params: { locale } })
   ])
 
+  // Transform houses data server-side to reduce client-side work
+  const houseItems = toHouseNavItems(houses)
+
   const jsonLd: WithContext<Organization> = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -152,7 +156,7 @@ export default async function LocaleLayout({
           <ActiveThemeProvider initialTheme="default">
             <NextIntlClientProvider>
               <div className="bg-background relative z-10 flex min-h-svh flex-col">
-                <SiteHeader houses={houses} />
+                <SiteHeader houseItems={houseItems} />
                 <main className="flex flex-1 flex-col">{children}</main>
                 {settings && <SiteFooter settings={settings} />}
               </div>
