@@ -88,4 +88,4 @@ jobs:
         run: bunx playwright install --with-deps chromium
 
       - name: Run E2E tests
-        run: bun test:e2e
+        run: bun run test:e2e
