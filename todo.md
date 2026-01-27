@@ -13,4 +13,4 @@
 - [x] Setup JSON-LD
 - [x] Add images captions on Crowdin
 - [x] Move gallery images and alts to Sanity (or my own DB/admin)
-- [] Enable indexing (meta.robots and robots.txt) once production is ready
+- [x] Enable indexing (meta.robots and robots.txt) once production is ready

@@ -74,8 +74,7 @@ export async function generateMetadata(
       shortcut: '/favicon-16x16.png',
       apple: '/apple-touch-icon.png'
     },
-    // TODO: Enable indexing once production is ready
-    robots: { index: false, follow: false }
+    robots: { index: true, follow: true }
   }
 }
 
