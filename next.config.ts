@@ -4,7 +4,13 @@ import createNextIntlPlugin from 'next-intl/plugin'
 
 const withNextIntl = createNextIntlPlugin({
   experimental: {
-    createMessagesDeclaration: './messages/en.json'
+    createMessagesDeclaration: './messages/en.json',
+    messages: {
+      path: './messages',
+      locales: 'infer',
+      format: 'json',
+      precompile: true
+    }
   }
 })
 
