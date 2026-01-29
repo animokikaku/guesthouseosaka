@@ -1,9 +1,9 @@
-import { describe, it, expect } from 'vitest'
 import { renderHook } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
 import {
-  useTourFormSchema,
+  useGeneralInquirySchema,
   useMoveInFormSchema,
-  useGeneralInquirySchema
+  useTourFormSchema
 } from '../schema'
 
 // Helper to get schema from hook
@@ -243,31 +243,35 @@ describe('useMoveInFormSchema', () => {
   })
 })
 
+// Valid base data for general inquiry form
+const validGeneralInquiryData = {
+  places: ['orange'] as const,
+  account: {
+    name: 'John Doe',
+    age: '25',
+    gender: 'male' as const,
+    nationality: 'USA',
+    email: 'john@example.com',
+    phone: ''
+  },
+  message: 'Hello, I have a question.',
+  privacyPolicy: true as const
+}
+
 describe('useGeneralInquirySchema', () => {
   const getSchemaInstance = () => getSchema(useGeneralInquirySchema)
 
-  it('requires only name, email, message, and privacyPolicy', () => {
+  it('requires places, account, message, and privacyPolicy', () => {
     const schema = getSchemaInstance()
-    const result = schema.safeParse({
-      account: {
-        name: 'John',
-        email: 'john@example.com'
-      },
-      message: 'Hello, I have a question.',
-      privacyPolicy: true
-    })
+    const result = schema.safeParse(validGeneralInquiryData)
     expect(result.success).toBe(true)
   })
 
   it('requires message length >= 5', () => {
     const schema = getSchemaInstance()
     const result = schema.safeParse({
-      account: {
-        name: 'John',
-        email: 'john@example.com'
-      },
-      message: 'Hi',
-      privacyPolicy: true
+      ...validGeneralInquiryData,
+      message: 'Hi'
     })
     expect(result.success).toBe(false)
   })
@@ -275,27 +279,52 @@ describe('useGeneralInquirySchema', () => {
   it('accepts message with exactly 5 characters', () => {
     const schema = getSchemaInstance()
     const result = schema.safeParse({
-      account: {
-        name: 'John',
-        email: 'john@example.com'
-      },
-      message: 'Hello',
-      privacyPolicy: true
+      ...validGeneralInquiryData,
+      message: 'Hello'
     })
     expect(result.success).toBe(true)
   })
 
-  it('does not require places, date, or hour', () => {
+  it('requires at least one place', () => {
     const schema = getSchemaInstance()
-    // Should pass without places, date, hour
     const result = schema.safeParse({
-      account: {
-        name: 'John',
-        email: 'john@example.com'
-      },
-      message: 'I have a question about your guesthouse.',
-      privacyPolicy: true
+      ...validGeneralInquiryData,
+      places: []
     })
+    expect(result.success).toBe(false)
+  })
+
+  it('requires gender', () => {
+    const schema = getSchemaInstance()
+    const result = schema.safeParse({
+      ...validGeneralInquiryData,
+      account: { ...validGeneralInquiryData.account, gender: '' }
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('requires age', () => {
+    const schema = getSchemaInstance()
+    const result = schema.safeParse({
+      ...validGeneralInquiryData,
+      account: { ...validGeneralInquiryData.account, age: '0' }
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('requires nationality', () => {
+    const schema = getSchemaInstance()
+    const result = schema.safeParse({
+      ...validGeneralInquiryData,
+      account: { ...validGeneralInquiryData.account, nationality: '' }
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('does not require date or hour', () => {
+    const schema = getSchemaInstance()
+    // Should pass without date, hour
+    const result = schema.safeParse(validGeneralInquiryData)
     expect(result.success).toBe(true)
   })
 })
