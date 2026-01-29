@@ -636,6 +636,7 @@ export type SanityImageMetadata = {
   palette?: SanityImagePalette
   lqip?: string
   blurHash?: string
+  thumbHash?: string
   hasAlpha?: boolean
   isOpaque?: boolean
 }
@@ -761,6 +762,12 @@ export type AllSanitySchemaTypes =
   | SanityImageAsset
 
 export declare const internalGroqTypeReferenceTo: unique symbol
+
+type ArrayOf<T> = Array<
+  T & {
+    _key: string
+  }
+>
 
 // Source: sanity/lib/queries.ts
 // Variable: settingsQuery
