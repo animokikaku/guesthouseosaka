@@ -1,7 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, act } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import type {
+  GeneralInquiryFields,
+  MoveInFormFields,
+  TourFormFields
+} from '../schema'
 import { useFormSubmit } from '../use-form-submit'
-import type { TourFormFields, MoveInFormFields, GeneralInquiryFields } from '../schema'
 
 // Mock the contact action
 const mockSubmitContactForm = vi.fn()
@@ -19,7 +23,8 @@ vi.mock('@/i18n/navigation', () => ({
 const mockToastPromise = vi.fn()
 vi.mock('sonner', () => ({
   toast: {
-    promise: (promise: Promise<unknown>, options: unknown) => mockToastPromise(promise, options)
+    promise: (promise: Promise<unknown>, options: unknown) =>
+      mockToastPromise(promise, options)
   }
 }))
 
@@ -32,7 +37,9 @@ describe('useFormSubmit', () => {
   describe('onSubmitInvalid', () => {
     it('focuses first input with aria-invalid="true"', () => {
       const mockElement = { focus: vi.fn() }
-      vi.spyOn(document, 'querySelector').mockReturnValue(mockElement as unknown as HTMLElement)
+      vi.spyOn(document, 'querySelector').mockReturnValue(
+        mockElement as unknown as HTMLElement
+      )
 
       const { result } = renderHook(() => useFormSubmit())
 
@@ -40,7 +47,9 @@ describe('useFormSubmit', () => {
         result.current.onSubmitInvalid()
       })
 
-      expect(document.querySelector).toHaveBeenCalledWith('[aria-invalid="true"]')
+      expect(document.querySelector).toHaveBeenCalledWith(
+        '[aria-invalid="true"]'
+      )
       expect(mockElement.focus).toHaveBeenCalled()
     })
 
@@ -92,9 +101,14 @@ describe('useFormSubmit', () => {
     }
 
     const mockGeneralData: GeneralInquiryFields = {
+      places: ['orange'],
       account: {
         name: 'Bob',
-        email: 'bob@example.com'
+        age: '28',
+        gender: 'male',
+        nationality: 'Canada',
+        email: 'bob@example.com',
+        phone: ''
       },
       message: 'General question',
       privacyPolicy: true

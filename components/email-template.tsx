@@ -112,14 +112,11 @@ export function MoveInRequestEmail({ data }: MoveInRequestEmailProps) {
 // --- General Inquiry Email ---
 
 interface GeneralInquiryEmailProps {
-  data: {
-    account: Pick<ContactFormFields['account'], 'name' | 'email'>
-    message: string
-  }
+  data: Pick<ContactFormFields, 'places' | 'account' | 'message'>
 }
 
 export function GeneralInquiryEmail({ data }: GeneralInquiryEmailProps) {
-  const { account, message } = data
+  const { account, message, places } = data
 
   return (
     <Html>
@@ -128,11 +125,10 @@ export function GeneralInquiryEmail({ data }: GeneralInquiryEmailProps) {
       <Body style={main}>
         <Container style={container}>
           <Heading style={h1}>お問い合わせ</Heading>
+          <AccountDetails account={account} />
+          <Hr style={hr} />
           <Text style={text}>
-            <strong>名前:</strong> {account.name}
-          </Text>
-          <Text style={text}>
-            <strong>メールアドレス:</strong> {account.email}
+            <strong>希望物件:</strong> {formatPlaces(places)}
           </Text>
           <Hr style={hr} />
           <MessageSection message={message} />

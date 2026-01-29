@@ -3,6 +3,9 @@
 
 import {
   contactFormDefaultValues,
+  FieldGroupPlaces,
+  FieldGroupUserAccount,
+  HouseTitles,
   useAppForm,
   useFormSubmit
 } from '@/components/forms'
@@ -10,21 +13,23 @@ import { FormCard } from '@/components/forms/form-card'
 import { useGeneralInquirySchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormConfig } from '@/lib/types/components'
-import { MailIcon, UserIcon } from 'lucide-react'
 
-type ContactFormProps = ContactFormConfig
+interface ContactFormProps extends ContactFormConfig {
+  houseTitles: HouseTitles
+}
 
-export function ContactForm({ title, description, fields }: ContactFormProps) {
+export function ContactForm({
+  title,
+  description,
+  fields,
+  houseTitles
+}: ContactFormProps) {
   const schema = useGeneralInquirySchema()
   const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
-  const { message, privacyPolicy, account } = contactFormDefaultValues
+  const { places, account, message, privacyPolicy } = contactFormDefaultValues
 
   const form = useAppForm({
-    defaultValues: {
-      message,
-      privacyPolicy,
-      account: { name: account.name, email: account.email }
-    },
+    defaultValues: { places, account, message, privacyPolicy },
     validators: {
       onSubmit: schema
     },
@@ -39,32 +44,15 @@ export function ContactForm({ title, description, fields }: ContactFormProps) {
       formId="other-form"
       form={form}
     >
-      <form.AppField
-        name="account.name"
-        children={(field) => (
-          <field.InputGroupField
-            required
-            type="text"
-            label={fields.name.label}
-            placeholder={fields.name.placeholder}
-            icon={<UserIcon />}
-            autoComplete="name"
-          />
-        )}
+      <FieldGroupPlaces
+        fields={{ places: 'places' }}
+        form={form}
+        label={fields.places.label}
+        description={fields.places.description}
+        houseTitles={houseTitles}
       />
-      <form.AppField
-        name="account.email"
-        children={(field) => (
-          <field.InputGroupField
-            required
-            type="email"
-            label={fields.email.label}
-            placeholder={fields.email.placeholder}
-            icon={<MailIcon />}
-            autoComplete="email"
-          />
-        )}
-      />
+      <FieldSeparator />
+      <FieldGroupUserAccount fields="account" form={form} config={fields} />
       <FieldSeparator />
       <form.AppField
         name="message"

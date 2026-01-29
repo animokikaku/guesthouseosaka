@@ -90,11 +90,9 @@ export const contactType = defineType({
       description: 'Customize labels, placeholders, and descriptions',
       options: { collapsible: true, collapsed: false },
       fields: [
+        // All forms
+        fieldConfig('places', 'Places Selection', { noPlaceholder: true }),
         // Tour & Move-in only
-        fieldConfig('places', 'Places Selection', {
-          hiddenFor: ['other'],
-          noPlaceholder: true
-        }),
         fieldConfig('date', 'Date', {
           hiddenFor: ['other'],
           noPlaceholder: true
@@ -108,12 +106,11 @@ export const contactType = defineType({
         fieldConfig('stayDuration', 'Length of Stay', {
           hiddenFor: ['tour', 'other']
         }),
-        // Tour & Move-in only (via FieldGroupUserAccount)
-        fieldConfig('gender', 'Gender', { hiddenFor: ['other'] }),
-        fieldConfig('age', 'Age', { hiddenFor: ['other'] }),
-        fieldConfig('nationality', 'Nationality', { hiddenFor: ['other'] }),
-        fieldConfig('phone', 'Phone', { hiddenFor: ['other'] }),
-        // All forms
+        // All forms (via FieldGroupUserAccount)
+        fieldConfig('gender', 'Gender'),
+        fieldConfig('age', 'Age'),
+        fieldConfig('nationality', 'Nationality'),
+        fieldConfig('phone', 'Phone'),
         fieldConfig('name', 'Name'),
         fieldConfig('email', 'Email'),
         fieldConfig('message', 'Message')

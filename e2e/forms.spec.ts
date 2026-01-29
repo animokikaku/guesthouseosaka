@@ -9,6 +9,54 @@ test.describe('Contact Form Tests', () => {
     await expect(page.locator('form#other-form')).toBeVisible()
   })
 
+  // Helper to fill all required fields for general inquiry form
+  async function fillRequiredFields(
+    page: import('@playwright/test').Page,
+    overrides: {
+      name?: string
+      email?: string
+      age?: string
+      nationality?: string
+      message?: string
+      skipPlaces?: boolean
+      skipGender?: boolean
+    } = {}
+  ) {
+    // Select at least one place (toggle button)
+    if (!overrides.skipPlaces) {
+      await page.getByRole('group').getByRole('button').first().click()
+    }
+
+    // Select gender
+    if (!overrides.skipGender) {
+      await page.getByRole('combobox').click()
+      await page.getByRole('option', { name: 'Male' }).click()
+    }
+
+    // Fill name
+    await page
+      .getByPlaceholder('Enter your name')
+      .fill(overrides.name ?? 'Test User')
+
+    // Fill age
+    await page.getByRole('spinbutton').fill(overrides.age ?? '25')
+
+    // Fill nationality
+    await page
+      .getByPlaceholder('Enter your nationality')
+      .fill(overrides.nationality ?? 'Japan')
+
+    // Fill email
+    await page
+      .getByPlaceholder('Enter your email')
+      .fill(overrides.email ?? 'test@example.com')
+
+    // Fill message
+    await page
+      .getByPlaceholder('Let us know any additional information or questions.')
+      .fill(overrides.message ?? 'This is a valid test message.')
+  }
+
   test.describe('Form Validation', () => {
     test('empty form shows validation errors on submit', async ({ page }) => {
       // Fill fields with invalid minimal values to bypass browser HTML5 validation
@@ -43,20 +91,8 @@ test.describe('Contact Form Tests', () => {
     })
 
     test('invalid email shows error', async ({ page }) => {
-      // Fill name with valid value
-      await page.getByPlaceholder('Enter your name').fill('Test User')
-
-      // Fill email with value that passes HTML5 validation but fails Zod
-      // Using a malformed but @ containing email
-      const emailField = page.getByPlaceholder('Enter your email')
-      await emailField.fill('invalid@email')
-
-      // Fill message with valid value
-      await page
-        .getByPlaceholder(
-          'Let us know any additional information or questions.'
-        )
-        .fill('This is a test message.')
+      // Fill all required fields with valid values except email
+      await fillRequiredFields(page, { email: 'invalid@email' })
 
       // Check privacy policy
       await page.getByRole('checkbox').click()
@@ -75,28 +111,20 @@ test.describe('Contact Form Tests', () => {
     })
 
     test('form fields accept valid input', async ({ page }) => {
-      // Fill name field
-      const nameField = page.getByPlaceholder('Enter your name')
-      await nameField.fill('John Doe')
-      await expect(nameField).toHaveValue('John Doe')
-
-      // Fill email field
-      const emailField = page.getByPlaceholder('Enter your email')
-      await emailField.fill('john@example.com')
-      await expect(emailField).toHaveValue('john@example.com')
-
-      // Fill message field
-      const messageField = page.getByPlaceholder(
-        'Let us know any additional information or questions.'
-      )
-      await messageField.fill('This is a test message for the contact form.')
-      await expect(messageField).toHaveValue(
-        'This is a test message for the contact form.'
-      )
+      // Fill all required fields with valid values
+      await fillRequiredFields(page, {
+        name: 'John Doe',
+        email: 'john@example.com',
+        message: 'This is a test message for the contact form.'
+      })
 
       // After filling fields correctly, no validation errors should be visible
-      // Blur to trigger validation
-      await messageField.blur()
+      // Blur the last field to trigger validation
+      await page
+        .getByPlaceholder(
+          'Let us know any additional information or questions.'
+        )
+        .blur()
 
       // Verify no validation errors are visible after valid input
       const errorMessages = page.locator(
@@ -106,15 +134,8 @@ test.describe('Contact Form Tests', () => {
     })
 
     test('message must be at least 5 characters', async ({ page }) => {
-      // Fill name and email with valid values
-      await page.getByPlaceholder('Enter your name').fill('Test User')
-      await page.getByPlaceholder('Enter your email').fill('test@example.com')
-
-      // Fill message with too short value (but not empty to bypass HTML5 validation)
-      const messageField = page.getByPlaceholder(
-        'Let us know any additional information or questions.'
-      )
-      await messageField.fill('Hi')
+      // Fill all required fields with valid values except message
+      await fillRequiredFields(page, { message: 'Hi' })
 
       // Check privacy policy to not block submission
       await page.getByRole('checkbox').click()
@@ -129,17 +150,8 @@ test.describe('Contact Form Tests', () => {
     })
 
     test('name must be at least 2 characters', async ({ page }) => {
-      // Fill name with too short value (but not empty to bypass HTML5 validation)
-      const nameField = page.getByPlaceholder('Enter your name')
-      await nameField.fill('A')
-
-      // Fill other fields with valid values
-      await page.getByPlaceholder('Enter your email').fill('test@example.com')
-      await page
-        .getByPlaceholder(
-          'Let us know any additional information or questions.'
-        )
-        .fill('This is a test message.')
+      // Fill all required fields with valid values except name
+      await fillRequiredFields(page, { name: 'A' })
 
       // Check privacy policy to not block submission
       await page.getByRole('checkbox').click()
@@ -152,12 +164,52 @@ test.describe('Contact Form Tests', () => {
         page.getByText('Name must be at least 2 characters long')
       ).toBeVisible()
     })
+
+    test('places selection is required', async ({ page }) => {
+      // Fill all required fields except places
+      await fillRequiredFields(page, { skipPlaces: true })
+
+      // Check privacy policy
+      await page.getByRole('checkbox').click()
+
+      // Try to submit
+      await page.getByRole('button', { name: 'Submit' }).click()
+
+      // Should show places validation error
+      await expect(
+        page.getByText('Please select at least one share house')
+      ).toBeVisible()
+    })
+
+    test('gender selection is required', async ({ page }) => {
+      // Fill all required fields except gender
+      await fillRequiredFields(page, { skipGender: true })
+
+      // Check privacy policy
+      await page.getByRole('checkbox').click()
+
+      // Try to submit
+      await page.getByRole('button', { name: 'Submit' }).click()
+
+      // Should show gender validation error
+      await expect(page.getByText('Please select your gender')).toBeVisible()
+    })
   })
 
   test.describe('Privacy Policy', () => {
     test('privacy checkbox must be checked to submit', async ({ page }) => {
-      // Fill all fields with valid values but leave checkbox unchecked
+      // Fill all required fields with valid values but leave checkbox unchecked
+      // Select a place
+      await page.getByRole('group').getByRole('button').first().click()
+
+      // Select gender
+      await page.getByRole('combobox').click()
+      await page.getByRole('option', { name: 'Male' }).click()
+
+      // Fill other fields
       await page.getByPlaceholder('Enter your name').fill('Test User')
+      await page.getByRole('spinbutton').fill('25')
+      await page.getByPlaceholder('Enter your nationality').fill('Japan')
       await page.getByPlaceholder('Enter your email').fill('test@example.com')
       await page
         .getByPlaceholder(
@@ -201,18 +253,35 @@ test.describe('Contact Form Tests', () => {
   })
 
   test.describe('Form Submission', () => {
-    test('valid form can be submitted', async ({ next, page }) => {
-      // Mock the Resend API to prevent actual email sending
-      mockResendAPI(next)
+    // Helper to fill all required fields for submission tests
+    async function fillAllRequiredFields(
+      page: import('@playwright/test').Page
+    ) {
+      // Select a place
+      await page.getByRole('group').getByRole('button').first().click()
 
-      // Fill all required fields
+      // Select gender
+      await page.getByRole('combobox').click()
+      await page.getByRole('option', { name: 'Male' }).click()
+
+      // Fill other fields
       await page.getByPlaceholder('Enter your name').fill('Test User')
+      await page.getByRole('spinbutton').fill('25')
+      await page.getByPlaceholder('Enter your nationality').fill('Japan')
       await page.getByPlaceholder('Enter your email').fill('test@example.com')
       await page
         .getByPlaceholder(
           'Let us know any additional information or questions.'
         )
         .fill('This is a valid test message for the contact form.')
+    }
+
+    test('valid form can be submitted', async ({ next, page }) => {
+      // Mock the Resend API to prevent actual email sending
+      mockResendAPI(next)
+
+      // Fill all required fields
+      await fillAllRequiredFields(page)
 
       // Check privacy policy checkbox
       const checkbox = page.getByRole('checkbox')
@@ -238,13 +307,7 @@ test.describe('Contact Form Tests', () => {
       mockResendAPI(next)
 
       // Fill all required fields
-      await page.getByPlaceholder('Enter your name').fill('Test User')
-      await page.getByPlaceholder('Enter your email').fill('test@example.com')
-      await page
-        .getByPlaceholder(
-          'Let us know any additional information or questions.'
-        )
-        .fill('This is a valid test message for the contact form.')
+      await fillAllRequiredFields(page)
 
       // Check privacy policy checkbox
       await page.getByRole('checkbox').click()
@@ -280,16 +343,22 @@ test.describe('Contact Form Tests', () => {
         'Let us know any additional information or questions.'
       )
       const checkbox = page.getByRole('checkbox')
+      const ageField = page.getByRole('spinbutton')
+
+      // Select a place
+      await page.getByRole('group').getByRole('button').first().click()
 
       await nameField.fill('Test User')
       await emailField.fill('test@example.com')
       await messageField.fill('Test message content')
+      await ageField.fill('30')
       await checkbox.click()
 
       // Verify fields are filled
       await expect(nameField).toHaveValue('Test User')
       await expect(emailField).toHaveValue('test@example.com')
       await expect(messageField).toHaveValue('Test message content')
+      await expect(ageField).toHaveValue('30')
       await expect(checkbox).toBeChecked()
 
       // Click reset button
@@ -299,10 +368,10 @@ test.describe('Contact Form Tests', () => {
       await expect(nameField).toHaveValue('')
       await expect(emailField).toHaveValue('')
       await expect(messageField).toHaveValue('')
+      await expect(ageField).toHaveValue('')
       await expect(checkbox).not.toBeChecked()
     })
   })
-
 })
 
 test.describe('Contact Page Navigation', () => {

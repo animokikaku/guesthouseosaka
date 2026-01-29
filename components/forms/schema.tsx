@@ -98,13 +98,11 @@ export function useGeneralInquirySchema() {
   const schema = useContactFormSchema()
   return schema
     .pick({
+      places: true,
+      account: true,
       privacyPolicy: true
     })
     .extend({
-      account: schema.shape.account.pick({
-        name: true,
-        email: true
-      }),
       message: schema.shape.message.refine((val) => val.length >= 5, {
         message: t('message_min')
       })

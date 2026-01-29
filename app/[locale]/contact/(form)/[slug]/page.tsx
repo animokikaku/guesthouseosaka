@@ -57,7 +57,7 @@ export default async function ContactTypePage({
     })
   ])
 
-  if (!contactData) {
+  if (!contactData || !houseTitles || houseTitles.length === 0) {
     return <PageEmptyState />
   }
 
@@ -66,23 +66,13 @@ export default async function ContactTypePage({
 
   // Render the appropriate form based on slug
   switch (slug) {
-    case 'tour': {
-      if (!houseTitles || houseTitles.length === 0) {
-        return <PageEmptyState />
-      }
+    case 'tour':
       return <TourForm {...formConfig} houseTitles={houseTitles} />
-    }
-    case 'move-in': {
-      if (!houseTitles || houseTitles.length === 0) {
-        return <PageEmptyState />
-      }
+    case 'move-in':
       return <MoveInForm {...formConfig} houseTitles={houseTitles} />
-    }
-    case 'other': {
-      return <ContactForm {...formConfig} />
-    }
-    default: {
+    case 'other':
+      return <ContactForm {...formConfig} houseTitles={houseTitles} />
+    default:
       return <PageEmptyState />
-    }
   }
 }
