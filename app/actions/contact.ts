@@ -63,7 +63,7 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
     case 'other':
       return emails.send({
         from,
-        to: to(),
+        to: to(data.places),
         replyTo: email,
         subject: `お問い合わせ: ${name}`,
         react: GeneralInquiryEmail({ data })

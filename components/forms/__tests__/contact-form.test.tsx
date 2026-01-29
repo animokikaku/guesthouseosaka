@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ContactForm } from '../contact-form'
 
 // Mock matchMedia
@@ -43,11 +43,20 @@ const baseProps = {
     name: { label: 'Your Name', placeholder: 'Enter name' },
     age: { label: 'Age' },
     gender: { label: 'Gender' },
-    nationality: { label: 'Nationality' },
+    nationality: { label: 'Nationality', placeholder: 'Enter nationality' },
     email: { label: 'Your Email', placeholder: 'Enter email' },
     phone: { label: 'Phone' },
-    message: { label: 'Your Message', placeholder: 'Enter message', description: 'Min 5 characters' }
-  }
+    message: {
+      label: 'Your Message',
+      placeholder: 'Enter message',
+      description: 'Min 5 characters'
+    }
+  },
+  houseTitles: [
+    { slug: 'orange' as const, title: 'Orange House' },
+    { slug: 'apple' as const, title: 'Apple House' },
+    { slug: 'lemon' as const, title: 'Lemon House' }
+  ]
 }
 
 describe('ContactForm', () => {
