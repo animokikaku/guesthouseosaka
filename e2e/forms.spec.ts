@@ -1,4 +1,4 @@
-import { expect, test } from 'next/experimental/testmode/playwright'
+import { expect, test, type Page } from 'next/experimental/testmode/playwright'
 import { mockResendAPI } from './mocks/resend'
 
 test.describe('Contact Form Tests', () => {
@@ -9,9 +9,28 @@ test.describe('Contact Form Tests', () => {
     await expect(page.locator('form#other-form')).toBeVisible()
   })
 
+  // Helper to get form fields using robust selectors
+  function getFormFields(page: Page) {
+    const form = page.locator('form#other-form')
+    return {
+      // Use input types and autocomplete attributes for reliable selection
+      nameField: form.locator('input[autocomplete="name"]'),
+      emailField: form.locator('input[type="email"]'),
+      ageField: form.locator('input[type="number"]'),
+      nationalityField: form.locator(
+        'input[type="text"]:not([autocomplete="name"])'
+      ),
+      messageField: form.locator('textarea'),
+      checkbox: form.getByRole('checkbox'),
+      genderSelect: form.getByRole('combobox'),
+      // Places toggle group - uses data-slot="checkbox-group" from ToggleGroupField
+      placesGroup: form.locator('[data-slot="checkbox-group"]')
+    }
+  }
+
   // Helper to fill all required fields for general inquiry form
   async function fillRequiredFields(
-    page: import('@playwright/test').Page,
+    page: Page,
     overrides: {
       name?: string
       email?: string
@@ -22,70 +41,65 @@ test.describe('Contact Form Tests', () => {
       skipGender?: boolean
     } = {}
   ) {
+    const fields = getFormFields(page)
+
     // Select at least one place (toggle button)
     if (!overrides.skipPlaces) {
-      await page.getByRole('group').getByRole('button').first().click()
+      await fields.placesGroup.getByRole('button').first().click()
     }
 
     // Select gender
     if (!overrides.skipGender) {
-      await page.getByRole('combobox').click()
-      await page.getByRole('option', { name: 'Male' }).click()
+      await fields.genderSelect.click()
+      await page.getByRole('option', { name: 'Male', exact: true }).click()
     }
 
     // Fill name
-    await page
-      .getByPlaceholder('Enter your name')
-      .fill(overrides.name ?? 'Test User')
+    await fields.nameField.fill(overrides.name ?? 'Test User')
 
     // Fill age
-    await page.getByRole('spinbutton').fill(overrides.age ?? '25')
+    await fields.ageField.fill(overrides.age ?? '25')
 
     // Fill nationality
-    await page
-      .getByPlaceholder('Enter your nationality')
-      .fill(overrides.nationality ?? 'Japan')
+    await fields.nationalityField.fill(overrides.nationality ?? 'Japan')
 
     // Fill email
-    await page
-      .getByPlaceholder('Enter your email')
-      .fill(overrides.email ?? 'test@example.com')
+    await fields.emailField.fill(overrides.email ?? 'test@example.com')
 
     // Fill message
-    await page
-      .getByPlaceholder('Let us know any additional information or questions.')
-      .fill(overrides.message ?? 'This is a valid test message.')
+    await fields.messageField.fill(
+      overrides.message ?? 'This is a valid test message.'
+    )
   }
 
   test.describe('Form Validation', () => {
-    test('empty form shows validation errors on submit', async ({ page }) => {
-      // Fill fields with invalid minimal values to bypass browser HTML5 validation
-      // but trigger the Zod validation
-      const nameField = page.getByPlaceholder('Enter your name')
-      const emailField = page.getByPlaceholder('Enter your email')
-      const messageField = page.getByPlaceholder(
-        'Let us know any additional information or questions.'
-      )
+    test('incomplete form shows validation errors on submit', async ({
+      page
+    }) => {
+      const fields = getFormFields(page)
 
-      // Fill with values that bypass HTML5 validation but fail Zod validation
-      await nameField.fill('A') // Too short (min 2)
-      await emailField.fill('a@b.c') // Looks like email to browser but may fail Zod
-      await messageField.fill('Hi') // Too short (min 5)
+      // Fill only some fields with invalid/missing values to trigger Zod validation
+      // Don't select places (required)
+      // Don't select gender (required)
+      await fields.nameField.fill('A') // Too short (min 2)
+      await fields.ageField.fill('25') // Valid age
+      await fields.nationalityField.fill('Japan') // Valid
+      await fields.emailField.fill('test@example.com') // Valid email
+      await fields.messageField.fill('Hi') // Too short (min 5)
 
       // Check the privacy policy checkbox to bypass browser validation
-      await page.getByRole('checkbox').click()
+      await fields.checkbox.click()
 
       // Click submit button
       await page.getByRole('button', { name: 'Submit' }).click()
 
-      // Validation errors should appear for required fields
-      // The form uses role="alert" for error messages
+      // Validation errors should appear for required fields (places, gender, name, message)
       const errorMessages = page.locator(
         '[role="alert"][data-slot="field-error"]'
       )
       await expect(errorMessages.first()).toBeVisible()
 
-      // Check that at least one error is visible (name, email, or message validation)
+      // Check that at least one error is visible
       const errorCount = await errorMessages.count()
       expect(errorCount).toBeGreaterThan(0)
     })
@@ -94,8 +108,10 @@ test.describe('Contact Form Tests', () => {
       // Fill all required fields with valid values except email
       await fillRequiredFields(page, { email: 'invalid@email' })
 
+      const fields = getFormFields(page)
+
       // Check privacy policy
-      await page.getByRole('checkbox').click()
+      await fields.checkbox.click()
 
       // Try to submit
       await page.getByRole('button', { name: 'Submit' }).click()
@@ -118,13 +134,10 @@ test.describe('Contact Form Tests', () => {
         message: 'This is a test message for the contact form.'
       })
 
-      // After filling fields correctly, no validation errors should be visible
+      const fields = getFormFields(page)
+
       // Blur the last field to trigger validation
-      await page
-        .getByPlaceholder(
-          'Let us know any additional information or questions.'
-        )
-        .blur()
+      await fields.messageField.blur()
 
       // Verify no validation errors are visible after valid input
       const errorMessages = page.locator(
@@ -137,8 +150,10 @@ test.describe('Contact Form Tests', () => {
       // Fill all required fields with valid values except message
       await fillRequiredFields(page, { message: 'Hi' })
 
+      const fields = getFormFields(page)
+
       // Check privacy policy to not block submission
-      await page.getByRole('checkbox').click()
+      await fields.checkbox.click()
 
       // Try to submit
       await page.getByRole('button', { name: 'Submit' }).click()
@@ -153,8 +168,10 @@ test.describe('Contact Form Tests', () => {
       // Fill all required fields with valid values except name
       await fillRequiredFields(page, { name: 'A' })
 
+      const fields = getFormFields(page)
+
       // Check privacy policy to not block submission
-      await page.getByRole('checkbox').click()
+      await fields.checkbox.click()
 
       // Try to submit
       await page.getByRole('button', { name: 'Submit' }).click()
@@ -169,8 +186,10 @@ test.describe('Contact Form Tests', () => {
       // Fill all required fields except places
       await fillRequiredFields(page, { skipPlaces: true })
 
+      const fields = getFormFields(page)
+
       // Check privacy policy
-      await page.getByRole('checkbox').click()
+      await fields.checkbox.click()
 
       // Try to submit
       await page.getByRole('button', { name: 'Submit' }).click()
@@ -185,8 +204,10 @@ test.describe('Contact Form Tests', () => {
       // Fill all required fields except gender
       await fillRequiredFields(page, { skipGender: true })
 
+      const fields = getFormFields(page)
+
       // Check privacy policy
-      await page.getByRole('checkbox').click()
+      await fields.checkbox.click()
 
       // Try to submit
       await page.getByRole('button', { name: 'Submit' }).click()
@@ -199,32 +220,15 @@ test.describe('Contact Form Tests', () => {
   test.describe('Privacy Policy', () => {
     test('privacy checkbox must be checked to submit', async ({ page }) => {
       // Fill all required fields with valid values but leave checkbox unchecked
-      // Select a place
-      await page.getByRole('group').getByRole('button').first().click()
-
-      // Select gender
-      await page.getByRole('combobox').click()
-      await page.getByRole('option', { name: 'Male' }).click()
-
-      // Fill other fields
-      await page.getByPlaceholder('Enter your name').fill('Test User')
-      await page.getByRole('spinbutton').fill('25')
-      await page.getByPlaceholder('Enter your nationality').fill('Japan')
-      await page.getByPlaceholder('Enter your email').fill('test@example.com')
-      await page
-        .getByPlaceholder(
-          'Let us know any additional information or questions.'
-        )
-        .fill('This is a valid test message.')
+      await fillRequiredFields(page)
 
       // Click submit without checking privacy policy
-      // The browser will show native validation ("Please check this box if you want to proceed.")
       await page.getByRole('button', { name: 'Submit' }).click()
 
+      const fields = getFormFields(page)
+
       // Verify the checkbox is not checked and submission is blocked
-      // Browser shows native validation, so we check the checkbox state instead
-      const checkbox = page.getByRole('checkbox')
-      await expect(checkbox).not.toBeChecked()
+      await expect(fields.checkbox).not.toBeChecked()
 
       // The form should not have navigated away (still on the same page)
       await expect(page).toHaveURL(/\/en\/contact\/other/)
@@ -253,47 +257,23 @@ test.describe('Contact Form Tests', () => {
   })
 
   test.describe('Form Submission', () => {
-    // Helper to fill all required fields for submission tests
-    async function fillAllRequiredFields(
-      page: import('@playwright/test').Page
-    ) {
-      // Select a place
-      await page.getByRole('group').getByRole('button').first().click()
-
-      // Select gender
-      await page.getByRole('combobox').click()
-      await page.getByRole('option', { name: 'Male' }).click()
-
-      // Fill other fields
-      await page.getByPlaceholder('Enter your name').fill('Test User')
-      await page.getByRole('spinbutton').fill('25')
-      await page.getByPlaceholder('Enter your nationality').fill('Japan')
-      await page.getByPlaceholder('Enter your email').fill('test@example.com')
-      await page
-        .getByPlaceholder(
-          'Let us know any additional information or questions.'
-        )
-        .fill('This is a valid test message for the contact form.')
-    }
-
     test('valid form can be submitted', async ({ next, page }) => {
       // Mock the Resend API to prevent actual email sending
       mockResendAPI(next)
 
       // Fill all required fields
-      await fillAllRequiredFields(page)
+      await fillRequiredFields(page)
+
+      const fields = getFormFields(page)
 
       // Check privacy policy checkbox
-      const checkbox = page.getByRole('checkbox')
-      await checkbox.click()
-      await expect(checkbox).toBeChecked()
+      await fields.checkbox.click()
+      await expect(fields.checkbox).toBeChecked()
 
       // Submit the form
       await page.getByRole('button', { name: 'Submit' }).click()
 
       // Wait for toast message or redirect
-      // The form shows a toast on success and redirects to /contact
-      // Wait for either the success toast or the navigation
       await Promise.race([
         expect(page.getByText('Message sent successfully')).toBeVisible({
           timeout: 10000
@@ -307,10 +287,12 @@ test.describe('Contact Form Tests', () => {
       mockResendAPI(next)
 
       // Fill all required fields
-      await fillAllRequiredFields(page)
+      await fillRequiredFields(page)
+
+      const fields = getFormFields(page)
 
       // Check privacy policy checkbox
-      await page.getByRole('checkbox').click()
+      await fields.checkbox.click()
 
       // The submit button should be enabled before submission
       const submitButton = page.getByRole('button', { name: 'Submit' })
@@ -319,11 +301,7 @@ test.describe('Contact Form Tests', () => {
       // Submit the form
       await submitButton.click()
 
-      // After submission, either:
-      // 1. The "Sending message" toast appears (loading state)
-      // 2. The "Message sent successfully" toast appears (success)
-      // 3. The page redirects to /contact (success with redirect)
-      // Any of these indicates the form submission was initiated
+      // After submission, either loading toast, success toast, or redirect
       await Promise.race([
         expect(page.getByText('Sending message')).toBeVisible({
           timeout: 10000
@@ -336,40 +314,34 @@ test.describe('Contact Form Tests', () => {
     })
 
     test('form resets after clicking reset button', async ({ page }) => {
-      // Fill some fields
-      const nameField = page.getByPlaceholder('Enter your name')
-      const emailField = page.getByPlaceholder('Enter your email')
-      const messageField = page.getByPlaceholder(
-        'Let us know any additional information or questions.'
-      )
-      const checkbox = page.getByRole('checkbox')
-      const ageField = page.getByRole('spinbutton')
+      const fields = getFormFields(page)
 
       // Select a place
-      await page.getByRole('group').getByRole('button').first().click()
+      await fields.placesGroup.getByRole('button').first().click()
 
-      await nameField.fill('Test User')
-      await emailField.fill('test@example.com')
-      await messageField.fill('Test message content')
-      await ageField.fill('30')
-      await checkbox.click()
+      // Fill fields
+      await fields.nameField.fill('Test User')
+      await fields.emailField.fill('test@example.com')
+      await fields.messageField.fill('Test message content')
+      await fields.ageField.fill('30')
+      await fields.checkbox.click()
 
       // Verify fields are filled
-      await expect(nameField).toHaveValue('Test User')
-      await expect(emailField).toHaveValue('test@example.com')
-      await expect(messageField).toHaveValue('Test message content')
-      await expect(ageField).toHaveValue('30')
-      await expect(checkbox).toBeChecked()
+      await expect(fields.nameField).toHaveValue('Test User')
+      await expect(fields.emailField).toHaveValue('test@example.com')
+      await expect(fields.messageField).toHaveValue('Test message content')
+      await expect(fields.ageField).toHaveValue('30')
+      await expect(fields.checkbox).toBeChecked()
 
       // Click reset button
       await page.getByRole('button', { name: 'Reset' }).click()
 
       // Verify fields are cleared
-      await expect(nameField).toHaveValue('')
-      await expect(emailField).toHaveValue('')
-      await expect(messageField).toHaveValue('')
-      await expect(ageField).toHaveValue('')
-      await expect(checkbox).not.toBeChecked()
+      await expect(fields.nameField).toHaveValue('')
+      await expect(fields.emailField).toHaveValue('')
+      await expect(fields.messageField).toHaveValue('')
+      await expect(fields.ageField).toHaveValue('')
+      await expect(fields.checkbox).not.toBeChecked()
     })
   })
 })
