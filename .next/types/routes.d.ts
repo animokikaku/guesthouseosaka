@@ -5,7 +5,7 @@ type AppRoutes = "/" | "/[locale]" | "/[locale]/[...rest]" | "/[locale]/[house]"
 type AppRouteHandlerRoutes = "/api/draft-mode/disable" | "/api/draft-mode/enable"
 type PageRoutes = never
 type LayoutRoutes = "/" | "/[locale]" | "/[locale]/[house]" | "/[locale]/contact" | "/[locale]/faq" | "/studio"
-type RedirectRoutes = never
+type RedirectRoutes = "/2013/[[...path]]" | "/en/link" | "/en/oranged" | "/jp" | "/jp/[[...path]]" | "/ko" | "/ko/[[...path]]"
 type RewriteRoutes = never
 type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRoutes | AppRouteHandlerRoutes
 
@@ -19,8 +19,15 @@ interface ParamMap {
   "/[locale]/contact": { "locale": string; }
   "/[locale]/contact/[slug]": { "locale": string; "slug": string; }
   "/[locale]/faq": { "locale": string; }
+  "/2013/[[...path]]": { "path"?: string[]; }
   "/api/draft-mode/disable": {}
   "/api/draft-mode/enable": {}
+  "/en/link": {}
+  "/en/oranged": {}
+  "/jp": {}
+  "/jp/[[...path]]": { "path"?: string[]; }
+  "/ko": {}
+  "/ko/[[...path]]": { "path"?: string[]; }
   "/studio": {}
   "/studio/[[...tool]]": { "tool"?: string[]; }
 }
