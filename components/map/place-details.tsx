@@ -76,12 +76,7 @@ function PlaceDetailsCompact({
           <gmp-place-type></gmp-place-type>
           <gmp-place-price></gmp-place-price>
           <gmp-place-accessible-entrance-icon></gmp-place-accessible-entrance-icon>
-          <gmp-place-phone-number></gmp-place-phone-number>
-          <gmp-place-summary></gmp-place-summary>
-          <gmp-place-type-specific-highlights></gmp-place-type-specific-highlights>
-          <gmp-place-reviews></gmp-place-reviews>
           <gmp-place-open-now-status></gmp-place-open-now-status>
-          <gmp-place-feature-list></gmp-place-feature-list>
         </gmp-place-content-config>
       </gmp-place-details-compact>
     </div>
