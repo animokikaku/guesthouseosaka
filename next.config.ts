@@ -18,26 +18,34 @@ const nextConfig: NextConfig = {
   reactCompiler: env.NODE_ENV === 'production' ? true : false,
   typedRoutes: true,
   redirects: async () => [
-    // Typos / wrong paths
-    { source: '/en/oranged', destination: '/en/orange', permanent: true },
-    { source: '/en/link', destination: '/en', permanent: true },
-    // Wrong locale: jp → ja
+    // Locale corrections: jp → ja
     { source: '/jp', destination: '/ja', permanent: true },
     { source: '/jp/:path*', destination: '/ja/:path*', permanent: true },
-    { source: '/:locale(en|ja|fr)/jp/:path*', destination: '/ja/:path*', permanent: true },
-    // Unsupported locale: ko → default (en)
-    { source: '/ko', destination: '/en', permanent: true },
-    { source: '/ko/:path*', destination: '/en/:path*', permanent: true },
-    // Non-existent house slugs (valid: orange, apple, lemon)
+
+    // Unsupported locales → default (en)
+    { source: '/:locale(ko|kr|zh)', destination: '/en', permanent: true },
+    { source: '/:locale(ko|kr|zh)/:path*', destination: '/en/:path*', permanent: true },
+
+    // Legacy WordPress/old site content (no locale prefix)
+    { source: '/:path(column|seo-blog|category)', destination: '/en', permanent: true },
+    { source: '/:path(column|seo-blog|category|2013|wp-content)/:rest*', destination: '/en', permanent: true },
+
+    // Legacy content (with locale prefix)
+    { source: '/:locale(en|ja|fr)/column', destination: '/:locale', permanent: true },
+    { source: '/:locale(en|ja|fr)/column/:path*', destination: '/:locale', permanent: true },
+
+    // Removed pages
+    { source: '/:locale(en|ja|fr)/:page(location|review)', destination: '/:locale', permanent: true },
+    { source: '/:locale(en|ja|fr)/orange-house', destination: '/:locale/orange', permanent: true },
+    { source: '/:locale(en|ja|fr)/:house(orange|apple|lemon)/access', destination: '/:locale/:house', permanent: true },
+
+    // Non-existent house slugs
     { source: '/:locale(en|ja|fr)/:house(banana|melon)', destination: '/:locale', permanent: true },
     { source: '/:locale(en|ja|fr)/:house(banana|melon)/:path*', destination: '/:locale', permanent: true },
-    // Legacy content (no locale prefix)
-    { source: '/:legacy(column|seo-blog|category)', destination: '/en', permanent: true },
-    { source: '/:legacy(column|seo-blog|category)/:path*', destination: '/en', permanent: true },
-    { source: '/2013/:path*', destination: '/en', permanent: true },
-    // Locale-prefixed legacy content
-    { source: '/:locale(en|ja|fr)/column', destination: '/:locale', permanent: true },
-    { source: '/:locale(en|ja|fr)/column/:path*', destination: '/:locale', permanent: true }
+
+    // Typos
+    { source: '/:locale(en|ja|fr)/oranged', destination: '/:locale/orange', permanent: true },
+    { source: '/:locale(en|ja|fr)/link', destination: '/:locale', permanent: true }
   ],
   experimental: {
     typedEnv: true,
