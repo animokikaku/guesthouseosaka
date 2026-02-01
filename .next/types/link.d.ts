@@ -35,10 +35,7 @@ declare namespace __next_route_internal_types__ {
     | `/`
     | `/api/draft-mode/disable`
     | `/api/draft-mode/enable`
-    | `/en/link`
-    | `/en/oranged`
     | `/jp`
-    | `/ko`
   type DynamicRoutes<T extends string = string> = 
     | `/${SafeSlug<T>}`
     | `/${SafeSlug<T>}/${CatchAllSlug<T>}`
@@ -47,9 +44,7 @@ declare namespace __next_route_internal_types__ {
     | `/${SafeSlug<T>}/contact`
     | `/${SafeSlug<T>}/contact/${SafeSlug<T>}`
     | `/${SafeSlug<T>}/faq`
-    | `/2013/${OptionalCatchAllSlug<T>}`
     | `/jp/${OptionalCatchAllSlug<T>}`
-    | `/ko/${OptionalCatchAllSlug<T>}`
     | `/studio/${OptionalCatchAllSlug<T>}`
 
   type RouteImpl<T> = 
