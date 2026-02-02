@@ -35,10 +35,16 @@ const houseRoutes: Route[] = HouseIdentifierValues.map((house) => ({
   params: { house }
 }))
 
+const galleryRoutes: Route[] = HouseIdentifierValues.map((house) => ({
+  pathname: '/[house]/gallery',
+  params: { house }
+}))
+
 export const routes: Route[] = [
   ...staticRoutes,
   ...contactTypeRoutes,
-  ...houseRoutes
+  ...houseRoutes,
+  ...galleryRoutes
 ]
 
 function buildUrl(href: Route, locale: Locale, host: string): string {

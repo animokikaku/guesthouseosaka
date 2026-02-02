@@ -26,26 +26,19 @@ const nextConfig: NextConfig = {
     { source: '/:locale(ko|kr|zh)', destination: '/en', permanent: true },
     { source: '/:locale(ko|kr|zh)/:path*', destination: '/en/:path*', permanent: true },
 
-    // Legacy WordPress/old site content (no locale prefix)
-    { source: '/:path(column|seo-blog|category)', destination: '/en', permanent: true },
-    { source: '/:path(column|seo-blog|category|2013|wp-content)/:rest*', destination: '/en', permanent: true },
-
-    // Legacy content (with locale prefix)
-    { source: '/:locale(en|ja|fr)/column', destination: '/:locale', permanent: true },
-    { source: '/:locale(en|ja|fr)/column/:path*', destination: '/:locale', permanent: true },
-
-    // Removed pages
-    { source: '/:locale(en|ja|fr)/:page(location|review)', destination: '/:locale', permanent: true },
+    // Renamed pages
     { source: '/:locale(en|ja|fr)/orange-house', destination: '/:locale/orange', permanent: true },
+    { source: '/:locale(en|ja|fr)/oranged', destination: '/:locale/orange', permanent: true },
     { source: '/:locale(en|ja|fr)/:house(orange|apple|lemon)/access', destination: '/:locale/:house', permanent: true },
 
-    // Non-existent house slugs
+    // Removed houses
     { source: '/:locale(en|ja|fr)/:house(banana|melon)', destination: '/:locale', permanent: true },
     { source: '/:locale(en|ja|fr)/:house(banana|melon)/:path*', destination: '/:locale', permanent: true },
 
-    // Typos
-    { source: '/:locale(en|ja|fr)/oranged', destination: '/:locale/orange', permanent: true },
-    { source: '/:locale(en|ja|fr)/link', destination: '/:locale', permanent: true }
+    // Removed pages
+    { source: '/:locale(en|ja|fr)/:path(column|seo-blog|category|location|review|feed|rss|blog|news|about|gallery|rooms|price|prices|access|privacy|terms|link)', destination: '/:locale', permanent: true },
+    { source: '/:locale(en|ja|fr)/:path(column|seo-blog|category|2013|wp-content)/:rest*', destination: '/:locale', permanent: true },
+    { source: '/:locale(en|ja|fr)/:path(reservation|booking|contact-us)', destination: '/:locale/contact', permanent: true }
   ],
   experimental: {
     typedEnv: true,
