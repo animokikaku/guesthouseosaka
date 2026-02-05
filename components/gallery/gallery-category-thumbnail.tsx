@@ -32,7 +32,7 @@ export function CategoryThumbnail({
       <div className="relative aspect-4/3 w-32 overflow-hidden rounded-md">
         <Image
           src={src}
-          alt={stegaClean(thumbnail.alt) ?? ''}
+          alt={stegaClean(thumbnail.alt) ?? stegaClean(category.label) ?? ''}
           fill
           placeholder={thumbnail.preview ? 'blur' : undefined}
           blurDataURL={thumbnail.preview ?? undefined}

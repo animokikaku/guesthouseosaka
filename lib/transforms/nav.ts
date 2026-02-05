@@ -64,7 +64,7 @@ export function toHouseNavItems(houses: HousesNavQueryResult): NavGroupItem[] {
         icon: asset.icon,
         background: {
           src,
-          alt: image?.alt ?? '',
+          alt: image?.alt ?? title ?? slug,
           blurDataURL: image?.preview ?? undefined
         }
       }
