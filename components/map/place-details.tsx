@@ -57,7 +57,7 @@ function PlaceDetailsCompact({
             .dpr(2)
             .fit('crop')
             .url()}
-          alt={placeImage.alt ?? ''}
+          alt={placeImage.alt ?? 'Place photo'}
           width={600}
           height={400}
           placeholder={placeImage.preview ? 'blur' : 'empty'}

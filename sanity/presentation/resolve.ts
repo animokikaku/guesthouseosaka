@@ -1,13 +1,10 @@
-import { HouseIdentifier } from '@/lib/types'
+import { ContactType, ContactTypeValues, HouseIdentifier } from '@/lib/types'
 import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
 
-const VALID_CONTACT_SLUGS = ['tour', 'move-in', 'other'] as const
-type ContactTypeSlug = (typeof VALID_CONTACT_SLUGS)[number]
-
-function isContactTypeSlug(slug: unknown): slug is ContactTypeSlug {
+function isContactTypeSlug(slug: unknown): slug is ContactType {
   return (
     typeof slug === 'string' &&
-    VALID_CONTACT_SLUGS.includes(slug as ContactTypeSlug)
+    ContactTypeValues.includes(slug as ContactType)
   )
 }
 
@@ -16,7 +13,7 @@ const l = {
   house: (slug: HouseIdentifier) => ({ title: 'House', href: `/${slug}` }),
   faq: () => ({ title: 'FAQ', href: '/faq' }),
   contact: () => ({ title: 'Contact', href: '/contact' }),
-  contactType: (slug: ContactTypeSlug) => ({
+  contactType: (slug: ContactType) => ({
     title: 'Contact Form',
     href: `/contact/${slug}`
   })

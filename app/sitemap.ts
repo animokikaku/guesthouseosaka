@@ -1,7 +1,7 @@
 import { getPathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { env } from '@/lib/env'
-import { HouseIdentifierValues } from '@/lib/types'
+import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import type { MetadataRoute } from 'next'
 
 type Locale = (typeof routing.locales)[number]
@@ -25,7 +25,7 @@ const staticRoutes: Route[] = [
   { pathname: '/contact' }
 ]
 
-const contactTypeRoutes: Route[] = ['tour', 'move-in', 'other'].map((slug) => ({
+const contactTypeRoutes: Route[] = ContactTypeValues.map((slug) => ({
   pathname: '/contact/[slug]',
   params: { slug }
 }))
@@ -59,10 +59,12 @@ function buildAlternates(href: Route, host: string): Record<Locale, string> {
 
 function buildSitemapEntry(
   href: Route,
-  host: string
+  host: string,
+  lastModified: Date
 ): MetadataRoute.Sitemap[number] {
   return {
     url: buildUrl(href, routing.defaultLocale, host),
+    lastModified,
     alternates: {
       languages: buildAlternates(href, host)
     }
@@ -71,5 +73,6 @@ function buildSitemapEntry(
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const host = env.NEXT_PUBLIC_APP_URL
-  return routes.map((route) => buildSitemapEntry(route, host))
+  const lastModified = new Date()
+  return routes.map((route) => buildSitemapEntry(route, host, lastModified))
 }

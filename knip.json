@@ -10,7 +10,6 @@
   ],
   "ignoreBinaries": ["crowdin"],
   "ignoreDependencies": [
-    "@sanity/client",
     "@sanity/icons",
     "@portabletext/types",
     "postcss"
