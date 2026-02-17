@@ -294,6 +294,38 @@ describe('GalleryModal', () => {
     })
   })
 
+  describe('swipe to close', () => {
+    it('closes modal on vertical swipe', () => {
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
+
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
+
+      const carouselContent = screen.getByTestId('carousel-content')
+
+      const touch = { clientX: 100, clientY: 100, identifier: 0, target: carouselContent } as unknown as Touch
+      const touchEnd = { clientX: 100, clientY: 200, identifier: 0, target: carouselContent } as unknown as Touch
+
+      act(() => {
+        carouselContent.dispatchEvent(new TouchEvent('touchstart', {
+          bubbles: true,
+          cancelable: true,
+          touches: [touch],
+          changedTouches: [touch]
+        }))
+      })
+      act(() => {
+        carouselContent.dispatchEvent(new TouchEvent('touchend', {
+          bubbles: true,
+          cancelable: true,
+          touches: [],
+          changedTouches: [touchEnd]
+        }))
+      })
+
+      expect(store.state.photoId).toBe(null)
+    })
+  })
+
   describe('carousel API integration', () => {
     it('registers select event handler when API is set', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
