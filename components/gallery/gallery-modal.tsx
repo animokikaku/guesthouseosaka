@@ -25,7 +25,7 @@ import { store } from '@/lib/store'
 import { urlFor } from '@/sanity/lib/image'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { getImageDimensions } from '@sanity/asset-utils'
-import { useStore } from '@tanstack/react-form'
+import { useStore } from '@tanstack/react-store'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
@@ -53,7 +53,7 @@ export function GalleryModal({
       open={photoId !== null}
       onOpenChange={(open) => {
         if (!open) {
-          store.setState({ photoId: null })
+          store.setState((prev) => ({ ...prev, photoId: null }))
         }
       }}
     >
@@ -115,7 +115,7 @@ function GalleryModalCarousel({
     : (selectedIndex ?? 0)
 
   const { onTouchStart, onTouchEnd } = useSwipeToClose({
-    onClose: () => store.setState({ photoId: null })
+    onClose: () => store.setState((prev) => ({ ...prev, photoId: null }))
   })
 
   const handleKeyDown = useCallback(
