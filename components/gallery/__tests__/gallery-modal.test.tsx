@@ -126,7 +126,7 @@ describe('GalleryModal', () => {
   const originalError = console.error
   beforeEach(() => {
     vi.clearAllMocks()
-    store.setState({ photoId: null })
+    store.setState((prev) => ({ ...prev, photoId: null }))
     resetCarouselMockState(carouselState)
     console.error = (...args: unknown[]) => {
       const message = args[0]
@@ -143,7 +143,7 @@ describe('GalleryModal', () => {
 
   describe('open/close state', () => {
     it('renders nothing when photoId is null', () => {
-      store.setState({ photoId: null })
+      store.setState((prev) => ({ ...prev, photoId: null }))
 
       const { container } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -151,7 +151,7 @@ describe('GalleryModal', () => {
     })
 
     it('renders dialog when photoId is set', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -159,7 +159,7 @@ describe('GalleryModal', () => {
     })
 
     it('closes dialog when close button is clicked', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -172,7 +172,7 @@ describe('GalleryModal', () => {
 
   describe('accessibility', () => {
     it('has accessible dialog title', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -181,7 +181,7 @@ describe('GalleryModal', () => {
     })
 
     it('has accessible dialog description', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -190,7 +190,7 @@ describe('GalleryModal', () => {
     })
 
     it('has accessible close button', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -200,7 +200,7 @@ describe('GalleryModal', () => {
 
   describe('dialog content', () => {
     it('renders close button with icon', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -213,7 +213,7 @@ describe('GalleryModal', () => {
 
   describe('keyboard navigation', () => {
     it('calls scrollPrev on ArrowLeft key press', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -231,7 +231,7 @@ describe('GalleryModal', () => {
     })
 
     it('calls scrollNext on ArrowRight key press', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -249,7 +249,7 @@ describe('GalleryModal', () => {
     })
 
     it('does not scroll on other key presses', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -269,7 +269,7 @@ describe('GalleryModal', () => {
     })
 
     it('removes keyboard event listener on unmount', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       const { unmount } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -296,7 +296,7 @@ describe('GalleryModal', () => {
 
   describe('carousel API integration', () => {
     it('registers select event handler when API is set', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
@@ -309,7 +309,7 @@ describe('GalleryModal', () => {
     })
 
     it('cleans up select event handler on unmount', () => {
-      store.setState({ photoId: 'img1' })
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       const { unmount } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
