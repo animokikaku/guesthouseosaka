@@ -38,6 +38,11 @@
       "matchPackageNames": ["/^@tanstack//"]
     },
     {
+      "description": "Ignore ESLint 10 until eslint-config-next supports it",
+      "matchPackageNames": ["eslint"],
+      "allowedVersions": "<10"
+    },
+    {
       "description": "Group testing packages",
       "groupName": "testing",
       "matchPackageNames": [
