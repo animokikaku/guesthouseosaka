@@ -81,7 +81,7 @@ function createGalleryItem(
 describe('GalleryGridItem', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    store.setState({ photoId: null })
+    store.setState((prev) => ({ ...prev, photoId: null }))
   })
 
   describe('empty states', () => {
@@ -186,7 +186,7 @@ describe('GalleryGridItem', () => {
       fireEvent.click(container.firstChild as HTMLElement)
       expect(store.state.photoId).toBe('photo-1')
 
-      store.setState({ photoId: null })
+      store.setState((prev) => ({ ...prev, photoId: null }))
 
       rerender(<GalleryGridItem item={item2} categoryKey="cat1" />)
       fireEvent.click(container.firstChild as HTMLElement)
