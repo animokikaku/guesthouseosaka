@@ -1,9 +1,5 @@
 import '@testing-library/jest-dom/vitest'
 import { vi } from 'vitest'
-import React from 'react'
-
-// styled-components v6 CJS bundle references React as a global
-globalThis.React = React
 
 // Mock ResizeObserver for Radix UI components
 class ResizeObserverMock {
