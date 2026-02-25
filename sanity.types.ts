@@ -763,12 +763,6 @@ export type AllSanitySchemaTypes =
 
 export declare const internalGroqTypeReferenceTo: unique symbol
 
-type ArrayOf<T> = Array<
-  T & {
-    _key: string
-  }
->
-
 // Source: sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]{  _id,  _type,  "siteName": coalesce(siteName[_key == $locale][0].value, siteName[_key == "en"][0].value),  "siteDescription": coalesce(siteDescription[_key == $locale][0].value, siteDescription[_key == "en"][0].value),  companyName,  email,  phone,  address,  "socialLinks": array::compact(socialLinks[]{    _key,    icon,    label,    url  })}
