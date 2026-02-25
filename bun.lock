@@ -26,7 +26,7 @@
         "@sanity/client": "^7.16.0",
         "@sanity/image-url": "^2.0.3",
         "@sanity/language-filter": "^4.1.0",
-        "@sanity/orderable-document-list": "^1.5.0",
+        "@sanity/orderable-document-list": "^1.5.1",
         "@sanity/vision": "^5.12.0",
         "@t3-oss/env-nextjs": "^0.13.10",
         "@tanstack/react-form": "^1.28.3",
@@ -1029,7 +1029,7 @@
 
     "@sanity/mutator": ["@sanity/mutator@5.4.0", "", { "dependencies": { "@sanity/diff-match-patch": "^3.2.0", "@sanity/types": "5.4.0", "@sanity/uuid": "^3.0.2", "debug": "^4.4.3", "lodash-es": "^4.17.22" } }, "sha512-rGrF73JpicTZQuCr7ROmYMJEqZ3GYHEXaj9yz7hRG+W87ao6cAeF05JdGk8CpjTSxBeL28qbphMLoWPEsUFB9w=="],
 
-    "@sanity/orderable-document-list": ["@sanity/orderable-document-list@1.5.0", "", { "dependencies": { "@hello-pangea/dnd": "^18.0.1", "@sanity/icons": "^3.5.3", "@sanity/incompatible-plugin": "^1.0.5", "@sanity/ui": "^2.10.11", "lexorank": "^1.0.4", "sanity-plugin-utils": "^1.6.8" }, "peerDependencies": { "react": "^18 || ^19", "react-dom": "^18 || ^19", "sanity": "^3.77.0 || ^4.0.0-0 || ^5.0.0", "styled-components": "^6.1" } }, "sha512-Ed1cykbRW/UrW4JC+KRVWAvm6TN7Z80DBUkf9qbNzFUnykFR8Yxtmmdcbx5Q1HwzTzA7uUR6agWYuw4COqt7YQ=="],
+    "@sanity/orderable-document-list": ["@sanity/orderable-document-list@1.5.1", "", { "dependencies": { "@hello-pangea/dnd": "^18.0.1", "@sanity/icons": "^3.5.3", "@sanity/incompatible-plugin": "^1.0.5", "@sanity/ui": "^2.10.11", "lexorank": "^1.0.4", "sanity-plugin-utils": "^1.6.8" }, "peerDependencies": { "react": "^18 || ^19", "react-dom": "^18 || ^19", "sanity": "^3.77.0 || ^4.0.0-0 || ^5.0.0", "styled-components": "^6.1" } }, "sha512-j4m9U0nC5cegQK1RCQ2wS7ZItBnZDFOFq2pOFrwQoLph92Iy13fRCnWCUJefiVixtiUrMLi5vlwePwF+YmRQcQ=="],
 
     "@sanity/presentation-comlink": ["@sanity/presentation-comlink@2.0.1", "", { "dependencies": { "@sanity/comlink": "^4.0.1", "@sanity/visual-editing-types": "^1.1.8" } }, "sha512-D0S2CfVyda99cd/8SnXxQ2tsVlVuRq4CAOjxRuF53evYmBhpWezSEpWKqAa0e1lunGBKK1EroxmOzb5ofNRwMg=="],
 
