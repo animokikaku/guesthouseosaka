@@ -25,9 +25,7 @@ describe('FAQExtraCostsTable', () => {
     it('returns null when pricingCategories is empty', () => {
       const houses: Houses = [createHouse('h1', 'orange')]
 
-      const { container } = render(
-        <FAQExtraCostsTable houses={houses} pricingCategories={[]} />
-      )
+      const { container } = render(<FAQExtraCostsTable houses={houses} pricingCategories={[]} />)
 
       expect(container.firstChild).toBeNull()
     })

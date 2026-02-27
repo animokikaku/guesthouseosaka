@@ -47,9 +47,7 @@ describe('FAQCard', () => {
   })
 
   it('renders contact note when provided', () => {
-    render(
-      <FAQCard contactSection={contactSection} contactNote="Available 24/7" houses={houses} />
-    )
+    render(<FAQCard contactSection={contactSection} contactNote="Available 24/7" houses={houses} />)
 
     expect(screen.getByText('Available 24/7')).toBeInTheDocument()
   })
