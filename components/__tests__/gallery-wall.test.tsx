@@ -53,4 +53,12 @@ describe('GalleryWall', () => {
     const wrapper = container.firstChild as HTMLElement
     expect(wrapper).toHaveClass('custom-class')
   })
+
+  it('renders at most 6 images even when given more', () => {
+    const images = createMockImages(8)
+    render(<GalleryWall images={images} />)
+
+    const imgElements = screen.getAllByRole('img', { hidden: true })
+    expect(imgElements).toHaveLength(6)
+  })
 })
