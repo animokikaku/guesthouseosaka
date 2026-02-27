@@ -92,6 +92,23 @@ const createExtraCost = (categoryId: string, text: string): ExtraCost => ({
   ]
 })
 
+const createExtraCostWithList = (
+  categoryId: string,
+  items: string[],
+  listItem: 'bullet' | 'number'
+): ExtraCost => ({
+  categoryId,
+  value: items.map((text, i) => ({
+    _type: 'block' as const,
+    _key: `list-block-${i}`,
+    children: [{ _type: 'span' as const, _key: `span${i}`, text, marks: [] as string[] }],
+    markDefs: [] as never[],
+    style: 'normal' as const,
+    listItem,
+    level: 1
+  }))
+})
+
 describe('FAQExtraCostsCards', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -307,6 +324,49 @@ describe('FAQExtraCostsCards', () => {
       // Verify off was called to clean up handlers
       expect(carouselState.mockApi.off).toHaveBeenCalledWith('select', expect.any(Function))
       expect(carouselState.mockApi.off).toHaveBeenCalledWith('reInit', expect.any(Function))
+    })
+  })
+
+  describe('portable text list rendering', () => {
+    it('renders bullet list items', () => {
+      const houses: Houses = [
+        createHouse('h1', 'orange', [
+          createExtraCostWithList('utilities', ['Water', 'Gas', 'Electricity'], 'bullet')
+        ])
+      ]
+      const pricingCategories: PricingCategories = [createCategory('utilities', 'Utilities')]
+
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
+
+      expect(screen.getByText('Water')).toBeInTheDocument()
+      expect(screen.getByText('Gas')).toBeInTheDocument()
+      expect(screen.getByText('Electricity')).toBeInTheDocument()
+    })
+
+    it('renders numbered list items', () => {
+      const houses: Houses = [
+        createHouse('h1', 'orange', [
+          createExtraCostWithList('steps', ['Step 1', 'Step 2'], 'number')
+        ])
+      ]
+      const pricingCategories: PricingCategories = [createCategory('steps', 'Steps')]
+
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
+
+      expect(screen.getByText('Step 1')).toBeInTheDocument()
+      expect(screen.getByText('Step 2')).toBeInTheDocument()
+    })
+  })
+
+  describe('null extraCosts handling', () => {
+    it('handles house with null extraCosts', () => {
+      const house = createHouse('h1', 'orange')
+      house.extraCosts = null
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
+
+      render(<FAQExtraCostsCards houses={[house]} pricingCategories={pricingCategories} />)
+
+      expect(screen.getByText('–')).toBeInTheDocument()
     })
   })
 })
