@@ -17,7 +17,8 @@ export default defineConfig({
         '**/__tests__/utils/**',
         '**/__tests__/mocks/**',
         '**/__tests__/mocks.{ts,tsx}',
-        '**/__mocks__/**'
+        '**/__mocks__/**',
+        '**/index.ts'
       ]
     }
   }

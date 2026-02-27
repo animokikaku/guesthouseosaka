@@ -187,6 +187,42 @@ describe('CategoryThumbnail', () => {
       expect(image).toHaveAttribute('data-blur-url', 'data:image/jpeg;base64,preview123')
     })
 
+    it('falls back to category label when thumbnail alt is null', () => {
+      const category = createCategory({
+        label: 'Kitchen',
+        thumbnail: {
+          asset: { _ref: 'image-test', _type: 'reference' },
+          hotspot: null,
+          crop: null,
+          alt: null,
+          preview: null
+        }
+      })
+
+      render(<CategoryThumbnail category={category} />)
+
+      const image = screen.getByTestId('thumbnail-image')
+      expect(image).toHaveAttribute('alt', 'Kitchen')
+    })
+
+    it('falls back to empty string when both alt and label are null', () => {
+      const category = createCategory({
+        label: null,
+        thumbnail: {
+          asset: { _ref: 'image-test', _type: 'reference' },
+          hotspot: null,
+          crop: null,
+          alt: null,
+          preview: null
+        }
+      })
+
+      render(<CategoryThumbnail category={category} />)
+
+      const image = screen.getByTestId('thumbnail-image')
+      expect(image).toHaveAttribute('alt', '')
+    })
+
     it('does not use blur placeholder when preview is null', () => {
       const category = createCategory({
         thumbnail: {

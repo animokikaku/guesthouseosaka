@@ -209,6 +209,55 @@ describe('GalleryModal', () => {
     })
   })
 
+  describe('image rendering', () => {
+    it('skips images with null asset', () => {
+      const categoriesWithNullAsset = [
+        createGalleryCategory({
+          _key: 'cat1',
+          items: [
+            createGalleryItem({
+              _key: 'valid',
+              image: createSanityImage({ alt: 'Valid image' })
+            }),
+            createGalleryItem({
+              _key: 'null-asset',
+              image: { asset: null, hotspot: null, crop: null, alt: 'No asset', preview: null }
+            })
+          ]
+        })
+      ]
+
+      store.setState((prev) => ({ ...prev, photoId: 'valid' }))
+
+      render(<GalleryModal galleryCategories={categoriesWithNullAsset} title="Test Gallery" />)
+
+      const images = screen.getAllByTestId('gallery-image')
+      expect(images).toHaveLength(1)
+      expect(images[0]).toHaveAttribute('alt', 'Valid image')
+    })
+
+    it('renders empty alt for images without alt text', () => {
+      const categoriesNoAlt = [
+        createGalleryCategory({
+          _key: 'cat1',
+          items: [
+            createGalleryItem({
+              _key: 'no-alt',
+              image: createSanityImage({ alt: null })
+            })
+          ]
+        })
+      ]
+
+      store.setState((prev) => ({ ...prev, photoId: 'no-alt' }))
+
+      render(<GalleryModal galleryCategories={categoriesNoAlt} title="Test Gallery" />)
+
+      const images = screen.getAllByTestId('gallery-image')
+      expect(images[0]).toHaveAttribute('alt', '')
+    })
+  })
+
   describe('dialog content', () => {
     it('renders close button with icon', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))

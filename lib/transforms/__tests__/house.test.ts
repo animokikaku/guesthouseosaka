@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
+  toAboutContent,
   toAmenityCategories,
   toBuildingData,
+  toFeaturedAmenities,
   toLocationData,
   toMapData,
   toPricingRows
@@ -262,5 +264,54 @@ describe('toAmenityCategories', () => {
     const result = toAmenityCategories([cat])
 
     expect(result[0].items).toEqual([])
+  })
+})
+
+describe('toFeaturedAmenities', () => {
+  it('transforms featured amenities preserving values', () => {
+    const items = [
+      createAmenityItem({ _key: 'wifi', label: 'Wifi', icon: 'wifi', note: 'shared' }),
+      createAmenityItem({ _key: 'bed', label: 'Bed', icon: 'bed', note: null })
+    ]
+
+    const result = toFeaturedAmenities(items)
+
+    expect(result).toHaveLength(2)
+    expect(result[0]).toEqual({ _key: 'wifi', label: 'Wifi', icon: 'wifi', note: 'shared' })
+    expect(result[1]).toEqual({ _key: 'bed', label: 'Bed', icon: 'bed', note: null })
+  })
+
+  it('returns empty array for null input', () => {
+    const result = toFeaturedAmenities(null)
+
+    expect(result).toEqual([])
+  })
+
+  it('returns empty array for empty array', () => {
+    const result = toFeaturedAmenities([])
+
+    expect(result).toEqual([])
+  })
+})
+
+describe('toAboutContent', () => {
+  it('returns content as PortableTextBlock array', () => {
+    const blocks = [{ _type: 'block' as const, _key: 'b1', children: [], style: 'normal' as const }]
+
+    const result = toAboutContent(blocks)
+
+    expect(result).toEqual(blocks)
+  })
+
+  it('returns null for null input', () => {
+    const result = toAboutContent(null)
+
+    expect(result).toBeNull()
+  })
+
+  it('returns null for empty array', () => {
+    const result = toAboutContent([])
+
+    expect(result).toBeNull()
   })
 })

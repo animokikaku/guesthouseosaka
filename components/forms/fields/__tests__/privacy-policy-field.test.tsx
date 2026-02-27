@@ -30,10 +30,38 @@ vi.mock('@/components/forms/form-context', async () => {
   }
 })
 
-// Mock the legal notice dialog - simplified mock since t.rich() callback isn't exercised in tests
+// Capture onAgree callback from LegalNoticeDialog
+let capturedOnAgree: (() => void) | undefined
+
 vi.mock('@/components/legal-notice-dialog', () => ({
-  LegalNoticeDialog: ({ children }: { children: React.ReactNode }) => <span>{children}</span>
+  LegalNoticeDialog: ({
+    children,
+    onAgree
+  }: {
+    children: React.ReactNode
+    onAgree?: () => void
+  }) => {
+    capturedOnAgree = onAgree
+    return <span>{children}</span>
+  }
 }))
+
+// Override next-intl mock to exercise t.rich() callback
+vi.mock('next-intl', () => {
+  const t = (key: string) => key
+  t.rich = (key: string, options?: Record<string, (chunks: string) => React.ReactNode>) => {
+    if (options?.link) {
+      return options.link('link text')
+    }
+    return key
+  }
+  t.raw = (key: string) => key
+  t.markup = (key: string) => key
+  return {
+    useTranslations: () => t,
+    useLocale: () => 'en'
+  }
+})
 
 // Import after mocking
 import { PrivacyPolicyField } from '../privacy-policy-field'
@@ -41,6 +69,7 @@ import { PrivacyPolicyField } from '../privacy-policy-field'
 describe('PrivacyPolicyField', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    capturedOnAgree = undefined
   })
 
   describe('rendering', () => {
@@ -54,8 +83,8 @@ describe('PrivacyPolicyField', () => {
       )
 
       expect(screen.getByRole('checkbox')).toBeInTheDocument()
-      // The label uses a translation key with rich text
-      expect(screen.getByText('fields.privacy_policy_agreement')).toBeInTheDocument()
+      // t.rich calls the link callback with 'link text'
+      expect(screen.getByText('link text')).toBeInTheDocument()
     })
   })
 
@@ -127,6 +156,23 @@ describe('PrivacyPolicyField', () => {
 
       fireEvent.blur(screen.getByRole('checkbox'))
       expect(fieldApi.handleBlur).toHaveBeenCalled()
+    })
+  })
+
+  describe('legal notice dialog', () => {
+    it('calls handleChange(true) when onAgree is triggered', () => {
+      const fieldApi = createMockFieldApi('privacyPolicy', false)
+
+      render(
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
+          <PrivacyPolicyField />
+        </FieldContextWrapper>
+      )
+
+      // onAgree was captured by the LegalNoticeDialog mock
+      expect(capturedOnAgree).toBeDefined()
+      capturedOnAgree!()
+      expect(fieldApi.handleChange).toHaveBeenCalledWith(true)
     })
   })
 
