@@ -1,10 +1,6 @@
 import { cn } from '@/lib/utils'
 
-function PageHeader({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<'section'>) {
+function PageHeader({ className, children, ...props }: React.ComponentProps<'section'>) {
   return (
     <section className={'border-grid'} {...props}>
       <div className="container-wrapper">
@@ -21,10 +17,7 @@ function PageHeader({
   )
 }
 
-function PageHeaderHeading({
-  className,
-  ...props
-}: React.ComponentProps<'h1'>) {
+function PageHeaderHeading({ className, ...props }: React.ComponentProps<'h1'>) {
   return (
     <h1
       className={cn(
@@ -36,16 +29,10 @@ function PageHeaderHeading({
   )
 }
 
-function PageHeaderDescription({
-  className,
-  ...props
-}: React.ComponentProps<'p'>) {
+function PageHeaderDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <p
-      className={cn(
-        'text-foreground max-w-3xl text-base text-balance sm:text-lg',
-        className
-      )}
+      className={cn('text-foreground max-w-3xl text-base text-balance sm:text-lg', className)}
       {...props}
     />
   )

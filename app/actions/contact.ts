@@ -5,11 +5,7 @@ import {
   MoveInRequestEmail,
   TourRequestEmail
 } from '@/components/email-template'
-import {
-  GeneralInquiryFields,
-  MoveInFormFields,
-  TourFormFields
-} from '@/components/forms/schema'
+import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
 import { env } from '@/lib/env'
 import { HouseIdentifier } from '@/lib/types'
 import { Resend } from 'resend'

@@ -1,11 +1,7 @@
 'use client'
 
 import { submitContactForm } from '@/app/actions/contact'
-import {
-  GeneralInquiryFields,
-  MoveInFormFields,
-  TourFormFields
-} from '@/components/forms/schema'
+import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useCallback } from 'react'
@@ -52,9 +48,7 @@ export function useFormSubmit() {
    * Focuses the first input with an error for accessibility.
    */
   const onSubmitInvalid = useCallback(() => {
-    const firstErrorInput = document.querySelector(
-      '[aria-invalid="true"]'
-    ) as HTMLElement | null
+    const firstErrorInput = document.querySelector('[aria-invalid="true"]') as HTMLElement | null
     firstErrorInput?.focus()
   }, [])
 

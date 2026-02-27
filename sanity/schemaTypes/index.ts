@@ -16,10 +16,7 @@ import { settings } from './documents/settings'
 // Object types
 import { address } from './objects/address'
 import { extraCostItem } from './objects/extra-cost-item'
-import {
-  formFieldConfig,
-  formFieldConfigNoPlaceholder
-} from './objects/form-field-config'
+import { formFieldConfig, formFieldConfigNoPlaceholder } from './objects/form-field-config'
 import { houseAmenity } from './objects/house-amenity'
 import { houseAmenityCategory } from './objects/house-amenity-category'
 import { houseBuilding } from './objects/house-building'

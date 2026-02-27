@@ -62,9 +62,7 @@ vi.mock('next/image', () => ({
   }
 }))
 
-function createGalleryItem(
-  overrides: Partial<GalleryItem> = {}
-): GalleryItem {
+function createGalleryItem(overrides: Partial<GalleryItem> = {}): GalleryItem {
   return {
     _key: 'item1',
     image: {
@@ -86,11 +84,12 @@ describe('GalleryGridItem', () => {
 
   describe('empty states', () => {
     it('returns null when image is null', () => {
-      const item = { ...createGalleryItem(), image: null } as unknown as GalleryItem
+      const item = {
+        ...createGalleryItem(),
+        image: null
+      } as unknown as GalleryItem
 
-      const { container } = render(
-        <GalleryGridItem item={item} categoryKey="cat1" />
-      )
+      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
 
       expect(container.firstChild).toBeNull()
     })
@@ -139,10 +138,7 @@ describe('GalleryGridItem', () => {
 
       const image = screen.getByTestId('gallery-image')
       expect(image).toHaveAttribute('data-placeholder', 'blur')
-      expect(image).toHaveAttribute(
-        'data-blur-url',
-        'data:image/jpeg;base64,preview123'
-      )
+      expect(image).toHaveAttribute('data-blur-url', 'data:image/jpeg;base64,preview123')
     })
 
     it('does not use blur placeholder when preview is null', () => {
@@ -180,9 +176,7 @@ describe('GalleryGridItem', () => {
       const item1 = createGalleryItem({ _key: 'photo-1' })
       const item2 = createGalleryItem({ _key: 'photo-2' })
 
-      const { container, rerender } = render(
-        <GalleryGridItem item={item1} categoryKey="cat1" />
-      )
+      const { container, rerender } = render(<GalleryGridItem item={item1} categoryKey="cat1" />)
       fireEvent.click(container.firstChild as HTMLElement)
       expect(store.state.photoId).toBe('photo-1')
 
@@ -255,16 +249,10 @@ describe('GalleryGridItem', () => {
   describe('data attributes', () => {
     it('sets data-sanity attribute when dataAttribute function is provided', () => {
       const item = createGalleryItem({ _key: 'item-123' })
-      const dataAttribute = vi.fn(
-        (path: string) => `encoded-path:${path}`
-      )
+      const dataAttribute = vi.fn((path: string) => `encoded-path:${path}`)
 
       const { container } = render(
-        <GalleryGridItem
-          item={item}
-          categoryKey="cat-abc"
-          dataAttribute={dataAttribute}
-        />
+        <GalleryGridItem item={item} categoryKey="cat-abc" dataAttribute={dataAttribute} />
       )
 
       expect(dataAttribute).toHaveBeenCalledWith(

@@ -20,9 +20,7 @@ const mockPricingWithContent: PricingRowData[] = [
         _type: 'block',
         _key: 'block1',
         style: 'normal',
-        children: [
-          { _type: 'span', _key: 'span1', text: '45,000 JPY', marks: [] }
-        ],
+        children: [{ _type: 'span', _key: 'span1', text: '45,000 JPY', marks: [] }],
         markDefs: []
       }
     ] as PricingRowData['content']
@@ -35,9 +33,7 @@ const mockPricingWithContent: PricingRowData[] = [
         _type: 'block',
         _key: 'block2',
         style: 'normal',
-        children: [
-          { _type: 'span', _key: 'span2', text: '1 month', marks: [] }
-        ],
+        children: [{ _type: 'span', _key: 'span2', text: '1 month', marks: [] }],
         markDefs: []
       }
     ] as PricingRowData['content']
@@ -65,9 +61,7 @@ const mockPricingWithBulletList: PricingRowData[] = [
         style: 'normal',
         listItem: 'bullet',
         level: 1,
-        children: [
-          { _type: 'span', _key: 's2', text: 'Electricity', marks: [] }
-        ],
+        children: [{ _type: 'span', _key: 's2', text: 'Electricity', marks: [] }],
         markDefs: []
       }
     ] as PricingRowData['content']
@@ -86,9 +80,7 @@ const mockPricingWithNumberedList: PricingRowData[] = [
         style: 'normal',
         listItem: 'number',
         level: 1,
-        children: [
-          { _type: 'span', _key: 's1', text: 'Submit application', marks: [] }
-        ],
+        children: [{ _type: 'span', _key: 's1', text: 'Submit application', marks: [] }],
         markDefs: []
       },
       {
@@ -97,9 +89,7 @@ const mockPricingWithNumberedList: PricingRowData[] = [
         style: 'normal',
         listItem: 'number',
         level: 1,
-        children: [
-          { _type: 'span', _key: 's2', text: 'Pay deposit', marks: [] }
-        ],
+        children: [{ _type: 'span', _key: 's2', text: 'Pay deposit', marks: [] }],
         markDefs: []
       }
     ] as PricingRowData['content']
@@ -125,9 +115,7 @@ describe('HousePricing', () => {
     render(<HousePricing pricing={mockPricing} />)
 
     // The heading uses the translation key
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      'heading'
-    )
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('heading')
   })
 
   it('renders section with correct id for anchor linking', () => {
@@ -147,9 +135,7 @@ describe('HousePricing', () => {
   })
 
   it('renders correct number of pricing rows', () => {
-    const singlePricing: PricingRowData[] = [
-      { _key: 'single', label: 'Price', content: null }
-    ]
+    const singlePricing: PricingRowData[] = [{ _key: 'single', label: 'Price', content: null }]
 
     render(<HousePricing pricing={singlePricing} />)
 

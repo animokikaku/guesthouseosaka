@@ -34,10 +34,7 @@ describe('flattenGalleryItems', () => {
     const categories = [
       createGalleryCategory({
         _key: 'cat1',
-        items: [
-          createGalleryItem({ _key: 'img1' }),
-          createGalleryItem({ _key: 'img2' })
-        ]
+        items: [createGalleryItem({ _key: 'img1' }), createGalleryItem({ _key: 'img2' })]
       }),
       createGalleryCategory({
         _key: 'cat2',
@@ -85,10 +82,7 @@ describe('getImageIndex', () => {
   it('returns 0 for non-existent photoKey', () => {
     const categories = [
       createGalleryCategory({
-        items: [
-          createGalleryItem({ _key: 'img1' }),
-          createGalleryItem({ _key: 'img2' })
-        ]
+        items: [createGalleryItem({ _key: 'img1' }), createGalleryItem({ _key: 'img2' })]
       })
     ]
 
@@ -102,10 +96,7 @@ describe('getImageIndex', () => {
   it('returns 0 for first item', () => {
     const categories = [
       createGalleryCategory({
-        items: [
-          createGalleryItem({ _key: 'first' }),
-          createGalleryItem({ _key: 'second' })
-        ]
+        items: [createGalleryItem({ _key: 'first' }), createGalleryItem({ _key: 'second' })]
       })
     ]
 
@@ -115,10 +106,7 @@ describe('getImageIndex', () => {
   it('finds items across multiple categories', () => {
     const categories = [
       createGalleryCategory({
-        items: [
-          createGalleryItem({ _key: 'img1' }),
-          createGalleryItem({ _key: 'img2' })
-        ]
+        items: [createGalleryItem({ _key: 'img1' }), createGalleryItem({ _key: 'img2' })]
       }),
       createGalleryCategory({
         items: [createGalleryItem({ _key: 'img3' })]
@@ -158,11 +146,7 @@ describe('toGalleryCategories', () => {
     const firstImage = createSanityImage({ alt: 'First kitchen image' })
     const categories = [
       createGalleryCategory({
-        items: [
-          createGalleryItem({ image: firstImage }),
-          createGalleryItem(),
-          createGalleryItem()
-        ]
+        items: [createGalleryItem({ image: firstImage }), createGalleryItem(), createGalleryItem()]
       })
     ]
 

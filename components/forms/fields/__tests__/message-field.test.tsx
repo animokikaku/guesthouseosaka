@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import {
-  createMockFieldApi,
-  createFieldContext,
-  FieldContextWrapper
-} from './test-utils'
+import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
 
 // Create a test field context
 const testFieldContext = createFieldContext<string>()
@@ -84,9 +80,7 @@ describe('MessageField', () => {
         </FieldContextWrapper>
       )
 
-      expect(
-        screen.queryByText('Enter your message here')
-      ).not.toBeInTheDocument()
+      expect(screen.queryByText('Enter your message here')).not.toBeInTheDocument()
     })
   })
 
@@ -132,7 +126,9 @@ describe('MessageField', () => {
 
   describe('character counter', () => {
     it('displays character counter with current count', () => {
-      const fieldApi = createMockFieldApi('message', 'Hello', { value: 'Hello' })
+      const fieldApi = createMockFieldApi('message', 'Hello', {
+        value: 'Hello'
+      })
 
       render(
         <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>

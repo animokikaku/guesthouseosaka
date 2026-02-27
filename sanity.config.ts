@@ -20,11 +20,7 @@ import { routing } from '@/i18n/routing'
 import { env } from '@/lib/env'
 import { locales } from '@/sanity/config'
 import { resolve } from '@/sanity/presentation/resolve'
-import {
-  type DocumentTypeName,
-  documentTypes,
-  schema
-} from '@/sanity/schemaTypes'
+import { type DocumentTypeName, documentTypes, schema } from '@/sanity/schemaTypes'
 import { structure } from '@/sanity/structure'
 
 const languages = locales.map(({ name, label }) => ({
@@ -75,18 +71,14 @@ export default defineConfig({
 
       // Remove duplicate and unpublish actions for singletons/fixed document sets
       if (noCreateDocumentTypes.includes(context.schemaType)) {
-        actions = actions.filter(
-          ({ action }) => action !== 'duplicate' && action !== 'unpublish'
-        )
+        actions = actions.filter(({ action }) => action !== 'duplicate' && action !== 'unpublish')
       }
 
       return actions
     },
     // Hide certain types from the "Create new document" menu
     newDocumentOptions: (prev) => {
-      return prev.filter(
-        ({ templateId }) => !noCreateDocumentTypes.includes(templateId)
-      )
+      return prev.filter(({ templateId }) => !noCreateDocumentTypes.includes(templateId))
     }
   },
   plugins: [
@@ -107,19 +99,14 @@ export default defineConfig({
           // It's an internationalized array value
           // And the array _key is the language of the field
           const language =
-            pathEnd[1] === 'value' && isKeySegment(pathEnd[0])
-              ? pathEnd[0]._key
-              : null
+            pathEnd[1] === 'value' && isKeySegment(pathEnd[0]) ? pathEnd[0]._key : null
 
           return language ? selectedLanguageIds.includes(language) : false
         }
 
         // Filter internationalized objects if you have them
         // `localeString` must be registered as a custom schema type
-        if (
-          enclosingType.jsonType === 'object' &&
-          enclosingType.name.startsWith('locale')
-        ) {
+        if (enclosingType.jsonType === 'object' && enclosingType.name.startsWith('locale')) {
           return selectedLanguageIds.includes(member.name)
         }
 

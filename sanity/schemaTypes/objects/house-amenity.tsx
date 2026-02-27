@@ -57,10 +57,7 @@ export const houseAmenity = defineType({
         shared: 'Shared',
         coin: 'Coin-operated'
       }
-      const subtitle = [
-        note ? noteLabels[note] : null,
-        featured ? 'Featured' : null
-      ]
+      const subtitle = [note ? noteLabels[note] : null, featured ? 'Featured' : null]
         .filter(Boolean)
         .join(' | ')
 

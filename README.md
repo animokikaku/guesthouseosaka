@@ -24,15 +24,15 @@ bun dev        # Start dev server at http://localhost:3000
 
 ## Scripts
 
-| Command           | Description                        |
-| ----------------- | ---------------------------------- |
-| `bun dev`         | Start development server           |
-| `bun run build`   | Production build                   |
-| `bun lint`        | Run ESLint                         |
-| `bun run typegen` | Regenerate Sanity TypeScript types |
-| `bun run test`    | Run unit tests (Vitest)            |
-| `bun run test:e2e`| Run E2E tests (Playwright)         |
-| `bun run knip`    | Detect unused code/dependencies    |
+| Command            | Description                        |
+| ------------------ | ---------------------------------- |
+| `bun dev`          | Start development server           |
+| `bun run build`    | Production build                   |
+| `bun lint`         | Run ESLint                         |
+| `bun run typegen`  | Regenerate Sanity TypeScript types |
+| `bun run test`     | Run unit tests (Vitest)            |
+| `bun run test:e2e` | Run E2E tests (Playwright)         |
+| `bun run knip`     | Detect unused code/dependencies    |
 
 ## Project Structure
 

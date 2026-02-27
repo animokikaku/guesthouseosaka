@@ -30,7 +30,7 @@
     {
       "description": "Group Next.js packages",
       "groupName": "next.js",
-      "matchPackageNames": ["/^next$/", "/^@next//", "/^eslint-config-next$/"]
+      "matchPackageNames": ["/^next$/", "/^@next//"]
     },
     {
       "description": "Group TanStack packages",
@@ -38,19 +38,14 @@
       "matchPackageNames": ["/^@tanstack//"]
     },
     {
-      "description": "Ignore ESLint 10 until eslint-config-next supports it",
-      "matchPackageNames": ["eslint"],
-      "allowedVersions": "<10"
+      "description": "Group Oxc toolchain",
+      "groupName": "oxc",
+      "matchPackageNames": ["/^oxlint$/", "/^oxfmt$/"]
     },
     {
       "description": "Group testing packages",
       "groupName": "testing",
-      "matchPackageNames": [
-        "/^vitest/",
-        "/^@vitest//",
-        "/^@playwright//",
-        "/^playwright$/"
-      ]
+      "matchPackageNames": ["/^vitest/", "/^@vitest//", "/^@playwright//", "/^playwright$/"]
     },
     {
       "description": "Group TypeScript and types",

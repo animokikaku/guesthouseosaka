@@ -27,18 +27,12 @@ import { useFormatter, useTranslations } from 'next-intl'
 
 const legalContentComponents: PortableTextComponents = {
   block: {
-    h3: ({ children }) => (
-      <h3 className="mt-6 mb-3 text-base font-semibold">{children}</h3>
-    ),
+    h3: ({ children }) => <h3 className="mt-6 mb-3 text-base font-semibold">{children}</h3>,
     normal: ({ children }) => <p>{children}</p>
   },
   list: {
-    bullet: ({ children }) => (
-      <ul className="list-disc space-y-1 pl-5">{children}</ul>
-    ),
-    number: ({ children }) => (
-      <ol className="list-decimal space-y-1 pl-5">{children}</ol>
-    )
+    bullet: ({ children }) => <ul className="list-disc space-y-1 pl-5">{children}</ul>,
+    number: ({ children }) => <ol className="list-decimal space-y-1 pl-5">{children}</ol>
   },
   listItem: {
     bullet: ({ children }) => <li>{children}</li>,
@@ -63,11 +57,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
     : new Date(Date.UTC(2025, 11, 4))
 
   const trigger = (
-    <Button
-      variant="link"
-      size="sm"
-      className="h-auto px-0 font-medium underline-offset-4"
-    >
+    <Button variant="link" size="sm" className="h-auto px-0 font-medium underline-offset-4">
       {children}
     </Button>
   )
@@ -83,10 +73,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
       </p>
       {data?.content ? (
         <div className="space-y-2">
-          <PortableText
-            value={data.content}
-            components={legalContentComponents}
-          />
+          <PortableText value={data.content} components={legalContentComponents} />
         </div>
       ) : null}
     </div>
@@ -99,9 +86,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
         <DrawerContent className="max-h-[90vh]">
           <DrawerHeader>
             <DrawerTitle>{data?.title}</DrawerTitle>
-            <DrawerDescription className="sr-only">
-              {t('description')}
-            </DrawerDescription>
+            <DrawerDescription className="sr-only">{t('description')}</DrawerDescription>
           </DrawerHeader>
           <div className="overflow-y-auto px-4 pb-8">
             {content}
@@ -124,9 +109,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
       <DialogContent className="max-h-[85vh] overflow-y-auto md:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{data?.title}</DialogTitle>
-          <DialogDescription className="sr-only">
-            {t('description')}
-          </DialogDescription>
+          <DialogDescription className="sr-only">{t('description')}</DialogDescription>
         </DialogHeader>
         {content}
         <DialogFooter className="pt-4">

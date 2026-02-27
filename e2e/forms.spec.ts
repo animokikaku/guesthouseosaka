@@ -17,9 +17,7 @@ test.describe('Contact Form Tests', () => {
       nameField: form.locator('input[autocomplete="name"]'),
       emailField: form.locator('input[type="email"]'),
       ageField: form.locator('input[type="number"]'),
-      nationalityField: form.locator(
-        'input[type="text"]:not([autocomplete="name"])'
-      ),
+      nationalityField: form.locator('input[type="text"]:not([autocomplete="name"])'),
       messageField: form.locator('textarea'),
       checkbox: form.getByRole('checkbox'),
       genderSelect: form.getByRole('combobox'),
@@ -67,15 +65,11 @@ test.describe('Contact Form Tests', () => {
     await fields.emailField.fill(overrides.email ?? 'test@example.com')
 
     // Fill message
-    await fields.messageField.fill(
-      overrides.message ?? 'This is a valid test message.'
-    )
+    await fields.messageField.fill(overrides.message ?? 'This is a valid test message.')
   }
 
   test.describe('Form Validation', () => {
-    test('incomplete form shows validation errors on submit', async ({
-      page
-    }) => {
+    test('incomplete form shows validation errors on submit', async ({ page }) => {
       const fields = getFormFields(page)
 
       // Fill only some fields with invalid/missing values to trigger Zod validation
@@ -94,9 +88,7 @@ test.describe('Contact Form Tests', () => {
       await page.getByRole('button', { name: 'Submit' }).click()
 
       // Validation errors should appear for required fields (places, gender, name, message)
-      const errorMessages = page.locator(
-        '[role="alert"][data-slot="field-error"]'
-      )
+      const errorMessages = page.locator('[role="alert"][data-slot="field-error"]')
       await expect(errorMessages.first()).toBeVisible()
 
       // Check that at least one error is visible
@@ -117,9 +109,7 @@ test.describe('Contact Form Tests', () => {
       await page.getByRole('button', { name: 'Submit' }).click()
 
       // Wait for validation error to appear
-      const errorMessage = page.locator(
-        '[role="alert"][data-slot="field-error"]'
-      )
+      const errorMessage = page.locator('[role="alert"][data-slot="field-error"]')
       await expect(errorMessage.first()).toBeVisible()
 
       // Error should contain email validation message
@@ -140,9 +130,7 @@ test.describe('Contact Form Tests', () => {
       await fields.messageField.blur()
 
       // Verify no validation errors are visible after valid input
-      const errorMessages = page.locator(
-        '[role="alert"][data-slot="field-error"]'
-      )
+      const errorMessages = page.locator('[role="alert"][data-slot="field-error"]')
       await expect(errorMessages).toHaveCount(0)
     })
 
@@ -159,9 +147,7 @@ test.describe('Contact Form Tests', () => {
       await page.getByRole('button', { name: 'Submit' }).click()
 
       // Should show message validation error
-      await expect(
-        page.getByText('Message must be at least 5 characters long')
-      ).toBeVisible()
+      await expect(page.getByText('Message must be at least 5 characters long')).toBeVisible()
     })
 
     test('name must be at least 2 characters', async ({ page }) => {
@@ -177,9 +163,7 @@ test.describe('Contact Form Tests', () => {
       await page.getByRole('button', { name: 'Submit' }).click()
 
       // Should show name validation error
-      await expect(
-        page.getByText('Name must be at least 2 characters long')
-      ).toBeVisible()
+      await expect(page.getByText('Name must be at least 2 characters long')).toBeVisible()
     })
 
     test('places selection is required', async ({ page }) => {
@@ -195,9 +179,7 @@ test.describe('Contact Form Tests', () => {
       await page.getByRole('button', { name: 'Submit' }).click()
 
       // Should show places validation error
-      await expect(
-        page.getByText('Please select at least one share house')
-      ).toBeVisible()
+      await expect(page.getByText('Please select at least one share house')).toBeVisible()
     })
 
     test('gender selection is required', async ({ page }) => {
@@ -245,9 +227,7 @@ test.describe('Contact Form Tests', () => {
       await expect(dialog).toBeVisible()
 
       // Dialog should have the Privacy Policy title
-      await expect(
-        page.getByRole('heading', { name: 'Privacy Policy' })
-      ).toBeVisible()
+      await expect(page.getByRole('heading', { name: 'Privacy Policy' })).toBeVisible()
 
       // Close the dialog using the footer Close button (first one in DOM order)
       const closeButton = page.getByRole('button', { name: 'Close' }).first()

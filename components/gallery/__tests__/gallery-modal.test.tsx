@@ -90,11 +90,7 @@ vi.mock('@/components/ui/carousel', () => ({
     onTouchStart?: React.TouchEventHandler
     onTouchEnd?: React.TouchEventHandler
   }) => (
-    <div
-      data-testid="carousel-content"
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
+    <div data-testid="carousel-content" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       {children}
     </div>
   ),
@@ -107,16 +103,29 @@ vi.mock('@/components/ui/carousel', () => ({
 
 // Import component after mocks
 import { GalleryModal } from '../gallery-modal'
-import { createGalleryCategory, createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
+import {
+  createGalleryCategory,
+  createGalleryItem,
+  createSanityImage
+} from '@/lib/transforms/__tests__/mocks'
 
 describe('GalleryModal', () => {
   const galleryCategories = [
     createGalleryCategory({
       _key: 'cat1',
       items: [
-        createGalleryItem({ _key: 'img1', image: createSanityImage({ alt: 'First image' }) }),
-        createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Second image' }) }),
-        createGalleryItem({ _key: 'img3', image: createSanityImage({ alt: 'Third image' }) })
+        createGalleryItem({
+          _key: 'img1',
+          image: createSanityImage({ alt: 'First image' })
+        }),
+        createGalleryItem({
+          _key: 'img2',
+          image: createSanityImage({ alt: 'Second image' })
+        }),
+        createGalleryItem({
+          _key: 'img3',
+          image: createSanityImage({ alt: 'Third image' })
+        })
       ]
     })
   ]
@@ -145,7 +154,9 @@ describe('GalleryModal', () => {
     it('renders nothing when photoId is null', () => {
       store.setState((prev) => ({ ...prev, photoId: null }))
 
-      const { container } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
+      const { container } = render(
+        <GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />
+      )
 
       expect(container.querySelector('[role="dialog"]')).not.toBeInTheDocument()
     })
@@ -271,7 +282,9 @@ describe('GalleryModal', () => {
     it('removes keyboard event listener on unmount', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      const { unmount } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
+      const { unmount } = render(
+        <GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />
+      )
 
       // Set up the mock API
       carouselState.mockApi = createMockCarouselApi(carouselState)
@@ -302,24 +315,38 @@ describe('GalleryModal', () => {
 
       const carouselContent = screen.getByTestId('carousel-content')
 
-      const touch = { clientX: 100, clientY: 100, identifier: 0, target: carouselContent } as unknown as Touch
-      const touchEnd = { clientX: 100, clientY: 200, identifier: 0, target: carouselContent } as unknown as Touch
+      const touch = {
+        clientX: 100,
+        clientY: 100,
+        identifier: 0,
+        target: carouselContent
+      } as unknown as Touch
+      const touchEnd = {
+        clientX: 100,
+        clientY: 200,
+        identifier: 0,
+        target: carouselContent
+      } as unknown as Touch
 
       act(() => {
-        carouselContent.dispatchEvent(new TouchEvent('touchstart', {
-          bubbles: true,
-          cancelable: true,
-          touches: [touch],
-          changedTouches: [touch]
-        }))
+        carouselContent.dispatchEvent(
+          new TouchEvent('touchstart', {
+            bubbles: true,
+            cancelable: true,
+            touches: [touch],
+            changedTouches: [touch]
+          })
+        )
       })
       act(() => {
-        carouselContent.dispatchEvent(new TouchEvent('touchend', {
-          bubbles: true,
-          cancelable: true,
-          touches: [],
-          changedTouches: [touchEnd]
-        }))
+        carouselContent.dispatchEvent(
+          new TouchEvent('touchend', {
+            bubbles: true,
+            cancelable: true,
+            touches: [],
+            changedTouches: [touchEnd]
+          })
+        )
       })
 
       expect(store.state.photoId).toBe(null)
@@ -343,7 +370,9 @@ describe('GalleryModal', () => {
     it('cleans up select event handler on unmount', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      const { unmount } = render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
+      const { unmount } = render(
+        <GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />
+      )
 
       carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {

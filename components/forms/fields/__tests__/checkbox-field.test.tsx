@@ -88,11 +88,7 @@ function FieldContextWrapper({
   children: React.ReactNode
   fieldApi: MockFieldApi
 }) {
-  return (
-    <testFieldContext.Provider value={fieldApi}>
-      {children}
-    </testFieldContext.Provider>
-  )
+  return <testFieldContext.Provider value={fieldApi}>{children}</testFieldContext.Provider>
 }
 
 describe('CheckboxField', () => {
@@ -132,10 +128,7 @@ describe('CheckboxField', () => {
 
       render(
         <FieldContextWrapper fieldApi={fieldApi}>
-          <CheckboxField
-            label="Subscribe"
-            description="Receive weekly newsletter"
-          />
+          <CheckboxField label="Subscribe" description="Receive weekly newsletter" />
         </FieldContextWrapper>
       )
 
@@ -152,17 +145,11 @@ describe('CheckboxField', () => {
       )
 
       const checkbox = screen.getByRole('checkbox')
-      expect(checkbox).toHaveAttribute(
-        'id',
-        'form-tanstack-checkbox-testCheckbox'
-      )
+      expect(checkbox).toHaveAttribute('id', 'form-tanstack-checkbox-testCheckbox')
 
       // Verify the label is associated with the checkbox
       const label = screen.getByText('Accept terms')
-      expect(label.closest('label')).toHaveAttribute(
-        'for',
-        'form-tanstack-checkbox-testCheckbox'
-      )
+      expect(label.closest('label')).toHaveAttribute('for', 'form-tanstack-checkbox-testCheckbox')
     })
   })
 
@@ -258,9 +245,7 @@ describe('CheckboxField', () => {
       )
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
-      expect(
-        screen.queryByText('This field is required')
-      ).not.toBeInTheDocument()
+      expect(screen.queryByText('This field is required')).not.toBeInTheDocument()
     })
 
     it('shows error when field is touched and invalid', () => {

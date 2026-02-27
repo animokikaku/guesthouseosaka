@@ -15,9 +15,7 @@ export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
     <div
       id={category._id}
       className="scroll-mt-3 space-y-4"
-      data-sanity={dataAttribute?.(
-        `galleryCategories[_key=="${category._key}"]`
-      )}
+      data-sanity={dataAttribute?.(`galleryCategories[_key=="${category._key}"]`)}
     >
       <h3 className="text-xl font-semibold">{category.label}</h3>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">

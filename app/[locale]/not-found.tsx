@@ -27,9 +27,7 @@ export default function NotFound() {
         <EmptyTitle className="text-2xl font-bold tracking-tight sm:text-4xl">
           {t('title')}
         </EmptyTitle>
-        <EmptyDescription className="text-base">
-          {t('description')}
-        </EmptyDescription>
+        <EmptyDescription className="text-base">{t('description')}</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
         <Button asChild variant="outline" size="lg">

@@ -1,10 +1,6 @@
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import {
-  useGeneralInquirySchema,
-  useMoveInFormSchema,
-  useTourFormSchema
-} from '../schema'
+import { useGeneralInquirySchema, useMoveInFormSchema, useTourFormSchema } from '../schema'
 
 // Helper to get schema from hook
 function getSchema<T>(hook: () => T): T {

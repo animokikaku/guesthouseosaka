@@ -22,22 +22,13 @@ interface InputFieldProps extends InputFormProps, Orientation {
   description?: string | null
 }
 
-export function InputField({
-  label,
-  description,
-  orientation,
-  ...props
-}: InputFieldProps) {
+export function InputField({ label, description, orientation, ...props }: InputFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<string>()
 
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
       <FieldContent>
-        {label && (
-          <FieldLabel htmlFor={`form-tanstack-input-${field.name}`}>
-            {label}
-          </FieldLabel>
-        )}
+        {label && <FieldLabel htmlFor={`form-tanstack-input-${field.name}`}>{label}</FieldLabel>}
         {description && <FieldDescription>{description}</FieldDescription>}
         {isInvalid && <FieldError errors={errors} />}
       </FieldContent>

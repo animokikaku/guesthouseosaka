@@ -30,9 +30,7 @@ test.describe('Homepage', () => {
 
       // Wait for the collection to load and find house links
       // House cards are in a grid and link to /[locale]/[house] routes
-      const houseLink = page
-        .locator('[data-slot="item-group"] a[href*="/en/"]')
-        .first()
+      const houseLink = page.locator('[data-slot="item-group"] a[href*="/en/"]').first()
       await expect(houseLink).toBeVisible()
       await houseLink.click()
 
@@ -122,9 +120,7 @@ test.describe('Homepage', () => {
   })
 
   test.describe('Responsive Design', () => {
-    test('mobile navigation toggle is visible on small screens', async ({
-      page
-    }) => {
+    test('mobile navigation toggle is visible on small screens', async ({ page }) => {
       // Set viewport to mobile size
       await page.setViewportSize({ width: 375, height: 667 })
       await page.goto('/en')

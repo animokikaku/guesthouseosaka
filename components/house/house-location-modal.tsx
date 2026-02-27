@@ -16,9 +16,7 @@ const portableTextComponents: PortableTextComponents = {
   list: {
     bullet: ({ children }) => <ul className="mb-6 space-y-2">{children}</ul>,
     number: ({ children }) => (
-      <ol className="text-foreground mb-6 list-decimal space-y-2 pl-5">
-        {children}
-      </ol>
+      <ol className="text-foreground mb-6 list-decimal space-y-2 pl-5">{children}</ol>
     )
   },
   listItem: {
@@ -38,11 +36,7 @@ interface HouseLocationModalProps {
   title: string
 }
 
-export function HouseLocationModal({
-  children,
-  details,
-  title
-}: HouseLocationModalProps) {
+export function HouseLocationModal({ children, details, title }: HouseLocationModalProps) {
   const [open, setOpen] = React.useState(false)
 
   if (!details) {

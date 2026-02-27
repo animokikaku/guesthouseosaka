@@ -1,7 +1,4 @@
-import type {
-  ContactFormConfig,
-  FormFieldsConfig
-} from '@/lib/types/components'
+import type { ContactFormConfig, FormFieldsConfig } from '@/lib/types/components'
 import type { ContactTypeQueryResult } from '@/sanity.types'
 
 // ============================================
@@ -40,9 +37,7 @@ const FIELD_KEYS: FieldKey[] = [
  * @param fields - Raw fields object from Sanity query
  * @returns FormFieldsConfig with all available fields
  */
-export function toFormFieldsConfig(
-  fields: NonNullable<ContactTypeFields>
-): FormFieldsConfig {
+export function toFormFieldsConfig(fields: NonNullable<ContactTypeFields>): FormFieldsConfig {
   return FIELD_KEYS.reduce((acc, key) => {
     const field = fields[key]
     acc[key] = {

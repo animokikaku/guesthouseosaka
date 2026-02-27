@@ -18,12 +18,7 @@ interface ContactFormProps extends ContactFormConfig {
   houseTitles: HouseTitles
 }
 
-export function ContactForm({
-  title,
-  description,
-  fields,
-  houseTitles
-}: ContactFormProps) {
+export function ContactForm({ title, description, fields, houseTitles }: ContactFormProps) {
   const schema = useGeneralInquirySchema()
   const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
   const { places, account, message, privacyPolicy } = contactFormDefaultValues
@@ -38,12 +33,7 @@ export function ContactForm({
   })
 
   return (
-    <FormCard
-      title={title}
-      description={description}
-      formId="other-form"
-      form={form}
-    >
+    <FormCard title={title} description={description} formId="other-form" form={form}>
       <FieldGroupPlaces
         fields={{ places: 'places' }}
         form={form}
@@ -67,10 +57,7 @@ export function ContactForm({
           />
         )}
       />
-      <form.AppField
-        name="privacyPolicy"
-        children={(field) => <field.PrivacyPolicyField />}
-      />
+      <form.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
     </FormCard>
   )
 }

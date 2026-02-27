@@ -170,9 +170,7 @@ export function toAmenityCategories(
  * @param featuredAmenities - Raw featured amenities from Sanity query
  * @returns Array of AmenityItemData for display
  */
-export function toFeaturedAmenities(
-  featuredAmenities: HouseFeaturedAmenities
-): AmenityItemData[] {
+export function toFeaturedAmenities(featuredAmenities: HouseFeaturedAmenities): AmenityItemData[] {
   if (!featuredAmenities) {
     return []
   }

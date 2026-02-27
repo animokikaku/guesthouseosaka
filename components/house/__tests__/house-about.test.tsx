@@ -27,9 +27,7 @@ const providerProps = {
 }
 
 function renderWithProvider(ui: React.ReactElement) {
-  return render(
-    <HouseProvider {...providerProps}>{ui}</HouseProvider>
-  )
+  return render(<HouseProvider {...providerProps}>{ui}</HouseProvider>)
 }
 
 describe('HouseAbout', () => {
@@ -64,9 +62,7 @@ describe('HouseAbout', () => {
 
   describe('PortableText content', () => {
     it('renders nothing when about is null', () => {
-      const { container } = renderWithProvider(
-        <HouseAbout {...baseProps} about={null} />
-      )
+      const { container } = renderWithProvider(<HouseAbout {...baseProps} about={null} />)
 
       // Should not have any paragraph elements from PortableText
       const paragraphs = container.querySelectorAll('section > p')

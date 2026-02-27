@@ -89,10 +89,7 @@ function FeatureItem({
 }) {
   return (
     <div
-      className={cn(
-        'border-border/60 bg-muted/40 rounded-lg border px-2 py-3',
-        className
-      )}
+      className={cn('border-border/60 bg-muted/40 rounded-lg border px-2 py-3', className)}
       data-sanity={dataSanity}
     >
       <div className="text-foreground flex items-center justify-center gap-1 text-sm font-semibold">

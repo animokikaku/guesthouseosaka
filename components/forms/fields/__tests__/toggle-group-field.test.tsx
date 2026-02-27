@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import {
-  createMockFieldApi,
-  createFieldContext,
-  FieldContextWrapper
-} from './test-utils'
+import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
 
 // Mock matchMedia for Radix UI
 beforeAll(() => {
@@ -53,10 +49,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -70,10 +63,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField label="Choose options" options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -85,14 +75,8 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
-          <ToggleGroupField
-            options={defaultOptions}
-            description="Select one or more options"
-          />
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
+          <ToggleGroupField options={defaultOptions} description="Select one or more options" />
         </FieldContextWrapper>
       )
 
@@ -103,18 +87,13 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} description={null} />
         </FieldContextWrapper>
       )
 
       // No description text should be present
-      expect(
-        screen.queryByText('Select one or more options')
-      ).not.toBeInTheDocument()
+      expect(screen.queryByText('Select one or more options')).not.toBeInTheDocument()
     })
   })
 
@@ -123,10 +102,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -143,10 +119,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -163,10 +136,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -183,10 +153,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -203,10 +170,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -223,10 +187,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -249,10 +210,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -268,18 +226,13 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
-      expect(
-        screen.getByText('Please select at least one option')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Please select at least one option')).toBeInTheDocument()
     })
 
     it('sets aria-invalid on toggle items when field is invalid', () => {
@@ -290,10 +243,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -315,10 +265,7 @@ describe('ToggleGroupField', () => {
       ]
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={optionsWithClass} />
         </FieldContextWrapper>
       )
@@ -332,14 +279,14 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       const optionsWithNodes = [
-        { value: 'opt1', label: <span data-testid="custom-label">Custom Label</span> }
+        {
+          value: 'opt1',
+          label: <span data-testid="custom-label">Custom Label</span>
+        }
       ]
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={optionsWithNodes} />
         </FieldContextWrapper>
       )

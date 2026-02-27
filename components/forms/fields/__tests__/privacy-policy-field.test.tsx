@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import {
-  createMockFieldApi,
-  createFieldContext,
-  FieldContextWrapper
-} from './test-utils'
+import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
 
 // Mock matchMedia for Radix UI
 beforeAll(() => {
@@ -36,9 +32,7 @@ vi.mock('@/components/forms/form-context', async () => {
 
 // Mock the legal notice dialog - simplified mock since t.rich() callback isn't exercised in tests
 vi.mock('@/components/legal-notice-dialog', () => ({
-  LegalNoticeDialog: ({ children }: { children: React.ReactNode }) => (
-    <span>{children}</span>
-  )
+  LegalNoticeDialog: ({ children }: { children: React.ReactNode }) => <span>{children}</span>
 }))
 
 // Import after mocking
@@ -54,21 +48,15 @@ describe('PrivacyPolicyField', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
 
       expect(screen.getByRole('checkbox')).toBeInTheDocument()
       // The label uses a translation key with rich text
-      expect(
-        screen.getByText('fields.privacy_policy_agreement')
-      ).toBeInTheDocument()
+      expect(screen.getByText('fields.privacy_policy_agreement')).toBeInTheDocument()
     })
-
   })
 
   describe('checked/unchecked states', () => {
@@ -76,10 +64,7 @@ describe('PrivacyPolicyField', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -88,13 +73,12 @@ describe('PrivacyPolicyField', () => {
     })
 
     it('renders checked when value is true', () => {
-      const fieldApi = createMockFieldApi('privacyPolicy', true, { value: true })
+      const fieldApi = createMockFieldApi('privacyPolicy', true, {
+        value: true
+      })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -108,10 +92,7 @@ describe('PrivacyPolicyField', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -121,13 +102,12 @@ describe('PrivacyPolicyField', () => {
     })
 
     it('calls handleChange with false when checked checkbox is clicked', () => {
-      const fieldApi = createMockFieldApi('privacyPolicy', true, { value: true })
+      const fieldApi = createMockFieldApi('privacyPolicy', true, {
+        value: true
+      })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -140,10 +120,7 @@ describe('PrivacyPolicyField', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -162,10 +139,7 @@ describe('PrivacyPolicyField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -181,18 +155,13 @@ describe('PrivacyPolicyField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
-      expect(
-        screen.getByText('You must accept the privacy policy')
-      ).toBeInTheDocument()
+      expect(screen.getByText('You must accept the privacy policy')).toBeInTheDocument()
     })
 
     it('sets aria-invalid when field is touched and invalid', () => {
@@ -203,10 +172,7 @@ describe('PrivacyPolicyField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -222,10 +188,7 @@ describe('PrivacyPolicyField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )

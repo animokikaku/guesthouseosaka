@@ -82,6 +82,7 @@ vi.mock('@/components/page-nav', () => ({
 
 vi.mock('@/i18n/navigation', () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: unknown }) => (
+    // eslint-disable-next-line jsx-a11y/anchor-is-valid -- test mock
     <a data-testid="nav-link" data-href={JSON.stringify(href)}>
       {children}
     </a>
@@ -132,11 +133,31 @@ const createBaseProps = (slugOverride?: HouseSlug): Props => {
     location: createLocation(),
     map: createMap(),
     pricing: [createPricingRow({ _key: 'p1' })],
-    about: [{ _type: 'block', _key: 'b1', children: [], style: 'normal', markDefs: [] }],
+    about: [
+      {
+        _type: 'block',
+        _key: 'b1',
+        children: [],
+        style: 'normal',
+        markDefs: []
+      }
+    ],
     building: createBuilding(),
     houses: [
-      { slug: 'orange', title: 'Orange House', description: null, caption: null, image: createMockImage('Orange') },
-      { slug: 'apple', title: 'Apple House', description: null, caption: null, image: createMockImage('Apple') }
+      {
+        slug: 'orange',
+        title: 'Orange House',
+        description: null,
+        caption: null,
+        image: createMockImage('Orange')
+      },
+      {
+        slug: 'apple',
+        title: 'Apple House',
+        description: null,
+        caption: null,
+        image: createMockImage('Apple')
+      }
     ]
   } as unknown as Props
 }

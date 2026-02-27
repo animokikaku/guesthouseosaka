@@ -13,10 +13,7 @@ import {
   SelectField,
   ToggleGroupField
 } from '@/components/forms/fields'
-import {
-  fieldContext,
-  formContext
-} from '@/components/forms/form-context'
+import { fieldContext, formContext } from '@/components/forms/form-context'
 import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
 import { HouseIdentifier, HouseIdentifierValues } from '@/lib/types'
@@ -24,13 +21,7 @@ import type { FormFieldsConfig } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
 import { HousesTitlesQueryResult } from '@/sanity.types'
 import { createFormHook } from '@tanstack/react-form'
-import {
-  CakeIcon,
-  GlobeIcon,
-  MailIcon,
-  PhoneIcon,
-  UserIcon
-} from 'lucide-react'
+import { CakeIcon, GlobeIcon, MailIcon, PhoneIcon, UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export { useFormSubmit } from './use-form-submit'
@@ -188,12 +179,9 @@ export const FieldGroupPlaces = withFieldGroup({
   },
   render: function Render({ group, description, label, houseTitles }) {
     const classNames: Record<HouseIdentifier, string> = {
-      orange:
-        'data-[state=on]:*:[svg]:fill-orange-500 data-[state=on]:*:[svg]:stroke-orange-500',
-      apple:
-        'data-[state=on]:*:[svg]:fill-red-500 data-[state=on]:*:[svg]:stroke-red-500',
-      lemon:
-        'data-[state=on]:*:[svg]:fill-yellow-500 data-[state=on]:*:[svg]:stroke-yellow-500'
+      orange: 'data-[state=on]:*:[svg]:fill-orange-500 data-[state=on]:*:[svg]:stroke-orange-500',
+      apple: 'data-[state=on]:*:[svg]:fill-red-500 data-[state=on]:*:[svg]:stroke-red-500',
+      lemon: 'data-[state=on]:*:[svg]:fill-yellow-500 data-[state=on]:*:[svg]:stroke-yellow-500'
     }
 
     const placeOptions = HouseIdentifierValues.map((house) => {
@@ -214,11 +202,7 @@ export const FieldGroupPlaces = withFieldGroup({
       <group.AppField
         name="places"
         children={(field) => (
-          <field.ToggleGroupField
-            label={label}
-            description={description}
-            options={placeOptions}
-          />
+          <field.ToggleGroupField label={label} description={description} options={placeOptions} />
         )}
       />
     )

@@ -9,10 +9,7 @@ type CategoryThumbnailProps = {
   tabIndex?: number
 }
 
-export function CategoryThumbnail({
-  category,
-  tabIndex = 0
-}: CategoryThumbnailProps) {
+export function CategoryThumbnail({ category, tabIndex = 0 }: CategoryThumbnailProps) {
   const thumbnail = category.thumbnail
   if (category.items.length === 0 || !thumbnail) return null
 
@@ -27,7 +24,7 @@ export function CategoryThumbnail({
         }
       }}
       tabIndex={tabIndex}
-      className="group flex h-auto w-[154px] shrink-0 cursor-pointer flex-col gap-2 rounded-lg p-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+      className="group focus-visible:ring-ring flex h-auto w-[154px] shrink-0 cursor-pointer flex-col gap-2 rounded-lg p-3 transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
     >
       <div className="relative aspect-4/3 w-32 overflow-hidden rounded-md">
         <Image

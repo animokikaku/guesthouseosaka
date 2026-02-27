@@ -1,17 +1,9 @@
 'use client'
 
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  type CarouselApi
-} from '@/components/ui/carousel'
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import type {
-  HousesBuildingQueryResult,
-  PricingCategoriesQueryResult
-} from '@/sanity.types'
+import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from 'next-sanity'
 import { useEffect, useState } from 'react'
@@ -21,12 +13,8 @@ const portableTextComponents: PortableTextComponents = {
     normal: ({ children }) => <span>{children}</span>
   },
   list: {
-    bullet: ({ children }) => (
-      <ul className="list-none space-y-1">{children}</ul>
-    ),
-    number: ({ children }) => (
-      <ol className="list-none space-y-1">{children}</ol>
-    )
+    bullet: ({ children }) => <ul className="list-none space-y-1">{children}</ul>,
+    number: ({ children }) => <ol className="list-none space-y-1">{children}</ol>
   },
   listItem: {
     bullet: ({ children }) => <li>{children}</li>,
@@ -49,8 +37,7 @@ const HOUSE_STYLES: Record<HouseIdentifier, HouseStyles> = {
   },
   apple: {
     text: 'text-red-700 dark:text-red-400',
-    headerBg:
-      'bg-gradient-to-r from-red-50 to-red-100/50 dark:from-red-950/40 dark:to-red-900/20',
+    headerBg: 'bg-gradient-to-r from-red-50 to-red-100/50 dark:from-red-950/40 dark:to-red-900/20',
     border: 'border-red-200 dark:border-red-800/50'
   },
   lemon: {
@@ -69,10 +56,7 @@ type FAQExtraCostsCardsProps = {
   pricingCategories: PricingCategories
 }
 
-export function FAQExtraCostsCards({
-  houses,
-  pricingCategories
-}: FAQExtraCostsCardsProps) {
+export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsCardsProps) {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
 
@@ -119,9 +103,7 @@ export function FAQExtraCostsCards({
             onClick={() => api?.scrollTo(index)}
             className={cn(
               'h-2 rounded-full transition-all duration-300',
-              current === index
-                ? 'bg-foreground w-6'
-                : 'bg-muted-foreground/30 w-2'
+              current === index ? 'bg-foreground w-6' : 'bg-muted-foreground/30 w-2'
             )}
             aria-label={`Go to ${title}`}
           />
@@ -138,15 +120,8 @@ interface ExtraCostsCardProps {
   pricingCategories: PricingCategories
 }
 
-function ExtraCostsCard({
-  styles,
-  title,
-  extraCosts,
-  pricingCategories
-}: ExtraCostsCardProps) {
-  const costsByCategory = new Map(
-    extraCosts?.map((c) => [c.categoryId, c.value]) ?? []
-  )
+function ExtraCostsCard({ styles, title, extraCosts, pricingCategories }: ExtraCostsCardProps) {
+  const costsByCategory = new Map(extraCosts?.map((c) => [c.categoryId, c.value]) ?? [])
   return (
     <CarouselItem>
       <div
@@ -156,12 +131,7 @@ function ExtraCostsCard({
         )}
       >
         <div className={cn('px-4 py-3', styles?.headerBg)}>
-          <h4
-            className={cn(
-              'text-base font-semibold tracking-tight',
-              styles?.text
-            )}
-          >
+          <h4 className={cn('text-base font-semibold tracking-tight', styles?.text)}>
             {stegaClean(title)}
           </h4>
         </div>
@@ -176,18 +146,9 @@ function ExtraCostsCard({
                   index % 2 === 1 && 'bg-muted/30'
                 )}
               >
-                <span className="text-foreground text-sm font-medium">
-                  {category.title}
-                </span>
+                <span className="text-foreground text-sm font-medium">{category.title}</span>
                 <span className="text-foreground/70 text-right text-sm tabular-nums">
-                  {cost ? (
-                    <PortableText
-                      value={cost}
-                      components={portableTextComponents}
-                    />
-                  ) : (
-                    '–'
-                  )}
+                  {cost ? <PortableText value={cost} components={portableTextComponents} /> : '–'}
                 </span>
               </div>
             )

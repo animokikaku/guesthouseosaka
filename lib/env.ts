@@ -10,9 +10,7 @@ export const env = createEnv({
     NODE_ENV: z.enum(['development', 'production', 'test'])
   },
   client: {
-    NEXT_PUBLIC_APP_URL: z
-      .url()
-      .default(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`),
+    NEXT_PUBLIC_APP_URL: z.url().default(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`),
     NEXT_PUBLIC_BLOB_STORAGE_URL: z
       .url()
       .refine((value) => vercelBlobHostname.test(new URL(value).hostname), {
@@ -26,8 +24,7 @@ export const env = createEnv({
   experimental__runtimeEnv: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_BLOB_STORAGE_URL: process.env.NEXT_PUBLIC_BLOB_STORAGE_URL,
-    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:
-      process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     NEXT_PUBLIC_SANITY_API_VERSION: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
     NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
     NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID

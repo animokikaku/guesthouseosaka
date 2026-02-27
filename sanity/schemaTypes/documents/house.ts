@@ -119,8 +119,7 @@ export const house = defineType({
       title: 'Photos by Category',
       type: 'array',
       group: 'content',
-      description:
-        'Photos grouped by category. Drag to reorder within each category.',
+      description: 'Photos grouped by category. Drag to reorder within each category.',
       of: [defineArrayMember({ type: 'houseGalleryCategory' })],
       options: { sortable: false }
     }),
@@ -133,8 +132,7 @@ export const house = defineType({
       title: 'Amenities by Category',
       type: 'array',
       group: 'amenities',
-      description:
-        'Amenities grouped by category. Drag to reorder within each category.',
+      description: 'Amenities grouped by category. Drag to reorder within each category.',
       of: [defineArrayMember({ type: 'houseAmenityCategory' })],
       options: { sortable: false }
     }),
@@ -165,8 +163,7 @@ export const house = defineType({
       group: 'business',
       description: 'Pricing information rows with rich text content',
       of: [defineArrayMember({ type: 'pricingRow' })],
-      validation: (rule) =>
-        rule.min(1).error('At least one pricing row is required')
+      validation: (rule) => rule.min(1).error('At least one pricing row is required')
     }),
     defineField({
       name: 'extraCosts',
@@ -178,19 +175,15 @@ export const house = defineType({
       of: [defineArrayMember({ type: 'extraCostItem' })],
       options: { sortable: false },
       validation: (rule) =>
-        rule.custom(
-          (items: Array<{ category?: { _ref: string } }> | undefined) => {
-            if (!items || items.length === 0) return true
-            const categoryRefs = items
-              .map((item) => item.category?._ref)
-              .filter(Boolean)
-            const uniqueRefs = new Set(categoryRefs)
-            if (uniqueRefs.size !== categoryRefs.length) {
-              return 'Each category can only be used once'
-            }
-            return true
+        rule.custom((items: Array<{ category?: { _ref: string } }> | undefined) => {
+          if (!items || items.length === 0) return true
+          const categoryRefs = items.map((item) => item.category?._ref).filter(Boolean)
+          const uniqueRefs = new Set(categoryRefs)
+          if (uniqueRefs.size !== categoryRefs.length) {
+            return 'Each category can only be used once'
           }
-        )
+          return true
+        })
     }),
 
     defineField({

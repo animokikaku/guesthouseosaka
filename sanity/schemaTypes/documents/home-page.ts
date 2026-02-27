@@ -15,8 +15,7 @@ export const homePage = defineType({
           name: 'content',
           title: 'Content',
           type: 'internationalizedArrayPortableText',
-          description:
-            'Use H1 for the heading and normal text for the description',
+          description: 'Use H1 for the heading and normal text for the description',
           options: { aiAssist: { translateAction: true } },
           validation: (rule) => rule.required()
         }),
@@ -48,14 +47,13 @@ export const homePage = defineType({
           name: 'content',
           title: 'Content',
           type: 'internationalizedArrayPortableText',
-          description:
-            'Use H2 for the heading and normal text for the description',
+          description: 'Use H2 for the heading and normal text for the description',
           options: { aiAssist: { translateAction: true } },
           validation: (rule) => rule.required()
         })
       ],
       validation: (rule) => rule.required()
-    }),
+    })
   ],
   preview: {
     prepare() {

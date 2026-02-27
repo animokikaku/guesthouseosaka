@@ -6,11 +6,7 @@ import {
   FieldError,
   FieldLabel
 } from '@/components/ui/field'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput
-} from '@/components/ui/input-group'
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { cn } from '@/lib/utils'
 
 type InputFormProps = Omit<
@@ -40,9 +36,7 @@ export function InputGroupField({
     <Field orientation={orientation} data-invalid={isInvalid}>
       <FieldContent>
         {label && (
-          <FieldLabel htmlFor={`form-tanstack-input-group-${field.name}`}>
-            {label}
-          </FieldLabel>
+          <FieldLabel htmlFor={`form-tanstack-input-group-${field.name}`}>{label}</FieldLabel>
         )}
         {description && <FieldDescription>{description}</FieldDescription>}
         {isInvalid && <FieldError errors={errors} />}

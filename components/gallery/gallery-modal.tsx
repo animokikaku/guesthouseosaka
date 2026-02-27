@@ -16,11 +16,7 @@ import {
   DialogTitle
 } from '@/components/ui/dialog'
 import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
-import {
-  flattenGalleryItems,
-  getImageIndex,
-  type GalleryCategories
-} from '@/lib/gallery'
+import { flattenGalleryItems, getImageIndex, type GalleryCategories } from '@/lib/gallery'
 import { store } from '@/lib/store'
 import { urlFor } from '@/sanity/lib/image'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
@@ -40,11 +36,7 @@ type GalleryModalProps = {
   dataAttribute?: DataAttributeFn
 }
 
-export function GalleryModal({
-  galleryCategories,
-  title,
-  dataAttribute
-}: GalleryModalProps) {
+export function GalleryModal({ galleryCategories, title, dataAttribute }: GalleryModalProps) {
   const photoId = useStore(store, (state) => state.photoId)
   const t = useTranslations('GalleryModal')
 
@@ -61,19 +53,13 @@ export function GalleryModal({
         <DialogOverlay className="z-30 bg-transparent" />
         <DialogPrimitive.Content className="bg-background text-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 sm:bg-background/50 fixed inset-0 z-40 flex items-center justify-center border-0 p-0 duration-200 sm:backdrop-blur-2xl">
           <DialogTitle className="sr-only">{t('title')}</DialogTitle>
-          <DialogDescription className="sr-only">
-            {t('description', { title })}
-          </DialogDescription>
+          <DialogDescription className="sr-only">{t('description', { title })}</DialogDescription>
           <GalleryModalCarousel
             galleryCategories={galleryCategories}
             dataAttribute={dataAttribute}
           />
           <DialogClose asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 left-4 rounded-full"
-            >
+            <Button variant="ghost" size="icon" className="absolute top-4 left-4 rounded-full">
               <ArrowLeftIcon className="size-6" />
               <span className="sr-only">{t('close')}</span>
             </Button>
@@ -89,19 +75,13 @@ type GalleryModalCarouselProps = {
   dataAttribute?: DataAttributeFn
 }
 
-function GalleryModalCarousel({
-  galleryCategories,
-  dataAttribute
-}: GalleryModalCarouselProps) {
+function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModalCarouselProps) {
   const [api, setApi] = useState<CarouselApi>()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const photoId = useStore(store, (state) => state.photoId)
 
   // Flatten all gallery items for carousel navigation
-  const imageList = useMemo(
-    () => flattenGalleryItems(galleryCategories),
-    [galleryCategories]
-  )
+  const imageList = useMemo(() => flattenGalleryItems(galleryCategories), [galleryCategories])
 
   const currentAlt = useMemo(() => {
     return selectedIndex !== null && selectedIndex < imageList.length
@@ -110,9 +90,7 @@ function GalleryModalCarousel({
   }, [selectedIndex, imageList])
 
   // Use selectedIndex as fallback to preserve position during close animation
-  const startIndex = photoId
-    ? getImageIndex(galleryCategories, photoId)
-    : (selectedIndex ?? 0)
+  const startIndex = photoId ? getImageIndex(galleryCategories, photoId) : (selectedIndex ?? 0)
 
   const { onTouchStart, onTouchEnd } = useSwipeToClose({
     onClose: () => store.setState((prev) => ({ ...prev, photoId: null }))
@@ -154,11 +132,7 @@ function GalleryModalCarousel({
   }, [api])
 
   return (
-    <Carousel
-      className="h-screen w-screen"
-      opts={{ startIndex: startIndex }}
-      setApi={setApi}
-    >
+    <Carousel className="h-screen w-screen" opts={{ startIndex: startIndex }} setApi={setApi}>
       <CarouselContent
         className="h-screen items-center"
         onTouchStart={onTouchStart}
@@ -174,9 +148,7 @@ function GalleryModalCarousel({
             <CarouselItem
               key={_key}
               className="flex h-full items-center justify-center"
-              data-sanity={dataAttribute?.(
-                `galleryCategories[].items[_key=="${_key}"]`
-              )}
+              data-sanity={dataAttribute?.(`galleryCategories[].items[_key=="${_key}"]`)}
             >
               <Image
                 src={src}

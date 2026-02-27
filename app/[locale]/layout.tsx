@@ -49,9 +49,7 @@ export async function generateMetadata(
   })
 
   return {
-    title: siteName
-      ? { default: siteName, template: `%s - ${siteName}` }
-      : undefined,
+    title: siteName ? { default: siteName, template: `%s - ${siteName}` } : undefined,
     metadataBase: env.NEXT_PUBLIC_APP_URL,
     authors: [{ name: 'Thibault Vieux', url: 'https://thibaultvieux.com' }],
     description: settings?.siteDescription,
@@ -78,10 +76,7 @@ export async function generateMetadata(
   }
 }
 
-export default async function LocaleLayout({
-  children,
-  params
-}: LayoutProps<'/[locale]'>) {
+export default async function LocaleLayout({ children, params }: LayoutProps<'/[locale]'>) {
   // Ensure that the incoming `locale` is valid
   const { locale } = await params
   if (!hasLocale(routing.locales, locale)) {
@@ -114,9 +109,7 @@ export default async function LocaleLayout({
       telephone: settings.phone,
       email: settings.email,
       sameAs: settings.socialLinks?.map((link) => link.url),
-      address: settings.address
-        ? { '@type': 'PostalAddress', ...settings.address }
-        : undefined
+      address: settings.address ? { '@type': 'PostalAddress', ...settings.address } : undefined
     })
   }
 

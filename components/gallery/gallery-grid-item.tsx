@@ -12,11 +12,7 @@ type GalleryGridItemProps = {
   dataAttribute?: DataAttributeFn
 }
 
-export function GalleryGridItem({
-  item,
-  categoryKey,
-  dataAttribute
-}: GalleryGridItemProps) {
+export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGridItemProps) {
   const { _key, image } = item
   if (!image) return null
 
@@ -24,7 +20,6 @@ export function GalleryGridItem({
 
   return (
     <GalleryImageButton
-      role="button"
       tabIndex={0}
       onClick={() => store.setState((prev) => ({ ...prev, photoId: _key }))}
       onKeyDown={(e) => {

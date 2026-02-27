@@ -4,16 +4,15 @@ import { describe, expect, it, vi } from 'vitest'
 
 // Use vi.hoisted to declare variables that will be used in mocks
 const { mockStorage } = vi.hoisted(() => {
-  const storage: { loadingFn: (() => React.ReactNode) | null } = { loadingFn: null }
+  const storage: { loadingFn: (() => React.ReactNode) | null } = {
+    loadingFn: null
+  }
   return { mockStorage: storage }
 })
 
 // Mock next/dynamic to render synchronously and capture loading function
 vi.mock('next/dynamic', () => ({
-  default: (
-    _importFn: () => Promise<unknown>,
-    options?: { loading?: () => React.ReactNode }
-  ) => {
+  default: (_importFn: () => Promise<unknown>, options?: { loading?: () => React.ReactNode }) => {
     // Capture the loading function for testing
     if (options?.loading) {
       mockStorage.loadingFn = options.loading
@@ -50,10 +49,7 @@ vi.mock('@/components/house/house-location-modal', () => ({
   }) => {
     if (!details) return null
     return (
-      <div
-        data-testid="location-modal"
-        data-details-count={details.length}
-      >
+      <div data-testid="location-modal" data-details-count={details.length}>
         {children}
       </div>
     )
@@ -109,9 +105,7 @@ describe('HouseLocation', () => {
     it('renders highlight text', () => {
       render(<HouseLocation {...baseProps} />)
 
-      expect(
-        screen.getByText('Great location near the station')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Great location near the station')).toBeInTheDocument()
     })
   })
 
@@ -129,10 +123,7 @@ describe('HouseLocation', () => {
       render(<HouseLocation {...baseProps} />)
 
       const map = screen.getByTestId('house-map')
-      expect(map).toHaveAttribute(
-        'data-place-id',
-        'ChIJA9KNRIL-AGARZtCjpPbTMCs'
-      )
+      expect(map).toHaveAttribute('data-place-id', 'ChIJA9KNRIL-AGARZtCjpPbTMCs')
     })
 
     it('does not render HouseMap when map is null', () => {
@@ -156,9 +147,7 @@ describe('HouseLocation', () => {
 
       // Section heading and highlight text should still be visible
       expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
-      expect(
-        screen.getByText('Great location near the station')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Great location near the station')).toBeInTheDocument()
       // Modal trigger should still be available
       expect(screen.getByTestId('location-modal')).toBeInTheDocument()
     })

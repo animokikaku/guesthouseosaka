@@ -76,9 +76,7 @@ describe('HouseGallery', () => {
     })
 
     it('renders nothing for null galleryCategories', () => {
-      const { container } = render(
-        <HouseGallery galleryCategories={null as unknown as []} />
-      )
+      const { container } = render(<HouseGallery galleryCategories={null as unknown as []} />)
 
       expect(container.querySelector('h3')).not.toBeInTheDocument()
     })
@@ -105,9 +103,7 @@ describe('HouseGallery', () => {
 
       render(<HouseGallery galleryCategories={galleryCategories} />)
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent(
-        'Bedroom'
-      )
+      expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Bedroom')
     })
 
     it('renders multiple categories', () => {

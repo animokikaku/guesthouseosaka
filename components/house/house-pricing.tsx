@@ -11,21 +11,15 @@ import { useTranslations } from 'next-intl'
 const portableTextComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
-      <p className="text-muted-foreground whitespace-pre-line text-sm">
-        {children}
-      </p>
+      <p className="text-muted-foreground text-sm whitespace-pre-line">{children}</p>
     )
   },
   list: {
     bullet: ({ children }) => (
-      <ul className="text-muted-foreground list-disc space-y-1 pl-3 text-sm">
-        {children}
-      </ul>
+      <ul className="text-muted-foreground list-disc space-y-1 pl-3 text-sm">{children}</ul>
     ),
     number: ({ children }) => (
-      <ol className="text-muted-foreground list-decimal space-y-1 pl-3 text-sm">
-        {children}
-      </ol>
+      <ol className="text-muted-foreground list-decimal space-y-1 pl-3 text-sm">{children}</ol>
     )
   },
   listItem: {
@@ -47,9 +41,7 @@ export function HousePricing({ pricing }: HousePricingProps) {
 
   return (
     <HouseSection id="pricing" aria-labelledby="pricing-title" className="pb-8">
-      <HouseSectionHeading id="pricing-title">
-        {t('heading')}
-      </HouseSectionHeading>
+      <HouseSectionHeading id="pricing-title">{t('heading')}</HouseSectionHeading>
       <HouseSectionContent>
         <div className="border-border overflow-hidden rounded-lg border">
           {pricing.map((row) => (
@@ -62,10 +54,7 @@ export function HousePricing({ pricing }: HousePricingProps) {
               </div>
               <div className="space-y-1 px-6 py-4 md:flex-1">
                 {row.content && (
-                  <PortableText
-                    value={row.content}
-                    components={portableTextComponents}
-                  />
+                  <PortableText value={row.content} components={portableTextComponents} />
                 )}
               </div>
             </div>

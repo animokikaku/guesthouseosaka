@@ -41,8 +41,7 @@ class IntersectionObserverMock implements IntersectionObserver {
   disconnect = vi.fn()
   takeRecords = vi.fn(() => [])
 }
-global.IntersectionObserver =
-  IntersectionObserverMock as unknown as typeof IntersectionObserver
+global.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver
 
 // Mock next-intl
 vi.mock('next-intl', () => {
@@ -56,8 +55,8 @@ vi.mock('next-intl', () => {
     useTranslations: () => t,
     useLocale: () => 'en',
     useFormatter: () => ({
-      number: (n: number) => String(n),
-    }),
+      number: (n: number) => String(n)
+    })
   }
 })
 
@@ -65,5 +64,5 @@ vi.mock('next-intl', () => {
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
   usePathname: () => '/',
-  useParams: () => ({}),
+  useParams: () => ({})
 }))

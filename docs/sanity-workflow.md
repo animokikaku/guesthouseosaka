@@ -30,13 +30,13 @@ bunx sanity docs search "query"   # Search documentation
 
 Use MCP tools instead of ad-hoc scripts:
 
-| Tool | Use For |
-|------|---------|
-| `query_documents` | Run GROQ queries |
-| `create_document_from_markdown` | Create content |
-| `patch_document` | Modify documents |
-| `deploy_schema` | Deploy schema |
-| `get_schema` | Inspect schema |
+| Tool                                     | Use For             |
+| ---------------------------------------- | ------------------- |
+| `query_documents`                        | Run GROQ queries    |
+| `create_document_from_markdown`          | Create content      |
+| `patch_document`                         | Modify documents    |
+| `deploy_schema`                          | Deploy schema       |
+| `get_schema`                             | Inspect schema      |
 | `list_sanity_rules` / `get_sanity_rules` | Load best practices |
 
 ## GROQ Queries

@@ -9,11 +9,7 @@
     "lib/transforms/__tests__/mocks.ts"
   ],
   "ignoreBinaries": ["crowdin"],
-  "ignoreDependencies": [
-    "@sanity/icons",
-    "@portabletext/types",
-    "postcss"
-  ],
+  "ignoreDependencies": ["@sanity/icons", "@portabletext/types", "postcss"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true

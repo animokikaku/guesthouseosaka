@@ -364,9 +364,7 @@ export const contactTypeQuery = defineQuery(`*[_type == "contactType" && slug ==
   ${contactFormFields}
 }`)
 
-export const contactTypeSlugsQuery = defineQuery(
-  `*[_type == "contactType"]{ slug }`
-)
+export const contactTypeSlugsQuery = defineQuery(`*[_type == "contactType"]{ slug }`)
 
 // =============================================================================
 // LEGAL NOTICE

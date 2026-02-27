@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -17,12 +11,7 @@ import {
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu'
 import { Link } from '@/i18n/navigation'
-import {
-  HouseIdentifier,
-  NavGroupItem,
-  NavItem,
-  NavListItem
-} from '@/lib/types'
+import { HouseIdentifier, NavGroupItem, NavItem, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { FileWarningIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -129,16 +118,14 @@ function NavigationMenuGroupItem({
   items: NavGroupItem[]
   house?: HouseIdentifier
 }) {
-  const [item, setHoverItem] = useState<NavGroupItem | undefined>(items[0])
+  const [hoveredItem, setHoverItem] = useState<NavGroupItem | undefined>(items[0])
   const t = useTranslations('PageEmptyState')
 
   // Show empty state when no items
   if (items.length === 0) {
     return (
       <NavigationMenuItem>
-        <NavigationMenuTrigger className="bg-transparent">
-          {title}
-        </NavigationMenuTrigger>
+        <NavigationMenuTrigger className="bg-transparent">{title}</NavigationMenuTrigger>
         <NavigationMenuContent>
           <Empty className="w-[300px] gap-3 border-none p-6">
             <EmptyHeader className="gap-1">
@@ -156,22 +143,15 @@ function NavigationMenuGroupItem({
 
   return (
     <NavigationMenuItem>
-      <NavigationMenuTrigger className="bg-transparent">
-        {title}
-      </NavigationMenuTrigger>
+      <NavigationMenuTrigger className="bg-transparent">{title}</NavigationMenuTrigger>
       <NavigationMenuContent>
         <ul className="grid w-[500px] grid-cols-[1fr_1fr] gap-2">
           <div className="row-span-3 flex flex-col gap-2">
             {items.map((item, i) => (
-              <li
-                key={`list-item-${i}`}
-                onMouseEnter={() => setHoverItem(item)}
-              >
+              <li key={`list-item-${i}`} onMouseEnter={() => setHoverItem(item)}>
                 <NavigationMenuLink data-active={house === item.key} asChild>
                   <Link href={item.href}>
-                    <div className="text-sm leading-none font-medium">
-                      {stegaClean(item.label)}
-                    </div>
+                    <div className="text-sm leading-none font-medium">{stegaClean(item.label)}</div>
                     {item.description ? (
                       <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
                         {stegaClean(item.description)}
@@ -186,11 +166,7 @@ function NavigationMenuGroupItem({
           <li className="row-span-3">
             <div className="group relative h-full w-full overflow-hidden rounded-md">
               {items.map((it) => (
-                <PreviewImageItem
-                  key={it.key}
-                  item={it}
-                  isActive={it.key === item?.key}
-                />
+                <PreviewImageItem key={it.key} item={it} isActive={it.key === hoveredItem?.key} />
               ))}
             </div>
           </li>

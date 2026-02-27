@@ -49,8 +49,7 @@ export function GalleryPageContent({
   })
 
   const scrollContainerRef = React.useRef<HTMLDivElement>(null)
-  const [scrollContainer, setScrollContainer] =
-    React.useState<HTMLDivElement | null>(null)
+  const [scrollContainer, setScrollContainer] = React.useState<HTMLDivElement | null>(null)
 
   // Compute categories for sticky nav
   const categories = React.useMemo(
@@ -58,10 +57,7 @@ export function GalleryPageContent({
     [galleryCategories]
   )
 
-  const sectionIds = React.useMemo(
-    () => categories.map((c) => c._id),
-    [categories]
-  )
+  const sectionIds = React.useMemo(() => categories.map((c) => c._id), [categories])
 
   const { isVisible, sentinelRef, activeId } = useStickyNav({
     sectionIds,
@@ -80,11 +76,7 @@ export function GalleryPageContent({
         {backButton}
         <div className="container-wrapper min-w-0 flex-1">
           <div className="container p-0">
-            <StickyCategoryNav
-              categories={categories}
-              activeId={activeId}
-              isVisible={isVisible}
-            />
+            <StickyCategoryNav categories={categories} activeId={activeId} isVisible={isVisible} />
           </div>
         </div>
       </div>

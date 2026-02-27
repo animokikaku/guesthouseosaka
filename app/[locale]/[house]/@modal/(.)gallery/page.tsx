@@ -11,9 +11,7 @@ import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
-export default async function GalleryModalPage({
-  params
-}: PageProps<'/[locale]/[house]/gallery'>) {
+export default async function GalleryModalPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
   const { locale, house } = await params
   if (!hasHouse(house)) {
     notFound()

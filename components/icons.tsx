@@ -69,7 +69,6 @@ export const Icons = {
       aria-hidden="true"
       role="presentation"
       focusable="false"
-      aria-labelledby="gallery-icon"
       className="h-4 w-4"
     >
       <title id="gallery-icon">Gallery</title>

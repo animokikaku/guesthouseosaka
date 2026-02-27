@@ -11,9 +11,7 @@ const fieldConfig = (
   defineField({
     name,
     title,
-    type: options?.noPlaceholder
-      ? 'formFieldConfigNoPlaceholder'
-      : 'formFieldConfig',
+    type: options?.noPlaceholder ? 'formFieldConfigNoPlaceholder' : 'formFieldConfig',
     hidden: options?.hiddenFor
       ? ({ document }) => options.hiddenFor!.includes(document?.slug as string)
       : undefined

@@ -18,10 +18,7 @@ vi.mock('@/components/forms/form-context', async () => {
 
 import { DateField } from '../date-field'
 
-function renderWithContext(
-  ui: React.ReactElement,
-  fieldApi: MockFieldApi<string>
-) {
+function renderWithContext(ui: React.ReactElement, fieldApi: MockFieldApi<string>) {
   return render(
     <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
       {ui}
@@ -163,15 +160,9 @@ describe('DateField', () => {
     it('passes through min prop', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(
-        <DateField label="Start Date" min="2025-01-01" />,
-        fieldApi
-      )
+      renderWithContext(<DateField label="Start Date" min="2025-01-01" />, fieldApi)
 
-      expect(screen.getByLabelText('Start Date')).toHaveAttribute(
-        'min',
-        '2025-01-01'
-      )
+      expect(screen.getByLabelText('Start Date')).toHaveAttribute('min', '2025-01-01')
     })
 
     it('passes through step prop', () => {

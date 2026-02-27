@@ -4,31 +4,15 @@ import { Link } from '@/i18n/navigation'
 import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { NavItem, NavItems, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { FileWarningIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 
-export function MobileNav({
-  items,
-  className
-}: {
-  items: NavItems
-  className?: string
-}) {
+export function MobileNav({ items, className }: { items: NavItems; className?: string }) {
   const [open, setOpen] = useState(false)
   const t = useTranslations('MobileNav')
 
@@ -82,9 +66,7 @@ export function MobileNav({
       >
         <div className="flex flex-col gap-12 overflow-auto px-6 py-6">
           <div className="flex flex-col gap-4">
-            <div className="text-muted-foreground text-sm font-medium">
-              {t('menu_label')}
-            </div>
+            <div className="text-muted-foreground text-sm font-medium">{t('menu_label')}</div>
             <div className="flex flex-col gap-3">
               <MobileLink href="/" onOpenChange={setOpen}>
                 {t('home_label')}
@@ -137,11 +119,7 @@ function MobileListSection({
       ) : (
         <div className="flex flex-col gap-3">
           {items.map((item) => (
-            <MobileLink
-              key={item.key}
-              href={item.href}
-              onOpenChange={onOpenChange}
-            >
+            <MobileLink key={item.key} href={item.href} onOpenChange={onOpenChange}>
               {item.label}
             </MobileLink>
           ))}

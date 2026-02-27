@@ -48,9 +48,7 @@ describe('GalleryWall', () => {
 
   it('applies custom className to container', () => {
     const images = createMockImages(1)
-    const { container } = render(
-      <GalleryWall images={images} className="custom-class" />
-    )
+    const { container } = render(<GalleryWall images={images} className="custom-class" />)
 
     const wrapper = container.firstChild as HTMLElement
     expect(wrapper).toHaveClass('custom-class')

@@ -8,10 +8,7 @@ import {
 } from '@/components/ui/table'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import type {
-  HousesBuildingQueryResult,
-  PricingCategoriesQueryResult
-} from '@/sanity.types'
+import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from 'next-sanity'
 
@@ -23,17 +20,11 @@ const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
 
 const portableTextComponents: PortableTextComponents = {
   block: {
-    normal: ({ children }) => (
-      <p className="leading-relaxed whitespace-pre-line">{children}</p>
-    )
+    normal: ({ children }) => <p className="leading-relaxed whitespace-pre-line">{children}</p>
   },
   list: {
-    bullet: ({ children }) => (
-      <ul className="list-none space-y-1">{children}</ul>
-    ),
-    number: ({ children }) => (
-      <ol className="list-none space-y-1">{children}</ol>
-    )
+    bullet: ({ children }) => <ul className="list-none space-y-1">{children}</ul>,
+    number: ({ children }) => <ol className="list-none space-y-1">{children}</ol>
   },
   listItem: {
     bullet: ({ children }) => <li className="wrap-break-word">{children}</li>,
@@ -49,10 +40,7 @@ type FAQExtraCostsTableProps = {
   pricingCategories: PricingCategories
 }
 
-export function FAQExtraCostsTable({
-  houses,
-  pricingCategories
-}: FAQExtraCostsTableProps) {
+export function FAQExtraCostsTable({ houses, pricingCategories }: FAQExtraCostsTableProps) {
   if (houses.length === 0 || pricingCategories.length === 0) {
     return null
   }
@@ -73,10 +61,7 @@ export function FAQExtraCostsTable({
               return (
                 <TableHead
                   key={_id}
-                  className={cn(
-                    'bg-secondary font-semibold',
-                    ACCENT_CLASSES[slug]
-                  )}
+                  className={cn('bg-secondary font-semibold', ACCENT_CLASSES[slug])}
                 >
                   {stegaClean(title)}
                 </TableHead>
@@ -91,16 +76,11 @@ export function FAQExtraCostsTable({
                 {category.title}
               </TableCell>
               {houses.map((house) => {
-                const cost = house.extraCosts?.find(
-                  (c) => c.categoryId === category._id
-                )
+                const cost = house.extraCosts?.find((c) => c.categoryId === category._id)
                 return (
                   <TableCell key={house._id} className="overflow-hidden">
                     {cost?.value ? (
-                      <PortableText
-                        value={cost.value}
-                        components={portableTextComponents}
-                      />
+                      <PortableText value={cost.value} components={portableTextComponents} />
                     ) : (
                       <span className="leading-relaxed">–</span>
                     )}

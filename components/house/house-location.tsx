@@ -43,13 +43,10 @@ function MapSkeleton() {
   )
 }
 
-const HouseMap = dynamic(
-  () => import('@/components/house/house-map').then((mod) => mod.HouseMap),
-  {
-    ssr: false,
-    loading: () => <MapSkeleton />
-  }
-)
+const HouseMap = dynamic(() => import('@/components/house/house-map').then((mod) => mod.HouseMap), {
+  ssr: false,
+  loading: () => <MapSkeleton />
+})
 
 interface LazyHouseMapProps {
   center: { lat: number; lng: number }
@@ -86,12 +83,7 @@ function LazyHouseMap({ center, placeId, placeImage, mapsUrl }: LazyHouseMapProp
   return (
     <div ref={containerRef}>
       {isVisible ? (
-        <HouseMap
-          center={center}
-          placeId={placeId}
-          placeImage={placeImage}
-          mapsUrl={mapsUrl}
-        />
+        <HouseMap center={center} placeId={placeId} placeImage={placeImage} mapsUrl={mapsUrl} />
       ) : (
         <MapSkeleton />
       )}
@@ -110,9 +102,7 @@ export function HouseLocation({ location, map }: HouseLocationProps) {
 
   return (
     <HouseSection id="location" aria-labelledby="location-title">
-      <HouseSectionHeading id="location-title">
-        {t('heading')}
-      </HouseSectionHeading>
+      <HouseSectionHeading id="location-title">{t('heading')}</HouseSectionHeading>
       <HouseSectionContent>
         <p className="text-foreground text-base leading-relaxed">{highlight}</p>
         {map && (

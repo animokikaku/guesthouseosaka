@@ -11,10 +11,7 @@ import { Button } from '@/components/ui/button'
 import { ResponsiveModal } from '@/components/ui/responsive-modal'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Icon } from '@/lib/icons'
-import type {
-  AmenityCategoryData,
-  AmenityItemData
-} from '@/lib/types/components'
+import type { AmenityCategoryData, AmenityItemData } from '@/lib/types/components'
 import { stegaClean } from '@sanity/client/stega'
 import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
@@ -75,13 +72,9 @@ function AmenitiesDialog({
         {amenityCategories.map((cat) => (
           <div
             key={cat._key}
-            data-sanity={dataAttribute?.(
-              `amenityCategories[_key=="${cat._key}"].items`
-            )}
+            data-sanity={dataAttribute?.(`amenityCategories[_key=="${cat._key}"].items`)}
           >
-            <h3 className="text-foreground mb-4 text-lg font-semibold">
-              {cat.label}
-            </h3>
+            <h3 className="text-foreground mb-4 text-lg font-semibold">{cat.label}</h3>
             <div className="grid grid-cols-1 gap-2">
               {cat.items.map((amenity) => (
                 <AmenityItem
@@ -90,11 +83,7 @@ function AmenitiesDialog({
                     ...amenity,
                     label: amenity.label ? stegaClean(amenity.label) : null
                   }}
-                  noteLabel={
-                    amenity.note
-                      ? noteLabels[stegaClean(amenity.note)]
-                      : undefined
-                  }
+                  noteLabel={amenity.note ? noteLabels[stegaClean(amenity.note)] : undefined}
                   data-sanity={dataAttribute?.(
                     `amenityCategories[_key=="${cat._key}"].items[_key=="${amenity._key}"]`
                   )}
@@ -138,29 +127,20 @@ export function HouseAmenities({
   }
 
   // Featured amenities: GROQ provides max 10, slice to 5 on mobile
-  const displayedFeatured = isMobile
-    ? featuredAmenities.slice(0, 5)
-    : featuredAmenities
+  const displayedFeatured = isMobile ? featuredAmenities.slice(0, 5) : featuredAmenities
 
-  const totalAmenitiesCount = amenityCategories.reduce(
-    (sum, cat) => sum + cat.items.length,
-    0
-  )
+  const totalAmenitiesCount = amenityCategories.reduce((sum, cat) => sum + cat.items.length, 0)
 
   return (
     <HouseSection id="amenities" aria-labelledby="amenities-title">
-      <HouseSectionHeading id="amenities-title">
-        {t('heading')}
-      </HouseSectionHeading>
+      <HouseSectionHeading id="amenities-title">{t('heading')}</HouseSectionHeading>
       <HouseSectionContent>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {displayedFeatured.map((amenity) => (
             <AmenityItem
               key={amenity._key}
               amenity={amenity}
-              noteLabel={
-                amenity.note ? noteLabels[stegaClean(amenity.note)] : undefined
-              }
+              noteLabel={amenity.note ? noteLabels[stegaClean(amenity.note)] : undefined}
             />
           ))}
         </div>

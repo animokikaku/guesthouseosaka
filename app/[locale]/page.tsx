@@ -70,16 +70,11 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
 
   return (
     <div className="snap-footer section-soft flex flex-col">
-      <section className="container-wrapper relative flex min-h-[calc(100dvh-var(--header-height))] max-w-7xl snap-none items-center justify-center md:snap-end py-8 md:py-0">
-        <div className="container flex flex-col items-center gap-12 md:gap-8 md:flex-row md:items-center">
+      <section className="container-wrapper relative flex min-h-[calc(100dvh-var(--header-height))] max-w-7xl snap-none items-center justify-center py-8 md:snap-end md:py-0">
+        <div className="container flex flex-col items-center gap-12 md:flex-row md:items-center md:gap-8">
           {/* Text content - expands to fill available space */}
-          <PageHeader className="md:flex-1 md:items-start p-0 md:p-0 lg:p-0 md:text-left">
-            {hero.content && (
-              <PortableText
-                value={hero.content}
-                components={heroComponents}
-              />
-            )}
+          <PageHeader className="p-0 md:flex-1 md:items-start md:p-0 md:text-left lg:p-0">
+            {hero.content && <PortableText value={hero.content} components={heroComponents} />}
             {hero.ctaLabel && (
               <PageActions className="md:justify-start">
                 <Button asChild size="lg">
@@ -98,10 +93,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
       <section className="snap:none container-wrapper relative flex max-w-7xl flex-1 flex-col items-center justify-center md:min-h-[calc(100dvh-var(--header-height)-var(--footer-height))] md:snap-start">
         <PageHeader>
           {collection.content && (
-            <PortableText
-              value={collection.content}
-              components={collectionComponents}
-            />
+            <PortableText value={collection.content} components={collectionComponents} />
           )}
           <PageActions>
             <Collection houses={houses} className="w-full pt-4" />

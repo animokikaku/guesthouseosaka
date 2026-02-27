@@ -198,8 +198,16 @@ describe('toAmenityCategories', () => {
   })
 
   it('transforms amenity items within categories', () => {
-    const item1 = createAmenityItem({ _key: 'item1', label: 'Wifi', icon: 'wifi' })
-    const item2 = createAmenityItem({ _key: 'item2', label: 'Bed', icon: 'bed' })
+    const item1 = createAmenityItem({
+      _key: 'item1',
+      label: 'Wifi',
+      icon: 'wifi'
+    })
+    const item2 = createAmenityItem({
+      _key: 'item2',
+      label: 'Bed',
+      icon: 'bed'
+    })
     const cat = createAmenityCategory({ items: [item1, item2] })
 
     const result = toAmenityCategories([cat])

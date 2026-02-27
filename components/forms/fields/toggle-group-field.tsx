@@ -1,10 +1,5 @@
 import { useFieldValidation } from '@/components/forms/hooks'
-import {
-  FieldDescription,
-  FieldError,
-  FieldLegend,
-  FieldSet
-} from '@/components/ui/field'
+import { FieldDescription, FieldError, FieldLegend, FieldSet } from '@/components/ui/field'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { cn } from '@/lib/utils'
 

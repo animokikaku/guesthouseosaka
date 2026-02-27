@@ -1,8 +1,5 @@
 import { ComponentIcon, HelpCircleIcon } from '@sanity/icons'
-import {
-  orderRankField,
-  orderRankOrdering
-} from '@sanity/orderable-document-list'
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { defineField, defineType } from 'sanity'
 
 export const faqQuestion = defineType({
