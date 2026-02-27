@@ -15,7 +15,8 @@ bun run build        # Production build (run before PRs)
 bun run typegen      # Regenerate Sanity types after schema changes
 bun run test         # Run tests
 bun run knip         # Detect unused deps/exports
-bun lint --fix       # Lint and auto-fix
+bun run lint --fix   # Lint and auto-fix
+bun run format       # Format with oxfmt
 ```
 
 ## Key Rules

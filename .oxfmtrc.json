@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "trailingComma": "none",
+  "semi": false,
+  "printWidth": 80,
+  "sortTailwindcss": {},
+  "ignorePatterns": ["components/ui/**", "messages/en.d.json.ts"]
+}
