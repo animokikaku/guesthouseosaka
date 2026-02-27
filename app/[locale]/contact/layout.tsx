@@ -3,11 +3,7 @@ import { PageHeader } from '@/components/page-header'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
-import {
-  contactPageMetaQuery,
-  contactPageQuery,
-  settingsQuery
-} from '@/sanity/lib/queries'
+import { contactPageMetaQuery, contactPageQuery, settingsQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import type { Metadata } from 'next'
 import type { Locale } from 'next-intl'
@@ -21,9 +17,7 @@ const headerComponents: PortableTextComponents = {
       </h1>
     ),
     normal: ({ children }) => (
-      <p className="text-foreground max-w-3xl text-base text-balance sm:text-lg">
-        {children}
-      </p>
+      <p className="text-foreground max-w-3xl text-base text-balance sm:text-lg">{children}</p>
     )
   }
 }
@@ -68,9 +62,7 @@ export default async function ContactLayout({
   return (
     <>
       <PageHeader>
-        {page?.header && (
-          <PortableText value={page.header} components={headerComponents} />
-        )}
+        {page?.header && <PortableText value={page.header} components={headerComponents} />}
         {page?.actions && page.actions.length > 0 && (
           <DynamicPageActions
             documentId={page._id}

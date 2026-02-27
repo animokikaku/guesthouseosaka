@@ -12,10 +12,7 @@ const { mockStorage } = vi.hoisted(() => {
 
 // Mock next/dynamic to render synchronously and capture loading function
 vi.mock('next/dynamic', () => ({
-  default: (
-    _importFn: () => Promise<unknown>,
-    options?: { loading?: () => React.ReactNode }
-  ) => {
+  default: (_importFn: () => Promise<unknown>, options?: { loading?: () => React.ReactNode }) => {
     // Capture the loading function for testing
     if (options?.loading) {
       mockStorage.loadingFn = options.loading
@@ -108,9 +105,7 @@ describe('HouseLocation', () => {
     it('renders highlight text', () => {
       render(<HouseLocation {...baseProps} />)
 
-      expect(
-        screen.getByText('Great location near the station')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Great location near the station')).toBeInTheDocument()
     })
   })
 
@@ -128,10 +123,7 @@ describe('HouseLocation', () => {
       render(<HouseLocation {...baseProps} />)
 
       const map = screen.getByTestId('house-map')
-      expect(map).toHaveAttribute(
-        'data-place-id',
-        'ChIJA9KNRIL-AGARZtCjpPbTMCs'
-      )
+      expect(map).toHaveAttribute('data-place-id', 'ChIJA9KNRIL-AGARZtCjpPbTMCs')
     })
 
     it('does not render HouseMap when map is null', () => {
@@ -155,9 +147,7 @@ describe('HouseLocation', () => {
 
       // Section heading and highlight text should still be visible
       expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
-      expect(
-        screen.getByText('Great location near the station')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Great location near the station')).toBeInTheDocument()
       // Modal trigger should still be available
       expect(screen.getByTestId('location-modal')).toBeInTheDocument()
     })
@@ -217,9 +207,7 @@ describe('HouseLocation', () => {
       expect(container.children.length).toBeGreaterThan(0)
 
       // Verify it has skeleton elements indicating loading
-      const hasSkeletonElements = container.querySelector(
-        '[data-slot="skeleton"]'
-      )
+      const hasSkeletonElements = container.querySelector('[data-slot="skeleton"]')
       expect(hasSkeletonElements).toBeTruthy()
     })
 

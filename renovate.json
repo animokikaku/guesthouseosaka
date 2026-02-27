@@ -45,12 +45,7 @@
     {
       "description": "Group testing packages",
       "groupName": "testing",
-      "matchPackageNames": [
-        "/^vitest/",
-        "/^@vitest//",
-        "/^@playwright//",
-        "/^playwright$/"
-      ]
+      "matchPackageNames": ["/^vitest/", "/^@vitest//", "/^@playwright//", "/^playwright$/"]
     },
     {
       "description": "Group TypeScript and types",

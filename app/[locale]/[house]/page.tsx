@@ -12,9 +12,7 @@ import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { Accommodation, WithContext } from 'schema-dts'
 
-export default async function HousePage({
-  params
-}: PageProps<'/[locale]/[house]'>) {
+export default async function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
   const { locale, house } = await params
   if (!hasHouse(house)) {
     notFound()

@@ -26,8 +26,7 @@ export const pageAction = defineType({
       name: 'href',
       title: 'Link',
       type: 'string',
-      description:
-        'Internal path (e.g., /contact, /faq#phone) or external URL (e.g., https://...)',
+      description: 'Internal path (e.g., /contact, /faq#phone) or external URL (e.g., https://...)',
       validation: (rule) => rule.required()
     })
   ],

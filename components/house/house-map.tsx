@@ -1,9 +1,4 @@
-import {
-  GoogleMaps,
-  HouseMarker,
-  MapProvider,
-  PlaceDetails
-} from '@/components/map'
+import { GoogleMaps, HouseMarker, MapProvider, PlaceDetails } from '@/components/map'
 import type { SanityImage } from '@/lib/types/components'
 
 interface HouseMapProps {
@@ -13,12 +8,7 @@ interface HouseMapProps {
   center: { lat: number; lng: number }
 }
 
-export function HouseMap({
-  center,
-  placeId,
-  placeImage,
-  mapsUrl
-}: HouseMapProps) {
+export function HouseMap({ center, placeId, placeImage, mapsUrl }: HouseMapProps) {
   return (
     <MapProvider>
       <div className="md:border-border flex min-h-[480px] flex-col gap-6 overflow-hidden md:flex-row md:gap-0 md:rounded-lg md:border">

@@ -9,8 +9,7 @@ export const houseLocation = defineType({
       name: 'highlight',
       title: 'Location Highlight',
       type: 'internationalizedArrayText',
-      description:
-        'Key location selling point (e.g., "14 minutes walk to Namba")',
+      description: 'Key location selling point (e.g., "14 minutes walk to Namba")',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } }
     }),

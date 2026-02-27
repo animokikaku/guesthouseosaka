@@ -33,8 +33,7 @@ export const faqPage = defineType({
       name: 'contactSection',
       title: 'Contact Section',
       type: 'internationalizedArrayPortableText',
-      description:
-        'Content for the contact card shown below FAQs. Use H2 for the title.',
+      description: 'Content for the contact card shown below FAQs. Use H2 for the title.',
       validation: (rule) => rule.required(),
       options: { aiAssist: { translateAction: true } },
       group: 'content'

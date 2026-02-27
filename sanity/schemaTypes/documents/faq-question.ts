@@ -1,8 +1,5 @@
 import { ComponentIcon, HelpCircleIcon } from '@sanity/icons'
-import {
-  orderRankField,
-  orderRankOrdering
-} from '@sanity/orderable-document-list'
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { defineField, defineType } from 'sanity'
 
 export const faqQuestion = defineType({
@@ -38,9 +35,7 @@ export const faqQuestion = defineType({
         ]
       },
       hidden: ({ document }) => {
-        const answer = document?.answer as
-          | Array<{ value?: unknown }>
-          | undefined
+        const answer = document?.answer as Array<{ value?: unknown }> | undefined
         return answer?.some((item) => item.value) ?? false
       }
     }),

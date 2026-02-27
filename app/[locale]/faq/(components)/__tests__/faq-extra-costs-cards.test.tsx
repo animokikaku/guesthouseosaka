@@ -1,9 +1,6 @@
 import { render, screen, fireEvent, act } from '@testing-library/react'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import type {
-  HousesBuildingQueryResult,
-  PricingCategoriesQueryResult
-} from '@/sanity.types'
+import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
 import {
   type CarouselMockState,
   type MockCarouselApi,
@@ -51,10 +48,7 @@ type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
 type ExtraCost = NonNullable<Houses[number]['extraCosts']>[number]
 
-const createCategory = (
-  id: string,
-  title: string
-): PricingCategories[number] => ({
+const createCategory = (id: string, title: string): PricingCategories[number] => ({
   _id: id,
   title,
   orderRank: `0|${id}:`
@@ -106,9 +100,7 @@ describe('FAQExtraCostsCards', () => {
 
   describe('empty states', () => {
     it('returns null when houses array is empty', () => {
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
       const { container } = render(
         <FAQExtraCostsCards houses={[]} pricingCategories={pricingCategories} />
@@ -120,9 +112,7 @@ describe('FAQExtraCostsCards', () => {
     it('returns null when pricingCategories is empty', () => {
       const houses: Houses = [createHouse('h1', 'orange')]
 
-      const { container } = render(
-        <FAQExtraCostsCards houses={houses} pricingCategories={[]} />
-      )
+      const { container } = render(<FAQExtraCostsCards houses={houses} pricingCategories={[]} />)
 
       expect(container.firstChild).toBeNull()
     })
@@ -131,16 +121,9 @@ describe('FAQExtraCostsCards', () => {
   describe('missing house values', () => {
     it('displays dash when house has no value for a category', () => {
       const houses: Houses = [createHouse('h1', 'orange', [])]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('–')).toBeInTheDocument()
     })
@@ -153,16 +136,9 @@ describe('FAQExtraCostsCards', () => {
         createHouse('h2', 'apple'),
         createHouse('h3', 'lemon')
       ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('Orange House')).toBeInTheDocument()
       expect(screen.getByText('Apple House')).toBeInTheDocument()
@@ -176,12 +152,7 @@ describe('FAQExtraCostsCards', () => {
         createCategory('internet', 'Internet')
       ]
 
-      render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('Deposit')).toBeInTheDocument()
       expect(screen.getByText('Internet')).toBeInTheDocument()
@@ -199,12 +170,7 @@ describe('FAQExtraCostsCards', () => {
         createCategory('internet', 'Internet')
       ]
 
-      render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('¥30,000')).toBeInTheDocument()
       expect(screen.getByText('Free')).toBeInTheDocument()
@@ -218,16 +184,9 @@ describe('FAQExtraCostsCards', () => {
         createHouse('h2', 'apple'),
         createHouse('h3', 'lemon')
       ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByTestId('carousel')).toBeInTheDocument()
       expect(screen.getByTestId('carousel-content')).toBeInTheDocument()
@@ -243,16 +202,9 @@ describe('FAQExtraCostsCards', () => {
         createHouse('h2', 'apple'),
         createHouse('h3', 'lemon')
       ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
       // Should have navigation dots with aria-labels
       expect(screen.getByLabelText('Go to Orange House')).toBeInTheDocument()
@@ -266,16 +218,9 @@ describe('FAQExtraCostsCards', () => {
         createHouse('h2', 'apple'),
         createHouse('h3', 'lemon')
       ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
       // Simulate API being set after render
       carouselState.mockApi = createMockCarouselApi(carouselState)
@@ -293,20 +238,10 @@ describe('FAQExtraCostsCards', () => {
 
   describe('carousel API integration', () => {
     it('registers select and reInit event handlers', () => {
-      const houses: Houses = [
-        createHouse('h1', 'orange'),
-        createHouse('h2', 'apple')
-      ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const houses: Houses = [createHouse('h1', 'orange'), createHouse('h2', 'apple')]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
       carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
@@ -314,14 +249,8 @@ describe('FAQExtraCostsCards', () => {
       })
 
       // Verify event handlers were registered
-      expect(carouselState.mockApi.on).toHaveBeenCalledWith(
-        'select',
-        expect.any(Function)
-      )
-      expect(carouselState.mockApi.on).toHaveBeenCalledWith(
-        'reInit',
-        expect.any(Function)
-      )
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith('select', expect.any(Function))
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith('reInit', expect.any(Function))
     })
 
     it('updates current index when select event fires', () => {
@@ -330,16 +259,9 @@ describe('FAQExtraCostsCards', () => {
         createHouse('h2', 'apple'),
         createHouse('h3', 'lemon')
       ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
       carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
@@ -368,19 +290,11 @@ describe('FAQExtraCostsCards', () => {
     })
 
     it('cleans up event handlers on unmount', () => {
-      const houses: Houses = [
-        createHouse('h1', 'orange'),
-        createHouse('h2', 'apple')
-      ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const houses: Houses = [createHouse('h1', 'orange'), createHouse('h2', 'apple')]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
       const { unmount } = render(
-        <FAQExtraCostsCards
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
+        <FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />
       )
 
       carouselState.mockApi = createMockCarouselApi(carouselState)
@@ -391,14 +305,8 @@ describe('FAQExtraCostsCards', () => {
       unmount()
 
       // Verify off was called to clean up handlers
-      expect(carouselState.mockApi.off).toHaveBeenCalledWith(
-        'select',
-        expect.any(Function)
-      )
-      expect(carouselState.mockApi.off).toHaveBeenCalledWith(
-        'reInit',
-        expect.any(Function)
-      )
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith('select', expect.any(Function))
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith('reInit', expect.any(Function))
     })
   })
 })

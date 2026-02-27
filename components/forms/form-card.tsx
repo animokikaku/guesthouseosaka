@@ -26,14 +26,7 @@ interface FormCardProps {
   className?: string
 }
 
-export function FormCard({
-  title,
-  description,
-  formId,
-  form,
-  children,
-  className
-}: FormCardProps) {
+export function FormCard({ title, description, formId, form, children, className }: FormCardProps) {
   return (
     <Card className={cn('mx-auto w-full sm:max-w-2xl', className)}>
       {(title || description) && (

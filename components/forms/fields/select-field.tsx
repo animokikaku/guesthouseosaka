@@ -14,10 +14,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 
-type SelectProps = Omit<
-  React.ComponentProps<typeof Select>,
-  'name' | 'value' | 'onValueChange'
->
+type SelectProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange'>
 
 type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
 
@@ -41,11 +38,7 @@ export function SelectField({
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
       <FieldContent>
-        {label && (
-          <FieldLabel htmlFor={`form-tanstack-select-${field.name}`}>
-            {label}
-          </FieldLabel>
-        )}
+        {label && <FieldLabel htmlFor={`form-tanstack-select-${field.name}`}>{label}</FieldLabel>}
         {description && <FieldDescription>{description}</FieldDescription>}
         {isInvalid && <FieldError errors={errors} />}
       </FieldContent>

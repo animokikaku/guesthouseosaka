@@ -23,12 +23,7 @@ interface CheckboxFieldProps extends CheckboxProps {
   description?: string
 }
 
-export function CheckboxField({
-  label,
-  description,
-  legend,
-  ...props
-}: CheckboxFieldProps) {
+export function CheckboxField({ label, description, legend, ...props }: CheckboxFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<boolean>()
 
   return (

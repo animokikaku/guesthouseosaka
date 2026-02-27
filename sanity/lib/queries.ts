@@ -252,21 +252,18 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
 }`)
 
 // House slugs for static generation
-export const houseSlugsQuery =
-  defineQuery(`*[_type == "house" && defined(slug)]{
+export const houseSlugsQuery = defineQuery(`*[_type == "house" && defined(slug)]{
   "slug": slug
 }`)
 
 // House titles for forms (ordered by global orderRank)
-export const housesTitlesQuery =
-  defineQuery(`*[_type == "house"] | order(orderRank){
+export const housesTitlesQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   "slug": slug,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value)
 }`)
 
 // Houses for navigation (header) - ordered by global orderRank
-export const housesNavQuery =
-  defineQuery(`*[_type == "house"] | order(orderRank){
+export const housesNavQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   slug,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   "description": coalesce(description[_key == $locale][0].value, description[_key == "en"][0].value),
@@ -275,8 +272,7 @@ export const housesNavQuery =
 }`)
 
 // All houses building and contact data (for FAQ page) - ordered by global orderRank
-export const housesBuildingQuery =
-  defineQuery(`*[_type == "house"] | order(orderRank){
+export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   _id,
   _type,
   slug,
@@ -359,8 +355,7 @@ export const contactTypesListQuery = defineQuery(`
   }
 `)
 
-export const contactTypeQuery =
-  defineQuery(`*[_type == "contactType" && slug == $slug][0]{
+export const contactTypeQuery = defineQuery(`*[_type == "contactType" && slug == $slug][0]{
   _id,
   _type,
   slug,
@@ -369,9 +364,7 @@ export const contactTypeQuery =
   ${contactFormFields}
 }`)
 
-export const contactTypeSlugsQuery = defineQuery(
-  `*[_type == "contactType"]{ slug }`
-)
+export const contactTypeSlugsQuery = defineQuery(`*[_type == "contactType"]{ slug }`)
 
 // =============================================================================
 // LEGAL NOTICE
@@ -389,8 +382,7 @@ export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
 // TAXONOMY QUERIES
 // =============================================================================
 
-export const pricingCategoriesQuery =
-  defineQuery(`*[_type == "pricingCategory"] | order(orderRank){
+export const pricingCategoriesQuery = defineQuery(`*[_type == "pricingCategory"] | order(orderRank){
   _id,
   "title": coalesce(title[_key == $locale][0].value, title[_key == "en"][0].value),
   orderRank

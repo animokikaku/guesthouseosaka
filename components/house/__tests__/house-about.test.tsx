@@ -11,9 +11,7 @@ vi.mock('next-sanity', () => ({
 
 // Mock HouseBuilding to isolate testing
 vi.mock('@/components/house/house-building', () => ({
-  HouseBuilding: () => (
-    <div data-testid="house-building">HouseBuilding Mock</div>
-  )
+  HouseBuilding: () => <div data-testid="house-building">HouseBuilding Mock</div>
 }))
 
 const baseProps = {
@@ -64,9 +62,7 @@ describe('HouseAbout', () => {
 
   describe('PortableText content', () => {
     it('renders nothing when about is null', () => {
-      const { container } = renderWithProvider(
-        <HouseAbout {...baseProps} about={null} />
-      )
+      const { container } = renderWithProvider(<HouseAbout {...baseProps} about={null} />)
 
       // Should not have any paragraph elements from PortableText
       const paragraphs = container.querySelectorAll('section > p')
@@ -79,9 +75,7 @@ describe('HouseAbout', () => {
           _type: 'block',
           _key: 'p1',
           style: 'normal',
-          children: [
-            { _type: 'span', _key: 's1', text: 'Welcome to our house.' }
-          ]
+          children: [{ _type: 'span', _key: 's1', text: 'Welcome to our house.' }]
         }
       ]
 

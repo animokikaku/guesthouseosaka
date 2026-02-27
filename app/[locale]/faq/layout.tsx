@@ -17,9 +17,7 @@ const headerComponents: PortableTextComponents = {
       </h1>
     ),
     normal: ({ children }) => (
-      <p className="text-foreground max-w-3xl text-base text-balance sm:text-lg">
-        {children}
-      </p>
+      <p className="text-foreground max-w-3xl text-base text-balance sm:text-lg">{children}</p>
     )
   }
 }
@@ -47,10 +45,7 @@ export async function generateMetadata(
   }
 }
 
-export default async function FAQLayout({
-  params,
-  children
-}: LayoutProps<'/[locale]/faq'>) {
+export default async function FAQLayout({ params, children }: LayoutProps<'/[locale]/faq'>) {
   const { locale } = await params
   setRequestLocale(locale as Locale)
 
@@ -62,9 +57,7 @@ export default async function FAQLayout({
   return (
     <>
       <PageHeader>
-        {data?.header && (
-          <PortableText value={data?.header} components={headerComponents} />
-        )}
+        {data?.header && <PortableText value={data?.header} components={headerComponents} />}
         {data?.actions && data?.actions.length > 0 && (
           <DynamicPageActions
             documentId={data._id}

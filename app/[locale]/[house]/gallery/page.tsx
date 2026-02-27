@@ -10,9 +10,7 @@ import { Locale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
-export default async function GalleryPage({
-  params
-}: PageProps<'/[locale]/[house]/gallery'>) {
+export default async function GalleryPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
   const { locale, house } = await params
   if (!hasHouse(house)) {
     notFound()
@@ -45,12 +43,7 @@ export default async function GalleryPage({
           galleryCategories={data.galleryCategories}
           title={data.title ?? ''}
           backButton={
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              className="shrink-0 rounded-full"
-            >
+            <Button variant="ghost" size="icon" asChild className="shrink-0 rounded-full">
               <Link href={{ pathname: '/[house]', params: { house } }}>
                 <ArrowLeftIcon className="size-6" />
                 <span className="sr-only">{t('close')}</span>

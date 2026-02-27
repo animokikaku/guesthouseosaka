@@ -22,9 +22,7 @@ const portableTextComponents: PortableTextComponents = {
   list: {
     bullet: ({ children }) => <ul className="mt-4 space-y-2">{children}</ul>,
     number: ({ children }) => (
-      <ol className="text-foreground mt-4 list-decimal space-y-2 pl-5">
-        {children}
-      </ol>
+      <ol className="text-foreground mt-4 list-decimal space-y-2 pl-5">{children}</ol>
     )
   },
   listItem: {
@@ -54,9 +52,7 @@ export function HouseAbout({ about, title, building }: HouseAboutProps) {
       </HouseSectionHeading>
       <HouseSectionContent className="space-y-4">
         <HouseBuilding building={building} />
-        {about ? (
-          <PortableText value={about} components={portableTextComponents} />
-        ) : null}
+        {about ? <PortableText value={about} components={portableTextComponents} /> : null}
       </HouseSectionContent>
     </HouseSection>
   )

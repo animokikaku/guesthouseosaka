@@ -10,10 +10,7 @@ import {
   useFormSubmit
 } from '@/components/forms'
 import { FormCard } from '@/components/forms/form-card'
-import {
-  ContactFormFields,
-  useMoveInFormSchema
-} from '@/components/forms/schema'
+import { ContactFormFields, useMoveInFormSchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormConfig } from '@/lib/types/components'
 import { useTranslations } from 'next-intl'
@@ -22,17 +19,11 @@ interface MoveInFormProps extends ContactFormConfig {
   houseTitles: HouseTitles
 }
 
-export function MoveInForm({
-  title,
-  description,
-  fields,
-  houseTitles
-}: MoveInFormProps) {
+export function MoveInForm({ title, description, fields, houseTitles }: MoveInFormProps) {
   const t = useTranslations('forms')
   const schema = useMoveInFormSchema()
   const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
-  const { places, date, stayDuration, account, message, privacyPolicy } =
-    contactFormDefaultValues
+  const { places, date, stayDuration, account, message, privacyPolicy } = contactFormDefaultValues
 
   const form = useAppForm({
     defaultValues: {
@@ -70,12 +61,7 @@ export function MoveInForm({
   ]
 
   return (
-    <FormCard
-      title={title}
-      description={description}
-      formId="move-in-form"
-      form={form}
-    >
+    <FormCard title={title} description={description} formId="move-in-form" form={form}>
       <FieldGroupPlaces
         fields={{ places: 'places' }}
         form={form}
@@ -121,10 +107,7 @@ export function MoveInForm({
           />
         )}
       />
-      <form.AppField
-        name="privacyPolicy"
-        children={(field) => <field.PrivacyPolicyField />}
-      />
+      <form.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
     </FormCard>
   )
 }

@@ -12,11 +12,9 @@ import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 
 const THEME_CLASSES: Record<HouseIdentifier, string> = {
-  orange:
-    'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
+  orange: 'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
   apple: 'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500',
-  lemon:
-    'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
+  lemon: 'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
 }
 
 const HOUSE_THEMES: Record<HouseIdentifier, string> = {

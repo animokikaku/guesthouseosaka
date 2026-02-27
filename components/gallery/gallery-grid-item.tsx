@@ -12,11 +12,7 @@ type GalleryGridItemProps = {
   dataAttribute?: DataAttributeFn
 }
 
-export function GalleryGridItem({
-  item,
-  categoryKey,
-  dataAttribute
-}: GalleryGridItemProps) {
+export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGridItemProps) {
   const { _key, image } = item
   if (!image) return null
 

@@ -133,9 +133,7 @@ export function createLocation(
 // House Map Mock Factory
 // ============================================
 
-export function createMap(
-  overrides: Partial<NonNullable<HouseMap>> = {}
-): NonNullable<HouseMap> {
+export function createMap(overrides: Partial<NonNullable<HouseMap>> = {}): NonNullable<HouseMap> {
   const imageRef = `image-${faker.string.nanoid()}`
   return {
     coordinates: {
@@ -173,9 +171,7 @@ export function createMap(
 // House Pricing Row Mock Factory
 // ============================================
 
-export function createPricingRow(
-  overrides: Partial<HousePricingRow> = {}
-): HousePricingRow {
+export function createPricingRow(overrides: Partial<HousePricingRow> = {}): HousePricingRow {
   return {
     _key: faker.string.nanoid(),
     label: faker.commerce.productName(),
@@ -195,9 +191,7 @@ export function createPricingRow(
 // House Amenity Mock Factories
 // ============================================
 
-export function createAmenityItem(
-  overrides: Partial<HouseAmenityItem> = {}
-): HouseAmenityItem {
+export function createAmenityItem(overrides: Partial<HouseAmenityItem> = {}): HouseAmenityItem {
   return {
     _key: faker.string.nanoid(),
     label: faker.word.noun(),
@@ -249,9 +243,7 @@ export function createSanityImage(
 // Gallery Item Mock Factory (for items within a category)
 // ============================================
 
-export function createGalleryItem(
-  overrides: Partial<HouseGalleryItem> = {}
-): HouseGalleryItem {
+export function createGalleryItem(overrides: Partial<HouseGalleryItem> = {}): HouseGalleryItem {
   return {
     _key: faker.string.nanoid(),
     image: createSanityImage(),
@@ -291,12 +283,7 @@ export function createTourFormData(overrides: Record<string, unknown> = {}) {
     account: {
       name: faker.person.fullName(),
       age: String(faker.number.int({ min: 18, max: 65 })),
-      gender: faker.helpers.arrayElement([
-        'male',
-        'female',
-        'other',
-        'prefer-not-to-say'
-      ]),
+      gender: faker.helpers.arrayElement(['male', 'female', 'other', 'prefer-not-to-say']),
       nationality: faker.location.country(),
       email: faker.internet.email(),
       phone: faker.phone.number()
@@ -312,20 +299,11 @@ export function createMoveInFormData(overrides: Record<string, unknown> = {}) {
   return {
     places: [faker.helpers.arrayElement(['imazato', 'taisho', 'tsuruhashi'])],
     date: futureDate.toISOString().split('T')[0],
-    stayDuration: faker.helpers.arrayElement([
-      '1-month',
-      '3-months',
-      'long-term'
-    ]),
+    stayDuration: faker.helpers.arrayElement(['1-month', '3-months', 'long-term']),
     account: {
       name: faker.person.fullName(),
       age: String(faker.number.int({ min: 18, max: 65 })),
-      gender: faker.helpers.arrayElement([
-        'male',
-        'female',
-        'other',
-        'prefer-not-to-say'
-      ]),
+      gender: faker.helpers.arrayElement(['male', 'female', 'other', 'prefer-not-to-say']),
       nationality: faker.location.country(),
       email: faker.internet.email(),
       phone: faker.phone.number()
@@ -336,20 +314,13 @@ export function createMoveInFormData(overrides: Record<string, unknown> = {}) {
   }
 }
 
-export function createGeneralInquiryData(
-  overrides: Record<string, unknown> = {}
-) {
+export function createGeneralInquiryData(overrides: Record<string, unknown> = {}) {
   return {
     places: [faker.helpers.arrayElement(['imazato', 'taisho', 'tsuruhashi'])],
     account: {
       name: faker.person.fullName(),
       age: String(faker.number.int({ min: 18, max: 65 })),
-      gender: faker.helpers.arrayElement([
-        'male',
-        'female',
-        'other',
-        'prefer-not-to-say'
-      ]),
+      gender: faker.helpers.arrayElement(['male', 'female', 'other', 'prefer-not-to-say']),
       nationality: faker.location.country(),
       email: faker.internet.email(),
       phone: faker.phone.number()

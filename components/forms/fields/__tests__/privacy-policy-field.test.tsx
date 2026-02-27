@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import {
-  createMockFieldApi,
-  createFieldContext,
-  FieldContextWrapper
-} from './test-utils'
+import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
 
 // Mock matchMedia for Radix UI
 beforeAll(() => {
@@ -36,9 +32,7 @@ vi.mock('@/components/forms/form-context', async () => {
 
 // Mock the legal notice dialog - simplified mock since t.rich() callback isn't exercised in tests
 vi.mock('@/components/legal-notice-dialog', () => ({
-  LegalNoticeDialog: ({ children }: { children: React.ReactNode }) => (
-    <span>{children}</span>
-  )
+  LegalNoticeDialog: ({ children }: { children: React.ReactNode }) => <span>{children}</span>
 }))
 
 // Import after mocking
@@ -61,9 +55,7 @@ describe('PrivacyPolicyField', () => {
 
       expect(screen.getByRole('checkbox')).toBeInTheDocument()
       // The label uses a translation key with rich text
-      expect(
-        screen.getByText('fields.privacy_policy_agreement')
-      ).toBeInTheDocument()
+      expect(screen.getByText('fields.privacy_policy_agreement')).toBeInTheDocument()
     })
   })
 
@@ -169,9 +161,7 @@ describe('PrivacyPolicyField', () => {
       )
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
-      expect(
-        screen.getByText('You must accept the privacy policy')
-      ).toBeInTheDocument()
+      expect(screen.getByText('You must accept the privacy policy')).toBeInTheDocument()
     })
 
     it('sets aria-invalid when field is touched and invalid', () => {
@@ -187,10 +177,7 @@ describe('PrivacyPolicyField', () => {
         </FieldContextWrapper>
       )
 
-      expect(screen.getByRole('checkbox')).toHaveAttribute(
-        'aria-invalid',
-        'true'
-      )
+      expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'true')
     })
 
     it('does not set aria-invalid when field is valid', () => {
@@ -206,10 +193,7 @@ describe('PrivacyPolicyField', () => {
         </FieldContextWrapper>
       )
 
-      expect(screen.getByRole('checkbox')).toHaveAttribute(
-        'aria-invalid',
-        'false'
-      )
+      expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'false')
     })
   })
 })

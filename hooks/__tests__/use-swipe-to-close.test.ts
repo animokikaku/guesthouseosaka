@@ -12,9 +12,7 @@ function createTouchEvent(x: number, y: number): React.TouchEvent {
 describe('useSwipeToClose', () => {
   it('calls onClose for vertical swipe down exceeding threshold', () => {
     const onClose = vi.fn()
-    const { result } = renderHook(() =>
-      useSwipeToClose({ onClose, threshold: 50 })
-    )
+    const { result } = renderHook(() => useSwipeToClose({ onClose, threshold: 50 }))
 
     act(() => {
       result.current.onTouchStart(createTouchEvent(100, 100))
@@ -29,9 +27,7 @@ describe('useSwipeToClose', () => {
 
   it('calls onClose for vertical swipe up exceeding threshold', () => {
     const onClose = vi.fn()
-    const { result } = renderHook(() =>
-      useSwipeToClose({ onClose, threshold: 50 })
-    )
+    const { result } = renderHook(() => useSwipeToClose({ onClose, threshold: 50 }))
 
     act(() => {
       result.current.onTouchStart(createTouchEvent(100, 200))
@@ -46,9 +42,7 @@ describe('useSwipeToClose', () => {
 
   it('does not call onClose for horizontal swipes', () => {
     const onClose = vi.fn()
-    const { result } = renderHook(() =>
-      useSwipeToClose({ onClose, threshold: 50 })
-    )
+    const { result } = renderHook(() => useSwipeToClose({ onClose, threshold: 50 }))
 
     act(() => {
       result.current.onTouchStart(createTouchEvent(100, 100))
@@ -63,9 +57,7 @@ describe('useSwipeToClose', () => {
 
   it('does not call onClose for swipes below threshold', () => {
     const onClose = vi.fn()
-    const { result } = renderHook(() =>
-      useSwipeToClose({ onClose, threshold: 50 })
-    )
+    const { result } = renderHook(() => useSwipeToClose({ onClose, threshold: 50 }))
 
     act(() => {
       result.current.onTouchStart(createTouchEvent(100, 100))
@@ -96,9 +88,7 @@ describe('useSwipeToClose', () => {
 
   it('respects custom threshold', () => {
     const onClose = vi.fn()
-    const { result } = renderHook(() =>
-      useSwipeToClose({ onClose, threshold: 100 })
-    )
+    const { result } = renderHook(() => useSwipeToClose({ onClose, threshold: 100 }))
 
     // 80px should not trigger with 100px threshold
     act(() => {

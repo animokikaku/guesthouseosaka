@@ -3,13 +3,7 @@
 import { useFieldValidation } from '@/components/forms/hooks'
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import { Checkbox } from '@/components/ui/checkbox'
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldSet
-} from '@/components/ui/field'
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
 import { useTranslations } from 'next-intl'
 
 export function PrivacyPolicyField() {

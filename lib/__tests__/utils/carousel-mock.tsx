@@ -16,9 +16,7 @@ export type CarouselMockState = {
   currentSelectedIndex: number
 }
 
-export function createMockCarouselApi(
-  state: CarouselMockState
-): MockCarouselApi {
+export function createMockCarouselApi(state: CarouselMockState): MockCarouselApi {
   return {
     selectedScrollSnap: () => state.currentSelectedIndex,
     scrollTo: vi.fn((index: number) => {

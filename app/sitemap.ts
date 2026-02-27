@@ -10,20 +10,13 @@ type Pathname = keyof typeof routing.pathnames
 type Route =
   | '/'
   | {
-      pathname: Exclude<
-        Pathname,
-        '/[house]' | '/[house]/gallery' | '/contact/[slug]'
-      >
+      pathname: Exclude<Pathname, '/[house]' | '/[house]/gallery' | '/contact/[slug]'>
     }
   | { pathname: '/[house]'; params: { house: string } }
   | { pathname: '/[house]/gallery'; params: { house: string } }
   | { pathname: '/contact/[slug]'; params: { slug: string } }
 
-const staticRoutes: Route[] = [
-  { pathname: '/' },
-  { pathname: '/faq' },
-  { pathname: '/contact' }
-]
+const staticRoutes: Route[] = [{ pathname: '/' }, { pathname: '/faq' }, { pathname: '/contact' }]
 
 const contactTypeRoutes: Route[] = ContactTypeValues.map((slug) => ({
   pathname: '/contact/[slug]',

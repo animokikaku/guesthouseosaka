@@ -24,10 +24,7 @@ vi.mock('@/components/house/house-about', () => ({
 
 vi.mock('@/components/house/house-amenities', () => ({
   HouseAmenities: ({ amenityCategories }: { amenityCategories: unknown[] }) => (
-    <div
-      data-testid="house-amenities"
-      data-count={amenityCategories?.length ?? 0}
-    >
+    <div data-testid="house-amenities" data-count={amenityCategories?.length ?? 0}>
       HouseAmenities
     </div>
   )
@@ -62,9 +59,7 @@ vi.mock('@/components/houses-nav', () => ({
 }))
 
 vi.mock('@/components/image-block-gallery', () => ({
-  ImageBlockGallery: () => (
-    <div data-testid="image-block-gallery">ImageBlockGallery</div>
-  )
+  ImageBlockGallery: () => <div data-testid="image-block-gallery">ImageBlockGallery</div>
 }))
 
 vi.mock('@/components/page-header', () => ({
@@ -127,18 +122,12 @@ const createBaseProps = (slugOverride?: HouseSlug): Props => {
     caption: 'Welcome to Orange House',
     phone: { domestic: '06-1234-5678', international: '+81-6-1234-5678' },
     image: createMockImage('House image'),
-    galleryImages: [
-      createGalleryItem({ _key: 'g1' }),
-      createGalleryItem({ _key: 'g2' })
-    ],
+    galleryImages: [createGalleryItem({ _key: 'g1' }), createGalleryItem({ _key: 'g2' })],
     featuredImage: createSanityImage({ alt: 'Featured image' }),
     amenityCategories: [
       createAmenityCategory({
         _key: 'cat1',
-        items: [
-          createAmenityItem({ _key: 'a1' }),
-          createAmenityItem({ _key: 'a2' })
-        ]
+        items: [createAmenityItem({ _key: 'a1' }), createAmenityItem({ _key: 'a2' })]
       })
     ],
     location: createLocation(),
@@ -182,17 +171,13 @@ describe('HousePageContent', () => {
     it('renders page header with title', () => {
       render(<HousePageContent {...createBaseProps()} />)
 
-      expect(screen.getByTestId('page-heading')).toHaveTextContent(
-        'Orange House'
-      )
+      expect(screen.getByTestId('page-heading')).toHaveTextContent('Orange House')
     })
 
     it('renders page header with description', () => {
       render(<HousePageContent {...createBaseProps()} />)
 
-      expect(screen.getByTestId('page-description')).toHaveTextContent(
-        'A beautiful orange house'
-      )
+      expect(screen.getByTestId('page-description')).toHaveTextContent('A beautiful orange house')
     })
 
     it('renders article with correct id', () => {
@@ -205,9 +190,7 @@ describe('HousePageContent', () => {
     it('renders article with aria-labelledby', () => {
       const { container } = render(<HousePageContent {...createBaseProps()} />)
 
-      const article = container.querySelector(
-        'article[aria-labelledby="orange-title"]'
-      )
+      const article = container.querySelector('article[aria-labelledby="orange-title"]')
       expect(article).toBeInTheDocument()
     })
   })
@@ -221,18 +204,14 @@ describe('HousePageContent', () => {
     })
 
     it('applies red theme color for apple house', () => {
-      const { container } = render(
-        <HousePageContent {...createBaseProps('apple')} />
-      )
+      const { container } = render(<HousePageContent {...createBaseProps('apple')} />)
 
       const colorBar = container.querySelector('[aria-hidden="true"]')
       expect(colorBar).toHaveClass('bg-red-600')
     })
 
     it('applies yellow theme color for lemon house', () => {
-      const { container } = render(
-        <HousePageContent {...createBaseProps('lemon')} />
-      )
+      const { container } = render(<HousePageContent {...createBaseProps('lemon')} />)
 
       const colorBar = container.querySelector('[aria-hidden="true"]')
       expect(colorBar).toHaveClass('bg-yellow-400')

@@ -1,8 +1,5 @@
 import { ComponentIcon } from '@sanity/icons'
-import {
-  orderRankField,
-  orderRankOrdering
-} from '@sanity/orderable-document-list'
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { defineField, defineType } from 'sanity'
 import { allowedIcons } from '../../lib/allowed-icons'
 import { IconPreview } from '../../lib/icon-preview'

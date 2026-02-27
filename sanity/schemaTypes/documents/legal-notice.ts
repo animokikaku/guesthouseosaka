@@ -39,8 +39,8 @@ export const legalNotice = defineType({
     },
     prepare({ title, lastUpdated }) {
       const displayTitle =
-        title?.find((t: { _key: string; value: string }) => t._key === 'en')
-          ?.value || 'Legal Notice'
+        title?.find((t: { _key: string; value: string }) => t._key === 'en')?.value ||
+        'Legal Notice'
       return {
         title: displayTitle,
         subtitle: lastUpdated ? `Last updated: ${lastUpdated}` : 'No date set'

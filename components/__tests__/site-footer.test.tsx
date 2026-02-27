@@ -11,10 +11,7 @@ type OptimisticReducer = (
 let capturedReducer: OptimisticReducer | null = null
 
 vi.mock('next-sanity/hooks', () => ({
-  useOptimistic: <T, A>(
-    initialValue: T,
-    reducer: (current: T, action: A) => T
-  ) => {
+  useOptimistic: <T, A>(initialValue: T, reducer: (current: T, action: A) => T) => {
     capturedReducer = reducer as unknown as OptimisticReducer
     return initialValue
   }
@@ -99,16 +96,10 @@ describe('SiteFooter', () => {
       render(<SiteFooter settings={createSettings()} />)
 
       const facebookLink = screen.getByRole('link', { name: 'Facebook' })
-      expect(facebookLink).toHaveAttribute(
-        'href',
-        'https://facebook.com/example'
-      )
+      expect(facebookLink).toHaveAttribute('href', 'https://facebook.com/example')
 
       const instagramLink = screen.getByRole('link', { name: 'Instagram' })
-      expect(instagramLink).toHaveAttribute(
-        'href',
-        'https://instagram.com/example'
-      )
+      expect(instagramLink).toHaveAttribute('href', 'https://instagram.com/example')
     })
 
     it('renders social links with data-sanity attribute for visual editing', () => {
@@ -173,9 +164,7 @@ describe('SiteFooter', () => {
       render(<SiteFooter settings={createSettings()} />)
 
       expect(screen.getByRole('link', { name: 'Facebook' })).toBeInTheDocument()
-      expect(
-        screen.getByRole('link', { name: 'Instagram' })
-      ).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Instagram' })).toBeInTheDocument()
     })
   })
 

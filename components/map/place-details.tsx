@@ -19,8 +19,7 @@ export const PlaceDetails = memo(function PlaceDetailsComponent({
   className
 }: PlaceDetailsProps) {
   const { resolvedTheme } = useTheme()
-  const colorScheme =
-    resolvedTheme === 'dark' ? ColorScheme.DARK : ColorScheme.LIGHT
+  const colorScheme = resolvedTheme === 'dark' ? ColorScheme.DARK : ColorScheme.LIGHT
 
   useMapsLibrary('places')
 
@@ -51,12 +50,7 @@ function PlaceDetailsCompact({
     <div className="overflow-hidden">
       <div className="relative w-full overflow-hidden">
         <Image
-          src={urlFor(placeImage)
-            .width(600)
-            .height(400)
-            .dpr(2)
-            .fit('crop')
-            .url()}
+          src={urlFor(placeImage).width(600).height(400).dpr(2).fit('crop').url()}
           alt={placeImage.alt ?? 'Place photo'}
           width={600}
           height={400}
@@ -67,9 +61,7 @@ function PlaceDetailsCompact({
         />
       </div>
       <gmp-place-details-compact style={{ colorScheme }} className={className}>
-        <gmp-place-details-place-request
-          place={id}
-        ></gmp-place-details-place-request>
+        <gmp-place-details-place-request place={id}></gmp-place-details-place-request>
         <gmp-place-content-config>
           <gmp-place-address></gmp-place-address>
           <gmp-place-rating></gmp-place-rating>

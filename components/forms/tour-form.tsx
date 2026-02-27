@@ -18,16 +18,10 @@ interface TourFormProps extends ContactFormConfig {
   houseTitles: HouseTitles
 }
 
-export function TourForm({
-  title,
-  description,
-  fields,
-  houseTitles
-}: TourFormProps) {
+export function TourForm({ title, description, fields, houseTitles }: TourFormProps) {
   const schema = useTourFormSchema()
   const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
-  const { places, account, message, date, hour, privacyPolicy } =
-    contactFormDefaultValues
+  const { places, account, message, date, hour, privacyPolicy } = contactFormDefaultValues
 
   const form = useAppForm({
     defaultValues: { places, account, message, date, hour, privacyPolicy },
@@ -39,12 +33,7 @@ export function TourForm({
   })
 
   return (
-    <FormCard
-      title={title}
-      description={description}
-      formId="tour-form"
-      form={form}
-    >
+    <FormCard title={title} description={description} formId="tour-form" form={form}>
       <FieldGroupPlaces
         fields={{ places: 'places' }}
         form={form}
@@ -90,10 +79,7 @@ export function TourForm({
           />
         )}
       />
-      <form.AppField
-        name="privacyPolicy"
-        children={(field) => <field.PrivacyPolicyField />}
-      />
+      <form.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
     </FormCard>
   )
 }

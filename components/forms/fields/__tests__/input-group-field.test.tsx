@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import {
-  createMockFieldApi,
-  createFieldContext,
-  FieldContextWrapper
-} from './test-utils'
+import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
 
 // Create a test field context
 const testFieldContext = createFieldContext<string>()
@@ -264,10 +260,7 @@ describe('InputGroupField', () => {
       )
 
       const input = screen.getByRole('textbox')
-      expect(input).toHaveAttribute(
-        'id',
-        'form-tanstack-input-group-monthlyBudget'
-      )
+      expect(input).toHaveAttribute('id', 'form-tanstack-input-group-monthlyBudget')
     })
 
     it('forwards additional props to input', () => {

@@ -3,7 +3,7 @@
   "singleQuote": true,
   "trailingComma": "none",
   "semi": false,
-  "printWidth": 80,
+  "printWidth": 100,
   "sortTailwindcss": {},
   "ignorePatterns": [
     "components/ui/**",

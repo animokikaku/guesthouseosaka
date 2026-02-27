@@ -53,18 +53,12 @@ describe('FormCard', () => {
       const form = createMockForm()
 
       render(
-        <FormCard
-          formId="test-form"
-          form={form}
-          description="Fill out this form to contact us"
-        >
+        <FormCard formId="test-form" form={form} description="Fill out this form to contact us">
           <input name="test" />
         </FormCard>
       )
 
-      expect(
-        screen.getByText('Fill out this form to contact us')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Fill out this form to contact us')).toBeInTheDocument()
     })
 
     it('renders both title and description', () => {
@@ -160,9 +154,7 @@ describe('FormCard', () => {
         </FormCard>
       )
 
-      const formElement = document.getElementById(
-        'test-form'
-      ) as HTMLFormElement
+      const formElement = document.getElementById('test-form') as HTMLFormElement
 
       const submitEvent = new Event('submit', {
         bubbles: true,
@@ -184,9 +176,7 @@ describe('FormCard', () => {
         </FormCard>
       )
 
-      const formElement = document.getElementById(
-        'test-form'
-      ) as HTMLFormElement
+      const formElement = document.getElementById('test-form') as HTMLFormElement
       fireEvent.submit(formElement)
 
       expect(form.handleSubmit).toHaveBeenCalledTimes(1)
@@ -210,12 +200,7 @@ describe('FormCard', () => {
       const form = createMockForm()
 
       render(
-        <FormCard
-          formId="test-form"
-          form={form}
-          title="Contact"
-          description={null}
-        >
+        <FormCard formId="test-form" form={form} title="Contact" description={null}>
           <input name="test" />
         </FormCard>
       )

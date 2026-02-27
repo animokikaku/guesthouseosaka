@@ -9,9 +9,7 @@ import { createDataAttribute, stegaClean } from 'next-sanity'
 import { useOptimistic } from 'next-sanity/hooks'
 import type { SanityDocument } from 'sanity'
 
-type PageAction = NonNullable<
-  NonNullable<FaqPageQueryResult>['actions']
->[number]
+type PageAction = NonNullable<NonNullable<FaqPageQueryResult>['actions']>[number]
 
 interface DynamicPageActionsProps {
   documentId: string
@@ -22,18 +20,18 @@ interface DynamicPageActionsProps {
 export function DynamicPageActions(props: DynamicPageActionsProps) {
   const currentPathname = usePathname()
 
-  const actions = useOptimistic<
-    PageAction[] | null,
-    SanityDocument & { actions?: PageAction[] }
-  >(props.actions, (currentActions, action) => {
-    if (action.id === props.documentId && action.document.actions) {
-      // Optimistic document only has _ref values, not resolved references
-      return action.document.actions.map(
-        (link) => currentActions?.find((l) => l._key === link._key) ?? link
-      )
+  const actions = useOptimistic<PageAction[] | null, SanityDocument & { actions?: PageAction[] }>(
+    props.actions,
+    (currentActions, action) => {
+      if (action.id === props.documentId && action.document.actions) {
+        // Optimistic document only has _ref values, not resolved references
+        return action.document.actions.map(
+          (link) => currentActions?.find((l) => l._key === link._key) ?? link
+        )
+      }
+      return currentActions
     }
-    return currentActions
-  })
+  )
 
   if (!actions || actions.length === 0) return null
 
@@ -49,8 +47,7 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
         const variant = index === 0 ? 'default' : 'ghost'
 
         // Check if href is external or internal
-        const isExternal =
-          href.startsWith('http://') || href.startsWith('https://')
+        const isExternal = href.startsWith('http://') || href.startsWith('https://')
 
         // Parse href for internal links with hash
         const hasHash = href.includes('#')
@@ -82,13 +79,7 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
             size="sm"
             data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
           >
-            <Link
-              href={
-                hasHash
-                  ? { pathname: pathname as '/', hash: `#${hash}` }
-                  : (href as '/')
-              }
-            >
+            <Link href={hasHash ? { pathname: pathname as '/', hash: `#${hash}` } : (href as '/')}>
               <Icon name={icon} aria-hidden="true" />
               {stegaClean(label)}
             </Link>

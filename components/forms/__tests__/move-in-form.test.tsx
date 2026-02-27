@@ -121,9 +121,7 @@ describe('MoveInForm', () => {
     it('submit button references the form id', () => {
       const { container } = render(<MoveInForm {...baseProps} />)
 
-      const submitButton = container.querySelector(
-        'button[form="move-in-form"]'
-      )
+      const submitButton = container.querySelector('button[form="move-in-form"]')
       expect(submitButton).toBeInTheDocument()
     })
   })

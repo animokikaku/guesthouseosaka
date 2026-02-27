@@ -55,9 +55,7 @@ function FloorsAndRoomsContent({ houses }: { houses: Houses }) {
               floorsTag: (chunks) => (
                 <span data-sanity={dataAttr('building.floors')}>{chunks}</span>
               ),
-              roomsTag: (chunks) => (
-                <span data-sanity={dataAttr('building.rooms')}>{chunks}</span>
-              )
+              roomsTag: (chunks) => <span data-sanity={dataAttr('building.rooms')}>{chunks}</span>
             })}
           </li>
         )
@@ -77,24 +75,17 @@ export function FAQAccordion({
         const component = componentKey ? stegaClean(componentKey) : null
         return (
           <AccordionItem key={_id} value={_id}>
-            <AccordionTrigger className="text-md sm:text-lg">
-              {question}
-            </AccordionTrigger>
+            <AccordionTrigger className="text-md sm:text-lg">{question}</AccordionTrigger>
             <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
               {/* Component-based content */}
               {component === 'floors-and-rooms' && (
                 <FloorsAndRoomsContent houses={housesBuilding} />
               )}
               {component === 'extra-costs' && (
-                <FAQExtraCosts
-                  pricingCategories={pricingCategories}
-                  houses={housesBuilding}
-                />
+                <FAQExtraCosts pricingCategories={pricingCategories} houses={housesBuilding} />
               )}
               {/* Regular text answer */}
-              {!component && answer && (
-                <PortableText value={answer} components={components} />
-              )}
+              {!component && answer && <PortableText value={answer} components={components} />}
             </AccordionContent>
           </AccordionItem>
         )

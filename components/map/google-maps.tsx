@@ -13,10 +13,7 @@ import { useTheme } from 'next-themes'
 
 import React from 'react'
 
-type GoogleMapProps = Omit<
-  MapProps,
-  'colorScheme' | 'disableDefaultUI' | 'mapId'
->
+type GoogleMapProps = Omit<MapProps, 'colorScheme' | 'disableDefaultUI' | 'mapId'>
 
 export function GoogleMaps({
   defaultCenter = DEFAULT_CENTER,

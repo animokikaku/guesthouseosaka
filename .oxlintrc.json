@@ -1,14 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "react",
-    "typescript",
-    "import",
-    "jsx-a11y",
-    "nextjs",
-    "unicorn",
-    "oxc"
-  ],
+  "plugins": ["react", "typescript", "import", "jsx-a11y", "nextjs", "unicorn", "oxc"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
@@ -29,12 +21,7 @@
           },
           {
             "name": "next/navigation",
-            "importNames": [
-              "redirect",
-              "permanentRedirect",
-              "useRouter",
-              "usePathname"
-            ],
+            "importNames": ["redirect", "permanentRedirect", "useRouter", "usePathname"],
             "message": "Please import from `@/i18n/navigation` instead."
           }
         ]

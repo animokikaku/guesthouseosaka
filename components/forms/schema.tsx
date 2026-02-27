@@ -6,10 +6,7 @@ import { z } from 'zod'
 function useContactFormSchema() {
   const t = useTranslations('forms.validation')
   return z.object({
-    places: z
-      .array(HouseIdentifierSchema)
-      .min(1, t('places_min'))
-      .max(3, t('places_max')),
+    places: z.array(HouseIdentifierSchema).min(1, t('places_min')).max(3, t('places_max')),
     account: z.object({
       name: z.string().min(2, t('name_min')),
       age: z.string().refine(
@@ -22,10 +19,7 @@ function useContactFormSchema() {
       gender: z.enum(['male', 'female'], {
         error: t('gender_required')
       }),
-      nationality: z
-        .string()
-        .min(1, t('nationality_required'))
-        .max(100, t('nationality_max')),
+      nationality: z.string().min(1, t('nationality_required')).max(100, t('nationality_max')),
       email: z.email(t('email')),
       phone: z.string().refine((v) => (v ? isMobilePhone(v, 'any') : true), {
         message: t('phone')
@@ -109,6 +103,4 @@ export function useGeneralInquirySchema() {
     })
 }
 
-export type GeneralInquiryFields = z.infer<
-  ReturnType<typeof useGeneralInquirySchema>
->
+export type GeneralInquiryFields = z.infer<ReturnType<typeof useGeneralInquirySchema>>

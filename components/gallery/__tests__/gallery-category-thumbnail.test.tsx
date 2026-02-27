@@ -58,9 +58,7 @@ vi.mock('next/image', () => ({
   }
 }))
 
-function createCategory(
-  overrides: Partial<GalleryCategory> = {}
-): GalleryCategory {
+function createCategory(overrides: Partial<GalleryCategory> = {}): GalleryCategory {
   return {
     _key: 'cat1',
     _id: 'category-1',
@@ -186,10 +184,7 @@ describe('CategoryThumbnail', () => {
 
       const image = screen.getByTestId('thumbnail-image')
       expect(image).toHaveAttribute('data-placeholder', 'blur')
-      expect(image).toHaveAttribute(
-        'data-blur-url',
-        'data:image/jpeg;base64,preview123'
-      )
+      expect(image).toHaveAttribute('data-blur-url', 'data:image/jpeg;base64,preview123')
     })
 
     it('does not use blur placeholder when preview is null', () => {
@@ -218,9 +213,7 @@ describe('CategoryThumbnail', () => {
       const mockElement = {
         scrollIntoView: vi.fn()
       }
-      vi.spyOn(document, 'getElementById').mockReturnValue(
-        mockElement as unknown as HTMLElement
-      )
+      vi.spyOn(document, 'getElementById').mockReturnValue(mockElement as unknown as HTMLElement)
 
       render(<CategoryThumbnail category={category} />)
 

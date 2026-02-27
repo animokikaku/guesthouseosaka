@@ -18,10 +18,7 @@ vi.mock('@/components/forms/form-context', async () => {
 
 import { InputField } from '../input-field'
 
-function renderWithContext(
-  ui: React.ReactElement,
-  fieldApi: MockFieldApi<string>
-) {
+function renderWithContext(ui: React.ReactElement, fieldApi: MockFieldApi<string>) {
   return render(
     <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
       {ui}
@@ -72,10 +69,7 @@ describe('InputField', () => {
       expect(input).toHaveAttribute('id', 'form-tanstack-input-testInput')
 
       const label = screen.getByText('Email')
-      expect(label.closest('label')).toHaveAttribute(
-        'for',
-        'form-tanstack-input-testInput'
-      )
+      expect(label.closest('label')).toHaveAttribute('for', 'form-tanstack-input-testInput')
     })
   })
 
@@ -167,29 +161,17 @@ describe('InputField', () => {
     it('passes through type prop', () => {
       const fieldApi = createMockFieldApi('testInput', '')
 
-      renderWithContext(
-        <InputField label="Password" type="password" />,
-        fieldApi
-      )
+      renderWithContext(<InputField label="Password" type="password" />, fieldApi)
 
-      expect(screen.getByLabelText('Password')).toHaveAttribute(
-        'type',
-        'password'
-      )
+      expect(screen.getByLabelText('Password')).toHaveAttribute('type', 'password')
     })
 
     it('passes through placeholder prop', () => {
       const fieldApi = createMockFieldApi('testInput', '')
 
-      renderWithContext(
-        <InputField label="Email" placeholder="Enter email" />,
-        fieldApi
-      )
+      renderWithContext(<InputField label="Email" placeholder="Enter email" />, fieldApi)
 
-      expect(screen.getByRole('textbox')).toHaveAttribute(
-        'placeholder',
-        'Enter email'
-      )
+      expect(screen.getByRole('textbox')).toHaveAttribute('placeholder', 'Enter email')
     })
   })
 })

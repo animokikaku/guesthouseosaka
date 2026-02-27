@@ -47,10 +47,7 @@ export function DraftModeIndicator() {
       >
         {/* Live indicator */}
         <ButtonGroupText
-          className={cn(
-            'border-none bg-transparent shadow-none',
-            'py-1.5 pr-0.5 pl-3'
-          )}
+          className={cn('border-none bg-transparent shadow-none', 'py-1.5 pr-0.5 pl-3')}
         >
           <span className="relative mr-1 flex size-2">
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-rose-400 opacity-75" />
@@ -74,11 +71,7 @@ export function DraftModeIndicator() {
             'focus-visible:ring-rose-500/50'
           )}
         >
-          {isPending ? (
-            <LoaderCircle className="size-4 animate-spin" />
-          ) : (
-            <X className="size-4" />
-          )}
+          {isPending ? <LoaderCircle className="size-4 animate-spin" /> : <X className="size-4" />}
         </Button>
       </ButtonGroup>
     </div>

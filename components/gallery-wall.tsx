@@ -46,13 +46,7 @@ const SLOTS = [
   }
 ] as const
 
-export function GalleryWall({
-  images,
-  className
-}: {
-  images: GalleryImage[]
-  className?: string
-}) {
+export function GalleryWall({ images, className }: { images: GalleryImage[]; className?: string }) {
   return (
     <div className={cn('w-full', className)}>
       <div className="relative aspect-634/452 w-full">

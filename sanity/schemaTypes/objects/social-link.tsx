@@ -18,8 +18,7 @@ export const socialLink = defineType({
       name: 'label',
       title: 'Label',
       type: 'string',
-      description:
-        'Platform name for accessibility (e.g., Facebook, Instagram)',
+      description: 'Platform name for accessibility (e.g., Facebook, Instagram)',
       validation: (rule) => rule.required()
     }),
     defineField({

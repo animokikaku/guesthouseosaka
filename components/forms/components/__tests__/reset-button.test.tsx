@@ -26,11 +26,7 @@ function FormContextWrapper({
   children: React.ReactNode
   formApi: MockFormApi
 }) {
-  return (
-    <testFormContext.Provider value={formApi}>
-      {children}
-    </testFormContext.Provider>
-  )
+  return <testFormContext.Provider value={formApi}>{children}</testFormContext.Provider>
 }
 
 function createMockFormApi(): MockFormApi {

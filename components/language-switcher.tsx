@@ -21,11 +21,7 @@ const langs: Record<Locale, string> = {
   fr: 'Français'
 }
 
-export function LanguageSwitcher({
-  size = 'default'
-}: {
-  size?: 'icon-sm' | 'default'
-}) {
+export function LanguageSwitcher({ size = 'default' }: { size?: 'icon-sm' | 'default' }) {
   const { locales } = routing
   const locale = useLocale()
 
@@ -91,21 +87,13 @@ function LanguageSwitcherSelect({
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger disabled={disabled} asChild>
-        <Button
-          aria-label={t('aria_label')}
-          size={size}
-          className={className}
-          variant={variant}
-        >
+        <Button aria-label={t('aria_label')} size={size} className={className} variant={variant}>
           {size === 'default' ? langs[value] : null}
           <Languages />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align}>
-        <DropdownMenuRadioGroup
-          onValueChange={(val) => onChange?.(val as Locale)}
-          value={value}
-        >
+        <DropdownMenuRadioGroup onValueChange={(val) => onChange?.(val as Locale)} value={value}>
           {languages.map(({ code, label }) => (
             <DropdownMenuRadioItem key={code} lang={code} value={code}>
               {label}

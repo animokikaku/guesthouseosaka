@@ -11,11 +11,7 @@ type StickyCategoryNavProps = {
   isVisible: boolean
 }
 
-export function StickyCategoryNav({
-  categories,
-  activeId,
-  isVisible
-}: StickyCategoryNavProps) {
+export function StickyCategoryNav({ categories, activeId, isVisible }: StickyCategoryNavProps) {
   const activeButtonRef = React.useRef<HTMLButtonElement>(null)
 
   // Auto-scroll to keep active category visible
@@ -58,9 +54,7 @@ export function StickyCategoryNav({
                 onClick={() => scrollToCategory(cat._id)}
                 className={cn(
                   'shrink-0 px-3 py-1.5 text-sm font-medium transition-colors',
-                  isActive
-                    ? 'text-primary'
-                    : 'text-muted-foreground hover:text-primary'
+                  isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary'
                 )}
               >
                 {cat.label}

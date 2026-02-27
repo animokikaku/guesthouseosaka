@@ -6,11 +6,7 @@ import { HousePricing } from '@/components/house/house-pricing'
 import { MobileHeroImage } from '@/components/house/mobile-hero-image'
 import { HousesNav } from '@/components/houses-nav'
 import { ImageBlockGallery } from '@/components/image-block-gallery'
-import {
-  PageHeader,
-  PageHeaderDescription,
-  PageHeaderHeading
-} from '@/components/page-header'
+import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
 import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
 import { featuredToGalleryImage, type GalleryImage } from '@/lib/gallery'
@@ -80,11 +76,7 @@ export function HousePageContent({
               featuredImage={featuredImage}
             />
             <HouseProvider id={_id} type={_type} slug={slug}>
-              <article
-                id={slug}
-                aria-labelledby={`${slug}-title`}
-                className="space-y-12 pt-8"
-              >
+              <article id={slug} aria-labelledby={`${slug}-title`} className="space-y-12 pt-8">
                 <HouseAbout
                   title={title}
                   about={toAboutContent(about)}
@@ -94,10 +86,7 @@ export function HousePageContent({
                   amenityCategories={toAmenityCategories(amenityCategories)}
                   featuredAmenities={toFeaturedAmenities(featuredAmenities)}
                 />
-                <HouseLocation
-                  location={toLocationData(location)}
-                  map={toMapData(map)}
-                />
+                <HouseLocation location={toLocationData(location)} map={toMapData(map)} />
                 <HousePricing pricing={toPricingRows(pricing)} />
               </article>
             </HouseProvider>

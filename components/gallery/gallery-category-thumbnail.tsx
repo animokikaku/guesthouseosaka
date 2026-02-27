@@ -9,10 +9,7 @@ type CategoryThumbnailProps = {
   tabIndex?: number
 }
 
-export function CategoryThumbnail({
-  category,
-  tabIndex = 0
-}: CategoryThumbnailProps) {
+export function CategoryThumbnail({ category, tabIndex = 0 }: CategoryThumbnailProps) {
   const thumbnail = category.thumbnail
   if (category.items.length === 0 || !thumbnail) return null
 

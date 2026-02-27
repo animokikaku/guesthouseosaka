@@ -26,9 +26,7 @@ export async function generateStaticParams() {
     return []
   }
 
-  return routing.locales.flatMap((locale) =>
-    houses.map(({ slug }) => ({ locale, house: slug }))
-  )
+  return routing.locales.flatMap((locale) => houses.map(({ slug }) => ({ locale, house: slug })))
 }
 
 export async function generateMetadata(
@@ -59,11 +57,7 @@ export async function generateMetadata(
   return { title, description, openGraph, twitter }
 }
 
-export default function HouseLayout({
-  children,
-  modal,
-  params
-}: LayoutProps<'/[locale]/[house]'>) {
+export default function HouseLayout({ children, modal, params }: LayoutProps<'/[locale]/[house]'>) {
   const { locale, house } = use(params)
 
   if (!hasHouse(house)) {

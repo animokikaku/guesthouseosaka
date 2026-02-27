@@ -6,9 +6,7 @@ import { urlFor } from '@/sanity/lib/image'
 // Input Types (from Sanity query results)
 // ============================================
 
-type GalleryWallImages = NonNullable<
-  NonNullable<HomePageQueryResult>['page']
->['galleryWall']
+type GalleryWallImages = NonNullable<NonNullable<HomePageQueryResult>['page']>['galleryWall']
 
 // ============================================
 // Gallery Layout Configuration
@@ -45,12 +43,7 @@ export function toGalleryImages(images: GalleryWallImages): GalleryImage[] {
 
     return {
       _key: img._key,
-      src: urlFor(img)
-        .width(layout.width)
-        .height(layout.height)
-        .dpr(2)
-        .fit('crop')
-        .url(),
+      src: urlFor(img).width(layout.width).height(layout.height).dpr(2).fit('crop').url(),
       alt: img.alt,
       blurDataURL: img.preview,
       width: layout.width,

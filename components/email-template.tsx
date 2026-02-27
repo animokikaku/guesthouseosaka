@@ -33,10 +33,7 @@ const formatPlaces = (places: HouseIdentifier[]) => {
 // --- Tour Request Email ---
 
 interface TourRequestEmailProps {
-  data: Pick<
-    ContactFormFields,
-    'places' | 'date' | 'hour' | 'account' | 'message'
-  >
+  data: Pick<ContactFormFields, 'places' | 'date' | 'hour' | 'account' | 'message'>
 }
 
 export function TourRequestEmail({ data }: TourRequestEmailProps) {
@@ -68,10 +65,7 @@ export function TourRequestEmail({ data }: TourRequestEmailProps) {
 // --- Move-in Request Email ---
 
 interface MoveInRequestEmailProps {
-  data: Pick<
-    ContactFormFields,
-    'places' | 'date' | 'stayDuration' | 'account' | 'message'
-  >
+  data: Pick<ContactFormFields, 'places' | 'date' | 'stayDuration' | 'account' | 'message'>
 }
 
 export function MoveInRequestEmail({ data }: MoveInRequestEmailProps) {
@@ -140,11 +134,7 @@ export function GeneralInquiryEmail({ data }: GeneralInquiryEmailProps) {
 
 // --- Shared Components ---
 
-function AccountDetails({
-  account
-}: {
-  account: ContactFormFields['account']
-}) {
+function AccountDetails({ account }: { account: ContactFormFields['account'] }) {
   return (
     <>
       <Text style={text}>

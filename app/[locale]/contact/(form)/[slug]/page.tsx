@@ -6,11 +6,7 @@ import { routing } from '@/i18n/routing'
 import { toContactFormConfig } from '@/lib/transforms'
 import { ContactType, ContactTypeSchema } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
-import {
-  contactTypeQuery,
-  contactTypeSlugsQuery,
-  housesTitlesQuery
-} from '@/sanity/lib/queries'
+import { contactTypeQuery, contactTypeSlugsQuery, housesTitlesQuery } from '@/sanity/lib/queries'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -30,14 +26,10 @@ export async function generateStaticParams() {
     return []
   }
 
-  return routing.locales.flatMap((locale) =>
-    contactTypes.map(({ slug }) => ({ locale, slug }))
-  )
+  return routing.locales.flatMap((locale) => contactTypes.map(({ slug }) => ({ locale, slug })))
 }
 
-export default async function ContactTypePage({
-  params
-}: PageProps<'/[locale]/contact/[slug]'>) {
+export default async function ContactTypePage({ params }: PageProps<'/[locale]/contact/[slug]'>) {
   const { locale, slug } = await params
   setRequestLocale(locale as Locale)
 

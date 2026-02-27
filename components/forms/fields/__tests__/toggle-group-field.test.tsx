@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import {
-  createMockFieldApi,
-  createFieldContext,
-  FieldContextWrapper
-} from './test-utils'
+import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
 
 // Mock matchMedia for Radix UI
 beforeAll(() => {
@@ -80,10 +76,7 @@ describe('ToggleGroupField', () => {
 
       render(
         <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField
-            options={defaultOptions}
-            description="Select one or more options"
-          />
+          <ToggleGroupField options={defaultOptions} description="Select one or more options" />
         </FieldContextWrapper>
       )
 
@@ -100,9 +93,7 @@ describe('ToggleGroupField', () => {
       )
 
       // No description text should be present
-      expect(
-        screen.queryByText('Select one or more options')
-      ).not.toBeInTheDocument()
+      expect(screen.queryByText('Select one or more options')).not.toBeInTheDocument()
     })
   })
 
@@ -123,13 +114,9 @@ describe('ToggleGroupField', () => {
     })
 
     it('renders with selected options', () => {
-      const fieldApi = createMockFieldApi(
-        'toggleField',
-        ['option1', 'option3'],
-        {
-          value: ['option1', 'option3']
-        }
-      )
+      const fieldApi = createMockFieldApi('toggleField', ['option1', 'option3'], {
+        value: ['option1', 'option3']
+      })
 
       render(
         <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
@@ -207,9 +194,7 @@ describe('ToggleGroupField', () => {
 
       // Find the toggle group container by its data-slot attribute
       // There are multiple groups, so we need to be specific
-      const toggleGroup = document.querySelector(
-        '[data-slot="checkbox-group"]'
-      )!
+      const toggleGroup = document.querySelector('[data-slot="checkbox-group"]')!
       fireEvent.blur(toggleGroup)
 
       expect(fieldApi.handleBlur).toHaveBeenCalled()
@@ -247,9 +232,7 @@ describe('ToggleGroupField', () => {
       )
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
-      expect(
-        screen.getByText('Please select at least one option')
-      ).toBeInTheDocument()
+      expect(screen.getByText('Please select at least one option')).toBeInTheDocument()
     })
 
     it('sets aria-invalid on toggle items when field is invalid', () => {

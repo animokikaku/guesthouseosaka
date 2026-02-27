@@ -7,18 +7,13 @@ test.describe('Contact Page', () => {
   // components/forms/__tests__/move-in-form.test.tsx
 
   test.describe('Contact Types List', () => {
-    test('navigates to tour form when clicking tour option', async ({
-      page
-    }) => {
+    test('navigates to tour form when clicking tour option', async ({ page }) => {
       await page.goto('/en/contact')
 
       // Wait for link to be visible and click
       const tourLink = page.locator('a[href*="/contact/tour"]')
       await expect(tourLink).toBeVisible()
-      await Promise.all([
-        page.waitForURL(/\/en\/contact\/tour/),
-        tourLink.click()
-      ])
+      await Promise.all([page.waitForURL(/\/en\/contact\/tour/), tourLink.click()])
     })
   })
 
@@ -31,9 +26,7 @@ test.describe('FAQ Page', () => {
       await page.goto('/en/faq')
 
       // Find and click first accordion trigger
-      const firstTrigger = page
-        .locator('[data-slot="accordion-trigger"]')
-        .first()
+      const firstTrigger = page.locator('[data-slot="accordion-trigger"]').first()
       await expect(firstTrigger).toBeVisible()
 
       // Check initial state (should be collapsed)
@@ -46,9 +39,7 @@ test.describe('FAQ Page', () => {
       await expect(firstTrigger).toHaveAttribute('data-state', 'open')
 
       // Content should be visible
-      const firstContent = page
-        .locator('[data-slot="accordion-content"]')
-        .first()
+      const firstContent = page.locator('[data-slot="accordion-content"]').first()
       await expect(firstContent).toBeVisible()
     })
 

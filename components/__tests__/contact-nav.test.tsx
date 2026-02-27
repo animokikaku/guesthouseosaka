@@ -83,20 +83,17 @@ describe('ContactNav', () => {
         'href',
         '/contact/move-in#tabs'
       )
-      expect(
-        screen.getByRole('link', { name: 'Other Inquiries' })
-      ).toHaveAttribute('href', '/contact/other#tabs')
+      expect(screen.getByRole('link', { name: 'Other Inquiries' })).toHaveAttribute(
+        'href',
+        '/contact/other#tabs'
+      )
     })
 
     it('renders single item correctly', () => {
-      const items: ContactNavItem[] = [
-        { id: 'single-1', slug: 'tour', title: 'Single Item' }
-      ]
+      const items: ContactNavItem[] = [{ id: 'single-1', slug: 'tour', title: 'Single Item' }]
       render(<ContactNav items={items} />)
 
-      expect(
-        screen.getByRole('link', { name: 'Single Item' })
-      ).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Single Item' })).toBeInTheDocument()
     })
   })
 
@@ -125,8 +122,7 @@ describe('ContactNav', () => {
       }))
 
       // Re-import the component after mocking
-      const { ContactNav: ContactNavWithTourActive } =
-        await import('../contact-nav')
+      const { ContactNav: ContactNavWithTourActive } = await import('../contact-nav')
 
       const items: ContactNavItem[] = [
         { id: 'tour-1', slug: 'tour', title: 'Book a Tour' },
@@ -146,9 +142,7 @@ describe('ContactNav', () => {
   describe('className prop', () => {
     it('applies custom className to the container', () => {
       const items = createMockItems(1)
-      const { container } = render(
-        <ContactNav items={items} className="custom-nav-class" />
-      )
+      const { container } = render(<ContactNav items={items} className="custom-nav-class" />)
 
       // Find the inner flex container that receives the className
       const flexContainer = container.querySelector('.custom-nav-class')

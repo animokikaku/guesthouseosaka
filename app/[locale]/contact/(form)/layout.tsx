@@ -5,10 +5,7 @@ import { toContactNavItems } from '@/lib/transforms/nav'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactPageQuery, legalNoticeQuery } from '@/sanity/lib/queries'
 
-export default async function Layout({
-  children,
-  params
-}: LayoutProps<'/[locale]/contact'>) {
+export default async function Layout({ children, params }: LayoutProps<'/[locale]/contact'>) {
   const { locale } = await params
 
   const [{ data: legalNotice }, { data: contactPage }] = await Promise.all([

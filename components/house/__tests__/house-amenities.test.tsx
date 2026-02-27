@@ -2,10 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { HouseAmenities } from '../house-amenities'
 import { HouseProvider } from '../house-context'
-import {
-  createAmenityCategory,
-  createAmenityItem
-} from '@/lib/transforms/__tests__/mocks'
+import { createAmenityCategory, createAmenityItem } from '@/lib/transforms/__tests__/mocks'
 import type { AmenityCategoryData } from '@/lib/types/components'
 
 // Mock matchMedia for vaul/Drawer
@@ -65,22 +62,18 @@ function renderWithProvider(ui: React.ReactElement) {
 }
 
 // Helper to create amenity category data matching component's expected type
-function toAmenityCategoryData(
-  cat: ReturnType<typeof createAmenityCategory>
-): AmenityCategoryData {
+function toAmenityCategoryData(cat: ReturnType<typeof createAmenityCategory>): AmenityCategoryData {
   return {
     _key: cat._key,
     _id: cat.category._id,
     label: cat.category.label ?? null,
     icon: cat.category.icon ?? null,
-    items: (cat.items ?? []).map(
-      (item: ReturnType<typeof createAmenityItem>) => ({
-        _key: item._key,
-        label: item.label ?? null,
-        icon: item.icon,
-        note: item.note ?? null
-      })
-    )
+    items: (cat.items ?? []).map((item: ReturnType<typeof createAmenityItem>) => ({
+      _key: item._key,
+      label: item.label ?? null,
+      icon: item.icon,
+      note: item.note ?? null
+    }))
   }
 }
 
@@ -125,10 +118,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       // Should display all 10 (max from GROQ) on desktop
@@ -169,10 +159,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       // Should display max 5 on mobile
@@ -232,10 +219,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       expect(screen.getByText('Featured 1')).toBeInTheDocument()
@@ -265,16 +249,11 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       // The heading uses t('heading') which returns 'heading' in mocked translations
-      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-        'heading'
-      )
+      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('heading')
     })
   })
 
@@ -310,10 +289,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       // Button uses show_all translation key (mocked)
@@ -398,10 +374,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       // Note labels use translation keys
@@ -458,10 +431,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       expect(screen.getByTestId('icon-wifi')).toBeInTheDocument()
@@ -471,9 +441,7 @@ describe('HouseAmenities', () => {
 
   describe('empty amenities', () => {
     it('handles empty amenity categories array', () => {
-      renderWithProvider(
-        <HouseAmenities amenityCategories={[]} featuredAmenities={[]} />
-      )
+      renderWithProvider(<HouseAmenities amenityCategories={[]} featuredAmenities={[]} />)
 
       // Should render section with heading
       expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
@@ -516,10 +484,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       fireEvent.click(screen.getByRole('button'))
@@ -562,10 +527,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       fireEvent.click(screen.getByRole('button'))
@@ -648,10 +610,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       fireEvent.click(screen.getByRole('button'))
@@ -746,10 +705,7 @@ describe('HouseAmenities', () => {
       ]
 
       renderWithProvider(
-        <HouseAmenities
-          amenityCategories={categories}
-          featuredAmenities={featuredAmenities}
-        />
+        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
       fireEvent.click(screen.getByRole('button'))

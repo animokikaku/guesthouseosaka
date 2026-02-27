@@ -1,19 +1,13 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { FAQExtraCostsTable } from '../faq-extra-costs-table'
-import type {
-  HousesBuildingQueryResult,
-  PricingCategoriesQueryResult
-} from '@/sanity.types'
+import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
 
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 type Houses = NonNullable<HousesBuildingQueryResult>
 type ExtraCost = NonNullable<Houses[number]['extraCosts']>[number]
 
-const createCategory = (
-  id: string,
-  title: string
-): PricingCategories[number] => ({
+const createCategory = (id: string, title: string): PricingCategories[number] => ({
   _id: id,
   title,
   orderRank: `0|${id}:`
@@ -60,9 +54,7 @@ const createExtraCost = (categoryId: string, text: string): ExtraCost => ({
 describe('FAQExtraCostsTable', () => {
   describe('empty states', () => {
     it('returns null when houses array is empty', () => {
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
       const { container } = render(
         <FAQExtraCostsTable houses={[]} pricingCategories={pricingCategories} />
@@ -74,9 +66,7 @@ describe('FAQExtraCostsTable', () => {
     it('returns null when pricingCategories is empty', () => {
       const houses: Houses = [createHouse('h1', 'orange')]
 
-      const { container } = render(
-        <FAQExtraCostsTable houses={houses} pricingCategories={[]} />
-      )
+      const { container } = render(<FAQExtraCostsTable houses={houses} pricingCategories={[]} />)
 
       expect(container.firstChild).toBeNull()
     })
@@ -85,16 +75,9 @@ describe('FAQExtraCostsTable', () => {
   describe('missing house values', () => {
     it('displays dash when house has no value for a category', () => {
       const houses: Houses = [createHouse('h1', 'orange', [])]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsTable
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('–')).toBeInTheDocument()
     })
@@ -104,16 +87,9 @@ describe('FAQExtraCostsTable', () => {
         createHouse('h1', 'orange', [createExtraCost('deposit', '¥30,000')]),
         createHouse('h2', 'apple', [])
       ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsTable
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('¥30,000')).toBeInTheDocument()
       expect(screen.getByText('–')).toBeInTheDocument()
@@ -127,16 +103,9 @@ describe('FAQExtraCostsTable', () => {
         createHouse('h2', 'apple'),
         createHouse('h3', 'lemon')
       ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
 
-      render(
-        <FAQExtraCostsTable
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('Orange House')).toBeInTheDocument()
       expect(screen.getByText('Apple House')).toBeInTheDocument()
@@ -151,12 +120,7 @@ describe('FAQExtraCostsTable', () => {
         createCategory('internet', 'Internet')
       ]
 
-      render(
-        <FAQExtraCostsTable
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('Deposit')).toBeInTheDocument()
       expect(screen.getByText('Common fees')).toBeInTheDocument()
@@ -175,12 +139,7 @@ describe('FAQExtraCostsTable', () => {
         createCategory('internet', 'Internet')
       ]
 
-      render(
-        <FAQExtraCostsTable
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('¥30,000')).toBeInTheDocument()
       expect(screen.getByText('Free')).toBeInTheDocument()
@@ -188,21 +147,14 @@ describe('FAQExtraCostsTable', () => {
 
     it('matches category by slug correctly', () => {
       const houses: Houses = [
-        createHouse('h1', 'orange', [
-          createExtraCost('utility-fees', '¥3,000/month')
-        ])
+        createHouse('h1', 'orange', [createExtraCost('utility-fees', '¥3,000/month')])
       ]
       const pricingCategories: PricingCategories = [
         createCategory('deposit', 'Deposit'),
         createCategory('utility-fees', 'Utility fees')
       ]
 
-      render(
-        <FAQExtraCostsTable
-          houses={houses}
-          pricingCategories={pricingCategories}
-        />
-      )
+      render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
 
       expect(screen.getByText('¥3,000/month')).toBeInTheDocument()
       // First row (Deposit) should have a dash

@@ -90,11 +90,7 @@ vi.mock('@/components/ui/carousel', () => ({
     onTouchStart?: React.TouchEventHandler
     onTouchEnd?: React.TouchEventHandler
   }) => (
-    <div
-      data-testid="carousel-content"
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
+    <div data-testid="carousel-content" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       {children}
     </div>
   ),
@@ -143,10 +139,7 @@ describe('GalleryModal', () => {
     resetCarouselMockState(carouselState)
     console.error = (...args: unknown[]) => {
       const message = args[0]
-      if (
-        typeof message === 'string' &&
-        message.includes('was not wrapped in act')
-      ) {
+      if (typeof message === 'string' && message.includes('was not wrapped in act')) {
         return
       }
       originalError.apply(console, args)
@@ -162,10 +155,7 @@ describe('GalleryModal', () => {
       store.setState((prev) => ({ ...prev, photoId: null }))
 
       const { container } = render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
+        <GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />
       )
 
       expect(container.querySelector('[role="dialog"]')).not.toBeInTheDocument()
@@ -174,12 +164,7 @@ describe('GalleryModal', () => {
     it('renders dialog when photoId is set', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       expect(screen.getByRole('dialog')).toBeInTheDocument()
     })
@@ -187,12 +172,7 @@ describe('GalleryModal', () => {
     it('closes dialog when close button is clicked', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       const closeButton = screen.getByRole('button', { name: /close/i })
       fireEvent.click(closeButton)
@@ -205,12 +185,7 @@ describe('GalleryModal', () => {
     it('has accessible dialog title', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // The title is sr-only but present
       expect(screen.getByText('title')).toBeInTheDocument()
@@ -219,12 +194,7 @@ describe('GalleryModal', () => {
     it('has accessible dialog description', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // The description uses translation key with title param
       expect(screen.getByText('description')).toBeInTheDocument()
@@ -233,12 +203,7 @@ describe('GalleryModal', () => {
     it('has accessible close button', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       expect(screen.getByRole('button', { name: /close/i })).toBeInTheDocument()
     })
@@ -248,12 +213,7 @@ describe('GalleryModal', () => {
     it('renders close button with icon', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // Close button should have the arrow icon
       const closeButton = screen.getByRole('button', { name: /close/i })
@@ -266,12 +226,7 @@ describe('GalleryModal', () => {
     it('calls scrollPrev on ArrowLeft key press', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // Set up the mock API and wrap in act to ensure React processes state update
       carouselState.mockApi = createMockCarouselApi(carouselState)
@@ -289,12 +244,7 @@ describe('GalleryModal', () => {
     it('calls scrollNext on ArrowRight key press', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // Set up the mock API and wrap in act to ensure React processes state update
       carouselState.mockApi = createMockCarouselApi(carouselState)
@@ -312,12 +262,7 @@ describe('GalleryModal', () => {
     it('does not scroll on other key presses', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       // Set up the mock API and wrap in act to ensure React processes state update
       carouselState.mockApi = createMockCarouselApi(carouselState)
@@ -338,10 +283,7 @@ describe('GalleryModal', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       const { unmount } = render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
+        <GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />
       )
 
       // Set up the mock API
@@ -358,9 +300,7 @@ describe('GalleryModal', () => {
 
       // Dispatch key events after unmount - should not trigger scroll
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
-      document.dispatchEvent(
-        new KeyboardEvent('keydown', { key: 'ArrowRight' })
-      )
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
 
       expect(carouselState.mockApi.scrollPrev).not.toHaveBeenCalled()
       expect(carouselState.mockApi.scrollNext).not.toHaveBeenCalled()
@@ -371,12 +311,7 @@ describe('GalleryModal', () => {
     it('closes modal on vertical swipe', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       const carouselContent = screen.getByTestId('carousel-content')
 
@@ -422,32 +357,21 @@ describe('GalleryModal', () => {
     it('registers select event handler when API is set', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
-      render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
-      )
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
 
       carouselState.mockApi = createMockCarouselApi(carouselState)
       act(() => {
         carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
-      expect(carouselState.mockApi.on).toHaveBeenCalledWith(
-        'select',
-        expect.any(Function)
-      )
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith('select', expect.any(Function))
     })
 
     it('cleans up select event handler on unmount', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
       const { unmount } = render(
-        <GalleryModal
-          galleryCategories={galleryCategories}
-          title="Test Gallery"
-        />
+        <GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />
       )
 
       carouselState.mockApi = createMockCarouselApi(carouselState)
@@ -457,10 +381,7 @@ describe('GalleryModal', () => {
 
       unmount()
 
-      expect(carouselState.mockApi.off).toHaveBeenCalledWith(
-        'select',
-        expect.any(Function)
-      )
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith('select', expect.any(Function))
     })
   })
 })

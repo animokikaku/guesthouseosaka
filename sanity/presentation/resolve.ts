@@ -2,9 +2,7 @@ import { ContactType, ContactTypeValues, HouseIdentifier } from '@/lib/types'
 import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
 
 function isContactTypeSlug(slug: unknown): slug is ContactType {
-  return (
-    typeof slug === 'string' && ContactTypeValues.includes(slug as ContactType)
-  )
+  return typeof slug === 'string' && ContactTypeValues.includes(slug as ContactType)
 }
 
 const l = {

@@ -1,8 +1,4 @@
-import {
-  Geist_Mono as FontMono,
-  Geist as FontSans,
-  Inter
-} from 'next/font/google'
+import { Geist_Mono as FontMono, Geist as FontSans, Inter } from 'next/font/google'
 
 import { cn } from '@/lib/utils'
 
@@ -22,8 +18,4 @@ const fontInter = Inter({
   variable: '--font-inter'
 })
 
-export const fontVariables = cn(
-  fontSans.variable,
-  fontMono.variable,
-  fontInter.variable
-)
+export const fontVariables = cn(fontSans.variable, fontMono.variable, fontInter.variable)

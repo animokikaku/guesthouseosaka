@@ -63,9 +63,7 @@ export function Collection({ houses, className }: CollectionProps) {
           </Link>
           <ItemContent className="self-start">
             <ItemTitle className="text-lg">{house.title}</ItemTitle>
-            <ItemDescription className="text-md text-start">
-              {house.description}
-            </ItemDescription>
+            <ItemDescription className="text-md text-start">{house.description}</ItemDescription>
           </ItemContent>
         </Item>
       ))}

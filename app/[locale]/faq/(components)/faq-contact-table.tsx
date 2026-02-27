@@ -46,10 +46,7 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
           <Item key={_id} variant="outline" asChild className="gap-3 px-3 py-3">
             <a href={`tel:${phone.international}`}>
               <ItemMedia variant="image" className="size-12 rounded-sm">
-                <HouseImage
-                  image={image}
-                  alt={image.alt ? stegaClean(image.alt) : ''}
-                />
+                <HouseImage image={image} alt={image.alt ? stegaClean(image.alt) : ''} />
               </ItemMedia>
               <ItemContent>
                 <ItemTitle>{stegaClean(title)}</ItemTitle>
@@ -95,10 +92,7 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
       <tbody className="font-mono">
         {houses.map(({ _id, title, phone }) => {
           return (
-            <tr
-              className="border-border/50 last:border-border border-none"
-              key={_id}
-            >
+            <tr className="border-border/50 last:border-border border-none" key={_id}>
               <td className="text-muted-foreground p-2 text-right font-sans">
                 {stegaClean(title)}
               </td>

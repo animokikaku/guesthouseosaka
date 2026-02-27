@@ -48,9 +48,7 @@ export function MessageField({
           >
             {label}
             {!required && (
-              <span className="text-muted-foreground text-xs">
-                ({t('optional_hint')})
-              </span>
+              <span className="text-muted-foreground text-xs">({t('optional_hint')})</span>
             )}
           </FieldLabel>
         )}

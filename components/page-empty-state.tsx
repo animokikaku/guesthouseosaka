@@ -1,10 +1,4 @@
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { cn } from '@/lib/utils'
 import { FileWarningIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -21,11 +15,7 @@ type PageEmptyStateProps = {
  * Empty state component for pages with missing Sanity content.
  * Displays a helpful message for content managers to add content.
  */
-export function PageEmptyState({
-  className,
-  title,
-  description
-}: PageEmptyStateProps) {
+export function PageEmptyState({ className, title, description }: PageEmptyStateProps) {
   const t = useTranslations('PageEmptyState')
 
   return (

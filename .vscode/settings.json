@@ -4,11 +4,7 @@
   "explorer.sortOrder": "filesFirst",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "tailwindCSS.classFunctions": ["cva", "cn"],
-  "vitest.debugExclude": [
-    "<node_internals>/**",
-    "**/node_modules/**",
-    "**/fixtures/**"
-  ],
+  "vitest.debugExclude": ["<node_internals>/**", "**/node_modules/**", "**/fixtures/**"],
   "files.watcherExclude": {
     "bun.lock": true
   },

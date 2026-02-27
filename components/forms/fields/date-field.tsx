@@ -38,11 +38,7 @@ export function DateField({
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
       <FieldContent>
-        {label && (
-          <FieldLabel htmlFor={`form-tanstack-date-${field.name}`}>
-            {label}
-          </FieldLabel>
-        )}
+        {label && <FieldLabel htmlFor={`form-tanstack-date-${field.name}`}>{label}</FieldLabel>}
         {description && <FieldDescription>{description}</FieldDescription>}
         {isInvalid && <FieldError errors={errors} />}
       </FieldContent>

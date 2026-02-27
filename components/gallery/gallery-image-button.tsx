@@ -11,20 +11,9 @@ type GalleryImageButtonProps = ComponentPropsWithoutRef<'div'> & {
   imageProps: Omit<ImageProps, 'fill' | 'className'>
 }
 
-export const GalleryImageButton = forwardRef<
-  HTMLDivElement,
-  GalleryImageButtonProps
->(
+export const GalleryImageButton = forwardRef<HTMLDivElement, GalleryImageButtonProps>(
   (
-    {
-      imageClassName,
-      containerClassName,
-      sizes,
-      imageProps,
-      className,
-      children,
-      ...divProps
-    },
+    { imageClassName, containerClassName, sizes, imageProps, className, children, ...divProps },
     ref
   ) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -40,10 +29,7 @@ export const GalleryImageButton = forwardRef<
         {...divProps}
       >
         <div
-          className={cn(
-            'bg-muted/40 relative h-full w-full overflow-hidden',
-            containerClassName
-          )}
+          className={cn('bg-muted/40 relative h-full w-full overflow-hidden', containerClassName)}
         >
           <Image
             fill

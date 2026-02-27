@@ -22,11 +22,7 @@ type GalleryModalWrapperProps = {
   children: ReactNode
 }
 
-export function GalleryModalWrapper({
-  house,
-  title,
-  children
-}: GalleryModalWrapperProps) {
+export function GalleryModalWrapper({ house, title, children }: GalleryModalWrapperProps) {
   const router = useRouter()
   const t = useTranslations('GalleryModal')
   const [isOpen, setIsOpen] = useState(true)
@@ -52,12 +48,8 @@ export function GalleryModalWrapper({
           onAnimationEnd={handleAnimationEnd}
         >
           <DialogTitle className="sr-only">{t('title')}</DialogTitle>
-          <DialogDescription className="sr-only">
-            {t('description', { title })}
-          </DialogDescription>
-          <div className="flex h-full w-full flex-col overflow-hidden">
-            {children}
-          </div>
+          <DialogDescription className="sr-only">{t('description', { title })}</DialogDescription>
+          <div className="flex h-full w-full flex-col overflow-hidden">{children}</div>
         </DialogPrimitive.Content>
       </DialogPortal>
     </Dialog>

@@ -1,18 +1,7 @@
 'use client'
 
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem
-} from '@/components/ui/carousel'
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty'
+import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import type { GalleryImage } from '@/lib/gallery'
 import { urlFor } from '@/sanity/lib/image'
@@ -72,18 +61,10 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
       >
         <CarouselContent>
           {images.map(({ _key, image }, index) => {
-            const src = urlFor(image)
-              .width(640)
-              .height(384)
-              .dpr(2)
-              .fit('crop')
-              .url()
+            const src = urlFor(image).width(640).height(384).dpr(2).fit('crop').url()
 
             return (
-              <CarouselItem
-                className="relative h-96 w-full select-none"
-                key={_key}
-              >
+              <CarouselItem className="relative h-96 w-full select-none" key={_key}>
                 <Image
                   src={src}
                   alt={image.alt ?? ''}

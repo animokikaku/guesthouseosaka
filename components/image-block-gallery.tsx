@@ -1,13 +1,7 @@
 import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle
-} from '@/components/ui/empty'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import type { FeaturedImage, GalleryItem } from '@/lib/gallery'
 import { urlFor } from '@/sanity/lib/image'
@@ -24,15 +18,10 @@ type ImageBlockGalleryProps = {
   featuredImage?: FeaturedImage
 }
 
-type SanityImage =
-  | NonNullable<GalleryItem['image']>
-  | NonNullable<FeaturedImage>
+type SanityImage = NonNullable<GalleryItem['image']> | NonNullable<FeaturedImage>
 
 // Transform Sanity image to Next.js Image props
-function toImageProps(
-  image: SanityImage,
-  width: number
-): Omit<ImageProps, 'fill'> {
+function toImageProps(image: SanityImage, width: number): Omit<ImageProps, 'fill'> {
   return {
     src: urlFor(image).width(width).fit('crop').dpr(2).url(),
     alt: image.alt ?? '',
@@ -86,11 +75,7 @@ function GalleryGrid({
               />
             </div>
           </Link>
-          <Button
-            variant="secondary"
-            asChild
-            className="absolute right-4 bottom-4"
-          >
+          <Button variant="secondary" asChild className="absolute right-4 bottom-4">
             <Link href={href}>
               <Icons.gallery className="h-4 w-4" />
               <span>{viewGalleryLabel}</span>
@@ -137,24 +122,14 @@ export async function ImageBlockGallery({
   const images: Omit<ImageProps, 'fill'>[] = hasFeatured
     ? [
         toImageProps(featuredImage, 560),
-        ...validGalleryImages
-          .slice(0, 4)
-          .map(({ image }) => toImageProps(image, 560))
+        ...validGalleryImages.slice(0, 4).map(({ image }) => toImageProps(image, 560))
       ]
     : firstGalleryImage
       ? [
           toImageProps(firstGalleryImage.image, 560),
-          ...validGalleryImages
-            .slice(1, 5)
-            .map(({ image }) => toImageProps(image, 560))
+          ...validGalleryImages.slice(1, 5).map(({ image }) => toImageProps(image, 560))
         ]
       : []
 
-  return (
-    <GalleryGrid
-      images={images}
-      href={href}
-      viewGalleryLabel={t('view_gallery')}
-    />
-  )
+  return <GalleryGrid images={images} href={href} viewGalleryLabel={t('view_gallery')} />
 }

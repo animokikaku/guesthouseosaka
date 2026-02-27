@@ -67,8 +67,7 @@ const nextConfig: NextConfig = {
       permanent: true
     },
     {
-      source:
-        '/:locale(en|ja|fr)/:path(column|seo-blog|category|2013|wp-content)/:rest*',
+      source: '/:locale(en|ja|fr)/:path(column|seo-blog|category|2013|wp-content)/:rest*',
       destination: '/:locale',
       permanent: true
     },
