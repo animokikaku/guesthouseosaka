@@ -1,36 +1,15 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import type { HousesBuildingQueryResult } from '@/sanity.types'
+import { type Houses, createHouse } from '@/lib/__tests__/utils/faq-fixtures'
 
 // Mock FAQContactTable since it has its own complex dependencies (next-intl, next/image, sanity)
 vi.mock('@/app/[locale]/faq/(components)/faq-contact-table', () => ({
   FAQContactTable: ({ houses }: { houses: unknown[] }) => (
-    <div data-testid="faq-contact-table">
-      {houses.length} houses
-    </div>
+    <div data-testid="faq-contact-table">{houses.length} houses</div>
   )
 }))
 
 import FAQCard from '../faq-card'
-
-type Houses = NonNullable<HousesBuildingQueryResult>
-
-const createHouse = (id: string, slug: 'orange' | 'apple' | 'lemon'): Houses[number] => ({
-  _id: id,
-  _type: 'house',
-  title: `${slug.charAt(0).toUpperCase() + slug.slice(1)} House`,
-  slug,
-  building: null,
-  phone: { _type: 'housePhone', domestic: '06-1234-5678', international: '+81-6-1234-5678' },
-  image: {
-    asset: null,
-    hotspot: null,
-    crop: null,
-    alt: null,
-    preview: null
-  },
-  extraCosts: null
-})
 
 const contactSection = [
   {
