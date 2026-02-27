@@ -74,9 +74,9 @@ describe('SelectField', () => {
     it('renders without label', () => {
       const fieldApi = createMockFieldApi('testSelect', '')
 
-      renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
+      const { container } = renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
 
-      expect(screen.queryByRole('label')).not.toBeInTheDocument()
+      expect(container.querySelector('label')).not.toBeInTheDocument()
     })
 
     it('renders with description', () => {

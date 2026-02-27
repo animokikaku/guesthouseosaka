@@ -1,19 +1,23 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook } from '@testing-library/react'
 
-const mockFieldApi = {
-  name: 'testField',
-  state: {
-    value: '',
-    meta: {
-      isTouched: false,
-      isValid: true,
-      errors: [] as Array<{ message: string }>
-    }
-  },
-  handleChange: vi.fn(),
-  handleBlur: vi.fn()
+function createMockFieldApi() {
+  return {
+    name: 'testField',
+    state: {
+      value: '',
+      meta: {
+        isTouched: false,
+        isValid: true,
+        errors: [] as Array<{ message: string }>
+      }
+    },
+    handleChange: vi.fn(),
+    handleBlur: vi.fn()
+  }
 }
+
+let mockFieldApi = createMockFieldApi()
 
 vi.mock('@/components/forms/form-context', () => ({
   useFieldContext: () => mockFieldApi
@@ -22,6 +26,10 @@ vi.mock('@/components/forms/form-context', () => ({
 import { useFieldValidation } from '../use-field-validation'
 
 describe('useFieldValidation', () => {
+  beforeEach(() => {
+    mockFieldApi = createMockFieldApi()
+  })
+
   it('returns field from context', () => {
     const { result } = renderHook(() => useFieldValidation<string>())
 
@@ -65,8 +73,6 @@ describe('useFieldValidation', () => {
   })
 
   it('returns empty errors when field has no errors', () => {
-    mockFieldApi.state.meta.errors = []
-
     const { result } = renderHook(() => useFieldValidation<string>())
 
     expect(result.current.errors).toEqual([])

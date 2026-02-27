@@ -24,7 +24,8 @@ vi.mock('@/components/forms/form-context', async () => {
 let mockStoreState = { isSubmitting: false, canSubmit: true }
 
 vi.mock('@tanstack/react-form', () => ({
-  useStore: () => [mockStoreState.isSubmitting, mockStoreState.canSubmit]
+  useStore: (_store: unknown, selector: (state: typeof mockStoreState) => unknown) =>
+    selector(mockStoreState)
 }))
 
 function createMockFormApi(): MockFormApi {
