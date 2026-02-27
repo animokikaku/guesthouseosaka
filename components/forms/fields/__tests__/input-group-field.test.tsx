@@ -264,7 +264,10 @@ describe('InputGroupField', () => {
       )
 
       const input = screen.getByRole('textbox')
-      expect(input).toHaveAttribute('id', 'form-tanstack-input-group-monthlyBudget')
+      expect(input).toHaveAttribute(
+        'id',
+        'form-tanstack-input-group-monthlyBudget'
+      )
     })
 
     it('forwards additional props to input', () => {

@@ -129,7 +129,9 @@ function NavigationMenuGroupItem({
   items: NavGroupItem[]
   house?: HouseIdentifier
 }) {
-  const [item, setHoverItem] = useState<NavGroupItem | undefined>(items[0])
+  const [hoveredItem, setHoverItem] = useState<NavGroupItem | undefined>(
+    items[0]
+  )
   const t = useTranslations('PageEmptyState')
 
   // Show empty state when no items
@@ -189,7 +191,7 @@ function NavigationMenuGroupItem({
                 <PreviewImageItem
                   key={it.key}
                   item={it}
-                  isActive={it.key === item?.key}
+                  isActive={it.key === hoveredItem?.key}
                 />
               ))}
             </div>

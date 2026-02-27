@@ -38,7 +38,9 @@ export const faqQuestion = defineType({
         ]
       },
       hidden: ({ document }) => {
-        const answer = document?.answer as Array<{ value?: unknown }> | undefined
+        const answer = document?.answer as
+          | Array<{ value?: unknown }>
+          | undefined
         return answer?.some((item) => item.value) ?? false
       }
     }),

@@ -1,7 +1,10 @@
 import { assets } from '@/lib/assets'
 import type { NavGroupItem } from '@/lib/types'
 import type { ContactNavItem } from '@/lib/types/components'
-import type { ContactPageQueryResult, HousesNavQueryResult } from '@/sanity.types'
+import type {
+  ContactPageQueryResult,
+  HousesNavQueryResult
+} from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 
 // ============================================

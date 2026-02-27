@@ -62,9 +62,7 @@ vi.mock('next/image', () => ({
   }
 }))
 
-function createGalleryItem(
-  overrides: Partial<GalleryItem> = {}
-): GalleryItem {
+function createGalleryItem(overrides: Partial<GalleryItem> = {}): GalleryItem {
   return {
     _key: 'item1',
     image: {
@@ -86,7 +84,10 @@ describe('GalleryGridItem', () => {
 
   describe('empty states', () => {
     it('returns null when image is null', () => {
-      const item = { ...createGalleryItem(), image: null } as unknown as GalleryItem
+      const item = {
+        ...createGalleryItem(),
+        image: null
+      } as unknown as GalleryItem
 
       const { container } = render(
         <GalleryGridItem item={item} categoryKey="cat1" />
@@ -167,7 +168,9 @@ describe('GalleryGridItem', () => {
     it('sets photoId in store when clicked', () => {
       const item = createGalleryItem({ _key: 'photo-123' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const { container } = render(
+        <GalleryGridItem item={item} categoryKey="cat1" />
+      )
 
       // GalleryImageButton uses a div with onClick, not a button
       const clickableDiv = container.firstChild as HTMLElement
@@ -198,7 +201,9 @@ describe('GalleryGridItem', () => {
     it('sets photoId when Enter key is pressed', () => {
       const item = createGalleryItem({ _key: 'photo-enter' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const { container } = render(
+        <GalleryGridItem item={item} categoryKey="cat1" />
+      )
 
       const clickableDiv = container.firstChild as HTMLElement
       fireEvent.keyDown(clickableDiv, { key: 'Enter' })
@@ -209,7 +214,9 @@ describe('GalleryGridItem', () => {
     it('sets photoId when Space key is pressed', () => {
       const item = createGalleryItem({ _key: 'photo-space' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const { container } = render(
+        <GalleryGridItem item={item} categoryKey="cat1" />
+      )
 
       const clickableDiv = container.firstChild as HTMLElement
       fireEvent.keyDown(clickableDiv, { key: ' ' })
@@ -220,7 +227,9 @@ describe('GalleryGridItem', () => {
     it('prevents default behavior on Enter key', () => {
       const item = createGalleryItem({ _key: 'photo-123' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const { container } = render(
+        <GalleryGridItem item={item} categoryKey="cat1" />
+      )
 
       const clickableDiv = container.firstChild as HTMLElement
       const event = fireEvent.keyDown(clickableDiv, { key: 'Enter' })
@@ -232,7 +241,9 @@ describe('GalleryGridItem', () => {
     it('prevents default behavior on Space key', () => {
       const item = createGalleryItem({ _key: 'photo-123' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const { container } = render(
+        <GalleryGridItem item={item} categoryKey="cat1" />
+      )
 
       const clickableDiv = container.firstChild as HTMLElement
       const event = fireEvent.keyDown(clickableDiv, { key: ' ' })
@@ -243,7 +254,9 @@ describe('GalleryGridItem', () => {
     it('does not set photoId for other keys', () => {
       const item = createGalleryItem({ _key: 'photo-123' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const { container } = render(
+        <GalleryGridItem item={item} categoryKey="cat1" />
+      )
 
       const clickableDiv = container.firstChild as HTMLElement
       fireEvent.keyDown(clickableDiv, { key: 'Tab' })
@@ -255,9 +268,7 @@ describe('GalleryGridItem', () => {
   describe('data attributes', () => {
     it('sets data-sanity attribute when dataAttribute function is provided', () => {
       const item = createGalleryItem({ _key: 'item-123' })
-      const dataAttribute = vi.fn(
-        (path: string) => `encoded-path:${path}`
-      )
+      const dataAttribute = vi.fn((path: string) => `encoded-path:${path}`)
 
       const { container } = render(
         <GalleryGridItem
@@ -281,7 +292,9 @@ describe('GalleryGridItem', () => {
     it('does not set data-sanity attribute when dataAttribute is undefined', () => {
       const item = createGalleryItem()
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const { container } = render(
+        <GalleryGridItem item={item} categoryKey="cat1" />
+      )
 
       const clickableDiv = container.firstChild as HTMLElement
       expect(clickableDiv).not.toHaveAttribute('data-sanity')

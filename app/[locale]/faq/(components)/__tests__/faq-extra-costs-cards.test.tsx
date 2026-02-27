@@ -70,7 +70,11 @@ const createHouse = (
   title: `${slug.charAt(0).toUpperCase() + slug.slice(1)} House`,
   slug,
   building: null,
-  phone: { _type: 'housePhone', domestic: '06-1234-5678', international: '+81-6-1234-5678' },
+  phone: {
+    _type: 'housePhone',
+    domestic: '06-1234-5678',
+    international: '+81-6-1234-5678'
+  },
   image: {
     asset: null,
     hotspot: null,
@@ -310,8 +314,14 @@ describe('FAQExtraCostsCards', () => {
       })
 
       // Verify event handlers were registered
-      expect(carouselState.mockApi.on).toHaveBeenCalledWith('select', expect.any(Function))
-      expect(carouselState.mockApi.on).toHaveBeenCalledWith('reInit', expect.any(Function))
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith(
+        'select',
+        expect.any(Function)
+      )
+      expect(carouselState.mockApi.on).toHaveBeenCalledWith(
+        'reInit',
+        expect.any(Function)
+      )
     })
 
     it('updates current index when select event fires', () => {
@@ -337,9 +347,9 @@ describe('FAQExtraCostsCards', () => {
       })
 
       // Initial state: first dot should be active (w-6 class)
-      const dots = screen.getAllByRole('button').filter(
-        (btn) => btn.getAttribute('aria-label')?.startsWith('Go to')
-      )
+      const dots = screen
+        .getAllByRole('button')
+        .filter((btn) => btn.getAttribute('aria-label')?.startsWith('Go to'))
       expect(dots).toHaveLength(3)
       expect(dots[0]).toHaveClass('w-6')
       expect(dots[1]).toHaveClass('w-2')
@@ -381,8 +391,14 @@ describe('FAQExtraCostsCards', () => {
       unmount()
 
       // Verify off was called to clean up handlers
-      expect(carouselState.mockApi.off).toHaveBeenCalledWith('select', expect.any(Function))
-      expect(carouselState.mockApi.off).toHaveBeenCalledWith('reInit', expect.any(Function))
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith(
+        'select',
+        expect.any(Function)
+      )
+      expect(carouselState.mockApi.off).toHaveBeenCalledWith(
+        'reInit',
+        expect.any(Function)
+      )
     })
   })
 })

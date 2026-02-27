@@ -4,7 +4,9 @@ import { describe, expect, it, vi } from 'vitest'
 
 // Use vi.hoisted to declare variables that will be used in mocks
 const { mockStorage } = vi.hoisted(() => {
-  const storage: { loadingFn: (() => React.ReactNode) | null } = { loadingFn: null }
+  const storage: { loadingFn: (() => React.ReactNode) | null } = {
+    loadingFn: null
+  }
   return { mockStorage: storage }
 })
 
@@ -50,10 +52,7 @@ vi.mock('@/components/house/house-location-modal', () => ({
   }) => {
     if (!details) return null
     return (
-      <div
-        data-testid="location-modal"
-        data-details-count={details.length}
-      >
+      <div data-testid="location-modal" data-details-count={details.length}>
         {children}
       </div>
     )
@@ -218,7 +217,9 @@ describe('HouseLocation', () => {
       expect(container.children.length).toBeGreaterThan(0)
 
       // Verify it has skeleton elements indicating loading
-      const hasSkeletonElements = container.querySelector('[data-slot="skeleton"]')
+      const hasSkeletonElements = container.querySelector(
+        '[data-slot="skeleton"]'
+      )
       expect(hasSkeletonElements).toBeTruthy()
     })
 

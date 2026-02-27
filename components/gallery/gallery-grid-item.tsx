@@ -24,7 +24,6 @@ export function GalleryGridItem({
 
   return (
     <GalleryImageButton
-      role="button"
       tabIndex={0}
       onClick={() => store.setState((prev) => ({ ...prev, photoId: _key }))}
       onKeyDown={(e) => {

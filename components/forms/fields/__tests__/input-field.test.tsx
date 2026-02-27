@@ -167,7 +167,10 @@ describe('InputField', () => {
     it('passes through type prop', () => {
       const fieldApi = createMockFieldApi('testInput', '')
 
-      renderWithContext(<InputField label="Password" type="password" />, fieldApi)
+      renderWithContext(
+        <InputField label="Password" type="password" />,
+        fieldApi
+      )
 
       expect(screen.getByLabelText('Password')).toHaveAttribute(
         'type',

@@ -54,10 +54,7 @@ describe('PrivacyPolicyField', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -68,7 +65,6 @@ describe('PrivacyPolicyField', () => {
         screen.getByText('fields.privacy_policy_agreement')
       ).toBeInTheDocument()
     })
-
   })
 
   describe('checked/unchecked states', () => {
@@ -76,10 +72,7 @@ describe('PrivacyPolicyField', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -88,13 +81,12 @@ describe('PrivacyPolicyField', () => {
     })
 
     it('renders checked when value is true', () => {
-      const fieldApi = createMockFieldApi('privacyPolicy', true, { value: true })
+      const fieldApi = createMockFieldApi('privacyPolicy', true, {
+        value: true
+      })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -108,10 +100,7 @@ describe('PrivacyPolicyField', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -121,13 +110,12 @@ describe('PrivacyPolicyField', () => {
     })
 
     it('calls handleChange with false when checked checkbox is clicked', () => {
-      const fieldApi = createMockFieldApi('privacyPolicy', true, { value: true })
+      const fieldApi = createMockFieldApi('privacyPolicy', true, {
+        value: true
+      })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -140,10 +128,7 @@ describe('PrivacyPolicyField', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -162,10 +147,7 @@ describe('PrivacyPolicyField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -181,10 +163,7 @@ describe('PrivacyPolicyField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
@@ -203,15 +182,15 @@ describe('PrivacyPolicyField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
 
-      expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'true')
+      expect(screen.getByRole('checkbox')).toHaveAttribute(
+        'aria-invalid',
+        'true'
+      )
     })
 
     it('does not set aria-invalid when field is valid', () => {
@@ -222,15 +201,15 @@ describe('PrivacyPolicyField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <PrivacyPolicyField />
         </FieldContextWrapper>
       )
 
-      expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'false')
+      expect(screen.getByRole('checkbox')).toHaveAttribute(
+        'aria-invalid',
+        'false'
+      )
     })
   })
 })

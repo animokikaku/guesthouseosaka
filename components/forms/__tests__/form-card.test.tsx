@@ -160,7 +160,9 @@ describe('FormCard', () => {
         </FormCard>
       )
 
-      const formElement = document.getElementById('test-form') as HTMLFormElement
+      const formElement = document.getElementById(
+        'test-form'
+      ) as HTMLFormElement
 
       const submitEvent = new Event('submit', {
         bubbles: true,
@@ -182,7 +184,9 @@ describe('FormCard', () => {
         </FormCard>
       )
 
-      const formElement = document.getElementById('test-form') as HTMLFormElement
+      const formElement = document.getElementById(
+        'test-form'
+      ) as HTMLFormElement
       fireEvent.submit(formElement)
 
       expect(form.handleSubmit).toHaveBeenCalledTimes(1)

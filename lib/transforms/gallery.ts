@@ -6,7 +6,9 @@ import { urlFor } from '@/sanity/lib/image'
 // Input Types (from Sanity query results)
 // ============================================
 
-type GalleryWallImages = NonNullable<NonNullable<HomePageQueryResult>['page']>['galleryWall']
+type GalleryWallImages = NonNullable<
+  NonNullable<HomePageQueryResult>['page']
+>['galleryWall']
 
 // ============================================
 // Gallery Layout Configuration

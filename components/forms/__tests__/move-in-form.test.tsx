@@ -51,7 +51,11 @@ const baseProps = {
     nationality: { label: 'Nationality', placeholder: 'Enter nationality' },
     email: { label: 'Your Email', placeholder: 'Enter email' },
     phone: { label: 'Phone', placeholder: 'Enter phone' },
-    message: { label: 'Message', placeholder: 'Tell us about yourself', description: 'Optional' }
+    message: {
+      label: 'Message',
+      placeholder: 'Tell us about yourself',
+      description: 'Optional'
+    }
   }
 }
 
@@ -117,7 +121,9 @@ describe('MoveInForm', () => {
     it('submit button references the form id', () => {
       const { container } = render(<MoveInForm {...baseProps} />)
 
-      const submitButton = container.querySelector('button[form="move-in-form"]')
+      const submitButton = container.querySelector(
+        'button[form="move-in-form"]'
+      )
       expect(submitButton).toBeInTheDocument()
     })
   })

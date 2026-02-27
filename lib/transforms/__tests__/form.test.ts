@@ -22,7 +22,9 @@ describe('toFormFieldsConfig', () => {
     const result = toFormFieldsConfig(fields)
 
     // Fields with placeholders should preserve them
-    expect(result.stayDuration.placeholder).toBe(fields.stayDuration.placeholder)
+    expect(result.stayDuration.placeholder).toBe(
+      fields.stayDuration.placeholder
+    )
     expect(result.email.placeholder).toBe(fields.email.placeholder)
     // Fields without placeholders should be undefined
     expect(result.places.placeholder).toBeUndefined()

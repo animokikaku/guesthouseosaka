@@ -53,10 +53,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -70,10 +67,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField label="Choose options" options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -85,10 +79,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField
             options={defaultOptions}
             description="Select one or more options"
@@ -103,10 +94,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} description={null} />
         </FieldContextWrapper>
       )
@@ -123,10 +111,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -138,15 +123,16 @@ describe('ToggleGroupField', () => {
     })
 
     it('renders with selected options', () => {
-      const fieldApi = createMockFieldApi('toggleField', ['option1', 'option3'], {
-        value: ['option1', 'option3']
-      })
+      const fieldApi = createMockFieldApi(
+        'toggleField',
+        ['option1', 'option3'],
+        {
+          value: ['option1', 'option3']
+        }
+      )
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -163,10 +149,7 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -183,10 +166,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -203,10 +183,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -223,17 +200,16 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
 
       // Find the toggle group container by its data-slot attribute
       // There are multiple groups, so we need to be specific
-      const toggleGroup = document.querySelector('[data-slot="checkbox-group"]')!
+      const toggleGroup = document.querySelector(
+        '[data-slot="checkbox-group"]'
+      )!
       fireEvent.blur(toggleGroup)
 
       expect(fieldApi.handleBlur).toHaveBeenCalled()
@@ -249,10 +225,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -268,10 +241,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -290,10 +260,7 @@ describe('ToggleGroupField', () => {
       })
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={defaultOptions} />
         </FieldContextWrapper>
       )
@@ -315,10 +282,7 @@ describe('ToggleGroupField', () => {
       ]
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={optionsWithClass} />
         </FieldContextWrapper>
       )
@@ -332,14 +296,14 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       const optionsWithNodes = [
-        { value: 'opt1', label: <span data-testid="custom-label">Custom Label</span> }
+        {
+          value: 'opt1',
+          label: <span data-testid="custom-label">Custom Label</span>
+        }
       ]
 
       render(
-        <FieldContextWrapper
-          fieldApi={fieldApi}
-          context={testFieldContext}
-        >
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
           <ToggleGroupField options={optionsWithNodes} />
         </FieldContextWrapper>
       )

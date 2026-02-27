@@ -15,7 +15,7 @@ const withNextIntl = createNextIntlPlugin({
 })
 
 const nextConfig: NextConfig = {
-  reactCompiler: env.NODE_ENV === 'production' ? true : false,
+  reactCompiler: env.NODE_ENV === 'production',
   typedRoutes: true,
   redirects: async () => [
     // Locale corrections: jp → ja
@@ -24,21 +24,59 @@ const nextConfig: NextConfig = {
 
     // Unsupported locales → default (en)
     { source: '/:locale(ko|kr|zh)', destination: '/en', permanent: true },
-    { source: '/:locale(ko|kr|zh)/:path*', destination: '/en/:path*', permanent: true },
+    {
+      source: '/:locale(ko|kr|zh)/:path*',
+      destination: '/en/:path*',
+      permanent: true
+    },
 
     // Renamed pages
-    { source: '/:locale(en|ja|fr)/orange-house', destination: '/:locale/orange', permanent: true },
-    { source: '/:locale(en|ja|fr)/oranged', destination: '/:locale/orange', permanent: true },
-    { source: '/:locale(en|ja|fr)/:house(orange|apple|lemon)/access', destination: '/:locale/:house', permanent: true },
+    {
+      source: '/:locale(en|ja|fr)/orange-house',
+      destination: '/:locale/orange',
+      permanent: true
+    },
+    {
+      source: '/:locale(en|ja|fr)/oranged',
+      destination: '/:locale/orange',
+      permanent: true
+    },
+    {
+      source: '/:locale(en|ja|fr)/:house(orange|apple|lemon)/access',
+      destination: '/:locale/:house',
+      permanent: true
+    },
 
     // Removed houses
-    { source: '/:locale(en|ja|fr)/:house(banana|melon)', destination: '/:locale', permanent: true },
-    { source: '/:locale(en|ja|fr)/:house(banana|melon)/:path*', destination: '/:locale', permanent: true },
+    {
+      source: '/:locale(en|ja|fr)/:house(banana|melon)',
+      destination: '/:locale',
+      permanent: true
+    },
+    {
+      source: '/:locale(en|ja|fr)/:house(banana|melon)/:path*',
+      destination: '/:locale',
+      permanent: true
+    },
 
     // Removed pages
-    { source: '/:locale(en|ja|fr)/:path(column|seo-blog|category|location|review|feed|rss|blog|news|about|gallery|rooms|price|prices|access|privacy|terms|link)', destination: '/:locale', permanent: true },
-    { source: '/:locale(en|ja|fr)/:path(column|seo-blog|category|2013|wp-content)/:rest*', destination: '/:locale', permanent: true },
-    { source: '/:locale(en|ja|fr)/:path(reservation|booking|contact-us)', destination: '/:locale/contact', permanent: true }
+    {
+      source:
+        '/:locale(en|ja|fr)/:path(column|seo-blog|category|location|review|feed|rss|blog|news|about|gallery|rooms|price|prices|access|privacy|terms|link)',
+      destination: '/:locale',
+      permanent: true
+    },
+    {
+      source:
+        '/:locale(en|ja|fr)/:path(column|seo-blog|category|2013|wp-content)/:rest*',
+      destination: '/:locale',
+      permanent: true
+    },
+    {
+      source: '/:locale(en|ja|fr)/:path(reservation|booking|contact-us)',
+      destination: '/:locale/contact',
+      permanent: true
+    }
   ],
   experimental: {
     typedEnv: true,

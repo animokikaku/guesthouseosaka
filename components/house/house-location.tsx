@@ -58,7 +58,12 @@ interface LazyHouseMapProps {
   mapsUrl?: string
 }
 
-function LazyHouseMap({ center, placeId, placeImage, mapsUrl }: LazyHouseMapProps) {
+function LazyHouseMap({
+  center,
+  placeId,
+  placeImage,
+  mapsUrl
+}: LazyHouseMapProps) {
   const [isVisible, setIsVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 

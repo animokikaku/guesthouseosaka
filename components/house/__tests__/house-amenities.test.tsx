@@ -73,12 +73,14 @@ function toAmenityCategoryData(
     _id: cat.category._id,
     label: cat.category.label ?? null,
     icon: cat.category.icon ?? null,
-    items: (cat.items ?? []).map((item: ReturnType<typeof createAmenityItem>) => ({
-      _key: item._key,
-      label: item.label ?? null,
-      icon: item.icon,
-      note: item.note ?? null
-    }))
+    items: (cat.items ?? []).map(
+      (item: ReturnType<typeof createAmenityItem>) => ({
+        _key: item._key,
+        label: item.label ?? null,
+        icon: item.icon,
+        note: item.note ?? null
+      })
+    )
   }
 }
 
@@ -104,7 +106,12 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: {
+              _id: 'c1',
+              label: 'Room',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
             items: Array.from({ length: 15 }, (_, i) =>
               createAmenityItem({
                 _key: `amenity-${i}`,
@@ -143,7 +150,12 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: {
+              _id: 'c1',
+              label: 'Room',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
             items: Array.from({ length: 15 }, (_, i) =>
               createAmenityItem({
                 _key: `amenity-${i}`,
@@ -170,18 +182,50 @@ describe('HouseAmenities', () => {
     it('displays only the featured amenities provided via prop', () => {
       // Featured amenities are now pre-filtered by GROQ query
       const featuredAmenities = [
-        { _key: 'featured-1', label: 'Featured 1', icon: 'wifi', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null },
-        { _key: 'featured-2', label: 'Featured 2', icon: 'utensils', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null }
+        {
+          _key: 'featured-1',
+          label: 'Featured 1',
+          icon: 'wifi',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        },
+        {
+          _key: 'featured-2',
+          label: 'Featured 2',
+          icon: 'utensils',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        }
       ]
       const categories = [
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: {
+              _id: 'c1',
+              label: 'Room',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
             items: [
-              createAmenityItem({ _key: 'featured-1', label: 'Featured 1', featured: true, icon: 'wifi' }),
-              createAmenityItem({ _key: 'not-featured', label: 'Not Featured', featured: false, icon: 'bed' }),
-              createAmenityItem({ _key: 'featured-2', label: 'Featured 2', featured: true, icon: 'utensils' })
+              createAmenityItem({
+                _key: 'featured-1',
+                label: 'Featured 1',
+                featured: true,
+                icon: 'wifi'
+              }),
+              createAmenityItem({
+                _key: 'not-featured',
+                label: 'Not Featured',
+                featured: false,
+                icon: 'bed'
+              }),
+              createAmenityItem({
+                _key: 'featured-2',
+                label: 'Featured 2',
+                featured: true,
+                icon: 'utensils'
+              })
             ]
           })
         )
@@ -204,7 +248,13 @@ describe('HouseAmenities', () => {
   describe('section heading', () => {
     it('renders section heading with translation key', () => {
       const featuredAmenities = [
-        { _key: 'wifi', label: 'Wifi', icon: 'wifi', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null }
+        {
+          _key: 'wifi',
+          label: 'Wifi',
+          icon: 'wifi',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        }
       ]
       const categories = [
         toAmenityCategoryData(
@@ -222,7 +272,9 @@ describe('HouseAmenities', () => {
       )
 
       // The heading uses t('heading') which returns 'heading' in mocked translations
-      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('heading')
+      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
+        'heading'
+      )
     })
   })
 
@@ -246,7 +298,12 @@ describe('HouseAmenities', () => {
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: {
+              _id: 'c1',
+              label: 'Room',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
             items
           })
         )
@@ -267,21 +324,74 @@ describe('HouseAmenities', () => {
   describe('note badges', () => {
     it('renders note badges for amenities with notes', () => {
       const featuredAmenities = [
-        { _key: 'shared-wifi', label: 'Wifi', icon: 'wifi', note: 'shared' as const, featured: true as boolean | null },
-        { _key: 'private-bath', label: 'Bath', icon: 'bath', note: 'private' as const, featured: true as boolean | null },
-        { _key: 'coin-laundry', label: 'Laundry', icon: 'shirt', note: 'coin' as const, featured: true as boolean | null },
-        { _key: 'no-note', label: 'Kitchen', icon: 'utensils', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null }
+        {
+          _key: 'shared-wifi',
+          label: 'Wifi',
+          icon: 'wifi',
+          note: 'shared' as const,
+          featured: true as boolean | null
+        },
+        {
+          _key: 'private-bath',
+          label: 'Bath',
+          icon: 'bath',
+          note: 'private' as const,
+          featured: true as boolean | null
+        },
+        {
+          _key: 'coin-laundry',
+          label: 'Laundry',
+          icon: 'shirt',
+          note: 'coin' as const,
+          featured: true as boolean | null
+        },
+        {
+          _key: 'no-note',
+          label: 'Kitchen',
+          icon: 'utensils',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        }
       ]
       const categories = [
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: {
+              _id: 'c1',
+              label: 'Room',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
             items: [
-              createAmenityItem({ _key: 'shared-wifi', label: 'Wifi', note: 'shared', featured: true, icon: 'wifi' }),
-              createAmenityItem({ _key: 'private-bath', label: 'Bath', note: 'private', featured: true, icon: 'bath' }),
-              createAmenityItem({ _key: 'coin-laundry', label: 'Laundry', note: 'coin', featured: true, icon: 'shirt' }),
-              createAmenityItem({ _key: 'no-note', label: 'Kitchen', note: null, featured: true, icon: 'utensils' })
+              createAmenityItem({
+                _key: 'shared-wifi',
+                label: 'Wifi',
+                note: 'shared',
+                featured: true,
+                icon: 'wifi'
+              }),
+              createAmenityItem({
+                _key: 'private-bath',
+                label: 'Bath',
+                note: 'private',
+                featured: true,
+                icon: 'bath'
+              }),
+              createAmenityItem({
+                _key: 'coin-laundry',
+                label: 'Laundry',
+                note: 'coin',
+                featured: true,
+                icon: 'shirt'
+              }),
+              createAmenityItem({
+                _key: 'no-note',
+                label: 'Kitchen',
+                note: null,
+                featured: true,
+                icon: 'utensils'
+              })
             ]
           })
         )
@@ -304,17 +414,44 @@ describe('HouseAmenities', () => {
   describe('amenity icons', () => {
     it('renders amenity icons correctly', () => {
       const featuredAmenities = [
-        { _key: 'wifi', label: 'Wifi', icon: 'wifi', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null },
-        { _key: 'bed', label: 'Bed', icon: 'bed', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null }
+        {
+          _key: 'wifi',
+          label: 'Wifi',
+          icon: 'wifi',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        },
+        {
+          _key: 'bed',
+          label: 'Bed',
+          icon: 'bed',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        }
       ]
       const categories = [
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Room', icon: null, orderRank: '0|a00000:' },
+            category: {
+              _id: 'c1',
+              label: 'Room',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
             items: [
-              createAmenityItem({ _key: 'wifi', label: 'Wifi', icon: 'wifi', featured: true }),
-              createAmenityItem({ _key: 'bed', label: 'Bed', icon: 'bed', featured: true })
+              createAmenityItem({
+                _key: 'wifi',
+                label: 'Wifi',
+                icon: 'wifi',
+                featured: true
+              }),
+              createAmenityItem({
+                _key: 'bed',
+                label: 'Bed',
+                icon: 'bed',
+                featured: true
+              })
             ]
           })
         )
@@ -348,14 +485,32 @@ describe('HouseAmenities', () => {
   describe('modal dialog', () => {
     it('opens Dialog on desktop when clicking button', () => {
       const featuredAmenities = [
-        { _key: 'wifi', label: 'Wifi', icon: 'wifi', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null }
+        {
+          _key: 'wifi',
+          label: 'Wifi',
+          icon: 'wifi',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        }
       ]
       const categories = [
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Internet', icon: null, orderRank: '0|a00000:' },
-            items: [createAmenityItem({ _key: 'wifi', label: 'Wifi', featured: true, icon: 'wifi' })]
+            category: {
+              _id: 'c1',
+              label: 'Internet',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
+            items: [
+              createAmenityItem({
+                _key: 'wifi',
+                label: 'Wifi',
+                featured: true,
+                icon: 'wifi'
+              })
+            ]
           })
         )
       ]
@@ -376,14 +531,32 @@ describe('HouseAmenities', () => {
     it('opens Drawer on mobile when clicking button', () => {
       mockUseIsMobile.mockReturnValue(true)
       const featuredAmenities = [
-        { _key: 'wifi', label: 'Wifi', icon: 'wifi', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null }
+        {
+          _key: 'wifi',
+          label: 'Wifi',
+          icon: 'wifi',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        }
       ]
       const categories = [
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Internet', icon: null, orderRank: '0|a00000:' },
-            items: [createAmenityItem({ _key: 'wifi', label: 'Wifi', featured: true, icon: 'wifi' })]
+            category: {
+              _id: 'c1',
+              label: 'Internet',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
+            items: [
+              createAmenityItem({
+                _key: 'wifi',
+                label: 'Wifi',
+                featured: true,
+                icon: 'wifi'
+              })
+            ]
           })
         )
       ]
@@ -405,26 +578,71 @@ describe('HouseAmenities', () => {
   describe('category grouping in modal', () => {
     it('displays categories with their labels in modal', () => {
       const featuredAmenities = [
-        { _key: 'wifi', label: 'Wifi', icon: 'wifi', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null },
-        { _key: 'router', label: 'Router', icon: 'router', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null },
-        { _key: 'bed', label: 'Bed', icon: 'bed', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null }
+        {
+          _key: 'wifi',
+          label: 'Wifi',
+          icon: 'wifi',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        },
+        {
+          _key: 'router',
+          label: 'Router',
+          icon: 'router',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        },
+        {
+          _key: 'bed',
+          label: 'Bed',
+          icon: 'bed',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        }
       ]
       const categories = [
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Internet Access', icon: null, orderRank: '0|a00000:' },
+            category: {
+              _id: 'c1',
+              label: 'Internet Access',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
             items: [
-              createAmenityItem({ _key: 'wifi', label: 'Wifi', featured: true, icon: 'wifi' }),
-              createAmenityItem({ _key: 'router', label: 'Router', featured: true, icon: 'router' })
+              createAmenityItem({
+                _key: 'wifi',
+                label: 'Wifi',
+                featured: true,
+                icon: 'wifi'
+              }),
+              createAmenityItem({
+                _key: 'router',
+                label: 'Router',
+                featured: true,
+                icon: 'router'
+              })
             ]
           })
         ),
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat2',
-            category: { _id: 'c2', label: 'Bedroom', icon: null, orderRank: '0|b00000:' },
-            items: [createAmenityItem({ _key: 'bed', label: 'Bed', featured: true, icon: 'bed' })]
+            category: {
+              _id: 'c2',
+              label: 'Bedroom',
+              icon: null,
+              orderRank: '0|b00000:'
+            },
+            items: [
+              createAmenityItem({
+                _key: 'bed',
+                label: 'Bed',
+                featured: true,
+                icon: 'bed'
+              })
+            ]
           })
         )
       ]
@@ -445,30 +663,84 @@ describe('HouseAmenities', () => {
 
     it('preserves category order in modal', () => {
       const featuredAmenities = [
-        { _key: 'wifi', label: 'Wifi', icon: 'wifi', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null },
-        { _key: 'bed', label: 'Bed', icon: 'bed', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null },
-        { _key: 'kitchen', label: 'Kitchen', icon: 'utensils', note: null as 'private' | 'shared' | 'coin' | null, featured: true as boolean | null }
+        {
+          _key: 'wifi',
+          label: 'Wifi',
+          icon: 'wifi',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        },
+        {
+          _key: 'bed',
+          label: 'Bed',
+          icon: 'bed',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        },
+        {
+          _key: 'kitchen',
+          label: 'Kitchen',
+          icon: 'utensils',
+          note: null as 'private' | 'shared' | 'coin' | null,
+          featured: true as boolean | null
+        }
       ]
       const categories = [
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat1',
-            category: { _id: 'c1', label: 'Internet', icon: null, orderRank: '0|a00000:' },
-            items: [createAmenityItem({ _key: 'wifi', label: 'Wifi', featured: true, icon: 'wifi' })]
+            category: {
+              _id: 'c1',
+              label: 'Internet',
+              icon: null,
+              orderRank: '0|a00000:'
+            },
+            items: [
+              createAmenityItem({
+                _key: 'wifi',
+                label: 'Wifi',
+                featured: true,
+                icon: 'wifi'
+              })
+            ]
           })
         ),
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat2',
-            category: { _id: 'c2', label: 'Bedroom', icon: null, orderRank: '0|b00000:' },
-            items: [createAmenityItem({ _key: 'bed', label: 'Bed', featured: true, icon: 'bed' })]
+            category: {
+              _id: 'c2',
+              label: 'Bedroom',
+              icon: null,
+              orderRank: '0|b00000:'
+            },
+            items: [
+              createAmenityItem({
+                _key: 'bed',
+                label: 'Bed',
+                featured: true,
+                icon: 'bed'
+              })
+            ]
           })
         ),
         toAmenityCategoryData(
           createAmenityCategory({
             _key: 'cat3',
-            category: { _id: 'c3', label: 'Kitchen', icon: null, orderRank: '0|c00000:' },
-            items: [createAmenityItem({ _key: 'kitchen', label: 'Kitchen', featured: true, icon: 'utensils' })]
+            category: {
+              _id: 'c3',
+              label: 'Kitchen',
+              icon: null,
+              orderRank: '0|c00000:'
+            },
+            items: [
+              createAmenityItem({
+                _key: 'kitchen',
+                label: 'Kitchen',
+                featured: true,
+                icon: 'utensils'
+              })
+            ]
           })
         )
       ]

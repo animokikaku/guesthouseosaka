@@ -49,9 +49,9 @@ export function LanguageSwitcher({
     [router, pathname, params]
   )
 
-  const languages = locales.map((locale) => ({
-    code: locale,
-    label: langs[locale]
+  const languages = locales.map((loc) => ({
+    code: loc,
+    label: langs[loc]
   }))
 
   return (
@@ -103,7 +103,7 @@ function LanguageSwitcherSelect({
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align}>
         <DropdownMenuRadioGroup
-          onValueChange={(value) => onChange?.(value as Locale)}
+          onValueChange={(val) => onChange?.(val as Locale)}
           value={value}
         >
           {languages.map(({ code, label }) => (

@@ -24,7 +24,9 @@ type ImageBlockGalleryProps = {
   featuredImage?: FeaturedImage
 }
 
-type SanityImage = NonNullable<GalleryItem['image']> | NonNullable<FeaturedImage>
+type SanityImage =
+  | NonNullable<GalleryItem['image']>
+  | NonNullable<FeaturedImage>
 
 // Transform Sanity image to Next.js Image props
 function toImageProps(

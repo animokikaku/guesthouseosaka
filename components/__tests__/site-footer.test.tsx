@@ -206,8 +206,18 @@ describe('SiteFooter', () => {
       expect(capturedReducer).not.toBeNull()
 
       const newLinks = [
-        { _key: 'social-1', icon: 'facebook', label: 'FB', url: 'https://fb.com' },
-        { _key: 'social-3', icon: 'twitter', label: 'Twitter', url: 'https://twitter.com' }
+        {
+          _key: 'social-1',
+          icon: 'facebook',
+          label: 'FB',
+          url: 'https://fb.com'
+        },
+        {
+          _key: 'social-3',
+          icon: 'twitter',
+          label: 'Twitter',
+          url: 'https://twitter.com'
+        }
       ]
 
       const result = capturedReducer!(currentLinks, {

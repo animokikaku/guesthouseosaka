@@ -54,7 +54,10 @@ describe('useIsMobile', () => {
   it('registers change event listener on mount', () => {
     renderHook(() => useIsMobile())
 
-    expect(addEventListenerSpy).toHaveBeenCalledWith('change', expect.any(Function))
+    expect(addEventListenerSpy).toHaveBeenCalledWith(
+      'change',
+      expect.any(Function)
+    )
   })
 
   it('removes event listener on unmount', () => {
@@ -62,7 +65,10 @@ describe('useIsMobile', () => {
 
     unmount()
 
-    expect(removeEventListenerSpy).toHaveBeenCalledWith('change', expect.any(Function))
+    expect(removeEventListenerSpy).toHaveBeenCalledWith(
+      'change',
+      expect.any(Function)
+    )
   })
 })
 

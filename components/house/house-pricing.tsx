@@ -11,7 +11,7 @@ import { useTranslations } from 'next-intl'
 const portableTextComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
-      <p className="text-muted-foreground whitespace-pre-line text-sm">
+      <p className="text-muted-foreground text-sm whitespace-pre-line">
         {children}
       </p>
     )

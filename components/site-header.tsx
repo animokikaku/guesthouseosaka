@@ -16,11 +16,7 @@ import { useTranslations } from 'next-intl'
 // eslint-disable-next-line no-restricted-imports
 import NextLink from 'next/link'
 
-export function SiteHeader({
-  houseItems
-}: {
-  houseItems: NavGroupItem[]
-}) {
+export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
   const t = useTranslations('SiteHeader')
   const isMobile = useIsMobile()
 

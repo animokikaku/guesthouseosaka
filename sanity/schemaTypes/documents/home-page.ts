@@ -55,7 +55,7 @@ export const homePage = defineType({
         })
       ],
       validation: (rule) => rule.required()
-    }),
+    })
   ],
   preview: {
     prepare() {

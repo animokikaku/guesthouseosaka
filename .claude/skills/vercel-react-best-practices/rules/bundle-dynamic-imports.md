@@ -25,7 +25,7 @@ function CodePanel({ code }: { code: string }) {
 import dynamic from 'next/dynamic'
 
 const MonacoEditor = dynamic(
-  () => import('./monaco-editor').then(m => m.MonacoEditor),
+  () => import('./monaco-editor').then((m) => m.MonacoEditor),
   { ssr: false }
 )
 

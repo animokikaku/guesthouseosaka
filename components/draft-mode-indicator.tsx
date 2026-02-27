@@ -52,7 +52,7 @@ export function DraftModeIndicator() {
             'py-1.5 pr-0.5 pl-3'
           )}
         >
-          <span className="relative flex size-2 mr-1">
+          <span className="relative mr-1 flex size-2">
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-rose-400 opacity-75" />
             <span className="relative inline-flex size-2 rounded-full bg-rose-500" />
           </span>

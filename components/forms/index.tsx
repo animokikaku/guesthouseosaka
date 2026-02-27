@@ -13,10 +13,7 @@ import {
   SelectField,
   ToggleGroupField
 } from '@/components/forms/fields'
-import {
-  fieldContext,
-  formContext
-} from '@/components/forms/form-context'
+import { fieldContext, formContext } from '@/components/forms/form-context'
 import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
 import { HouseIdentifier, HouseIdentifierValues } from '@/lib/types'

@@ -11,7 +11,9 @@ vi.mock('next-sanity', () => ({
 
 // Mock HouseBuilding to isolate testing
 vi.mock('@/components/house/house-building', () => ({
-  HouseBuilding: () => <div data-testid="house-building">HouseBuilding Mock</div>
+  HouseBuilding: () => (
+    <div data-testid="house-building">HouseBuilding Mock</div>
+  )
 }))
 
 const baseProps = {
@@ -27,9 +29,7 @@ const providerProps = {
 }
 
 function renderWithProvider(ui: React.ReactElement) {
-  return render(
-    <HouseProvider {...providerProps}>{ui}</HouseProvider>
-  )
+  return render(<HouseProvider {...providerProps}>{ui}</HouseProvider>)
 }
 
 describe('HouseAbout', () => {
@@ -79,7 +79,9 @@ describe('HouseAbout', () => {
           _type: 'block',
           _key: 'p1',
           style: 'normal',
-          children: [{ _type: 'span', _key: 's1', text: 'Welcome to our house.' }]
+          children: [
+            { _type: 'span', _key: 's1', text: 'Welcome to our house.' }
+          ]
         }
       ]
 

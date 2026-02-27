@@ -68,7 +68,7 @@ export function useStickyNav({
             id: entry.target.id,
             top: entry.boundingClientRect.top
           }))
-          .sort((a, b) => a.top - b.top)
+          .toSorted((a, b) => a.top - b.top)
 
         if (intersecting.length > 0) {
           setActiveId(intersecting[0].id)

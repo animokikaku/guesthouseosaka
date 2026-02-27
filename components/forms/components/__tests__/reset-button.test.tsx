@@ -101,7 +101,9 @@ describe('ResetButton', () => {
 
       // Create a mock event with preventDefault spy
       const event = new MouseEvent('click', { bubbles: true })
-      Object.defineProperty(event, 'preventDefault', { value: preventDefaultSpy })
+      Object.defineProperty(event, 'preventDefault', {
+        value: preventDefaultSpy
+      })
 
       button.dispatchEvent(event)
 

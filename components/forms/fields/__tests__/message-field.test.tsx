@@ -132,7 +132,9 @@ describe('MessageField', () => {
 
   describe('character counter', () => {
     it('displays character counter with current count', () => {
-      const fieldApi = createMockFieldApi('message', 'Hello', { value: 'Hello' })
+      const fieldApi = createMockFieldApi('message', 'Hello', {
+        value: 'Hello'
+      })
 
       render(
         <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>

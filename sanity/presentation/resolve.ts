@@ -3,8 +3,7 @@ import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
 
 function isContactTypeSlug(slug: unknown): slug is ContactType {
   return (
-    typeof slug === 'string' &&
-    ContactTypeValues.includes(slug as ContactType)
+    typeof slug === 'string' && ContactTypeValues.includes(slug as ContactType)
   )
 }
 

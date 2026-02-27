@@ -51,7 +51,10 @@ type LegalNoticeDialogProps = {
   onAgree?: () => void
 }
 
-export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps) {
+export function LegalNoticeDialog({
+  children,
+  onAgree
+}: LegalNoticeDialogProps) {
   const t = useTranslations('LegalNoticeDialog')
   const formatter = useFormatter()
   const data = useLegalNotice()
