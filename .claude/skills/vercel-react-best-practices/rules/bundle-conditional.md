@@ -18,7 +18,7 @@ function AnimationPlayer({ enabled }: { enabled: boolean }) {
   useEffect(() => {
     if (enabled && !frames && typeof window !== 'undefined') {
       import('./animation-frames.js')
-        .then((mod) => setFrames(mod.frames))
+        .then(mod => setFrames(mod.frames))
         .catch(() => setEnabled(false))
     }
   }, [enabled, frames])
