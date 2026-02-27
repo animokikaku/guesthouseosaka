@@ -1,55 +1,14 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { FAQExtraCostsTable } from '../faq-extra-costs-table'
-import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
-
-type PricingCategories = NonNullable<PricingCategoriesQueryResult>
-type Houses = NonNullable<HousesBuildingQueryResult>
-type ExtraCost = NonNullable<Houses[number]['extraCosts']>[number]
-
-const createCategory = (id: string, title: string): PricingCategories[number] => ({
-  _id: id,
-  title,
-  orderRank: `0|${id}:`
-})
-
-const createHouse = (
-  id: string,
-  slug: 'orange' | 'apple' | 'lemon',
-  extraCosts: ExtraCost[] = []
-): Houses[number] => ({
-  _id: id,
-  _type: 'house',
-  title: `${slug.charAt(0).toUpperCase() + slug.slice(1)} House`,
-  slug,
-  building: null,
-  phone: {
-    _type: 'housePhone',
-    domestic: '06-1234-5678',
-    international: '+81-6-1234-5678'
-  },
-  image: {
-    asset: null,
-    hotspot: null,
-    crop: null,
-    alt: null,
-    preview: null
-  },
-  extraCosts
-})
-
-const createExtraCost = (categoryId: string, text: string): ExtraCost => ({
-  categoryId,
-  value: [
-    {
-      _type: 'block',
-      _key: 'block1',
-      children: [{ _type: 'span', _key: 'span1', text, marks: [] }],
-      markDefs: [],
-      style: 'normal'
-    }
-  ]
-})
+import {
+  type Houses,
+  type PricingCategories,
+  createCategory,
+  createExtraCost,
+  createExtraCostWithList,
+  createHouse
+} from '@/lib/__tests__/utils/faq-fixtures'
 
 describe('FAQExtraCostsTable', () => {
   describe('empty states', () => {
@@ -72,31 +31,7 @@ describe('FAQExtraCostsTable', () => {
     })
   })
 
-  describe('missing house values', () => {
-    it('displays dash when house has no value for a category', () => {
-      const houses: Houses = [createHouse('h1', 'orange', [])]
-      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
-
-      render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
-
-      expect(screen.getByText('–')).toBeInTheDocument()
-    })
-
-    it('shows values for some houses and dashes for others', () => {
-      const houses: Houses = [
-        createHouse('h1', 'orange', [createExtraCost('deposit', '¥30,000')]),
-        createHouse('h2', 'apple', [])
-      ]
-      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
-
-      render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
-
-      expect(screen.getByText('¥30,000')).toBeInTheDocument()
-      expect(screen.getByText('–')).toBeInTheDocument()
-    })
-  })
-
-  describe('complete data rendering', () => {
+  describe('data rendering', () => {
     it('renders table with house headers', () => {
       const houses: Houses = [
         createHouse('h1', 'orange'),
@@ -127,12 +62,13 @@ describe('FAQExtraCostsTable', () => {
       expect(screen.getByText('Internet')).toBeInTheDocument()
     })
 
-    it('renders portable text values correctly', () => {
+    it('renders values for matching categories and dashes for missing ones', () => {
       const houses: Houses = [
         createHouse('h1', 'orange', [
           createExtraCost('deposit', '¥30,000'),
           createExtraCost('internet', 'Free')
-        ])
+        ]),
+        createHouse('h2', 'apple', [])
       ]
       const pricingCategories: PricingCategories = [
         createCategory('deposit', 'Deposit'),
@@ -143,22 +79,37 @@ describe('FAQExtraCostsTable', () => {
 
       expect(screen.getByText('¥30,000')).toBeInTheDocument()
       expect(screen.getByText('Free')).toBeInTheDocument()
+      // Apple house has no costs
+      expect(screen.getAllByText('–')).toHaveLength(2)
     })
 
-    it('matches category by slug correctly', () => {
+    it('renders bullet list items', () => {
       const houses: Houses = [
-        createHouse('h1', 'orange', [createExtraCost('utility-fees', '¥3,000/month')])
+        createHouse('h1', 'orange', [
+          createExtraCostWithList('utilities', ['Water', 'Gas', 'Electricity'], 'bullet')
+        ])
       ]
-      const pricingCategories: PricingCategories = [
-        createCategory('deposit', 'Deposit'),
-        createCategory('utility-fees', 'Utility fees')
-      ]
+      const pricingCategories: PricingCategories = [createCategory('utilities', 'Utilities')]
 
       render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
 
-      expect(screen.getByText('¥3,000/month')).toBeInTheDocument()
-      // First row (Deposit) should have a dash
-      expect(screen.getByText('–')).toBeInTheDocument()
+      expect(screen.getByText('Water')).toBeInTheDocument()
+      expect(screen.getByText('Gas')).toBeInTheDocument()
+      expect(screen.getByText('Electricity')).toBeInTheDocument()
+    })
+
+    it('renders numbered list items', () => {
+      const houses: Houses = [
+        createHouse('h1', 'orange', [
+          createExtraCostWithList('steps', ['Step 1', 'Step 2'], 'number')
+        ])
+      ]
+      const pricingCategories: PricingCategories = [createCategory('steps', 'Steps')]
+
+      render(<FAQExtraCostsTable houses={houses} pricingCategories={pricingCategories} />)
+
+      expect(screen.getByText('Step 1')).toBeInTheDocument()
+      expect(screen.getByText('Step 2')).toBeInTheDocument()
     })
   })
 })
