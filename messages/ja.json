@@ -35,7 +35,8 @@
   },
   "HouseLocation": {
     "heading": "周辺地図",
-    "modal_trigger": "もっと見る"
+    "modal_trigger": "もっと見る",
+    "loading_map": "地図を読み込み中"
   },
   "HousePricing": {
     "heading": "料金"
@@ -85,11 +86,20 @@
   },
   "SiteHeader": {
     "logo_label": "シェアハウス大阪",
+    "studio_label": "Sanity Studio",
     "navigation": {
       "share_houses": "シェアハウス",
       "faq": "よくある質問",
       "contact": "お問い合わせ"
     }
+  },
+  "PlaceDetails": {
+    "fallback_alt": "施設の写真"
+  },
+  "Metadata": {
+    "contact_title": "お問い合わせ",
+    "faq_title": "よくある質問",
+    "manifest_name": "シェアハウス大阪"
   },
   "SubmitButton": {
     "label": "送信"

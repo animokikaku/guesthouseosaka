@@ -66,7 +66,7 @@ export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
             <Button variant="ghost" size="icon" asChild>
               <NextLink href="/studio" target="_blank" prefetch={false}>
                 <Settings2 className="size-4.5" />
-                <span className="sr-only">Sanity Studio</span>
+                <span className="sr-only">{t('studio_label')}</span>
               </NextLink>
             </Button>
           </div>

@@ -9,15 +9,17 @@ import {
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { LocationData, MapData } from '@/lib/types/components'
-import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
+import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
 function MapSkeleton() {
+  const t = useTranslations('HouseLocation')
+
   return (
     <div
       role="status"
-      aria-label="Loading map"
+      aria-label={t('loading_map')}
       className="md:border-border flex flex-col gap-6 overflow-hidden md:flex-row md:gap-0 md:rounded-lg md:border"
     >
       {/* PlaceDetails skeleton */}

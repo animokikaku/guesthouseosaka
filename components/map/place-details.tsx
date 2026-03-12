@@ -3,6 +3,7 @@
 import type { SanityImage } from '@/lib/types/components'
 import { urlFor } from '@/sanity/lib/image'
 import { ColorScheme, useMapsLibrary } from '@vis.gl/react-google-maps'
+import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import { memo } from 'react'
@@ -46,12 +47,14 @@ function PlaceDetailsCompact({
   colorScheme,
   className
 }: GoogleMapsPlaceDetailsProps) {
+  const t = useTranslations('PlaceDetails')
+
   return (
     <div className="overflow-hidden">
       <div className="relative w-full overflow-hidden">
         <Image
           src={urlFor(placeImage).width(600).height(400).dpr(2).fit('crop').url()}
-          alt={placeImage.alt ?? 'Place photo'}
+          alt={placeImage.alt ?? t('fallback_alt')}
           width={600}
           height={400}
           placeholder={placeImage.preview ? 'blur' : 'empty'}

@@ -38,7 +38,8 @@ declare const messages: {
   },
   "HouseLocation": {
     "heading": "Where you'll be",
-    "modal_trigger": "Show more"
+    "modal_trigger": "Show more",
+    "loading_map": "Loading map"
   },
   "HousePricing": {
     "heading": "Pricing"
@@ -88,11 +89,20 @@ declare const messages: {
   },
   "SiteHeader": {
     "logo_label": "Share House Osaka",
+    "studio_label": "Sanity Studio",
     "navigation": {
       "share_houses": "Share Houses",
       "faq": "FAQ",
       "contact": "Contact"
     }
+  },
+  "PlaceDetails": {
+    "fallback_alt": "Place photo"
+  },
+  "Metadata": {
+    "contact_title": "Contact",
+    "faq_title": "FAQ",
+    "manifest_name": "Share House Osaka"
   },
   "SubmitButton": {
     "label": "Submit"
