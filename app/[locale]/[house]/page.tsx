@@ -35,14 +35,14 @@ export default async function HousePage({ params }: PageProps<'/[locale]/[house]
     )
   }
 
-  const url = `${env.NEXT_PUBLIC_APP_URL}/${house}`
+  const url = new URL(`/${locale}/${house}`, env.NEXT_PUBLIC_APP_URL).toString()
   const { title, description, map, building, phone, image } = data
 
   const jsonLd: WithContext<Accommodation> = {
     '@context': 'https://schema.org',
     '@type': 'House',
     '@id': `${url}#house`,
-    url: `${url}/${locale}`,
+    url,
     name: title ?? undefined,
     description: description ?? undefined,
     image: urlFor(image).width(1200).height(630).fit('crop').url(),
