@@ -46,7 +46,7 @@
     "@sanity/orderable-document-list": "^1.5.1",
     "@sanity/vision": "^5.14.1",
     "@t3-oss/env-nextjs": "^0.13.10",
-    "@tanstack/react-form": "^1.28.4",
+    "@tanstack/react-form": "^1.28.5",
     "@tanstack/react-store": "^0.9.2",
     "@vercel/analytics": "^2.0.0",
     "@vercel/speed-insights": "^2.0.0",
