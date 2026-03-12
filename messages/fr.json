@@ -35,7 +35,8 @@
   },
   "HouseLocation": {
     "heading": "Où vous vous trouverez",
-    "modal_trigger": "En savoir plus"
+    "modal_trigger": "En savoir plus",
+    "loading_map": "Chargement de la carte"
   },
   "HousePricing": {
     "heading": "Tarifs"
@@ -85,11 +86,20 @@
   },
   "SiteHeader": {
     "logo_label": "Share House Osaka",
+    "studio_label": "Sanity Studio",
     "navigation": {
       "share_houses": "Maisons partagées",
       "faq": "FAQ",
       "contact": "Contact"
     }
+  },
+  "PlaceDetails": {
+    "fallback_alt": "Photo du lieu"
+  },
+  "Metadata": {
+    "contact_title": "Contact",
+    "faq_title": "FAQ",
+    "manifest_name": "Share House Osaka"
   },
   "SubmitButton": {
     "label": "Envoyer"

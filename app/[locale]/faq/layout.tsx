@@ -7,7 +7,7 @@ import { faqPageQuery, settingsQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import type { Metadata } from 'next'
 import type { Locale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 const headerComponents: PortableTextComponents = {
   block: {
@@ -26,6 +26,7 @@ export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/faq'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
+  const t = await getTranslations({ locale: locale as Locale, namespace: 'Metadata' })
   const [{ data: faqPage }, { data: settings }] = await Promise.all([
     sanityFetch({ query: faqPageQuery, params: { locale } }),
     sanityFetch({ query: settingsQuery, params: { locale } })
@@ -38,7 +39,7 @@ export async function generateMetadata(
   })
 
   return {
-    title: faqPage?.metaTitle ?? 'FAQ',
+    title: faqPage?.metaTitle ?? t('faq_title'),
     description: faqPage?.metaDescription ?? undefined,
     openGraph,
     twitter
