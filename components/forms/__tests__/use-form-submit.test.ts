@@ -23,6 +23,18 @@ vi.mock('sonner', () => ({
   }
 }))
 
+function createDeferred<T>() {
+  let resolve!: (value: T) => void
+  let reject!: (reason?: unknown) => void
+
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+
+  return { promise, resolve, reject }
+}
+
 describe('useFormSubmit', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -169,6 +181,27 @@ describe('useFormSubmit', () => {
       expect(options).toHaveProperty('loading')
       expect(options).toHaveProperty('success')
       expect(options).toHaveProperty('error')
+    })
+
+    it('waits for the submit action to settle before resolving', async () => {
+      const deferred = createDeferred<{ success: boolean }>()
+      mockSubmitContactForm.mockReturnValueOnce(deferred.promise)
+
+      const { result } = renderHook(() => useFormSubmit())
+      const onSubmit = result.current.createOnSubmit('tour')
+
+      let isResolved = false
+      const submission = onSubmit({ value: mockTourData }).then(() => {
+        isResolved = true
+      })
+
+      await Promise.resolve()
+      expect(isResolved).toBe(false)
+
+      deferred.resolve({ success: true })
+      await submission
+
+      expect(isResolved).toBe(true)
     })
 
     it('success callback redirects to /contact', async () => {

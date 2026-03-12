@@ -87,6 +87,8 @@ export function useFormSubmit() {
             }
           }
         })
+
+        return await promise
       }
     },
     [t, router]
