@@ -9,7 +9,7 @@ const imageRefFields = /* groq */ `
   asset,
   hotspot,
   crop,
-  "alt": coalesce(alt[language == $locale || _key == $locale][0].value, alt[language == "en" || _key == "en"][0].value),
+  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),
   "preview": asset->metadata.lqip
 `
 
@@ -21,7 +21,7 @@ const actionsFields = /* groq */ `
   "actions": array::compact(actions[]{
     _key,
     icon,
-    "label": coalesce(label[language == $locale || _key == $locale][0].value, label[language == "en" || _key == "en"][0].value),
+    "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
     href
   })
 `
@@ -30,59 +30,59 @@ const actionsFields = /* groq */ `
 const contactFormFields = /* groq */ `
   "fields": {
     "places": {
-      "label": coalesce(fields.places.label[language == $locale || _key == $locale][0].value, fields.places.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.places.placeholder[language == $locale || _key == $locale][0].value, fields.places.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.places.description[language == $locale || _key == $locale][0].value, fields.places.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.places.label[language == $locale][0].value, fields.places.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.places.placeholder[language == $locale][0].value, fields.places.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.places.description[language == $locale][0].value, fields.places.description[language == "en"][0].value)
     },
     "date": {
-      "label": coalesce(fields.date.label[language == $locale || _key == $locale][0].value, fields.date.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.date.placeholder[language == $locale || _key == $locale][0].value, fields.date.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.date.description[language == $locale || _key == $locale][0].value, fields.date.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.date.label[language == $locale][0].value, fields.date.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.date.placeholder[language == $locale][0].value, fields.date.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.date.description[language == $locale][0].value, fields.date.description[language == "en"][0].value)
     },
     "hour": {
-      "label": coalesce(fields.hour.label[language == $locale || _key == $locale][0].value, fields.hour.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.hour.placeholder[language == $locale || _key == $locale][0].value, fields.hour.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.hour.description[language == $locale || _key == $locale][0].value, fields.hour.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.hour.label[language == $locale][0].value, fields.hour.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.hour.placeholder[language == $locale][0].value, fields.hour.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.hour.description[language == $locale][0].value, fields.hour.description[language == "en"][0].value)
     },
     "stayDuration": {
-      "label": coalesce(fields.stayDuration.label[language == $locale || _key == $locale][0].value, fields.stayDuration.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.stayDuration.placeholder[language == $locale || _key == $locale][0].value, fields.stayDuration.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.stayDuration.description[language == $locale || _key == $locale][0].value, fields.stayDuration.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.stayDuration.label[language == $locale][0].value, fields.stayDuration.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.stayDuration.placeholder[language == $locale][0].value, fields.stayDuration.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.stayDuration.description[language == $locale][0].value, fields.stayDuration.description[language == "en"][0].value)
     },
     "gender": {
-      "label": coalesce(fields.gender.label[language == $locale || _key == $locale][0].value, fields.gender.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.gender.placeholder[language == $locale || _key == $locale][0].value, fields.gender.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.gender.description[language == $locale || _key == $locale][0].value, fields.gender.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.gender.label[language == $locale][0].value, fields.gender.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.gender.placeholder[language == $locale][0].value, fields.gender.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.gender.description[language == $locale][0].value, fields.gender.description[language == "en"][0].value)
     },
     "age": {
-      "label": coalesce(fields.age.label[language == $locale || _key == $locale][0].value, fields.age.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.age.placeholder[language == $locale || _key == $locale][0].value, fields.age.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.age.description[language == $locale || _key == $locale][0].value, fields.age.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.age.label[language == $locale][0].value, fields.age.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.age.placeholder[language == $locale][0].value, fields.age.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.age.description[language == $locale][0].value, fields.age.description[language == "en"][0].value)
     },
     "nationality": {
-      "label": coalesce(fields.nationality.label[language == $locale || _key == $locale][0].value, fields.nationality.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.nationality.placeholder[language == $locale || _key == $locale][0].value, fields.nationality.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.nationality.description[language == $locale || _key == $locale][0].value, fields.nationality.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.nationality.label[language == $locale][0].value, fields.nationality.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.nationality.placeholder[language == $locale][0].value, fields.nationality.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.nationality.description[language == $locale][0].value, fields.nationality.description[language == "en"][0].value)
     },
     "phone": {
-      "label": coalesce(fields.phone.label[language == $locale || _key == $locale][0].value, fields.phone.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.phone.placeholder[language == $locale || _key == $locale][0].value, fields.phone.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.phone.description[language == $locale || _key == $locale][0].value, fields.phone.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.phone.label[language == $locale][0].value, fields.phone.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.phone.placeholder[language == $locale][0].value, fields.phone.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.phone.description[language == $locale][0].value, fields.phone.description[language == "en"][0].value)
     },
     "name": {
-      "label": coalesce(fields.name.label[language == $locale || _key == $locale][0].value, fields.name.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.name.placeholder[language == $locale || _key == $locale][0].value, fields.name.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.name.description[language == $locale || _key == $locale][0].value, fields.name.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.name.label[language == $locale][0].value, fields.name.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.name.placeholder[language == $locale][0].value, fields.name.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.name.description[language == $locale][0].value, fields.name.description[language == "en"][0].value)
     },
     "email": {
-      "label": coalesce(fields.email.label[language == $locale || _key == $locale][0].value, fields.email.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.email.placeholder[language == $locale || _key == $locale][0].value, fields.email.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.email.description[language == $locale || _key == $locale][0].value, fields.email.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.email.label[language == $locale][0].value, fields.email.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.email.placeholder[language == $locale][0].value, fields.email.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.email.description[language == $locale][0].value, fields.email.description[language == "en"][0].value)
     },
     "message": {
-      "label": coalesce(fields.message.label[language == $locale || _key == $locale][0].value, fields.message.label[language == "en" || _key == "en"][0].value),
-      "placeholder": coalesce(fields.message.placeholder[language == $locale || _key == $locale][0].value, fields.message.placeholder[language == "en" || _key == "en"][0].value),
-      "description": coalesce(fields.message.description[language == $locale || _key == $locale][0].value, fields.message.description[language == "en" || _key == "en"][0].value)
+      "label": coalesce(fields.message.label[language == $locale][0].value, fields.message.label[language == "en"][0].value),
+      "placeholder": coalesce(fields.message.placeholder[language == $locale][0].value, fields.message.placeholder[language == "en"][0].value),
+      "description": coalesce(fields.message.description[language == $locale][0].value, fields.message.description[language == "en"][0].value)
     }
   }
 `
@@ -94,8 +94,8 @@ const contactFormFields = /* groq */ `
 export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
   _id,
   _type,
-  "siteName": coalesce(siteName[language == $locale || _key == $locale][0].value, siteName[language == "en" || _key == "en"][0].value),
-  "siteDescription": coalesce(siteDescription[language == $locale || _key == $locale][0].value, siteDescription[language == "en" || _key == "en"][0].value),
+  "siteName": coalesce(siteName[language == $locale][0].value, siteName[language == "en"][0].value),
+  "siteDescription": coalesce(siteDescription[language == $locale][0].value, siteDescription[language == "en"][0].value),
   companyName,
   email,
   phone,
@@ -117,21 +117,21 @@ export const homePageQuery = defineQuery(`{
     _id,
     _type,
     "hero": hero{
-      "content": coalesce(content[language == $locale || _key == $locale][0].value, content[language == "en" || _key == "en"][0].value),
-      "ctaLabel": coalesce(ctaLabel[language == $locale || _key == $locale][0].value, ctaLabel[language == "en" || _key == "en"][0].value)
+      "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value),
+      "ctaLabel": coalesce(ctaLabel[language == $locale][0].value, ctaLabel[language == "en"][0].value)
     },
     "galleryWall": array::compact(galleryWall[0...6]{
       _key,${imageRefFields}
     }),
     "collection": collection{
-      "content": coalesce(content[language == $locale || _key == $locale][0].value, content[language == "en" || _key == "en"][0].value)
+      "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)
     }
   },
   "houses": *[_type == "house"] | order(orderRank){
     _id,
     slug,
-    "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value),
-    "description": coalesce(description[language == $locale || _key == $locale][0].value, description[language == "en" || _key == "en"][0].value),
+    "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
     ${imageFields}
   }
 }`)
@@ -144,9 +144,9 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   _id,
   _type,
   slug,
-  "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value),
-  "description": coalesce(description[language == $locale || _key == $locale][0].value, description[language == "en" || _key == "en"][0].value),
-  "caption": coalesce(caption[language == $locale || _key == $locale][0].value, caption[language == "en" || _key == "en"][0].value),
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
+  "caption": coalesce(caption[language == $locale][0].value, caption[language == "en"][0].value),
   building,
   phone,
 
@@ -160,7 +160,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     },
     hotspot,
     crop,
-    "alt": coalesce(alt[language == $locale || _key == $locale][0].value, alt[language == "en" || _key == "en"][0].value)
+    "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value)
   },
 
   // Featured Image (optional, prepended to gallery grids)
@@ -169,7 +169,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   ),
 
   // About Section
-  "about": coalesce(about[language == $locale || _key == $locale][0].value, about[language == "en" || _key == "en"][0].value),
+  "about": coalesce(about[language == $locale][0].value, about[language == "en"][0].value),
 
   // Gallery grouped by category (for gallery page - enables per-category display)
   // Sorted by category orderRank for consistent display order
@@ -178,7 +178,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     _key,
     "category": category->{
       _id,
-      "label": coalesce(label[language == $locale || _key == $locale][0].value, label[language == "en" || _key == "en"][0].value),
+      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
       orderRank
     },
     "items": array::compact(items[]{
@@ -199,7 +199,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     _key,
     "category": category->{
       _id,
-      "label": coalesce(label[language == $locale || _key == $locale][0].value, label[language == "en" || _key == "en"][0].value),
+      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
       icon,
       orderRank
     },
@@ -208,9 +208,9 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
       note,
       featured,
       "label": coalesce(
-        customLabel[language == $locale || _key == $locale][0].value,
-        amenity->label[language == $locale || _key == $locale][0].value,
-        amenity->label[language == "en" || _key == "en"][0].value
+        customLabel[language == $locale][0].value,
+        amenity->label[language == $locale][0].value,
+        amenity->label[language == "en"][0].value
       ),
       "icon": amenity->icon
     })
@@ -221,17 +221,17 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     _key,
     note,
     "label": coalesce(
-      customLabel[language == $locale || _key == $locale][0].value,
-      amenity->label[language == $locale || _key == $locale][0].value,
-      amenity->label[language == "en" || _key == "en"][0].value
+      customLabel[language == $locale][0].value,
+      amenity->label[language == $locale][0].value,
+      amenity->label[language == "en"][0].value
     ),
     "icon": amenity->icon
   },
 
   // Location
   "location": location{
-    "highlight": coalesce(highlight[language == $locale || _key == $locale][0].value, highlight[language == "en" || _key == "en"][0].value),
-    "details": coalesce(details[language == $locale || _key == $locale][0].value, details[language == "en" || _key == "en"][0].value)
+    "highlight": coalesce(highlight[language == $locale][0].value, highlight[language == "en"][0].value),
+    "details": coalesce(details[language == $locale][0].value, details[language == "en"][0].value)
   },
 
   // Map
@@ -246,8 +246,8 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // Pricing
   "pricing": array::compact(pricing[]{
     _key,
-    "label": coalesce(label[language == $locale || _key == $locale][0].value, label[language == "en" || _key == "en"][0].value),
-    "content": coalesce(content[language == $locale || _key == $locale][0].value, content[language == "en" || _key == "en"][0].value)
+    "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
+    "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)
   })
 }`)
 
@@ -259,15 +259,15 @@ export const houseSlugsQuery = defineQuery(`*[_type == "house" && defined(slug)]
 // House titles for forms (ordered by global orderRank)
 export const housesTitlesQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   "slug": slug,
-  "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value)
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value)
 }`)
 
 // Houses for navigation (header) - ordered by global orderRank
 export const housesNavQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   slug,
-  "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value),
-  "description": coalesce(description[language == $locale || _key == $locale][0].value, description[language == "en" || _key == "en"][0].value),
-  "caption": coalesce(caption[language == $locale || _key == $locale][0].value, caption[language == "en" || _key == "en"][0].value),
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
+  "caption": coalesce(caption[language == $locale][0].value, caption[language == "en"][0].value),
   ${imageFields}
 }`)
 
@@ -276,7 +276,7 @@ export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(orde
   _id,
   _type,
   slug,
-  "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value),
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
   "building": building{
     rooms,
     floors
@@ -285,7 +285,7 @@ export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(orde
   ${imageFields},
   "extraCosts": array::compact(extraCosts[]{
     "categoryId": category->_id,
-    "value": coalesce(value[language == $locale || _key == $locale][0].value, value[language == "en" || _key == "en"][0].value)[]
+    "value": coalesce(value[language == $locale][0].value, value[language == "en"][0].value)[]
   })
 }`)
 
@@ -296,20 +296,20 @@ export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(orde
 export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   _id,
   _type,
-  "header": coalesce(header[language == $locale || _key == $locale][0].value, header[language == "en" || _key == "en"][0].value),
-  "metaTitle": coalesce(metaTitle[language == $locale || _key == $locale][0].value, metaTitle[language == "en" || _key == "en"][0].value),
-  "metaDescription": coalesce(metaDescription[language == $locale || _key == $locale][0].value, metaDescription[language == "en" || _key == "en"][0].value),
+  "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),
+  "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),
+  "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value),
   ${actionsFields},
-  "contactSection": coalesce(contactSection[language == $locale || _key == $locale][0].value, contactSection[language == "en" || _key == "en"][0].value),
-  "contactNote": coalesce(contactNote[language == $locale || _key == $locale][0].value, contactNote[language == "en" || _key == "en"][0].value)
+  "contactSection": coalesce(contactSection[language == $locale][0].value, contactSection[language == "en"][0].value),
+  "contactNote": coalesce(contactNote[language == $locale][0].value, contactNote[language == "en"][0].value)
 }`)
 
 export const faqQuestionsQuery = defineQuery(`
   *[_type == "faqQuestion"] | order(orderRank) {
     _id,
     _type,
-    "question": coalesce(question[language == $locale || _key == $locale][0].value, question[language == "en" || _key == "en"][0].value),
-    "answer": coalesce(answer[language == $locale || _key == $locale][0].value, answer[language == "en" || _key == "en"][0].value),
+    "question": coalesce(question[language == $locale][0].value, question[language == "en"][0].value),
+    "answer": coalesce(answer[language == $locale][0].value, answer[language == "en"][0].value),
     componentKey
   }
 `)
@@ -322,8 +322,8 @@ export const faqQuestionsQuery = defineQuery(`
 // (generateMetadata runs before draft mode context is established)
 export const contactPageMetaQuery = defineQuery(`
   *[_type == "contactPage"][0]{
-    "metaTitle": coalesce(metaTitle[language == $locale || _key == $locale][0].value, metaTitle[language == "en" || _key == "en"][0].value),
-    "metaDescription": coalesce(metaDescription[language == $locale || _key == $locale][0].value, metaDescription[language == "en" || _key == "en"][0].value)
+    "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),
+    "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value)
   }
 `)
 
@@ -331,15 +331,15 @@ export const contactPageQuery = defineQuery(`{
   "page": *[_type == "contactPage"][0]{
     _id,
     _type,
-    "header": coalesce(header[language == $locale || _key == $locale][0].value, header[language == "en" || _key == "en"][0].value),
+    "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),
     ${actionsFields}
   },
   "contactTypes": *[_type == "contactType"] | order(orderRank){
     _id,
     _type,
     slug,
-    "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value),
-    "description": coalesce(description[language == $locale || _key == $locale][0].value, description[language == "en" || _key == "en"][0].value),
+    "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
     ${contactFormFields}
   }
 }`)
@@ -350,8 +350,8 @@ export const contactTypesListQuery = defineQuery(`
     _id,
     _type,
     slug,
-    "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value),
-    "description": coalesce(description[language == $locale || _key == $locale][0].value, description[language == "en" || _key == "en"][0].value)
+    "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)
   }
 `)
 
@@ -359,8 +359,8 @@ export const contactTypeQuery = defineQuery(`*[_type == "contactType" && slug ==
   _id,
   _type,
   slug,
-  "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value),
-  "description": coalesce(description[language == $locale || _key == $locale][0].value, description[language == "en" || _key == "en"][0].value),
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
   ${contactFormFields}
 }`)
 
@@ -373,9 +373,9 @@ export const contactTypeSlugsQuery = defineQuery(`*[_type == "contactType"]{ slu
 export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
   _id,
   _type,
-  "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value),
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
   lastUpdated,
-  "content": coalesce(content[language == $locale || _key == $locale][0].value, content[language == "en" || _key == "en"][0].value)
+  "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)
 }`)
 
 // =============================================================================
@@ -384,6 +384,6 @@ export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
 
 export const pricingCategoriesQuery = defineQuery(`*[_type == "pricingCategory"] | order(orderRank){
   _id,
-  "title": coalesce(title[language == $locale || _key == $locale][0].value, title[language == "en" || _key == "en"][0].value),
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
   orderRank
 }`)
