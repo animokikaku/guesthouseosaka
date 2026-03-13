@@ -7,19 +7,37 @@ const globalWithDomConstructors = globalThis as typeof globalThis & {
   window?: Window & typeof globalThis
 }
 
-const domConstructors = [
-  'Element',
-  'HTMLElement',
-  'Node',
-  'DocumentFragment',
-  'SVGElement'
-] as const
+if (
+  typeof globalWithDomConstructors.Element === 'undefined' &&
+  globalWithDomConstructors.window?.Element
+) {
+  globalWithDomConstructors.Element = globalWithDomConstructors.window.Element
+}
 
-for (const key of domConstructors) {
-  if (
-    typeof globalWithDomConstructors[key] === 'undefined' &&
-    globalWithDomConstructors.window?.[key]
-  ) {
-    globalWithDomConstructors[key] = globalWithDomConstructors.window[key]
-  }
+if (
+  typeof globalWithDomConstructors.HTMLElement === 'undefined' &&
+  globalWithDomConstructors.window?.HTMLElement
+) {
+  globalWithDomConstructors.HTMLElement = globalWithDomConstructors.window.HTMLElement
+}
+
+if (
+  typeof globalWithDomConstructors.Node === 'undefined' &&
+  globalWithDomConstructors.window?.Node
+) {
+  globalWithDomConstructors.Node = globalWithDomConstructors.window.Node
+}
+
+if (
+  typeof globalWithDomConstructors.DocumentFragment === 'undefined' &&
+  globalWithDomConstructors.window?.DocumentFragment
+) {
+  globalWithDomConstructors.DocumentFragment = globalWithDomConstructors.window.DocumentFragment
+}
+
+if (
+  typeof globalWithDomConstructors.SVGElement === 'undefined' &&
+  globalWithDomConstructors.window?.SVGElement
+) {
+  globalWithDomConstructors.SVGElement = globalWithDomConstructors.window.SVGElement
 }
