@@ -44,7 +44,7 @@ Use MCP tools instead of ad-hoc scripts:
 - Use `defineQuery()` in `sanity/lib/queries.ts` for type safety
 - Localized content pattern:
   ```groq
-  coalesce(field[language == $locale || _key == $locale][0].value, field[language == "en" || _key == "en"][0].value)
+  coalesce(field[language == $locale][0].value, field[language == "en"][0].value)
   ```
 
 ## Rules

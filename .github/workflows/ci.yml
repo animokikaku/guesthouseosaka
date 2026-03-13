@@ -38,7 +38,7 @@ jobs:
         run: bun run format:check
 
       - name: Run TypeScript
-        run: bunx tsc --noEmit
+        run: bun run typecheck
 
       - name: Run unit tests
         run: bun run test:coverage
