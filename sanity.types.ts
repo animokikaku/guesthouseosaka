@@ -12,6 +12,8 @@
  * ---------------------------------------------------------------------------------
  */
 
+export declare const internalGroqTypeReferenceTo: unique symbol
+
 // Source: schema.json
 export type FormFieldConfigNoPlaceholder = {
   _type: 'formFieldConfigNoPlaceholder'
@@ -443,21 +445,25 @@ export type InternationalizedArrayPortableTextValue = {
     _type: 'block'
     _key: string
   }>
+  language: string
 }
 
 export type InternationalizedArrayStringArrayValue = {
   _type: 'internationalizedArrayStringArrayValue'
   value?: Array<string>
+  language: string
 }
 
 export type InternationalizedArrayTextValue = {
   _type: 'internationalizedArrayTextValue'
   value?: string
+  language: string
 }
 
 export type InternationalizedArrayStringValue = {
   _type: 'internationalizedArrayStringValue'
   value?: string
+  language: string
 }
 
 export type InternationalizedArrayStringArray = Array<
@@ -652,14 +658,14 @@ export type SanityFileAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   source?: SanityAssetSourceData
 }
 
@@ -681,14 +687,14 @@ export type SanityImageAsset = {
   title?: string
   description?: string
   altText?: string
-  sha1hash?: string
-  extension?: string
-  mimeType?: string
-  size?: number
-  assetId?: string
+  sha1hash: string
+  extension: string
+  mimeType: string
+  size: number
+  assetId: string
   uploadId?: string
-  path?: string
-  url?: string
+  path: string
+  url: string
   metadata?: SanityImageMetadata
   source?: SanityAssetSourceData
 }
@@ -760,8 +766,6 @@ export type AllSanitySchemaTypes =
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
-
-export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: sanity/lib/queries.ts
 // Variable: settingsQuery
@@ -870,7 +874,7 @@ export type HouseQueryResult = {
   image: {
     asset: {
       _id: string
-      url: string | null
+      url: string
       dimensions: SanityImageDimensions | null
       lqip: string | null
     } | null
