@@ -4,6 +4,7 @@
  * This configuration is used to for the Sanity Studio that's mounted on the `/app/studio/[[...tool]]/page.tsx` route
  */
 
+import '@/sanity/runtime-shims'
 import { assist } from '@sanity/assist'
 import { visionTool } from '@sanity/vision'
 import { defineConfig, defineField } from 'sanity'
@@ -14,8 +15,8 @@ import { structureTool } from 'sanity/structure'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { routing } from '@/i18n/routing'
-import { env } from '@/lib/env'
 import { locales } from '@/sanity/config'
+import { sanityApiVersion, sanityDataset, sanityProjectId } from '@/sanity/env'
 import { resolve } from '@/sanity/presentation/resolve'
 import { type DocumentTypeName, documentTypes, schema } from '@/sanity/schemaTypes'
 import { structure } from '@/sanity/structure'
@@ -53,8 +54,8 @@ const noCreateDocumentTypes: string[] = [
 
 export default defineConfig({
   basePath: '/studio',
-  projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: env.NEXT_PUBLIC_SANITY_DATASET,
+  projectId: sanityProjectId,
+  dataset: sanityDataset,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
   document: {
@@ -91,7 +92,7 @@ export default defineConfig({
     structureTool({ structure }),
     // Vision is for querying with GROQ from inside the Studio
     // https://www.sanity.io/docs/the-vision-plugin
-    visionTool({ defaultApiVersion: env.NEXT_PUBLIC_SANITY_API_VERSION }),
+    visionTool({ defaultApiVersion: sanityApiVersion }),
     presentationTool({
       previewUrl: {
         preview: '/',

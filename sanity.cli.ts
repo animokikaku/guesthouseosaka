@@ -2,16 +2,28 @@
  * This configuration file lets you run `$ sanity [command]` in this folder
  * Go to https://www.sanity.io/docs/cli to learn more.
  **/
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineCliConfig } from 'sanity/cli'
+import { mergeConfig } from 'vite'
+import { sanityDataset, sanityProjectId } from './sanity/env'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '515wijoz'
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'development'
+const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineCliConfig({
   api: {
-    projectId,
-    dataset
+    projectId: sanityProjectId,
+    dataset: sanityDataset
   },
+  vite: (config) =>
+    mergeConfig(config, {
+      envPrefix: ['SANITY_STUDIO_', 'NEXT_PUBLIC_'],
+      resolve: {
+        alias: {
+          '@': rootDir
+        }
+      }
+    }),
   typegen: {
     path: [
       './**/*.{ts,tsx,js,jsx}',
