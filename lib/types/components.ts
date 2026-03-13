@@ -110,7 +110,7 @@ export interface AmenityCategoryData {
  *
  * Type guarantees:
  * - `label` is `string` (not null) because schema has `validation: rule.required()`
- *   and queries use `coalesce(..., title[_key == "en"][0].value)` fallback
+ *   and queries use `coalesce(..., title[language == "en" || _key == "en"][0].value)` fallback
  * - `placeholder` and `description` are nullable (no validation in schema)
  *
  * @see sanity/schemaTypes/objects/form-field-config.ts
