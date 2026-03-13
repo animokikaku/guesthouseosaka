@@ -31,7 +31,7 @@
         "@t3-oss/env-nextjs": "^0.13.10",
         "@tanstack/react-form": "^1.28.5",
         "@tanstack/react-store": "^0.9.2",
-        "@vercel/analytics": "^2.0.0",
+        "@vercel/analytics": "^2.0.1",
         "@vercel/speed-insights": "^2.0.0",
         "@vis.gl/react-google-maps": "^1.7.1",
         "class-variance-authority": "^0.7.1",
@@ -1491,7 +1491,7 @@
 
     "@unhead/vue": ["@unhead/vue@2.1.12", "", { "dependencies": { "hookable": "^6.0.1", "unhead": "2.1.12" }, "peerDependencies": { "vue": ">=3.5.18" } }, "sha512-zEWqg0nZM8acpuTZE40wkeUl8AhIe0tU0OkilVi1D4fmVjACrwoh5HP6aNqJ8kUnKsoy6D+R3Vi/O+fmdNGO7g=="],
 
-    "@vercel/analytics": ["@vercel/analytics@2.0.0", "", { "peerDependencies": { "@remix-run/react": "^2", "@sveltejs/kit": "^1 || ^2", "next": ">= 13", "nuxt": ">= 3", "react": "^18 || ^19 || ^19.0.0-rc", "svelte": ">= 4", "vue": "^3", "vue-router": "^4" }, "optionalPeers": ["@remix-run/react", "@sveltejs/kit", "next", "react", "svelte", "vue", "vue-router"] }, "sha512-fP/ASXXz+1K/C2vWTnocd8RsGnkO9f1qOIDrhgQ3DagJtnea1EsM9AV9fDzjXlPIPb2vBQapxOIMCjtGIW8PZw=="],
+    "@vercel/analytics": ["@vercel/analytics@2.0.1", "", { "peerDependencies": { "@remix-run/react": "^2", "@sveltejs/kit": "^1 || ^2", "next": ">= 13", "nuxt": ">= 3", "react": "^18 || ^19 || ^19.0.0-rc", "svelte": ">= 4", "vue": "^3", "vue-router": "^4" }, "optionalPeers": ["@remix-run/react", "@sveltejs/kit", "next", "nuxt", "react", "svelte", "vue", "vue-router"] }, "sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g=="],
 
     "@vercel/edge": ["@vercel/edge@1.2.2", "", {}, "sha512-1+y+f6rk0Yc9ss9bRDgz/gdpLimwoRteKHhrcgHvEpjbP1nyT3ByqEMWm2BTcpIO5UtDmIFXc8zdq4LR190PDA=="],
 
