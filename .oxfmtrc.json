@@ -10,6 +10,8 @@
     "messages/en.d.json.ts",
     ".claude/**",
     ".codex/**",
-    ".cursor/**"
+    ".cursor/**",
+    "sanity.types.ts",
+    "schema.json"
   ]
 }
