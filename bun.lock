@@ -39,7 +39,7 @@
         "lucide-react": "^0.577.0",
         "next": "^16.1.7",
         "next-intl": "^4.8.3",
-        "next-sanity": "^12.1.1",
+        "next-sanity": "^12.1.2",
         "next-themes": "^0.4.6",
         "react": "^19.2.4",
         "react-dom": "^19.2.4",
@@ -1775,7 +1775,7 @@
 
     "graceful-fs": ["graceful-fs@4.2.11", "", {}, "sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ=="],
 
-    "groq": ["groq@5.15.0", "", {}, "sha512-BMpzWlECyi7jLl7VIn3ceeOX6YupRsewusJoX52la0nws0xLMs7tZT68HnmgOtqu+cL6LkI6HKW25p3SBD+GeQ=="],
+    "groq": ["groq@5.16.0", "", {}, "sha512-Od15+2M3XTi7TuStq6g8rAD3NZhqtvxG5zOuYf3wtsF5xIX9A+8eTbHyvWHvEDamK/ybxUMwzi+qL5GZCTjWhg=="],
 
     "groq-js": ["groq-js@1.29.0", "", { "dependencies": { "debug": "^4.3.4" } }, "sha512-LP/O1GwdCpKk4X/+GtUNafOLvPMf8oU+kLbe6QdqUQQl/lOOirHcpS/Br6HRrb0VeVl9QKJzmS/dK7lHO1LYsg=="],
 
@@ -2075,7 +2075,7 @@
 
     "next-intl-swc-plugin-extractor": ["next-intl-swc-plugin-extractor@4.8.3", "", {}, "sha512-YcaT+R9z69XkGhpDarVFWUprrCMbxgIQYPUaXoE6LGVnLjGdo8hu3gL6bramDVjNKViYY8a/pXPy7Bna0mXORg=="],
 
-    "next-sanity": ["next-sanity@12.1.1", "", { "dependencies": { "@portabletext/react": "^6.0.3", "@sanity/client": "^7.16.0", "@sanity/comlink": "^4.0.1", "@sanity/presentation-comlink": "^2.0.1", "@sanity/preview-url-secret": "^4.0.3", "@sanity/visual-editing": "^5.3.0", "@sanity/webhook": "^4.0.4", "dequal": "^2.0.3", "groq": "^5.13.0", "history": "^5.3.0", "server-only": "^0.0.1" }, "peerDependencies": { "next": "^16.0.0-0", "react": "^19.2.3", "react-dom": "^19.2.3", "sanity": "^5.13.0", "styled-components": "^6.1" } }, "sha512-7GTIkPcdNPRpr82/E90xQQrydQB4dvK3t5gpNIsx8joYjWTef2AFVIDHT2YJr1obwmXTazLMhLAX3+/2k6ZPdw=="],
+    "next-sanity": ["next-sanity@12.1.2", "", { "dependencies": { "@portabletext/react": "^6.0.3", "@sanity/client": "^7.17.0", "@sanity/comlink": "^4.0.1", "@sanity/presentation-comlink": "^2.0.1", "@sanity/preview-url-secret": "^4.0.3", "@sanity/visual-editing": "^5.3.0", "@sanity/webhook": "^4.0.4", "dequal": "^2.0.3", "groq": "^5.16.0", "history": "^5.3.0", "server-only": "^0.0.1" }, "peerDependencies": { "next": "^16.0.0-0", "react": "^19.2.3", "react-dom": "^19.2.3", "sanity": "^5.16.0", "styled-components": "^6.1" } }, "sha512-t3N95QQvrjB+4rmzuYgzUgicdJ9t5UXhXU1xsrZPQ81N3YXsbj33vpBbYVj5DAcaGXmVijwBPHNGf+MXz41S3Q=="],
 
     "next-themes": ["next-themes@0.4.6", "", { "peerDependencies": { "react": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc", "react-dom": "^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc" } }, "sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA=="],
 
@@ -2732,6 +2732,8 @@
     "@sanity/cli-core/vite": ["vite@7.3.1", "", { "dependencies": { "esbuild": "^0.27.0", "fdir": "^6.5.0", "picomatch": "^4.0.3", "postcss": "^8.5.6", "rollup": "^4.43.0", "tinyglobby": "^0.2.15" }, "optionalDependencies": { "fsevents": "~2.3.3" }, "peerDependencies": { "@types/node": "^20.19.0 || >=22.12.0", "jiti": ">=1.21.0", "less": "^4.0.0", "lightningcss": "^1.21.0", "sass": "^1.70.0", "sass-embedded": "^1.70.0", "stylus": ">=0.54.8", "sugarss": "^5.0.0", "terser": "^5.16.0", "tsx": "^4.8.1", "yaml": "^2.4.2" }, "optionalPeers": ["@types/node", "jiti", "less", "lightningcss", "sass", "sass-embedded", "stylus", "sugarss", "terser", "tsx", "yaml"], "bin": { "vite": "bin/vite.js" } }, "sha512-w+N7Hifpc3gRjZ63vYBXA56dvvRlNWRczTdmCBBa+CotUzAPf5b7YMdMR/8CQoeYE5LX3W4wj6RYTgonm1b9DA=="],
 
     "@sanity/codegen/chokidar": ["chokidar@3.6.0", "", { "dependencies": { "anymatch": "~3.1.2", "braces": "~3.0.2", "glob-parent": "~5.1.2", "is-binary-path": "~2.1.0", "is-glob": "~4.0.1", "normalize-path": "~3.0.0", "readdirp": "~3.6.0" }, "optionalDependencies": { "fsevents": "~2.3.2" } }, "sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw=="],
+
+    "@sanity/codegen/groq": ["groq@5.15.0", "", {}, "sha512-BMpzWlECyi7jLl7VIn3ceeOX6YupRsewusJoX52la0nws0xLMs7tZT68HnmgOtqu+cL6LkI6HKW25p3SBD+GeQ=="],
 
     "@sanity/comlink/uuid": ["uuid@13.0.0", "", { "bin": { "uuid": "dist-node/bin/uuid" } }, "sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w=="],
 
