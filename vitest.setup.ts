@@ -7,21 +7,21 @@ class ResizeObserverMock {
   unobserve = vi.fn()
   disconnect = vi.fn()
 }
-global.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver
+vi.stubGlobal('ResizeObserver', ResizeObserverMock)
 
-// Mock IntersectionObserver for lazy loading components
+// Mock IntersectionObserver for lazy loading and scroll-spy components
 class IntersectionObserverMock implements IntersectionObserver {
   readonly root: Element | Document | null = null
-  readonly rootMargin: string = ''
+  readonly rootMargin = ''
+  readonly scrollMargin = ''
   readonly thresholds: ReadonlyArray<number> = []
   private callback: IntersectionObserverCallback
 
-  constructor(callback: IntersectionObserverCallback) {
+  constructor(callback: IntersectionObserverCallback, _options?: IntersectionObserverInit) {
     this.callback = callback
   }
 
   observe = vi.fn((target: Element) => {
-    // Immediately trigger callback with isIntersecting: true to simulate element in view
     this.callback(
       [
         {
@@ -37,11 +37,12 @@ class IntersectionObserverMock implements IntersectionObserver {
       this
     )
   })
+
   unobserve = vi.fn()
   disconnect = vi.fn()
   takeRecords = vi.fn(() => [])
 }
-global.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver
+vi.stubGlobal('IntersectionObserver', IntersectionObserverMock)
 
 // Mock next-intl
 vi.mock('next-intl', () => {
