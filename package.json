@@ -63,7 +63,7 @@
     "react-dom": "^19.2.4",
     "resend": "^6.9.4",
     "sanity": "^5.17.1",
-    "sanity-plugin-internationalized-array": "^5.0.3",
+    "sanity-plugin-internationalized-array": "^5.0.4",
     "sanity-plugin-lucide-icon-picker": "^1.0.3",
     "schema-dts": "^1.1.5",
     "sonner": "^2.0.7",
