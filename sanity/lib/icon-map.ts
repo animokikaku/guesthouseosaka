@@ -1,3 +1,4 @@
+import { createElement } from 'react'
 import {
   ArrowUpDown,
   Bath,
@@ -9,10 +10,8 @@ import {
   ChefHat,
   Cigarette,
   Coffee,
-  Facebook,
   Flower,
   HousePlug,
-  Instagram,
   Lock,
   Mail,
   Mailbox,
@@ -34,15 +33,36 @@ import {
   UtensilsCrossed,
   WashingMachine,
   Wifi,
-  Wind,
-  type LucideIcon
+  Wind
 } from 'lucide-react'
+import { siFacebook, siInstagram } from 'simple-icons'
+
+type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>
+
+function createSimpleIcon(icon: { path: string; title: string }): IconComponent {
+  return function SimpleIcon(props) {
+    return createElement(
+      'svg',
+      {
+        viewBox: '0 0 24 24',
+        fill: 'currentColor',
+        role: 'img',
+        'aria-label': icon.title,
+        ...props
+      },
+      createElement('path', { d: icon.path })
+    )
+  }
+}
+
+const FacebookIcon = createSimpleIcon(siFacebook)
+const InstagramIcon = createSimpleIcon(siInstagram)
 
 /**
  * Static icon map - only includes icons from allowedIcons.
  * Shared between frontend and Sanity Studio for tree-shaking.
  */
-export const iconMap: Record<string, LucideIcon> = {
+export const iconMap: Record<string, IconComponent> = {
   'arrow-up-down': ArrowUpDown,
   bath: Bath,
   bed: Bed,
@@ -53,10 +73,10 @@ export const iconMap: Record<string, LucideIcon> = {
   'chef-hat': ChefHat,
   cigarette: Cigarette,
   coffee: Coffee,
-  facebook: Facebook,
+  facebook: FacebookIcon,
   flower: Flower,
   'house-plug': HousePlug,
-  instagram: Instagram,
+  instagram: InstagramIcon,
   lock: Lock,
   mail: Mail,
   mailbox: Mailbox,
