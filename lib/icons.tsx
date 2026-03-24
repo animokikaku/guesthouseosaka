@@ -1,16 +1,15 @@
 import { allowedIcons } from '@/sanity/lib/allowed-icons'
 import { iconMap } from '@/sanity/lib/icon-map'
-import type { LucideIcon } from 'lucide-react'
 
 // Type-safe icon names derived from allowedIcons
 export type IconName = (typeof allowedIcons)[number]
 
-export interface IconProps extends React.ComponentProps<LucideIcon> {
+export interface IconProps extends React.SVGProps<SVGSVGElement> {
   name: IconName
 }
 
 /**
- * Renders a Lucide icon by name from the allowed icons list.
+ * Renders an icon by name from the allowed icons list.
  * Falls back to null for unknown icons.
  */
 export function Icon({ name, ...props }: IconProps) {
