@@ -70,8 +70,7 @@ export function GalleryPageContent({
   }, [])
 
   return (
-    <>
-      {/* Header with back button and category nav */}
+    <div className="flex h-full flex-col">
       <div className="border-border/50 flex shrink-0 items-center gap-2 p-4 md:border-b">
         {backButton}
         <div className="container-wrapper min-w-0 flex-1">
@@ -81,7 +80,6 @@ export function GalleryPageContent({
         </div>
       </div>
 
-      {/* Scrollable Content */}
       <div
         ref={scrollContainerRef}
         className="relative flex-1 overflow-y-auto scroll-smooth"
@@ -105,6 +103,6 @@ export function GalleryPageContent({
         title={title}
         dataAttribute={dataAttribute}
       />
-    </>
+    </div>
   )
 }
