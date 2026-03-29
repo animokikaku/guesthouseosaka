@@ -19,7 +19,6 @@
 
 # next.js
 /.next/
-!/.next/types/
 /out/
 
 # production
