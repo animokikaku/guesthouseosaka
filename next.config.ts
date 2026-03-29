@@ -1,4 +1,4 @@
-import { env } from '@/lib/env'
+import { varlockNextConfigPlugin } from '@varlock/nextjs-integration/plugin'
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
@@ -15,7 +15,7 @@ const withNextIntl = createNextIntlPlugin({
 })
 
 const nextConfig: NextConfig = {
-  reactCompiler: env.NODE_ENV === 'production',
+  reactCompiler: process.env.NODE_ENV === 'production',
   typedRoutes: true,
   redirects: async () => [
     // Locale corrections: jp → ja
@@ -100,4 +100,4 @@ const nextConfig: NextConfig = {
   }
 }
 
-export default withNextIntl(nextConfig)
+export default varlockNextConfigPlugin()(withNextIntl(nextConfig))

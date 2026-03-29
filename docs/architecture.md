@@ -43,6 +43,6 @@ public/                # Static assets only
 
 ### Environment
 
-- Type-safe env via `@t3-oss/env-nextjs` in `lib/env.ts`
+- Type-safe env via Varlock
 - Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`
 - Client: `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`, `NEXT_PUBLIC_BLOB_STORAGE_URL`

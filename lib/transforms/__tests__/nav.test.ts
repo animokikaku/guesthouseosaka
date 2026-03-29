@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
 import { faker } from '@faker-js/faker'
 
+vi.hoisted(() => {
+  process.env.NEXT_PUBLIC_BLOB_STORAGE_URL = 'https://test.public.blob.vercel-storage.com'
+})
+
 vi.mock('@/sanity/lib/image', () => ({
   urlFor: () => ({
     width: () => ({
@@ -13,12 +17,6 @@ vi.mock('@/sanity/lib/image', () => ({
       })
     })
   })
-}))
-
-vi.mock('@/lib/env', () => ({
-  env: {
-    NEXT_PUBLIC_BLOB_STORAGE_URL: 'https://test.public.blob.vercel-storage.com'
-  }
 }))
 
 import { toContactNavItems, toHouseNavItems } from '../nav'

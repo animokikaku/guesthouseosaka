@@ -61,23 +61,14 @@ messages/             # Translation files (en.json, ja.json, fr.json)
 
 ## Environment Variables
 
-Create a `.env.local` file with:
+Varlock is the source of truth for env config via `.env.schema`.
 
 ```env
-# Sanity
-NEXT_PUBLIC_SANITY_PROJECT_ID=
-NEXT_PUBLIC_SANITY_DATASET=
-SANITY_API_READ_TOKEN=
-
-# Email
-RESEND_API_KEY=
-
-# Google Maps
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
-
-# Blob Storage
-NEXT_PUBLIC_BLOB_STORAGE_URL=
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
+
+Sensitive values are loaded from `pass` through the schema.
+Override `NEXT_PUBLIC_APP_URL` in deployment environments like Vercel.
 
 ## Sanity Workflow
 

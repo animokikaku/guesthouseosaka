@@ -6,16 +6,15 @@ import {
   TourRequestEmail
 } from '@/components/email-template'
 import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
-import { env } from '@/lib/env'
 import { HouseIdentifier } from '@/lib/types'
 import { Resend } from 'resend'
 
-const { emails } = new Resend(env.RESEND_API_KEY)
+const { emails } = new Resend(process.env.RESEND_API_KEY)
 
 const DEFAULT_CONTACT = {
   from: 'Guest House Osaka <info@guesthouseosaka.com>',
   to: (places?: HouseIdentifier[]) => {
-    if (env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       return 'dev@guesthouseosaka.com'
     }
     if (places?.length === 1) {

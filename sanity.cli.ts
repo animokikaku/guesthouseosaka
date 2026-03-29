@@ -3,13 +3,14 @@
  * Go to https://www.sanity.io/docs/cli to learn more.
  **/
 import { defineCliConfig } from 'sanity/cli'
+import 'varlock/auto-load'
 import { mergeConfig } from 'vite'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '515wijoz'
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'development'
-
 export default defineCliConfig({
-  api: { projectId, dataset },
+  api: {
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET
+  },
   vite: (config) => mergeConfig(config, { envPrefix: ['NEXT_PUBLIC_'] }),
   typegen: {
     path: [

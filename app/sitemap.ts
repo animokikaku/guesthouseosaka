@@ -1,6 +1,5 @@
 import { getPathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
-import { env } from '@/lib/env'
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import type { MetadataRoute } from 'next'
 
@@ -65,7 +64,7 @@ function buildSitemapEntry(
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const host = env.NEXT_PUBLIC_APP_URL
+  const host = process.env.NEXT_PUBLIC_APP_URL
   const lastModified = new Date()
   return routes.map((route) => buildSitemapEntry(route, host, lastModified))
 }

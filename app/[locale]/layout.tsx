@@ -15,7 +15,6 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { assets } from '@/lib/assets'
 import { META_THEME_COLORS } from '@/lib/config'
-import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { toHouseNavItems } from '@/lib/transforms/nav'
@@ -50,7 +49,7 @@ export async function generateMetadata(
 
   return {
     title: siteName ? { default: siteName, template: `%s - ${siteName}` } : undefined,
-    metadataBase: env.NEXT_PUBLIC_APP_URL,
+    metadataBase: process.env.NEXT_PUBLIC_APP_URL,
     authors: [{ name: 'Thibault Vieux', url: 'https://thibaultvieux.com' }],
     description: settings?.siteDescription,
     keywords: [
@@ -86,7 +85,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
   // Enable static rendering
   setRequestLocale(locale)
 
-  const url = env.NEXT_PUBLIC_APP_URL
+  const url = process.env.NEXT_PUBLIC_APP_URL
 
   const [{ data: settings }, { data: houses }] = await Promise.all([
     sanityFetch({ query: settingsQuery, params: { locale } }),
