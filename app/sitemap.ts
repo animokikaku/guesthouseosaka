@@ -2,6 +2,7 @@ import { getPathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import type { MetadataRoute } from 'next'
+import { ENV } from 'varlock/env'
 
 type Locale = (typeof routing.locales)[number]
 type Pathname = keyof typeof routing.pathnames
@@ -64,7 +65,7 @@ function buildSitemapEntry(
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const host = process.env.NEXT_PUBLIC_APP_URL
+  const host = ENV.NEXT_PUBLIC_APP_URL
   const lastModified = new Date()
   return routes.map((route) => buildSitemapEntry(route, host, lastModified))
 }

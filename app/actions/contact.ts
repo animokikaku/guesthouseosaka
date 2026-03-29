@@ -8,8 +8,9 @@ import {
 import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
 import { HouseIdentifier } from '@/lib/types'
 import { Resend } from 'resend'
+import { ENV } from 'varlock/env'
 
-const { emails } = new Resend(process.env.RESEND_API_KEY)
+const { emails } = new Resend(ENV.RESEND_API_KEY)
 
 const DEFAULT_CONTACT = {
   from: 'Guest House Osaka <info@guesthouseosaka.com>',

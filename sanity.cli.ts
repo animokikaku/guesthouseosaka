@@ -5,11 +5,12 @@
 import { defineCliConfig } from 'sanity/cli'
 import 'varlock/auto-load'
 import { mergeConfig } from 'vite'
+import { ENV } from 'varlock/env'
 
 export default defineCliConfig({
   api: {
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET
+    projectId: ENV.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    dataset: ENV.NEXT_PUBLIC_SANITY_DATASET
   },
   vite: (config) => mergeConfig(config, { envPrefix: ['NEXT_PUBLIC_'] }),
   typegen: {

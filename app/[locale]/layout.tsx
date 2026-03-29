@@ -25,6 +25,7 @@ import { type Metadata } from 'next'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import { draftMode } from 'next/headers'
 import { Organization, WithContext } from 'schema-dts'
+import { ENV } from 'varlock/env'
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -49,7 +50,7 @@ export async function generateMetadata(
 
   return {
     title: siteName ? { default: siteName, template: `%s - ${siteName}` } : undefined,
-    metadataBase: process.env.NEXT_PUBLIC_APP_URL,
+    metadataBase: ENV.NEXT_PUBLIC_APP_URL,
     authors: [{ name: 'Thibault Vieux', url: 'https://thibaultvieux.com' }],
     description: settings?.siteDescription,
     keywords: [
@@ -85,7 +86,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
   // Enable static rendering
   setRequestLocale(locale)
 
-  const url = process.env.NEXT_PUBLIC_APP_URL
+  const url = ENV.NEXT_PUBLIC_APP_URL
 
   const [{ data: settings }, { data: houses }] = await Promise.all([
     sanityFetch({ query: settingsQuery, params: { locale } }),
