@@ -49,6 +49,7 @@ next-env.d.ts
 /public/images
 
 # sanity
+schema.json
 *.tar.gz
 dist/
 backup/
