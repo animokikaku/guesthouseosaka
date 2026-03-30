@@ -17,6 +17,15 @@ jobs:
   unit-test:
     name: Unit Test
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    env:
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+      NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
+      NEXT_PUBLIC_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION }}
+      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
+      NEXT_PUBLIC_BLOB_STORAGE_URL: ${{ secrets.NEXT_PUBLIC_BLOB_STORAGE_URL }}
+      SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+      RESEND_API_KEY: re_dummy_ci_test_key
     steps:
       - name: Checkout
         uses: actions/checkout@v6

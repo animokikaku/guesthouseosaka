@@ -19,7 +19,6 @@
 
 # next.js
 /.next/
-!/.next/types/
 /out/
 
 # production
@@ -50,6 +49,7 @@ env.d.ts
 /public/images
 
 # sanity
+schema.json
 *.tar.gz
 dist/
 backup/
