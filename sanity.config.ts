@@ -11,6 +11,7 @@ import { internationalizedArray } from 'sanity-plugin-internationalized-array'
 import { lucideIconPicker } from 'sanity-plugin-lucide-icon-picker'
 import { presentationTool } from 'sanity/presentation'
 import { structureTool } from 'sanity/structure'
+import { ENV } from 'varlock/env'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { routing } from '@/i18n/routing'
@@ -52,8 +53,8 @@ const noCreateDocumentTypes: string[] = [
 
 export default defineConfig({
   basePath: '/studio',
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  projectId: ENV.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: ENV.NEXT_PUBLIC_SANITY_DATASET,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
   document: {
@@ -90,7 +91,7 @@ export default defineConfig({
     structureTool({ structure }),
     // Vision is for querying with GROQ from inside the Studio
     // https://www.sanity.io/docs/the-vision-plugin
-    visionTool({ defaultApiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION }),
+    visionTool({ defaultApiVersion: ENV.NEXT_PUBLIC_SANITY_API_VERSION }),
     presentationTool({
       previewUrl: {
         preview: '/',
