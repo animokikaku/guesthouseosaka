@@ -6,11 +6,11 @@ import {
   TourRequestEmail
 } from '@/components/email-template'
 import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
+import { env } from '@/lib/env'
 import { HouseIdentifier } from '@/lib/types'
 import { Resend } from 'resend'
-import { ENV } from 'varlock/env'
 
-const { emails } = new Resend(ENV.RESEND_API_KEY)
+const { emails } = new Resend(env.RESEND_API_KEY)
 
 const DEFAULT_CONTACT = {
   from: 'Guest House Osaka <info@guesthouseosaka.com>',

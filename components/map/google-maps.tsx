@@ -6,10 +6,10 @@ import {
   DEFAULT_ZOOM,
   MIN_ZOOM
 } from '@/components/map/location-map-constants'
+import { env } from '@/lib/env'
 import { APIProvider, Map, MapProps } from '@vis.gl/react-google-maps'
 import { useLocale } from 'next-intl'
 import { useTheme } from 'next-themes'
-import { ENV } from 'varlock/env'
 
 import React from 'react'
 
@@ -45,7 +45,7 @@ export function MapProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <APIProvider
-      apiKey={ENV.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
+      apiKey={env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
       language={locale}
       libraries={['marker']}
     >

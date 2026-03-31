@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
 import { faker } from '@faker-js/faker'
 
-vi.mock('varlock/env', () => ({
-  ENV: {
+vi.mock('@/lib/env', () => ({
+  env: {
     NEXT_PUBLIC_BLOB_STORAGE_URL: 'https://test.public.blob.vercel-storage.com'
   }
 }))

@@ -1,10 +1,10 @@
 import { createImageUrlBuilder, type SanityImageSource } from '@sanity/image-url'
-import { ENV } from 'varlock/env'
+import { env } from '@/lib/env'
 
 // https://www.sanity.io/docs/image-url
 const builder = createImageUrlBuilder({
-  projectId: ENV.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: ENV.NEXT_PUBLIC_SANITY_DATASET
+  projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: env.NEXT_PUBLIC_SANITY_DATASET
 })
 
 export const urlFor = (source: SanityImageSource) => {

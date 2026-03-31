@@ -2,6 +2,7 @@ import { hasHouse } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
+import { env } from '@/lib/env'
 import { getHouse } from '@/sanity/lib/cached-queries'
 import { urlFor } from '@/sanity/lib/image'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -10,7 +11,6 @@ import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { Accommodation, WithContext } from 'schema-dts'
-import { ENV } from 'varlock/env'
 
 export default async function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
   const { locale, house } = await params
@@ -35,7 +35,7 @@ export default async function HousePage({ params }: PageProps<'/[locale]/[house]
     )
   }
 
-  const url = new URL(`/${locale}/${house}`, ENV.NEXT_PUBLIC_APP_URL).toString()
+  const url = new URL(`/${locale}/${house}`, env.NEXT_PUBLIC_APP_URL).toString()
   const { title, description, map, building, phone, image } = data
 
   const jsonLd: WithContext<Accommodation> = {
