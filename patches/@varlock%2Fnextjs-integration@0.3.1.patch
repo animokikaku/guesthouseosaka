@@ -1,0 +1,60 @@
+diff --git a/dist/loader.js b/dist/loader.js
+index 2eb96626b163b2b60f02697ecfd60fc51293eacb..1e43baeafeed0677e2020752169e7e7c26b735c3 100644
+--- a/dist/loader.js
++++ b/dist/loader.js
+@@ -12,6 +12,9 @@ var require_loader = __commonJS({
+       if (!process.env.DEBUG_VARLOCK_NEXT_INTEGRATION) return;
+       console.log("[varlock-loader]", ...args);
+     }
++    function isTurbopackWorker() {
++      return !!(process.env.TURBOPACK || process.env.TURBOPACK_DEV || process.env.TURBOPACK_BUILD || process.env.npm_config_turbopack);
++    }
+     function escapeRegExp(str) {
+       return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+     }
+@@ -37,10 +40,7 @@ ${source}`;
+       }
+       debug("processing:", relPath);
+       const isClientComponent = USE_CLIENT_RE.test(source);
+-      if (isClientComponent) {
+-        debug("skipping client component:", relPath);
+-        return source;
+-      }
++      if (isClientComponent) debug("client component:", relPath);
+       const rawEnv = process.env.__VARLOCK_ENV;
+       if (!rawEnv) {
+         throw new Error("expected __VARLOCK_ENV to be set");
+@@ -51,21 +51,23 @@ ${source}`;
+       } catch {
+         return source;
+       }
+-      let result = source;
+       const loaderOptions = this.getOptions?.() ?? {};
+       const isWebpack = loaderOptions.bundler === "webpack";
+-      const isTurbopack = loaderOptions.bundler === "turbopack";
++      const isTurbopack = loaderOptions.bundler === "turbopack" || isTurbopackWorker();
+       const isEdge = loaderOptions.isEdge ?? false;
+-      let initGuard;
+-      if (isEdge) {
+-        initGuard = "if(globalThis.__varlockPatchConsole)globalThis.__varlockPatchConsole();";
+-      } else {
+-        initGuard = "if(!globalThis.__varlockBuildInit){globalThis.__varlockBuildInit=true;require('varlock/env').initVarlockEnv();require('varlock/patch-console').patchGlobalConsole();}";
+-        if (isWebpack) {
+-          initGuard += "require('varlock/patch-console').patchGlobalConsole();";
++      let result = source;
++      if (!isClientComponent) {
++        let initGuard;
++        if (isEdge) {
++          initGuard = "if(globalThis.__varlockPatchConsole)globalThis.__varlockPatchConsole();";
++        } else {
++          initGuard = "if(!globalThis.__varlockBuildInit){globalThis.__varlockBuildInit=true;require('varlock/env').initVarlockEnv();require('varlock/patch-console').patchGlobalConsole();}";
++          if (isWebpack) {
++            initGuard += "require('varlock/patch-console').patchGlobalConsole();";
++          }
+         }
++        result = prependAfterDirectives(result, initGuard);
+       }
+-      result = prependAfterDirectives(result, initGuard);
+       if (isTurbopack && source.includes("ENV.")) {
+         this.cacheable(false);
+         for (const [key, item] of Object.entries(envGraph.config)) {
