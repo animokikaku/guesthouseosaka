@@ -1,5 +1,5 @@
-import { createClient } from 'next-sanity'
 import { env } from '@/lib/env'
+import { createClient } from 'next-sanity'
 
 /**
  * Create a Sanity client

@@ -11,10 +11,10 @@ import { internationalizedArray } from 'sanity-plugin-internationalized-array'
 import { lucideIconPicker } from 'sanity-plugin-lucide-icon-picker'
 import { presentationTool } from 'sanity/presentation'
 import { structureTool } from 'sanity/structure'
-import { env } from '@/lib/env'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { routing } from '@/i18n/routing'
+import { env } from '@/lib/env'
 import { locales } from '@/sanity/config'
 import { resolve } from '@/sanity/presentation/resolve'
 import { type DocumentTypeName, documentTypes, schema } from '@/sanity/schemaTypes'
