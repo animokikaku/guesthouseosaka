@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { render, screen, fireEvent } from '@testing-library/react'
-import { GalleryGridItem } from '../gallery-grid-item'
 import type { GalleryItem } from '@/lib/gallery'
 import { store } from '@/lib/store'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { GalleryGridItem } from '../gallery-grid-item'
 
 // Mock Sanity image utilities
 vi.mock('@/sanity/lib/image', () => ({
@@ -238,9 +238,7 @@ describe('GalleryGridItem', () => {
       const item = createGalleryItem({ _key: 'item-123' })
       const dataAttribute = vi.fn((path: string) => `encoded-path:${path}`)
 
-      const { container } = render(
-        <GalleryGridItem item={item} categoryKey="cat-abc" dataAttribute={dataAttribute} />
-      )
+      render(<GalleryGridItem item={item} categoryKey="cat-abc" dataAttribute={dataAttribute} />)
 
       expect(dataAttribute).toHaveBeenCalledWith(
         'galleryCategories[_key=="cat-abc"].items[_key=="item-123"]'
