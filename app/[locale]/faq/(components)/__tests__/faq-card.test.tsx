@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
 import { type Houses, createHouse } from '@/lib/__tests__/utils/faq-fixtures'
 
 // Mock FAQContactTable since it has its own complex dependencies (next-intl, next/image, sanity)

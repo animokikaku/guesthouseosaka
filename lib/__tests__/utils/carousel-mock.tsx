@@ -1,4 +1,3 @@
-import { vi } from 'vitest'
 
 export type MockCarouselApi = {
   selectedScrollSnap: () => number

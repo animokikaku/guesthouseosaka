@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
 import { HouseBuilding } from '../house-building'
 import { HouseProvider } from '../house-context'
 import type { BuildingData } from '@/lib/types/components'

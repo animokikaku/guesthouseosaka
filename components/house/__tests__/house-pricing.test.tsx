@@ -1,6 +1,5 @@
 import type { PricingRowData } from '@/lib/types/components'
 import { render, screen, within } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
 import { HousePricing } from '../house-pricing'
 
 // Test data with no content

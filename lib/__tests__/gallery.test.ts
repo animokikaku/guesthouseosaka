@@ -3,7 +3,6 @@ import {
   createGalleryItem,
   createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
-import { describe, expect, it } from 'vitest'
 import {
   featuredToGalleryImage,
   flattenGalleryItems,

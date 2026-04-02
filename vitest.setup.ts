@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom/vitest'
-import { vi } from 'vitest'
 
 // Mock ResizeObserver for Radix UI components
 class ResizeObserverMock {

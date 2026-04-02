@@ -5,7 +5,6 @@ import {
   createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
 import { render, screen } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {

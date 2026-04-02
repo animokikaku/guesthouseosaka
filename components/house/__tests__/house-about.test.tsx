@@ -1,4 +1,3 @@
-import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { HouseAbout } from '../house-about'
 import { HouseProvider } from '../house-context'

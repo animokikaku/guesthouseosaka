@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { CategoryThumbnail } from '../gallery-category-thumbnail'
 import type { GalleryCategory } from '@/lib/gallery'

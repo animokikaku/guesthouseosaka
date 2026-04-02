@@ -1,6 +1,5 @@
 import type { SettingsQueryResult } from '@/sanity.types'
 import { render, screen } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SiteFooter } from '../site-footer'
 
 type OptimisticReducer = (

@@ -1,6 +1,5 @@
 import { LocationData } from '@/lib/types/components'
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
 
 // Use vi.hoisted to declare variables that will be used in mocks
 const { mockStorage } = vi.hoisted(() => {
