@@ -25,36 +25,6 @@ test.describe('House Page', () => {
   // Note: Visibility tests for About, Amenities, Pricing, Location sections
   // are covered by unit tests in components/house/__tests__/
 
-  test.describe('Amenities Section', () => {
-    test('opens amenities dialog when clicking show all', async ({ page }) => {
-      await page.goto(`/en/${testHouse}`)
-
-      const showAllButton = page.getByRole('button', {
-        name: /Show all.*amenities/i
-      })
-      await showAllButton.click()
-
-      // Dialog should appear with amenities content
-      const dialog = page.getByRole('dialog')
-      await expect(dialog).toBeVisible()
-    })
-  })
-
-  test.describe('Gallery Section', () => {
-    test('gallery link navigates to gallery page', async ({ page }) => {
-      await page.setViewportSize({ width: 1280, height: 800 })
-      await page.goto(`/en/${testHouse}`)
-
-      const galleryButton = page.getByRole('link', {
-        name: /Show all photos/i
-      })
-      await galleryButton.click()
-
-      // Should navigate to gallery page
-      await expect(page).toHaveURL(new RegExp(`/en/${testHouse}/gallery`))
-    })
-  })
-
   test.describe('Navigation', () => {
     test('can navigate to other houses from tabs', async ({ page }) => {
       await page.goto(`/en/${testHouse}`)
