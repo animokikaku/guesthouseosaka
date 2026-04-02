@@ -22,6 +22,21 @@ test.describe('Gallery', () => {
     return modal
   }
 
+  const getVisibleCaptionText = async (modal: ReturnType<Page['locator']>) => {
+    return modal.locator('span').evaluateAll((elements) => {
+      const visibleTexts = elements
+        .filter((element) => {
+          const htmlElement = element as HTMLElement
+          if (htmlElement.classList.contains('sr-only')) return false
+          return !!(htmlElement.offsetWidth || htmlElement.offsetHeight || htmlElement.getClientRects().length)
+        })
+        .map((element) => element.textContent?.trim())
+        .filter((text): text is string => Boolean(text))
+
+      return visibleTexts.at(-1) ?? null
+    })
+  }
+
   test('desktop modal supports navigation and closes with Escape', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto(galleryUrl)
@@ -29,13 +44,15 @@ test.describe('Gallery', () => {
 
     const modal = await clickGalleryImageAndWaitForModal(page)
     await expect(modal.locator('img').first()).toBeVisible()
+    const initialCaption = await getVisibleCaptionText(modal)
 
     const nextButton = page.locator('[data-slot="carousel-next"]')
     await expect(nextButton).toBeVisible()
     await nextButton.click()
+    await expect.poll(() => getVisibleCaptionText(modal)).not.toBe(initialCaption)
 
     await page.keyboard.press('ArrowLeft')
-    await expect(modal).toBeVisible()
+    await expect.poll(() => getVisibleCaptionText(modal)).toBe(initialCaption)
 
     await page.keyboard.press('Escape')
     await expect(modal).not.toBeVisible({ timeout: 5000 })

@@ -70,21 +70,20 @@ test.describe('Contact Form Tests', () => {
 
   test.describe('Form Validation', () => {
     // Detailed field-level validation is covered by Vitest schema/component tests.
-    test('incomplete form shows validation errors on submit', async ({ page }) => {
+    test('missing places and gender show validation errors on submit', async ({ page }) => {
       const fields = getFormFields(page)
 
-      await fields.nameField.fill('A')
+      await fields.nameField.fill('Alice')
       await fields.ageField.fill('25')
       await fields.nationalityField.fill('Japan')
       await fields.emailField.fill('test@example.com')
-      await fields.messageField.fill('Hi')
+      await fields.messageField.fill('This is a valid test message.')
       await fields.checkbox.click()
 
       await page.getByRole('button', { name: 'Submit' }).click()
 
-      const errorMessages = page.locator('[role="alert"][data-slot="field-error"]')
-      await expect(errorMessages.first()).toBeVisible()
-      expect(await errorMessages.count()).toBeGreaterThan(0)
+      await expect(page.getByText('Please select at least one share house')).toBeVisible()
+      await expect(page.getByText('Please select your gender')).toBeVisible()
     })
   })
 
