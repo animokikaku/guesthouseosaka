@@ -28,7 +28,11 @@ test.describe('Gallery', () => {
         .filter((element) => {
           const htmlElement = element as HTMLElement
           if (htmlElement.classList.contains('sr-only')) return false
-          return !!(htmlElement.offsetWidth || htmlElement.offsetHeight || htmlElement.getClientRects().length)
+          return !!(
+            htmlElement.offsetWidth ||
+            htmlElement.offsetHeight ||
+            htmlElement.getClientRects().length
+          )
         })
         .map((element) => element.textContent?.trim())
         .filter((text): text is string => Boolean(text))
