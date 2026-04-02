@@ -24,6 +24,9 @@ export default defineConfig({
   // Retry on CI only
   retries: process.env.CI ? 2 : 0,
 
+  // Use all available vCPUs on CI now that tests run in a single job.
+  workers: process.env.CI ? 4 : undefined,
+
   // Reporter to use
   reporter: process.env.CI ? 'github' : 'list',
 

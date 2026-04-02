@@ -58,13 +58,9 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   e2e:
-    name: E2E Tests (${{ matrix.shard }}/2)
+    name: E2E Tests
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: [1, 2]
     env:
       NEXT_PUBLIC_APP_URL: http://localhost:3000
       NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
@@ -104,12 +100,12 @@ jobs:
         run: bunx playwright install --with-deps chromium
 
       - name: Run E2E tests
-        run: bunx playwright test --shard=${{ matrix.shard }}/2
+        run: bunx playwright test
 
       - name: Upload Playwright artifacts
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-artifacts-shard-${{ matrix.shard }}
+          name: playwright-artifacts
           path: test-results
           if-no-files-found: ignore
