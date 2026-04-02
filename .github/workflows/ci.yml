@@ -100,7 +100,7 @@ jobs:
         run: bunx playwright install --with-deps chromium
 
       - name: Run E2E tests
-        run: bunx playwright test
+        run: bun run test:e2e
 
       - name: Upload Playwright artifacts
         if: failure()
