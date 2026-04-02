@@ -1,4 +1,3 @@
-import { describe, expect, it, vi } from 'vitest'
 import { faker } from '@faker-js/faker'
 
 vi.mock('@/sanity/lib/image', () => ({

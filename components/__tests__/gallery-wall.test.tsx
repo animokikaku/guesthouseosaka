@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { GalleryWall } from '../gallery-wall'
 import type { GalleryImage } from '@/lib/types/components'
