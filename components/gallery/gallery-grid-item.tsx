@@ -20,6 +20,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
 
   return (
     <GalleryImageButton
+      data-testid="gallery-grid-image"
       tabIndex={0}
       onClick={() => store.setState((prev) => ({ ...prev, photoId: _key }))}
       onKeyDown={(e) => {

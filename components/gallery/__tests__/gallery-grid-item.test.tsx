@@ -100,6 +100,7 @@ describe('GalleryGridItem', () => {
 
       render(<GalleryGridItem item={item} categoryKey="cat1" />)
 
+      expect(screen.getByTestId('gallery-grid-image')).toBeInTheDocument()
       const image = screen.getByTestId('gallery-image')
       expect(image).toBeInTheDocument()
       expect(image).toHaveAttribute('alt', 'Test gallery image')
@@ -162,11 +163,8 @@ describe('GalleryGridItem', () => {
     it('sets photoId in store when clicked', () => {
       const item = createGalleryItem({ _key: 'photo-123' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
-
-      // GalleryImageButton uses a div with onClick, not a button
-      const clickableDiv = container.firstChild as HTMLElement
-      fireEvent.click(clickableDiv)
+      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      fireEvent.click(screen.getByTestId('gallery-grid-image'))
 
       expect(store.state.photoId).toBe('photo-123')
     })
@@ -175,14 +173,14 @@ describe('GalleryGridItem', () => {
       const item1 = createGalleryItem({ _key: 'photo-1' })
       const item2 = createGalleryItem({ _key: 'photo-2' })
 
-      const { container, rerender } = render(<GalleryGridItem item={item1} categoryKey="cat1" />)
-      fireEvent.click(container.firstChild as HTMLElement)
+      const { rerender } = render(<GalleryGridItem item={item1} categoryKey="cat1" />)
+      fireEvent.click(screen.getByTestId('gallery-grid-image'))
       expect(store.state.photoId).toBe('photo-1')
 
       store.setState((prev) => ({ ...prev, photoId: null }))
 
       rerender(<GalleryGridItem item={item2} categoryKey="cat1" />)
-      fireEvent.click(container.firstChild as HTMLElement)
+      fireEvent.click(screen.getByTestId('gallery-grid-image'))
       expect(store.state.photoId).toBe('photo-2')
     })
   })
@@ -191,10 +189,8 @@ describe('GalleryGridItem', () => {
     it('sets photoId when Enter key is pressed', () => {
       const item = createGalleryItem({ _key: 'photo-enter' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
-
-      const clickableDiv = container.firstChild as HTMLElement
-      fireEvent.keyDown(clickableDiv, { key: 'Enter' })
+      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: 'Enter' })
 
       expect(store.state.photoId).toBe('photo-enter')
     })
@@ -202,10 +198,8 @@ describe('GalleryGridItem', () => {
     it('sets photoId when Space key is pressed', () => {
       const item = createGalleryItem({ _key: 'photo-space' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
-
-      const clickableDiv = container.firstChild as HTMLElement
-      fireEvent.keyDown(clickableDiv, { key: ' ' })
+      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: ' ' })
 
       expect(store.state.photoId).toBe('photo-space')
     })
@@ -213,10 +207,8 @@ describe('GalleryGridItem', () => {
     it('prevents default behavior on Enter key', () => {
       const item = createGalleryItem({ _key: 'photo-123' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
-
-      const clickableDiv = container.firstChild as HTMLElement
-      const event = fireEvent.keyDown(clickableDiv, { key: 'Enter' })
+      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const event = fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: 'Enter' })
 
       // fireEvent.keyDown returns false if preventDefault was called
       expect(event).toBe(false)
@@ -225,10 +217,8 @@ describe('GalleryGridItem', () => {
     it('prevents default behavior on Space key', () => {
       const item = createGalleryItem({ _key: 'photo-123' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
-
-      const clickableDiv = container.firstChild as HTMLElement
-      const event = fireEvent.keyDown(clickableDiv, { key: ' ' })
+      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const event = fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: ' ' })
 
       expect(event).toBe(false)
     })
@@ -236,10 +226,8 @@ describe('GalleryGridItem', () => {
     it('does not set photoId for other keys', () => {
       const item = createGalleryItem({ _key: 'photo-123' })
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
-
-      const clickableDiv = container.firstChild as HTMLElement
-      fireEvent.keyDown(clickableDiv, { key: 'Tab' })
+      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: 'Tab' })
 
       expect(store.state.photoId).toBeNull()
     })
@@ -258,20 +246,15 @@ describe('GalleryGridItem', () => {
         'galleryCategories[_key=="cat-abc"].items[_key=="item-123"]'
       )
 
-      const clickableDiv = container.firstChild as HTMLElement
-      expect(clickableDiv).toHaveAttribute(
+      expect(screen.getByTestId('gallery-grid-image')).toHaveAttribute(
         'data-sanity',
         'encoded-path:galleryCategories[_key=="cat-abc"].items[_key=="item-123"]'
       )
     })
 
     it('does not set data-sanity attribute when dataAttribute is undefined', () => {
-      const item = createGalleryItem()
-
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
-
-      const clickableDiv = container.firstChild as HTMLElement
-      expect(clickableDiv).not.toHaveAttribute('data-sanity')
+      render(<GalleryGridItem item={createGalleryItem()} categoryKey="cat1" />)
+      expect(screen.getByTestId('gallery-grid-image')).not.toHaveAttribute('data-sanity')
     })
   })
 })

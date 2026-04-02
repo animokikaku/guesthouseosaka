@@ -8,7 +8,7 @@ test.describe('Gallery', () => {
   // by unit tests in components/gallery/__tests__/house-gallery-client.test.tsx
 
   const getGalleryGridImages = (page: Page) =>
-    page.locator('.grid .cursor-pointer').filter({
+    page.locator('[data-testid="gallery-grid-image"]').filter({
       has: page.locator('img')
     })
 

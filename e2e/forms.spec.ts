@@ -71,14 +71,8 @@ test.describe('Contact Form Tests', () => {
   test.describe('Form Validation', () => {
     // Detailed field-level validation is covered by Vitest schema/component tests.
     test('missing places and gender show validation errors on submit', async ({ page }) => {
-      const fields = getFormFields(page)
-
-      await fields.nameField.fill('Alice')
-      await fields.ageField.fill('25')
-      await fields.nationalityField.fill('Japan')
-      await fields.emailField.fill('test@example.com')
-      await fields.messageField.fill('This is a valid test message.')
-      await fields.checkbox.click()
+      await fillRequiredFields(page, { skipPlaces: true, skipGender: true })
+      await getFormFields(page).checkbox.click()
 
       await page.getByRole('button', { name: 'Submit' }).click()
 
