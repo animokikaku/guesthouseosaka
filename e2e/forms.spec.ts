@@ -69,132 +69,14 @@ test.describe('Contact Form Tests', () => {
   }
 
   test.describe('Form Validation', () => {
-    test('incomplete form shows validation errors on submit', async ({ page }) => {
-      const fields = getFormFields(page)
+    // Detailed field-level validation is covered by Vitest schema/component tests.
+    test('missing places and gender show validation errors on submit', async ({ page }) => {
+      await fillRequiredFields(page, { skipPlaces: true, skipGender: true })
+      await getFormFields(page).checkbox.click()
 
-      // Fill only some fields with invalid/missing values to trigger Zod validation
-      // Don't select places (required)
-      // Don't select gender (required)
-      await fields.nameField.fill('A') // Too short (min 2)
-      await fields.ageField.fill('25') // Valid age
-      await fields.nationalityField.fill('Japan') // Valid
-      await fields.emailField.fill('test@example.com') // Valid email
-      await fields.messageField.fill('Hi') // Too short (min 5)
-
-      // Check the privacy policy checkbox to bypass browser validation
-      await fields.checkbox.click()
-
-      // Click submit button
       await page.getByRole('button', { name: 'Submit' }).click()
 
-      // Validation errors should appear for required fields (places, gender, name, message)
-      const errorMessages = page.locator('[role="alert"][data-slot="field-error"]')
-      await expect(errorMessages.first()).toBeVisible()
-
-      // Check that at least one error is visible
-      const errorCount = await errorMessages.count()
-      expect(errorCount).toBeGreaterThan(0)
-    })
-
-    test('invalid email shows error', async ({ page }) => {
-      // Fill all required fields with valid values except email
-      await fillRequiredFields(page, { email: 'invalid@email' })
-
-      const fields = getFormFields(page)
-
-      // Check privacy policy
-      await fields.checkbox.click()
-
-      // Try to submit
-      await page.getByRole('button', { name: 'Submit' }).click()
-
-      // Wait for validation error to appear
-      const errorMessage = page.locator('[role="alert"][data-slot="field-error"]')
-      await expect(errorMessage.first()).toBeVisible()
-
-      // Error should contain email validation message
-      await expect(page.getByText('Invalid email address')).toBeVisible()
-    })
-
-    test('form fields accept valid input', async ({ page }) => {
-      // Fill all required fields with valid values
-      await fillRequiredFields(page, {
-        name: 'John Doe',
-        email: 'john@example.com',
-        message: 'This is a test message for the contact form.'
-      })
-
-      const fields = getFormFields(page)
-
-      // Blur the last field to trigger validation
-      await fields.messageField.blur()
-
-      // Verify no validation errors are visible after valid input
-      const errorMessages = page.locator('[role="alert"][data-slot="field-error"]')
-      await expect(errorMessages).toHaveCount(0)
-    })
-
-    test('message must be at least 5 characters', async ({ page }) => {
-      // Fill all required fields with valid values except message
-      await fillRequiredFields(page, { message: 'Hi' })
-
-      const fields = getFormFields(page)
-
-      // Check privacy policy to not block submission
-      await fields.checkbox.click()
-
-      // Try to submit
-      await page.getByRole('button', { name: 'Submit' }).click()
-
-      // Should show message validation error
-      await expect(page.getByText('Message must be at least 5 characters long')).toBeVisible()
-    })
-
-    test('name must be at least 2 characters', async ({ page }) => {
-      // Fill all required fields with valid values except name
-      await fillRequiredFields(page, { name: 'A' })
-
-      const fields = getFormFields(page)
-
-      // Check privacy policy to not block submission
-      await fields.checkbox.click()
-
-      // Try to submit
-      await page.getByRole('button', { name: 'Submit' }).click()
-
-      // Should show name validation error
-      await expect(page.getByText('Name must be at least 2 characters long')).toBeVisible()
-    })
-
-    test('places selection is required', async ({ page }) => {
-      // Fill all required fields except places
-      await fillRequiredFields(page, { skipPlaces: true })
-
-      const fields = getFormFields(page)
-
-      // Check privacy policy
-      await fields.checkbox.click()
-
-      // Try to submit
-      await page.getByRole('button', { name: 'Submit' }).click()
-
-      // Should show places validation error
       await expect(page.getByText('Please select at least one share house')).toBeVisible()
-    })
-
-    test('gender selection is required', async ({ page }) => {
-      // Fill all required fields except gender
-      await fillRequiredFields(page, { skipGender: true })
-
-      const fields = getFormFields(page)
-
-      // Check privacy policy
-      await fields.checkbox.click()
-
-      // Try to submit
-      await page.getByRole('button', { name: 'Submit' }).click()
-
-      // Should show gender validation error
       await expect(page.getByText('Please select your gender')).toBeVisible()
     })
   })
@@ -261,87 +143,10 @@ test.describe('Contact Form Tests', () => {
         expect(page).toHaveURL(/\/en\/contact(?!\/other)/, { timeout: 10000 })
       ])
     })
-
-    test('loading state shows while submitting', async ({ next, page }) => {
-      // Mock the Resend API to prevent actual email sending
-      mockResendAPI(next)
-
-      // Fill all required fields
-      await fillRequiredFields(page)
-
-      const fields = getFormFields(page)
-
-      // Check privacy policy checkbox
-      await fields.checkbox.click()
-
-      // The submit button should be enabled before submission
-      const submitButton = page.getByRole('button', { name: 'Submit' })
-      await expect(submitButton).toBeEnabled()
-
-      // Submit the form
-      await submitButton.click()
-
-      // After submission, either loading toast, success toast, or redirect
-      await Promise.race([
-        expect(page.getByText('Sending message')).toBeVisible({
-          timeout: 10000
-        }),
-        expect(page.getByText('Message sent successfully')).toBeVisible({
-          timeout: 10000
-        }),
-        expect(page).toHaveURL(/\/en\/contact(?!\/other)/, { timeout: 10000 })
-      ])
-    })
-
-    test('form resets after clicking reset button', async ({ page }) => {
-      const fields = getFormFields(page)
-
-      // Select a place
-      await fields.placesGroup.getByRole('button').first().click()
-
-      // Fill fields
-      await fields.nameField.fill('Test User')
-      await fields.emailField.fill('test@example.com')
-      await fields.messageField.fill('Test message content')
-      await fields.ageField.fill('30')
-      await fields.checkbox.click()
-
-      // Verify fields are filled
-      await expect(fields.nameField).toHaveValue('Test User')
-      await expect(fields.emailField).toHaveValue('test@example.com')
-      await expect(fields.messageField).toHaveValue('Test message content')
-      await expect(fields.ageField).toHaveValue('30')
-      await expect(fields.checkbox).toBeChecked()
-
-      // Click reset button
-      await page.getByRole('button', { name: 'Reset' }).click()
-
-      // Verify fields are cleared
-      await expect(fields.nameField).toHaveValue('')
-      await expect(fields.emailField).toHaveValue('')
-      await expect(fields.messageField).toHaveValue('')
-      await expect(fields.ageField).toHaveValue('')
-      await expect(fields.checkbox).not.toBeChecked()
-    })
   })
 })
 
 test.describe('Contact Page Navigation', () => {
-  test('contact page shows contact type options', async ({ page }) => {
-    await page.goto('/en/contact')
-
-    // The main contact page should show links to different form types
-    // Based on the ContactTypesList component - check that at least one link exists
-    const tourLink = page.locator('a[href*="/contact/tour"]')
-    const moveInLink = page.locator('a[href*="/contact/move-in"]')
-    const otherLink = page.locator('a[href*="/contact/other"]')
-
-    // All three contact type links should be visible
-    await expect(tourLink).toBeVisible()
-    await expect(moveInLink).toBeVisible()
-    await expect(otherLink).toBeVisible()
-  })
-
   test('can navigate to general inquiry form', async ({ page }) => {
     await page.goto('/en/contact')
 

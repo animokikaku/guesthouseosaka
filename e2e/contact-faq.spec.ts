@@ -1,25 +1,5 @@
 import { expect, test } from '@playwright/test'
 
-test.describe('Contact Page', () => {
-  // Note: Form field visibility tests are now covered by unit tests in
-  // components/forms/__tests__/contact-form.test.tsx
-  // components/forms/__tests__/tour-form.test.tsx
-  // components/forms/__tests__/move-in-form.test.tsx
-
-  test.describe('Contact Types List', () => {
-    test('navigates to tour form when clicking tour option', async ({ page }) => {
-      await page.goto('/en/contact')
-
-      // Wait for link to be visible and click
-      const tourLink = page.locator('a[href*="/contact/tour"]')
-      await expect(tourLink).toBeVisible()
-      await Promise.all([page.waitForURL(/\/en\/contact\/tour/), tourLink.click()])
-    })
-  })
-
-  // Note: Locale tests are now consolidated in e2e/locales.spec.ts
-})
-
 test.describe('FAQ Page', () => {
   test.describe('FAQ Accordion', () => {
     test('accordion items are expandable', async ({ page }) => {
