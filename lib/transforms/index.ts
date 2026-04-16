@@ -1,1 +1,0 @@
-export { toContactFormConfig } from './form'

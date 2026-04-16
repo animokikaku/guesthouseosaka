@@ -4,11 +4,8 @@ import { GalleryModal } from '@/components/gallery/gallery-modal'
 import { HouseGallery } from '@/components/gallery/house-gallery'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
 import { useStickyNav } from '@/hooks/use-sticky-nav'
-import {
-  toGalleryCategories,
-  type GalleryCategories,
-  type GalleryCategoryData
-} from '@/lib/gallery'
+import { type GalleryCategories, type GalleryCategoryData } from '@/lib/gallery'
+import { toGalleryCategories } from '@/lib/transforms/gallery'
 import { createDataAttribute } from 'next-sanity'
 import { useOptimistic } from 'next-sanity/hooks'
 import * as React from 'react'
