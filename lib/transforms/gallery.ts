@@ -1,3 +1,4 @@
+import type { GalleryCategories, GalleryCategory } from '@/lib/gallery'
 import type { GalleryImage } from '@/lib/types/components'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
@@ -50,4 +51,17 @@ export function toGalleryImages(images: GalleryWallImages): GalleryImage[] {
       height: layout.height
     }
   })
+}
+
+// Transform pre-grouped data to frontend display format with computed fields
+// Note: Data is pre-sorted and filtered (empty categories excluded) in GROQ query
+export function toGalleryCategories(data: GalleryCategories | null): GalleryCategory[] {
+  if (!data) return []
+  return data.map((cat) => ({
+    _key: cat._key,
+    _id: cat.category._id,
+    label: cat.category.label,
+    thumbnail: cat.items?.[0]?.image ?? null,
+    items: cat.items ?? []
+  }))
 }

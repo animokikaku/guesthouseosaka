@@ -8,19 +8,13 @@ import {
 } from '@/components/ui/item'
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
-import { type HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HOUSE_COLORS } from '@/lib/utils/theme'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import Image from 'next/image'
 
 type House = NonNullable<HomePageQueryResult['houses']>[number]
-
-const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
-  orange: 'bg-orange-600/50',
-  apple: 'bg-red-600/50',
-  lemon: 'bg-yellow-600/50'
-}
 
 type CollectionProps = {
   houses: House[]
@@ -49,7 +43,7 @@ export function Collection({ houses, className }: CollectionProps) {
               <div
                 className={cn(
                   'pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100',
-                  ACCENT_CLASSES[house.slug]
+                  HOUSE_COLORS[house.slug].accent
                 )}
               >
                 <Image

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-children-prop */
 'use client'
 
 import { ResetButton } from '@/components/forms/components/reset-button'
@@ -16,9 +15,10 @@ import {
 import { fieldContext, formContext } from '@/components/forms/form-context'
 import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
-import { HouseIdentifier, HouseIdentifierValues } from '@/lib/types'
+import { HouseIdentifier } from '@/lib/types'
 import type { FormFieldsConfig } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
+import { HOUSE_COLORS } from '@/lib/utils/theme'
 import { HousesTitlesQueryResult } from '@/sanity.types'
 import { createFormHook } from '@tanstack/react-form'
 import { CakeIcon, GlobeIcon, MailIcon, PhoneIcon, UserIcon } from 'lucide-react'
@@ -28,7 +28,7 @@ export { useFormSubmit } from './use-form-submit'
 
 export type HouseTitles = HousesTitlesQueryResult
 
-export const { useAppForm, withFieldGroup } = createFormHook({
+const formHook = createFormHook({
   fieldContext,
   formContext,
   fieldComponents: {
@@ -46,6 +46,9 @@ export const { useAppForm, withFieldGroup } = createFormHook({
     ResetButton
   }
 })
+
+export const useAppForm = formHook.useAppForm
+const withFieldGroup = formHook.withFieldGroup
 
 const userAccountDefaultValues = {
   name: '',
@@ -178,25 +181,16 @@ export const FieldGroupPlaces = withFieldGroup({
     houseTitles: [] as HousesTitlesQueryResult
   },
   render: function Render({ group, description, label, houseTitles }) {
-    const classNames: Record<HouseIdentifier, string> = {
-      orange: 'data-[state=on]:*:[svg]:fill-orange-500 data-[state=on]:*:[svg]:stroke-orange-500',
-      apple: 'data-[state=on]:*:[svg]:fill-red-500 data-[state=on]:*:[svg]:stroke-red-500',
-      lemon: 'data-[state=on]:*:[svg]:fill-yellow-500 data-[state=on]:*:[svg]:stroke-yellow-500'
-    }
-
-    const placeOptions = HouseIdentifierValues.map((house) => {
-      const houseData = houseTitles.find((h) => h.slug === house)
-      return {
-        value: house,
-        label: (
-          <>
-            <HouseIcon name={house} />
-            {houseData?.title ?? house}
-          </>
-        ),
-        className: cn('data-[state=on]:bg-transparent', classNames[house])
-      }
-    })
+    const placeOptions = houseTitles.map(({ slug, title }) => ({
+      value: slug,
+      label: (
+        <>
+          <HouseIcon name={slug} />
+          {title ?? slug}
+        </>
+      ),
+      className: cn('data-[state=on]:bg-transparent', HOUSE_COLORS[slug].toggleSvg)
+    }))
 
     return (
       <group.AppField

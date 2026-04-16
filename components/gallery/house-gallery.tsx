@@ -1,7 +1,8 @@
 import { CategoryGrid } from '@/components/gallery/gallery-category-grid'
 import { CategoryThumbnail } from '@/components/gallery/gallery-category-thumbnail'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { toGalleryCategories, type GalleryCategories } from '@/lib/gallery'
+import { type GalleryCategories } from '@/lib/gallery'
+import { toGalleryCategories } from '@/lib/transforms/gallery'
 import * as React from 'react'
 
 type DataAttributeFn = (path: string) => string

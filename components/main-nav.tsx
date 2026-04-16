@@ -1,6 +1,6 @@
 'use client'
 
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import { NavEmptyState } from '@/components/nav-empty-state'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,8 +13,6 @@ import {
 import { Link } from '@/i18n/navigation'
 import { HouseIdentifier, NavGroupItem, NavItem, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { FileWarningIcon } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
 import Image from 'next/image'
 import { useParams, useSelectedLayoutSegment } from 'next/navigation'
@@ -119,7 +117,6 @@ function NavigationMenuGroupItem({
   house?: HouseIdentifier
 }) {
   const [hoveredItem, setHoverItem] = useState<NavGroupItem | undefined>(items[0])
-  const t = useTranslations('PageEmptyState')
 
   // Show empty state when no items
   if (items.length === 0) {
@@ -127,15 +124,7 @@ function NavigationMenuGroupItem({
       <NavigationMenuItem>
         <NavigationMenuTrigger className="bg-transparent">{title}</NavigationMenuTrigger>
         <NavigationMenuContent>
-          <Empty className="w-[300px] gap-3 border-none p-6">
-            <EmptyHeader className="gap-1">
-              <EmptyMedia variant="warning">
-                <FileWarningIcon />
-              </EmptyMedia>
-              <EmptyTitle className="text-sm">{t('title')}</EmptyTitle>
-              <EmptyDescription>{t('description')}</EmptyDescription>
-            </EmptyHeader>
-          </Empty>
+          <NavEmptyState className="w-[300px] border-none" />
         </NavigationMenuContent>
       </NavigationMenuItem>
     )

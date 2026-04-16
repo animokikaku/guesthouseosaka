@@ -1,14 +1,24 @@
+vi.mock('@/sanity/lib/image', () => ({
+  urlFor: () => ({
+    width: () => ({
+      height: () => ({
+        dpr: () => ({
+          fit: () => ({
+            url: () => 'https://cdn.sanity.io/images/test/gallery.jpg'
+          })
+        })
+      })
+    })
+  })
+}))
+
 import {
   createGalleryCategory,
   createGalleryItem,
   createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
-import {
-  featuredToGalleryImage,
-  flattenGalleryItems,
-  getImageIndex,
-  toGalleryCategories
-} from '../gallery'
+import { featuredToGalleryImage, flattenGalleryItems, getImageIndex } from '../gallery'
+import { toGalleryCategories } from '../transforms/gallery'
 
 describe('featuredToGalleryImage', () => {
   it('converts featured image with _key: "featured"', () => {

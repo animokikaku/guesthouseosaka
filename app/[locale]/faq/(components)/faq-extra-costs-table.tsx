@@ -6,17 +6,11 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HOUSE_COLORS } from '@/lib/utils/theme'
 import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from 'next-sanity'
-
-const ACCENT_CLASSES: Record<HouseIdentifier, string> = {
-  orange: 'text-orange-600',
-  apple: 'text-red-600',
-  lemon: 'text-yellow-600'
-}
 
 const portableTextComponents: PortableTextComponents = {
   block: {
@@ -61,7 +55,7 @@ export function FAQExtraCostsTable({ houses, pricingCategories }: FAQExtraCostsT
               return (
                 <TableHead
                   key={_id}
-                  className={cn('bg-secondary font-semibold', ACCENT_CLASSES[slug])}
+                  className={cn('bg-secondary font-semibold', HOUSE_COLORS[slug].text)}
                 >
                   {stegaClean(title)}
                 </TableHead>

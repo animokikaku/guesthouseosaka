@@ -38,16 +38,3 @@ export function getImageIndex(categories: GalleryCategories | null, photoKey: st
   const index = items.findIndex((img) => img._key === photoKey)
   return index >= 0 ? index : 0
 }
-
-// Transform pre-grouped data to frontend display format with computed fields
-// Note: Data is pre-sorted and filtered (empty categories excluded) in GROQ query
-export function toGalleryCategories(data: GalleryCategories | null): GalleryCategory[] {
-  if (!data) return []
-  return data.map((cat) => ({
-    _key: cat._key,
-    _id: cat.category._id,
-    label: cat.category.label,
-    thumbnail: cat.items?.[0]?.image ?? null,
-    items: cat.items ?? []
-  }))
-}

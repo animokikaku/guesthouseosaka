@@ -3,12 +3,11 @@
 import { Link } from '@/i18n/navigation'
 import * as React from 'react'
 
+import { NavEmptyState } from '@/components/nav-empty-state'
 import { Button } from '@/components/ui/button'
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { NavItem, NavItems, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { FileWarningIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useMemo, useState } from 'react'
 
@@ -101,21 +100,11 @@ function MobileListSection({
   items: NavListItem['items']
   onOpenChange?: (open: boolean) => void
 }) {
-  const t = useTranslations('PageEmptyState')
-
   return (
     <div className="flex flex-col gap-4">
       <div className="text-muted-foreground text-sm font-medium">{label}</div>
       {items.length === 0 ? (
-        <Empty className="gap-3 rounded-lg border border-dashed border-amber-400/50 bg-amber-50/50 p-6 dark:border-amber-600/30 dark:bg-amber-950/20">
-          <EmptyHeader className="gap-1">
-            <EmptyMedia variant="warning">
-              <FileWarningIcon />
-            </EmptyMedia>
-            <EmptyTitle className="text-sm">{t('title')}</EmptyTitle>
-            <EmptyDescription>{t('description')}</EmptyDescription>
-          </EmptyHeader>
-        </Empty>
+        <NavEmptyState className="rounded-lg border border-dashed border-amber-400/50 bg-amber-50/50 dark:border-amber-600/30 dark:bg-amber-950/20" />
       ) : (
         <div className="flex flex-col gap-3">
           {items.map((item) => (

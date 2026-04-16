@@ -7,6 +7,7 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "react/no-children-prop": "off",
     "import/no-unassigned-import": "off",
     "unicorn/consistent-function-scoping": "off",
     "jsx-a11y/heading-has-content": "off",
