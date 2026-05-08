@@ -1,16 +1,6 @@
 import { ContactFormFields } from '@/components/forms/schema'
 import { HouseIdentifier } from '@/lib/types'
-import {
-  Body,
-  Container,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Preview,
-  Section,
-  Text
-} from '@react-email/components'
+import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from 'react-email'
 
 // Helper for date formatting
 const formatDate = (date: string | Date) => {
