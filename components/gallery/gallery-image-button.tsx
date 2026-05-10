@@ -34,9 +34,7 @@ export function GalleryImageButton({
       )}
       {...divProps}
     >
-      <div
-        className={cn('bg-muted/40 relative h-full w-full overflow-hidden', containerClassName)}
-      >
+      <div className={cn('bg-muted/40 relative h-full w-full overflow-hidden', containerClassName)}>
         <Image
           fill
           alt={alt}
