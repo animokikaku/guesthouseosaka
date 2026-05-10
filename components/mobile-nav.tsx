@@ -63,23 +63,23 @@ export function MobileNav({ items, className }: { items: NavItems; className?: s
         align="start"
         side="bottom"
       >
-        <div className="flex flex-col gap-12 overflow-auto px-6 py-6">
+        <div className="flex flex-col gap-12 overflow-auto p-6">
           <div className="flex flex-col gap-4">
             <div className="text-muted-foreground text-sm font-medium">{t('menu_label')}</div>
             <div className="flex flex-col gap-3">
               <MobileLink href="/" onOpenChange={setOpen}>
                 {t('home_label')}
               </MobileLink>
-              {mobileItems.map((item, index) => (
-                <MobileLink key={index} href={item.href} onOpenChange={setOpen}>
+              {mobileItems.map((item) => (
+                <MobileLink key={item.key} href={item.href} onOpenChange={setOpen}>
                   {item.label}
                 </MobileLink>
               ))}
             </div>
           </div>
-          {mobileListItems.map((listItem, index) => (
+          {mobileListItems.map((listItem) => (
             <MobileListSection
-              key={`mobile-list-item-${index}`}
+              key={listItem.key}
               label={listItem.label}
               items={listItem.items}
               onOpenChange={setOpen}

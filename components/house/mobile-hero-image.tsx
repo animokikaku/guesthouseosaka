@@ -55,10 +55,7 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
 
   return (
     <Link href={href} className="select-none sm:hidden">
-      <Carousel
-        className="max-h-96 w-full cursor-pointer select-none"
-        setApi={(carouselApi) => setApi(carouselApi)}
-      >
+      <Carousel className="max-h-96 w-full cursor-pointer select-none" setApi={setApi}>
         <CarouselContent>
           {images.map(({ _key, image }, index) => {
             const src = urlFor(image).width(640).height(384).dpr(2).fit('crop').url()

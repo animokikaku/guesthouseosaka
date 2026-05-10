@@ -5,7 +5,7 @@ import { PortableText, type PortableTextComponents } from '@portabletext/react'
 
 const components: PortableTextComponents = {
   block: {
-    h2: ({ children }) => <h2 className="text-2xl font-bold">{children}</h2>,
+    h2: ({ children }) => <h2 className="text-2xl font-semibold">{children}</h2>,
     normal: ({ children }) => <p className="text-muted-foreground text-md">{children}</p>
   }
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import type { LegalNoticeQueryResult } from '@/sanity.types'
-import { createContext, useContext, type ReactNode } from 'react'
+import { createContext, use, type ReactNode } from 'react'
 
 type LegalNoticeData = NonNullable<LegalNoticeQueryResult>
 
@@ -18,7 +18,7 @@ export function LegalNoticeProvider({
 }
 
 export function useLegalNotice(): LegalNoticeData | null {
-  const context = useContext(LegalNoticeContext)
+  const context = use(LegalNoticeContext)
   if (context === undefined) {
     throw new Error('useLegalNotice must be used within LegalNoticeProvider')
   }

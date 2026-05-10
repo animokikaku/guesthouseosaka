@@ -17,12 +17,11 @@ export default async function GalleryPage({ params }: PageProps<'/[locale]/[hous
   }
 
   setRequestLocale(locale as Locale)
-  const t = await getTranslations('GalleryPage')
 
-  const { data } = await sanityFetch({
-    query: houseQuery,
-    params: { locale, slug: house }
-  })
+  const [t, { data }] = await Promise.all([
+    getTranslations('GalleryPage'),
+    sanityFetch({ query: houseQuery, params: { locale, slug: house } })
+  ])
 
   if (!data) {
     return (

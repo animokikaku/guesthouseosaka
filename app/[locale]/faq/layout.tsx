@@ -26,8 +26,8 @@ export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/faq'>, 'children'>
 ): Promise<Metadata> {
   const { locale } = await props.params
-  const t = await getTranslations({ locale: locale as Locale, namespace: 'Metadata' })
-  const [{ data: faqPage }, { data: settings }] = await Promise.all([
+  const [t, { data: faqPage }, { data: settings }] = await Promise.all([
+    getTranslations({ locale: locale as Locale, namespace: 'Metadata' }),
     sanityFetch({ query: faqPageQuery, params: { locale } }),
     sanityFetch({ query: settingsQuery, params: { locale } })
   ])

@@ -51,7 +51,7 @@ function PreviewImageItem({ item: it, isActive }: PreviewImageItemProps) {
           width={40}
           height={40}
           loading={isActive ? 'eager' : 'lazy'}
-          className="h-10 w-10 object-contain opacity-50 drop-shadow-lg"
+          className="size-10 object-contain opacity-50 drop-shadow-lg"
         />
       </div>
 
@@ -136,8 +136,8 @@ function NavigationMenuGroupItem({
       <NavigationMenuContent>
         <ul className="grid w-[500px] grid-cols-[1fr_1fr] gap-2">
           <div className="row-span-3 flex flex-col gap-2">
-            {items.map((item, i) => (
-              <li key={`list-item-${i}`} onMouseEnter={() => setHoverItem(item)}>
+            {items.map((item) => (
+              <li key={item.key} onMouseEnter={() => setHoverItem(item)}>
                 <NavigationMenuLink data-active={house === item.key} asChild>
                   <Link href={item.href}>
                     <div className="text-sm leading-none font-medium">{stegaClean(item.label)}</div>

@@ -93,7 +93,7 @@ function FeatureItem({
       data-sanity={dataSanity}
     >
       <div className="text-foreground flex items-center justify-center gap-1 text-sm font-semibold">
-        {Icon && <Icon className="text-primary h-4 w-4" />}
+        {Icon && <Icon className="text-primary size-4" />}
         {value}
       </div>
       <span className="text-muted-foreground/70 block pt-1 text-[11px] font-medium tracking-wide uppercase">
