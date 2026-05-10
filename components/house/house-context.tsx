@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext } from 'react'
+import { createContext, use } from 'react'
 import type { HouseIdentifier } from '@/lib/types'
 
 interface HouseDocumentContext {
@@ -21,7 +21,7 @@ export function HouseProvider({
 }
 
 export function useHouseDocument() {
-  const context = useContext(HouseContext)
+  const context = use(HouseContext)
   if (!context) {
     throw new Error('useHouseDocument must be used within a HouseProvider')
   }

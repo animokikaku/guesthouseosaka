@@ -42,8 +42,8 @@ interface AmenityItemProps extends React.HTMLAttributes<HTMLDivElement> {
 function AmenityItem({ amenity, noteLabel, ...props }: AmenityItemProps) {
   return (
     <div className="flex items-center gap-3 py-2" {...props}>
-      <div className="text-muted-foreground h-5 w-5 shrink-0">
-        <Icon name={amenity.icon} className="h-5 w-5" />
+      <div className="text-muted-foreground size-5 shrink-0">
+        <Icon name={amenity.icon} className="size-5" />
       </div>
       <div className="flex-1">
         <span className="text-foreground">{amenity.label}</span>

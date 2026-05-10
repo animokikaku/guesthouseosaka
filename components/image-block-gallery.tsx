@@ -77,7 +77,7 @@ function GalleryGrid({
           </Link>
           <Button variant="secondary" asChild className="absolute right-4 bottom-4">
             <Link href={href}>
-              <Icons.gallery className="h-4 w-4" />
+              <Icons.gallery className="size-4" />
               <span>{viewGalleryLabel}</span>
             </Link>
           </Button>

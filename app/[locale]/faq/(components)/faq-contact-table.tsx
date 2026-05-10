@@ -43,7 +43,7 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
     <ItemGroup id="phone" className="w-full gap-2 sm:hidden">
       {houses.map(({ _id, title, phone, image }) => {
         return (
-          <Item key={_id} variant="outline" asChild className="gap-3 px-3 py-3">
+          <Item key={_id} variant="outline" asChild className="gap-3 p-3">
             <a href={`tel:${phone.international}`}>
               <ItemMedia variant="image" className="size-12 rounded-sm">
                 <HouseImage image={image} alt={image.alt ? stegaClean(image.alt) : ''} />

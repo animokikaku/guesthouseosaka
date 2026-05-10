@@ -36,7 +36,7 @@ export const Icons = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-      className="h-5 w-5"
+      className="size-5"
       viewBox="0 0 24 24"
       aria-labelledby="instagram-icon"
     >
@@ -52,7 +52,7 @@ export const Icons = {
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"
-      className="h-5 w-5"
+      className="size-5"
       viewBox="0 0 24 24"
       aria-labelledby="facebook-icon"
     >
@@ -69,7 +69,7 @@ export const Icons = {
       aria-hidden="true"
       role="presentation"
       focusable="false"
-      className="h-4 w-4"
+      className="size-4"
     >
       <title id="gallery-icon">Gallery</title>
       <path

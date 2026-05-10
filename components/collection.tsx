@@ -50,7 +50,7 @@ export function Collection({ houses, className }: CollectionProps) {
                   {...assets[house.slug].icon}
                   alt={assets[house.slug].icon.alt}
                   loading="eager"
-                  className="h-12 w-12 object-contain opacity-90 drop-shadow-lg"
+                  className="size-12 object-contain opacity-90 drop-shadow-lg"
                 />
               </div>
             </ItemHeader>
