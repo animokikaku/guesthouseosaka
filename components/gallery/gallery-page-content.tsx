@@ -69,7 +69,7 @@ export function GalleryPageContent({
   return (
     <div className="flex h-full flex-col">
       <div className="border-border/50 flex shrink-0 items-center gap-2 p-4 md:border-b">
-        {backButton}
+        <div className="shrink-0">{backButton}</div>
         <div className="container-wrapper min-w-0 flex-1">
           <div className="container p-0">
             <StickyCategoryNav categories={categories} activeId={activeId} isVisible={isVisible} />

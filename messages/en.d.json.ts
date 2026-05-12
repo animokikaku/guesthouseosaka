@@ -132,7 +132,7 @@ declare const messages: {
         "description": "Please try again later or contact us directly at {email}.",
         "message": "Failed to send message."
       },
-      "sending": "Sending message...",
+      "sending": "Sending message…",
       "success": {
         "description": "Thank you for contacting us {name}. We will get back to you shortly.",
         "message": "Message sent successfully!"

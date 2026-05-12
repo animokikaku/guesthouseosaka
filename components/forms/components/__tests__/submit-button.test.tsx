@@ -106,7 +106,7 @@ describe('SubmitButton', () => {
       expect(screen.getByRole('button')).toBeDisabled()
     })
 
-    it('is disabled when canSubmit is false', () => {
+    it('stays enabled when canSubmit is false so submit validation can run', () => {
       mockStoreState = { isSubmitting: false, canSubmit: false }
       const formApi = createMockFormApi()
 
@@ -116,7 +116,8 @@ describe('SubmitButton', () => {
         </FormContextWrapper>
       )
 
-      expect(screen.getByRole('button')).toBeDisabled()
+      expect(screen.getByRole('button')).not.toBeDisabled()
+      expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'false')
     })
 
     it('is disabled when both submitting and canSubmit is false', () => {
@@ -130,6 +131,7 @@ describe('SubmitButton', () => {
       )
 
       expect(screen.getByRole('button')).toBeDisabled()
+      expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true')
     })
   })
 

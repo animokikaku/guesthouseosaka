@@ -58,13 +58,14 @@ export function MessageField({
           aria-invalid={isInvalid}
           id={`form-tanstack-message-${field.name}`}
           name={field.name}
+          maxLength={MAX_LENGTH}
           value={field.state.value}
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
           {...props}
         />
         <InputGroupAddon align="block-end">
-          <InputGroupText className="tabular-nums">
+          <InputGroupText className="tabular-nums" aria-live="polite">
             {t('character_counter', {
               count: `${field.state.value.length}`,
               max: `${MAX_LENGTH}`

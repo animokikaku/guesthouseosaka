@@ -138,6 +138,9 @@
 
   html {
     @apply overscroll-y-none;
+    color-scheme: light;
+    scroll-padding-top: var(--header-height);
+    -webkit-tap-highlight-color: transparent;
   }
 
   @supports not (-webkit-touch-callout: none) {
@@ -149,7 +152,27 @@
   body {
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
+  }
+
+  :is(h1, h2, h3, h4, h5, h6) {
+    @apply scroll-mt-24;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+      scroll-snap-type: none;
+    }
+
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   @supports (font: -apple-system-body) and (-webkit-appearance: none) {
@@ -157,6 +180,10 @@
       @apply min-[1800px]:border-t;
     }
   }
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 @utility border-grid {
