@@ -12,6 +12,7 @@
     "unicorn/consistent-function-scoping": "off",
     "jsx-a11y/heading-has-content": "off",
     "nextjs/no-duplicate-head": "off",
+    "no-underscore-dangle": "off",
     "no-restricted-imports": [
       "error",
       {

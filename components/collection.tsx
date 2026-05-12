@@ -28,6 +28,7 @@ export function Collection({ houses, className }: CollectionProps) {
         <Item
           key={house._id}
           variant="default"
+          // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
           role="listitem"
           className="h-full flex-col items-start p-0"
         >

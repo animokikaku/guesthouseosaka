@@ -45,8 +45,8 @@ export function GalleryPageContent({
     type: documentType
   })
 
-  const scrollContainerRef = React.useRef<HTMLDivElement>(null)
-  const [scrollContainer, setScrollContainer] = React.useState<HTMLDivElement | null>(null)
+  const scrollContainerRef = React.useRef<HTMLElement>(null)
+  const [scrollContainer, setScrollContainer] = React.useState<HTMLElement | null>(null)
 
   // Compute categories for sticky nav
   const categories = React.useMemo(
@@ -77,10 +77,9 @@ export function GalleryPageContent({
         </div>
       </div>
 
-      <div
+      <main
         ref={scrollContainerRef}
         className="relative flex-1 overflow-y-auto scroll-smooth"
-        role="main"
         aria-label="Gallery Content"
       >
         <div className="container-wrapper">
@@ -93,7 +92,7 @@ export function GalleryPageContent({
             />
           </div>
         </div>
-      </div>
+      </main>
 
       <GalleryModal
         galleryCategories={galleryCategories}
