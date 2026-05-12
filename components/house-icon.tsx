@@ -4,7 +4,7 @@ import { Apple, Citrus, Icon } from 'lucide-react'
 
 interface HouseIconProps extends Omit<
   React.ComponentProps<typeof Icon>,
-  'iconNode' | 'aria-label'
+  'iconNode' | 'aria-hidden'
 > {
   name: HouseIdentifier
 }
@@ -12,10 +12,10 @@ interface HouseIconProps extends Omit<
 export function HouseIcon({ name, ...props }: HouseIconProps) {
   switch (name) {
     case 'apple':
-      return <Apple aria-label="apple" {...props} />
+      return <Apple aria-hidden="true" {...props} />
     case 'lemon':
-      return <Citrus aria-label="lemon" {...props} />
+      return <Citrus aria-hidden="true" {...props} />
     case 'orange':
-      return <Icon iconNode={fruit} aria-label="orange" {...props} />
+      return <Icon iconNode={fruit} aria-hidden="true" {...props} />
   }
 }

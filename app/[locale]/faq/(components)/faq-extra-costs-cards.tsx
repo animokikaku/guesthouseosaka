@@ -102,7 +102,7 @@ export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsC
             type="button"
             onClick={() => api?.scrollTo(index)}
             className={cn(
-              'h-2 rounded-full transition-all duration-300',
+              'h-2 rounded-full transition-[background-color,width] duration-300',
               current === index ? 'bg-foreground w-6' : 'bg-muted-foreground/30 w-2'
             )}
             aria-label={`Go to ${title}`}

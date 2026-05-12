@@ -31,8 +31,9 @@ export function MobileNav({ items, className }: { items: NavItems; className?: s
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
+          aria-expanded={open}
           className={cn(
-            'extend-touch-target h-8 touch-manipulation items-center justify-start gap-2.5 p-0! hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 active:bg-transparent dark:hover:bg-transparent',
+            'extend-touch-target h-8 touch-manipulation items-center justify-start gap-2.5 rounded-sm p-0! hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-2 active:bg-transparent dark:hover:bg-transparent',
             className
           )}
         >
@@ -40,13 +41,13 @@ export function MobileNav({ items, className }: { items: NavItems; className?: s
             <div className="relative size-4">
               <span
                 className={cn(
-                  'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100',
+                  'bg-foreground absolute left-0 block h-0.5 w-4 transition-[top,rotate] duration-100',
                   open ? 'top-[0.4rem] -rotate-45' : 'top-1'
                 )}
               />
               <span
                 className={cn(
-                  'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100',
+                  'bg-foreground absolute left-0 block h-0.5 w-4 transition-[top,rotate] duration-100',
                   open ? 'top-[0.4rem] rotate-45' : 'top-2.5'
                 )}
               />
@@ -59,7 +60,7 @@ export function MobileNav({ items, className }: { items: NavItems; className?: s
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="bg-background/90 no-scrollbar h-(--radix-popper-available-height) w-(--radix-popper-available-width) overflow-y-auto rounded-none border-none p-0 shadow-none backdrop-blur duration-100"
+        className="bg-background/90 no-scrollbar h-(--radix-popper-available-height) w-(--radix-popper-available-width) overflow-y-auto overscroll-contain rounded-none border-none p-0 shadow-none backdrop-blur duration-100"
         align="start"
         side="bottom"
       >
@@ -135,7 +136,10 @@ function MobileLink({
       onClick={() => {
         onOpenChange?.(false)
       }}
-      className={cn('text-2xl font-medium', className)}
+      className={cn(
+        'focus-visible:ring-ring rounded-sm text-2xl font-medium text-wrap hover:text-primary focus-visible:ring-2 focus-visible:outline-none',
+        className
+      )}
       {...props}
     >
       {children}

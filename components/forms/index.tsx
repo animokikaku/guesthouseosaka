@@ -112,7 +112,8 @@ export const FieldGroupUserAccount = withFieldGroup({
               label={config.age.label}
               type="number"
               min={1}
-              autoComplete="age"
+              inputMode="numeric"
+              autoComplete="off"
             />
           )}
         />
@@ -127,6 +128,7 @@ export const FieldGroupUserAccount = withFieldGroup({
               icon={<GlobeIcon />}
               type="text"
               placeholder={config.nationality.placeholder}
+              autoComplete="country-name"
             />
           )}
         />
@@ -142,6 +144,7 @@ export const FieldGroupUserAccount = withFieldGroup({
               label={config.email.label}
               icon={<MailIcon />}
               autoComplete="email"
+              spellCheck={false}
             />
           )}
         />

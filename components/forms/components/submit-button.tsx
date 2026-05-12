@@ -1,6 +1,7 @@
 import { useFormContext } from '@/components/forms/form-context'
 import { Button } from '@/components/ui/button'
 import { useStore } from '@tanstack/react-form'
+import { Loader2Icon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 type FormSubmitButtonProps = Omit<
@@ -12,13 +13,11 @@ export const SubmitButton = (props: FormSubmitButtonProps) => {
   const form = useFormContext()
   const t = useTranslations('SubmitButton')
 
-  const [isSubmitting, canSubmit] = useStore(form.store, (state) => [
-    state.isSubmitting,
-    state.canSubmit
-  ])
+  const isSubmitting = useStore(form.store, (state) => state.isSubmitting)
 
   return (
-    <Button type="submit" disabled={isSubmitting || !canSubmit} {...props}>
+    <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting} {...props}>
+      {isSubmitting && <Loader2Icon aria-hidden="true" className="animate-spin" />}
       {t('label')}
     </Button>
   )
