@@ -16,6 +16,10 @@ function createMockForm() {
   }
 }
 
+function TestInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
+  return <input aria-label="Test input" name="test" {...props} />
+}
+
 describe('FormCard', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -27,7 +31,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="test-form" form={form}>
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -41,7 +45,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="test-form" form={form} title="Contact Us">
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -53,7 +57,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="test-form" form={form} description="Fill out this form to contact us">
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -70,7 +74,7 @@ describe('FormCard', () => {
           title="Contact Us"
           description="Fill out this form"
         >
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -83,7 +87,7 @@ describe('FormCard', () => {
 
       const { container } = render(
         <FormCard formId="test-form" form={form}>
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -96,7 +100,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="test-form" form={form}>
-          <input name="email" data-testid="email-input" />
+          <TestInput name="email" data-testid="email-input" />
         </FormCard>
       )
 
@@ -108,7 +112,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="test-form" form={form}>
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -121,7 +125,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="my-custom-form" form={form}>
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -134,7 +138,7 @@ describe('FormCard', () => {
 
       const { container } = render(
         <FormCard formId="test-form" form={form} className="custom-class">
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -149,7 +153,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="test-form" form={form}>
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -171,7 +175,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="test-form" form={form}>
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -188,7 +192,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="test-form" form={form} title={null}>
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
@@ -200,7 +204,7 @@ describe('FormCard', () => {
 
       render(
         <FormCard formId="test-form" form={form} title="Contact" description={null}>
-          <input name="test" />
+          <TestInput />
         </FormCard>
       )
 
