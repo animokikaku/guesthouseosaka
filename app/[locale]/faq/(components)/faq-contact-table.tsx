@@ -80,7 +80,7 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
     <table id="phone" className="hidden border-collapse text-sm sm:table">
       <thead>
         <tr>
-          <th className="border-border border-b p-2 text-left"></th>
+          <th aria-label={t('house')} className="border-border border-b p-2 text-left"></th>
           <th className="text-muted-foreground border-border border-b p-2 text-center font-medium">
             {t('within_japan')}
           </th>

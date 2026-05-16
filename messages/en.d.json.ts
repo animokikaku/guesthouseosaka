@@ -9,6 +9,7 @@ declare const messages: {
   },
   "FAQContactTable": {
     "from_overseas": "From overseas",
+    "house": "House",
     "within_japan": "Within Japan"
   },
   "GalleryModal": {
