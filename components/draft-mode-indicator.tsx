@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from '@/i18n/navigation'
-import { useDraftModeEnvironment } from 'next-sanity/hooks'
+import { useVisualEditingEnvironment } from 'next-sanity/hooks'
 import { LoaderCircle, X } from 'lucide-react'
 import { useTransition } from 'react'
 
@@ -16,10 +16,10 @@ async function disableDraftMode() {
 export function DraftModeIndicator() {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
-  const environment = useDraftModeEnvironment()
+  const environment = useVisualEditingEnvironment()
 
   // Only show when in standalone preview mode (not inside Presentation Tool)
-  if (environment !== 'live' && environment !== 'unknown') {
+  if (environment === 'presentation-iframe' || environment === 'presentation-window') {
     return null
   }
 
