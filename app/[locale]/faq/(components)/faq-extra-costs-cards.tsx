@@ -3,6 +3,7 @@
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HOUSE_CARD_STYLES } from '@/lib/utils/theme'
 import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from 'next-sanity'
@@ -22,31 +23,7 @@ const portableTextComponents: PortableTextComponents = {
   }
 }
 
-type HouseStyles = {
-  text: string
-  headerBg: string
-  border: string
-}
-
-const HOUSE_STYLES: Record<HouseIdentifier, HouseStyles> = {
-  orange: {
-    text: 'text-orange-700 dark:text-orange-400',
-    headerBg:
-      'bg-gradient-to-r from-orange-50 to-orange-100/50 dark:from-orange-950/40 dark:to-orange-900/20',
-    border: 'border-orange-200 dark:border-orange-800/50'
-  },
-  apple: {
-    text: 'text-red-700 dark:text-red-400',
-    headerBg: 'bg-gradient-to-r from-red-50 to-red-100/50 dark:from-red-950/40 dark:to-red-900/20',
-    border: 'border-red-200 dark:border-red-800/50'
-  },
-  lemon: {
-    text: 'text-yellow-700 dark:text-yellow-400',
-    headerBg:
-      'bg-gradient-to-r from-yellow-50 to-amber-100/50 dark:from-yellow-950/40 dark:to-amber-900/20',
-    border: 'border-yellow-200 dark:border-yellow-800/50'
-  }
-}
+type HouseCardStyles = (typeof HOUSE_CARD_STYLES)[HouseIdentifier]
 
 type Houses = NonNullable<HousesBuildingQueryResult>
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
@@ -86,7 +63,7 @@ export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsC
           {houses.map((house) => (
             <ExtraCostsCard
               key={house._id}
-              styles={HOUSE_STYLES[house.slug]}
+              styles={HOUSE_CARD_STYLES[house.slug]}
               title={house.title}
               extraCosts={house.extraCosts}
               pricingCategories={pricingCategories}
@@ -114,7 +91,7 @@ export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsC
 }
 
 interface ExtraCostsCardProps {
-  styles: HouseStyles | undefined
+  styles: HouseCardStyles | undefined
   title: string | null
   extraCosts: Houses[number]['extraCosts']
   pricingCategories: PricingCategories

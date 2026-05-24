@@ -1,5 +1,5 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
-import { HousePageContent } from '@/components/house'
+import { HousePageContent } from '@/components/house/house-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
 import { env } from '@/lib/env'

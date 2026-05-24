@@ -6,8 +6,8 @@ export type GalleryCategoryData = NonNullable<GalleryCategories>[number]
 export type GalleryItem = NonNullable<GalleryCategoryData['items']>[number]
 export type FeaturedImage = NonNullable<HouseQueryResult>['featuredImage']
 
-// Minimal type for components that only need _key and image (e.g., MobileHeroImage carousel)
-export type GalleryImage = Pick<GalleryItem, '_key' | 'image'>
+// Minimal type for hero carousel slides (Sanity-backed _key + image)
+export type GallerySlide = Pick<GalleryItem, '_key' | 'image'>
 
 // Category with computed fields for frontend display (flattened structure)
 export interface GalleryCategory {
@@ -18,8 +18,8 @@ export interface GalleryCategory {
   items: GalleryItem[]
 }
 
-// Transform featured image to match GalleryImage shape (for MobileHeroImage)
-export function featuredToGalleryImage(image: NonNullable<FeaturedImage>): GalleryImage {
+// Transform featured image to match GallerySlide shape (for MobileHeroImage)
+export function featuredToGallerySlide(image: NonNullable<FeaturedImage>): GallerySlide {
   return {
     _key: 'featured',
     image

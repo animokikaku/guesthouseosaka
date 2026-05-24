@@ -1,26 +1,15 @@
 import { DynamicPageActions } from '@/components/dynamic-page-actions'
+import { PageContentShell } from '@/components/page-content-shell'
 import { PageHeader } from '@/components/page-header'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
+import { pageHeaderComponents } from '@/lib/portable-text/page-header-components'
 import { sanityFetch } from '@/sanity/lib/live'
 import { faqPageQuery, settingsQuery } from '@/sanity/lib/queries'
-import { PortableText, type PortableTextComponents } from '@portabletext/react'
+import { PortableText } from '@portabletext/react'
 import type { Metadata } from 'next'
 import type { Locale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
-
-const headerComponents: PortableTextComponents = {
-  block: {
-    h1: ({ children }) => (
-      <h1 className="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter">
-        {children}
-      </h1>
-    ),
-    normal: ({ children }) => (
-      <p className="text-foreground max-w-3xl text-base text-balance sm:text-lg">{children}</p>
-    )
-  }
-}
 
 export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/faq'>, 'children'>
@@ -58,7 +47,7 @@ export default async function FAQLayout({ params, children }: LayoutProps<'/[loc
   return (
     <>
       <PageHeader>
-        {data?.header && <PortableText value={data?.header} components={headerComponents} />}
+        {data?.header && <PortableText value={data?.header} components={pageHeaderComponents} />}
         {data?.actions && data?.actions.length > 0 && (
           <DynamicPageActions
             documentId={data._id}
@@ -67,11 +56,7 @@ export default async function FAQLayout({ params, children }: LayoutProps<'/[loc
           />
         )}
       </PageHeader>
-      <div className="container-wrapper section-soft flex-1 md:pb-12">
-        <div className="container">
-          <div className="mx-auto w-full max-w-2xl">{children}</div>
-        </div>
-      </div>
+      <PageContentShell>{children}</PageContentShell>
     </>
   )
 }

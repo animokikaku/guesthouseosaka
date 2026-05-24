@@ -1,6 +1,7 @@
 import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
+import { staticParamsForLocales } from '@/lib/static-params'
 import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
 import { getHouse } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -26,7 +27,7 @@ export async function generateStaticParams() {
     return []
   }
 
-  return routing.locales.flatMap((locale) => houses.map(({ slug }) => ({ locale, house: slug })))
+  return staticParamsForLocales(routing.locales, houses, 'house')
 }
 
 export async function generateMetadata(

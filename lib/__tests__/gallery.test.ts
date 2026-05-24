@@ -17,13 +17,13 @@ import {
   createGalleryItem,
   createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
-import { featuredToGalleryImage, flattenGalleryItems, getImageIndex } from '../gallery'
+import { featuredToGallerySlide, flattenGalleryItems, getImageIndex } from '../gallery'
 import { toGalleryCategories } from '../transforms/gallery'
 
-describe('featuredToGalleryImage', () => {
+describe('featuredToGallerySlide', () => {
   it('converts featured image with _key: "featured"', () => {
     const image = createSanityImage()
-    const result = featuredToGalleryImage(image)
+    const result = featuredToGallerySlide(image)
 
     expect(result._key).toBe('featured')
     expect(result.image).toBe(image)

@@ -9,6 +9,7 @@ import {
   useFormSubmit
 } from '@/components/forms'
 import { FormCard } from '@/components/forms/form-card'
+import { FormMessageSection } from '@/components/forms/form-sections'
 import { useTourFormSchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormConfig } from '@/lib/types/components'
@@ -66,19 +67,7 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
       <FieldSeparator />
       <FieldGroupUserAccount fields="account" form={form} config={fields} />
       <FieldSeparator />
-      <form.AppField
-        name="message"
-        children={(field) => (
-          <field.MessageField
-            label={fields.message.label}
-            rows={6}
-            className="min-h-24 resize-none"
-            placeholder={fields.message.placeholder}
-            description={fields.message.description}
-          />
-        )}
-      />
-      <form.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
+      <FormMessageSection form={form} fields={fields} />
     </FormCard>
   )
 }

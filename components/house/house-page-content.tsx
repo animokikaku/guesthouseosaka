@@ -9,7 +9,7 @@ import { ImageBlockGallery } from '@/components/image-block-gallery'
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
 import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
-import { featuredToGalleryImage, type GalleryImage } from '@/lib/gallery'
+import { featuredToGallerySlide, type GallerySlide } from '@/lib/gallery'
 import {
   toAboutContent,
   toAmenityCategories,
@@ -47,8 +47,8 @@ export function HousePageContent({
   }
 
   // Build mobile hero images: featured first (if present), then gallery images
-  const mobileHeroImages: GalleryImage[] = featuredImage?.asset
-    ? [featuredToGalleryImage(featuredImage), ...(galleryImages ?? [])]
+  const mobileHeroImages: GallerySlide[] = featuredImage?.asset
+    ? [featuredToGallerySlide(featuredImage), ...(galleryImages ?? [])]
     : (galleryImages ?? [])
 
   return (
