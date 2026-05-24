@@ -2,6 +2,7 @@
 
 import {
   contactFormDefaultValues,
+  FieldGroupMessage,
   FieldGroupPlaces,
   FieldGroupUserAccount,
   HouseTitles,
@@ -9,7 +10,6 @@ import {
   useFormSubmit
 } from '@/components/forms'
 import { FormCard } from '@/components/forms/form-card'
-import { FormMessageSection } from '@/components/forms/form-sections'
 import { useTourFormSchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormConfig } from '@/lib/types/components'
@@ -67,7 +67,11 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
       <FieldSeparator />
       <FieldGroupUserAccount fields="account" form={form} config={fields} />
       <FieldSeparator />
-      <FormMessageSection form={form} fields={fields} />
+      <FieldGroupMessage
+        fields={{ message: 'message', privacyPolicy: 'privacyPolicy' }}
+        form={form}
+        config={fields}
+      />
     </FormCard>
   )
 }

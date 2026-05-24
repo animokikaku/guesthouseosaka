@@ -2,6 +2,7 @@
 
 import {
   contactFormDefaultValues,
+  FieldGroupMessage,
   FieldGroupPlaces,
   FieldGroupUserAccount,
   HouseTitles,
@@ -9,7 +10,6 @@ import {
   useFormSubmit
 } from '@/components/forms'
 import { FormCard } from '@/components/forms/form-card'
-import { FormMessageSection } from '@/components/forms/form-sections'
 import { useGeneralInquirySchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormConfig } from '@/lib/types/components'
@@ -44,7 +44,12 @@ export function ContactForm({ title, description, fields, houseTitles }: Contact
       <FieldSeparator />
       <FieldGroupUserAccount fields="account" form={form} config={fields} />
       <FieldSeparator />
-      <FormMessageSection form={form} fields={fields} messageRequired />
+      <FieldGroupMessage
+        fields={{ message: 'message', privacyPolicy: 'privacyPolicy' }}
+        form={form}
+        config={fields}
+        messageRequired
+      />
     </FormCard>
   )
 }

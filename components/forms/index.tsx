@@ -206,6 +206,48 @@ export const FieldGroupPlaces = withFieldGroup({
   }
 })
 
+type FieldGroupMessageRenderProps = {
+  config: Pick<FormFieldsConfig, 'message'>
+  messageRequired?: boolean
+}
+
+export const FieldGroupMessage = withFieldGroup<
+  {
+    message: string
+    privacyPolicy: ContactFormFields['privacyPolicy']
+  },
+  unknown,
+  FieldGroupMessageRenderProps
+>({
+  defaultValues: {
+    message: '',
+    privacyPolicy: false as ContactFormFields['privacyPolicy']
+  },
+  props: {
+    config: {} as Pick<FormFieldsConfig, 'message'>
+  },
+  render: function Render({ group, config, messageRequired = false }) {
+    return (
+      <>
+        <group.AppField
+          name="message"
+          children={(field) => (
+            <field.MessageField
+              required={messageRequired}
+              label={config.message.label}
+              rows={6}
+              className="min-h-24 resize-none"
+              placeholder={config.message.placeholder}
+              description={config.message.description}
+            />
+          )}
+        />
+        <group.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
+      </>
+    )
+  }
+})
+
 export const contactFormDefaultValues = {
   places: [] as HouseIdentifier[],
   account: userAccountDefaultValues,
