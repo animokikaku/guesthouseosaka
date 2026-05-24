@@ -7,7 +7,7 @@ interface HouseColorVariants {
   toggleSvg: string
 }
 
-interface HouseCardStyles {
+export interface HouseCardStyles {
   text: string
   headerBg: string
   border: string

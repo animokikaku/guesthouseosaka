@@ -1,9 +1,8 @@
 'use client'
 
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel'
-import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { HOUSE_CARD_STYLES } from '@/lib/utils/theme'
+import { HOUSE_CARD_STYLES, type HouseCardStyles } from '@/lib/utils/theme'
 import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from 'next-sanity'
@@ -22,8 +21,6 @@ const portableTextComponents: PortableTextComponents = {
     number: ({ children }) => <li>{children}</li>
   }
 }
-
-type HouseCardStyles = (typeof HOUSE_CARD_STYLES)[HouseIdentifier]
 
 type Houses = NonNullable<HousesBuildingQueryResult>
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
