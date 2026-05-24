@@ -2,7 +2,6 @@
 
 import {
   contactFormDefaultValues,
-  FieldGroupMessage,
   FieldGroupPlaces,
   FieldGroupUserAccount,
   HouseTitles,
@@ -44,12 +43,20 @@ export function ContactForm({ title, description, fields, houseTitles }: Contact
       <FieldSeparator />
       <FieldGroupUserAccount fields="account" form={form} config={fields} />
       <FieldSeparator />
-      <FieldGroupMessage
-        fields={{ message: 'message', privacyPolicy: 'privacyPolicy' }}
-        form={form}
-        config={fields}
-        messageRequired
+      <form.AppField
+        name="message"
+        children={(field) => (
+          <field.MessageField
+            required
+            label={fields.message.label}
+            rows={6}
+            className="min-h-24 resize-none"
+            placeholder={fields.message.placeholder}
+            description={fields.message.description}
+          />
+        )}
       />
+      <form.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
     </FormCard>
   )
 }

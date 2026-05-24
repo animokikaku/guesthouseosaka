@@ -2,7 +2,6 @@
 
 import {
   contactFormDefaultValues,
-  FieldGroupMessage,
   FieldGroupPlaces,
   FieldGroupUserAccount,
   HouseTitles,
@@ -95,11 +94,19 @@ export function MoveInForm({ title, description, fields, houseTitles }: MoveInFo
       <FieldSeparator />
       <FieldGroupUserAccount fields="account" form={form} config={fields} />
       <FieldSeparator />
-      <FieldGroupMessage
-        fields={{ message: 'message', privacyPolicy: 'privacyPolicy' }}
-        form={form}
-        config={fields}
+      <form.AppField
+        name="message"
+        children={(field) => (
+          <field.MessageField
+            label={fields.message.label}
+            rows={6}
+            className="min-h-24 resize-none"
+            placeholder={fields.message.placeholder}
+            description={fields.message.description}
+          />
+        )}
       />
+      <form.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
     </FormCard>
   )
 }
