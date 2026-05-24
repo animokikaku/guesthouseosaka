@@ -3,6 +3,7 @@ import { MoveInForm } from '@/components/forms/move-in-form'
 import { TourForm } from '@/components/forms/tour-form'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { routing } from '@/i18n/routing'
+import { staticParamsForLocales } from '@/lib/static-params'
 import { toContactFormConfig } from '@/lib/transforms/form'
 import { ContactType, ContactTypeSchema } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -10,6 +11,12 @@ import { contactTypeQuery, contactTypeSlugsQuery, housesTitlesQuery } from '@/sa
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+
+const FORM_BY_SLUG = {
+  tour: TourForm,
+  'move-in': MoveInForm,
+  other: ContactForm
+} as const satisfies Record<ContactType, typeof TourForm>
 
 export function hasContactType(slug: string): slug is ContactType {
   return ContactTypeSchema.safeParse(slug).success
@@ -26,7 +33,7 @@ export async function generateStaticParams() {
     return []
   }
 
-  return routing.locales.flatMap((locale) => contactTypes.map(({ slug }) => ({ locale, slug })))
+  return staticParamsForLocales(routing.locales, contactTypes, 'slug')
 }
 
 export default async function ContactTypePage({ params }: PageProps<'/[locale]/contact/[slug]'>) {
@@ -56,15 +63,6 @@ export default async function ContactTypePage({ params }: PageProps<'/[locale]/c
   // Transform contact type data at page level
   const formConfig = toContactFormConfig(contactData)
 
-  // Render the appropriate form based on slug
-  switch (slug) {
-    case 'tour':
-      return <TourForm {...formConfig} houseTitles={houseTitles} />
-    case 'move-in':
-      return <MoveInForm {...formConfig} houseTitles={houseTitles} />
-    case 'other':
-      return <ContactForm {...formConfig} houseTitles={houseTitles} />
-    default:
-      return <PageEmptyState />
-  }
+  const Form = FORM_BY_SLUG[slug]
+  return <Form {...formConfig} houseTitles={houseTitles} />
 }

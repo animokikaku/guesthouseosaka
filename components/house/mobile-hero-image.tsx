@@ -3,7 +3,7 @@
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import type { GalleryImage } from '@/lib/gallery'
+import type { GallerySlide } from '@/lib/gallery'
 import { urlFor } from '@/sanity/lib/image'
 import { ImageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -12,7 +12,7 @@ import { ComponentProps, useEffect, useState } from 'react'
 
 type MobileHeroImageProps = {
   href: ComponentProps<typeof Link>['href']
-  images: GalleryImage[]
+  images: GallerySlide[]
 }
 
 export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
