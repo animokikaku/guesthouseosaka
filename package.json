@@ -61,7 +61,7 @@
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-email": "^6.3.3",
-    "resend": "^6.12.3",
+    "resend": "^6.12.4",
     "sanity": "^5.26.0",
     "sanity-plugin-internationalized-array": "^5.1.2",
     "sanity-plugin-lucide-icon-picker": "^1.0.3",
