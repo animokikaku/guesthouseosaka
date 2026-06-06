@@ -13,7 +13,8 @@ vi.mock('@/i18n/navigation', () => ({
 }))
 
 vi.mock('@/components/ui/dialog', async () => {
-  const actual = await vi.importActual<typeof import('@/components/ui/dialog')>('@/components/ui/dialog')
+  const actual =
+    await vi.importActual<typeof import('@/components/ui/dialog')>('@/components/ui/dialog')
 
   return {
     ...actual,

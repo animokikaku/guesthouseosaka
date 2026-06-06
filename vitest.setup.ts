@@ -9,7 +9,11 @@ vi.mock('@/components/ui/scroll-area', async () => {
   return {
     ScrollArea: ({ children, ...props }: React.ComponentProps<'div'>) =>
       React.createElement('div', { 'data-slot': 'scroll-area', ...props }, children),
-    ScrollBar: ({ children, orientation = 'vertical', ...props }: React.ComponentProps<'div'> & {
+    ScrollBar: ({
+      children,
+      orientation = 'vertical',
+      ...props
+    }: React.ComponentProps<'div'> & {
       orientation?: 'horizontal' | 'vertical'
     }) =>
       React.createElement(

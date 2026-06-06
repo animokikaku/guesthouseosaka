@@ -131,12 +131,7 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
   }, [api])
 
   return (
-    <Carousel
-      className="h-screen w-screen"
-      opts={{ startIndex: startIndex }}
-      setApi={setApi}
-      keyboardNavigation={false}
-    >
+    <Carousel className="h-screen w-screen" opts={{ startIndex: startIndex }} setApi={setApi}>
       <CarouselContent
         className="h-screen items-center"
         onTouchStart={onTouchStart}

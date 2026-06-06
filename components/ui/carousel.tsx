@@ -1,7 +1,7 @@
 "use client"
 
 import useEmblaCarousel, {
-    type UseEmblaCarouselType,
+  type UseEmblaCarouselType,
 } from "embla-carousel-react";
 import * as React from "react";
 
@@ -19,8 +19,6 @@ type CarouselProps = {
   plugins?: CarouselPlugin
   orientation?: "horizontal" | "vertical"
   setApi?: (api: CarouselApi) => void
-  /** When false, arrow keys are not handled by the carousel (e.g. when a parent owns keyboard nav). */
-  keyboardNavigation?: boolean
 }
 
 type CarouselContextProps = {
