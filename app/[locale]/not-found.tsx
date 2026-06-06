@@ -14,6 +14,21 @@ import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
+import type { ReactNode } from 'react'
+
+function renderContactLink(chunks: ReactNode) {
+  return (
+    <Link
+      href={{
+        pathname: '/contact/[slug]',
+        params: { slug: 'other' },
+        hash: '#tabs'
+      }}
+    >
+      {chunks}
+    </Link>
+  )
+}
 
 export default function NotFound() {
   const t = useTranslations('NotFound')
@@ -35,17 +50,7 @@ export default function NotFound() {
         </Button>
         <EmptyDescription>
           {t.rich('contact_us', {
-            link: (chunks) => (
-              <Link
-                href={{
-                  pathname: '/contact/[slug]',
-                  params: { slug: 'other' },
-                  hash: '#tabs'
-                }}
-              >
-                {chunks}
-              </Link>
-            )
+            link: renderContactLink
           })}
         </EmptyDescription>
       </EmptyContent>

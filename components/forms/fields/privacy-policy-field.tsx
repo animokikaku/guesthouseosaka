@@ -5,6 +5,11 @@ import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
 import { useTranslations } from 'next-intl'
+import type { ReactNode } from 'react'
+
+function renderPrivacyPolicyLink(chunks: ReactNode, onAgree: () => void) {
+  return <LegalNoticeDialog onAgree={onAgree}>{chunks}</LegalNoticeDialog>
+}
 
 export function PrivacyPolicyField() {
   const { field, isInvalid, errors } = useFieldValidation<boolean>()
@@ -28,11 +33,7 @@ export function PrivacyPolicyField() {
           >
             <span className="text-muted-foreground">
               {t.rich('fields.privacy_policy_agreement', {
-                link: (chunks) => (
-                  <LegalNoticeDialog onAgree={() => field.handleChange(true)}>
-                    {chunks}
-                  </LegalNoticeDialog>
-                )
+                link: (chunks) => renderPrivacyPolicyLink(chunks, () => field.handleChange(true))
               })}
             </span>
           </FieldLabel>

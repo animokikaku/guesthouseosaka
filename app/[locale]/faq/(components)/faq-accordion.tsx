@@ -16,6 +16,7 @@ import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
 import { useFormatter, useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
+import type { ReactNode } from 'react'
 
 const components: PortableTextComponents = {
   block: {
@@ -36,6 +37,10 @@ type FAQAccordionProps = {
   housesBuilding: Houses
 }
 
+function renderSanitySpan(chunks: ReactNode, dataAttr: (path: string) => string, path: string) {
+  return <span data-sanity={dataAttr(path)}>{chunks}</span>
+}
+
 function FloorsAndRoomsContent({ houses }: { houses: Houses }) {
   const t = useTranslations('FAQAccordion')
   const formatter = useFormatter()
@@ -52,10 +57,8 @@ function FloorsAndRoomsContent({ houses }: { houses: Houses }) {
             {t.rich('floors_and_rooms.format', {
               floors: formatter.number(floors),
               rooms: formatter.number(rooms),
-              floorsTag: (chunks) => (
-                <span data-sanity={dataAttr('building.floors')}>{chunks}</span>
-              ),
-              roomsTag: (chunks) => <span data-sanity={dataAttr('building.rooms')}>{chunks}</span>
+              floorsTag: (chunks) => renderSanitySpan(chunks, dataAttr, 'building.floors'),
+              roomsTag: (chunks) => renderSanitySpan(chunks, dataAttr, 'building.rooms')
             })}
           </li>
         )
