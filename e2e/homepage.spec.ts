@@ -46,6 +46,24 @@ test.describe('Homepage', () => {
       // Should stay on FAQ page with Japanese locale
       await expect(page).toHaveURL(/\/ja\/faq/)
     })
+
+    test('closes menu when selecting the active language', async ({ page }) => {
+      await page.goto('/en/faq')
+
+      const languageSwitcher = page.getByRole('button', {
+        name: /select language/i
+      })
+      await languageSwitcher.click()
+
+      const menuContent = page.locator('[data-slot="dropdown-menu-content"]')
+      await expect(menuContent).toBeVisible()
+
+      const englishOption = page.getByRole('menuitemradio', { name: 'English' })
+      await englishOption.click()
+
+      await expect(menuContent).toBeHidden()
+      await expect(page).toHaveURL(/\/en\/faq/)
+    })
   })
 
   // Note: Locale route tests are now consolidated in e2e/locales.spec.ts
