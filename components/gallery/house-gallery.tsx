@@ -29,6 +29,10 @@ export function HouseGallery({
     [galleryCategories]
   )
 
+  if (categories.length === 0) {
+    return null
+  }
+
   return (
     <div className="space-y-8">
       {/* Category Navigation with Thumbnails */}

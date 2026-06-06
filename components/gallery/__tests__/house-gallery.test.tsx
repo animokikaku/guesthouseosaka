@@ -71,13 +71,13 @@ describe('HouseGallery', () => {
     it('renders nothing for empty galleryCategories', () => {
       const { container } = render(<HouseGallery galleryCategories={[]} />)
 
-      expect(container.querySelector('h3')).not.toBeInTheDocument()
+      expect(container).toBeEmptyDOMElement()
     })
 
     it('renders nothing for null galleryCategories', () => {
       const { container } = render(<HouseGallery galleryCategories={null as unknown as []} />)
 
-      expect(container.querySelector('h3')).not.toBeInTheDocument()
+      expect(container).toBeEmptyDOMElement()
     })
   })
 
