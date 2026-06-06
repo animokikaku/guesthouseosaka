@@ -80,8 +80,8 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
   if (isMobile) {
     return (
       <Drawer>
-        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-        <DrawerContent className="max-h-[90vh]">
+        <DrawerTrigger render={trigger} />
+        <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>{data?.title}</DrawerTitle>
             <DrawerDescription>{lastUpdatedText}</DrawerDescription>
@@ -89,10 +89,8 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
           <div className="overflow-y-auto px-4 pb-8">
             {content}
             {onAgree && (
-              <DrawerClose asChild>
-                <Button onClick={onAgree} className="mt-6 w-full">
-                  {t('agree_button')}
-                </Button>
+              <DrawerClose render={<Button onClick={onAgree} className="mt-6 w-full" />}>
+                {t('agree_button')}
               </DrawerClose>
             )}
           </div>

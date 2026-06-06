@@ -1,4 +1,5 @@
 .theme-mono .theme-container,
+.theme-mono [data-slot='drawer-content'],
 .theme-mono [data-slot='dropdown-menu-content'],
 .theme-mono [data-slot='dropdown-menu-sub-content'],
 .theme-mono [data-slot='navigation-menu-popup'],
@@ -61,6 +62,7 @@
 }
 
 .theme-scaled .theme-container,
+.theme-scaled [data-slot='drawer-content'],
 .theme-scaled [data-slot='dropdown-menu-content'],
 .theme-scaled [data-slot='dropdown-menu-sub-content'],
 .theme-scaled [data-slot='navigation-menu-popup'],
@@ -99,6 +101,7 @@
 }
 
 .theme-inter .theme-container,
+.theme-inter [data-slot='drawer-content'],
 .theme-inter [data-slot='dropdown-menu-content'],
 .theme-inter [data-slot='dropdown-menu-sub-content'],
 .theme-inter [data-slot='navigation-menu-popup'],
@@ -108,6 +111,7 @@
 }
 
 .theme-orange .theme-container,
+.theme-orange [data-slot='drawer-content'],
 .theme-orange [data-slot='dropdown-menu-content'],
 .theme-orange [data-slot='dropdown-menu-sub-content'],
 .theme-orange [data-slot='navigation-menu-popup'],
@@ -131,6 +135,7 @@
 }
 
 .theme-red .theme-container,
+.theme-red [data-slot='drawer-content'],
 .theme-red [data-slot='dropdown-menu-content'],
 .theme-red [data-slot='dropdown-menu-sub-content'],
 .theme-red [data-slot='navigation-menu-popup'],
@@ -154,6 +159,7 @@
 }
 
 .theme-yellow .theme-container,
+.theme-yellow [data-slot='drawer-content'],
 .theme-yellow [data-slot='dropdown-menu-content'],
 .theme-yellow [data-slot='dropdown-menu-sub-content'],
 .theme-yellow [data-slot='navigation-menu-popup'],
