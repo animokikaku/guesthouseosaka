@@ -29,18 +29,18 @@ type FAQContactTableProps = {
 
 export function FAQContactTable({ houses }: FAQContactTableProps) {
   return (
-    <>
+    <div id="phone" className="w-full sm:w-auto">
       {/* Mobile: Item cards */}
       <MobilePhoneCards houses={houses} />
       {/* Desktop: Table */}
       <DesktopPhoneTable houses={houses} />
-    </>
+    </div>
   )
 }
 
 function MobilePhoneCards({ houses }: FAQContactTableProps) {
   return (
-    <ItemGroup id="phone" className="w-full gap-2 sm:hidden">
+    <ItemGroup role="presentation" className="w-full gap-2 sm:hidden">
       {houses.map(({ _id, title, phone, image }) => {
         return (
           <Item
@@ -59,6 +59,8 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
                 </ItemContent>
                 <ItemActions>
                   <Button
+                    render={<span />}
+                    nativeButton={false}
                     size="icon"
                     variant="outline"
                     className="pointer-events-none rounded-full"
@@ -82,7 +84,7 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
   const t = useTranslations('FAQContactTable')
 
   return (
-    <table id="phone" className="hidden border-collapse text-sm sm:table">
+    <table className="hidden border-collapse text-sm sm:table">
       <thead>
         <tr>
           <th aria-label={t('house')} className="border-border border-b p-2 text-left"></th>
