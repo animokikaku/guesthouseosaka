@@ -1,13 +1,13 @@
 "use client"
 
-import * as React from "react"
 import useEmblaCarousel, {
-  type UseEmblaCarouselType,
-} from "embla-carousel-react"
+    type UseEmblaCarouselType,
+} from "embla-carousel-react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -49,7 +49,6 @@ function Carousel({
   opts,
   setApi,
   plugins,
-  keyboardNavigation = true,
   className,
   children,
   ...props
@@ -77,19 +76,6 @@ function Carousel({
   const scrollNext = React.useCallback(() => {
     api?.scrollNext()
   }, [api])
-
-  const handleKeyDown = React.useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === "ArrowLeft") {
-        event.preventDefault()
-        scrollPrev()
-      } else if (event.key === "ArrowRight") {
-        event.preventDefault()
-        scrollNext()
-      }
-    },
-    [scrollPrev, scrollNext]
-  )
 
   React.useEffect(() => {
     if (!api || !setApi) return
@@ -122,8 +108,6 @@ function Carousel({
       }}
     >
       <div
-        onKeyDownCapture={keyboardNavigation ? handleKeyDown : undefined}
-        tabIndex={keyboardNavigation ? 0 : undefined}
         className={cn("relative", className)}
         role="region"
         aria-roledescription="carousel"
@@ -236,11 +220,11 @@ function CarouselNext({
 }
 
 export {
-  type CarouselApi,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
-  useCarousel,
-}
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+    useCarousel,
+    type CarouselApi
+};

@@ -169,7 +169,7 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
         })}
       </CarouselContent>
       {currentAlt && (
-        <div className="pointer-events-none absolute bottom-0 left-1/2 z-50 w-full -translate-x-1/2 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] text-center sm:pb-4 lg:w-fit">
+        <div className="pointer-events-none absolute bottom-0 left-1/2 z-50 w-full -translate-x-1/2 pb-[calc(5rem+env(safe-area-inset-bottom,0))] text-center sm:pb-4 lg:w-fit">
           <span className="bg-primary-foreground/90 pointer-events-auto inline-block max-w-[90vw] rounded-lg px-4 py-2 text-sm wrap-break-word backdrop-blur-sm sm:max-w-none sm:text-base">
             {currentAlt}
           </span>
