@@ -43,30 +43,35 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
     <ItemGroup id="phone" className="w-full gap-2 sm:hidden">
       {houses.map(({ _id, title, phone, image }) => {
         return (
-          <Item key={_id} variant="outline" asChild className="gap-3 p-3">
-            <a href={`tel:${phone.international}`}>
-              <ItemMedia variant="image" className="size-12 rounded-sm">
-                <HouseImage image={image} alt={image.alt ? stegaClean(image.alt) : ''} />
-              </ItemMedia>
-              <ItemContent>
-                <ItemTitle>{stegaClean(title)}</ItemTitle>
-                <ItemDescription className="font-mono">
-                  {phone.international ?? 'ー'}
-                </ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="pointer-events-none rounded-full"
-                  aria-hidden="true"
-                  tabIndex={-1}
-                >
-                  <Phone className="size-4" />
-                </Button>
-              </ItemActions>
-            </a>
-          </Item>
+          <Item
+            key={_id}
+            variant="outline"
+            render={
+              <a href={`tel:${phone.international}`}>
+                <ItemMedia variant="image" className="size-12 rounded-sm">
+                  <HouseImage image={image} alt={image.alt ? stegaClean(image.alt) : ''} />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>{stegaClean(title)}</ItemTitle>
+                  <ItemDescription className="font-mono">
+                    {phone.international ?? 'ー'}
+                  </ItemDescription>
+                </ItemContent>
+                <ItemActions>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    className="pointer-events-none rounded-full"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                  >
+                    <Phone className="size-4" />
+                  </Button>
+                </ItemActions>
+              </a>
+            }
+            className="gap-3 p-3"
+          />
         )
       })}
     </ItemGroup>

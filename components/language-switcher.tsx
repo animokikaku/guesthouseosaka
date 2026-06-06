@@ -11,7 +11,7 @@ import {
 import { usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { Languages } from 'lucide-react'
-import { Locale, useLocale, useTranslations } from 'next-intl'
+import { hasLocale, Locale, useLocale, useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { useCallback, useTransition } from 'react'
 
@@ -86,14 +86,24 @@ function LanguageSwitcherSelect({
   const t = useTranslations('LanguageSwitcher')
   return (
     <DropdownMenu modal={false}>
-      <DropdownMenuTrigger disabled={disabled} asChild>
-        <Button aria-label={t('aria_label')} size={size} className={className} variant={variant}>
-          {size === 'default' ? langs[value] : null}
-          <Languages />
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger
+        disabled={disabled}
+        render={
+          <Button aria-label={t('aria_label')} size={size} className={className} variant={variant}>
+            {size === 'default' ? langs[value] : null}
+            <Languages />
+          </Button>
+        }
+      />
       <DropdownMenuContent align={align}>
-        <DropdownMenuRadioGroup onValueChange={(val) => onChange?.(val as Locale)} value={value}>
+        <DropdownMenuRadioGroup
+          onValueChange={(val) => {
+            if (hasLocale(routing.locales, val)) {
+              onChange?.(val)
+            }
+          }}
+          value={value}
+        >
           {languages.map(({ code, label }) => (
             <DropdownMenuRadioItem key={code} lang={code} value={code}>
               {label}

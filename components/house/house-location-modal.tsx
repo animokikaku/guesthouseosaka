@@ -31,7 +31,7 @@ const portableTextComponents: PortableTextComponents = {
 }
 
 interface HouseLocationModalProps {
-  children: React.ReactNode
+  children: React.ReactElement
   details: LocationData['details']
   title: string
 }
@@ -44,13 +44,7 @@ export function HouseLocationModal({ children, details, title }: HouseLocationMo
   }
 
   return (
-    <ResponsiveModal
-      trigger={children}
-      title={title}
-      open={open}
-      onOpenChange={setOpen}
-      contentClassName="pt-8"
-    >
+    <ResponsiveModal trigger={children} title={title} open={open} onOpenChange={setOpen}>
       <LocationSections details={details} />
     </ResponsiveModal>
   )

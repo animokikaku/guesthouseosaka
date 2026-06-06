@@ -49,25 +49,27 @@ export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
         <div className="3xl:fixed:container flex h-(--header-height) items-center gap-2 **:data-[slot=separator]:h-4!">
           <MobileNav items={navItems} className="flex lg:hidden" />
           <Button
-            asChild
+            render={<Link href="/" />}
+            nativeButton={false}
             variant="ghost"
             size="icon"
             className="hidden size-8 bg-transparent lg:flex"
           >
-            <Link href="/">
-              <Icons.logo className="size-5" />
-              <span className="sr-only">{t('logo_label')}</span>
-            </Link>
+            <Icons.logo className="size-5" />
+            <span className="sr-only">{t('logo_label')}</span>
           </Button>
           <MainNav items={navItems} className="hidden lg:flex" />
           <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
             <LanguageSwitcher size={isMobile ? 'icon-sm' : 'default'} />
             <ModeSwitcher />
-            <Button variant="ghost" size="icon" asChild>
-              <NextLink href="/studio" target="_blank" prefetch={false}>
-                <Settings2 className="size-4.5" />
-                <span className="sr-only">{t('studio_label')}</span>
-              </NextLink>
+            <Button
+              variant="ghost"
+              size="icon"
+              render={<NextLink href="/studio" target="_blank" prefetch={false} />}
+              nativeButton={false}
+            >
+              <Settings2 className="size-4.5" />
+              <span className="sr-only">{t('studio_label')}</span>
             </Button>
           </div>
         </div>

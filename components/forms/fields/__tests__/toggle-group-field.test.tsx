@@ -108,7 +108,7 @@ describe('ToggleGroupField', () => {
 
       const buttons = screen.getAllByRole('button')
       buttons.forEach((button) => {
-        expect(button).toHaveAttribute('data-state', 'off')
+        expect(button).not.toHaveAttribute('data-pressed')
       })
     })
 
@@ -124,9 +124,9 @@ describe('ToggleGroupField', () => {
       )
 
       const buttons = screen.getAllByRole('button')
-      expect(buttons[0]).toHaveAttribute('data-state', 'on')
-      expect(buttons[1]).toHaveAttribute('data-state', 'off')
-      expect(buttons[2]).toHaveAttribute('data-state', 'on')
+      expect(buttons[0]).toHaveAttribute('data-pressed')
+      expect(buttons[1]).not.toHaveAttribute('data-pressed')
+      expect(buttons[2]).toHaveAttribute('data-pressed')
     })
   })
 

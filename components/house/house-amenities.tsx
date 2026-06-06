@@ -28,7 +28,7 @@ interface HouseAmenitiesProps {
 interface AmenitiesDialogProps {
   amenityCategories: AmenityCategoryData[]
   noteLabels: Record<string, string>
-  trigger: React.ReactNode
+  trigger: React.ReactElement
   title: string
   dataAttribute?: DataAttributeFn
 }
@@ -67,7 +67,7 @@ function AmenitiesDialog({
   if (!amenityCategories || amenityCategories.length === 0) return null
 
   return (
-    <ResponsiveModal trigger={trigger} title={title} contentClassName="pt-8">
+    <ResponsiveModal trigger={trigger} title={title}>
       <div className="space-y-8">
         {amenityCategories.map((cat) => (
           <div

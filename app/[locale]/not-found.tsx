@@ -30,8 +30,8 @@ export default function NotFound() {
         <EmptyDescription className="text-base">{t('description')}</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button asChild variant="outline" size="lg">
-          <Link href="/">{t('back_home')}</Link>
+        <Button render={<Link href="/" />} nativeButton={false} variant="outline" size="lg">
+          {t('back_home')}
         </Button>
         <EmptyDescription>
           {t.rich('contact_us', {

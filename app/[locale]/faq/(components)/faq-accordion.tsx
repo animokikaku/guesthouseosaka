@@ -70,7 +70,7 @@ export function FAQAccordion({
   housesBuilding
 }: FAQAccordionProps) {
   return (
-    <Accordion type="multiple">
+    <Accordion multiple>
       {faqQuestions.map(({ _id, question, answer, componentKey }) => {
         const component = componentKey ? stegaClean(componentKey) : null
         return (

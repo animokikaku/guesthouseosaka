@@ -164,7 +164,7 @@ describe('CheckboxField', () => {
 
       const checkbox = screen.getByRole('checkbox')
       expect(checkbox).not.toBeChecked()
-      expect(checkbox).toHaveAttribute('data-state', 'unchecked')
+      expect(checkbox).toHaveAttribute('data-unchecked')
     })
 
     it('renders checked when value is true', () => {
@@ -178,7 +178,7 @@ describe('CheckboxField', () => {
 
       const checkbox = screen.getByRole('checkbox')
       expect(checkbox).toBeChecked()
-      expect(checkbox).toHaveAttribute('data-state', 'checked')
+      expect(checkbox).toHaveAttribute('data-checked')
     })
   })
 

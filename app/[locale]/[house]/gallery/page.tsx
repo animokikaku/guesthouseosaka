@@ -42,11 +42,15 @@ export default async function GalleryPage({ params }: PageProps<'/[locale]/[hous
           galleryCategories={data.galleryCategories}
           title={data.title ?? ''}
           backButton={
-            <Button variant="ghost" size="icon" asChild className="shrink-0 rounded-full">
-              <Link href={{ pathname: '/[house]', params: { house } }}>
-                <ArrowLeftIcon className="size-6" />
-                <span className="sr-only">{t('close')}</span>
-              </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              render={<Link href={{ pathname: '/[house]', params: { house } }} />}
+              nativeButton={false}
+              className="shrink-0 rounded-full"
+            >
+              <ArrowLeftIcon className="size-6" />
+              <span className="sr-only">{t('close')}</span>
             </Button>
           }
         />

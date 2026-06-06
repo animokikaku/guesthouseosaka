@@ -57,15 +57,6 @@ vi.mock('next/image', () => ({
   }
 }))
 
-// Mock Radix Dialog portals
-vi.mock('@radix-ui/react-dialog', async () => {
-  const actual = await vi.importActual('@radix-ui/react-dialog')
-  return {
-    ...actual,
-    Portal: ({ children }: { children: React.ReactNode }) => children
-  }
-})
-
 // Mock carousel with state capture
 vi.mock('@/components/ui/carousel', () => ({
   Carousel: ({

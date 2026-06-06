@@ -22,7 +22,7 @@ import * as React from 'react'
 
 interface ResponsiveModalProps {
   children: React.ReactNode
-  trigger: React.ReactNode
+  trigger: React.ReactElement
   title: string
   open?: boolean
   onOpenChange?: (open: boolean) => void
@@ -56,13 +56,13 @@ export function ResponsiveModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="theme-container max-h-[85vh] overflow-y-auto md:max-w-3xl">
+      <DialogTrigger render={trigger} />
+      <DialogContent className="theme-container md:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="sr-only">{title}</DialogDescription>
         </DialogHeader>
-        <div className={cn(contentClassName)}>{children}</div>
+        <div className={cn('max-h-[65vh] overflow-y-auto', contentClassName)}>{children}</div>
       </DialogContent>
     </Dialog>
   )

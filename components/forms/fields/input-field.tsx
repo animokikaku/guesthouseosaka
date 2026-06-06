@@ -9,6 +9,7 @@ import {
   FieldLabel
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
 type InputFormProps = Omit<
   React.ComponentProps<typeof Input>,
@@ -22,7 +23,13 @@ interface InputFieldProps extends InputFormProps, Orientation {
   description?: string | null
 }
 
-export function InputField({ label, description, orientation, ...props }: InputFieldProps) {
+export function InputField({
+  label,
+  description,
+  orientation,
+  className,
+  ...props
+}: InputFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<string>()
 
   return (
@@ -39,6 +46,10 @@ export function InputField({ label, description, orientation, ...props }: InputF
         aria-invalid={isInvalid}
         onChange={(e) => field.handleChange(e.target.value)}
         onBlur={() => field.handleBlur()}
+        className={cn(
+          'w-full min-w-0 @md/field-group:w-[220px] @md/field-group:min-w-[220px] @md/field-group:max-w-[220px]',
+          className
+        )}
         {...props}
       />
     </Field>

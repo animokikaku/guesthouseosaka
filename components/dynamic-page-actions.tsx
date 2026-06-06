@@ -57,32 +57,41 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
 
         if (isExternal) {
           return (
-            <Button key={_key} asChild variant={variant} size="sm">
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
-              >
-                <Icon name={icon} aria-hidden="true" />
-                {stegaClean(label)}
-              </a>
-            </Button>
+            <Button
+              key={_key}
+              render={
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
+                >
+                  <Icon name={icon} aria-hidden="true" />
+                  {stegaClean(label)}
+                </a>
+              }
+              nativeButton={false}
+              variant={variant}
+              size="sm"
+            />
           )
         }
 
         return (
           <Button
             key={_key}
-            asChild
+            render={
+              <Link
+                href={hasHash ? { pathname: pathname as '/', hash: `#${hash}` } : (href as '/')}
+              />
+            }
+            nativeButton={false}
             variant={variant}
             size="sm"
             data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
           >
-            <Link href={hasHash ? { pathname: pathname as '/', hash: `#${hash}` } : (href as '/')}>
-              <Icon name={icon} aria-hidden="true" />
-              {stegaClean(label)}
-            </Link>
+            <Icon name={icon} aria-hidden="true" />
+            {stegaClean(label)}
           </Button>
         )
       })}

@@ -188,11 +188,11 @@ export const FieldGroupPlaces = withFieldGroup({
       value: slug,
       label: (
         <>
-          <HouseIcon name={slug} />
-          {title ?? slug}
+          <HouseIcon name={slug} strokeWidth={1.25} />
+          <span className="text-muted-foreground sm:text-inherit">{title ?? slug}</span>
         </>
       ),
-      className: cn('data-[state=on]:bg-transparent', HOUSE_COLORS[slug].toggleSvg)
+      className: cn('data-pressed:bg-transparent', HOUSE_COLORS[slug].toggleSvg)
     }))
 
     return (

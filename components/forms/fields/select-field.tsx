@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
+import { cn } from '@/lib/utils'
 
 type SelectProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange'>
 
@@ -34,6 +35,10 @@ export function SelectField({
   ...props
 }: SelectFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<string>()
+  const items = options.map((option) => ({
+    label: option.label,
+    value: option.value
+  }))
 
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
@@ -43,20 +48,23 @@ export function SelectField({
         {isInvalid && <FieldError errors={errors} />}
       </FieldContent>
       <Select
+        items={items}
         name={field.name}
         value={field.state.value}
-        onValueChange={field.handleChange}
+        onValueChange={(value) => field.handleChange(value as string)}
         {...props}
       >
         <SelectTrigger
           id={`form-tanstack-select-${field.name}`}
           aria-invalid={isInvalid}
-          className="min-w-[120px] sm:min-w-[220px]"
+          className={cn(
+            'w-full min-w-0 @md/field-group:w-[220px] @md/field-group:min-w-[220px] @md/field-group:max-w-[220px]'
+          )}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
-        <SelectContent position="item-aligned">
-          {options.map((option) => (
+        <SelectContent>
+          {items.map((option) => (
             <SelectItem key={option.value} value={option.value}>
               {option.label}
             </SelectItem>

@@ -41,7 +41,12 @@ export function InputGroupField({
         {description && <FieldDescription>{description}</FieldDescription>}
         {isInvalid && <FieldError errors={errors} />}
       </FieldContent>
-      <InputGroup>
+      <InputGroup
+        className={cn(
+          'w-full min-w-0 @md/field-group:w-[220px] @md/field-group:min-w-[220px] @md/field-group:max-w-[220px]',
+          className
+        )}
+      >
         <InputGroupInput
           id={`form-tanstack-input-group-${field.name}`}
           name={field.name}
@@ -49,7 +54,6 @@ export function InputGroupField({
           aria-invalid={isInvalid}
           onChange={(e) => field.handleChange(e.target.value)}
           onBlur={() => field.handleBlur()}
-          className={cn(className, 'min-w-[120px]')}
           {...props}
         />
         {icon && <InputGroupAddon>{icon}</InputGroupAddon>}

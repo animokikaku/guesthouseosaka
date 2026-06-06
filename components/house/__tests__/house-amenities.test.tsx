@@ -28,15 +28,6 @@ vi.mock('@/lib/icons', () => ({
   Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />
 }))
 
-// Mock Radix UI portals for Dialog/Drawer
-vi.mock('@radix-ui/react-dialog', async () => {
-  const actual = await vi.importActual('@radix-ui/react-dialog')
-  return {
-    ...actual,
-    Portal: ({ children }: { children: React.ReactNode }) => children
-  }
-})
-
 vi.mock('vaul', async () => {
   const actual = await vi.importActual<typeof import('vaul')>('vaul')
   return {

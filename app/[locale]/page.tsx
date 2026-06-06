@@ -77,8 +77,8 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
             {hero.content && <PortableText value={hero.content} components={heroComponents} />}
             {hero.ctaLabel && (
               <PageActions className="md:justify-start">
-                <Button asChild size="lg">
-                  <Link href="/contact">{hero.ctaLabel}</Link>
+                <Button render={<Link href="/contact" />} nativeButton={false} size="lg">
+                  {hero.ctaLabel}
                 </Button>
               </PageActions>
             )}

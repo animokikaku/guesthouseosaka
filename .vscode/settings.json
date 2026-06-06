@@ -22,8 +22,6 @@
     "next/router",
     // give priority for Link to next/link instead of lucide-react
     // "lucide-react",
-    // give priority for internal components rather than radix-ui
-    "@radix-ui",
     "react-day-picker"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"
