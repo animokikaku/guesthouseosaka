@@ -13,6 +13,8 @@ function renderPrivacyPolicyLink(chunks: ReactNode, onAgree: () => void) {
 
 export function PrivacyPolicyField() {
   const { field, isInvalid, errors } = useFieldValidation<boolean>()
+  const checkboxId = `form-tanstack-checkbox-${field.name}`
+  const labelId = `${checkboxId}-label`
   const t = useTranslations('forms')
 
   return (
@@ -20,15 +22,18 @@ export function PrivacyPolicyField() {
       <FieldGroup data-slot="checkbox-group">
         <Field orientation="horizontal" data-invalid={isInvalid}>
           <Checkbox
-            id={`form-tanstack-checkbox-${field.name}`}
+            id={checkboxId}
             name={field.name}
+            nativeButton
+            render={<button type="button" aria-labelledby={labelId} />}
             checked={field.state.value}
             aria-invalid={isInvalid}
             onCheckedChange={(checked) => field.handleChange(checked === true)}
             onBlur={() => field.handleBlur()}
           />
           <FieldLabel
-            htmlFor={`form-tanstack-checkbox-${field.name}`}
+            id={labelId}
+            htmlFor={checkboxId}
             className="text-muted-foreground font-normal"
           >
             <span className="text-muted-foreground">

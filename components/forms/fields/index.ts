@@ -1,4 +1,3 @@
-export { CheckboxField } from './checkbox-field'
 export { DateField } from './date-field'
 export { InputField } from './input-field'
 export { InputGroupField } from './input-group-field'

@@ -3,7 +3,6 @@
 import { ResetButton } from '@/components/forms/components/reset-button'
 import { SubmitButton } from '@/components/forms/components/submit-button'
 import {
-  CheckboxField,
   DateField,
   InputField,
   InputGroupField,
@@ -32,7 +31,6 @@ const formHook = createFormHook({
   fieldContext,
   formContext,
   fieldComponents: {
-    CheckboxField,
     DateField,
     InputField,
     InputGroupField,
