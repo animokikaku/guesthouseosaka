@@ -12,22 +12,23 @@ vi.mock('@/i18n/navigation', () => ({
   useRouter: () => ({ push: mockPush })
 }))
 
-vi.mock('@/components/ui/dialog', async () => {
-  const actual =
-    await vi.importActual<typeof import('@/components/ui/dialog')>('@/components/ui/dialog')
+vi.mock('@/components/gallery/gallery-dialog', async () => {
+  const actual = await vi.importActual<typeof import('@/components/gallery/gallery-dialog')>(
+    '@/components/gallery/gallery-dialog'
+  )
 
   return {
     ...actual,
-    Dialog: ({
+    GalleryDialog: ({
       children,
       onOpenChangeComplete: handler,
       ...props
-    }: React.ComponentProps<typeof actual.Dialog>) => {
+    }: React.ComponentProps<typeof actual.GalleryDialog>) => {
       if (handler) {
         onOpenChangeComplete.mockImplementation(handler)
       }
 
-      return <actual.Dialog {...props}>{children}</actual.Dialog>
+      return <actual.GalleryDialog {...props}>{children}</actual.GalleryDialog>
     }
   }
 })

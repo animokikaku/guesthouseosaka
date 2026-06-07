@@ -1,11 +1,11 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
+import { Popover as PopoverPrimitive } from '@base-ui/react/popover'
 import * as React from 'react'
 
 import { NavEmptyState } from '@/components/nav-empty-state'
 import { Button } from '@/components/ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { NavItem, NavItems, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
@@ -27,8 +27,9 @@ export function MobileNav({ items, className }: { items: NavItems; className?: s
   }, [items])
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger
+    <PopoverPrimitive.Root data-slot="mobile-nav" open={open} onOpenChange={setOpen}>
+      <PopoverPrimitive.Trigger
+        data-slot="mobile-nav-trigger"
         render={
           <Button
             variant="ghost"
@@ -61,22 +62,28 @@ export function MobileNav({ items, className }: { items: NavItems; className?: s
           </Button>
         }
       />
-      <PopoverContent
-        className="bg-background/90 no-scrollbar h-full w-full max-w-none overflow-y-auto overscroll-contain rounded-none border-none p-0 shadow-none ring-0 backdrop-blur duration-100"
-        align="start"
-        positionerClassName="fixed! inset-x-0! top-[var(--header-height)]! bottom-0! z-40! h-auto! w-screen! transform-none!"
-        side="bottom"
-        sideOffset={0}
-      >
-        <MobileMenuPanel
-          homeLabel={t('home_label')}
-          menuLabel={t('menu_label')}
-          mobileItems={mobileItems}
-          mobileListItems={mobileListItems}
-          onOpenChange={setOpen}
-        />
-      </PopoverContent>
-    </Popover>
+      <PopoverPrimitive.Portal>
+        <PopoverPrimitive.Positioner
+          className="fixed! inset-x-0! top-(--header-height)! bottom-0! z-40! h-auto! w-screen! transform-none!"
+          align="start"
+          side="bottom"
+          sideOffset={0}
+        >
+          <PopoverPrimitive.Popup
+            data-slot="mobile-nav-content"
+            className="bg-background/90 no-scrollbar data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 h-full w-full max-w-none overflow-y-auto overscroll-contain rounded-none border-none p-0 shadow-none ring-0 backdrop-blur duration-100 outline-none"
+          >
+            <MobileMenuPanel
+              homeLabel={t('home_label')}
+              menuLabel={t('menu_label')}
+              mobileItems={mobileItems}
+              mobileListItems={mobileListItems}
+              onOpenChange={setOpen}
+            />
+          </PopoverPrimitive.Popup>
+        </PopoverPrimitive.Positioner>
+      </PopoverPrimitive.Portal>
+    </PopoverPrimitive.Root>
   )
 }
 

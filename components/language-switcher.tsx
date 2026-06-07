@@ -110,7 +110,7 @@ function LanguageSwitcherSelect({
           </Button>
         }
       />
-      <DropdownMenuContent align={align}>
+      <DropdownMenuContent align={align} disableAnchorTracking positionMethod="fixed">
         <DropdownMenuRadioGroup onValueChange={handleValueChange} value={value}>
           {languages.map(({ code, label }) => (
             <DropdownMenuRadioItem
