@@ -280,7 +280,6 @@ describe('CategoryThumbnail', () => {
 
       render(<CategoryThumbnail category={category} />)
 
-      // Native button elements are keyboard accessible (Enter/Space trigger click)
       const button = screen.getByRole('button')
       expect(button).toBeInTheDocument()
       expect(button.tagName).toBe('BUTTON')

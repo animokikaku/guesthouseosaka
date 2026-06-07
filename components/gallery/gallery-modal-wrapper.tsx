@@ -1,5 +1,6 @@
 'use client'
 
+import { GalleryShell } from '@/components/gallery/gallery-shell'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -47,11 +48,11 @@ export function GalleryModalWrapper({ house, title, children }: GalleryModalWrap
         motion="fade"
         showHeaderCloseButton={false}
         overlayClassName="bg-background z-60 backdrop-blur-2xl"
-        className="bg-background text-foreground fixed inset-0 z-60 max-w-none translate-none rounded-none p-0 ring-0 sm:max-w-none"
+        className="bg-background text-foreground fixed inset-0 z-60 flex h-full max-w-none translate-none flex-col gap-0 rounded-none p-0 ring-0 sm:max-w-none"
       >
         <DialogTitle className="sr-only">{t('title')}</DialogTitle>
         <DialogDescription className="sr-only">{t('description', { title })}</DialogDescription>
-        <div className="flex h-full w-full flex-col overflow-hidden">{children}</div>
+        <GalleryShell>{children}</GalleryShell>
       </DialogContent>
     </Dialog>
   )
