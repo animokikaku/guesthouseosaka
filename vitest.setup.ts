@@ -28,14 +28,6 @@ vi.mock('@/components/ui/scroll-area', async () => {
   }
 })
 
-// Mock ResizeObserver for Base UI components
-class ResizeObserverMock {
-  observe = vi.fn()
-  unobserve = vi.fn()
-  disconnect = vi.fn()
-}
-vi.stubGlobal('ResizeObserver', ResizeObserverMock)
-
 // Mock IntersectionObserver for lazy loading and scroll-spy components
 class IntersectionObserverMock implements IntersectionObserver {
   readonly root: Element | Document | null = null

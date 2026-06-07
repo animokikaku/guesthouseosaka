@@ -120,24 +120,10 @@ describe('GalleryModal', () => {
     })
   ]
 
-  // Suppress React act() warnings from Radix Dialog internal state updates
-  // These warnings come from third-party library internals (FocusScope, Presence, DismissableLayer)
-  const originalError = console.error
   beforeEach(() => {
     vi.clearAllMocks()
     store.setState((prev) => ({ ...prev, photoId: null }))
     resetCarouselMockState(carouselState)
-    console.error = (...args: unknown[]) => {
-      const message = args[0]
-      if (typeof message === 'string' && message.includes('was not wrapped in act')) {
-        return
-      }
-      originalError.apply(console, args)
-    }
-  })
-
-  afterEach(() => {
-    console.error = originalError
   })
 
   describe('open/close state', () => {
@@ -273,9 +259,9 @@ describe('GalleryModal', () => {
         carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
-      // Dispatch ArrowLeft key event
-      const event = new KeyboardEvent('keydown', { key: 'ArrowLeft' })
-      document.dispatchEvent(event)
+      act(() => {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
+      })
 
       expect(carouselState.mockApi.scrollPrev).toHaveBeenCalled()
     })
@@ -291,9 +277,9 @@ describe('GalleryModal', () => {
         carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
-      // Dispatch ArrowRight key event
-      const event = new KeyboardEvent('keydown', { key: 'ArrowRight' })
-      document.dispatchEvent(event)
+      act(() => {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
+      })
 
       expect(carouselState.mockApi.scrollNext).toHaveBeenCalled()
     })
@@ -309,10 +295,11 @@ describe('GalleryModal', () => {
         carouselState.setApiCallback?.(carouselState.mockApi!)
       })
 
-      // Dispatch other key events
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Space' }))
+      act(() => {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Space' }))
+      })
 
       expect(carouselState.mockApi.scrollPrev).not.toHaveBeenCalled()
       expect(carouselState.mockApi.scrollNext).not.toHaveBeenCalled()
@@ -337,9 +324,10 @@ describe('GalleryModal', () => {
       carouselState.mockApi.scrollPrev.mockClear()
       carouselState.mockApi.scrollNext.mockClear()
 
-      // Dispatch key events after unmount - should not trigger scroll
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
+      act(() => {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
+      })
 
       expect(carouselState.mockApi.scrollPrev).not.toHaveBeenCalled()
       expect(carouselState.mockApi.scrollNext).not.toHaveBeenCalled()
