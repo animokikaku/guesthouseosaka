@@ -19,8 +19,17 @@ const drawerPopupClassName = cn(
   "[transition:transform_450ms_cubic-bezier(0.32,0.72,0,1),height_450ms_cubic-bezier(0.32,0.72,0,1),box-shadow_450ms_cubic-bezier(0.32,0.72,0,1)]"
 )
 
-function Drawer({ ...props }: DrawerPrimitive.Root.Props) {
-  return <DrawerPrimitive.Root data-slot="drawer" {...props} />
+function Drawer({
+  ...props
+}: Omit<DrawerPrimitive.Root.Props, "swipeDirection">) {
+  return (
+    <DrawerPrimitive.Root
+      data-slot="drawer"
+      {...props}
+      // Bottom-sheet styles only; other swipe directions need their own animation CSS.
+      swipeDirection="down"
+    />
+  )
 }
 
 function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
