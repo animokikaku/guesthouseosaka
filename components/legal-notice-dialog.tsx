@@ -19,7 +19,6 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerPopup,
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer'
@@ -84,22 +83,20 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
     return (
       <Drawer>
         <DrawerTrigger render={trigger} />
-        <DrawerPopup>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>{data?.title}</DrawerTitle>
-              <DrawerDescription>{lastUpdatedText}</DrawerDescription>
-            </DrawerHeader>
-            <DrawerBody className="pb-8">{content}</DrawerBody>
-            {onAgree ? (
-              <DrawerFooter>
-                <DrawerClose render={<Button onClick={onAgree} className="w-full" />}>
-                  {t('agree_button')}
-                </DrawerClose>
-              </DrawerFooter>
-            ) : null}
-          </DrawerContent>
-        </DrawerPopup>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>{data?.title}</DrawerTitle>
+            <DrawerDescription>{lastUpdatedText}</DrawerDescription>
+          </DrawerHeader>
+          <DrawerBody className="pb-8">{content}</DrawerBody>
+          {onAgree ? (
+            <DrawerFooter>
+              <DrawerClose render={<Button onClick={onAgree} className="w-full" />}>
+                {t('agree_button')}
+              </DrawerClose>
+            </DrawerFooter>
+          ) : null}
+        </DrawerContent>
       </Drawer>
     )
   }

@@ -14,7 +14,6 @@ import {
     DrawerContent,
     DrawerDescription,
     DrawerHeader,
-    DrawerPopup,
     DrawerTitle,
     DrawerTrigger
 } from '@/components/ui/drawer';
@@ -45,15 +44,13 @@ export function ResponsiveModal({
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerTrigger render={trigger} />
-        <DrawerPopup>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>{title}</DrawerTitle>
-              <DrawerDescription className="sr-only">{title}</DrawerDescription>
-            </DrawerHeader>
-            <DrawerBody className={cn('pb-8', contentClassName)}>{children}</DrawerBody>
-          </DrawerContent>
-        </DrawerPopup>
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription className="sr-only">{title}</DrawerDescription>
+          </DrawerHeader>
+          <DrawerBody className={cn('pb-8', contentClassName)}>{children}</DrawerBody>
+        </DrawerContent>
       </Drawer>
     )
   }
