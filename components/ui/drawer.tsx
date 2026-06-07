@@ -82,7 +82,7 @@ function DrawerBody({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="drawer-body"
       className={cn(
-        'no-scrollbar min-h-0 flex-1 touch-auto overflow-y-auto overscroll-contain px-4 pb-[calc(2rem+env(safe-area-inset-bottom,0))] group-has-data-[slot=drawer-footer]/drawer-content:pb-8',
+        'no-scrollbar min-h-0 flex-1 touch-auto overflow-y-auto overscroll-contain px-4',
         className
       )}
       {...props}
@@ -94,10 +94,7 @@ function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="drawer-footer"
-      className={cn(
-        'mt-auto flex shrink-0 flex-col gap-2 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom,0))]',
-        className
-      )}
+      className={cn('mt-auto flex shrink-0 flex-col gap-2 p-4', className)}
       {...props}
     />
   )
