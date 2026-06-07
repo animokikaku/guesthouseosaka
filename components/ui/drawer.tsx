@@ -1,83 +1,75 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
+import * as React from 'react';
+import { Drawer as DrawerPrimitive } from 'vaul-base';
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils';
 
-function Drawer({
-  ...props
-}: Omit<DrawerPrimitive.Root.Props, "swipeDirection">) {
-  return (
-    <DrawerPrimitive.Root
-      data-slot="drawer"
-      {...props}
-      // Bottom-sheet styles only; other swipe directions need their own animation CSS.
-      swipeDirection="down"
-    />
-  )
+function Drawer({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
+  return <DrawerPrimitive.Root data-slot="drawer" {...props} />
 }
 
-function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
+function DrawerTrigger({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Trigger>) {
   return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />
 }
 
-function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
+function DrawerPortal({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Portal>) {
+  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />
+}
+
+function DrawerClose({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Close>) {
   return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />
+}
+
+function DrawerOverlay({
+  className,
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Overlay>) {
+  return (
+    <DrawerPrimitive.Overlay
+      data-slot="drawer-overlay"
+      className={cn(
+        'fixed inset-0 z-50 bg-black/10 supports-backdrop-filter:backdrop-blur-xs dark:bg-black/50',
+        className
+      )}
+      {...props}
+    />
+  )
 }
 
 function DrawerContent({
   className,
   children,
   ...props
-}: DrawerPrimitive.Popup.Props) {
+}: React.ComponentProps<typeof DrawerPrimitive.Content>) {
   return (
-    <DrawerPrimitive.Portal data-slot="drawer-portal">
-      <DrawerPrimitive.Backdrop
-        data-slot="drawer-overlay"
-        className="[--backdrop-opacity:0.1] [--bleed:3rem] dark:[--backdrop-opacity:0.5] fixed inset-0 z-50 min-h-dvh bg-black opacity-[calc(var(--backdrop-opacity)*(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:duration-0 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:absolute supports-backdrop-filter:backdrop-blur-xs"
-      />
-      <DrawerPrimitive.Viewport
-        data-slot="drawer-viewport"
-        className="fixed inset-0 z-50 flex items-end justify-center"
+    <DrawerPortal data-slot="drawer-portal">
+      <DrawerOverlay />
+      <DrawerPrimitive.Content
+        data-slot="drawer-content"
+        className={cn(
+          'group/drawer-content fixed z-50 flex max-h-[80vh] min-h-0 flex-col bg-popover text-sm text-popover-foreground',
+          'data-[vaul-drawer-direction=bottom]:inset-x-0 data-[vaul-drawer-direction=bottom]:bottom-0 data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:rounded-t-xl data-[vaul-drawer-direction=bottom]:border-t',
+          'data-[vaul-drawer-direction=top]:inset-x-0 data-[vaul-drawer-direction=top]:top-0 data-[vaul-drawer-direction=top]:mb-24 data-[vaul-drawer-direction=top]:max-h-[80vh] data-[vaul-drawer-direction=top]:rounded-b-xl data-[vaul-drawer-direction=top]:border-b',
+          'data-[vaul-drawer-direction=left]:inset-y-0 data-[vaul-drawer-direction=left]:left-0 data-[vaul-drawer-direction=left]:w-3/4 data-[vaul-drawer-direction=left]:rounded-r-xl data-[vaul-drawer-direction=left]:border-r data-[vaul-drawer-direction=left]:sm:max-w-sm',
+          'data-[vaul-drawer-direction=right]:inset-y-0 data-[vaul-drawer-direction=right]:right-0 data-[vaul-drawer-direction=right]:w-3/4 data-[vaul-drawer-direction=right]:rounded-l-xl data-[vaul-drawer-direction=right]:border-l data-[vaul-drawer-direction=right]:sm:max-w-sm',
+          className
+        )}
+        {...props}
       >
-        <DrawerPrimitive.Popup
-          data-slot="drawer-popup"
-          className={cn(
-            "group/popup relative flex w-full max-h-[calc(80vh+var(--bleed))] flex-col overflow-hidden text-sm",
-            "[--bleed:3rem] border-border border-t bg-popover text-popover-foreground overscroll-contain data-swiping:select-none",
-            "rounded-t-xl -mb-(--bleed) pb-[calc(1.5rem+env(safe-area-inset-bottom,0)+var(--bleed))]",
-            "h-(--drawer-height,auto) shadow-[0_2px_10px_rgb(0_0_0/0.1)]",
-            "origin-[50%_calc(100%-var(--bleed))]",
-            "transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y)))]",
-            "data-swiping:duration-0 data-ending-style:shadow-[0_2px_10px_rgb(0_0_0/0)]",
-            "data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)]",
-            "data-ending-style:transform-[translateY(calc(100%-var(--bleed)))]",
-            "data-starting-style:transform-[translateY(calc(100%-var(--bleed)))]",
-            "[transition:transform_450ms_cubic-bezier(0.32,0.72,0,1),height_450ms_cubic-bezier(0.32,0.72,0,1),box-shadow_450ms_cubic-bezier(0.32,0.72,0,1)]",
-            className
-          )}
-          {...props}
-        >
-          <div className="mx-auto mt-4 h-1 w-[100px] shrink-0 rounded-full bg-muted" />
-          <DrawerPrimitive.Content
-            data-slot="drawer-content"
-            className="flex min-h-0 flex-1 flex-col outline-none"
-          >
-            {children}
-          </DrawerPrimitive.Content>
-        </DrawerPrimitive.Popup>
-      </DrawerPrimitive.Viewport>
-    </DrawerPrimitive.Portal>
+        <div className="mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full bg-muted group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
+        {children}
+      </DrawerPrimitive.Content>
+    </DrawerPortal>
   )
 }
 
-function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
+function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="drawer-header"
       className={cn(
-        "flex shrink-0 flex-col gap-0.5 p-4 text-center md:gap-1.5 md:text-left",
+        'flex shrink-0 flex-col gap-0.5 p-4 group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center md:gap-1.5 md:text-left',
         className
       )}
       {...props}
@@ -85,12 +77,12 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function DrawerBody({ className, ...props }: React.ComponentProps<"div">) {
+function DrawerBody({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="drawer-body"
       className={cn(
-        "no-scrollbar min-h-0 flex-1 touch-auto overflow-y-auto overscroll-contain px-4",
+        'no-scrollbar min-h-0 flex-1 touch-auto overflow-y-auto overscroll-contain px-4 pb-[calc(2rem+env(safe-area-inset-bottom,0))] group-has-data-[slot=drawer-footer]/drawer-content:pb-8',
         className
       )}
       {...props}
@@ -98,21 +90,24 @@ function DrawerBody({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function DrawerFooter({ className, ...props }: React.ComponentProps<"div">) {
+function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="drawer-footer"
-      className={cn("mt-auto flex shrink-0 flex-col gap-2 p-4", className)}
+      className={cn(
+        'mt-auto flex shrink-0 flex-col gap-2 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom,0))]',
+        className
+      )}
       {...props}
     />
   )
 }
 
-function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
+function DrawerTitle({ className, ...props }: React.ComponentProps<typeof DrawerPrimitive.Title>) {
   return (
     <DrawerPrimitive.Title
       data-slot="drawer-title"
-      className={cn("font-heading font-medium text-foreground", className)}
+      className={cn('font-heading font-medium text-foreground', className)}
       {...props}
     />
   )
@@ -121,24 +116,26 @@ function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
 function DrawerDescription({
   className,
   ...props
-}: DrawerPrimitive.Description.Props) {
+}: React.ComponentProps<typeof DrawerPrimitive.Description>) {
   return (
     <DrawerPrimitive.Description
       data-slot="drawer-description"
-      className={cn("text-sm text-muted-foreground", className)}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   )
 }
 
 export {
-  Drawer,
-  DrawerBody,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-}
+    Drawer,
+    DrawerBody,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerPortal,
+    DrawerTitle,
+    DrawerTrigger
+};
