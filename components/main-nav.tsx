@@ -2,7 +2,6 @@
 
 import { NavEmptyState } from '@/components/nav-empty-state'
 import {
-  NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
@@ -13,6 +12,7 @@ import {
 import { Link } from '@/i18n/navigation'
 import { HouseIdentifier, NavGroupItem, NavItem, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { NavigationMenu as NavigationMenuPrimitive } from '@base-ui/react/navigation-menu'
 import { stegaClean } from 'next-sanity'
 import Image from 'next/image'
 import { useParams, useSelectedLayoutSegment } from 'next/navigation'
@@ -68,16 +68,26 @@ function PreviewImageItem({ item: it, isActive }: PreviewImageItemProps) {
 
 export function MainNav({
   items,
+  align = 'start',
+  className,
   ...props
-}: React.ComponentProps<typeof NavigationMenu> & {
-  items: Array<NavItem | NavListItem>
-}) {
+}: NavigationMenuPrimitive.Root.Props &
+  Pick<NavigationMenuPrimitive.Positioner.Props, 'align'> & {
+    items: Array<NavItem | NavListItem>
+  }) {
   const selectedLayoutSegment = useSelectedLayoutSegment()
   const pathname = selectedLayoutSegment ? `/${selectedLayoutSegment}` : '/'
   const { house } = useParams<{ house?: HouseIdentifier }>()
 
   return (
-    <NavigationMenu {...props}>
+    <NavigationMenuPrimitive.Root
+      data-slot="navigation-menu"
+      className={cn(
+        'group/navigation-menu relative flex max-w-max flex-1 items-center justify-center',
+        className
+      )}
+      {...props}
+    >
       <NavigationMenuList className="flex-wrap">
         {items.map((entry) => {
           if ('items' in entry) {
@@ -103,7 +113,39 @@ export function MainNav({
           )
         })}
       </NavigationMenuList>
-    </NavigationMenu>
+      <MainNavPositioner align={align} />
+    </NavigationMenuPrimitive.Root>
+  )
+}
+
+function MainNavPositioner({
+  className,
+  side = 'bottom',
+  sideOffset = 8,
+  align = 'start',
+  alignOffset = 0,
+  ...props
+}: NavigationMenuPrimitive.Positioner.Props) {
+  return (
+    <NavigationMenuPrimitive.Portal>
+      <NavigationMenuPrimitive.Positioner
+        side={side}
+        sideOffset={sideOffset}
+        align={align}
+        alignOffset={alignOffset}
+        disableAnchorTracking
+        positionMethod="fixed"
+        className={cn(
+          'isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-instant:transition-none data-[side=bottom]:before:top-[-10px] data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0',
+          className
+        )}
+        {...props}
+      >
+        <NavigationMenuPrimitive.Popup className="data-[ending-style]:easing-[ease] xs:w-(--popup-width) bg-popover/70 text-popover-foreground ring-foreground/10 relative isolate h-(--popup-height) w-(--popup-width) origin-(--transform-origin) overflow-hidden rounded-lg shadow ring-1 transition-[opacity,transform,width,height,scale,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] outline-none before:pointer-events-none before:absolute before:inset-0 before:-z-1 before:rounded-[inherit] before:backdrop-blur-2xl before:backdrop-saturate-150 data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150 data-starting-style:scale-90 data-starting-style:opacity-0">
+          <NavigationMenuPrimitive.Viewport className="relative size-full overflow-hidden" />
+        </NavigationMenuPrimitive.Popup>
+      </NavigationMenuPrimitive.Positioner>
+    </NavigationMenuPrimitive.Portal>
   )
 }
 
@@ -141,6 +183,7 @@ function NavigationMenuGroupItem({
                 <NavigationMenuLink
                   data-active={house === item.key}
                   render={<Link href={item.href} />}
+                  className="flex flex-col items-start gap-1 rounded-md text-left"
                 >
                   <div className="text-sm leading-none font-medium">{stegaClean(item.label)}</div>
                   {item.description ? (
