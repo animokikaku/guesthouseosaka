@@ -1,9 +1,9 @@
 "use client"
 
-import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
-import * as React from "react";
+import * as React from "react"
+import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 function resolveClassName<S>(
   className: string | ((state: S) => string | undefined) | undefined,
@@ -36,51 +36,21 @@ function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
   return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />
 }
 
-function DrawerPortal({ className, ...props }: DrawerPrimitive.Portal.Props) {
-  return (
-    <DrawerPrimitive.Portal
-      data-slot="drawer-portal"
-      className={(state) =>
-        cn("fixed inset-0 z-50", resolveClassName(className, state))
-      }
-      {...props}
-    />
-  )
-}
-
 function DrawerClose({ ...props }: DrawerPrimitive.Close.Props) {
   return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />
-}
-
-function DrawerOverlay({
-  className,
-  ...props
-}: DrawerPrimitive.Backdrop.Props) {
-  return (
-    <DrawerPrimitive.Backdrop
-      data-slot="drawer-overlay"
-      className={(state) =>
-        cn(
-          "[--backdrop-opacity:0.1] [--bleed:3rem] dark:[--backdrop-opacity:0.5] fixed inset-0 z-50 min-h-dvh bg-black opacity-[calc(var(--backdrop-opacity)*(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:duration-0 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:absolute supports-backdrop-filter:backdrop-blur-xs",
-          resolveClassName(className, state)
-        )
-      }
-      {...props}
-    />
-  )
 }
 
 function DrawerContent({
   className,
   children,
-  container,
   ...props
-}: DrawerPrimitive.Popup.Props & {
-  container?: DrawerPrimitive.Portal.Props["container"]
-}) {
+}: DrawerPrimitive.Popup.Props) {
   return (
-    <DrawerPortal container={container}>
-      <DrawerOverlay />
+    <DrawerPrimitive.Portal data-slot="drawer-portal">
+      <DrawerPrimitive.Backdrop
+        data-slot="drawer-overlay"
+        className="[--backdrop-opacity:0.1] [--bleed:3rem] dark:[--backdrop-opacity:0.5] fixed inset-0 z-50 min-h-dvh bg-black opacity-[calc(var(--backdrop-opacity)*(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:duration-0 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:absolute supports-backdrop-filter:backdrop-blur-xs"
+      />
       <DrawerPrimitive.Viewport
         data-slot="drawer-viewport"
         className="fixed inset-0 z-50 flex items-end justify-center"
@@ -101,7 +71,7 @@ function DrawerContent({
           </DrawerPrimitive.Content>
         </DrawerPrimitive.Popup>
       </DrawerPrimitive.Viewport>
-    </DrawerPortal>
+    </DrawerPrimitive.Portal>
   )
 }
 
@@ -145,12 +115,7 @@ function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
   return (
     <DrawerPrimitive.Title
       data-slot="drawer-title"
-      className={(state) =>
-        cn(
-          "font-heading font-medium text-foreground",
-          resolveClassName(className, state)
-        )
-      }
+      className={cn("font-heading font-medium text-foreground", className)}
       {...props}
     />
   )
@@ -163,27 +128,20 @@ function DrawerDescription({
   return (
     <DrawerPrimitive.Description
       data-slot="drawer-description"
-      className={(state) =>
-        cn(
-          "text-sm text-muted-foreground",
-          resolveClassName(className, state)
-        )
-      }
+      className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
   )
 }
 
 export {
-    Drawer,
-    DrawerBody,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerPortal,
-    DrawerTitle,
-    DrawerTrigger
-};
+  Drawer,
+  DrawerBody,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+}
