@@ -88,7 +88,7 @@ export function MainNav({
       )}
       {...props}
     >
-      <NavigationMenuList className="flex-wrap">
+      <NavigationMenuList className="flex-wrap gap-1">
         {items.map((entry) => {
           if ('items' in entry) {
             return (
