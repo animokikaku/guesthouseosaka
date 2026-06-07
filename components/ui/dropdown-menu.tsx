@@ -10,15 +10,10 @@ import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 /** Keeps menus anchored while scrolling; override per call site when needed. */
 const defaultDropdownPositionerProps = {
   positionMethod: "fixed",
-  collisionAvoidance: {
-    side: "none",
-    align: "none",
-    fallbackAxisSide: "none",
-  },
   disableAnchorTracking: true,
 } as const satisfies Pick<
   MenuPrimitive.Positioner.Props,
-  "positionMethod" | "collisionAvoidance" | "disableAnchorTracking"
+  "positionMethod" | "disableAnchorTracking"
 >;
 
 function DropdownMenu({ ...props }: MenuPrimitive.Root.Props) {
@@ -36,7 +31,7 @@ function DropdownMenuTrigger({ ...props }: MenuPrimitive.Trigger.Props) {
 function DropdownMenuContent({
   align = "start",
   alignOffset = 0,
-  collisionAvoidance = defaultDropdownPositionerProps.collisionAvoidance,
+  collisionAvoidance,
   disableAnchorTracking = defaultDropdownPositionerProps.disableAnchorTracking,
   positionMethod = defaultDropdownPositionerProps.positionMethod,
   side = "bottom",

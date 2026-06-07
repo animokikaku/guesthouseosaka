@@ -53,9 +53,7 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
                 </ItemMedia>
                 <ItemContent>
                   <ItemTitle>{stegaClean(title)}</ItemTitle>
-                  <ItemDescription className="font-mono">
-                    {phone.international ?? 'ー'}
-                  </ItemDescription>
+                  <ItemDescription className="font-mono">{phone.international}</ItemDescription>
                 </ItemContent>
                 <ItemActions>
                   <Button
@@ -108,7 +106,7 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
                   href={`tel:${phone.domestic}`}
                   className="text-foreground hover:text-primary transition-colors"
                 >
-                  {phone.domestic ?? 'ー'}
+                  {phone.domestic}
                 </a>
               </td>
               <td className="p-2 text-center">
@@ -116,7 +114,7 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
                   href={`tel:${phone.international}`}
                   className="text-foreground hover:text-primary transition-colors"
                 >
-                  {phone.international ?? 'ー'}
+                  {phone.international}
                 </a>
               </td>
             </tr>

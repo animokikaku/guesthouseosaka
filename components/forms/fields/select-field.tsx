@@ -51,7 +51,7 @@ export function SelectField({
         items={items}
         name={field.name}
         value={field.state.value}
-        onValueChange={(value) => field.handleChange(value as string)}
+        onValueChange={(value) => field.handleChange(typeof value === 'string' ? value : '')}
         {...props}
       >
         <SelectTrigger

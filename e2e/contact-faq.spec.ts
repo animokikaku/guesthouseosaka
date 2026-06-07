@@ -29,18 +29,18 @@ test.describe('FAQ Page', () => {
       const triggers = page.locator('[data-slot="accordion-trigger"]')
       const count = await triggers.count()
 
-      if (count >= 2) {
-        // Expand first item
-        await triggers.nth(0).click()
-        await expect(triggers.nth(0)).toHaveAttribute('aria-expanded', 'true')
+      expect(count).toBeGreaterThanOrEqual(2)
 
-        // Expand second item
-        await triggers.nth(1).click()
-        await expect(triggers.nth(1)).toHaveAttribute('aria-expanded', 'true')
+      // Expand first item
+      await triggers.nth(0).click()
+      await expect(triggers.nth(0)).toHaveAttribute('aria-expanded', 'true')
 
-        // First should still be open (multiple accordion)
-        await expect(triggers.nth(0)).toHaveAttribute('aria-expanded', 'true')
-      }
+      // Expand second item
+      await triggers.nth(1).click()
+      await expect(triggers.nth(1)).toHaveAttribute('aria-expanded', 'true')
+
+      // First should still be open (multiple accordion)
+      await expect(triggers.nth(0)).toHaveAttribute('aria-expanded', 'true')
     })
   })
 
