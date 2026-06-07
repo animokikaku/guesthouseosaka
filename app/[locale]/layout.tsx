@@ -147,7 +147,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
         <ThemeProvider>
           <ActiveThemeProvider initialTheme="default">
             <NextIntlClientProvider>
-              <div className="bg-background relative z-10 flex min-h-svh flex-col">
+              <div className="bg-background relative flex min-h-svh flex-col">
                 <SiteHeader houseItems={houseItems} />
                 <main className="flex flex-1 flex-col">{children}</main>
                 {settings && <SiteFooter settings={settings} />}

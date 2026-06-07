@@ -13,10 +13,13 @@ import {
 } from '@/components/ui/dialog'
 import {
   Drawer,
+  DrawerBody,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
+  DrawerFooter,
   DrawerHeader,
+  DrawerPopup,
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer'
@@ -81,20 +84,22 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
     return (
       <Drawer>
         <DrawerTrigger render={trigger} />
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>{data?.title}</DrawerTitle>
-            <DrawerDescription>{lastUpdatedText}</DrawerDescription>
-          </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-8">
-            {content}
-            {onAgree && (
-              <DrawerClose render={<Button onClick={onAgree} className="mt-6 w-full" />}>
-                {t('agree_button')}
-              </DrawerClose>
-            )}
-          </div>
-        </DrawerContent>
+        <DrawerPopup>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>{data?.title}</DrawerTitle>
+              <DrawerDescription>{lastUpdatedText}</DrawerDescription>
+            </DrawerHeader>
+            <DrawerBody className="pb-8">{content}</DrawerBody>
+            {onAgree ? (
+              <DrawerFooter>
+                <DrawerClose render={<Button onClick={onAgree} className="w-full" />}>
+                  {t('agree_button')}
+                </DrawerClose>
+              </DrawerFooter>
+            ) : null}
+          </DrawerContent>
+        </DrawerPopup>
       </Drawer>
     )
   }

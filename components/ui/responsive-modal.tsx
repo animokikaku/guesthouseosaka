@@ -10,9 +10,11 @@ import {
 } from '@/components/ui/dialog';
 import {
     Drawer,
+    DrawerBody,
     DrawerContent,
     DrawerDescription,
     DrawerHeader,
+    DrawerPopup,
     DrawerTitle,
     DrawerTrigger
 } from '@/components/ui/drawer';
@@ -43,13 +45,15 @@ export function ResponsiveModal({
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerTrigger render={trigger} />
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>{title}</DrawerTitle>
-            <DrawerDescription className="sr-only">{title}</DrawerDescription>
-          </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-8">{children}</div>
-        </DrawerContent>
+        <DrawerPopup>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>{title}</DrawerTitle>
+              <DrawerDescription className="sr-only">{title}</DrawerDescription>
+            </DrawerHeader>
+            <DrawerBody className={cn('pb-8', contentClassName)}>{children}</DrawerBody>
+          </DrawerContent>
+        </DrawerPopup>
       </Drawer>
     )
   }

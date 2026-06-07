@@ -18,11 +18,12 @@ describe('Drawer', () => {
 
     await waitFor(() => {
       expect(document.querySelector('[data-slot="drawer-portal"]')).toBeTruthy()
+      expect(document.querySelector('[data-slot="drawer-popup"]')).toBeTruthy()
       expect(document.querySelector('[data-slot="drawer-content"]')).toBeTruthy()
       expect(screen.getByText('Drawer body content')).toBeInTheDocument()
     })
 
-    const popup = document.querySelector('[data-slot="drawer-content"]') as HTMLElement
+    const popup = document.querySelector('[data-slot="drawer-popup"]') as HTMLElement
     expect(popup.hasAttribute('hidden')).toBe(false)
   })
 })
