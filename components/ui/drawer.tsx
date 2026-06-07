@@ -20,9 +20,7 @@ const drawerPopupClassName = cn(
 )
 
 function Drawer({ ...props }: DrawerPrimitive.Root.Props) {
-  return (
-    <DrawerPrimitive.Root data-slot="drawer" swipeDirection="down" {...props} />
-  )
+  return <DrawerPrimitive.Root data-slot="drawer" {...props} />
 }
 
 function DrawerTrigger({ ...props }: DrawerPrimitive.Trigger.Props) {
