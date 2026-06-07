@@ -5,13 +5,6 @@ import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 
 import { cn } from "@/lib/utils"
 
-function resolveClassName<S>(
-  className: string | ((state: S) => string | undefined) | undefined,
-  state: S
-): string | undefined {
-  return typeof className === "function" ? className(state) : className
-}
-
 const drawerPopupClassName = cn(
   "group/popup relative flex w-full max-h-[calc(80vh+var(--bleed))] flex-col overflow-hidden text-sm",
   "[--bleed:3rem] border-border border-t bg-popover text-popover-foreground overscroll-contain data-swiping:select-none",
@@ -57,9 +50,7 @@ function DrawerContent({
       >
         <DrawerPrimitive.Popup
           data-slot="drawer-popup"
-          className={(state) =>
-            cn(drawerPopupClassName, resolveClassName(className, state))
-          }
+          className={cn(drawerPopupClassName, className)}
           {...props}
         >
           <div className="mx-auto mt-4 h-1 w-[100px] shrink-0 rounded-full bg-muted" />
