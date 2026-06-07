@@ -137,10 +137,7 @@ function LanguageMenuContent({
   className,
   ...props
 }: MenuPrimitive.Popup.Props &
-  Pick<
-    MenuPrimitive.Positioner.Props,
-    'align' | 'alignOffset' | 'side' | 'sideOffset'
-  >) {
+  Pick<MenuPrimitive.Positioner.Props, 'align' | 'alignOffset' | 'side' | 'sideOffset'>) {
   return (
     <MenuPrimitive.Portal>
       <MenuPrimitive.Positioner
