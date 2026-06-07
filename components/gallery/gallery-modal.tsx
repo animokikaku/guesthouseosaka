@@ -1,3 +1,10 @@
+import {
+  GalleryDialog,
+  GalleryDialogClose,
+  GalleryDialogContent,
+  GalleryDialogDescription,
+  GalleryDialogTitle
+} from '@/components/gallery/gallery-dialog'
 import { Button } from '@/components/ui/button'
 import {
   Carousel,
@@ -7,13 +14,6 @@ import {
   CarouselPrevious,
   type CarouselApi
 } from '@/components/ui/carousel'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle
-} from '@/components/ui/dialog'
 import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
 import { flattenGalleryItems, getImageIndex, type GalleryCategories } from '@/lib/gallery'
 import { store } from '@/lib/store'
@@ -39,7 +39,7 @@ export function GalleryModal({ galleryCategories, title, dataAttribute }: Galler
   const t = useTranslations('GalleryModal')
 
   return (
-    <Dialog
+    <GalleryDialog
       open={photoId !== null}
       onOpenChange={(open) => {
         if (!open) {
@@ -47,25 +47,25 @@ export function GalleryModal({ galleryCategories, title, dataAttribute }: Galler
         }
       }}
     >
-      <DialogContent
-        motion="fade"
-        showHeaderCloseButton={false}
-        overlayClassName="z-60 bg-transparent"
+      <GalleryDialogContent
+        overlayClassName="bg-transparent"
         className="bg-background text-foreground sm:bg-background/50 fixed inset-0 z-60 flex max-w-none translate-none items-center justify-center rounded-none border-0 p-0 ring-0 duration-200 sm:max-w-none sm:backdrop-blur-2xl"
       >
-        <DialogTitle className="sr-only">{t('title')}</DialogTitle>
-        <DialogDescription className="sr-only">{t('description', { title })}</DialogDescription>
+        <GalleryDialogTitle className="sr-only">{t('title')}</GalleryDialogTitle>
+        <GalleryDialogDescription className="sr-only">
+          {t('description', { title })}
+        </GalleryDialogDescription>
         <GalleryModalCarousel galleryCategories={galleryCategories} dataAttribute={dataAttribute} />
-        <DialogClose
+        <GalleryDialogClose
           render={
             <Button variant="ghost" size="icon" className="absolute top-4 left-4 rounded-full" />
           }
         >
           <ArrowLeftIcon className="size-6" />
           <span className="sr-only">{t('close')}</span>
-        </DialogClose>
-      </DialogContent>
-    </Dialog>
+        </GalleryDialogClose>
+      </GalleryDialogContent>
+    </GalleryDialog>
   )
 }
 
