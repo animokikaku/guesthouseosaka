@@ -41,7 +41,7 @@ export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
   return (
     <header
       className={cn(
-        'bg-background sticky top-0 z-50 w-full',
+        'bg-background fixed inset-x-0 top-0 z-50 w-full',
         'sm:supports-backdrop-filter:bg-background/60 sm:backdrop-blur'
       )}
     >

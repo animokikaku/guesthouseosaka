@@ -46,8 +46,8 @@ export function GalleryModalWrapper({ house, title, children }: GalleryModalWrap
       <DialogContent
         motion="fade"
         showHeaderCloseButton={false}
-        overlayClassName="bg-background z-30 backdrop-blur-2xl"
-        className="bg-background text-foreground fixed inset-0 z-40 max-w-none translate-none rounded-none p-0 ring-0 sm:max-w-none"
+        overlayClassName="bg-background z-60 backdrop-blur-2xl"
+        className="bg-background text-foreground fixed inset-0 z-60 max-w-none translate-none rounded-none p-0 ring-0 sm:max-w-none"
       >
         <DialogTitle className="sr-only">{t('title')}</DialogTitle>
         <DialogDescription className="sr-only">{t('description', { title })}</DialogDescription>

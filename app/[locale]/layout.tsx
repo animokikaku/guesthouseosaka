@@ -149,7 +149,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
             <NextIntlClientProvider>
               <div className="bg-background relative z-10 flex min-h-svh flex-col">
                 <SiteHeader houseItems={houseItems} />
-                <main className="flex flex-1 flex-col">{children}</main>
+                <main className="flex flex-1 flex-col pt-(--header-height)">{children}</main>
                 {settings && <SiteFooter settings={settings} />}
               </div>
               <TailwindIndicator />

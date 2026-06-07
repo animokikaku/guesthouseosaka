@@ -50,8 +50,8 @@ export function GalleryModal({ galleryCategories, title, dataAttribute }: Galler
       <DialogContent
         motion="fade"
         showHeaderCloseButton={false}
-        overlayClassName="z-30 bg-transparent"
-        className="bg-background text-foreground sm:bg-background/50 fixed inset-0 z-40 flex max-w-none translate-none items-center justify-center rounded-none border-0 p-0 ring-0 duration-200 sm:max-w-none sm:backdrop-blur-2xl"
+        overlayClassName="z-60 bg-transparent"
+        className="bg-background text-foreground sm:bg-background/50 fixed inset-0 z-60 flex max-w-none translate-none items-center justify-center rounded-none border-0 p-0 ring-0 duration-200 sm:max-w-none sm:backdrop-blur-2xl"
       >
         <DialogTitle className="sr-only">{t('title')}</DialogTitle>
         <DialogDescription className="sr-only">{t('description', { title })}</DialogDescription>

@@ -34,7 +34,7 @@ export default async function GalleryPage({ params }: PageProps<'/[locale]/[hous
   }
 
   return (
-    <div className="bg-background text-foreground fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden">
+    <div className="bg-background text-foreground fixed inset-0 z-60 flex h-full w-full flex-col overflow-hidden">
       <div className="flex h-full w-full flex-col overflow-hidden">
         <GalleryPageContent
           documentId={data._id}
