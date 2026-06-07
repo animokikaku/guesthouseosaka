@@ -28,7 +28,7 @@ vi.mock('@/components/ui/scroll-area', async () => {
   }
 })
 
-// Mock ResizeObserver for Radix UI components
+// Mock ResizeObserver for Base UI components
 class ResizeObserverMock {
   observe = vi.fn()
   unobserve = vi.fn()

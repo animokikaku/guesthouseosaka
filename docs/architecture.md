@@ -9,7 +9,7 @@ app/
 └── layout.tsx         # Root layout with shared wrappers
 
 components/
-├── ui/                # Radix-based shadcn primitives
+├── ui/                # BaseUI shadcn primitives
 ├── house/             # House/room feature components
 ├── gallery/           # Gallery components
 ├── forms/             # Forms with @tanstack/react-form + Zod

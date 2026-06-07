@@ -4,7 +4,7 @@
 
 ## Technology Stack
 
-Next.js 16 with React 19 (React Compiler), TypeScript, Sanity CMS with embedded Studio, Tailwind CSS 4, Radix UI components, next-intl for internationalization (English/Japanese/French), Vitest and Playwright for testing, Vercel for hosting, Resend for transactional emails, and Google Maps API.
+Next.js 16 with React 19 (React Compiler), TypeScript, Sanity CMS with embedded Studio, Tailwind CSS 4, Base UI components, next-intl for internationalization (English/Japanese/French), Vitest and Playwright for testing, Vercel for hosting, Resend for transactional emails, and Google Maps API.
 
 ## Role & Responsibilities
 
