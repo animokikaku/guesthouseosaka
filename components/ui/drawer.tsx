@@ -101,7 +101,7 @@ export const drawerPopupClassName = ({
       "w-full max-h-[calc(80vh+var(--bleed))] text-sm":
         swipeDirection === "up" || swipeDirection === "down",
       // Down-only (with stacking transform + transitions for height & box-shadow)
-      "rounded-t-xl border-t -mb-(--bleed) pt-2 pb-[calc(1.5rem+env(safe-area-inset-bottom,0px)+var(--bleed))] h-(--drawer-height,auto) shadow-[0_2px_10px_rgb(0_0_0/0.1)] data-ending-style:shadow-[0_2px_10px_rgb(0_0_0/0)] origin-[50%_calc(100%-var(--bleed))] transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y)-var(--stack-peek-offset)-(var(--shrink)*var(--height))))_scale(var(--scale))] data-swiping:duration-0 data-nested-drawer-open:h-[calc(var(--height)+var(--bleed))] [transition:transform_450ms_cubic-bezier(0.32,0.72,0,1),height_450ms_cubic-bezier(0.32,0.72,0,1),box-shadow_450ms_cubic-bezier(0.32,0.72,0,1)]":
+      "rounded-t-xl border-t -mb-(--bleed) pb-[calc(1.5rem+env(safe-area-inset-bottom,0px)+var(--bleed))] h-(--drawer-height,auto) shadow-[0_2px_10px_rgb(0_0_0/0.1)] data-ending-style:shadow-[0_2px_10px_rgb(0_0_0/0)] origin-[50%_calc(100%-var(--bleed))] transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y)-var(--stack-peek-offset)-(var(--shrink)*var(--height))))_scale(var(--scale))] data-swiping:duration-0 data-nested-drawer-open:h-[calc(var(--height)+var(--bleed))] [transition:transform_450ms_cubic-bezier(0.32,0.72,0,1),height_450ms_cubic-bezier(0.32,0.72,0,1),box-shadow_450ms_cubic-bezier(0.32,0.72,0,1)]":
         swipeDirection === "down",
       // Up-only (with stacking transform + transitions for height & box-shadow)
       "rounded-b-2xl -mt-(--bleed) pb-6 pt-[calc(1.5rem+env(safe-area-inset-top,0px)+var(--bleed))] h-(--drawer-height,auto) shadow-[0_-2px_10px_rgb(0_0_0/0.1)] data-ending-style:shadow-[0_-2px_10px_rgb(0_0_0/0)] origin-[50%_var(--bleed)] transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y)+var(--stack-peek-offset)+(var(--shrink)*var(--height))))_scale(var(--scale))] data-swiping:duration-0 data-nested-drawer-open:h-[calc(var(--height)+var(--bleed))] [transition:transform_450ms_cubic-bezier(0.32,0.72,0,1),height_450ms_cubic-bezier(0.32,0.72,0,1),box-shadow_450ms_cubic-bezier(0.32,0.72,0,1)]":
@@ -128,7 +128,7 @@ function DrawerPopup({
 
   return (
     <DrawerPortal container={container}>
-      <DrawerBackdrop />
+      <DrawerOverlay />
       <DrawerViewport>
         <DrawerPrimitive.Popup
           data-slot="drawer-popup"
@@ -164,7 +164,7 @@ function DrawerHeader({ className, ...props }: ComponentProps<"div">) {
     <div
       data-slot="drawer-header"
       className={cn(
-        "flex shrink-0 flex-col gap-0.5 p-4 md:gap-0.5 md:text-left",
+        "flex shrink-0 flex-col gap-0.5 p-4 md:gap-1.5 md:text-left",
         {
           "text-center": dir === "down" || dir === "up",
         },
@@ -231,7 +231,7 @@ function DrawerTitle({ className, ...props }: DrawerPrimitive.Title.Props) {
       data-slot="drawer-title"
       className={(state) =>
         cn(
-          "font-heading text-base font-medium text-foreground",
+          "font-heading font-medium text-foreground",
           resolveClassName(className, state),
         )
       }
@@ -258,13 +258,13 @@ function DrawerDescription({
   );
 }
 
-function DrawerBackdrop({
+function DrawerOverlay({
   className,
   ...props
 }: DrawerPrimitive.Backdrop.Props) {
   return (
     <DrawerPrimitive.Backdrop
-      data-slot="drawer-backdrop"
+      data-slot="drawer-overlay"
       className={(state) =>
         cn(
           "[--backdrop-opacity:0.1] [--bleed:3rem] dark:[--backdrop-opacity:0.5] fixed inset-0 z-50 min-h-dvh bg-black opacity-[calc(var(--backdrop-opacity)*(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] data-swiping:duration-0 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] supports-[-webkit-touch-callout:none]:absolute supports-backdrop-filter:backdrop-blur-xs",
@@ -311,7 +311,7 @@ function DrawerIndent({ className, ...props }: DrawerPrimitive.Indent.Props) {
 export {
   DrawerProvider,
   Drawer,
-  DrawerBackdrop,
+  DrawerOverlay,
   DrawerBody,
   DrawerClose,
   DrawerContent,
