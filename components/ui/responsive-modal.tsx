@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import {
     Drawer,
+    DrawerBody,
     DrawerContent,
     DrawerDescription,
     DrawerHeader,
@@ -48,7 +49,7 @@ export function ResponsiveModal({
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription className="sr-only">{title}</DrawerDescription>
           </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-8">{children}</div>
+          <DrawerBody className={cn('pb-8', contentClassName)}>{children}</DrawerBody>
         </DrawerContent>
       </Drawer>
     )

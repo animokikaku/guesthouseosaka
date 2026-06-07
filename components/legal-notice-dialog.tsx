@@ -13,9 +13,11 @@ import {
 } from '@/components/ui/dialog'
 import {
   Drawer,
+  DrawerBody,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger
@@ -86,14 +88,14 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
             <DrawerTitle>{data?.title}</DrawerTitle>
             <DrawerDescription>{lastUpdatedText}</DrawerDescription>
           </DrawerHeader>
-          <div className="overflow-y-auto px-4 pb-8">
-            {content}
-            {onAgree && (
-              <DrawerClose render={<Button onClick={onAgree} className="mt-6 w-full" />}>
+          <DrawerBody className="pb-8">{content}</DrawerBody>
+          {onAgree ? (
+            <DrawerFooter>
+              <DrawerClose render={<Button onClick={onAgree} className="w-full" />}>
                 {t('agree_button')}
               </DrawerClose>
-            )}
-          </div>
+            </DrawerFooter>
+          ) : null}
         </DrawerContent>
       </Drawer>
     )
