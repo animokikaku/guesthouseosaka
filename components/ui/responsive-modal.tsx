@@ -49,7 +49,7 @@ export function ResponsiveModal({
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription className="sr-only">{title}</DrawerDescription>
           </DrawerHeader>
-          <DrawerBody className={cn('pb-8', contentClassName)}>{children}</DrawerBody>
+          <DrawerBody className={contentClassName}>{children}</DrawerBody>
         </DrawerContent>
       </Drawer>
     )

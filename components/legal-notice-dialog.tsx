@@ -88,7 +88,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
             <DrawerTitle>{data?.title}</DrawerTitle>
             <DrawerDescription>{lastUpdatedText}</DrawerDescription>
           </DrawerHeader>
-          <DrawerBody className="pb-8">{content}</DrawerBody>
+          <DrawerBody>{content}</DrawerBody>
           {onAgree ? (
             <DrawerFooter>
               <DrawerClose render={<Button onClick={onAgree} className="w-full" />}>
