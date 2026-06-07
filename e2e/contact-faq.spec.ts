@@ -10,13 +10,13 @@ test.describe('FAQ Page', () => {
       await expect(firstTrigger).toBeVisible()
 
       // Check initial state (should be collapsed)
-      await expect(firstTrigger).toHaveAttribute('data-state', 'closed')
+      await expect(firstTrigger).toHaveAttribute('aria-expanded', 'false')
 
       // Click to expand
       await firstTrigger.click()
 
       // Check expanded state
-      await expect(firstTrigger).toHaveAttribute('data-state', 'open')
+      await expect(firstTrigger).toHaveAttribute('aria-expanded', 'true')
 
       // Content should be visible
       const firstContent = page.locator('[data-slot="accordion-content"]').first()
@@ -29,18 +29,18 @@ test.describe('FAQ Page', () => {
       const triggers = page.locator('[data-slot="accordion-trigger"]')
       const count = await triggers.count()
 
-      if (count >= 2) {
-        // Expand first item
-        await triggers.nth(0).click()
-        await expect(triggers.nth(0)).toHaveAttribute('data-state', 'open')
+      expect(count).toBeGreaterThanOrEqual(2)
 
-        // Expand second item
-        await triggers.nth(1).click()
-        await expect(triggers.nth(1)).toHaveAttribute('data-state', 'open')
+      // Expand first item
+      await triggers.nth(0).click()
+      await expect(triggers.nth(0)).toHaveAttribute('aria-expanded', 'true')
 
-        // First should still be open (type="multiple")
-        await expect(triggers.nth(0)).toHaveAttribute('data-state', 'open')
-      }
+      // Expand second item
+      await triggers.nth(1).click()
+      await expect(triggers.nth(1)).toHaveAttribute('aria-expanded', 'true')
+
+      // First should still be open (multiple accordion)
+      await expect(triggers.nth(0)).toHaveAttribute('aria-expanded', 'true')
     })
   })
 

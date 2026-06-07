@@ -77,7 +77,7 @@ export function MainNav({
   const { house } = useParams<{ house?: HouseIdentifier }>()
 
   return (
-    <NavigationMenu viewport={false} {...props}>
+    <NavigationMenu {...props}>
       <NavigationMenuList className="flex-wrap">
         {items.map((entry) => {
           if ('items' in entry) {
@@ -93,11 +93,11 @@ export function MainNav({
           return (
             <NavigationMenuItem key={`nav-item-${entry.key}`}>
               <NavigationMenuLink
-                asChild
+                render={<Link href={entry.href} />}
                 data-active={pathname === entry.href}
                 className={cn(navigationMenuTriggerStyle(), 'bg-transparent')}
               >
-                <Link href={entry.href}>{entry.label}</Link>
+                {entry.label}
               </NavigationMenuLink>
             </NavigationMenuItem>
           )
@@ -138,15 +138,16 @@ function NavigationMenuGroupItem({
           <div className="row-span-3 flex flex-col gap-2">
             {items.map((item) => (
               <li key={item.key} onMouseEnter={() => setHoverItem(item)}>
-                <NavigationMenuLink data-active={house === item.key} asChild>
-                  <Link href={item.href}>
-                    <div className="text-sm leading-none font-medium">{stegaClean(item.label)}</div>
-                    {item.description ? (
-                      <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-                        {stegaClean(item.description)}
-                      </p>
-                    ) : null}
-                  </Link>
+                <NavigationMenuLink
+                  data-active={house === item.key}
+                  render={<Link href={item.href} />}
+                >
+                  <div className="text-sm leading-none font-medium">{stegaClean(item.label)}</div>
+                  {item.description ? (
+                    <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                      {stegaClean(item.description)}
+                    </p>
+                  ) : null}
                 </NavigationMenuLink>
               </li>
             ))}

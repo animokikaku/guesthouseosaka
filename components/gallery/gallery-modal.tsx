@@ -10,16 +10,14 @@ import {
 import {
   Dialog,
   DialogClose,
+  DialogContent,
   DialogDescription,
-  DialogOverlay,
-  DialogPortal,
   DialogTitle
 } from '@/components/ui/dialog'
 import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
 import { flattenGalleryItems, getImageIndex, type GalleryCategories } from '@/lib/gallery'
 import { store } from '@/lib/store'
 import { urlFor } from '@/sanity/lib/image'
-import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { getImageDimensions } from '@sanity/asset-utils'
 import { useStore } from '@tanstack/react-store'
 import { ArrowLeftIcon } from 'lucide-react'
@@ -49,23 +47,24 @@ export function GalleryModal({ galleryCategories, title, dataAttribute }: Galler
         }
       }}
     >
-      <DialogPortal>
-        <DialogOverlay className="z-30 bg-transparent" />
-        <DialogPrimitive.Content className="bg-background text-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 sm:bg-background/50 fixed inset-0 z-40 flex items-center justify-center border-0 p-0 duration-200 sm:backdrop-blur-2xl">
-          <DialogTitle className="sr-only">{t('title')}</DialogTitle>
-          <DialogDescription className="sr-only">{t('description', { title })}</DialogDescription>
-          <GalleryModalCarousel
-            galleryCategories={galleryCategories}
-            dataAttribute={dataAttribute}
-          />
-          <DialogClose asChild>
-            <Button variant="ghost" size="icon" className="absolute top-4 left-4 rounded-full">
-              <ArrowLeftIcon className="size-6" />
-              <span className="sr-only">{t('close')}</span>
-            </Button>
-          </DialogClose>
-        </DialogPrimitive.Content>
-      </DialogPortal>
+      <DialogContent
+        motion="fade"
+        showHeaderCloseButton={false}
+        overlayClassName="z-30 bg-transparent"
+        className="bg-background text-foreground sm:bg-background/50 fixed inset-0 z-40 flex max-w-none translate-none items-center justify-center rounded-none border-0 p-0 ring-0 duration-200 sm:max-w-none sm:backdrop-blur-2xl"
+      >
+        <DialogTitle className="sr-only">{t('title')}</DialogTitle>
+        <DialogDescription className="sr-only">{t('description', { title })}</DialogDescription>
+        <GalleryModalCarousel galleryCategories={galleryCategories} dataAttribute={dataAttribute} />
+        <DialogClose
+          render={
+            <Button variant="ghost" size="icon" className="absolute top-4 left-4 rounded-full" />
+          }
+        >
+          <ArrowLeftIcon className="size-6" />
+          <span className="sr-only">{t('close')}</span>
+        </DialogClose>
+      </DialogContent>
     </Dialog>
   )
 }
@@ -110,9 +109,9 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
   )
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('keydown', handleKeyDown, true)
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('keydown', handleKeyDown, true)
     }
   }, [handleKeyDown])
 
@@ -165,7 +164,7 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
         })}
       </CarouselContent>
       {currentAlt && (
-        <div className="pointer-events-none absolute bottom-0 left-1/2 z-50 w-full -translate-x-1/2 pb-[calc(5rem+env(safe-area-inset-bottom,0px))] text-center sm:pb-4 lg:w-fit">
+        <div className="pointer-events-none absolute bottom-0 left-1/2 z-50 w-full -translate-x-1/2 pb-[calc(5rem+env(safe-area-inset-bottom,0))] text-center sm:pb-4 lg:w-fit">
           <span className="bg-primary-foreground/90 pointer-events-auto inline-block max-w-[90vw] rounded-lg px-4 py-2 text-sm wrap-break-word backdrop-blur-sm sm:max-w-none sm:text-base">
             {currentAlt}
           </span>

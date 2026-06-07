@@ -29,44 +29,49 @@ type FAQContactTableProps = {
 
 export function FAQContactTable({ houses }: FAQContactTableProps) {
   return (
-    <>
+    <div id="phone" className="w-full sm:w-auto">
       {/* Mobile: Item cards */}
       <MobilePhoneCards houses={houses} />
       {/* Desktop: Table */}
       <DesktopPhoneTable houses={houses} />
-    </>
+    </div>
   )
 }
 
 function MobilePhoneCards({ houses }: FAQContactTableProps) {
   return (
-    <ItemGroup id="phone" className="w-full gap-2 sm:hidden">
+    <ItemGroup role="presentation" className="w-full gap-2 sm:hidden">
       {houses.map(({ _id, title, phone, image }) => {
         return (
-          <Item key={_id} variant="outline" asChild className="gap-3 p-3">
-            <a href={`tel:${phone.international}`}>
-              <ItemMedia variant="image" className="size-12 rounded-sm">
-                <HouseImage image={image} alt={image.alt ? stegaClean(image.alt) : ''} />
-              </ItemMedia>
-              <ItemContent>
-                <ItemTitle>{stegaClean(title)}</ItemTitle>
-                <ItemDescription className="font-mono">
-                  {phone.international ?? 'ー'}
-                </ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="pointer-events-none rounded-full"
-                  aria-hidden="true"
-                  tabIndex={-1}
-                >
-                  <Phone className="size-4" />
-                </Button>
-              </ItemActions>
-            </a>
-          </Item>
+          <Item
+            key={_id}
+            variant="outline"
+            render={
+              <a href={`tel:${phone.international}`}>
+                <ItemMedia variant="image" className="size-12 rounded-sm">
+                  <HouseImage image={image} alt={image.alt ? stegaClean(image.alt) : ''} />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>{stegaClean(title)}</ItemTitle>
+                  <ItemDescription className="font-mono">{phone.international}</ItemDescription>
+                </ItemContent>
+                <ItemActions>
+                  <Button
+                    render={<span />}
+                    nativeButton={false}
+                    size="icon"
+                    variant="outline"
+                    className="pointer-events-none rounded-full"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                  >
+                    <Phone className="size-4" />
+                  </Button>
+                </ItemActions>
+              </a>
+            }
+            className="gap-3 p-3"
+          />
         )
       })}
     </ItemGroup>
@@ -77,7 +82,7 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
   const t = useTranslations('FAQContactTable')
 
   return (
-    <table id="phone" className="hidden border-collapse text-sm sm:table">
+    <table className="hidden border-collapse text-sm sm:table">
       <thead>
         <tr>
           <th aria-label={t('house')} className="border-border border-b p-2 text-left"></th>
@@ -101,7 +106,7 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
                   href={`tel:${phone.domestic}`}
                   className="text-foreground hover:text-primary transition-colors"
                 >
-                  {phone.domestic ?? 'ー'}
+                  {phone.domestic}
                 </a>
               </td>
               <td className="p-2 text-center">
@@ -109,7 +114,7 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
                   href={`tel:${phone.international}`}
                   className="text-foreground hover:text-primary transition-colors"
                 >
-                  {phone.international ?? 'ー'}
+                  {phone.international}
                 </a>
               </td>
             </tr>

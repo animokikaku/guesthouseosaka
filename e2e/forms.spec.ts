@@ -36,7 +36,6 @@ test.describe('Contact Form Tests', () => {
       nationality?: string
       message?: string
       skipPlaces?: boolean
-      skipGender?: boolean
     } = {}
   ) {
     const fields = getFormFields(page)
@@ -47,10 +46,8 @@ test.describe('Contact Form Tests', () => {
     }
 
     // Select gender
-    if (!overrides.skipGender) {
-      await fields.genderSelect.click()
-      await page.getByRole('option', { name: 'Male', exact: true }).click()
-    }
+    await fields.genderSelect.click()
+    await page.getByRole('option', { name: 'Male', exact: true }).click()
 
     // Fill name
     await fields.nameField.fill(overrides.name ?? 'Test User')
@@ -70,14 +67,13 @@ test.describe('Contact Form Tests', () => {
 
   test.describe('Form Validation', () => {
     // Detailed field-level validation is covered by Vitest schema/component tests.
-    test('missing places and gender show validation errors on submit', async ({ page }) => {
-      await fillRequiredFields(page, { skipPlaces: true, skipGender: true })
+    test('missing places shows validation error on submit', async ({ page }) => {
+      await fillRequiredFields(page, { skipPlaces: true })
       await getFormFields(page).checkbox.click()
 
       await page.getByRole('button', { name: 'Submit' }).click()
 
       await expect(page.getByText('Please select at least one share house')).toBeVisible()
-      await expect(page.getByText('Please select your gender')).toBeVisible()
     })
   })
 

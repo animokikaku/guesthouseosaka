@@ -75,11 +75,14 @@ function GalleryGrid({
               />
             </div>
           </Link>
-          <Button variant="secondary" asChild className="absolute right-4 bottom-4">
-            <Link href={href}>
-              <Icons.gallery className="size-4" />
-              <span>{viewGalleryLabel}</span>
-            </Link>
+          <Button
+            variant="secondary"
+            render={<Link href={href} />}
+            nativeButton={false}
+            className="absolute right-4 bottom-4"
+          >
+            <Icons.gallery className="size-4" />
+            <span>{viewGalleryLabel}</span>
           </Button>
         </div>
       </div>

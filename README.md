@@ -11,7 +11,7 @@ A multilingual website for a guest house in Osaka, built with Next.js and Sanity
 - **Styling**: Tailwind CSS v4
 - **i18n**: next-intl (English, Japanese, French)
 - **Forms**: TanStack React Form + Zod validation
-- **UI Components**: Radix UI primitives (shadcn/ui)
+- **UI Components**: Base UI primitives (shadcn/ui)
 - **Email**: Resend + React Email
 - **Maps**: Google Maps via @vis.gl/react-google-maps
 
@@ -50,7 +50,7 @@ components/
   gallery/            # Gallery components
   house/              # House-specific components
   map/                # Google Maps integration
-  ui/                 # Radix-based UI primitives
+  ui/                 # Base UI primitives
 
 sanity/
   schemaTypes/        # Sanity document and object schemas

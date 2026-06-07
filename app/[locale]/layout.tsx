@@ -140,7 +140,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps<'/[
       </head>
       <body
         className={cn(
-          'text-foreground group/body theme-default font-sans antialiased [--footer-height:calc(var(--spacing)*14)] [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)]',
+          'text-foreground group/body theme-default font-sans antialiased [--footer-height:--spacing(14)] [--header-height:--spacing(14)] xl:[--footer-height:--spacing(24)]',
           fontVariables
         )}
       >

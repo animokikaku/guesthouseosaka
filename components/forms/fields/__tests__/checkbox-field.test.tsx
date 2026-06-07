@@ -1,23 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { createContext } from 'react'
 
-// Mock matchMedia for Radix UI - must be in beforeAll to ensure jsdom is available
-beforeAll(() => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn()
-    }))
-  })
-})
-
 // Create a mock field state factory
 interface MockFieldState {
   value: boolean
@@ -164,7 +147,7 @@ describe('CheckboxField', () => {
 
       const checkbox = screen.getByRole('checkbox')
       expect(checkbox).not.toBeChecked()
-      expect(checkbox).toHaveAttribute('data-state', 'unchecked')
+      expect(checkbox).toHaveAttribute('data-unchecked')
     })
 
     it('renders checked when value is true', () => {
@@ -178,7 +161,7 @@ describe('CheckboxField', () => {
 
       const checkbox = screen.getByRole('checkbox')
       expect(checkbox).toBeChecked()
-      expect(checkbox).toHaveAttribute('data-state', 'checked')
+      expect(checkbox).toHaveAttribute('data-checked')
     })
   })
 

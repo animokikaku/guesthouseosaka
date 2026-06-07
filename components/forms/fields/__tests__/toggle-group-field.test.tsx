@@ -1,23 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
 
-// Mock matchMedia for Radix UI
-beforeAll(() => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn()
-    }))
-  })
-})
-
 // Create a test field context
 const testFieldContext = createFieldContext<string[]>()
 
@@ -108,7 +91,7 @@ describe('ToggleGroupField', () => {
 
       const buttons = screen.getAllByRole('button')
       buttons.forEach((button) => {
-        expect(button).toHaveAttribute('data-state', 'off')
+        expect(button).not.toHaveAttribute('data-pressed')
       })
     })
 
@@ -124,9 +107,9 @@ describe('ToggleGroupField', () => {
       )
 
       const buttons = screen.getAllByRole('button')
-      expect(buttons[0]).toHaveAttribute('data-state', 'on')
-      expect(buttons[1]).toHaveAttribute('data-state', 'off')
-      expect(buttons[2]).toHaveAttribute('data-state', 'on')
+      expect(buttons[0]).toHaveAttribute('data-pressed')
+      expect(buttons[1]).not.toHaveAttribute('data-pressed')
+      expect(buttons[2]).toHaveAttribute('data-pressed')
     })
   })
 

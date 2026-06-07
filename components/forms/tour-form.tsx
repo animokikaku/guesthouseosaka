@@ -58,7 +58,6 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
             label={fields.hour.label}
             description={fields.hour.description}
             orientation="responsive"
-            className="sm:min-w-[220px]"
             type="time"
           />
         )}

@@ -50,7 +50,10 @@ export function DateField({
         aria-invalid={isInvalid}
         onChange={(e) => field.handleChange(e.target.value)}
         onBlur={() => field.handleBlur()}
-        className={cn('sm:min-w-[220px]', className)}
+        className={cn(
+          'w-full min-w-0 @md/field-group:w-[220px] @md/field-group:min-w-[220px] @md/field-group:max-w-[220px]',
+          className
+        )}
         {...props}
       />
     </Field>

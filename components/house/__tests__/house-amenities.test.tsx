@@ -4,7 +4,7 @@ import { HouseProvider } from '../house-context'
 import { createAmenityCategory, createAmenityItem } from '@/lib/transforms/__tests__/mocks'
 import type { AmenityCategoryData } from '@/lib/types/components'
 
-// Mock matchMedia for vaul/Drawer
+// Mock matchMedia for mobile drawer behavior
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn().mockImplementation((query) => ({
@@ -27,26 +27,6 @@ vi.mock('@/hooks/use-mobile', () => ({
 vi.mock('@/lib/icons', () => ({
   Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />
 }))
-
-// Mock Radix UI portals for Dialog/Drawer
-vi.mock('@radix-ui/react-dialog', async () => {
-  const actual = await vi.importActual('@radix-ui/react-dialog')
-  return {
-    ...actual,
-    Portal: ({ children }: { children: React.ReactNode }) => children
-  }
-})
-
-vi.mock('vaul', async () => {
-  const actual = await vi.importActual<typeof import('vaul')>('vaul')
-  return {
-    ...actual,
-    Drawer: {
-      ...actual.Drawer,
-      Portal: ({ children }: { children: React.ReactNode }) => children
-    }
-  }
-})
 
 import { useIsMobile } from '@/hooks/use-mobile'
 

@@ -1,12 +1,32 @@
 import '@testing-library/jest-dom/vitest'
 
-// Mock ResizeObserver for Radix UI components
-class ResizeObserverMock {
-  observe = vi.fn()
-  unobserve = vi.fn()
-  disconnect = vi.fn()
-}
-vi.stubGlobal('ResizeObserver', ResizeObserverMock)
+// Base UI ScrollArea measures overflow after render, which causes act() warnings in
+// consumer tests. The wrapper itself is covered by browser behavior, so unit tests
+// use a static DOM equivalent.
+vi.mock('@/components/ui/scroll-area', async () => {
+  const React = await vi.importActual<typeof import('react')>('react')
+
+  return {
+    ScrollArea: ({ children, ...props }: React.ComponentProps<'div'>) =>
+      React.createElement('div', { 'data-slot': 'scroll-area', ...props }, children),
+    ScrollBar: ({
+      children,
+      orientation = 'vertical',
+      ...props
+    }: React.ComponentProps<'div'> & {
+      orientation?: 'horizontal' | 'vertical'
+    }) =>
+      React.createElement(
+        'div',
+        {
+          'data-slot': 'scroll-area-scrollbar',
+          'data-orientation': orientation,
+          ...props
+        },
+        children
+      )
+  }
+})
 
 // Mock IntersectionObserver for lazy loading and scroll-spy components
 class IntersectionObserverMock implements IntersectionObserver {
