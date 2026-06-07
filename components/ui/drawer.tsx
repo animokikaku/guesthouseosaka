@@ -1,9 +1,9 @@
 "use client"
 
-import * as React from "react"
-import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
+import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function Drawer({ ...props }: DrawerPrimitive.Root.Props) {
   return <DrawerPrimitive.Root data-slot="drawer" {...props} />
@@ -29,7 +29,10 @@ function DrawerOverlay({
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/10 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        "fixed inset-0 z-50 bg-black/10 supports-backdrop-filter:backdrop-blur-xs",
+        "transition-opacity duration-300 ease-out data-swiping:duration-0",
+        "data-starting-style:opacity-0 data-ending-style:opacity-0",
+        "data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*300ms)]",
         className
       )}
       {...props}
@@ -43,13 +46,16 @@ function DrawerContent({
   ...props
 }: DrawerPrimitive.Popup.Props) {
   return (
-    <DrawerPortal data-slot="drawer-portal">
+    <DrawerPortal>
       <DrawerOverlay />
-      <DrawerPrimitive.Viewport className="fixed inset-0 z-50 overflow-hidden">
+      <DrawerPrimitive.Viewport className="fixed inset-0 z-50 flex items-end justify-center overflow-hidden">
         <DrawerPrimitive.Popup
           data-slot="drawer-content"
           className={cn(
-            "group/drawer-content fixed inset-x-0 bottom-0 z-50 flex h-auto max-h-[80vh] flex-col rounded-t-xl rounded-b-none border-t bg-popover text-sm text-popover-foreground outline-none duration-100 data-open:animate-in data-open:fade-in-0 data-open:slide-in-from-bottom data-closed:animate-out data-closed:fade-out-0 data-closed:slide-out-to-bottom",
+            "group/drawer-content z-50 flex h-auto w-full max-h-[80vh] flex-col rounded-t-xl rounded-b-none border-t bg-popover text-sm text-popover-foreground outline-none",
+            "transform-[translateY(var(--drawer-swipe-movement-y,0px))] transition-transform duration-300 ease-out data-swiping:duration-0",
+            "data-starting-style:translate-y-full data-ending-style:translate-y-full",
+            "data-ending-style:duration-[calc(var(--drawer-swipe-strength,1)*300ms)]",
             className
           )}
           {...props}
@@ -114,14 +120,14 @@ function DrawerDescription({
 }
 
 export {
-  Drawer,
-  DrawerPortal,
-  DrawerOverlay,
-  DrawerTrigger,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerFooter,
-  DrawerTitle,
-  DrawerDescription,
-}
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerPortal,
+    DrawerTitle,
+    DrawerTrigger
+};
