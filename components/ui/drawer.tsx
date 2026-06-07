@@ -5,20 +5,6 @@ import { Drawer as DrawerPrimitive } from "@base-ui/react/drawer"
 
 import { cn } from "@/lib/utils"
 
-const drawerPopupClassName = cn(
-  "group/popup relative flex w-full max-h-[calc(80vh+var(--bleed))] flex-col overflow-hidden text-sm",
-  "[--bleed:3rem] border-border border-t bg-popover text-popover-foreground overscroll-contain data-swiping:select-none",
-  "rounded-t-xl -mb-(--bleed) pb-[calc(1.5rem+env(safe-area-inset-bottom,0)+var(--bleed))]",
-  "h-(--drawer-height,auto) shadow-[0_2px_10px_rgb(0_0_0/0.1)]",
-  "origin-[50%_calc(100%-var(--bleed))]",
-  "transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y)))]",
-  "data-swiping:duration-0 data-ending-style:shadow-[0_2px_10px_rgb(0_0_0/0)]",
-  "data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)]",
-  "data-ending-style:transform-[translateY(calc(100%-var(--bleed)))]",
-  "data-starting-style:transform-[translateY(calc(100%-var(--bleed)))]",
-  "[transition:transform_450ms_cubic-bezier(0.32,0.72,0,1),height_450ms_cubic-bezier(0.32,0.72,0,1),box-shadow_450ms_cubic-bezier(0.32,0.72,0,1)]"
-)
-
 function Drawer({
   ...props
 }: Omit<DrawerPrimitive.Root.Props, "swipeDirection">) {
@@ -57,7 +43,20 @@ function DrawerContent({
       >
         <DrawerPrimitive.Popup
           data-slot="drawer-popup"
-          className={cn(drawerPopupClassName, className)}
+          className={cn(
+            "group/popup relative flex w-full max-h-[calc(80vh+var(--bleed))] flex-col overflow-hidden text-sm",
+            "[--bleed:3rem] border-border border-t bg-popover text-popover-foreground overscroll-contain data-swiping:select-none",
+            "rounded-t-xl -mb-(--bleed) pb-[calc(1.5rem+env(safe-area-inset-bottom,0)+var(--bleed))]",
+            "h-(--drawer-height,auto) shadow-[0_2px_10px_rgb(0_0_0/0.1)]",
+            "origin-[50%_calc(100%-var(--bleed))]",
+            "transform-[translateY(calc(var(--drawer-snap-point-offset,0px)+var(--drawer-swipe-movement-y)))]",
+            "data-swiping:duration-0 data-ending-style:shadow-[0_2px_10px_rgb(0_0_0/0)]",
+            "data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)]",
+            "data-ending-style:transform-[translateY(calc(100%-var(--bleed)))]",
+            "data-starting-style:transform-[translateY(calc(100%-var(--bleed)))]",
+            "[transition:transform_450ms_cubic-bezier(0.32,0.72,0,1),height_450ms_cubic-bezier(0.32,0.72,0,1),box-shadow_450ms_cubic-bezier(0.32,0.72,0,1)]",
+            className
+          )}
           {...props}
         >
           <div className="mx-auto mt-4 h-1 w-[100px] shrink-0 rounded-full bg-muted" />
