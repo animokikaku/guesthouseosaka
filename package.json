@@ -48,7 +48,7 @@
     "next-themes": "^0.4.6",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-email": "^6.5.0",
+    "react-email": "^6.6.0",
     "resend": "^6.12.4",
     "sanity": "^5.30.0",
     "sanity-plugin-internationalized-array": "^5.1.3",
