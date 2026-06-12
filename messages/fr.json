@@ -47,6 +47,9 @@
     "empty_title": "Aucune image de galerie",
     "empty_description": "Les images de galerie sont gérées via Sanity CMS."
   },
+  "StickyCategoryNav": {
+    "gallery_categories_label": "Catégories de la galerie"
+  },
   "LanguageSwitcher": {
     "aria_label": "Sélectionner la langue"
   },

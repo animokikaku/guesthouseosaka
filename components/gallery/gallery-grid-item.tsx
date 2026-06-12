@@ -16,12 +16,15 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
   const { _key, image } = item
   if (!image) return null
 
+  const imageProps = toGalleryImageProps(image, { width: 400, height: 400 })
+  if (!imageProps) return null
+
   return (
     <GalleryImageButton
       type="button"
       data-testid="gallery-grid-image"
       onClick={() => store.setState((prev) => ({ ...prev, photoId: _key }))}
-      imageProps={toGalleryImageProps(image, { width: 400, height: 400 })}
+      imageProps={imageProps}
       className="aspect-square rounded-lg"
       style={{
         contentVisibility: 'auto',

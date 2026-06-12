@@ -50,6 +50,9 @@ declare const messages: {
     "empty_title": "No gallery images",
     "empty_description": "Gallery images are managed through Sanity CMS."
   },
+  "StickyCategoryNav": {
+    "gallery_categories_label": "Gallery categories"
+  },
   "LanguageSwitcher": {
     "aria_label": "Select language"
   },

@@ -115,7 +115,10 @@ export async function ImageBlockGallery({
     featuredImage,
     galleryImages: validGalleryImages,
     limit: 5
-  }).map(({ image }) => toGalleryImageProps(image, { width: 560 }))
+  }).flatMap(({ image }) => {
+    const imageProps = toGalleryImageProps(image, { width: 560 })
+    return imageProps ? [imageProps] : []
+  })
 
   return <GalleryGrid images={images} href={href} viewGalleryLabel={t('view_gallery')} />
 }

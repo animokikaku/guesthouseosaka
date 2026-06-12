@@ -4,6 +4,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { scrollToGalleryCategory } from '@/lib/gallery-scroll'
 import type { GalleryCategory } from '@/lib/gallery'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 type StickyCategoryNavProps = {
@@ -13,6 +14,7 @@ type StickyCategoryNavProps = {
 }
 
 export function StickyCategoryNav({ categories, activeId, isVisible }: StickyCategoryNavProps) {
+  const t = useTranslations('StickyCategoryNav')
   const activeButtonRef = React.useRef<HTMLButtonElement>(null)
 
   // Auto-scroll to keep active category visible
@@ -28,7 +30,7 @@ export function StickyCategoryNav({ categories, activeId, isVisible }: StickyCat
 
   return (
     <nav
-      aria-label="Gallery categories"
+      aria-label={t('gallery_categories_label')}
       className={cn(
         'min-w-0 flex-1 transition-opacity duration-200',
         isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'

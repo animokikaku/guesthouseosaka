@@ -62,6 +62,7 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
               height: 384,
               includeDimensions: false
             })
+            if (!imageProps) return null
 
             return (
               <CarouselItem className="relative h-96 w-full select-none" key={_key}>

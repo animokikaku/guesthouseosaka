@@ -79,7 +79,9 @@ function toSizedGalleryImageProps(
     alt = image.alt,
     includeDimensions = true
   }: SizedGalleryImageOptions = {}
-): GalleryImageProps {
+): GalleryImageProps | null {
+  if (!image.asset) return null
+
   let builder = urlFor(image)
 
   if (width) builder = builder.width(width)
@@ -122,7 +124,7 @@ export function toGalleryImageProps(
 export function toGalleryImageProps(
   image: SanityGalleryImage,
   options?: SizedGalleryImageOptions
-): GalleryImageProps
+): GalleryImageProps | null
 export function toGalleryImageProps(
   image: SanityGalleryImage,
   options: ToGalleryImagePropsOptions = {}

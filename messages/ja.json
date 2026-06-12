@@ -47,6 +47,9 @@
     "empty_title": "ギャラリー画像がありません",
     "empty_description": "ギャラリー画像はSanity CMSで管理されています。"
   },
+  "StickyCategoryNav": {
+    "gallery_categories_label": "ギャラリーカテゴリ"
+  },
   "LanguageSwitcher": {
     "aria_label": "言語を選択"
   },
