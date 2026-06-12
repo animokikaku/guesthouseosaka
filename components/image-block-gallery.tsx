@@ -1,13 +1,17 @@
-import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
+import { GalleryImageFrame } from '@/components/gallery/gallery-image-button'
 import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import type { FeaturedImage, GalleryItem } from '@/lib/gallery'
-import { urlFor } from '@/sanity/lib/image'
+import {
+  buildGallerySlides,
+  toGalleryImageProps,
+  type FeaturedImage,
+  type GalleryImageProps,
+  type GalleryItem
+} from '@/lib/gallery'
 import { ImageIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
-import type { ImageProps } from 'next/image'
 import { ComponentProps } from 'react'
 
 type GalleryImages = GalleryItem[] | null
@@ -18,25 +22,12 @@ type ImageBlockGalleryProps = {
   featuredImage?: FeaturedImage
 }
 
-type SanityImage = NonNullable<GalleryItem['image']> | NonNullable<FeaturedImage>
-
-// Transform Sanity image to Next.js Image props
-function toImageProps(image: SanityImage, width: number): Omit<ImageProps, 'fill'> {
-  return {
-    src: urlFor(image).width(width).fit('crop').dpr(2).url(),
-    alt: image.alt ?? '',
-    width,
-    blurDataURL: image.preview ?? undefined,
-    placeholder: image.preview ? 'blur' : undefined
-  }
-}
-
 function GalleryGrid({
   images,
   href,
   viewGalleryLabel
 }: {
-  images: Omit<ImageProps, 'fill'>[]
+  images: GalleryImageProps[]
   href: ComponentProps<typeof Link>['href']
   viewGalleryLabel: string
 }) {
@@ -48,27 +39,27 @@ function GalleryGrid({
         <div className="relative aspect-2/1 min-h-[300px] overflow-hidden rounded-xl lg:aspect-7/3">
           <Link href={href} tabIndex={-1} className="block h-full w-full">
             <div className="grid h-full w-full grid-cols-4 grid-rows-2 gap-0.5">
-              <GalleryImageButton
+              <GalleryImageFrame
                 className="col-span-2 row-span-2"
                 sizes="(min-width: 1120px) 560px, 50vw"
                 imageProps={{ ...images[0], priority: true }}
               />
-              <GalleryImageButton
+              <GalleryImageFrame
                 className="col-span-1 col-start-3 row-start-1"
                 imageProps={images[1]}
                 sizes="(min-width: 1120px) 280px, 25vw"
               />
-              <GalleryImageButton
+              <GalleryImageFrame
                 className="col-span-1 col-start-4 row-start-1"
                 imageProps={images[2]}
                 sizes="(min-width: 1120px) 280px, 25vw"
               />
-              <GalleryImageButton
+              <GalleryImageFrame
                 className="col-span-1 col-start-3 row-start-2"
                 imageProps={images[3]}
                 sizes="(min-width: 1120px) 280px, 25vw"
               />
-              <GalleryImageButton
+              <GalleryImageFrame
                 className="col-span-1 col-start-4 row-start-2"
                 imageProps={images[4]}
                 sizes="(min-width: 1120px) 280px, 25vw"
@@ -120,19 +111,11 @@ export async function ImageBlockGallery({
     )
   }
 
-  // Build display images: featured first (if available), then gallery images
-  const firstGalleryImage = validGalleryImages[0]
-  const images: Omit<ImageProps, 'fill'>[] = hasFeatured
-    ? [
-        toImageProps(featuredImage, 560),
-        ...validGalleryImages.slice(0, 4).map(({ image }) => toImageProps(image, 560))
-      ]
-    : firstGalleryImage
-      ? [
-          toImageProps(firstGalleryImage.image, 560),
-          ...validGalleryImages.slice(1, 5).map(({ image }) => toImageProps(image, 560))
-        ]
-      : []
+  const images = buildGallerySlides({
+    featuredImage,
+    galleryImages: validGalleryImages,
+    limit: 5
+  }).map(({ image }) => toGalleryImageProps(image, { width: 560 }))
 
   return <GalleryGrid images={images} href={href} viewGalleryLabel={t('view_gallery')} />
 }

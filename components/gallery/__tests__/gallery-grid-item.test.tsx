@@ -185,51 +185,15 @@ describe('GalleryGridItem', () => {
     })
   })
 
-  describe('keyboard handler', () => {
-    it('sets photoId when Enter key is pressed', () => {
-      const item = createGalleryItem({ _key: 'photo-enter' })
-
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
-      fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: 'Enter' })
-
-      expect(store.state.photoId).toBe('photo-enter')
-    })
-
-    it('sets photoId when Space key is pressed', () => {
-      const item = createGalleryItem({ _key: 'photo-space' })
-
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
-      fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: ' ' })
-
-      expect(store.state.photoId).toBe('photo-space')
-    })
-
-    it('prevents default behavior on Enter key', () => {
+  describe('keyboard accessibility', () => {
+    it('renders the image control as a native button', () => {
       const item = createGalleryItem({ _key: 'photo-123' })
 
       render(<GalleryGridItem item={item} categoryKey="cat1" />)
-      const event = fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: 'Enter' })
 
-      // fireEvent.keyDown returns false if preventDefault was called
-      expect(event).toBe(false)
-    })
-
-    it('prevents default behavior on Space key', () => {
-      const item = createGalleryItem({ _key: 'photo-123' })
-
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
-      const event = fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: ' ' })
-
-      expect(event).toBe(false)
-    })
-
-    it('does not set photoId for other keys', () => {
-      const item = createGalleryItem({ _key: 'photo-123' })
-
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
-      fireEvent.keyDown(screen.getByTestId('gallery-grid-image'), { key: 'Tab' })
-
-      expect(store.state.photoId).toBeNull()
+      const button = screen.getByTestId('gallery-grid-image')
+      expect(button.tagName).toBe('BUTTON')
+      expect(button).toHaveAttribute('type', 'button')
     })
   })
 

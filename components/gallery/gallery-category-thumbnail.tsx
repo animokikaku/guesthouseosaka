@@ -1,9 +1,8 @@
 'use client'
 
 import { Badge } from '@/components/ui/badge'
-import type { GalleryCategory } from '@/lib/gallery'
-import { urlFor } from '@/sanity/lib/image'
-import { stegaClean } from '@sanity/client/stega'
+import { toGalleryImageProps, type GalleryCategory } from '@/lib/gallery'
+import { scrollToGalleryCategory } from '@/lib/gallery-scroll'
 import Image from 'next/image'
 
 type CategoryThumbnailProps = {
@@ -15,29 +14,24 @@ export function CategoryThumbnail({ category, tabIndex = 0 }: CategoryThumbnailP
   const thumbnail = category.thumbnail
   if (category.items.length === 0 || !thumbnail) return null
 
-  const src = urlFor(thumbnail).width(256).height(192).dpr(2).fit('crop').url()
-
-  const scrollToCategory = () => {
-    const targetElement = document.getElementById(category._id)
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
+  const imageProps = toGalleryImageProps(thumbnail, {
+    width: 256,
+    height: 192,
+    alt: thumbnail.alt ?? category.label,
+    includeDimensions: false
+  })
 
   return (
     <button
       type="button"
-      onClick={scrollToCategory}
+      onClick={() => scrollToGalleryCategory(category._id)}
       tabIndex={tabIndex}
       className="group focus-visible:ring-ring flex h-auto w-[154px] shrink-0 cursor-pointer flex-col gap-2 rounded-lg p-3 text-center transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
     >
       <span className="relative mx-auto block aspect-4/3 w-32 overflow-hidden rounded-md">
         <Image
-          src={src}
-          alt={stegaClean(thumbnail.alt) ?? stegaClean(category.label) ?? ''}
+          {...imageProps}
           fill
-          placeholder={thumbnail.preview ? 'blur' : undefined}
-          blurDataURL={thumbnail.preview ?? undefined}
           className="object-cover"
           sizes="128px"
         />

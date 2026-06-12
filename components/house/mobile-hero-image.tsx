@@ -3,8 +3,7 @@
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import type { GallerySlide } from '@/lib/gallery'
-import { urlFor } from '@/sanity/lib/image'
+import { toGalleryImageProps, type GallerySlide } from '@/lib/gallery'
 import { ImageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
@@ -58,20 +57,21 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
       <Carousel className="max-h-96 w-full cursor-pointer select-none" setApi={setApi}>
         <CarouselContent>
           {images.map(({ _key, image }, index) => {
-            const src = urlFor(image).width(640).height(384).dpr(2).fit('crop').url()
+            const imageProps = toGalleryImageProps(image, {
+              width: 640,
+              height: 384,
+              includeDimensions: false
+            })
 
             return (
               <CarouselItem className="relative h-96 w-full select-none" key={_key}>
                 <Image
-                  src={src}
-                  alt={image.alt ?? ''}
+                  {...imageProps}
                   fill
                   priority={index === 0}
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   className="object-cover"
                   sizes="(max-width: 639px) 100vw, 0"
-                  placeholder={image.preview ? 'blur' : undefined}
-                  blurDataURL={image.preview ?? undefined}
                 />
               </CarouselItem>
             )

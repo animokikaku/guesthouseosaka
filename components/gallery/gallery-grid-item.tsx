@@ -1,8 +1,8 @@
+'use client'
+
 import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
-import type { GalleryItem } from '@/lib/gallery'
+import { toGalleryImageProps, type GalleryItem } from '@/lib/gallery'
 import { store } from '@/lib/store'
-import { urlFor } from '@/sanity/lib/image'
-import { stegaClean } from '@sanity/client/stega'
 
 type DataAttributeFn = (path: string) => string
 
@@ -16,27 +16,12 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
   const { _key, image } = item
   if (!image) return null
 
-  const src = urlFor(image).width(400).height(400).dpr(2).fit('crop').url()
-
   return (
     <GalleryImageButton
+      type="button"
       data-testid="gallery-grid-image"
-      tabIndex={0}
       onClick={() => store.setState((prev) => ({ ...prev, photoId: _key }))}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          store.setState((prev) => ({ ...prev, photoId: _key }))
-        }
-      }}
-      imageProps={{
-        src,
-        alt: stegaClean(image.alt) ?? '',
-        width: 400,
-        height: 400,
-        blurDataURL: image.preview ?? undefined,
-        placeholder: image.preview ? 'blur' : undefined
-      }}
+      imageProps={toGalleryImageProps(image, { width: 400, height: 400 })}
       className="aspect-square rounded-lg"
       style={{
         contentVisibility: 'auto',

@@ -1,6 +1,7 @@
 'use client'
 
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { scrollToGalleryCategory } from '@/lib/gallery-scroll'
 import type { GalleryCategory } from '@/lib/gallery'
 import { cn } from '@/lib/utils'
 import * as React from 'react'
@@ -25,13 +26,6 @@ export function StickyCategoryNav({ categories, activeId, isVisible }: StickyCat
     }
   }, [activeId])
 
-  const scrollToCategory = (key: string) => {
-    const element = document.getElementById(key)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
     <nav
       aria-label="Gallery categories"
@@ -51,7 +45,7 @@ export function StickyCategoryNav({ categories, activeId, isVisible }: StickyCat
                 type="button"
                 tabIndex={isVisible ? 0 : -1}
                 aria-current={isActive ? 'true' : undefined}
-                onClick={() => scrollToCategory(cat._id)}
+                onClick={() => scrollToGalleryCategory(cat._id)}
                 className={cn(
                   'shrink-0 px-3 py-1.5 text-sm font-medium transition-colors',
                   isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary'
