@@ -17,7 +17,7 @@ import {
   createGalleryItem,
   createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
-import { featuredToGallerySlide, flattenGalleryItems, getImageIndex } from '../gallery'
+import { featuredToGallerySlide, flattenGalleryItems } from '../gallery'
 import { toGalleryCategories } from '../transforms/gallery'
 
 describe('featuredToGallerySlide', () => {
@@ -70,59 +70,6 @@ describe('flattenGalleryItems', () => {
 
     expect(result).toHaveLength(1)
     expect(result[0]._key).toBe('img1')
-  })
-})
-
-describe('getImageIndex', () => {
-  it('returns correct index for existing photoKey', () => {
-    const categories = [
-      createGalleryCategory({
-        items: [
-          createGalleryItem({ _key: 'img1' }),
-          createGalleryItem({ _key: 'img2' }),
-          createGalleryItem({ _key: 'img3' })
-        ]
-      })
-    ]
-
-    expect(getImageIndex(categories, 'img2')).toBe(1)
-  })
-
-  it('returns 0 for non-existent photoKey', () => {
-    const categories = [
-      createGalleryCategory({
-        items: [createGalleryItem({ _key: 'img1' }), createGalleryItem({ _key: 'img2' })]
-      })
-    ]
-
-    expect(getImageIndex(categories, 'nonexistent')).toBe(0)
-  })
-
-  it('handles null categories', () => {
-    expect(getImageIndex(null, 'any')).toBe(0)
-  })
-
-  it('returns 0 for first item', () => {
-    const categories = [
-      createGalleryCategory({
-        items: [createGalleryItem({ _key: 'first' }), createGalleryItem({ _key: 'second' })]
-      })
-    ]
-
-    expect(getImageIndex(categories, 'first')).toBe(0)
-  })
-
-  it('finds items across multiple categories', () => {
-    const categories = [
-      createGalleryCategory({
-        items: [createGalleryItem({ _key: 'img1' }), createGalleryItem({ _key: 'img2' })]
-      }),
-      createGalleryCategory({
-        items: [createGalleryItem({ _key: 'img3' })]
-      })
-    ]
-
-    expect(getImageIndex(categories, 'img3')).toBe(2)
   })
 })
 

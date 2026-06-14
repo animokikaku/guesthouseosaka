@@ -15,14 +15,12 @@ import {
   type CarouselApi
 } from '@/components/ui/carousel'
 import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
-import { flattenGalleryItems, getImageIndex, type GalleryCategories } from '@/lib/gallery'
+import { flattenGalleryItems, type GalleryCategories } from '@/lib/gallery'
+import { toGalleryImageProps } from '@/lib/gallery-image'
 import { store } from '@/lib/store'
-import { urlFor } from '@/sanity/lib/image'
-import { getImageDimensions } from '@sanity/asset-utils'
 import { useStore } from '@tanstack/react-store'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { stegaClean } from 'next-sanity'
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -79,17 +77,32 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const photoId = useStore(store, (state) => state.photoId)
 
-  // Flatten all gallery items for carousel navigation
-  const imageList = useMemo(() => flattenGalleryItems(galleryCategories), [galleryCategories])
+  const slides = useMemo(
+    () =>
+      flattenGalleryItems(galleryCategories).flatMap(({ _key, image }) => {
+        const imageProps = toGalleryImageProps(image, { size: 'full' })
+        return imageProps ? [{ _key, imageProps }] : []
+      }),
+    [galleryCategories]
+  )
 
   const currentAlt = useMemo(() => {
-    return selectedIndex !== null && selectedIndex < imageList.length
-      ? stegaClean(imageList[selectedIndex].image.alt)
-      : null
-  }, [selectedIndex, imageList])
+    if (selectedIndex === null || selectedIndex >= slides.length) {
+      return null
+    }
+
+    const alt = slides[selectedIndex]?.imageProps.alt
+    return alt ? alt : null
+  }, [selectedIndex, slides])
 
   // Use selectedIndex as fallback to preserve position during close animation
-  const startIndex = photoId ? getImageIndex(galleryCategories, photoId) : (selectedIndex ?? 0)
+  const startIndex = useMemo(() => {
+    if (photoId) {
+      const index = slides.findIndex((slide) => slide._key === photoId)
+      return index >= 0 ? index : 0
+    }
+    return selectedIndex ?? 0
+  }, [photoId, slides, selectedIndex])
 
   const { onTouchStart, onTouchEnd } = useSwipeToClose({
     onClose: () => store.setState((prev) => ({ ...prev, photoId: null }))
@@ -137,31 +150,19 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        {imageList.map(({ _key, image }) => {
-          if (!image.asset) return null
-          const dimensions = getImageDimensions(image.asset)
-          const src = urlFor(image).url()
-          const alt = image.alt ? stegaClean(image.alt) : ''
-
-          return (
-            <CarouselItem
-              key={_key}
-              className="flex h-full items-center justify-center"
-              data-sanity={dataAttribute?.(`galleryCategories[].items[_key=="${_key}"]`)}
-            >
-              <Image
-                src={src}
-                alt={alt}
-                width={dimensions.width}
-                height={dimensions.height}
-                placeholder={image.preview ? 'blur' : undefined}
-                blurDataURL={image.preview ?? undefined}
-                className="max-h-screen object-contain select-none"
-                sizes="100vw"
-              />
-            </CarouselItem>
-          )
-        })}
+        {slides.map(({ _key, imageProps }) => (
+          <CarouselItem
+            key={_key}
+            className="flex h-full items-center justify-center"
+            data-sanity={dataAttribute?.(`galleryCategories[].items[_key=="${_key}"]`)}
+          >
+            <Image
+              {...imageProps}
+              className="max-h-screen object-contain select-none"
+              sizes="100vw"
+            />
+          </CarouselItem>
+        ))}
       </CarouselContent>
       {currentAlt && (
         <div className="pointer-events-none absolute bottom-0 left-1/2 z-50 w-full -translate-x-1/2 pb-[calc(5rem+env(safe-area-inset-bottom,0))] text-center sm:pb-4 lg:w-fit">

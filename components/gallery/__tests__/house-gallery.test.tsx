@@ -4,6 +4,7 @@ import {
   createGalleryItem,
   createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
+import { toGalleryCategories } from '@/lib/transforms/gallery'
 import { render, screen } from '@testing-library/react'
 
 // Mock matchMedia
@@ -69,13 +70,13 @@ describe('HouseGallery', () => {
 
   describe('empty gallery', () => {
     it('renders nothing for empty galleryCategories', () => {
-      const { container } = render(<HouseGallery galleryCategories={[]} />)
+      const { container } = render(<HouseGallery categories={[]} />)
 
       expect(container).toBeEmptyDOMElement()
     })
 
     it('renders nothing for null galleryCategories', () => {
-      const { container } = render(<HouseGallery galleryCategories={null as unknown as []} />)
+      const { container } = render(<HouseGallery categories={[]} />)
 
       expect(container).toBeEmptyDOMElement()
     })
@@ -100,7 +101,7 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery galleryCategories={galleryCategories} />)
+      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
 
       expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Bedroom')
     })
@@ -119,7 +120,7 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery galleryCategories={galleryCategories} />)
+      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings).toHaveLength(2)
@@ -140,7 +141,7 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery galleryCategories={galleryCategories} />)
+      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings[0]).toHaveTextContent('Bedroom')
@@ -171,7 +172,7 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery galleryCategories={galleryCategories} />)
+      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
 
       const buttons = screen.getAllByTestId('gallery-image-button')
       expect(buttons).toHaveLength(3)
@@ -188,7 +189,7 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery galleryCategories={galleryCategories} />)
+      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
 
       // Multiple buttons: thumbnail + grid item
       // Should have 2 buttons: 1 category thumbnail + 1 grid item

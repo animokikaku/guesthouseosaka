@@ -26,15 +26,24 @@ export function featuredToGallerySlide(image: NonNullable<FeaturedImage>): Galle
   }
 }
 
+export function buildGallerySlides({
+  featuredImage,
+  galleryImages,
+  limit
+}: {
+  featuredImage?: FeaturedImage
+  galleryImages: GalleryItem[] | null
+  limit?: number
+}): GallerySlide[] {
+  const slides: GallerySlide[] = featuredImage?.asset
+    ? [featuredToGallerySlide(featuredImage), ...(galleryImages ?? [])]
+    : (galleryImages ?? [])
+
+  return typeof limit === 'number' ? slides.slice(0, limit) : slides
+}
+
 // Flatten all gallery items from categories (for modal navigation)
 export function flattenGalleryItems(categories: GalleryCategories | null): GalleryItem[] {
   if (!categories) return []
   return categories.flatMap((cat) => cat.items ?? [])
-}
-
-// Get index of image by key across all categories
-export function getImageIndex(categories: GalleryCategories | null, photoKey: string): number {
-  const items = flattenGalleryItems(categories)
-  const index = items.findIndex((img) => img._key === photoKey)
-  return index >= 0 ? index : 0
 }

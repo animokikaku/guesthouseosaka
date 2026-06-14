@@ -85,7 +85,7 @@ export function GalleryPageContent({
         <div className="container-wrapper">
           <div className="container py-8 md:py-12">
             <HouseGallery
-              galleryCategories={galleryCategories}
+              categories={categories}
               sentinelRef={sentinelRef}
               dataAttribute={dataAttribute}
               stickyNavVisible={isVisible}

@@ -1,14 +1,13 @@
 import { CategoryGrid } from '@/components/gallery/gallery-category-grid'
 import { CategoryThumbnail } from '@/components/gallery/gallery-category-thumbnail'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { type GalleryCategories } from '@/lib/gallery'
-import { toGalleryCategories } from '@/lib/transforms/gallery'
+import { type GalleryCategory } from '@/lib/gallery'
 import * as React from 'react'
 
 type DataAttributeFn = (path: string) => string
 
 type HouseGalleryProps = {
-  galleryCategories: GalleryCategories
+  categories: GalleryCategory[]
   /** Ref for sentinel element (used to detect when thumbnails scroll out of view) */
   sentinelRef?: React.RefObject<HTMLDivElement | null>
   /** Data attribute helper for Sanity visual editing */
@@ -18,17 +17,11 @@ type HouseGalleryProps = {
 }
 
 export function HouseGallery({
-  galleryCategories,
+  categories,
   sentinelRef,
   dataAttribute,
   stickyNavVisible = false
 }: HouseGalleryProps) {
-  // Transform to display format with computed fields
-  const categories = React.useMemo(
-    () => toGalleryCategories(galleryCategories),
-    [galleryCategories]
-  )
-
   if (categories.length === 0) {
     return null
   }

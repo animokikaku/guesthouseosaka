@@ -1,8 +1,10 @@
 'use client'
 
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { scrollToGalleryCategory } from '@/lib/gallery-scroll'
 import type { GalleryCategory } from '@/lib/gallery'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 type StickyCategoryNavProps = {
@@ -12,6 +14,7 @@ type StickyCategoryNavProps = {
 }
 
 export function StickyCategoryNav({ categories, activeId, isVisible }: StickyCategoryNavProps) {
+  const t = useTranslations('StickyCategoryNav')
   const activeButtonRef = React.useRef<HTMLButtonElement>(null)
 
   // Auto-scroll to keep active category visible
@@ -25,16 +28,9 @@ export function StickyCategoryNav({ categories, activeId, isVisible }: StickyCat
     }
   }, [activeId])
 
-  const scrollToCategory = (key: string) => {
-    const element = document.getElementById(key)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
     <nav
-      aria-label="Gallery categories"
+      aria-label={t('gallery_categories_label')}
       className={cn(
         'min-w-0 flex-1 transition-opacity duration-200',
         isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
@@ -51,7 +47,7 @@ export function StickyCategoryNav({ categories, activeId, isVisible }: StickyCat
                 type="button"
                 tabIndex={isVisible ? 0 : -1}
                 aria-current={isActive ? 'true' : undefined}
-                onClick={() => scrollToCategory(cat._id)}
+                onClick={() => scrollToGalleryCategory(cat._id)}
                 className={cn(
                   'shrink-0 px-3 py-1.5 text-sm font-medium transition-colors',
                   isActive ? 'text-primary' : 'text-muted-foreground hover:text-primary'
