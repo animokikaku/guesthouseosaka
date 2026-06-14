@@ -83,6 +83,11 @@ vi.mock('lucide-react', () => ({
   ImageIcon: () => <svg data-testid="image-icon" />
 }))
 
+const galleryHref = {
+  pathname: '/[house]/gallery',
+  params: { house: 'orange' }
+} as const
+
 describe('ImageBlockGallery', () => {
   it('renders five gallery images with the first image prioritized', async () => {
     const galleryImages = Array.from({ length: 5 }, (_, index) =>
@@ -94,7 +99,7 @@ describe('ImageBlockGallery', () => {
 
     render(
       await ImageBlockGallery({
-        href: '/en/orange/gallery',
+        href: galleryHref,
         galleryImages
       })
     )
@@ -117,7 +122,7 @@ describe('ImageBlockGallery', () => {
 
     render(
       await ImageBlockGallery({
-        href: '/en/orange/gallery',
+        href: galleryHref,
         galleryImages,
         featuredImage: createSanityImage({ alt: 'Featured image' })
       })
@@ -145,7 +150,7 @@ describe('ImageBlockGallery', () => {
 
     render(
       await ImageBlockGallery({
-        href: '/en/orange/gallery',
+        href: galleryHref,
         galleryImages
       })
     )
