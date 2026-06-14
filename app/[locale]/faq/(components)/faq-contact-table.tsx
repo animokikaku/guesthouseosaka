@@ -10,6 +10,14 @@ import {
   ItemMedia,
   ItemTitle
 } from '@/components/ui/item'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table'
 import type { HousesBuildingQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions } from '@sanity/asset-utils'
@@ -65,7 +73,7 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
                     aria-hidden="true"
                     tabIndex={-1}
                   >
-                    <Phone className="size-4" />
+                    <Phone />
                   </Button>
                 </ItemActions>
               </a>
@@ -82,46 +90,48 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
   const t = useTranslations('FAQContactTable')
 
   return (
-    <table className="hidden border-collapse text-sm sm:table">
-      <thead>
-        <tr>
-          <th aria-label={t('house')} className="border-border border-b p-2 text-left"></th>
-          <th className="text-muted-foreground border-border border-b p-2 text-center font-medium">
-            {t('within_japan')}
-          </th>
-          <th className="text-muted-foreground border-border border-b p-2 text-center font-medium">
-            {t('from_overseas')}
-          </th>
-        </tr>
-      </thead>
-      <tbody className="font-mono">
-        {houses.map(({ _id, title, phone }) => {
-          return (
-            <tr className="border-border/50 last:border-border border-none" key={_id}>
-              <td className="text-muted-foreground p-2 text-right font-sans">
-                {stegaClean(title)}
-              </td>
-              <td className="p-2 text-center">
-                <a
-                  href={`tel:${phone.domestic}`}
-                  className="text-foreground hover:text-primary transition-colors"
-                >
-                  {phone.domestic}
-                </a>
-              </td>
-              <td className="p-2 text-center">
-                <a
-                  href={`tel:${phone.international}`}
-                  className="text-foreground hover:text-primary transition-colors"
-                >
-                  {phone.international}
-                </a>
-              </td>
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
+    <div className="hidden sm:block">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead aria-label={t('house')} />
+            <TableHead className="text-muted-foreground text-center font-medium">
+              {t('within_japan')}
+            </TableHead>
+            <TableHead className="text-muted-foreground text-center font-medium">
+              {t('from_overseas')}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody className="font-mono">
+          {houses.map(({ _id, title, phone }) => {
+            return (
+              <TableRow className="border-none" key={_id}>
+                <TableCell className="text-muted-foreground text-right font-sans">
+                  {stegaClean(title)}
+                </TableCell>
+                <TableCell className="text-center">
+                  <a
+                    href={`tel:${phone.domestic}`}
+                    className="text-foreground hover:text-primary transition-colors"
+                  >
+                    {phone.domestic}
+                  </a>
+                </TableCell>
+                <TableCell className="text-center">
+                  <a
+                    href={`tel:${phone.international}`}
+                    className="text-foreground hover:text-primary transition-colors"
+                  >
+                    {phone.international}
+                  </a>
+                </TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
+    </div>
   )
 }
 

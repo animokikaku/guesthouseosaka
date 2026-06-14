@@ -67,7 +67,7 @@ function GalleryGrid({
             nativeButton={false}
             className="absolute right-4 bottom-4"
           >
-            <Icons.gallery className="size-4" />
+            <Icons.gallery data-icon="inline-start" />
             <span>{viewGalleryLabel}</span>
           </Button>
         </div>
