@@ -1,14 +1,15 @@
 'use client'
 
+import type { GalleryImageProps } from '@/lib/gallery-image'
 import { cn } from '@/lib/utils'
-import Image, { ImageProps } from 'next/image'
+import Image from 'next/image'
 import { ComponentPropsWithoutRef } from 'react'
 
 type GalleryImageContentProps = {
   imageClassName?: string
   containerClassName?: string
   sizes?: string
-  imageProps: Omit<ImageProps, 'fill' | 'className'>
+  imageProps: GalleryImageProps
 }
 
 type GalleryImageFrameProps = ComponentPropsWithoutRef<'div'> & GalleryImageContentProps

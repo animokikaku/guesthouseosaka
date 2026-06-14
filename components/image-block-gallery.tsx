@@ -83,14 +83,18 @@ export async function ImageBlockGallery({
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
 
-  // Use pre-flattened gallery images from GROQ query
   const validGalleryImages = galleryImages ?? []
 
-  // Count total available images (featured + gallery)
-  const hasFeatured = !!featuredImage
-  const totalCount = (hasFeatured ? 1 : 0) + validGalleryImages.length
+  const images = buildGallerySlides({
+    featuredImage,
+    galleryImages: validGalleryImages,
+    limit: 5
+  }).flatMap(({ image }) => {
+    const imageProps = toGalleryImageProps(image, { width: 560 })
+    return imageProps ? [imageProps] : []
+  })
 
-  if (totalCount < 5) {
+  if (images.length < 5) {
     return (
       <div className="hidden sm:block">
         <Empty className="min-h-[300px] rounded-xl border border-dashed">
@@ -105,15 +109,6 @@ export async function ImageBlockGallery({
       </div>
     )
   }
-
-  const images = buildGallerySlides({
-    featuredImage,
-    galleryImages: validGalleryImages,
-    limit: 5
-  }).flatMap(({ image }) => {
-    const imageProps = toGalleryImageProps(image, { width: 560 })
-    return imageProps ? [imageProps] : []
-  })
 
   return <GalleryGrid images={images} href={href} viewGalleryLabel={t('view_gallery')} />
 }

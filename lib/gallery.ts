@@ -47,10 +47,3 @@ export function flattenGalleryItems(categories: GalleryCategories | null): Galle
   if (!categories) return []
   return categories.flatMap((cat) => cat.items ?? [])
 }
-
-// Get index of image by key across all categories
-export function getImageIndex(categories: GalleryCategories | null, photoKey: string): number {
-  const items = flattenGalleryItems(categories)
-  const index = items.findIndex((img) => img._key === photoKey)
-  return index >= 0 ? index : 0
-}
