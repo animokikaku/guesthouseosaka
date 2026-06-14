@@ -71,7 +71,7 @@ export function DraftModeIndicator() {
             'focus-visible:ring-rose-500/50'
           )}
         >
-          {isPending ? <LoaderCircle className="size-4 animate-spin" /> : <X className="size-4" />}
+          {isPending ? <LoaderCircle className="animate-spin" /> : <X />}
         </Button>
       </ButtonGroup>
     </div>

@@ -7,6 +7,7 @@ import {
   HouseSectionHeading
 } from '@/components/house/house-section'
 import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { LocationData, MapData } from '@/lib/types/components'
 import { useTranslations } from 'next-intl'
@@ -27,7 +28,7 @@ function MapSkeleton() {
       <div className="border-border flex h-[478px] flex-col overflow-hidden rounded-lg border bg-white md:w-1/3 md:shrink-0 md:rounded-none md:border-0 md:border-r dark:bg-[#131314]">
         {/* Image skeleton - takes half the height, clipped by parent overflow */}
         <Skeleton className="h-1/2 w-full rounded-none" />
-        <hr />
+        <Separator />
         {/* Text skeletons */}
         <div className="flex flex-1 flex-col gap-3 p-4 md:p-6">
           {/* Title */}
