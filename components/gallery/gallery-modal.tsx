@@ -15,7 +15,8 @@ import {
   type CarouselApi
 } from '@/components/ui/carousel'
 import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
-import { flattenGalleryItems, toGalleryImageProps, type GalleryCategories } from '@/lib/gallery'
+import { flattenGalleryItems, type GalleryCategories } from '@/lib/gallery'
+import { toGalleryImageProps } from '@/lib/gallery-image'
 import { store } from '@/lib/store'
 import { useStore } from '@tanstack/react-store'
 import { ArrowLeftIcon } from 'lucide-react'

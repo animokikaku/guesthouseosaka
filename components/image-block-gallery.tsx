@@ -3,13 +3,8 @@ import { Icons } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
-import {
-  buildGallerySlides,
-  toGalleryImageProps,
-  type FeaturedImage,
-  type GalleryImageProps,
-  type GalleryItem
-} from '@/lib/gallery'
+import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
+import { toGalleryImageProps, type GalleryImageProps } from '@/lib/gallery-image'
 import { ImageIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { ComponentProps } from 'react'

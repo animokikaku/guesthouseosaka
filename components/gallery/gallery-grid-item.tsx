@@ -1,7 +1,8 @@
 'use client'
 
 import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
-import { toGalleryImageProps, type GalleryItem } from '@/lib/gallery'
+import type { GalleryItem } from '@/lib/gallery'
+import { toGalleryImageProps } from '@/lib/gallery-image'
 import { store } from '@/lib/store'
 
 type DataAttributeFn = (path: string) => string

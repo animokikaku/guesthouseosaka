@@ -1,7 +1,8 @@
 'use client'
 
 import { Badge } from '@/components/ui/badge'
-import { toGalleryImageProps, type GalleryCategory } from '@/lib/gallery'
+import type { GalleryCategory } from '@/lib/gallery'
+import { toGalleryImageProps } from '@/lib/gallery-image'
 import { scrollToGalleryCategory } from '@/lib/gallery-scroll'
 import Image from 'next/image'
 
