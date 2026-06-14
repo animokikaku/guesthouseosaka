@@ -1,7 +1,12 @@
 'use client'
 
 import { submitContactForm } from '@/app/actions/contact'
-import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
+import {
+  ContactFormPayload,
+  GeneralInquiryFields,
+  MoveInFormFields,
+  TourFormFields
+} from '@/components/forms/schema'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useCallback } from 'react'
@@ -65,7 +70,7 @@ export function useFormSubmit() {
         const promise = submitContactForm({
           type: formType,
           data: value
-        } as Parameters<typeof submitContactForm>[0])
+        } as ContactFormPayload)
 
         toast.promise(promise, {
           loading: t('status.sending'),

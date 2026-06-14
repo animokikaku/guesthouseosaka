@@ -5,12 +5,21 @@ import {
   MoveInRequestEmail,
   TourRequestEmail
 } from '@/components/email-template'
-import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
 import { env } from '@/lib/env'
+import { ContactFormRejectedError } from '@/lib/errors/contact-form'
+import { assertWithinContactSubmissionRateLimit } from '@/lib/rate-limit/contact-submissions'
+import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
 import { HouseIdentifier } from '@/lib/types'
+import { headers } from 'next/headers'
 import { Resend } from 'resend'
 
 const { emails } = new Resend(env.RESEND_API_KEY)
+
+async function getRequesterIdentifier() {
+  const headerList = await headers()
+  const forwardedFor = headerList.get('x-forwarded-for')?.split(',')[0]?.trim()
+  return forwardedFor || headerList.get('x-real-ip') || 'unknown'
+}
 
 const DEFAULT_CONTACT = {
   from: 'Guest House Osaka <info@guesthouseosaka.com>',
@@ -25,16 +34,22 @@ const DEFAULT_CONTACT = {
   }
 }
 
-type ContactFormPayload =
-  | { type: 'tour'; data: TourFormFields }
-  | { type: 'move-in'; data: MoveInFormFields }
-  | { type: 'other'; data: GeneralInquiryFields }
+export type { ContactFormPayload } from '@/lib/schemas/contact-form'
 
-export async function submitContactForm({ type, data }: ContactFormPayload) {
+export async function submitContactForm(payload: ContactFormPayload) {
   // Skip sending emails in CI (e2e tests)
   if (process.env.CI) {
     return { id: 'ci-skipped', object: 'email' }
   }
+
+  const result = contactFormPayloadSchema.safeParse(payload)
+
+  if (!result.success) {
+    throw new ContactFormRejectedError('validation')
+  }
+
+  const { type, data } = result.data
+  assertWithinContactSubmissionRateLimit(await getRequesterIdentifier())
 
   const { from, to } = DEFAULT_CONTACT
   const { name, email } = data.account
