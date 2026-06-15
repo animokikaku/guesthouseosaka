@@ -34,10 +34,7 @@ function toContactFormPayload<T extends FormType>(
   return { type: formType, data: value } as Extract<ContactFormPayload, { type: T }>
 }
 
-function contactFormErrorToast(
-  error: Error,
-  t: ReturnType<typeof useTranslations<'forms'>>
-) {
+function contactFormErrorToast(error: Error, t: ReturnType<typeof useTranslations<'forms'>>) {
   if (error instanceof ContactFormRejectedError) {
     switch (error.code) {
       case 'rate_limit':
