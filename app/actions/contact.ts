@@ -37,11 +37,6 @@ const DEFAULT_CONTACT = {
 export type { ContactFormPayload } from '@/lib/schemas/contact-form'
 
 export async function submitContactForm(payload: ContactFormPayload) {
-  // Skip sending emails in CI (e2e tests)
-  if (process.env.CI) {
-    return { id: 'ci-skipped', object: 'email' }
-  }
-
   const result = contactFormPayloadSchema.safeParse(payload)
 
   if (!result.success) {
@@ -50,6 +45,11 @@ export async function submitContactForm(payload: ContactFormPayload) {
 
   const { type, data } = result.data
   assertWithinContactSubmissionRateLimit(await getRequesterIdentifier())
+
+  // Skip sending emails in CI (e2e tests)
+  if (process.env.CI) {
+    return { id: 'ci-skipped', object: 'email' }
+  }
 
   const { from, to } = DEFAULT_CONTACT
   const { name, email } = data.account

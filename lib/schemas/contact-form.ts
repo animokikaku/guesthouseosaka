@@ -138,38 +138,26 @@ export function createGeneralInquirySchema(messages: ContactFormValidationMessag
     })
 }
 
-const contactFormSchema = createContactFormSchema(defaultContactFormValidationMessages)
-const baseContactFormPayloadSchema = contactFormSchema.pick({
-  places: true,
-  account: true,
-  message: true,
-  privacyPolicy: true
-})
+export function createContactFormPayloadSchema(messages: ContactFormValidationMessages) {
+  return z.discriminatedUnion('type', [
+    z.object({
+      type: z.literal('tour'),
+      data: createTourFormSchema(messages)
+    }),
+    z.object({
+      type: z.literal('move-in'),
+      data: createMoveInFormSchema(messages)
+    }),
+    z.object({
+      type: z.literal('other'),
+      data: createGeneralInquirySchema(messages)
+    })
+  ])
+}
 
-export const contactFormPayloadSchema = z.discriminatedUnion('type', [
-  z.object({
-    type: z.literal('tour'),
-    data: baseContactFormPayloadSchema.extend({
-      date: contactFormSchema.shape.date,
-      hour: contactFormSchema.shape.hour
-    })
-  }),
-  z.object({
-    type: z.literal('move-in'),
-    data: baseContactFormPayloadSchema.extend({
-      date: contactFormSchema.shape.date,
-      stayDuration: contactFormSchema.shape.stayDuration
-    })
-  }),
-  z.object({
-    type: z.literal('other'),
-    data: baseContactFormPayloadSchema.extend({
-      message: baseContactFormPayloadSchema.shape.message.refine((value) => value.length >= 5, {
-        message: defaultContactFormValidationMessages.message_min
-      })
-    })
-  })
-])
+export const contactFormPayloadSchema = createContactFormPayloadSchema(
+  defaultContactFormValidationMessages
+)
 
 export type ContactFormFields = z.infer<ReturnType<typeof createContactFormSchema>>
 export type TourFormFields = z.infer<ReturnType<typeof createTourFormSchema>>

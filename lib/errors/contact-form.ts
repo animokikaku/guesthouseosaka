@@ -4,7 +4,7 @@ export class ContactFormRejectedError extends Error {
   readonly code: ContactFormRejectionCode
 
   constructor(code: ContactFormRejectionCode) {
-    super('')
+    super(`Contact form rejected: ${code}`)
     this.name = 'ContactFormRejectedError'
     this.code = code
   }

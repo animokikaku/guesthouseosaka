@@ -198,13 +198,17 @@ describe('submitContactForm', () => {
     expect(mocks.send).toHaveBeenCalledTimes(5)
   })
 
-  it('skips validation and email sending in CI', async () => {
+  it('skips email sending in CI but still validates payloads', async () => {
     process.env.CI = 'true'
 
-    await expect(submitContactForm({ type: 'other', data: {} } as never)).resolves.toEqual({
+    await expect(submitContactForm(validGeneralInquiry)).resolves.toEqual({
       id: 'ci-skipped',
       object: 'email'
     })
+
+    await expect(submitContactForm({ type: 'other', data: {} } as never)).rejects.toThrow(
+      ContactFormRejectedError
+    )
 
     expect(mocks.send).not.toHaveBeenCalled()
   })

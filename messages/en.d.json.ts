@@ -133,8 +133,16 @@ declare const messages: {
     },
     "status": {
       "error": {
-        "description": "Please try again later or contact us directly at {email}.",
-        "message": "Failed to send message."
+        "description": "Please try again later.",
+        "message": "Failed to send message.",
+        "rate_limit": {
+          "description": "Please wait about 10 minutes before trying again.",
+          "message": "Too many submission attempts."
+        },
+        "validation": {
+          "description": "Please check your entries and try again.",
+          "message": "Unable to submit this form."
+        }
       },
       "sending": "Sending message…",
       "success": {

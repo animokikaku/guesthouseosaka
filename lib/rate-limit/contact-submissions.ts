@@ -1,5 +1,6 @@
 import { ContactFormRejectedError } from '@/lib/errors/contact-form'
 
+// Best-effort per-instance limiter. Resend also enforces provider-side limits.
 const CONTACT_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
 const CONTACT_RATE_LIMIT_MAX_REQUESTS = 5
 

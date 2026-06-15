@@ -130,8 +130,16 @@
     },
     "status": {
       "error": {
-        "description": "Veuillez réessayer plus tard ou contactez-nous directement à {email}.",
-        "message": "Échec de l'envoi du message."
+        "description": "Veuillez réessayer plus tard.",
+        "message": "Échec de l'envoi du message.",
+        "rate_limit": {
+          "description": "Veuillez attendre environ 10 minutes avant de réessayer.",
+          "message": "Trop de tentatives d'envoi."
+        },
+        "validation": {
+          "description": "Veuillez vérifier vos informations et réessayer.",
+          "message": "Impossible d'envoyer ce formulaire."
+        }
       },
       "sending": "Envoi du message…",
       "success": {
