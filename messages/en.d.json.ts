@@ -133,40 +133,32 @@ declare const messages: {
     },
     "status": {
       "error": {
-        "description": "Please try again later.",
-        "message": "Failed to send message.",
-        "rate_limit": {
-          "description": "Please wait about 10 minutes before trying again.",
-          "message": "Too many submission attempts."
-        },
-        "validation": {
-          "description": "Please check your entries and try again.",
-          "message": "Unable to submit this form."
-        }
+        "description": "Please try again later or contact us directly at {email}.",
+        "message": "Failed to send message."
       },
       "sending": "Sending message…",
       "success": {
         "description": "Thank you for contacting us {name}. We will get back to you shortly.",
         "message": "Message sent successfully!"
       }
+    },
+    "validation": {
+      "age_positive": "Age must be a positive number.",
+      "date_future": "Date must be today or later.",
+      "email": "Invalid email address.",
+      "gender_required": "Please select your gender.",
+      "message_max": "Message must be at most 3000 characters.",
+      "message_min": "Message must be at least 5 characters long.",
+      "name_min": "Name must be at least 2 characters long.",
+      "nationality_max": "Nationality must be at most 100 characters.",
+      "nationality_required": "Please enter your nationality.",
+      "phone": "Invalid phone number.",
+      "places_max": "You can select up to 3 share houses.",
+      "places_min": "Please select at least one share house.",
+      "privacy_policy": "You must agree to the privacy policy.",
+      "stay_duration": "Please select your desired minimum stay.",
+      "time_range": "Time must be between 10:00 and 20:00."
     }
-  },
-  "ContactFormValidation": {
-    "age_positive": "Age must be a positive number.",
-    "date_future": "Date must be today or later.",
-    "email": "Invalid email address.",
-    "gender_required": "Please select your gender.",
-    "message_max": "Message must be at most 3000 characters.",
-    "message_min": "Message must be at least 5 characters long.",
-    "name_min": "Name must be at least 2 characters long.",
-    "nationality_max": "Nationality must be at most 100 characters.",
-    "nationality_required": "Please enter your nationality.",
-    "phone": "Invalid phone number.",
-    "places_max": "You can select up to 3 share houses.",
-    "places_min": "Please select at least one share house.",
-    "privacy_policy": "You must agree to the privacy policy.",
-    "stay_duration": "Please select your desired minimum stay.",
-    "time_range": "Time must be between 10:00 and 20:00."
   }
 };
 export default messages;

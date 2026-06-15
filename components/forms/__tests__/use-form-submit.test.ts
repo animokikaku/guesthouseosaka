@@ -220,7 +220,7 @@ describe('useFormSubmit', () => {
       expect(successResult).toHaveProperty('description')
     })
 
-    it('error callback returns generic i18n message for unknown errors', async () => {
+    it('error callback returns error message', async () => {
       const { result } = renderHook(() => useFormSubmit())
 
       const onSubmit = result.current.createOnSubmit('tour')
@@ -232,8 +232,8 @@ describe('useFormSubmit', () => {
       const [, options] = mockToastPromise.mock.calls[0]
       const errorResult = options.error(new Error('Network error'))
 
-      expect(errorResult).toHaveProperty('message', 'status.error.message')
-      expect(errorResult).toHaveProperty('description', 'status.error.description')
+      expect(errorResult).toHaveProperty('message', 'Network error')
+      expect(errorResult).toHaveProperty('description')
     })
   })
 })

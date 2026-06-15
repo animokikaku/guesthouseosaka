@@ -1,13 +1,7 @@
 'use client'
 
 import { submitContactForm } from '@/app/actions/contact'
-import {
-  ContactFormPayload,
-  GeneralInquiryFields,
-  MoveInFormFields,
-  TourFormFields
-} from '@/components/forms/schema'
-import { ContactFormRejectedError } from '@/lib/errors/contact-form'
+import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useCallback } from 'react'
@@ -26,39 +20,6 @@ type FormTypeDataMap = {
  * Form type identifiers matching the ContactFormPayload discriminated union.
  */
 type FormType = keyof FormTypeDataMap
-
-function toContactFormPayload<T extends FormType>(
-  formType: T,
-  value: FormTypeDataMap[T]
-): Extract<ContactFormPayload, { type: T }> {
-  return { type: formType, data: value } as Extract<ContactFormPayload, { type: T }>
-}
-
-function contactFormErrorToast(error: Error, t: ReturnType<typeof useTranslations<'forms'>>) {
-  if (error instanceof ContactFormRejectedError) {
-    switch (error.code) {
-      case 'rate_limit':
-        return {
-          message: t('status.error.rate_limit.message'),
-          description: t('status.error.rate_limit.description')
-        }
-      case 'validation':
-        return {
-          message: t('status.error.validation.message'),
-          description: t('status.error.validation.description')
-        }
-      default: {
-        const unhandledCode: never = error.code
-        throw new Error(`Unhandled contact form rejection code: ${unhandledCode}`)
-      }
-    }
-  }
-
-  return {
-    message: t('status.error.message'),
-    description: t('status.error.description')
-  }
-}
 
 /**
  * Hook that provides shared form submission handlers.
@@ -101,7 +62,10 @@ export function useFormSubmit() {
   const createOnSubmit = useCallback(
     <T extends FormType>(formType: T) => {
       return async ({ value }: { value: FormTypeDataMap[T] }) => {
-        const promise = submitContactForm(toContactFormPayload(formType, value))
+        const promise = submitContactForm({
+          type: formType,
+          data: value
+        } as Parameters<typeof submitContactForm>[0])
 
         toast.promise(promise, {
           loading: t('status.sending'),
@@ -114,7 +78,14 @@ export function useFormSubmit() {
               })
             }
           },
-          error: (error: Error) => contactFormErrorToast(error, t)
+          error: (error: Error) => {
+            return {
+              message: error.message || t('status.error.message'),
+              description: t('status.error.description', {
+                email: 'info@guesthouseosaka.com'
+              })
+            }
+          }
         })
 
         return await promise
