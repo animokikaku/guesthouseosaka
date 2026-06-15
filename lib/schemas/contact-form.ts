@@ -38,6 +38,21 @@ const defaultContactFormValidationMessages: ContactFormValidationMessages = {
   time_range: 'Invalid time'
 }
 
+const japanDateFormatter = new Intl.DateTimeFormat('en-US', {
+  day: '2-digit',
+  month: '2-digit',
+  timeZone: 'Asia/Tokyo',
+  year: 'numeric'
+})
+
+function getTodayInJapan() {
+  const parts = Object.fromEntries(
+    japanDateFormatter.formatToParts(new Date()).map((part) => [part.type, part.value])
+  )
+
+  return `${parts.year}-${parts.month}-${parts.day}`
+}
+
 export function createContactFormSchema(messages: ContactFormValidationMessages) {
   return z.object({
     places: z.array(HouseIdentifierSchema).min(1, messages.places_min).max(3, messages.places_max),
@@ -65,11 +80,7 @@ export function createContactFormSchema(messages: ContactFormValidationMessages)
     message: z.string().max(3000, messages.message_max),
     date: z.iso.date().refine(
       (value) => {
-        const inputDate = new Date(value)
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        inputDate.setHours(0, 0, 0, 0)
-        return inputDate >= today
+        return value >= getTodayInJapan()
       },
       { message: messages.date_future }
     ),

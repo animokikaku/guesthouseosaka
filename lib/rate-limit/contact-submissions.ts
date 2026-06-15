@@ -7,14 +7,11 @@ const contactSubmissionAttempts = new Map<string, { count: number; resetAt: numb
 
 export function assertWithinContactSubmissionRateLimit(identifier: string) {
   const now = Date.now()
-
-  for (const [key, value] of contactSubmissionAttempts) {
-    if (value.resetAt <= now) {
-      contactSubmissionAttempts.delete(key)
-    }
-  }
-
   const attempts = contactSubmissionAttempts.get(identifier)
+
+  if (attempts && attempts.resetAt <= now) {
+    contactSubmissionAttempts.delete(identifier)
+  }
 
   if (!attempts || attempts.resetAt <= now) {
     contactSubmissionAttempts.set(identifier, {

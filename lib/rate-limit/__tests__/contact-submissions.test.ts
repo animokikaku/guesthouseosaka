@@ -1,3 +1,4 @@
+import { ContactFormRejectedError } from '@/lib/errors/contact-form'
 import {
   assertWithinContactSubmissionRateLimit,
   resetContactSubmissionRateLimit
@@ -21,7 +22,15 @@ describe('assertWithinContactSubmissionRateLimit', () => {
       assertWithinContactSubmissionRateLimit(identifier)
     }
 
-    expect(() => assertWithinContactSubmissionRateLimit(identifier)).toThrow()
+    let rejection: unknown
+    try {
+      assertWithinContactSubmissionRateLimit(identifier)
+    } catch (error) {
+      rejection = error
+    }
+
+    expect(rejection).toBeInstanceOf(ContactFormRejectedError)
+    expect((rejection as ContactFormRejectedError).code).toBe('rate_limit')
 
     vi.setSystemTime(new Date('2030-01-01T00:10:01Z'))
 

@@ -138,23 +138,23 @@
         "description": "Merci de nous avoir contactés {name}. Nous vous répondrons sous peu.",
         "message": "Message envoyé avec succès !"
       }
-    },
-    "validation": {
-      "age_positive": "L'âge doit être un nombre positif.",
-      "date_future": "La date doit être aujourd'hui ou plus tard.",
-      "email": "Adresse e-mail invalide.",
-      "gender_required": "Veuillez sélectionner votre genre.",
-      "message_max": "Le message doit contenir au maximum 3000 caractères.",
-      "message_min": "Le message doit contenir au moins 5 caractères.",
-      "name_min": "Le nom doit contenir au moins 2 caractères.",
-      "nationality_max": "La nationalité doit comporter au maximum 100 caractères.",
-      "nationality_required": "Veuillez saisir votre nationalité.",
-      "phone": "Numéro de téléphone invalide.",
-      "places_max": "Vous pouvez sélectionner jusqu'à 3 share houses.",
-      "places_min": "Veuillez sélectionner au moins une share house.",
-      "privacy_policy": "Vous devez accepter la politique de confidentialité.",
-      "stay_duration": "Veuillez sélectionner votre durée de séjour minimale souhaitée.",
-      "time_range": "L'heure doit être comprise entre 10:00 et 20:00."
     }
+  },
+  "ContactFormValidation": {
+    "age_positive": "L'âge doit être un nombre positif.",
+    "date_future": "La date doit être aujourd'hui ou plus tard.",
+    "email": "Adresse e-mail invalide.",
+    "gender_required": "Veuillez sélectionner votre genre.",
+    "message_max": "Le message doit contenir au maximum 3000 caractères.",
+    "message_min": "Le message doit contenir au moins 5 caractères.",
+    "name_min": "Le nom doit contenir au moins 2 caractères.",
+    "nationality_max": "La nationalité doit comporter au maximum 100 caractères.",
+    "nationality_required": "Veuillez saisir votre nationalité.",
+    "phone": "Numéro de téléphone invalide.",
+    "places_max": "Vous pouvez sélectionner jusqu'à 3 share houses.",
+    "places_min": "Veuillez sélectionner au moins une share house.",
+    "privacy_policy": "Vous devez accepter la politique de confidentialité.",
+    "stay_duration": "Veuillez sélectionner votre durée de séjour minimale souhaitée.",
+    "time_range": "L'heure doit être comprise entre 10:00 et 20:00."
   }
 }

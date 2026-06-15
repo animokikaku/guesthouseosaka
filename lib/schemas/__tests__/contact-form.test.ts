@@ -55,4 +55,33 @@ describe('contactFormPayloadSchema', () => {
 
     expect(result.success).toBe(false)
   })
+
+  it('validates tour dates against the current day in Japan', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2030-01-14T16:00:00Z'))
+
+    try {
+      const todayInJapanResult = contactFormPayloadSchema.safeParse({
+        type: 'tour',
+        data: {
+          ...validGeneralInquiryPayload.data,
+          date: '2030-01-15',
+          hour: '14:00:00'
+        }
+      })
+      const yesterdayInJapanResult = contactFormPayloadSchema.safeParse({
+        type: 'tour',
+        data: {
+          ...validGeneralInquiryPayload.data,
+          date: '2030-01-14',
+          hour: '14:00:00'
+        }
+      })
+
+      expect(todayInJapanResult.success).toBe(true)
+      expect(yesterdayInJapanResult.success).toBe(false)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })
