@@ -162,10 +162,18 @@ describe('submitContactForm', () => {
     })
   })
 
-  it('rejects invalid payloads before sending email', async () => {
-    await expect(submitContactForm({ type: 'other', data: {} } as never)).rejects.toThrow(
-      ContactFormRejectedError
-    )
+  it('rate limits invalid payloads before validation', async () => {
+    const invalidPayload = { type: 'other', data: {} } as never
+
+    for (let index = 0; index < 5; index += 1) {
+      await expect(submitContactForm(invalidPayload)).rejects.toMatchObject({
+        code: 'validation'
+      })
+    }
+
+    await expect(submitContactForm(invalidPayload)).rejects.toMatchObject({
+      code: 'rate_limit'
+    })
 
     expect(mocks.send).not.toHaveBeenCalled()
   })
