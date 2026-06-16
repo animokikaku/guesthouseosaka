@@ -179,10 +179,12 @@ function NavigationMenuGroupItem({
         <ul className="grid w-[500px] grid-cols-[1fr_1fr] gap-2">
           <div className="row-span-3 flex flex-col gap-2">
             {items.map((item) => (
-              <li key={item.key} onMouseEnter={() => setHoverItem(item)}>
+              <li key={item.key}>
                 <NavigationMenuLink
                   data-active={house === item.key}
                   render={<Link href={item.href} />}
+                  onFocus={() => setHoverItem(item)}
+                  onMouseEnter={() => setHoverItem(item)}
                   className="flex flex-col items-start gap-1 rounded-md text-left"
                 >
                   <div className="text-sm leading-none font-medium">{stegaClean(item.label)}</div>
