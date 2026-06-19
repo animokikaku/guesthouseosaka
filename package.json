@@ -23,7 +23,7 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@base-ui/react": "^1.5.0",
+    "@base-ui/react": "^1.6.0",
     "@lucide/lab": "^0.1.2",
     "@portabletext/react": "^6.2.0",
     "@sanity/asset-utils": "^2.3.0",
