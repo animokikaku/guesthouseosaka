@@ -136,7 +136,7 @@ function MainNavPositioner({
         disableAnchorTracking
         positionMethod="fixed"
         className={cn(
-          'isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) transition-[top,left,right,bottom] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-instant:transition-none data-[side=bottom]:before:top-[-10px] data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0',
+          'isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) data-[side=bottom]:before:top-[-10px] data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0',
           className
         )}
         {...props}
@@ -177,26 +177,28 @@ function NavigationMenuGroupItem({
       <NavigationMenuTrigger className="bg-transparent">{title}</NavigationMenuTrigger>
       <NavigationMenuContent>
         <ul className="grid w-[500px] grid-cols-[1fr_1fr] gap-2">
-          <div className="row-span-3 flex flex-col gap-2">
-            {items.map((item) => (
-              <li key={item.key}>
-                <NavigationMenuLink
-                  data-active={house === item.key}
-                  render={<Link href={item.href} />}
-                  onFocus={() => setHoverItem(item)}
-                  onMouseEnter={() => setHoverItem(item)}
-                  className="flex flex-col items-start gap-1 rounded-md text-left"
-                >
-                  <div className="text-sm leading-none font-medium">{stegaClean(item.label)}</div>
-                  {item.description ? (
-                    <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-                      {stegaClean(item.description)}
-                    </p>
-                  ) : null}
-                </NavigationMenuLink>
-              </li>
-            ))}
-          </div>
+          <li className="row-span-3">
+            <ul className="flex flex-col gap-2">
+              {items.map((item) => (
+                <li key={item.key}>
+                  <NavigationMenuLink
+                    data-active={house === item.key}
+                    render={<Link href={item.href} />}
+                    onFocus={() => setHoverItem(item)}
+                    onMouseEnter={() => setHoverItem(item)}
+                    className="flex flex-col items-start gap-1 rounded-md text-left"
+                  >
+                    <div className="text-sm leading-none font-medium">{stegaClean(item.label)}</div>
+                    {item.description ? (
+                      <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                        {stegaClean(item.description)}
+                      </p>
+                    ) : null}
+                  </NavigationMenuLink>
+                </li>
+              ))}
+            </ul>
+          </li>
 
           <li className="row-span-3">
             <div className="group relative h-full w-full overflow-hidden rounded-md">
