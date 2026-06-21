@@ -2,14 +2,13 @@
 
 import { Link } from '@/i18n/navigation'
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover'
-import * as React from 'react'
 
 import { NavEmptyState } from '@/components/nav-empty-state'
 import { Button } from '@/components/ui/button'
 import { NavItem, NavItems, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type ComponentProps, type ReactNode } from 'react'
 
 export function MobileNav({ items, className }: { items: NavItems; className?: string }) {
   const [open, setOpen] = useState(false)
@@ -160,9 +159,9 @@ function MobileLink({
   className,
   children,
   ...props
-}: React.ComponentProps<typeof Link> & {
+}: ComponentProps<typeof Link> & {
   onOpenChange?: (open: boolean) => void
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 }) {
   return (

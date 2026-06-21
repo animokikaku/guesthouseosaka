@@ -78,7 +78,7 @@ export function FAQAccordion({
         const component = componentKey ? stegaClean(componentKey) : null
         return (
           <AccordionItem key={_id} value={_id}>
-            <AccordionTrigger className="text-md sm:text-lg">{question}</AccordionTrigger>
+            <AccordionTrigger className="text-base sm:text-lg">{question}</AccordionTrigger>
             <AccordionContent className="text-muted-foreground flex flex-col gap-4 text-sm sm:text-base">
               {/* Component-based content */}
               {component === 'floors-and-rooms' && (
