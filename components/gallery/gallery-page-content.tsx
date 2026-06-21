@@ -5,11 +5,10 @@ import { HouseGallery } from '@/components/gallery/house-gallery'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
 import { useStickyNav } from '@/hooks/use-sticky-nav'
 import { type GalleryCategories, type GalleryCategoryData } from '@/lib/gallery'
+import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { toGalleryCategories } from '@/lib/transforms/gallery'
 import { createDataAttribute } from 'next-sanity'
-import { useOptimistic } from 'next-sanity/hooks'
-import * as React from 'react'
-import type { SanityDocument } from 'sanity'
+import { useMemo, useRef, type ReactNode } from 'react'
 
 type GalleryPageContentProps = {
   documentId: string
@@ -17,7 +16,7 @@ type GalleryPageContentProps = {
   galleryCategories: GalleryCategories
   title: string
   /** Back button element (Link or Dialog.Close) */
-  backButton: React.ReactNode
+  backButton: ReactNode
 }
 
 export function GalleryPageContent({
@@ -27,44 +26,28 @@ export function GalleryPageContent({
   title,
   backButton
 }: GalleryPageContentProps) {
-  const galleryCategories = useOptimistic<
+  const galleryCategories = useSanityOptimisticArray<
+    GalleryCategoryData,
     GalleryCategories,
-    SanityDocument & { galleryCategories?: GalleryCategoryData[] }
-  >(initialGalleryCategories, (current, action) => {
-    if (action.id === documentId && action.document.galleryCategories) {
-      // Optimistic document only has partial data, merge with current
-      return action.document.galleryCategories.map(
-        (cat) => current?.find((c) => c._key === cat._key) ?? cat
-      )
-    }
-    return current
-  })
+    { galleryCategories?: GalleryCategoryData[] }
+  >(documentId, initialGalleryCategories, (document) => document.galleryCategories)
 
   const dataAttribute = createDataAttribute({
     id: documentId,
     type: documentType
   })
 
-  const scrollContainerRef = React.useRef<HTMLElement>(null)
-  const [scrollContainer, setScrollContainer] = React.useState<HTMLElement | null>(null)
-
-  // Compute categories for sticky nav
-  const categories = React.useMemo(
+  const scrollContainerRef = useRef<HTMLElement>(null)
+  const categories = useMemo(
     () => toGalleryCategories(galleryCategories),
     [galleryCategories]
   )
-
-  const sectionIds = React.useMemo(() => categories.map((c) => c._id), [categories])
+  const sectionIds = useMemo(() => categories.map((c) => c._id), [categories])
 
   const { isVisible, sentinelRef, activeId } = useStickyNav({
     sectionIds,
-    scrollContainer
+    scrollContainerRef
   })
-
-  // Set scroll container after mount (needed for IntersectionObserver root)
-  React.useEffect(() => {
-    setScrollContainer(scrollContainerRef.current)
-  }, [])
 
   return (
     <div className="flex h-full flex-col">

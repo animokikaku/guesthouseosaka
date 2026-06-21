@@ -3,27 +3,19 @@
 import { Link } from '@/i18n/navigation'
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover'
 
-import { NavEmptyState } from '@/components/nav-empty-state'
+import { PageEmptyState } from '@/components/page-empty-state'
 import { Button } from '@/components/ui/button'
 import { NavItem, NavItems, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
-import { useMemo, useState, type ComponentProps, type ReactNode } from 'react'
+import { useState, type ComponentProps, type ReactNode } from 'react'
 
 export function MobileNav({ items, className }: { items: NavItems; className?: string }) {
   const [open, setOpen] = useState(false)
   const t = useTranslations('MobileNav')
 
-  const { mobileItems, mobileListItems } = useMemo(() => {
-    return items.reduce(
-      (acc, item) => {
-        if ('href' in item) acc.mobileItems.push(item)
-        else if ('items' in item) acc.mobileListItems.push(item)
-        return acc
-      },
-      { mobileItems: [] as NavItem[], mobileListItems: [] as NavListItem[] }
-    )
-  }, [items])
+  const mobileItems = items.filter((item): item is NavItem => 'href' in item)
+  const mobileListItems = items.filter((item): item is NavListItem => 'items' in item)
 
   return (
     <PopoverPrimitive.Root data-slot="mobile-nav" open={open} onOpenChange={setOpen}>
@@ -139,7 +131,10 @@ function MobileListSection({
     <div className="flex flex-col gap-4">
       <div className="text-muted-foreground text-sm font-medium">{label}</div>
       {items.length === 0 ? (
-        <NavEmptyState className="rounded-lg border border-dashed border-amber-400/50 bg-amber-50/50 dark:border-amber-600/30 dark:bg-amber-950/20" />
+        <PageEmptyState
+          variant="nav"
+          className="rounded-lg border border-dashed border-amber-400/50 bg-amber-50/50 dark:border-amber-600/30 dark:bg-amber-950/20"
+        />
       ) : (
         <div className="flex flex-col gap-3">
           {items.map((item) => (

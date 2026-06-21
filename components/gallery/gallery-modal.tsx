@@ -1,11 +1,10 @@
 import {
   GalleryDialog,
-  GalleryDialogClose,
   GalleryDialogContent,
   GalleryDialogDescription,
   GalleryDialogTitle
 } from '@/components/gallery/gallery-dialog'
-import { Button } from '@/components/ui/button'
+import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
 import {
   Carousel,
   CarouselContent,
@@ -19,10 +18,9 @@ import { flattenGalleryItems, type GalleryCategories } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
 import { store } from '@/lib/store'
 import { useStore } from '@tanstack/react-store'
-import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 type DataAttributeFn = (path: string) => string
 
@@ -54,14 +52,7 @@ export function GalleryModal({ galleryCategories, title, dataAttribute }: Galler
           {t('description', { title })}
         </GalleryDialogDescription>
         <GalleryModalCarousel galleryCategories={galleryCategories} dataAttribute={dataAttribute} />
-        <GalleryDialogClose
-          render={
-            <Button variant="ghost" size="icon" className="absolute top-4 left-4 rounded-full" />
-          }
-        >
-          <ArrowLeftIcon className="size-6" />
-          <span className="sr-only">{t('close')}</span>
-        </GalleryDialogClose>
+        <GalleryModalCloseButton className="absolute top-4 left-4" />
       </GalleryDialogContent>
     </GalleryDialog>
   )
@@ -86,30 +77,22 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
     [galleryCategories]
   )
 
-  const currentAlt = useMemo(() => {
-    if (selectedIndex === null || selectedIndex >= slides.length) {
-      return null
-    }
-
-    const alt = slides[selectedIndex]?.imageProps.alt
-    return alt ? alt : null
-  }, [selectedIndex, slides])
+  const currentAlt =
+    selectedIndex != null && selectedIndex < slides.length
+      ? (slides[selectedIndex]?.imageProps.alt ?? null)
+      : null
 
   // Use selectedIndex as fallback to preserve position during close animation
-  const startIndex = useMemo(() => {
-    if (photoId) {
-      const index = slides.findIndex((slide) => slide._key === photoId)
-      return index >= 0 ? index : 0
-    }
-    return selectedIndex ?? 0
-  }, [photoId, slides, selectedIndex])
+  const startIndex = photoId
+    ? Math.max(0, slides.findIndex((slide) => slide._key === photoId))
+    : (selectedIndex ?? 0)
 
   const { onTouchStart, onTouchEnd } = useSwipeToClose({
     onClose: () => store.setState((prev) => ({ ...prev, photoId: null }))
   })
 
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft') {
         event.preventDefault()
         api?.scrollPrev()
@@ -117,16 +100,13 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
         event.preventDefault()
         api?.scrollNext()
       }
-    },
-    [api]
-  )
+    }
 
-  useEffect(() => {
     document.addEventListener('keydown', handleKeyDown, true)
     return () => {
       document.removeEventListener('keydown', handleKeyDown, true)
     }
-  }, [handleKeyDown])
+  }, [api])
 
   useEffect(() => {
     if (!api) return

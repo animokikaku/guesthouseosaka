@@ -3,8 +3,8 @@ import * as React from 'react'
 type UseStickyNavOptions = {
   /** Array of section IDs to observe for active state */
   sectionIds: string[]
-  /** Scroll container element (required for IntersectionObserver root) */
-  scrollContainer: HTMLElement | null
+  /** Scroll container ref (required for IntersectionObserver root) */
+  scrollContainerRef: React.RefObject<HTMLElement | null>
 }
 
 type UseStickyNavReturn = {
@@ -25,7 +25,7 @@ type UseStickyNavReturn = {
  */
 export function useStickyNav({
   sectionIds,
-  scrollContainer
+  scrollContainerRef
 }: UseStickyNavOptions): UseStickyNavReturn {
   const [isVisible, setIsVisible] = React.useState(false)
   const [activeId, setActiveId] = React.useState<string | null>(null)
@@ -34,6 +34,7 @@ export function useStickyNav({
   // Observer for sentinel (show/hide sticky nav)
   React.useEffect(() => {
     const sentinel = sentinelRef.current
+    const scrollContainer = scrollContainerRef.current
     if (!sentinel || !scrollContainer) return
 
     const observer = new IntersectionObserver(
@@ -48,10 +49,11 @@ export function useStickyNav({
 
     observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [scrollContainer])
+  }, [scrollContainerRef])
 
   // Observer for sections (active state tracking)
   React.useEffect(() => {
+    const scrollContainer = scrollContainerRef.current
     if (!scrollContainer || sectionIds.length === 0) return
 
     const elements = sectionIds
@@ -83,7 +85,7 @@ export function useStickyNav({
 
     elements.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
-  }, [scrollContainer, sectionIds])
+  }, [scrollContainerRef, sectionIds])
 
   return { isVisible, sentinelRef, activeId }
 }

@@ -11,12 +11,11 @@ import { Button } from '@/components/ui/button'
 import { ResponsiveModal } from '@/components/ui/responsive-modal'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Icon } from '@/lib/icons'
+import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import type { AmenityCategoryData, AmenityItemData } from '@/lib/types/components'
 import { stegaClean } from '@sanity/client/stega'
 import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
-import { useOptimistic } from 'next-sanity/hooks'
-import type { SanityDocument } from 'sanity'
 
 type DataAttributeFn = (path: string) => string
 
@@ -105,18 +104,11 @@ export function HouseAmenities({
   const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
 
-  const amenityCategories = useOptimistic<
+  const amenityCategories = useSanityOptimisticArray<
+    AmenityCategoryData,
     AmenityCategoryData[],
-    SanityDocument & { amenityCategories?: AmenityCategoryData[] }
-  >(initialCategories, (currentCategories, action) => {
-    if (action.id === id && action.document.amenityCategories) {
-      // Optimistic document only has partial data, merge with current
-      return action.document.amenityCategories.map(
-        (cat) => currentCategories?.find((c) => c._key === cat._key) ?? cat
-      )
-    }
-    return currentCategories
-  })
+    { amenityCategories?: AmenityCategoryData[] }
+  >(id, initialCategories, (document) => document.amenityCategories)
 
   const dataAttribute = createDataAttribute({ id, type })
 

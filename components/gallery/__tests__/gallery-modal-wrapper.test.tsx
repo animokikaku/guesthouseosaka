@@ -1,9 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import {
-  GalleryModalCloseButton,
-  GalleryModalWrapper
-} from '@/components/gallery/gallery-modal-wrapper'
+import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
+import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 
 const mockPush = vi.fn()
 const onOpenChangeComplete = vi.fn<(open: boolean) => void>()
