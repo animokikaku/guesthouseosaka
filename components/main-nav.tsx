@@ -160,48 +160,48 @@ function NavigationMenuGroupItem({
 }) {
   const [hoveredItem, setHoverItem] = useState<NavGroupItem | undefined>(items[0])
 
-  const content =
-    items.length === 0 ? (
-      <PageEmptyState variant="nav" className="w-[300px] border-none" />
-    ) : (
-      <ul className="grid w-[500px] grid-cols-[1fr_1fr] gap-2">
-        <li className="row-span-3">
-          <ul className="flex flex-col gap-2">
-            {items.map((item) => (
-              <li key={item.key}>
-                <NavigationMenuLink
-                  data-active={house === item.key}
-                  render={<Link href={item.href} />}
-                  onFocus={() => setHoverItem(item)}
-                  onMouseEnter={() => setHoverItem(item)}
-                  className="flex flex-col items-start gap-1 rounded-md text-left"
-                >
-                  <div className="text-sm leading-none font-medium">{stegaClean(item.label)}</div>
-                  {item.description ? (
-                    <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
-                      {stegaClean(item.description)}
-                    </p>
-                  ) : null}
-                </NavigationMenuLink>
-              </li>
-            ))}
-          </ul>
-        </li>
-
-        <li className="row-span-3">
-          <div className="group relative h-full w-full overflow-hidden rounded-md">
-            {items.map((it) => (
-              <PreviewImageItem key={it.key} item={it} isActive={it.key === hoveredItem?.key} />
-            ))}
-          </div>
-        </li>
-      </ul>
-    )
-
   return (
     <NavigationMenuItem>
       <NavigationMenuTrigger className="bg-transparent">{title}</NavigationMenuTrigger>
-      <NavigationMenuContent>{content}</NavigationMenuContent>
+      <NavigationMenuContent>
+        {items.length === 0 ? (
+          <PageEmptyState variant="nav" className="w-[300px] border-none" />
+        ) : (
+          <ul className="grid w-[500px] grid-cols-[1fr_1fr] gap-2">
+            <li className="row-span-3">
+              <ul className="flex flex-col gap-2">
+                {items.map((item) => (
+                  <li key={item.key}>
+                    <NavigationMenuLink
+                      data-active={house === item.key}
+                      render={<Link href={item.href} />}
+                      onFocus={() => setHoverItem(item)}
+                      onMouseEnter={() => setHoverItem(item)}
+                      className="flex flex-col items-start gap-1 rounded-md text-left"
+                    >
+                      <div className="text-sm leading-none font-medium">
+                        {stegaClean(item.label)}
+                      </div>
+                      {item.description ? (
+                        <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+                          {stegaClean(item.description)}
+                        </p>
+                      ) : null}
+                    </NavigationMenuLink>
+                  </li>
+                ))}
+              </ul>
+            </li>
+            <li className="row-span-3">
+              <div className="group relative h-full w-full overflow-hidden rounded-md">
+                {items.map((it) => (
+                  <PreviewImageItem key={it.key} item={it} isActive={it.key === hoveredItem?.key} />
+                ))}
+              </div>
+            </li>
+          </ul>
+        )}
+      </NavigationMenuContent>
     </NavigationMenuItem>
   )
 }
