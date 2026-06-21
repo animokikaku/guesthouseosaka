@@ -84,7 +84,10 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
 
   // Use selectedIndex as fallback to preserve position during close animation
   const startIndex = photoId
-    ? Math.max(0, slides.findIndex((slide) => slide._key === photoId))
+    ? Math.max(
+        0,
+        slides.findIndex((slide) => slide._key === photoId)
+      )
     : (selectedIndex ?? 0)
 
   const { onTouchStart, onTouchEnd } = useSwipeToClose({

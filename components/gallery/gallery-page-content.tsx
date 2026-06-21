@@ -38,10 +38,7 @@ export function GalleryPageContent({
   })
 
   const scrollContainerRef = useRef<HTMLElement>(null)
-  const categories = useMemo(
-    () => toGalleryCategories(galleryCategories),
-    [galleryCategories]
-  )
+  const categories = useMemo(() => toGalleryCategories(galleryCategories), [galleryCategories])
   const sectionIds = useMemo(() => categories.map((c) => c._id), [categories])
 
   const { isVisible, sentinelRef, activeId } = useStickyNav({
