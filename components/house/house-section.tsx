@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 
 function HouseSection({ className, ...props }: React.ComponentProps<'section'>) {
-  return <section className={cn(className)} {...props} />
+  return <section className={className} {...props} />
 }
 
 function HouseSectionHeading({ className, ...props }: React.ComponentProps<'h2'>) {

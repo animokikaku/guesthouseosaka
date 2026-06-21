@@ -5,8 +5,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@custom-variant fixed (&:is(.layout-fixed *));
-
 @theme inline {
   --breakpoint-3xl: 1600px;
   --breakpoint-4xl: 2000px;
@@ -51,6 +49,7 @@
   --color-selection: var(--selection);
   --color-selection-foreground: var(--selection-foreground);
   --font-heading: var(--font-sans);
+  --leading-tighter: 1.1;
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -193,12 +192,6 @@
       transition-duration: 0.01ms !important;
     }
   }
-
-  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
-    [data-wrapper] {
-      @apply min-[1800px]:border-t;
-    }
-  }
 }
 
 .dark {
@@ -210,11 +203,11 @@
 }
 
 @utility section-soft {
-  @apply from-background to-surface/40 dark:bg-background 3xl:fixed:bg-none bg-linear-to-b;
+  @apply from-background to-surface/40 dark:bg-background bg-linear-to-b;
 }
 
 @utility container-wrapper {
-  @apply 3xl:fixed:max-w-[calc(var(--breakpoint-2xl)+2rem)] mx-auto w-full px-2;
+  @apply mx-auto w-full px-2;
 }
 
 @utility container {
@@ -228,10 +221,6 @@
   &::-webkit-scrollbar {
     display: none;
   }
-}
-
-@utility border-ghost {
-  @apply after:border-border relative after:absolute after:inset-0 after:border after:mix-blend-darken dark:after:mix-blend-lighten;
 }
 
 @utility extend-touch-target {

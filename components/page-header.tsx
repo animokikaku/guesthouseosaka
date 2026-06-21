@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 
 function PageHeader({ className, children, ...props }: React.ComponentProps<'section'>) {
   return (
-    <section className={'border-grid'} {...props}>
+    <section className="border-grid" {...props}>
       <div className="container-wrapper">
         <div
           className={cn(
@@ -21,7 +21,7 @@ function PageHeaderHeading({ className, ...props }: React.ComponentProps<'h1'>) 
   return (
     <h1
       className={cn(
-        'text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter',
+        'text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance xl:text-5xl xl:tracking-tighter',
         className
       )}
       {...props}

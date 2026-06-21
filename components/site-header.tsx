@@ -45,8 +45,8 @@ export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
         'sm:supports-backdrop-filter:bg-background/60 sm:backdrop-blur'
       )}
     >
-      <div className="container-wrapper 3xl:fixed:px-0 px-6">
-        <div className="3xl:fixed:container flex h-(--header-height) items-center gap-2 **:data-[slot=separator]:h-4!">
+      <div className="container-wrapper px-6">
+        <div className="flex h-(--header-height) items-center gap-2 **:data-[slot=separator]:h-4!">
           <MobileNav items={navItems} className="flex lg:hidden" />
           <Button
             render={<Link href="/" />}
