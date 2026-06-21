@@ -1,8 +1,6 @@
 import { hasHouse } from '@/app/[locale]/[house]/layout'
-import {
-  GalleryModalCloseButton,
-  GalleryModalWrapper
-} from '@/components/gallery/gallery-modal-wrapper'
+import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
+import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'

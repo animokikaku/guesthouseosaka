@@ -4,10 +4,9 @@ import { PageActions } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Icon } from '@/lib/icons'
+import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { FaqPageQueryResult } from '@/sanity.types'
 import { createDataAttribute, stegaClean } from 'next-sanity'
-import { useOptimistic } from 'next-sanity/hooks'
-import type { SanityDocument } from 'sanity'
 
 type PageAction = NonNullable<NonNullable<FaqPageQueryResult>['actions']>[number]
 
@@ -20,18 +19,11 @@ interface DynamicPageActionsProps {
 export function DynamicPageActions(props: DynamicPageActionsProps) {
   const currentPathname = usePathname()
 
-  const actions = useOptimistic<PageAction[] | null, SanityDocument & { actions?: PageAction[] }>(
-    props.actions,
-    (currentActions, action) => {
-      if (action.id === props.documentId && action.document.actions) {
-        // Optimistic document only has _ref values, not resolved references
-        return action.document.actions.map(
-          (link) => currentActions?.find((l) => l._key === link._key) ?? link
-        )
-      }
-      return currentActions
-    }
-  )
+  const actions = useSanityOptimisticArray<
+    PageAction,
+    PageAction[] | null,
+    { actions?: PageAction[] }
+  >(props.documentId, props.actions, (document) => document.actions ?? null)
 
   if (!actions || actions.length === 0) return null
 

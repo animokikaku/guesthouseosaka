@@ -2,16 +2,13 @@
 
 import {
   GalleryDialog,
-  GalleryDialogClose,
   GalleryDialogContent,
   GalleryDialogDescription,
   GalleryDialogTitle
 } from '@/components/gallery/gallery-dialog'
 import { GalleryShell } from '@/components/gallery/gallery-shell'
-import { Button } from '@/components/ui/button'
 import { useRouter } from '@/i18n/navigation'
 import type { HouseIdentifier } from '@/lib/types'
-import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ReactNode, useState } from 'react'
 
@@ -26,23 +23,13 @@ export function GalleryModalWrapper({ house, title, children }: GalleryModalWrap
   const t = useTranslations('GalleryModal')
   const [isOpen, setIsOpen] = useState(true)
 
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      setIsOpen(false)
-    }
-  }
-
-  const handleOpenChangeComplete = (open: boolean) => {
-    if (!open) {
-      router.push({ pathname: '/[house]', params: { house } })
-    }
-  }
-
   return (
     <GalleryDialog
       open={isOpen}
-      onOpenChange={handleOpenChange}
-      onOpenChangeComplete={handleOpenChangeComplete}
+      onOpenChange={(open) => !open && setIsOpen(false)}
+      onOpenChangeComplete={(open) =>
+        !open && router.push({ pathname: '/[house]', params: { house } })
+      }
     >
       <GalleryDialogContent
         overlayClassName="bg-background backdrop-blur-2xl"
@@ -55,18 +42,5 @@ export function GalleryModalWrapper({ house, title, children }: GalleryModalWrap
         <GalleryShell>{children}</GalleryShell>
       </GalleryDialogContent>
     </GalleryDialog>
-  )
-}
-
-export function GalleryModalCloseButton() {
-  const t = useTranslations('GalleryModal')
-
-  return (
-    <GalleryDialogClose
-      render={<Button variant="ghost" size="icon" className="shrink-0 rounded-full" />}
-    >
-      <ArrowLeftIcon className="size-6" />
-      <span className="sr-only">{t('close')}</span>
-    </GalleryDialogClose>
   )
 }
