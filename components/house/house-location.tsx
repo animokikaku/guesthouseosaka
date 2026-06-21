@@ -22,10 +22,10 @@ function MapSkeleton() {
       aria-busy="true"
       aria-label={t('loading_map')}
       aria-live="polite"
-      className="md:border-border flex flex-col gap-6 overflow-hidden md:flex-row md:gap-0 md:rounded-lg md:border"
+      className="md:border-border flex min-h-[480px] flex-col gap-6 overflow-hidden md:flex-row md:gap-0 md:rounded-lg md:border"
     >
       {/* PlaceDetails skeleton */}
-      <div className="border-border flex h-[478px] flex-col overflow-hidden rounded-lg border bg-white md:w-1/3 md:shrink-0 md:rounded-none md:border-0 md:border-r dark:bg-[#131314]">
+      <div className="border-border flex min-h-[480px] flex-col overflow-hidden rounded-lg border bg-white md:w-1/3 md:shrink-0 md:rounded-none md:border-0 md:border-r dark:bg-[#131314]">
         {/* Image skeleton - takes half the height, clipped by parent overflow */}
         <Skeleton className="h-1/2 w-full rounded-none" />
         <Separator />
@@ -41,7 +41,7 @@ function MapSkeleton() {
       </div>
       {/* Map skeleton */}
       <div className="md:w-2/3">
-        <Skeleton className="border-border h-[478px] w-full rounded-lg border md:rounded-none md:border-0" />
+        <Skeleton className="border-border h-[400px] w-full rounded-lg border md:h-full md:rounded-none md:border-0" />
       </div>
     </div>
   )

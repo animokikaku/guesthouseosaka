@@ -47,7 +47,7 @@ export function GalleryModal({ galleryCategories, title, dataAttribute }: Galler
     >
       <GalleryDialogContent
         overlayClassName="bg-transparent"
-        className="bg-background text-foreground sm:bg-background/50 fixed inset-0 z-60 flex max-w-none translate-none items-center justify-center rounded-none border-0 p-0 ring-0 duration-200 sm:max-w-none sm:backdrop-blur-2xl"
+        className="bg-background text-foreground sm:bg-background/50 fixed inset-0 z-60 flex max-w-none translate-none items-center justify-center rounded-none border-0 p-0 ring-0 duration-200 sm:backdrop-blur-2xl"
       >
         <GalleryDialogTitle className="sr-only">{t('title')}</GalleryDialogTitle>
         <GalleryDialogDescription className="sr-only">

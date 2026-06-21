@@ -23,7 +23,7 @@ type CollectionProps = {
 
 export function Collection({ houses, className }: CollectionProps) {
   return (
-    <ItemGroup className={cn('grid gap-8 md:grid-cols-3 md:gap-8', className)}>
+    <ItemGroup className={cn('grid gap-8 md:grid-cols-3', className)}>
       {houses.map((house) => (
         <Item
           key={house._id}

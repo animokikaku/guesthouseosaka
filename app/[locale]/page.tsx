@@ -14,7 +14,7 @@ import { setRequestLocale } from 'next-intl/server'
 const heroComponents: PortableTextComponents = {
   block: {
     h1: ({ children }) => (
-      <h1 className="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance md:text-left lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter">
+      <h1 className="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance md:text-left xl:text-5xl xl:tracking-tighter">
         {children}
       </h1>
     ),
@@ -29,7 +29,7 @@ const heroComponents: PortableTextComponents = {
 const collectionComponents: PortableTextComponents = {
   block: {
     h2: ({ children }) => (
-      <h2 className="text-primary leading-tighter max-w-none self-start text-start text-2xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-4xl xl:tracking-tighter">
+      <h2 className="text-primary leading-tighter max-w-none self-start text-start text-2xl font-semibold tracking-tight text-balance xl:text-4xl xl:tracking-tighter">
         {children}
       </h2>
     ),
@@ -71,7 +71,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
   return (
     <div className="snap-footer section-soft flex flex-col">
       <section className="container-wrapper relative flex min-h-[calc(100dvh-var(--header-height))] max-w-7xl snap-none items-center justify-center py-8 md:snap-end md:py-0">
-        <div className="container flex flex-col items-center gap-12 md:flex-row md:items-center md:gap-8">
+        <div className="container flex flex-col items-center gap-12 md:flex-row md:gap-8">
           {/* Text content - expands to fill available space */}
           <PageHeader className="p-0 md:flex-1 md:items-start md:p-0 md:text-left lg:p-0">
             {hero.content && <PortableText value={hero.content} components={heroComponents} />}
@@ -90,7 +90,7 @@ export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
           </div>
         </div>
       </section>
-      <section className="snap:none container-wrapper relative flex max-w-7xl flex-1 flex-col items-center justify-center md:min-h-[calc(100dvh-var(--header-height)-var(--footer-height))] md:snap-start">
+      <section className="container-wrapper relative flex max-w-7xl flex-1 snap-none flex-col items-center justify-center md:min-h-[calc(100dvh-var(--header-height)-var(--footer-height))] md:snap-start">
         <PageHeader>
           {collection.content && (
             <PortableText value={collection.content} components={collectionComponents} />

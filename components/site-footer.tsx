@@ -31,7 +31,7 @@ export function SiteFooter({ settings }: SiteFooterProps) {
   })
 
   return (
-    <footer className="group-has-[.section-soft]/body:bg-surface/40 3xl:fixed:bg-transparent group-has-[.snap-footer]/body:md:snap-end dark:bg-transparent">
+    <footer className="group-has-[.section-soft]/body:bg-surface/40 group-has-[.snap-footer]/body:md:snap-end dark:bg-transparent">
       <div className="container-wrapper px-4 xl:px-6">
         <div className="flex min-h-(--footer-height) flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:flex-nowrap">
           <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">

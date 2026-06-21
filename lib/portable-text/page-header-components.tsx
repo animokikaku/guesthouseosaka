@@ -3,7 +3,7 @@ import type { PortableTextComponents } from '@portabletext/react'
 export const pageHeaderComponents: PortableTextComponents = {
   block: {
     h1: ({ children }) => (
-      <h1 className="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter">
+      <h1 className="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance xl:text-5xl xl:tracking-tighter">
         {children}
       </h1>
     ),
