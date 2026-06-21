@@ -39,7 +39,7 @@ export default async function ContactPage({ params }: PageProps<'/[locale]/conta
         >
           <ItemContent>
             {title && <ItemTitle className="text-lg font-medium">{title}</ItemTitle>}
-            {description && <ItemDescription className="text-base">{description}</ItemDescription>}
+            {description && <ItemDescription>{description}</ItemDescription>}
           </ItemContent>
           <ItemActions>
             <ChevronRightIcon className="size-4" aria-hidden />
