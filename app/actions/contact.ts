@@ -5,13 +5,11 @@ import {
   MoveInRequestEmail,
   TourRequestEmail
 } from '@/components/email-template'
-import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
 import { env } from '@/lib/env'
-import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
+import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
+import { HouseIdentifier } from '@/lib/types'
 import { headers } from 'next/headers'
 import { Resend } from 'resend'
-import { isMobilePhone } from 'validator'
-import { z } from 'zod'
 
 const { emails } = new Resend(env.RESEND_API_KEY)
 const CONTACT_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
@@ -43,48 +41,6 @@ function assertRateLimit(identifier: string) {
   attempts.count += 1
 }
 
-const accountSchema = z.object({
-  name: z.string().min(2),
-  age: z.string().refine((value) => {
-    const age = Number(value)
-    return !isNaN(age) && age > 0
-  }),
-  gender: z.enum(['male', 'female']),
-  nationality: z.string().min(1).max(100),
-  email: z.email(),
-  phone: z.string().refine((value) => (value ? isMobilePhone(value, 'any') : true))
-})
-
-const baseContactFormPayloadSchema = z.object({
-  places: z.array(HouseIdentifierSchema).min(1).max(3),
-  account: accountSchema,
-  message: z.string().max(3000),
-  privacyPolicy: z.literal(true)
-})
-
-const contactFormPayloadSchema = z.discriminatedUnion('type', [
-  z.object({
-    type: z.literal('tour'),
-    data: baseContactFormPayloadSchema.extend({
-      date: z.iso.date(),
-      hour: z.iso.time()
-    })
-  }),
-  z.object({
-    type: z.literal('move-in'),
-    data: baseContactFormPayloadSchema.extend({
-      date: z.iso.date(),
-      stayDuration: z.enum(['1-month', '3-months', 'long-term'])
-    })
-  }),
-  z.object({
-    type: z.literal('other'),
-    data: baseContactFormPayloadSchema.extend({
-      message: baseContactFormPayloadSchema.shape.message.min(5)
-    })
-  })
-])
-
 const DEFAULT_CONTACT = {
   from: 'Guest House Osaka <info@guesthouseosaka.com>',
   to: (places?: HouseIdentifier[]) => {
@@ -97,11 +53,6 @@ const DEFAULT_CONTACT = {
     return 'info@guesthouseosaka.com'
   }
 }
-
-type ContactFormPayload =
-  | { type: 'tour'; data: TourFormFields }
-  | { type: 'move-in'; data: MoveInFormFields }
-  | { type: 'other'; data: GeneralInquiryFields }
 
 export async function submitContactForm({ type, data }: ContactFormPayload) {
   assertRateLimit(await getRequesterIdentifier())

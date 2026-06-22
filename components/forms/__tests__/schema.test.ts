@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react'
+import { contactFormPayloadSchema } from '@/lib/schemas/contact-form'
 import { useGeneralInquirySchema, useMoveInFormSchema, useTourFormSchema } from '../schema'
 
 // Helper to get schema from hook
@@ -144,6 +145,27 @@ describe('useTourFormSchema', () => {
         account: { ...validTourData.account, phone: 'not-a-phone' }
       })
       expect(result.success).toBe(false)
+    })
+  })
+
+  describe('date field', () => {
+    afterEach(() => {
+      vi.useRealTimers()
+      vi.unstubAllEnvs()
+    })
+
+    it('accepts today in UTC-negative local timezones', () => {
+      vi.stubEnv('TZ', 'America/New_York')
+      vi.useFakeTimers()
+      vi.setSystemTime(new Date(2026, 0, 15, 0, 30))
+
+      const schema = getSchemaInstance()
+      const result = schema.safeParse({
+        ...validTourData,
+        date: '2026-01-15'
+      })
+
+      expect(result.success).toBe(true)
     })
   })
 
@@ -321,5 +343,19 @@ describe('useGeneralInquirySchema', () => {
     // Should pass without date, hour
     const result = schema.safeParse(validGeneralInquiryData)
     expect(result.success).toBe(true)
+  })
+})
+
+describe('contactFormPayloadSchema', () => {
+  it('accepts each submitted contact form shape', () => {
+    expect(contactFormPayloadSchema.safeParse({ type: 'tour', data: validTourData }).success).toBe(
+      true
+    )
+    expect(
+      contactFormPayloadSchema.safeParse({ type: 'move-in', data: validMoveInData }).success
+    ).toBe(true)
+    expect(
+      contactFormPayloadSchema.safeParse({ type: 'other', data: validGeneralInquiryData }).success
+    ).toBe(true)
   })
 })

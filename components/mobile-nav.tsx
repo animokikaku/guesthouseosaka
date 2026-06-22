@@ -13,7 +13,6 @@ import { useState, type ComponentProps, type ReactNode } from 'react'
 export function MobileNav({ items, className }: { items: NavItems; className?: string }) {
   const [open, setOpen] = useState(false)
   const t = useTranslations('MobileNav')
-
   const mobileItems = items.filter((item): item is NavItem => 'href' in item)
   const mobileListItems = items.filter((item): item is NavListItem => 'items' in item)
 
@@ -64,57 +63,33 @@ export function MobileNav({ items, className }: { items: NavItems; className?: s
             data-slot="mobile-nav-content"
             className="bg-background/90 no-scrollbar data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 h-full w-full max-w-none overflow-y-auto overscroll-contain rounded-none border-none p-0 shadow-none ring-0 backdrop-blur duration-100 outline-none"
           >
-            <MobileMenuPanel
-              homeLabel={t('home_label')}
-              menuLabel={t('menu_label')}
-              mobileItems={mobileItems}
-              mobileListItems={mobileListItems}
-              onOpenChange={setOpen}
-            />
+            <div className="flex flex-col gap-12 p-6">
+              <div className="flex flex-col gap-4">
+                <div className="text-muted-foreground text-sm font-medium">{t('menu_label')}</div>
+                <div className="flex flex-col gap-3">
+                  <MobileLink href="/" onOpenChange={setOpen}>
+                    {t('home_label')}
+                  </MobileLink>
+                  {mobileItems.map((item) => (
+                    <MobileLink key={item.key} href={item.href} onOpenChange={setOpen}>
+                      {item.label}
+                    </MobileLink>
+                  ))}
+                </div>
+              </div>
+              {mobileListItems.map((listItem) => (
+                <MobileListSection
+                  key={listItem.key}
+                  label={listItem.label}
+                  items={listItem.items}
+                  onOpenChange={setOpen}
+                />
+              ))}
+            </div>
           </PopoverPrimitive.Popup>
         </PopoverPrimitive.Positioner>
       </PopoverPrimitive.Portal>
     </PopoverPrimitive.Root>
-  )
-}
-
-function MobileMenuPanel({
-  homeLabel,
-  menuLabel,
-  mobileItems,
-  mobileListItems,
-  onOpenChange
-}: {
-  homeLabel: string
-  menuLabel: string
-  mobileItems: NavItem[]
-  mobileListItems: NavListItem[]
-  onOpenChange: (open: boolean) => void
-}) {
-  return (
-    <div className="flex flex-col gap-12 p-6">
-      <div className="flex flex-col gap-4">
-        <div className="text-muted-foreground text-sm font-medium">{menuLabel}</div>
-        <div className="flex flex-col gap-3">
-          <MobileLink href="/" onOpenChange={onOpenChange}>
-            {homeLabel}
-          </MobileLink>
-          {mobileItems.map((item) => (
-            <MobileLink key={item.key} href={item.href} onOpenChange={onOpenChange}>
-              {item.label}
-            </MobileLink>
-          ))}
-        </div>
-      </div>
-      {mobileListItems.map((listItem) => (
-        <MobileListSection
-          key={listItem.key}
-          label={listItem.label}
-          items={listItem.items}
-          onOpenChange={onOpenChange}
-        />
-      ))}
-    </div>
   )
 }
 

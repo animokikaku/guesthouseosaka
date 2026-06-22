@@ -1,4 +1,4 @@
-import { ContactFormFields } from '@/components/forms/schema'
+import type { ContactFormFields } from '@/components/forms/schema'
 import { HouseIdentifier } from '@/lib/types'
 import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from 'react-email'
 

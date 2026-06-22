@@ -9,7 +9,7 @@ import {
   useFormSubmit
 } from '@/components/forms'
 import { FormCard } from '@/components/forms/form-card'
-import { ContactFormFields, useMoveInFormSchema } from '@/components/forms/schema'
+import { useMoveInFormSchema, type ContactFormFields } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormConfig } from '@/lib/types/components'
 import { useTranslations } from 'next-intl'
