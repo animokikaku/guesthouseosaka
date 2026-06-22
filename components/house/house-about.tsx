@@ -1,5 +1,3 @@
-'use client'
-
 import { HouseBuilding } from '@/components/house/house-building'
 import {
   HouseSection,
