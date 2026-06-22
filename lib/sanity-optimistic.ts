@@ -2,7 +2,7 @@
 
 import { useOptimistic } from 'next-sanity/hooks'
 
-export function mergeOptimisticByKey<T extends { _key: string }>(
+function mergeOptimisticByKey<T extends { _key: string }>(
   current: T[] | null | undefined,
   incoming: T[]
 ): T[] {

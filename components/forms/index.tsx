@@ -12,7 +12,7 @@ import {
   ToggleGroupField
 } from '@/components/forms/fields'
 import { fieldContext, formContext } from '@/components/forms/form-context'
-import { ContactFormFields } from '@/components/forms/schema'
+import type { ContactFormFields } from '@/components/forms/schema'
 import { HouseIcon } from '@/components/house-icon'
 import { HouseIdentifier } from '@/lib/types'
 import type { FormFieldsConfig } from '@/lib/types/components'

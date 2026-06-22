@@ -1,7 +1,11 @@
 'use client'
 
 import { submitContactForm } from '@/app/actions/contact'
-import { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '@/components/forms/schema'
+import type {
+  GeneralInquiryFields,
+  MoveInFormFields,
+  TourFormFields
+} from '@/components/forms/schema'
 import { useRouter } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
