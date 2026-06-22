@@ -18,10 +18,7 @@ export default async function GalleryPage({ params }: PageProps<'/[locale]/[hous
 
   setRequestLocale(locale as Locale)
 
-  const [t, { data }] = await Promise.all([
-    getTranslations('GalleryPage'),
-    getHouse(locale, house)
-  ])
+  const [t, { data }] = await Promise.all([getTranslations('GalleryPage'), getHouse(locale, house)])
 
   if (!data) {
     return (
