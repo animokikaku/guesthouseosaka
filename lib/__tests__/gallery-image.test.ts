@@ -1,18 +1,3 @@
-vi.mock('@/sanity/lib/image', () => ({
-  urlFor: () => ({
-    width: () => ({
-      height: () => ({
-        dpr: () => ({
-          fit: () => ({
-            url: () => 'https://cdn.sanity.io/images/test/sized.jpg'
-          })
-        })
-      })
-    }),
-    url: () => 'https://cdn.sanity.io/images/test/full.jpg'
-  })
-}))
-
 vi.mock('@sanity/client/stega', () => ({
   stegaClean: (value: string | null | undefined) => value ?? ''
 }))
@@ -47,7 +32,7 @@ describe('toGalleryImageProps', () => {
     const image = createSanityImage({ alt: 'Kitchen' })
 
     expect(toGalleryImageProps(image, { width: 560, height: 400 })).toEqual({
-      src: 'https://cdn.sanity.io/images/test/sized.jpg',
+      src: 'https://cdn.sanity.io/images/test/image.jpg?w=560&h=400&dpr=2&fit=crop',
       alt: 'Kitchen',
       width: 560,
       height: 400,
@@ -66,10 +51,21 @@ describe('toGalleryImageProps', () => {
     })
 
     expect(result).toMatchObject({
-      src: 'https://cdn.sanity.io/images/test/sized.jpg',
+      src: 'https://cdn.sanity.io/images/test/image.jpg?w=256&h=192&dpr=2&fit=crop',
       width: undefined,
       height: undefined
     })
+  })
+
+  it('requests auto format and quality for direct CDN images', () => {
+    const image = createSanityImage()
+
+    expect(toGalleryImageProps(image, { width: 400, height: 400, unoptimized: true })).toEqual(
+      expect.objectContaining({
+        src: 'https://cdn.sanity.io/images/test/image.jpg?w=400&h=400&dpr=2&fit=crop&auto=format&q=75',
+        unoptimized: true
+      })
+    )
   })
 
   it('uses custom alt when provided', () => {
@@ -99,7 +95,7 @@ describe('toGalleryImageProps', () => {
     const image = createSanityImage({ alt: 'Full view' })
 
     expect(toGalleryImageProps(image, { size: 'full' })).toEqual({
-      src: 'https://cdn.sanity.io/images/test/full.jpg',
+      src: 'https://cdn.sanity.io/images/test/image.jpg',
       alt: 'Full view',
       width: 1920,
       height: 1080,

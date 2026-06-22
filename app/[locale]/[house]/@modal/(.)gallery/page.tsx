@@ -3,8 +3,7 @@ import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-clos
 import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
-import { sanityFetch } from '@/sanity/lib/live'
-import { houseQuery } from '@/sanity/lib/queries'
+import { getHouse } from '@/sanity/lib/cached-queries'
 import { Locale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -17,10 +16,7 @@ export default async function GalleryModalPage({ params }: PageProps<'/[locale]/
 
   setRequestLocale(locale as Locale)
 
-  const { data } = await sanityFetch({
-    query: houseQuery,
-    params: { locale, slug: house }
-  })
+  const { data } = await getHouse(locale, house)
 
   if (!data) {
     return (

@@ -1,20 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { render, screen } from '@testing-library/react'
 
-vi.mock('@/sanity/lib/image', () => ({
-  urlFor: () => ({
-    width: () => ({
-      height: () => ({
-        dpr: () => ({
-          fit: () => ({
-            url: () => 'https://cdn.sanity.io/images/test/image.jpg'
-          })
-        })
-      })
-    })
-  })
-}))
-
 vi.mock('@sanity/client/stega', () => ({
   stegaClean: (value: string) => value
 }))

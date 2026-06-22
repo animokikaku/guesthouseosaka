@@ -28,6 +28,44 @@ vi.mock('@/components/ui/scroll-area', async () => {
   }
 })
 
+vi.mock('@/sanity/lib/image', () => {
+  type MockImageBuilder = {
+    width: (value: number) => MockImageBuilder
+    height: (value: number) => MockImageBuilder
+    dpr: (value: number) => MockImageBuilder
+    fit: (value: string) => MockImageBuilder
+    auto: (value: string) => MockImageBuilder
+    quality: (value: number) => MockImageBuilder
+    url: () => string
+  }
+
+  function createBuilder(params = new URLSearchParams()): MockImageBuilder {
+    const withParam = (key: string, value: number | string) => {
+      const nextParams = new URLSearchParams(params)
+      nextParams.set(key, String(value))
+      return createBuilder(nextParams)
+    }
+
+    return {
+      width: (value) => withParam('w', value),
+      height: (value) => withParam('h', value),
+      dpr: (value) => withParam('dpr', value),
+      fit: (value) => withParam('fit', value),
+      auto: (value) => withParam('auto', value),
+      quality: (value) => withParam('q', value),
+      url: () => {
+        const query = params.toString()
+        const url = 'https://cdn.sanity.io/images/test/image.jpg'
+        return query ? `${url}?${query}` : url
+      }
+    }
+  }
+
+  return {
+    urlFor: () => createBuilder()
+  }
+})
+
 // Mock IntersectionObserver for lazy loading and scroll-spy components
 class IntersectionObserverMock implements IntersectionObserver {
   readonly root: Element | Document | null = null

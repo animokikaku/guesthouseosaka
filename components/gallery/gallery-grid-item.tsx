@@ -17,7 +17,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
   const { _key, image } = item
   if (!image) return null
 
-  const imageProps = toGalleryImageProps(image, { width: 400, height: 400 })
+  const imageProps = toGalleryImageProps(image, { width: 400, height: 400, unoptimized: true })
   if (!imageProps) return null
 
   return (

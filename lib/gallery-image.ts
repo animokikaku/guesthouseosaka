@@ -14,6 +14,7 @@ type SizedGalleryImageOptions = {
   fit?: 'clip' | 'crop' | 'fill' | 'fillmax' | 'max' | 'scale' | 'min'
   alt?: string | null
   includeDimensions?: boolean
+  unoptimized?: boolean
 }
 
 type FullGalleryImageOptions = {
@@ -35,7 +36,8 @@ function toSizedGalleryImageProps(
     dpr = 2,
     fit = 'crop',
     alt = image.alt,
-    includeDimensions = true
+    includeDimensions = true,
+    unoptimized = false
   }: SizedGalleryImageOptions = {}
 ): GalleryImageProps | null {
   if (!image.asset) return null
@@ -46,6 +48,7 @@ function toSizedGalleryImageProps(
   if (height) builder = builder.height(height)
   if (dpr) builder = builder.dpr(dpr)
   if (fit) builder = builder.fit(fit)
+  if (unoptimized) builder = builder.auto('format').quality(75)
 
   return {
     src: builder.url(),
@@ -53,7 +56,8 @@ function toSizedGalleryImageProps(
     width: includeDimensions ? width : undefined,
     height: includeDimensions ? height : undefined,
     blurDataURL: image.preview ?? undefined,
-    placeholder: image.preview ? 'blur' : undefined
+    placeholder: image.preview ? 'blur' : undefined,
+    ...(unoptimized ? { unoptimized } : {})
   }
 }
 

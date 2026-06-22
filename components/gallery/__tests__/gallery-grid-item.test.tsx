@@ -4,21 +4,6 @@ import { store } from '@/lib/store'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { GalleryGridItem } from '../gallery-grid-item'
 
-// Mock Sanity image utilities
-vi.mock('@/sanity/lib/image', () => ({
-  urlFor: () => ({
-    width: () => ({
-      height: () => ({
-        dpr: () => ({
-          fit: () => ({
-            url: () => 'https://cdn.sanity.io/images/test/image.jpg'
-          })
-        })
-      })
-    })
-  })
-}))
-
 // Mock stegaClean
 vi.mock('@sanity/client/stega', () => ({
   stegaClean: (value: string) => value
