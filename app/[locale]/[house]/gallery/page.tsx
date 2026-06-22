@@ -4,8 +4,7 @@ import { GalleryShell } from '@/components/gallery/gallery-shell'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
-import { sanityFetch } from '@/sanity/lib/live'
-import { houseQuery } from '@/sanity/lib/queries'
+import { getHouse } from '@/sanity/lib/cached-queries'
 import { ArrowLeftIcon } from 'lucide-react'
 import { Locale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
@@ -21,7 +20,7 @@ export default async function GalleryPage({ params }: PageProps<'/[locale]/[hous
 
   const [t, { data }] = await Promise.all([
     getTranslations('GalleryPage'),
-    sanityFetch({ query: houseQuery, params: { locale, slug: house } })
+    getHouse(locale, house)
   ])
 
   if (!data) {

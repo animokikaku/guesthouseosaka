@@ -4,6 +4,11 @@ vi.mock('@/sanity/lib/image', () => ({
       height: () => ({
         dpr: () => ({
           fit: () => ({
+            auto: () => ({
+              quality: () => ({
+                url: () => 'https://cdn.sanity.io/images/test/sized.jpg?auto=format&q=75'
+              })
+            }),
             url: () => 'https://cdn.sanity.io/images/test/sized.jpg'
           })
         })
@@ -70,6 +75,17 @@ describe('toGalleryImageProps', () => {
       width: undefined,
       height: undefined
     })
+  })
+
+  it('requests auto format for direct CDN images', () => {
+    const image = createSanityImage()
+
+    expect(toGalleryImageProps(image, { width: 400, height: 400, unoptimized: true })).toEqual(
+      expect.objectContaining({
+        src: 'https://cdn.sanity.io/images/test/sized.jpg?auto=format&q=75',
+        unoptimized: true
+      })
+    )
   })
 
   it('uses custom alt when provided', () => {

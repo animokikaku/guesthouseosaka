@@ -19,7 +19,8 @@ export function CategoryThumbnail({ category, tabIndex = 0 }: CategoryThumbnailP
     width: 256,
     height: 192,
     alt: thumbnail.alt ?? category.label,
-    includeDimensions: false
+    includeDimensions: false,
+    unoptimized: true
   })
   if (!imageProps) return null
 
