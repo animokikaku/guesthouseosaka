@@ -30,20 +30,6 @@ vi.mock('next/image', () => ({
   )
 }))
 
-// Mock Sanity image utilities
-vi.mock('@/sanity/lib/image', () => ({
-  urlFor: () => ({
-    width: () => ({
-      height: () => ({
-        dpr: () => ({
-          fit: () => ({ url: () => 'https://cdn.sanity.io/test.jpg' })
-        })
-      })
-    }),
-    url: () => 'https://cdn.sanity.io/test.jpg'
-  })
-}))
-
 vi.mock('@sanity/client/stega', () => ({
   stegaClean: (value: string) => value
 }))

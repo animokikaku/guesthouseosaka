@@ -3,21 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { CategoryThumbnail } from '../gallery-category-thumbnail'
 import type { GalleryCategory } from '@/lib/gallery'
 
-// Mock Sanity image utilities
-vi.mock('@/sanity/lib/image', () => ({
-  urlFor: () => ({
-    width: () => ({
-      height: () => ({
-        dpr: () => ({
-          fit: () => ({
-            url: () => 'https://cdn.sanity.io/images/test/thumbnail.jpg'
-          })
-        })
-      })
-    })
-  })
-}))
-
 // Mock stegaClean
 vi.mock('@sanity/client/stega', () => ({
   stegaClean: (value: string) => value
