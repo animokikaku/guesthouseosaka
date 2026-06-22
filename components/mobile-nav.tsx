@@ -71,20 +71,20 @@ export function MobileNav({ items, className }: { items: NavItems; className?: s
                     {t('home_label')}
                   </MobileLink>
                   {mobileItems.map((item) => (
-                      <MobileLink key={item.key} href={item.href} onOpenChange={setOpen}>
-                        {item.label}
-                      </MobileLink>
-                    ))}
+                    <MobileLink key={item.key} href={item.href} onOpenChange={setOpen}>
+                      {item.label}
+                    </MobileLink>
+                  ))}
                 </div>
               </div>
               {mobileListItems.map((listItem) => (
-                  <MobileListSection
-                    key={listItem.key}
-                    label={listItem.label}
-                    items={listItem.items}
-                    onOpenChange={setOpen}
-                  />
-                ))}
+                <MobileListSection
+                  key={listItem.key}
+                  label={listItem.label}
+                  items={listItem.items}
+                  onOpenChange={setOpen}
+                />
+              ))}
             </div>
           </PopoverPrimitive.Popup>
         </PopoverPrimitive.Positioner>
