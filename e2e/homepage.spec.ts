@@ -18,14 +18,23 @@ test.describe('Homepage', () => {
     test('house card link navigates to house page', async ({ page }) => {
       await page.goto('/en')
 
-      // Wait for the collection to load and find house links
-      // House cards are in a grid and link to /[locale]/[house] routes
-      const houseLink = page.locator('[data-slot="item-group"] a[href*="/en/"]').first()
-      await expect(houseLink).toBeVisible()
-      await houseLink.click()
+      const housePageUrl = /\/en\/(orange|apple|lemon)\/?$/
+      const houseLink = page
+        .locator(
+          [
+            '[data-slot="item-group"] a[href="/en/orange"]',
+            '[data-slot="item-group"] a[href="/en/apple"]',
+            '[data-slot="item-group"] a[href="/en/lemon"]'
+          ].join(', ')
+        )
+        .first()
 
-      // Should navigate to a house page (orange, apple, or lemon)
-      await expect(page).toHaveURL(/\/en\/(orange|apple|lemon)/)
+      await expect(houseLink).toBeVisible()
+      await expect(houseLink).toHaveAttribute('href', housePageUrl)
+      await houseLink.scrollIntoViewIfNeeded()
+      await expect(houseLink).toBeInViewport()
+
+      await Promise.all([page.waitForURL(housePageUrl), houseLink.click()])
     })
   })
 
