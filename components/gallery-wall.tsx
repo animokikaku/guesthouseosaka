@@ -74,7 +74,7 @@ export function GalleryWall({ images, className }: { images: GalleryImage[]; cla
                 height={image.height}
                 blurDataURL={image.blurDataURL || undefined}
                 placeholder={image.blurDataURL ? 'blur' : undefined}
-                className="h-full w-full object-cover transition-transform duration-300 ease-out-ui pointer-fine:group-hover:scale-[1.03]"
+                className="ease-out-ui h-full w-full object-cover transition-transform duration-300 pointer-fine:group-hover:scale-[1.03]"
               />
               <div
                 className={cn(

@@ -96,7 +96,7 @@ function CollectionImage({ image }: CollectionImageProps) {
         height={800}
         blurDataURL={blurDataURL}
         placeholder={placeholder}
-        className="hidden aspect-square w-full object-cover transition-transform duration-300 pointer-fine:group-hover:scale-[1.02] group-focus-visible:scale-[1.02] md:block"
+        className="hidden aspect-square w-full object-cover transition-transform duration-300 group-focus-visible:scale-[1.02] md:block pointer-fine:group-hover:scale-[1.02]"
       />
     </>
   )
