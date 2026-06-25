@@ -34,7 +34,7 @@ export function DraftModeIndicator() {
     <div
       className={cn(
         'fixed top-3 left-1/2 z-50 -translate-x-1/2',
-        'animate-in fade-in slide-in-from-top-1 duration-500 ease-out'
+        'animate-in fade-in slide-in-from-top-1 duration-200 ease-out-ui'
       )}
     >
       <ButtonGroup
@@ -71,7 +71,13 @@ export function DraftModeIndicator() {
             'focus-visible:ring-rose-500/50'
           )}
         >
-          {isPending ? <LoaderCircle className="animate-spin" /> : <X />}
+          {isPending ? (
+            <span className="inline-flex animate-spin">
+              <LoaderCircle />
+            </span>
+          ) : (
+            <X />
+          )}
         </Button>
       </ButtonGroup>
     </div>

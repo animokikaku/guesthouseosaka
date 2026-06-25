@@ -17,7 +17,11 @@ export const SubmitButton = (props: FormSubmitButtonProps) => {
 
   return (
     <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting} {...props}>
-      {isSubmitting && <Loader2Icon aria-hidden="true" className="animate-spin" />}
+      {isSubmitting ? (
+        <span aria-hidden="true" className="inline-flex animate-spin">
+          <Loader2Icon />
+        </span>
+      ) : null}
       {t('label')}
     </Button>
   )

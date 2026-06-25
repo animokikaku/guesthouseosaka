@@ -43,7 +43,7 @@ export function Collection({ houses, className }: CollectionProps) {
               <CollectionImage image={house.image} />
               <div
                 className={cn(
-                  'pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100',
+                  'pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 pointer-fine:group-hover:opacity-100 group-focus-visible:opacity-100',
                   HOUSE_COLORS[house.slug].accent
                 )}
               >
@@ -96,7 +96,7 @@ function CollectionImage({ image }: CollectionImageProps) {
         height={800}
         blurDataURL={blurDataURL}
         placeholder={placeholder}
-        className="hidden aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] group-focus-visible:scale-[1.02] md:block"
+        className="hidden aspect-square w-full object-cover transition-transform duration-300 pointer-fine:group-hover:scale-[1.02] group-focus-visible:scale-[1.02] md:block"
       />
     </>
   )

@@ -74,7 +74,7 @@ export function GalleryWall({ images, className }: { images: GalleryImage[]; cla
                 height={image.height}
                 blurDataURL={image.blurDataURL || undefined}
                 placeholder={image.blurDataURL ? 'blur' : undefined}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-300 ease-out-ui pointer-fine:group-hover:scale-[1.03]"
               />
               <div
                 className={cn(
@@ -82,7 +82,7 @@ export function GalleryWall({ images, className }: { images: GalleryImage[]; cla
                   slot.overlay
                 )}
               />
-              <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/0 via-black/10 to-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-black/0 via-black/10 to-black/30 opacity-0 transition-opacity duration-300 pointer-fine:group-hover:opacity-100" />
             </div>
           )
         })}
