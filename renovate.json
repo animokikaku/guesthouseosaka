@@ -3,9 +3,14 @@
   "extends": ["config:recommended"],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
-  "automerge": true,
   "automergeType": "pr",
   "platformAutomerge": true,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 4am on monday"],
+    "timezone": "Asia/Tokyo",
+    "automerge": true
+  },
   "packageRules": [
     {
       "description": "Auto-merge patch and minor updates",
@@ -18,6 +23,12 @@
       "automerge": false
     },
     {
+      "description": "Group non-major dev dependencies",
+      "groupName": "dev dependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch", "minor"]
+    },
+    {
       "description": "Group Sanity packages",
       "groupName": "sanity",
       "matchPackageNames": ["/^@sanity//", "/^sanity$/", "/^next-sanity$/"]
@@ -26,6 +37,11 @@
       "description": "Group Next.js packages",
       "groupName": "next.js",
       "matchPackageNames": ["/^next$/", "/^@next//"]
+    },
+    {
+      "description": "Group React packages",
+      "groupName": "react",
+      "matchPackageNames": ["/^react$/", "/^react-dom$/"]
     },
     {
       "description": "Group TanStack packages",
