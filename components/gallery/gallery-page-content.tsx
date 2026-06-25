@@ -8,6 +8,7 @@ import { type GalleryCategories, type GalleryCategoryData } from '@/lib/gallery'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { toGalleryCategories } from '@/lib/transforms/gallery'
 import { createDataAttribute } from 'next-sanity'
+import { LayoutGroup, MotionConfig } from 'motion/react'
 import { useMemo, useRef, type ReactNode } from 'react'
 
 type GalleryPageContentProps = {
@@ -47,38 +48,46 @@ export function GalleryPageContent({
   })
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="border-border/50 flex shrink-0 items-center gap-2 p-4 md:border-b">
-        <div className="shrink-0">{backButton}</div>
-        <div className="container-wrapper min-w-0 flex-1">
-          <div className="container p-0">
-            <StickyCategoryNav categories={categories} activeId={activeId} isVisible={isVisible} />
+    <MotionConfig reducedMotion="user">
+      <LayoutGroup id="gallery-image-transition">
+        <div className="flex h-full flex-col">
+          <div className="border-border/50 flex shrink-0 items-center gap-2 p-4 md:border-b">
+            <div className="shrink-0">{backButton}</div>
+            <div className="container-wrapper min-w-0 flex-1">
+              <div className="container p-0">
+                <StickyCategoryNav
+                  categories={categories}
+                  activeId={activeId}
+                  isVisible={isVisible}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <main
-        ref={scrollContainerRef}
-        className="relative flex-1 overflow-y-auto scroll-smooth"
-        aria-label="Gallery Content"
-      >
-        <div className="container-wrapper">
-          <div className="container py-8 md:py-12">
-            <HouseGallery
-              categories={categories}
-              sentinelRef={sentinelRef}
-              dataAttribute={dataAttribute}
-              stickyNavVisible={isVisible}
-            />
-          </div>
-        </div>
-      </main>
+          <main
+            ref={scrollContainerRef}
+            className="relative flex-1 overflow-y-auto scroll-smooth"
+            aria-label="Gallery Content"
+          >
+            <div className="container-wrapper">
+              <div className="container py-8 md:py-12">
+                <HouseGallery
+                  categories={categories}
+                  sentinelRef={sentinelRef}
+                  dataAttribute={dataAttribute}
+                  stickyNavVisible={isVisible}
+                />
+              </div>
+            </div>
+          </main>
 
-      <GalleryModal
-        galleryCategories={galleryCategories}
-        title={title}
-        dataAttribute={dataAttribute}
-      />
-    </div>
+          <GalleryModal
+            galleryCategories={galleryCategories}
+            title={title}
+            dataAttribute={dataAttribute}
+          />
+        </div>
+      </LayoutGroup>
+    </MotionConfig>
   )
 }

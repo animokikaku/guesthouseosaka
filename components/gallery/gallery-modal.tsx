@@ -15,12 +15,14 @@ import {
 } from '@/components/ui/carousel'
 import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
 import { flattenGalleryItems, type GalleryCategories } from '@/lib/gallery'
-import { toGalleryImageProps } from '@/lib/gallery-image'
+import { toGalleryImageProps, type GalleryImageProps } from '@/lib/gallery-image'
 import { store } from '@/lib/store'
+import { getGalleryImageLayoutId } from '@/lib/gallery-transition'
 import { useStore } from '@tanstack/react-store'
+import { motion } from 'motion/react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { useEffect, useMemo, useState } from 'react'
+import { type CSSProperties, useEffect, useMemo, useState } from 'react'
 
 type DataAttributeFn = (path: string) => string
 
@@ -32,7 +34,14 @@ type GalleryModalProps = {
 
 export function GalleryModal({ galleryCategories, title, dataAttribute }: GalleryModalProps) {
   const photoId = useStore(store, (state) => state.photoId)
+  const [transitionPhotoId, setTransitionPhotoId] = useState<string | null>(null)
   const t = useTranslations('GalleryModal')
+
+  useEffect(() => {
+    if (photoId) {
+      setTransitionPhotoId(photoId)
+    }
+  }, [photoId])
 
   return (
     <GalleryDialog
@@ -40,6 +49,11 @@ export function GalleryModal({ galleryCategories, title, dataAttribute }: Galler
       onOpenChange={(open) => {
         if (!open) {
           store.setState((prev) => ({ ...prev, photoId: null }))
+        }
+      }}
+      onOpenChangeComplete={(open) => {
+        if (!open) {
+          setTransitionPhotoId(null)
         }
       }}
     >
@@ -51,7 +65,11 @@ export function GalleryModal({ galleryCategories, title, dataAttribute }: Galler
         <GalleryDialogDescription className="sr-only">
           {t('description', { title })}
         </GalleryDialogDescription>
-        <GalleryModalCarousel galleryCategories={galleryCategories} dataAttribute={dataAttribute} />
+        <GalleryModalCarousel
+          galleryCategories={galleryCategories}
+          activePhotoId={photoId ?? transitionPhotoId}
+          dataAttribute={dataAttribute}
+        />
         <GalleryModalCloseButton className="absolute top-4 left-4" />
       </GalleryDialogContent>
     </GalleryDialog>
@@ -60,10 +78,15 @@ export function GalleryModal({ galleryCategories, title, dataAttribute }: Galler
 
 type GalleryModalCarouselProps = {
   galleryCategories: GalleryCategories
+  activePhotoId: string | null
   dataAttribute?: DataAttributeFn
 }
 
-function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModalCarouselProps) {
+function GalleryModalCarousel({
+  galleryCategories,
+  activePhotoId,
+  dataAttribute
+}: GalleryModalCarouselProps) {
   const [api, setApi] = useState<CarouselApi>()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const photoId = useStore(store, (state) => state.photoId)
@@ -81,6 +104,8 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
     selectedIndex != null && selectedIndex < slides.length
       ? (slides[selectedIndex]?.imageProps.alt ?? null)
       : null
+  const activeLayoutPhotoId =
+    selectedIndex != null ? (slides[selectedIndex]?._key ?? activePhotoId) : activePhotoId
 
   // Use selectedIndex as fallback to preserve position during close animation
   const startIndex = photoId
@@ -139,10 +164,10 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
             className="flex h-full items-center justify-center"
             data-sanity={dataAttribute?.(`galleryCategories[].items[_key=="${_key}"]`)}
           >
-            <Image
-              {...imageProps}
-              className="max-h-screen object-contain select-none"
-              sizes="100vw"
+            <GalleryModalImageFrame
+              imageKey={_key}
+              imageProps={imageProps}
+              isActive={activeLayoutPhotoId === _key}
             />
           </CarouselItem>
         ))}
@@ -157,5 +182,40 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
       <CarouselPrevious variant="ghost" className="left-4 hidden sm:flex" />
       <CarouselNext variant="ghost" className="right-4 hidden sm:flex" />
     </Carousel>
+  )
+}
+
+type GalleryModalImageFrameProps = {
+  imageKey: string
+  imageProps: GalleryImageProps
+  isActive: boolean
+}
+
+function GalleryModalImageFrame({ imageKey, imageProps, isActive }: GalleryModalImageFrameProps) {
+  const { alt, height, width, ...restImageProps } = imageProps
+  const ratio = Number(width) / Number(height)
+
+  return (
+    <motion.div
+      layoutId={isActive ? getGalleryImageLayoutId(imageKey) : `gallery-modal-${imageKey}`}
+      data-slot="gallery-modal-image-frame"
+      className="relative max-h-screen max-w-screen overflow-hidden"
+      style={
+        {
+          '--gallery-image-ratio': `${ratio}`,
+          aspectRatio: 'var(--gallery-image-ratio)',
+          width: 'min(100vw, calc(100vh * var(--gallery-image-ratio)))'
+        } as CSSProperties
+      }
+      transition={{ type: 'spring', stiffness: 320, damping: 34, mass: 0.9 }}
+    >
+      <Image
+        {...restImageProps}
+        alt={alt}
+        fill
+        className="object-contain select-none"
+        sizes="100vw"
+      />
+    </motion.div>
   )
 }
