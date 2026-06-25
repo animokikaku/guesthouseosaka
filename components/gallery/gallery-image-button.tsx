@@ -33,7 +33,7 @@ function GalleryImageContent({
         fill
         alt={alt}
         className={cn(
-          'object-cover transition-opacity duration-300 group-hover:opacity-90 group-focus-visible:opacity-90',
+          'object-cover transition-opacity duration-300 pointer-fine:group-hover:opacity-90 group-focus-visible:opacity-90',
           imageClassName
         )}
         sizes={sizes}
@@ -42,7 +42,7 @@ function GalleryImageContent({
       {alt && (
         <div
           data-slot="gallery-image-caption"
-          className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-end bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-[opacity,transform] duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
+          className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-end bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-[opacity,transform] duration-300 ease-out group-focus-visible:translate-y-0 group-focus-visible:opacity-100 pointer-fine:group-hover:translate-y-0 pointer-fine:group-hover:opacity-100"
           aria-hidden="true"
         >
           <span className="text-sm font-medium text-white">{alt}</span>
