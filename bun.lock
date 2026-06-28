@@ -37,7 +37,7 @@
         "sanity-plugin-lucide-icon-picker": "^1.0.3",
         "schema-dts": "^2.0.0",
         "shadcn": "^4.12.0",
-        "simple-icons": "^16.24.0",
+        "simple-icons": "^16.24.1",
         "sonner": "^2.0.7",
         "styled-components": "^6.4.3",
         "tailwind-merge": "^3.6.0",
@@ -2447,7 +2447,7 @@
 
     "signal-exit": ["signal-exit@4.1.0", "", {}, "sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw=="],
 
-    "simple-icons": ["simple-icons@16.24.0", "", {}, "sha512-lAPW1rqgwPQ4tdIY15TtcKSgSelvJexz8q/B+a7Igg1dJoXR0LPjScLkLMI8UbLSkS41/fLVZWIhsH7HPUwAgQ=="],
+    "simple-icons": ["simple-icons@16.24.1", "", {}, "sha512-AnDQPrZAVzYSym7cBVIrnbhLk9auWGgkl+9hKvkbTqGEfH6TU7WKgumEXYYaJuM1Ib87+cnzr881UZniCM7t+A=="],
 
     "simple-wcswidth": ["simple-wcswidth@1.1.2", "", {}, "sha512-j7piyCjAeTDSjzTSQ7DokZtMNwNlEAyxqSZeCS+CXH7fJ4jx3FuJ/mTW3mE+6JLs4VJBbcll0Kjn+KXI5t21Iw=="],
 
