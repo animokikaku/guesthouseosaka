@@ -60,7 +60,7 @@
         "@vitest/ui": "^4.1.9",
         "babel-plugin-react-compiler": "^1.0.0",
         "jsdom": "^29.1.1",
-        "knip": "^6.23.0",
+        "knip": "^6.24.0",
         "oxfmt": "^0.57.0",
         "oxlint": "^1.72.0",
         "tailwindcss": "^4.3.2",
@@ -1959,7 +1959,7 @@
 
     "kleur": ["kleur@4.1.5", "", {}, "sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ=="],
 
-    "knip": ["knip@6.23.0", "", { "dependencies": { "fdir": "^6.5.0", "formatly": "^0.3.0", "get-tsconfig": "4.14.0", "jiti": "^2.7.0", "oxc-parser": "^0.137.0", "oxc-resolver": "11.21.3", "picomatch": "^4.0.4", "smol-toml": "^1.6.1", "strip-json-comments": "5.0.3", "tinyglobby": "^0.2.17", "unbash": "^4.0.1", "yaml": "^2.9.0", "zod": "^4.1.11" }, "bin": { "knip": "bin/knip.js", "knip-bun": "bin/knip-bun.js" } }, "sha512-2DvAOX2pZWiG4SLvRRxOAU0aWGEn1ZoVblI541xIoXFdHqq2THMZXy66/qcY5WGuW3TXhb9T1x1zd/Hd1u+yqg=="],
+    "knip": ["knip@6.24.0", "", { "dependencies": { "fdir": "^6.5.0", "formatly": "^0.3.0", "get-tsconfig": "4.14.0", "jiti": "^2.7.0", "oxc-parser": "^0.137.0", "oxc-resolver": "11.21.3", "picomatch": "^4.0.4", "smol-toml": "^1.6.1", "strip-json-comments": "5.0.3", "tinyglobby": "^0.2.17", "unbash": "^4.0.1", "yaml": "^2.9.0", "zod": "^4.1.11" }, "bin": { "knip": "bin/knip.js", "knip-bun": "bin/knip-bun.js" } }, "sha512-PokLlgeEjLh1rAsB7ts+52wZ37HBr1nDhE6NNONwEaXdeZGCJOkP7ZlIAI2Gtu8xohquzTWy75bc/1diI9shQw=="],
 
     "lambda-runtimes": ["lambda-runtimes@3.0.0", "", {}, "sha512-fre88KwPAjsDq8jeenv8GlgkdqbKf4wPGTlnKMXEDA5K12A3IptirNFv1koG47IBcgSykCbWYF9T3wmmKJFJtQ=="],
 
