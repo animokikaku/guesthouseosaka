@@ -51,7 +51,7 @@
     "react-email": "^6.6.5",
     "resend": "^6.16.0",
     "sanity": "^6.3.0",
-    "sanity-plugin-internationalized-array": "^5.1.9",
+    "sanity-plugin-internationalized-array": "^5.1.10",
     "sanity-plugin-lucide-icon-picker": "^1.0.3",
     "schema-dts": "^2.0.0",
     "shadcn": "^4.12.0",
