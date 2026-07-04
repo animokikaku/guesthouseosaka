@@ -91,5 +91,8 @@
   },
   "overrides": {
     "@sanity/client": "$@sanity/client"
+  },
+  "patchedDependencies": {
+    "sanity-plugin-lucide-icon-picker@1.0.3": "patches/sanity-plugin-lucide-icon-picker@1.0.3.patch"
   }
 }
