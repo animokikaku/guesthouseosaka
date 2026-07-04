@@ -1,4 +1,4 @@
-import { ImagesIcon } from '@sanity/icons'
+import { ImagesIcon } from '@sanity/icons/Images'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 import { IconPreview } from '../../lib/icon-preview'
 

@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "types": ["node", "vitest/globals"],
+    "types": ["google.maps", "node", "vitest/globals"],
     "plugins": [
       {
         "name": "next"

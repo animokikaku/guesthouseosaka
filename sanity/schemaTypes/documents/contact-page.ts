@@ -1,4 +1,5 @@
-import { CogIcon, EnvelopeIcon } from '@sanity/icons'
+import { CogIcon } from '@sanity/icons/Cog'
+import { EnvelopeIcon } from '@sanity/icons/Envelope'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
 export const contactPage = defineType({

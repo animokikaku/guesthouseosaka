@@ -1,4 +1,5 @@
-import { CogIcon, HelpCircleIcon } from '@sanity/icons'
+import { CogIcon } from '@sanity/icons/Cog'
+import { HelpCircleIcon } from '@sanity/icons/HelpCircle'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
 export const faqPage = defineType({

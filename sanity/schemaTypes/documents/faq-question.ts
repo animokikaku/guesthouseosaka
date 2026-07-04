@@ -1,4 +1,5 @@
-import { ComponentIcon, HelpCircleIcon } from '@sanity/icons'
+import { ComponentIcon } from '@sanity/icons/Component'
+import { HelpCircleIcon } from '@sanity/icons/HelpCircle'
 import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { defineField, defineType } from 'sanity'
 

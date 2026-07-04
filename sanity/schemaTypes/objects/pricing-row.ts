@@ -1,4 +1,4 @@
-import { DocumentTextIcon } from '@sanity/icons'
+import { DocumentTextIcon } from '@sanity/icons/DocumentText'
 import { toPlainText } from '@portabletext/react'
 import { defineField, defineType } from 'sanity'
 

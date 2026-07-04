@@ -1,4 +1,4 @@
-import { HomeIcon } from '@sanity/icons'
+import { HomeIcon } from '@sanity/icons/Home'
 import { defineField, defineType } from 'sanity'
 
 export const address = defineType({
