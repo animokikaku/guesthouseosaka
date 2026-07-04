@@ -24,15 +24,15 @@ bun dev        # Start dev server at http://localhost:3000
 
 ## Scripts
 
-| Command            | Description                        |
-| ------------------ | ---------------------------------- |
-| `bun dev`          | Start development server           |
-| `bun run build`    | Production build                   |
-| `bun lint`         | Run ESLint                         |
-| `bun run typegen`  | Regenerate Sanity TypeScript types |
-| `bun run test`     | Run unit tests (Vitest)            |
+| Command            | Description                                                                                                           |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `bun dev`          | Start development server                                                                                              |
+| `bun run build`    | Production build                                                                                                      |
+| `bun lint`         | Run ESLint                                                                                                            |
+| `bun run typegen`  | Regenerate Sanity TypeScript types                                                                                    |
+| `bun run test`     | Run unit tests (Vitest)                                                                                               |
 | `bun run test:e2e` | Run E2E tests against a production build (Playwright builds and starts the server; reuses an existing server locally) |
-| `bun run knip`     | Detect unused code/dependencies    |
+| `bun run knip`     | Detect unused code/dependencies                                                                                       |
 
 ## Project Structure
 
