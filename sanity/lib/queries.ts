@@ -140,6 +140,13 @@ export const homePageQuery = defineQuery(`{
 // HOUSE PAGE
 // =============================================================================
 
+// Keep metadata separate from the render query so draft-mode stega data
+// is resolved independently for pages and galleries.
+export const houseMetaQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)
+}`)
+
 export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   _id,
   _type,
@@ -292,6 +299,13 @@ export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(orde
 // =============================================================================
 // FAQ PAGE
 // =============================================================================
+
+// Keep metadata separate from the render query so draft-mode stega data
+// is resolved independently for the layout and page.
+export const faqPageMetaQuery = defineQuery(`*[_type == "faqPage"][0]{
+  "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),
+  "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value)
+}`)
 
 export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   _id,
