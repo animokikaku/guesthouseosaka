@@ -1,4 +1,4 @@
-import { resolveHouseAndLocale } from '@/app/[locale]/[house]/layout'
+import { getHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
 import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
@@ -7,7 +7,7 @@ import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery } from '@/sanity/lib/queries'
 
 export default async function GalleryModalPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
-  const { house, locale } = await resolveHouseAndLocale(params)
+  const { house, locale } = await getHouseAndLocale(params)
 
   const { data } = await sanityFetch({
     query: houseQuery,

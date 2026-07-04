@@ -1,4 +1,4 @@
-import { resolveHouseAndLocale } from '@/app/[locale]/[house]/layout'
+import { getHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { GalleryShell } from '@/components/gallery/gallery-shell'
 import { PageEmptyState } from '@/components/page-empty-state'
@@ -10,7 +10,7 @@ import { ArrowLeftIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 
 export default async function GalleryPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
-  const { house, locale } = await resolveHouseAndLocale(params)
+  const { house, locale } = await getHouseAndLocale(params)
 
   const [t, { data }] = await Promise.all([
     getTranslations('GalleryPage'),

@@ -1,4 +1,4 @@
-import { resolveHouseAndLocale } from '@/app/[locale]/[house]/layout'
+import { getHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house/house-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
@@ -9,7 +9,7 @@ import { houseQuery, housesNavQuery } from '@/sanity/lib/queries'
 import { Accommodation, WithContext } from 'schema-dts'
 
 export default async function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
-  const { house, locale } = await resolveHouseAndLocale(params)
+  const { house, locale } = await getHouseAndLocale(params)
 
   const [{ data }, { data: houses }] = await Promise.all([
     sanityFetch({ query: houseQuery, params: { locale, slug: house } }),

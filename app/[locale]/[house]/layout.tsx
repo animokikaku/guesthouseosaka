@@ -10,16 +10,14 @@ import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { use } from 'react'
 
-export function hasHouse(house: string): house is HouseIdentifier {
+function hasHouse(house: string): house is HouseIdentifier {
   return HouseIdentifierSchema.safeParse(house).success
 }
 
-export async function resolveHouseAndLocale(params: Promise<{ house: string }>) {
+/** Params + locale for pages under HouseLayout (slug validity is enforced there). */
+export async function getHouseAndLocale(params: Promise<{ house: string }>) {
   const [{ house }, locale] = await Promise.all([params, getLocale()])
-  if (!hasHouse(house)) {
-    notFound()
-  }
-  return { house, locale }
+  return { house: house as HouseIdentifier, locale }
 }
 
 export async function generateStaticParams() {
