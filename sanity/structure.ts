@@ -1,15 +1,13 @@
-import {
-  CheckmarkCircleIcon,
-  CogIcon,
-  ComponentIcon,
-  DocumentsIcon,
-  EnvelopeIcon,
-  HelpCircleIcon,
-  HomeIcon,
-  ImagesIcon,
-  LockIcon,
-  TagIcon
-} from '@sanity/icons'
+import { CheckmarkCircleIcon } from '@sanity/icons/CheckmarkCircle'
+import { CogIcon } from '@sanity/icons/Cog'
+import { ComponentIcon } from '@sanity/icons/Component'
+import { DocumentsIcon } from '@sanity/icons/Documents'
+import { EnvelopeIcon } from '@sanity/icons/Envelope'
+import { HelpCircleIcon } from '@sanity/icons/HelpCircle'
+import { HomeIcon } from '@sanity/icons/Home'
+import { ImagesIcon } from '@sanity/icons/Images'
+import { LockIcon } from '@sanity/icons/Lock'
+import { TagIcon } from '@sanity/icons/Tag'
 import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 import type { StructureResolver } from 'sanity/structure'
 

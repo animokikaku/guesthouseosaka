@@ -1,4 +1,4 @@
-import { ImagesIcon } from '@sanity/icons'
+import { ImagesIcon } from '@sanity/icons/Images'
 import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { defineField, defineType } from 'sanity'
 import { allowedIcons } from '../../lib/allowed-icons'

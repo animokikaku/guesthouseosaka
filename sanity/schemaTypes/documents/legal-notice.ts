@@ -1,4 +1,4 @@
-import { LockIcon } from '@sanity/icons'
+import { LockIcon } from '@sanity/icons/Lock'
 import { defineField, defineType } from 'sanity'
 
 export const legalNotice = defineType({

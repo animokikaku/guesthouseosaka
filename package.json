@@ -27,17 +27,18 @@
     "@lucide/lab": "^0.1.2",
     "@portabletext/react": "^6.2.0",
     "@sanity/asset-utils": "^2.3.0",
-    "@sanity/assist": "^6.1.5",
+    "@sanity/assist": "^6.1.8",
     "@sanity/client": "^7.23.0",
+    "@sanity/icons": "^5.0.0",
     "@sanity/image-url": "^2.1.1",
-    "@sanity/orderable-document-list": "^2.0.5",
+    "@sanity/orderable-document-list": "^2.0.7",
     "@sanity/vision": "^6.3.0",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@tanstack/react-form": "^1.33.0",
     "@tanstack/react-store": "^0.11.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "@vis.gl/react-google-maps": "^1.8.3",
+    "@vis.gl/react-google-maps": "^1.9.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
@@ -69,6 +70,7 @@
     "@tailwindcss/postcss": "^4.3.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@types/google.maps": "^3.64.0",
     "@types/node": "^26.1.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
@@ -89,5 +91,8 @@
   },
   "overrides": {
     "@sanity/client": "$@sanity/client"
+  },
+  "patchedDependencies": {
+    "sanity-plugin-lucide-icon-picker@1.0.3": "patches/sanity-plugin-lucide-icon-picker@1.0.3.patch"
   }
 }

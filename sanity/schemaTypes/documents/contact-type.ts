@@ -1,5 +1,5 @@
 import { ContactTypeSchema, ContactTypeValues } from '@/lib/types'
-import { EnvelopeIcon } from '@sanity/icons'
+import { EnvelopeIcon } from '@sanity/icons/Envelope'
 import { defineField, defineType, type StringFieldProps } from 'sanity'
 
 // Helper to create a field config
