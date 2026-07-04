@@ -3,7 +3,11 @@ import FAQCard from '@/app/[locale]/faq/(components)/faq-card'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { getFaqPage } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
-import { faqQuestionsQuery, housesBuildingQuery, pricingCategoriesQuery } from '@/sanity/lib/queries'
+import {
+  faqQuestionsQuery,
+  housesBuildingQuery,
+  pricingCategoriesQuery
+} from '@/sanity/lib/queries'
 import { getLocale } from 'next-intl/server'
 
 export default async function FAQPage() {
