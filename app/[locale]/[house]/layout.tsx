@@ -14,6 +14,14 @@ export function hasHouse(house: string): house is HouseIdentifier {
   return HouseIdentifierSchema.safeParse(house).success
 }
 
+export async function resolveHouseAndLocale(params: Promise<{ house: string }>) {
+  const [{ house }, locale] = await Promise.all([params, getLocale()])
+  if (!hasHouse(house)) {
+    notFound()
+  }
+  return { house, locale }
+}
+
 export async function generateStaticParams() {
   const { data: houses } = await sanityFetch({
     query: houseSlugsQuery,

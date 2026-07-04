@@ -1,18 +1,13 @@
-import { hasHouse } from '@/app/[locale]/[house]/layout'
+import { resolveHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
 import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery } from '@/sanity/lib/queries'
-import { getLocale } from 'next-intl/server'
-import { notFound } from 'next/navigation'
 
 export default async function GalleryModalPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
-  const [{ house }, locale] = await Promise.all([params, getLocale()])
-  if (!hasHouse(house)) {
-    notFound()
-  }
+  const { house, locale } = await resolveHouseAndLocale(params)
 
   const { data } = await sanityFetch({
     query: houseQuery,

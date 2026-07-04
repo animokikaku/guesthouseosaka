@@ -1,4 +1,4 @@
-import { hasHouse } from '@/app/[locale]/[house]/layout'
+import { resolveHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { GalleryShell } from '@/components/gallery/gallery-shell'
 import { PageEmptyState } from '@/components/page-empty-state'
@@ -7,14 +7,10 @@ import { Link } from '@/i18n/navigation'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery } from '@/sanity/lib/queries'
 import { ArrowLeftIcon } from 'lucide-react'
-import { getLocale, getTranslations } from 'next-intl/server'
-import { notFound } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 
 export default async function GalleryPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
-  const [{ house }, locale] = await Promise.all([params, getLocale()])
-  if (!hasHouse(house)) {
-    notFound()
-  }
+  const { house, locale } = await resolveHouseAndLocale(params)
 
   const [t, { data }] = await Promise.all([
     getTranslations('GalleryPage'),
