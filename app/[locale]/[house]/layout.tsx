@@ -38,8 +38,8 @@ export async function generateMetadata(
   }
 
   const [{ data }, { data: settings }] = await Promise.all([
-    sanityFetch({ query: houseMetaQuery, params: { locale, slug: house } }),
-    sanityFetch({ query: settingsQuery, params: { locale } })
+    sanityFetch({ query: houseMetaQuery, params: { locale, slug: house }, stega: false }),
+    sanityFetch({ query: settingsQuery, params: { locale }, stega: false })
   ])
 
   if (!data) {
