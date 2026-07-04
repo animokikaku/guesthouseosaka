@@ -38,13 +38,14 @@ export default defineConfig({
     timeout: 10 * 1000
   },
 
-  // Run your local dev server before starting the tests (skip when using Vercel deployment)
+  // Run E2E tests against a production build. Skip the managed server when
+  // testing an external deployment via BASE_URL.
   webServer: process.env.BASE_URL
     ? undefined
     : {
-        command: 'bun run dev',
+        command: 'bun run build && bun run start',
         url: baseURL,
-        timeout: 2 * 60 * 1000,
+        timeout: 5 * 60 * 1000,
         reuseExistingServer: !process.env.CI
       },
 
