@@ -6,17 +6,14 @@ import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { getHouse } from '@/sanity/lib/cached-queries'
 import { ArrowLeftIcon } from 'lucide-react'
-import { Locale } from 'next-intl'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 export default async function GalleryPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
-  const { locale, house } = await params
+  const [{ house }, locale] = await Promise.all([params, getLocale()])
   if (!hasHouse(house)) {
     notFound()
   }
-
-  setRequestLocale(locale as Locale)
 
   const [t, { data }] = await Promise.all([getTranslations('GalleryPage'), getHouse(locale, house)])
 

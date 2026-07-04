@@ -8,12 +8,10 @@ import {
   housesBuildingQuery,
   pricingCategoriesQuery
 } from '@/sanity/lib/queries'
-import { Locale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 
-export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
-  const { locale } = await params
-  setRequestLocale(locale as Locale)
+export default async function FAQPage() {
+  const locale = await getLocale()
 
   const [
     { data: housesBuilding },

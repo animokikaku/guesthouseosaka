@@ -7,10 +7,8 @@ import { getHouse } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseSlugsQuery, settingsQuery } from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
-import { hasLocale, Locale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { use } from 'react'
 
 export function hasHouse(house: string): house is HouseIdentifier {
   return HouseIdentifierSchema.safeParse(house).success
@@ -33,9 +31,9 @@ export async function generateStaticParams() {
 export async function generateMetadata(
   props: Omit<LayoutProps<'/[locale]/[house]'>, 'children'>
 ): Promise<Metadata | undefined> {
-  const { locale, house } = await props.params
+  const [{ house }, locale] = await Promise.all([props.params, getLocale()])
 
-  if (!hasLocale(routing.locales, locale) || !hasHouse(house)) {
+  if (!hasHouse(house)) {
     return undefined
   }
 
@@ -58,14 +56,16 @@ export async function generateMetadata(
   return { title, description, openGraph, twitter }
 }
 
-export default function HouseLayout({ children, modal, params }: LayoutProps<'/[locale]/[house]'>) {
-  const { locale, house } = use(params)
+export default async function HouseLayout({
+  children,
+  modal,
+  params
+}: LayoutProps<'/[locale]/[house]'>) {
+  const { house } = await params
 
   if (!hasHouse(house)) {
     notFound()
   }
-
-  setRequestLocale(locale as Locale)
 
   return (
     <>

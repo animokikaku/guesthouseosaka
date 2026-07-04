@@ -4,12 +4,10 @@ import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactTypesListQuery } from '@/sanity/lib/queries'
 import { ChevronRightIcon } from 'lucide-react'
-import type { Locale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 
-export default async function ContactPage({ params }: PageProps<'/[locale]/contact'>) {
-  const { locale } = await params
-  setRequestLocale(locale as Locale)
+export default async function ContactPage() {
+  const locale = await getLocale()
 
   // Use separate query to avoid stega deduplication with layout
   const { data: contactTypes } = await sanityFetch({

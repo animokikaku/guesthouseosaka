@@ -1,9 +1,8 @@
 import { routing } from '@/i18n/routing'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { hasLocale, Locale, NextIntlClientProvider } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
-import { notFound } from 'next/navigation'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale } from 'next-intl/server'
 
 import '@/app/globals.css'
 import { ActiveThemeProvider } from '@/components/active-theme'
@@ -31,10 +30,8 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
-export async function generateMetadata(
-  props: Omit<LayoutProps<'/[locale]'>, 'children'>
-): Promise<Metadata> {
-  const { locale } = await props.params
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
 
   const { data: settings } = await sanityFetch({
     query: settingsQuery,
@@ -44,7 +41,7 @@ export async function generateMetadata(
   const siteName = settings?.siteName
 
   const { openGraph, twitter } = getOpenGraphMetadata({
-    locale: locale as Locale,
+    locale,
     siteName
   })
 
@@ -76,15 +73,8 @@ export async function generateMetadata(
   }
 }
 
-export default async function LocaleLayout({ children, params }: LayoutProps<'/[locale]'>) {
-  // Ensure that the incoming `locale` is valid
-  const { locale } = await params
-  if (!hasLocale(routing.locales, locale)) {
-    notFound()
-  }
-
-  // Enable static rendering
-  setRequestLocale(locale)
+export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'>) {
+  const locale = await getLocale()
 
   const url = env.NEXT_PUBLIC_APP_URL
 
