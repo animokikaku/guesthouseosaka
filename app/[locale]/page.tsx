@@ -8,8 +8,7 @@ import { toGalleryImages } from '@/lib/transforms/gallery'
 import { sanityFetch } from '@/sanity/lib/live'
 import { homePageQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
-import { Locale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 
 const heroComponents: PortableTextComponents = {
   block: {
@@ -41,10 +40,8 @@ const collectionComponents: PortableTextComponents = {
   }
 }
 
-export default async function LocalePage({ params }: PageProps<'/[locale]'>) {
-  const { locale } = await params
-  // Enable static rendering
-  setRequestLocale(locale as Locale)
+export default async function LocalePage() {
+  const locale = await getLocale()
 
   const { data } = await sanityFetch({
     query: homePageQuery,

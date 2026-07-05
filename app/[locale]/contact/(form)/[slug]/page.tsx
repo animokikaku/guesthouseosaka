@@ -8,8 +8,7 @@ import { toContactFormConfig } from '@/lib/transforms/form'
 import { ContactType, ContactTypeSchema } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactTypeQuery, contactTypeSlugsQuery, housesTitlesQuery } from '@/sanity/lib/queries'
-import { Locale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 const FORM_BY_SLUG = {
@@ -37,8 +36,7 @@ export async function generateStaticParams() {
 }
 
 export default async function ContactTypePage({ params }: PageProps<'/[locale]/contact/[slug]'>) {
-  const { locale, slug } = await params
-  setRequestLocale(locale as Locale)
+  const [{ slug }, locale] = await Promise.all([params, getLocale()])
 
   if (!hasContactType(slug)) {
     notFound()

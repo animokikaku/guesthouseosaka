@@ -1,27 +1,18 @@
-import { hasHouse } from '@/app/[locale]/[house]/layout'
+import { getHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house/house-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
 import { env } from '@/lib/env'
-import { getHouse } from '@/sanity/lib/cached-queries'
 import { urlFor } from '@/sanity/lib/image'
 import { sanityFetch } from '@/sanity/lib/live'
-import { housesNavQuery } from '@/sanity/lib/queries'
-import { Locale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
-import { notFound } from 'next/navigation'
+import { houseQuery, housesNavQuery } from '@/sanity/lib/queries'
 import { Accommodation, WithContext } from 'schema-dts'
 
 export default async function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
-  const { locale, house } = await params
-  if (!hasHouse(house)) {
-    notFound()
-  }
-
-  setRequestLocale(locale as Locale)
+  const { house, locale } = await getHouseAndLocale(params)
 
   const [{ data }, { data: houses }] = await Promise.all([
-    getHouse(locale, house),
+    sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
     sanityFetch({ query: housesNavQuery, params: { locale } })
   ])
 

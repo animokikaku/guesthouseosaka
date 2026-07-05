@@ -1,4 +1,3 @@
-import { env } from '@/lib/env'
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
@@ -15,7 +14,7 @@ const withNextIntl = createNextIntlPlugin({
 })
 
 const nextConfig: NextConfig = {
-  reactCompiler: env.NODE_ENV === 'production',
+  reactCompiler: true,
   typedRoutes: true,
   redirects: async () => [
     // Locale corrections: jp → ja
@@ -81,7 +80,8 @@ const nextConfig: NextConfig = {
     typedEnv: true,
     turbopackFileSystemCacheForBuild: true,
     turbopackFileSystemCacheForDev: true,
-    testProxy: true
+    testProxy: true,
+    turbopackRustReactCompiler: true
   },
   images: {
     qualities: [75, 90],

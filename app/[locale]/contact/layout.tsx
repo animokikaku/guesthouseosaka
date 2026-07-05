@@ -8,21 +8,18 @@ import { sanityFetch } from '@/sanity/lib/live'
 import { contactPageMetaQuery, contactPageQuery, settingsQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import type { Metadata } from 'next'
-import type { Locale } from 'next-intl'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 
-export async function generateMetadata(
-  props: Omit<LayoutProps<'/[locale]/contact'>, 'children'>
-): Promise<Metadata> {
-  const { locale } = await props.params
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
   const [t, { data: contactPageMeta }, { data: settings }] = await Promise.all([
-    getTranslations({ locale: locale as Locale, namespace: 'Metadata' }),
+    getTranslations('Metadata'),
     sanityFetch({ query: contactPageMetaQuery, params: { locale } }),
     sanityFetch({ query: settingsQuery, params: { locale } })
   ])
 
   const { openGraph, twitter } = getOpenGraphMetadata({
-    locale: locale as Locale,
+    locale,
     image: assets.openGraph.contact.src,
     siteName: settings?.siteName
   })
@@ -35,12 +32,8 @@ export async function generateMetadata(
   }
 }
 
-export default async function ContactLayout({
-  params,
-  children
-}: LayoutProps<'/[locale]/contact'>) {
-  const { locale } = await params
-  setRequestLocale(locale as Locale)
+export default async function ContactLayout({ children }: LayoutProps<'/[locale]/contact'>) {
+  const locale = await getLocale()
 
   const { data } = await sanityFetch({
     query: contactPageQuery,

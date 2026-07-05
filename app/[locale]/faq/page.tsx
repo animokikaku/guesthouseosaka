@@ -1,19 +1,17 @@
 import { FAQAccordion } from '@/app/[locale]/faq/(components)/faq-accordion'
 import FAQCard from '@/app/[locale]/faq/(components)/faq-card'
 import { PageEmptyState } from '@/components/page-empty-state'
+import { getFaqPage } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
 import {
-  faqPageQuery,
   faqQuestionsQuery,
   housesBuildingQuery,
   pricingCategoriesQuery
 } from '@/sanity/lib/queries'
-import { Locale } from 'next-intl'
-import { setRequestLocale } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 
-export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
-  const { locale } = await params
-  setRequestLocale(locale as Locale)
+export default async function FAQPage() {
+  const locale = await getLocale()
 
   const [
     { data: housesBuilding },
@@ -25,10 +23,7 @@ export default async function FAQPage({ params }: PageProps<'/[locale]/faq'>) {
       query: housesBuildingQuery,
       params: { locale }
     }),
-    sanityFetch({
-      query: faqPageQuery,
-      params: { locale }
-    }),
+    getFaqPage(locale),
     sanityFetch({
       query: pricingCategoriesQuery,
       params: { locale }

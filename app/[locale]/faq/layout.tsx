@@ -4,25 +4,23 @@ import { PageHeader } from '@/components/page-header'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { pageHeaderComponents } from '@/lib/portable-text/page-header-components'
+import { getFaqPage } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
-import { faqPageQuery, settingsQuery } from '@/sanity/lib/queries'
+import { faqPageMetaQuery, settingsQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import type { Metadata } from 'next'
-import type { Locale } from 'next-intl'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 
-export async function generateMetadata(
-  props: Omit<LayoutProps<'/[locale]/faq'>, 'children'>
-): Promise<Metadata> {
-  const { locale } = await props.params
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
   const [t, { data: faqPage }, { data: settings }] = await Promise.all([
-    getTranslations({ locale: locale as Locale, namespace: 'Metadata' }),
-    sanityFetch({ query: faqPageQuery, params: { locale } }),
-    sanityFetch({ query: settingsQuery, params: { locale } })
+    getTranslations('Metadata'),
+    sanityFetch({ query: faqPageMetaQuery, params: { locale }, stega: false }),
+    sanityFetch({ query: settingsQuery, params: { locale }, stega: false })
   ])
 
   const { openGraph, twitter } = getOpenGraphMetadata({
-    locale: locale as Locale,
+    locale,
     image: assets.openGraph.faq.src,
     siteName: settings?.siteName
   })
@@ -35,14 +33,10 @@ export async function generateMetadata(
   }
 }
 
-export default async function FAQLayout({ params, children }: LayoutProps<'/[locale]/faq'>) {
-  const { locale } = await params
-  setRequestLocale(locale as Locale)
+export default async function FAQLayout({ children }: LayoutProps<'/[locale]/faq'>) {
+  const locale = await getLocale()
 
-  const { data } = await sanityFetch({
-    query: faqPageQuery,
-    params: { locale }
-  })
+  const { data } = await getFaqPage(locale)
 
   return (
     <>
