@@ -97,8 +97,7 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.sanity.io'
       }
     ]
-  },
-  serverExternalPackages: ['@react-email/components', '@react-email/render']
+  }
 }
 
 export default withNextIntl(nextConfig)

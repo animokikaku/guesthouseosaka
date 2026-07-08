@@ -8,6 +8,7 @@ import {
 import { env } from '@/lib/env'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
 import { HouseIdentifier } from '@/lib/types'
+import { render } from '@react-email/render'
 import { headers } from 'next/headers'
 import { Resend } from 'resend'
 
@@ -76,7 +77,7 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
         to: to(data.places),
         replyTo: email,
         subject: `内覧希望: ${name}`,
-        react: TourRequestEmail({ data })
+        html: await render(TourRequestEmail({ data }))
       })
     case 'move-in':
       return emails.send({
@@ -84,7 +85,7 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
         to: to(data.places),
         replyTo: email,
         subject: `入居希望: ${name}`,
-        react: MoveInRequestEmail({ data })
+        html: await render(MoveInRequestEmail({ data }))
       })
     case 'other':
       return emails.send({
@@ -92,7 +93,7 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
         to: to(data.places),
         replyTo: email,
         subject: `お問い合わせ: ${name}`,
-        react: GeneralInquiryEmail({ data })
+        html: await render(GeneralInquiryEmail({ data }))
       })
   }
 }
