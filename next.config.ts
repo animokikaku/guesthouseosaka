@@ -15,7 +15,7 @@ const withNextIntl = createNextIntlPlugin({
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  transpilePackages: ['prettier'],
+  transpilePackages: ['@react-email/render', 'prettier'],
   typedRoutes: true,
   redirects: async () => [
     // Locale corrections: jp → ja
