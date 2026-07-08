@@ -95,14 +95,21 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Cache Next.js build
-        uses: actions/cache@v6
+      - name: Restore Next.js cache on pull requests
+        if: github.event_name == 'pull_request'
+        uses: actions/cache/restore@v6
         with:
           path: ${{ github.workspace }}/.next/cache
-          key: nextjs-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}-${{ github.sha }}
-          restore-keys: |
-            nextjs-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}-
-            nextjs-${{ runner.os }}-
+          key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
+          restore-keys: nextjs-v3-${{ runner.os }}-
+
+      - name: Restore exact Next.js cache on main
+        if: github.event_name == 'push'
+        id: next-cache-main
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
 
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
@@ -110,6 +117,13 @@ jobs:
 
       - name: Run E2E tests
         run: bun run test:e2e
+
+      - name: Save Next.js cache from main
+        if: github.event_name == 'push' && steps.next-cache-main.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
 
       - name: Upload Playwright artifacts
         if: failure()
