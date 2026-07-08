@@ -117,7 +117,7 @@ test.describe('Contact Form Tests', () => {
   test.describe('Form Submission', () => {
     test('valid form can be submitted', async ({ next, page }) => {
       // Mock the Resend API to prevent actual email sending
-      mockResendAPI(next)
+      const requests = mockResendAPI(next)
 
       // Fill all required fields
       await fillRequiredFields(page)
@@ -138,6 +138,17 @@ test.describe('Contact Form Tests', () => {
         }),
         expect(page).toHaveURL(/\/en\/contact(?!\/other)/, { timeout: 10000 })
       ])
+
+      expect(requests).toHaveLength(1)
+      expect(requests[0]).toMatchObject({
+        from: 'Guest House Osaka <info@guesthouseosaka.com>',
+        html: expect.stringMatching(
+          /<!DOCTYPE html[\s\S]*Test User[\s\S]*This is a valid test message/
+        ),
+        reply_to: 'test@example.com',
+        subject: 'お問い合わせ: Test User',
+        to: 'orange@guesthouseosaka.com'
+      })
     })
   })
 })

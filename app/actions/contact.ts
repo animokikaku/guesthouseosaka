@@ -61,11 +61,6 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
     throw new Error('Invalid contact form submission')
   }
 
-  // Skip sending emails in CI (e2e tests)
-  if (process.env.CI) {
-    return { id: 'ci-skipped', object: 'email' }
-  }
-
   const { from, to } = DEFAULT_CONTACT
   const { name, email } = data.account
 
