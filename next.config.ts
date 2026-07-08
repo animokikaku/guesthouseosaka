@@ -78,7 +78,7 @@ const nextConfig: NextConfig = {
   ],
   experimental: {
     typedEnv: true,
-    turbopackFileSystemCacheForBuild: false,
+    turbopackFileSystemCacheForBuild: true,
     turbopackFileSystemCacheForDev: true,
     testProxy: true,
     turbopackRustReactCompiler: true
@@ -97,7 +97,8 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.sanity.io'
       }
     ]
-  }
+  },
+  serverExternalPackages: ['@react-email/components', '@react-email/render']
 }
 
 export default withNextIntl(nextConfig)
