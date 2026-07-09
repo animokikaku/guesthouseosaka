@@ -45,7 +45,7 @@ const DEFAULT_CONTACT = {
   from: 'Guest House Osaka <info@guesthouseosaka.com>',
   to: (places?: HouseIdentifier[]) => {
     if (env.VERCEL_ENV === 'preview') {
-      return 'delivered+guesthouseosaka-contact-preview@resend.dev'
+      return 'delivered+guesthouseosaka@resend.dev'
     }
     if (env.NODE_ENV !== 'production') {
       return 'dev@guesthouseosaka.com'
