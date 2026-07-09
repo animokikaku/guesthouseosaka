@@ -4,15 +4,14 @@ import { defineConfig, devices } from '@playwright/test'
 const PORT = process.env.PORT || 3000
 const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`
 const vercelProtectionBypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET
-const isExternalPreviewSmoke = Boolean(
-  process.env.CI && process.env.BASE_URL && vercelProtectionBypass
-)
-const extraHTTPHeaders = isExternalPreviewSmoke
-  ? {
-      'x-vercel-protection-bypass': vercelProtectionBypass,
-      'x-vercel-set-bypass-cookie': 'true'
-    }
-  : undefined
+
+const extraHTTPHeaders =
+  process.env.BASE_URL && vercelProtectionBypass
+    ? {
+        'x-vercel-protection-bypass': vercelProtectionBypass,
+        'x-vercel-set-bypass-cookie': 'true'
+      }
+    : undefined
 
 /**
  * Playwright configuration for E2E testing.

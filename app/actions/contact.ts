@@ -5,9 +5,9 @@ import {
   MoveInRequestEmail,
   TourRequestEmail
 } from '@/components/email-template'
-import { CONTACT_EMAIL_FROM, getContactRecipient } from '@/lib/contact-email'
 import { env } from '@/lib/env'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
+import { HouseIdentifier } from '@/lib/types'
 import { headers } from 'next/headers'
 import { Resend } from 'resend'
 
@@ -41,6 +41,22 @@ function assertRateLimit(identifier: string) {
   attempts.count += 1
 }
 
+const DEFAULT_CONTACT = {
+  from: 'Guest House Osaka <info@guesthouseosaka.com>',
+  to: (places?: HouseIdentifier[]) => {
+    if (env.VERCEL_ENV === 'preview') {
+      return 'delivered+guesthouseosaka-contact-preview@resend.dev'
+    }
+    if (env.NODE_ENV !== 'production') {
+      return 'dev@guesthouseosaka.com'
+    }
+    if (places?.length === 1) {
+      return `${places[0]}@guesthouseosaka.com`
+    }
+    return 'info@guesthouseosaka.com'
+  }
+}
+
 export async function submitContactForm({ type, data }: ContactFormPayload) {
   assertRateLimit(await getRequesterIdentifier())
 
@@ -48,29 +64,30 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
     throw new Error('Invalid contact form submission')
   }
 
+  const { from, to } = DEFAULT_CONTACT
   const { name, email } = data.account
 
   switch (type) {
     case 'tour':
       return emails.send({
-        from: CONTACT_EMAIL_FROM,
-        to: getContactRecipient(data.places),
+        from,
+        to: to(data.places),
         replyTo: email,
         subject: `内覧希望: ${name}`,
         react: TourRequestEmail({ data })
       })
     case 'move-in':
       return emails.send({
-        from: CONTACT_EMAIL_FROM,
-        to: getContactRecipient(data.places),
+        from,
+        to: to(data.places),
         replyTo: email,
         subject: `入居希望: ${name}`,
         react: MoveInRequestEmail({ data })
       })
     case 'other':
       return emails.send({
-        from: CONTACT_EMAIL_FROM,
-        to: getContactRecipient(data.places),
+        from,
+        to: to(data.places),
         replyTo: email,
         subject: `お問い合わせ: ${name}`,
         react: GeneralInquiryEmail({ data })
