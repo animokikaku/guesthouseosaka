@@ -6,7 +6,7 @@ export const DEFAULT_PREVIEW_CONTACT_RECIPIENT =
   'delivered+guesthouseosaka-contact-preview@resend.dev'
 
 export function getContactRecipient(places?: HouseIdentifier[]) {
-  if (env.NEXT_PUBLIC_VERCEL_ENV === 'preview') {
+  if (env.VERCEL_ENV === 'preview') {
     return DEFAULT_PREVIEW_CONTACT_RECIPIENT
   }
 

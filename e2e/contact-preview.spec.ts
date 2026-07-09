@@ -1,9 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-test.skip(
-  process.env.NEXT_PUBLIC_VERCEL_ENV !== 'preview',
-  'Preview smoke test only runs against Vercel preview deployments.'
-)
+test.skip(!process.env.CI, 'Preview smoke test only runs in CI against Vercel preview deployments.')
 
 function getFormFields(page: Page) {
   const form = page.locator('form#other-form')

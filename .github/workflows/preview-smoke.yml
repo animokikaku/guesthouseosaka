@@ -4,32 +4,18 @@ on:
   repository_dispatch:
     types:
       - 'vercel.deployment.success'
-  workflow_dispatch:
-    inputs:
-      base_url:
-        description: 'Preview deployment URL to test'
-        required: true
-        type: string
 
 jobs:
   contact-preview-smoke:
-    name: Contact Preview Smoke
-    if: github.event_name == 'workflow_dispatch' || github.event.client_payload.environment == 'preview'
+    if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10
-    env:
-      BASE_URL: ${{ github.event.client_payload.url || github.event.inputs.base_url }}
-      NEXT_PUBLIC_VERCEL_ENV: preview
-      VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.client_payload.git.sha || github.sha }}
+          ref: ${{ github.event.client_payload.git.sha }}
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - uses: oven-sh/setup-bun@v2
 
       - name: Cache bun dependencies
         uses: actions/cache@v6
@@ -55,6 +41,9 @@ jobs:
 
       - name: Run preview contact smoke
         run: bun run test:e2e:preview
+        env:
+          BASE_URL: ${{ github.event.client_payload.url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
 
       - name: Upload Playwright artifacts
         if: failure()

@@ -7,7 +7,8 @@ export const env = createEnv({
   server: {
     SANITY_API_READ_TOKEN: z.string().min(1),
     RESEND_API_KEY: z.string().min(1),
-    NODE_ENV: z.enum(['development', 'production', 'test'])
+    NODE_ENV: z.enum(['development', 'production', 'test']),
+    VERCEL_ENV: z.enum(['development', 'preview', 'production']).optional()
   },
   client: {
     NEXT_PUBLIC_APP_URL: z.url().default(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`),
@@ -19,8 +20,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().min(1),
     NEXT_PUBLIC_SANITY_API_VERSION: z.string().min(1),
     NEXT_PUBLIC_SANITY_DATASET: z.enum(['production', 'development']),
-    NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1),
-    NEXT_PUBLIC_VERCEL_ENV: z.enum(['development', 'preview', 'production']).optional()
+    NEXT_PUBLIC_SANITY_PROJECT_ID: z.string().min(1)
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
@@ -28,8 +28,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     NEXT_PUBLIC_SANITY_API_VERSION: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
     NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
-    NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-    NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV
+    NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
   },
   emptyStringAsUndefined: true
 })
