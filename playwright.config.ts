@@ -3,6 +3,15 @@ import { defineConfig, devices } from '@playwright/test'
 // Use process.env.PORT by default and fallback to port 3000
 const PORT = process.env.PORT || 3000
 const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`
+const isPreviewDeployment = process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
+const vercelProtectionBypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+const extraHTTPHeaders =
+  isPreviewDeployment && vercelProtectionBypass
+    ? {
+        'x-vercel-protection-bypass': vercelProtectionBypass,
+        'x-vercel-set-bypass-cookie': 'true'
+      }
+    : undefined
 
 /**
  * Playwright configuration for E2E testing.
@@ -53,6 +62,7 @@ export default defineConfig({
   use: {
     // Use baseURL for navigations
     baseURL,
+    extraHTTPHeaders,
 
     // Collect trace when retrying the failed test
     trace: process.env.CI ? 'on' : 'retain-on-failure',
