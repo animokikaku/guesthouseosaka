@@ -6,8 +6,8 @@ on:
       - 'vercel.deployment.success'
 
 jobs:
-  preview:
-    name: Preview
+  preview_tests:
+    name: Run Preview Tests
     if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10
@@ -55,10 +55,10 @@ jobs:
           path: test-results
           if-no-files-found: ignore
 
-  report-preview:
-    name: Report Preview
-    needs: preview
-    if: always() && needs.preview.result != 'skipped'
+  publish_preview_status:
+    name: Publish Preview Status
+    needs: preview_tests
+    if: always()
     runs-on: ubuntu-24.04
     permissions:
       statuses: write
@@ -66,8 +66,14 @@ jobs:
       - uses: actions/github-script@v8
         with:
           script: |
-            const result = '${{ needs.preview.result }}';
-            const state = result === 'success' ? 'success' : 'failure';
+            const result = '${{ needs.preview_tests.result }}';
+            const state = ['success', 'skipped'].includes(result) ? 'success' : 'failure';
+            const description =
+              result === 'success'
+                ? 'Preview tests passed.'
+                : result === 'skipped'
+                  ? 'Preview tests not required for this deployment.'
+                  : 'Preview tests failed.';
 
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
@@ -75,9 +81,6 @@ jobs:
               sha: '${{ github.event.client_payload.git.sha }}',
               state,
               context: 'Preview',
-              description:
-                state === 'success'
-                  ? 'Preview tests passed.'
-                  : 'Preview tests failed.',
+              description,
               target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
             });
