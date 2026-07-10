@@ -9,6 +9,7 @@ on:
 jobs:
   preview_status:
     name: Preview Status
+    if: github.event_name == 'pull_request' || github.event.client_payload.environment == 'preview'
     runs-on: ${{ github.event_name == 'repository_dispatch' && 'blacksmith-4vcpu-ubuntu-2404' || 'ubuntu-24.04' }}
     timeout-minutes: 10
     permissions:
@@ -30,10 +31,10 @@ jobs:
           fi
 
       - uses: oven-sh/setup-bun@v2
-        if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
+        if: github.event_name == 'repository_dispatch'
 
       - name: Cache bun dependencies
-        if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
+        if: github.event_name == 'repository_dispatch'
         uses: actions/cache@v6
         with:
           path: ~/.bun/install/cache
@@ -42,7 +43,7 @@ jobs:
 
       - name: Cache Playwright browsers
         id: playwright-cache
-        if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
+        if: github.event_name == 'repository_dispatch'
         uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
@@ -50,23 +51,23 @@ jobs:
           restore-keys: playwright-${{ runner.os }}-
 
       - name: Install dependencies
-        if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
+        if: github.event_name == 'repository_dispatch'
         run: bun install --frozen-lockfile
 
       - name: Install Playwright browsers
-        if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview' && steps.playwright-cache.outputs.cache-hit != 'true'
+        if: github.event_name == 'repository_dispatch' && steps.playwright-cache.outputs.cache-hit != 'true'
         run: bunx playwright install --with-deps chromium
 
       - name: Run preview tests
         id: preview-tests
-        if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
+        if: github.event_name == 'repository_dispatch'
         run: bun run test:e2e:preview --retries=0
         env:
           BASE_URL: ${{ github.event.client_payload.url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
 
       - name: Upload Playwright artifacts
-        if: failure() && github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
+        if: failure() && github.event_name == 'repository_dispatch'
         uses: actions/upload-artifact@v7
         with:
           name: preview-playwright-artifacts
