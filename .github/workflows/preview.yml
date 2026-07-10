@@ -63,7 +63,7 @@ jobs:
     permissions:
       statuses: write
     steps:
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         with:
           script: |
             const result = '${{ needs.preview.result }}';
