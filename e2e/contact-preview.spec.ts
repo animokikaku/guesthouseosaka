@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-test.skip(!process.env.CI, 'Preview smoke test only runs in CI against Vercel preview deployments.')
+test.skip(!process.env.BASE_URL, 'Preview smoke test requires a deployed preview URL.')
 
 function getFormFields(page: Page) {
   const form = page.locator('form#other-form')
