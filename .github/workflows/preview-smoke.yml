@@ -7,6 +7,7 @@ on:
 
 jobs:
   contact-preview-smoke:
+    name: Smoke Test
     if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10

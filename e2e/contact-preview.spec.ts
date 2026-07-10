@@ -38,10 +38,7 @@ test('preview deployment can send the contact form through Resend', async ({ pag
   await fillPreviewSmokeContactForm(page)
   await page.getByRole('button', { name: 'Submit' }).click()
 
-  await Promise.race([
-    expect(page.getByText('Message sent successfully')).toBeVisible({
-      timeout: 15000
-    }),
-    expect(page).toHaveURL(/\/en\/contact(?!\/other)/, { timeout: 15000 })
-  ])
+  const statusMessage = page.getByText(/^(Message sent successfully!|Failed to send message\.)$/)
+  await expect(statusMessage).toBeVisible({ timeout: 10000 })
+  await expect(statusMessage).toHaveText('Message sent successfully!')
 })
