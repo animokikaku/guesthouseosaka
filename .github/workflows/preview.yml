@@ -1,40 +1,32 @@
 name: Preview
 
 on:
-  pull_request:
   repository_dispatch:
     types:
       - 'vercel.deployment.success'
+      - 'vercel.deployment.ignored'
 
 jobs:
   preview_status:
     name: Preview Status
-    if: github.event_name == 'pull_request' || github.event.client_payload.environment == 'preview'
-    runs-on: ${{ github.event_name == 'repository_dispatch' && 'blacksmith-4vcpu-ubuntu-2404' || 'ubuntu-24.04' }}
+    if: github.event.client_payload.environment == 'preview'
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10
     permissions:
       contents: read
       statuses: write
     steps:
       - uses: actions/checkout@v7
+        if: github.event.action == 'vercel.deployment.success'
         with:
-          ref: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.git.sha || github.event.pull_request.head.sha }}
-          fetch-depth: 2
+          ref: ${{ github.event.client_payload.git.sha }}
           persist-credentials: false
 
-      - id: ignored
-        name: Check whether Vercel ignored this commit
-        if: github.event_name == 'pull_request'
-        run: |
-          if git diff --quiet HEAD^ HEAD -- ':!**/__tests__/**' ':!**/*.test.*' ':!**/*.spec.*' app/ components/ lib/ sanity/ public/ messages/ package.json bun.lock next.config.ts; then
-            echo 'value=true' >> "$GITHUB_OUTPUT"
-          fi
-
       - uses: oven-sh/setup-bun@v2
-        if: github.event_name == 'repository_dispatch'
+        if: github.event.action == 'vercel.deployment.success'
 
       - name: Cache bun dependencies
-        if: github.event_name == 'repository_dispatch'
+        if: github.event.action == 'vercel.deployment.success'
         uses: actions/cache@v6
         with:
           path: ~/.bun/install/cache
@@ -43,7 +35,7 @@ jobs:
 
       - name: Cache Playwright browsers
         id: playwright-cache
-        if: github.event_name == 'repository_dispatch'
+        if: github.event.action == 'vercel.deployment.success'
         uses: actions/cache@v6
         with:
           path: ~/.cache/ms-playwright
@@ -51,23 +43,23 @@ jobs:
           restore-keys: playwright-${{ runner.os }}-
 
       - name: Install dependencies
-        if: github.event_name == 'repository_dispatch'
+        if: github.event.action == 'vercel.deployment.success'
         run: bun install --frozen-lockfile
 
       - name: Install Playwright browsers
-        if: github.event_name == 'repository_dispatch' && steps.playwright-cache.outputs.cache-hit != 'true'
+        if: github.event.action == 'vercel.deployment.success' && steps.playwright-cache.outputs.cache-hit != 'true'
         run: bunx playwright install --with-deps chromium
 
       - name: Run preview tests
         id: preview-tests
-        if: github.event_name == 'repository_dispatch'
+        if: github.event.action == 'vercel.deployment.success'
         run: bun run test:e2e:preview --retries=0
         env:
           BASE_URL: ${{ github.event.client_payload.url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
 
       - name: Upload Playwright artifacts
-        if: failure() && github.event_name == 'repository_dispatch'
+        if: failure() && github.event.action == 'vercel.deployment.success'
         uses: actions/upload-artifact@v7
         with:
           name: preview-playwright-artifacts
@@ -78,23 +70,12 @@ jobs:
         if: always()
         uses: actions/github-script@v9
         env:
-          IGNORED_PULL_REQUEST: ${{ steps.ignored.outputs.value }}
           PREVIEW_TEST_OUTCOME: ${{ steps.preview-tests.outcome }}
         with:
           script: |
-            const isPreviewDeployment =
-              context.eventName === 'repository_dispatch' &&
-              context.payload.client_payload.environment === 'preview';
-            const isIgnoredPullRequest =
-              context.eventName === 'pull_request' &&
-              process.env.IGNORED_PULL_REQUEST === 'true';
-
-            if (context.eventName === 'pull_request' && !isIgnoredPullRequest) return;
-
-            const failed = isPreviewDeployment && process.env.PREVIEW_TEST_OUTCOME !== 'success';
-            const sha = context.eventName === 'pull_request'
-              ? context.payload.pull_request.head.sha
-              : context.payload.client_payload.git.sha;
+            const testsRequired = context.payload.action === 'vercel.deployment.success';
+            const failed = testsRequired && process.env.PREVIEW_TEST_OUTCOME !== 'success';
+            const sha = context.payload.client_payload.git.sha;
 
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
@@ -104,7 +85,7 @@ jobs:
               context: 'Preview',
               description: failed
                 ? 'Preview tests failed.'
-                : isPreviewDeployment
+                : testsRequired
                   ? 'Preview tests passed.'
                   : 'Preview tests not required for this change.',
               target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
