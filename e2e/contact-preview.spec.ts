@@ -38,7 +38,7 @@ test('preview deployment can send the contact form through Resend', async ({ pag
   await fillPreviewSmokeContactForm(page)
   await page.getByRole('button', { name: 'Submit' }).click()
 
-  const statusMessage = page.getByText(/^(Message sent successfully!|Failed to send message\.)$/)
-  await expect(statusMessage).toBeVisible({ timeout: 10000 })
-  await expect(statusMessage).toHaveText('Message sent successfully!')
+  const toast = page.locator('[data-sonner-toast]').first()
+  await expect(toast).toBeVisible({ timeout: 10000 })
+  await expect(toast).toContainText('Message sent successfully!')
 })
