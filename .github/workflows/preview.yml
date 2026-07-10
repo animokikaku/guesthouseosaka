@@ -1,4 +1,4 @@
-name: Preview Smoke
+name: Preview
 
 on:
   repository_dispatch:
@@ -6,8 +6,8 @@ on:
       - 'vercel.deployment.success'
 
 jobs:
-  contact-preview-smoke:
-    name: Smoke Test
+  preview:
+    name: Preview
     if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10
@@ -41,7 +41,7 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: bunx playwright install --with-deps chromium
 
-      - name: Run preview contact smoke
+      - name: Run preview tests
         run: bun run test:e2e:preview
         env:
           BASE_URL: ${{ github.event.client_payload.url }}
@@ -51,6 +51,33 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: preview-smoke-playwright-artifacts
+          name: preview-playwright-artifacts
           path: test-results
           if-no-files-found: ignore
+
+  report-preview:
+    name: Report Preview
+    needs: preview
+    if: always() && needs.preview.result != 'skipped'
+    runs-on: ubuntu-24.04
+    permissions:
+      statuses: write
+    steps:
+      - uses: actions/github-script@v8
+        with:
+          script: |
+            const result = '${{ needs.preview.result }}';
+            const state = result === 'success' ? 'success' : 'failure';
+
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.event.client_payload.git.sha }}',
+              state,
+              context: 'Preview',
+              description:
+                state === 'success'
+                  ? 'Preview tests passed.'
+                  : 'Preview tests failed.',
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            });
