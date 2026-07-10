@@ -131,13 +131,11 @@ test.describe('Contact Form Tests', () => {
       // Submit the form
       await page.getByRole('button', { name: 'Submit' }).click()
 
-      // Wait for toast message or redirect
-      await Promise.race([
-        expect(page.getByText('Message sent successfully')).toBeVisible({
-          timeout: 10000
-        }),
-        expect(page).toHaveURL(/\/en\/contact(?!\/other)/, { timeout: 10000 })
-      ])
+      await expect(page.locator('[data-sonner-toast]').first()).toContainText(
+        'Message sent successfully!'
+      )
+
+      await expect(page).toHaveURL(/\/en\/contact(?!\/other)/)
 
       expect(requests).toHaveLength(1)
       expect(requests[0]).toMatchObject({
