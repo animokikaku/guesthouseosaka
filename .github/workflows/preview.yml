@@ -60,7 +60,7 @@ jobs:
       - name: Run preview tests
         id: preview-tests
         if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
-        run: bun run test:e2e:preview
+        run: bun run test:e2e:preview --retries=0
         env:
           BASE_URL: ${{ github.event.client_payload.url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
