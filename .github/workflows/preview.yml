@@ -93,7 +93,7 @@ jobs:
   publish_preview_status:
     name: Publish Preview Status
     needs: preview_tests
-    if: always()
+    if: always() && github.event_name == 'repository_dispatch'
     runs-on: ubuntu-24.04
     permissions:
       statuses: write
