@@ -10,7 +10,7 @@ jobs:
   preview_status:
     name: Preview Status
     if: github.event.client_payload.environment == 'preview'
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 10
     permissions:
       contents: read
