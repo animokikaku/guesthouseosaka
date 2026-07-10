@@ -1,11 +1,46 @@
 name: Preview
 
 on:
+  pull_request:
   repository_dispatch:
     types:
       - 'vercel.deployment.success'
 
 jobs:
+  publish_ignored_preview_status:
+    name: Publish Ignored Preview Status
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      statuses: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+
+      - id: ignored
+        name: Check whether Vercel ignored this commit
+        run: |
+          if git diff --quiet HEAD^ HEAD -- ':!**/__tests__/**' ':!**/*.test.*' ':!**/*.spec.*' app/ components/ lib/ sanity/ public/ messages/ package.json bun.lock next.config.ts; then
+            echo 'value=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/github-script@v9
+        if: steps.ignored.outputs.value == 'true'
+        with:
+          script: |
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.payload.pull_request.head.sha,
+              state: 'success',
+              context: 'Preview',
+              description: 'Preview tests not required for this change.',
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            });
+
   preview_tests:
     name: Run Preview Tests
     if: github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'preview'
