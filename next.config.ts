@@ -82,7 +82,8 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForBuild: true,
     turbopackFileSystemCacheForDev: true,
     testProxy: true,
-    turbopackRustReactCompiler: true
+    turbopackRustReactCompiler: true,
+    useTypeScriptCli: true
   },
   images: {
     qualities: [75, 90],
