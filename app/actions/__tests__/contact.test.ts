@@ -1,4 +1,9 @@
-const { headersMock, sendMock } = vi.hoisted(() => ({
+const { envMock, headersMock, sendMock } = vi.hoisted(() => ({
+  envMock: {
+    NODE_ENV: 'test',
+    RESEND_API_KEY: 're_test',
+    VERCEL_ENV: undefined as string | undefined
+  },
   headersMock: vi.fn(),
   sendMock: vi.fn()
 }))
@@ -14,11 +19,7 @@ vi.mock('resend', () => ({
 }))
 
 vi.mock('@/lib/env', () => ({
-  env: {
-    NODE_ENV: 'test',
-    RESEND_API_KEY: 're_test',
-    VERCEL_ENV: undefined
-  }
+  env: envMock
 }))
 
 vi.mock('@/components/email-template', () => ({
@@ -47,11 +48,39 @@ const payload: ContactFormPayload = {
   }
 }
 
+const tourPayload: ContactFormPayload = {
+  type: 'tour',
+  data: {
+    ...payload.data,
+    date: '2030-01-15',
+    hour: '14:00:00'
+  }
+}
+
+const moveInPayload: ContactFormPayload = {
+  type: 'move-in',
+  data: {
+    ...payload.data,
+    date: '2030-01-15',
+    stayDuration: '3-months'
+  }
+}
+
+function mockAcceptedEmail() {
+  sendMock.mockResolvedValue({
+    data: { id: 'email-id' },
+    error: null,
+    headers: {}
+  })
+}
+
 describe('submitContactForm', () => {
   let requesterIndex = 0
 
   beforeEach(() => {
     vi.clearAllMocks()
+    envMock.NODE_ENV = 'test'
+    envMock.VERCEL_ENV = undefined
     requesterIndex += 1
     headersMock.mockResolvedValue(
       new Headers({ 'x-forwarded-for': `198.51.100.${requesterIndex}` })
@@ -63,13 +92,51 @@ describe('submitContactForm', () => {
   })
 
   it('returns success when Resend accepts the email', async () => {
-    sendMock.mockResolvedValue({
-      data: { id: 'email-id' },
-      error: null,
-      headers: {}
-    })
+    mockAcceptedEmail()
 
     await expect(submitContactForm(payload)).resolves.toEqual({ ok: true })
+  })
+
+  it.each([
+    ['tour', tourPayload, '内覧希望: Test User'],
+    ['move-in', moveInPayload, '入居希望: Test User']
+  ])('sends the %s email variant', async (_, variantPayload, subject) => {
+    mockAcceptedEmail()
+
+    await expect(submitContactForm(variantPayload)).resolves.toEqual({ ok: true })
+    expect(sendMock).toHaveBeenCalledWith(expect.objectContaining({ subject }))
+  })
+
+  it.each([
+    [
+      'preview',
+      { NODE_ENV: 'test', VERCEL_ENV: 'preview' },
+      ['orange'],
+      'delivered+guesthouseosaka@resend.dev'
+    ],
+    [
+      'single-house production',
+      { NODE_ENV: 'production', VERCEL_ENV: undefined },
+      ['orange'],
+      'orange@guesthouseosaka.com'
+    ],
+    [
+      'multi-house production',
+      { NODE_ENV: 'production', VERCEL_ENV: undefined },
+      ['orange', 'lemon'],
+      'info@guesthouseosaka.com'
+    ]
+  ])('routes %s email safely', async (_, environment, places, recipient) => {
+    Object.assign(envMock, environment)
+    mockAcceptedEmail()
+
+    await expect(
+      submitContactForm({
+        ...payload,
+        data: { ...payload.data, places }
+      } as ContactFormPayload)
+    ).resolves.toEqual({ ok: true })
+    expect(sendMock).toHaveBeenCalledWith(expect.objectContaining({ to: recipient }))
   })
 
   it('maps a Resend API error to a typed delivery failure', async () => {
@@ -118,11 +185,7 @@ describe('submitContactForm', () => {
 
   it('returns a typed failure after five attempts from one requester', async () => {
     headersMock.mockResolvedValue(new Headers({ 'x-forwarded-for': '198.51.100.250' }))
-    sendMock.mockResolvedValue({
-      data: { id: 'email-id' },
-      error: null,
-      headers: {}
-    })
+    mockAcceptedEmail()
 
     for (let attempt = 0; attempt < 5; attempt += 1) {
       await expect(submitContactForm(payload)).resolves.toEqual({ ok: true })
