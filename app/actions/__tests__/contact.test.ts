@@ -48,22 +48,32 @@ const payload: ContactFormPayload = {
 }
 
 describe('submitContactForm', () => {
+  let requesterIndex = 0
+
   beforeEach(() => {
     vi.clearAllMocks()
-    headersMock.mockResolvedValue(new Headers({ 'x-forwarded-for': '198.51.100.10' }))
+    requesterIndex += 1
+    headersMock.mockResolvedValue(
+      new Headers({ 'x-forwarded-for': `198.51.100.${requesterIndex}` })
+    )
   })
 
-  it('returns the created email when Resend accepts it', async () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('returns success when Resend accepts the email', async () => {
     sendMock.mockResolvedValue({
       data: { id: 'email-id' },
       error: null,
       headers: {}
     })
 
-    await expect(submitContactForm(payload)).resolves.toEqual({ id: 'email-id' })
+    await expect(submitContactForm(payload)).resolves.toEqual({ ok: true })
   })
 
-  it('rejects when Resend returns an API error', async () => {
+  it('returns a delivery failure when Resend returns an API error', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined)
     sendMock.mockResolvedValue({
       data: null,
       error: {
@@ -74,6 +84,48 @@ describe('submitContactForm', () => {
       headers: {}
     })
 
-    await expect(submitContactForm(payload)).rejects.toThrow('Failed to send contact form email')
+    await expect(submitContactForm(payload)).resolves.toEqual({
+      ok: false,
+      code: 'delivery_failed'
+    })
+    expect(consoleError).toHaveBeenCalledWith(
+      'Failed to send contact form email',
+      expect.objectContaining({ name: 'validation_error' })
+    )
+  })
+
+  it('preserves unexpected transport failures as rejected actions', async () => {
+    sendMock.mockRejectedValue(new Error('Network unavailable'))
+
+    await expect(submitContactForm(payload)).rejects.toThrow('Network unavailable')
+  })
+
+  it('returns an invalid submission without sending an email', async () => {
+    await expect(
+      submitContactForm({ type: 'other', data: {} } as ContactFormPayload)
+    ).resolves.toEqual({
+      ok: false,
+      code: 'invalid_submission'
+    })
+    expect(sendMock).not.toHaveBeenCalled()
+  })
+
+  it('returns a rate-limit failure after five attempts from one requester', async () => {
+    headersMock.mockResolvedValue(new Headers({ 'x-forwarded-for': '198.51.100.250' }))
+    sendMock.mockResolvedValue({
+      data: { id: 'email-id' },
+      error: null,
+      headers: {}
+    })
+
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      await expect(submitContactForm(payload)).resolves.toEqual({ ok: true })
+    }
+
+    await expect(submitContactForm(payload)).resolves.toEqual({
+      ok: false,
+      code: 'rate_limited'
+    })
+    expect(sendMock).toHaveBeenCalledTimes(5)
   })
 })

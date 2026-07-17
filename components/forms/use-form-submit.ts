@@ -56,7 +56,11 @@ export function useFormSubmit() {
       const promise = submitContactForm({
         type: formType,
         data: value
-      } as Parameters<typeof submitContactForm>[0])
+      } as Parameters<typeof submitContactForm>[0]).then((result) => {
+        if (!result.ok) {
+          throw new Error(result.code)
+        }
+      })
 
       toast.promise(promise, {
         loading: t('status.sending'),

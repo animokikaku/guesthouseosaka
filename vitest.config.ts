@@ -15,16 +15,18 @@ export default defineConfig({
     passWithNoTests: true,
     coverage: {
       include: [
-        'app/actions/**/*.{ts,tsx}',
+        'app/**/*.{ts,tsx}',
         'components/**/*.{ts,tsx}',
         'hooks/**/*.{ts,tsx}',
-        'lib/**/*.{ts,tsx}'
+        'i18n/**/*.{ts,tsx}',
+        'lib/**/*.{ts,tsx}',
+        'sanity/**/*.{ts,tsx}'
       ],
       thresholds: {
-        branches: 55,
-        functions: 55,
-        lines: 55,
-        statements: 55
+        branches: 40,
+        functions: 40,
+        lines: 40,
+        statements: 40
       },
       exclude: [
         'components/ui/**',

@@ -61,26 +61,10 @@ messages/             # Translation files (en.json, ja.json, fr.json)
 
 ## Environment Variables
 
-Create a `.env.local` file with:
+Copy the environment template, then fill in the values needed for your environment:
 
-```env
-# Sanity
-NEXT_PUBLIC_SANITY_API_VERSION=
-NEXT_PUBLIC_SANITY_PROJECT_ID=
-NEXT_PUBLIC_SANITY_DATASET=
-SANITY_API_READ_TOKEN=
-
-# Application
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-# Email
-RESEND_API_KEY=
-
-# Google Maps
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
-
-# Blob Storage
-NEXT_PUBLIC_BLOB_STORAGE_URL=
+```bash
+cp .env.example .env.local
 ```
 
 ## Sanity Workflow
