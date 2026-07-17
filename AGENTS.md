@@ -13,7 +13,7 @@ bun install          # Install dependencies
 bun dev              # Dev server at localhost:3000
 bun run build        # Production build (run before PRs)
 bun run typegen      # Regenerate Sanity types after schema changes
-bun run test         # Run tests
+bun run test --run   # Run tests once without watch mode
 bun run knip         # Detect unused deps/exports
 bun run lint --fix   # Lint and auto-fix
 bun run typecheck    # Generate Next.js types and run TypeScript checks
@@ -27,6 +27,13 @@ bun run format:check # Check formatting without modifying files
 - Follow Conventional Commits, including `feat:`, `fix:`, `refactor:`, `chore:`, `docs:`, `test:`, `perf:`, `ci:`, and `build:`
 - Put all user-facing strings in `messages/en.json`; never hardcode them in components
 - Keep `messages/fr.json` and `messages/ja.json` structurally synchronized with `messages/en.json`
+
+## Change Boundaries
+
+- Keep changes narrowly scoped to the user's request
+- Preserve unrelated working-tree changes
+- Ask before adding a production dependency
+- Do not commit, push, deploy, or open a pull request unless the user explicitly requests it
 
 ## Validation
 
