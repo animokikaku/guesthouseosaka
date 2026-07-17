@@ -7,7 +7,7 @@ import {
 } from '@/components/email-template'
 import { env } from '@/lib/env'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
-import { HouseIdentifier } from '@/lib/types'
+import type { HouseIdentifier } from '@/lib/types'
 import { headers } from 'next/headers'
 import { Resend } from 'resend'
 
@@ -15,6 +15,16 @@ const { emails } = new Resend(env.RESEND_API_KEY)
 const CONTACT_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
 const CONTACT_RATE_LIMIT_MAX_REQUESTS = 5
 const contactSubmissionAttempts = new Map<string, { count: number; resetAt: number }>()
+
+async function sendEmail(payload: Parameters<typeof emails.send>[0]) {
+  const { data, error } = await emails.send(payload)
+
+  if (error) {
+    throw new Error('Failed to send contact form email', { cause: error })
+  }
+
+  return data
+}
 
 async function getRequesterIdentifier() {
   const headerList = await headers()
@@ -69,7 +79,7 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
 
   switch (type) {
     case 'tour':
-      return emails.send({
+      return sendEmail({
         from,
         to: to(data.places),
         replyTo: email,
@@ -77,7 +87,7 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
         react: TourRequestEmail({ data })
       })
     case 'move-in':
-      return emails.send({
+      return sendEmail({
         from,
         to: to(data.places),
         replyTo: email,
@@ -85,7 +95,7 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
         react: MoveInRequestEmail({ data })
       })
     case 'other':
-      return emails.send({
+      return sendEmail({
         from,
         to: to(data.places),
         replyTo: email,

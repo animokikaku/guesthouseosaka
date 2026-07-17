@@ -69,9 +69,9 @@ export function useFormSubmit() {
             })
           }
         },
-        error: (error: Error) => {
+        error: () => {
           return {
-            message: error.message || t('status.error.message'),
+            message: t('status.error.message'),
             description: t('status.error.description', {
               email: 'info@guesthouseosaka.com'
             })

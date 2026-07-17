@@ -50,14 +50,9 @@ function buildAlternates(href: Route, host: string): Record<Locale, string> {
   ) as Record<Locale, string>
 }
 
-function buildSitemapEntry(
-  href: Route,
-  host: string,
-  lastModified: Date
-): MetadataRoute.Sitemap[number] {
+function buildSitemapEntry(href: Route, host: string): MetadataRoute.Sitemap[number] {
   return {
     url: buildUrl(href, routing.defaultLocale, host),
-    lastModified,
     alternates: {
       languages: buildAlternates(href, host)
     }
@@ -66,6 +61,5 @@ function buildSitemapEntry(
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const host = env.NEXT_PUBLIC_APP_URL
-  const lastModified = new Date()
-  return routes.map((route) => buildSitemapEntry(route, host, lastModified))
+  return routes.map((route) => buildSitemapEntry(route, host))
 }

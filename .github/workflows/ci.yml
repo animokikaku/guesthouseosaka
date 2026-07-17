@@ -51,6 +51,9 @@ jobs:
       - name: Run TypeScript
         run: bun run typecheck
 
+      - name: Check unused code and dependencies
+        run: bun run knip
+
       - name: Run unit tests
         run: bun run test:coverage
 
