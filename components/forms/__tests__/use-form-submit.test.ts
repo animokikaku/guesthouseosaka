@@ -37,7 +37,7 @@ function createDeferred<T>() {
 describe('useFormSubmit', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockSubmitContactForm.mockResolvedValue({ success: true })
+    mockSubmitContactForm.mockResolvedValue({ ok: true })
   })
 
   afterEach(() => {
@@ -183,7 +183,7 @@ describe('useFormSubmit', () => {
     })
 
     it('waits for the submit action to settle before resolving', async () => {
-      const deferred = createDeferred<{ success: boolean }>()
+      const deferred = createDeferred<{ ok: true }>()
       mockSubmitContactForm.mockReturnValueOnce(deferred.promise)
 
       const { result } = renderHook(() => useFormSubmit())
@@ -197,7 +197,7 @@ describe('useFormSubmit', () => {
       await Promise.resolve()
       expect(isResolved).toBe(false)
 
-      deferred.resolve({ success: true })
+      deferred.resolve({ ok: true })
       await submission
 
       expect(isResolved).toBe(true)
@@ -220,20 +220,20 @@ describe('useFormSubmit', () => {
       expect(successResult).toHaveProperty('description')
     })
 
-    it('error callback returns error message', async () => {
+    it('turns an expected action failure into a localized toast error', async () => {
+      mockSubmitContactForm.mockResolvedValueOnce({ ok: false, code: 'delivery_failed' })
       const { result } = renderHook(() => useFormSubmit())
 
       const onSubmit = result.current.createOnSubmit('tour')
 
-      await act(async () => {
-        await onSubmit({ value: mockTourData })
-      })
+      await expect(onSubmit({ value: mockTourData })).rejects.toThrow('delivery_failed')
 
       const [, options] = mockToastPromise.mock.calls[0]
       const errorResult = options.error(new Error('Network error'))
 
-      expect(errorResult).toHaveProperty('message', 'Network error')
+      expect(errorResult).toHaveProperty('message', 'status.error.message')
       expect(errorResult).toHaveProperty('description')
+      expect(mockPush).not.toHaveBeenCalled()
     })
   })
 })

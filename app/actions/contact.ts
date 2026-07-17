@@ -7,38 +7,52 @@ import {
 } from '@/components/email-template'
 import { env } from '@/lib/env'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
-import { HouseIdentifier } from '@/lib/types'
+import type { HouseIdentifier } from '@/lib/types'
+import { Data, Effect } from 'effect'
 import { headers } from 'next/headers'
-import { Resend } from 'resend'
+import { Resend, type CreateEmailOptions } from 'resend'
 
 const { emails } = new Resend(env.RESEND_API_KEY)
 const CONTACT_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
 const CONTACT_RATE_LIMIT_MAX_REQUESTS = 5
 const contactSubmissionAttempts = new Map<string, { count: number; resetAt: number }>()
 
-async function getRequesterIdentifier() {
+class InvalidContactSubmission extends Data.TaggedError('InvalidContactSubmission') {}
+class ContactRateLimitExceeded extends Data.TaggedError('ContactRateLimitExceeded') {}
+class ContactEmailDeliveryFailed extends Data.TaggedError('ContactEmailDeliveryFailed')<{
+  readonly reason: unknown
+}> {}
+
+export type ContactSubmissionResult =
+  | { ok: true }
+  | { ok: false; code: 'delivery_failed' | 'invalid_submission' | 'rate_limited' }
+
+const getRequesterIdentifier = Effect.promise(async () => {
   const headerList = await headers()
   const forwardedFor = headerList.get('x-forwarded-for')?.split(',')[0]?.trim()
   return forwardedFor || headerList.get('x-real-ip') || 'unknown'
-}
+})
 
-function assertRateLimit(identifier: string) {
-  const now = Date.now()
-  const attempts = contactSubmissionAttempts.get(identifier)
+function recordSubmissionAttempt(identifier: string) {
+  return Effect.suspend(() => {
+    const now = Date.now()
+    const attempts = contactSubmissionAttempts.get(identifier)
 
-  if (!attempts || attempts.resetAt <= now) {
-    contactSubmissionAttempts.set(identifier, {
-      count: 1,
-      resetAt: now + CONTACT_RATE_LIMIT_WINDOW_MS
-    })
-    return
-  }
+    if (!attempts || attempts.resetAt <= now) {
+      contactSubmissionAttempts.set(identifier, {
+        count: 1,
+        resetAt: now + CONTACT_RATE_LIMIT_WINDOW_MS
+      })
+      return Effect.succeed(undefined)
+    }
 
-  if (attempts.count >= CONTACT_RATE_LIMIT_MAX_REQUESTS) {
-    throw new Error('Too many contact form submissions')
-  }
+    if (attempts.count >= CONTACT_RATE_LIMIT_MAX_REQUESTS) {
+      return Effect.fail(new ContactRateLimitExceeded())
+    }
 
-  attempts.count += 1
+    attempts.count += 1
+    return Effect.succeed(undefined)
+  })
 }
 
 const DEFAULT_CONTACT = {
@@ -57,40 +71,81 @@ const DEFAULT_CONTACT = {
   }
 }
 
-export async function submitContactForm({ type, data }: ContactFormPayload) {
-  assertRateLimit(await getRequesterIdentifier())
+function validateContactForm(payload: ContactFormPayload) {
+  const result = contactFormPayloadSchema.safeParse(payload)
+  return result.success ? Effect.succeed(result.data) : Effect.fail(new InvalidContactSubmission())
+}
 
-  if (!contactFormPayloadSchema.safeParse({ type, data }).success) {
-    throw new Error('Invalid contact form submission')
-  }
+function sendEmail(payload: CreateEmailOptions) {
+  return Effect.tryPromise({
+    try: () => emails.send(payload),
+    catch: (reason) => new ContactEmailDeliveryFailed({ reason })
+  }).pipe(
+    Effect.flatMap(({ error }) =>
+      error
+        ? Effect.fail(new ContactEmailDeliveryFailed({ reason: error }))
+        : Effect.succeed(undefined)
+    ),
+    Effect.tapError(({ reason }) =>
+      Effect.sync(() => console.error('Failed to send contact form email', reason))
+    )
+  )
+}
 
-  const { from, to } = DEFAULT_CONTACT
-  const { name, email } = data.account
+function submitContactFormEffect(
+  payload: ContactFormPayload
+): Effect.Effect<ContactSubmissionResult> {
+  return Effect.gen(function* () {
+    yield* recordSubmissionAttempt(yield* getRequesterIdentifier)
 
-  switch (type) {
-    case 'tour':
-      return emails.send({
-        from,
-        to: to(data.places),
-        replyTo: email,
-        subject: `内覧希望: ${name}`,
-        react: TourRequestEmail({ data })
-      })
-    case 'move-in':
-      return emails.send({
-        from,
-        to: to(data.places),
-        replyTo: email,
-        subject: `入居希望: ${name}`,
-        react: MoveInRequestEmail({ data })
-      })
-    case 'other':
-      return emails.send({
-        from,
-        to: to(data.places),
-        replyTo: email,
-        subject: `お問い合わせ: ${name}`,
-        react: GeneralInquiryEmail({ data })
-      })
-  }
+    const { type, data } = yield* validateContactForm(payload)
+    const { from, to } = DEFAULT_CONTACT
+    const { name, email } = data.account
+
+    switch (type) {
+      case 'tour':
+        yield* sendEmail({
+          from,
+          to: to(data.places),
+          replyTo: email,
+          subject: `内覧希望: ${name}`,
+          react: TourRequestEmail({ data })
+        })
+        break
+      case 'move-in':
+        yield* sendEmail({
+          from,
+          to: to(data.places),
+          replyTo: email,
+          subject: `入居希望: ${name}`,
+          react: MoveInRequestEmail({ data })
+        })
+        break
+      case 'other':
+        yield* sendEmail({
+          from,
+          to: to(data.places),
+          replyTo: email,
+          subject: `お問い合わせ: ${name}`,
+          react: GeneralInquiryEmail({ data })
+        })
+        break
+    }
+
+    return { ok: true } as const
+  }).pipe(
+    Effect.catchTags({
+      ContactEmailDeliveryFailed: () =>
+        Effect.succeed({ ok: false, code: 'delivery_failed' } as const),
+      ContactRateLimitExceeded: () => Effect.succeed({ ok: false, code: 'rate_limited' } as const),
+      InvalidContactSubmission: () =>
+        Effect.succeed({ ok: false, code: 'invalid_submission' } as const)
+    })
+  )
+}
+
+export async function submitContactForm(
+  payload: ContactFormPayload
+): Promise<ContactSubmissionResult> {
+  return Effect.runPromise(submitContactFormEffect(payload))
 }
