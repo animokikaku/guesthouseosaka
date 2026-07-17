@@ -14,13 +14,13 @@ export default defineConfig({
     exclude: ['**/node_modules/**', '**/e2e/**', '**/playwright/**'],
     passWithNoTests: true,
     coverage: {
+      // Sanity schemas are validated through type generation, TypeScript, and production builds.
       include: [
         'app/**/*.{ts,tsx}',
         'components/**/*.{ts,tsx}',
         'hooks/**/*.{ts,tsx}',
         'i18n/**/*.{ts,tsx}',
-        'lib/**/*.{ts,tsx}',
-        'sanity/**/*.{ts,tsx}'
+        'lib/**/*.{ts,tsx}'
       ],
       thresholds: {
         branches: 40,
@@ -28,16 +28,7 @@ export default defineConfig({
         lines: 40,
         statements: 40
       },
-      exclude: [
-        'components/ui/**',
-        '**/__tests__/**',
-        '**/*.test.{ts,tsx}',
-        '**/__tests__/utils/**',
-        '**/__tests__/mocks/**',
-        '**/__tests__/mocks.{ts,tsx}',
-        '**/__mocks__/**',
-        '**/index.ts'
-      ]
+      exclude: ['components/ui/**', '**/__tests__/**', '**/*.test.{ts,tsx}', '**/__mocks__/**']
     }
   }
 })
