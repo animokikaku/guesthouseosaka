@@ -7,14 +7,29 @@ import {
 } from '@/components/email-template'
 import { env } from '@/lib/env'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
-import { HouseIdentifier } from '@/lib/types'
+import type { HouseIdentifier } from '@/lib/types'
 import { headers } from 'next/headers'
-import { Resend } from 'resend'
+import { Resend, type CreateEmailOptions } from 'resend'
 
 const { emails } = new Resend(env.RESEND_API_KEY)
 const CONTACT_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
 const CONTACT_RATE_LIMIT_MAX_REQUESTS = 5
 const contactSubmissionAttempts = new Map<string, { count: number; resetAt: number }>()
+
+export type ContactSubmissionResult =
+  | { ok: true }
+  | { ok: false; code: 'delivery_failed' | 'invalid_submission' | 'rate_limited' }
+
+async function sendEmail(payload: CreateEmailOptions): Promise<ContactSubmissionResult> {
+  const { error } = await emails.send(payload)
+
+  if (error) {
+    console.error('Failed to send contact form email', error)
+    return { ok: false, code: 'delivery_failed' }
+  }
+
+  return { ok: true }
+}
 
 async function getRequesterIdentifier() {
   const headerList = await headers()
@@ -22,7 +37,7 @@ async function getRequesterIdentifier() {
   return forwardedFor || headerList.get('x-real-ip') || 'unknown'
 }
 
-function assertRateLimit(identifier: string) {
+function recordSubmissionAttempt(identifier: string) {
   const now = Date.now()
   const attempts = contactSubmissionAttempts.get(identifier)
 
@@ -31,14 +46,15 @@ function assertRateLimit(identifier: string) {
       count: 1,
       resetAt: now + CONTACT_RATE_LIMIT_WINDOW_MS
     })
-    return
+    return true
   }
 
   if (attempts.count >= CONTACT_RATE_LIMIT_MAX_REQUESTS) {
-    throw new Error('Too many contact form submissions')
+    return false
   }
 
   attempts.count += 1
+  return true
 }
 
 const DEFAULT_CONTACT = {
@@ -57,19 +73,25 @@ const DEFAULT_CONTACT = {
   }
 }
 
-export async function submitContactForm({ type, data }: ContactFormPayload) {
-  assertRateLimit(await getRequesterIdentifier())
-
-  if (!contactFormPayloadSchema.safeParse({ type, data }).success) {
-    throw new Error('Invalid contact form submission')
+export async function submitContactForm(
+  payload: ContactFormPayload
+): Promise<ContactSubmissionResult> {
+  if (!recordSubmissionAttempt(await getRequesterIdentifier())) {
+    return { ok: false, code: 'rate_limited' }
   }
 
+  const parsedPayload = contactFormPayloadSchema.safeParse(payload)
+  if (!parsedPayload.success) {
+    return { ok: false, code: 'invalid_submission' }
+  }
+
+  const { type, data } = parsedPayload.data
   const { from, to } = DEFAULT_CONTACT
   const { name, email } = data.account
 
   switch (type) {
     case 'tour':
-      return emails.send({
+      return sendEmail({
         from,
         to: to(data.places),
         replyTo: email,
@@ -77,7 +99,7 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
         react: TourRequestEmail({ data })
       })
     case 'move-in':
-      return emails.send({
+      return sendEmail({
         from,
         to: to(data.places),
         replyTo: email,
@@ -85,7 +107,7 @@ export async function submitContactForm({ type, data }: ContactFormPayload) {
         react: MoveInRequestEmail({ data })
       })
     case 'other':
-      return emails.send({
+      return sendEmail({
         from,
         to: to(data.places),
         replyTo: email,

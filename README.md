@@ -7,7 +7,7 @@ A multilingual website for a guest house in Osaka, built with Next.js and Sanity
 ## Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
-- **CMS**: Sanity v5 with embedded Studio at `/studio`
+- **CMS**: Sanity v6 with embedded Studio at `/studio`
 - **Styling**: Tailwind CSS v4
 - **i18n**: next-intl (English, Japanese, French)
 - **Forms**: TanStack React Form + Zod validation
@@ -28,7 +28,7 @@ bun dev        # Start dev server at http://localhost:3000
 | ------------------ | --------------------------------------------------------------------------------------------------------------------- |
 | `bun dev`          | Start development server                                                                                              |
 | `bun run build`    | Production build                                                                                                      |
-| `bun lint`         | Run ESLint                                                                                                            |
+| `bun lint`         | Run Oxlint                                                                                                            |
 | `bun run typegen`  | Regenerate Sanity TypeScript types                                                                                    |
 | `bun run test`     | Run unit tests (Vitest)                                                                                               |
 | `bun run test:e2e` | Run E2E tests against a production build (Playwright builds and starts the server; reuses an existing server locally) |
@@ -61,22 +61,10 @@ messages/             # Translation files (en.json, ja.json, fr.json)
 
 ## Environment Variables
 
-Create a `.env.local` file with:
+Copy the environment template, then fill in the values needed for your environment:
 
-```env
-# Sanity
-NEXT_PUBLIC_SANITY_PROJECT_ID=
-NEXT_PUBLIC_SANITY_DATASET=
-SANITY_API_READ_TOKEN=
-
-# Email
-RESEND_API_KEY=
-
-# Google Maps
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
-
-# Blob Storage
-NEXT_PUBLIC_BLOB_STORAGE_URL=
+```bash
+cp .env.example .env.local
 ```
 
 ## Sanity Workflow

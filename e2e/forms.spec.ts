@@ -148,6 +148,31 @@ test.describe('Contact Form Tests', () => {
         to: 'orange@guesthouseosaka.com'
       })
     })
+
+    test('failed email delivery shows an error without leaving the form', async ({
+      next,
+      page
+    }) => {
+      mockResendAPI(next, {
+        status: 422,
+        body: {
+          message: 'The email could not be delivered.',
+          name: 'validation_error',
+          statusCode: 422
+        }
+      })
+
+      await fillRequiredFields(page)
+
+      const fields = getFormFields(page)
+      await fields.checkbox.click()
+      await page.getByRole('button', { name: 'Submit' }).click()
+
+      const toast = page.locator('[data-sonner-toast]').first()
+      await expect(toast).toBeVisible()
+      await expect(toast).toContainText('Failed to send message.')
+      await expect(page).toHaveURL(/\/en\/contact\/other/)
+    })
   })
 })
 
