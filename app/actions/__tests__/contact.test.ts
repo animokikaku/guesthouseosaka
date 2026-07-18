@@ -47,6 +47,38 @@ const payload: ContactFormPayload = {
   }
 }
 
+const successfulSubmissionCases = [
+  {
+    name: 'general inquiry',
+    payload,
+    subject: 'お問い合わせ: Test User'
+  },
+  {
+    name: 'tour request',
+    payload: {
+      type: 'tour',
+      data: {
+        ...payload.data,
+        date: '2030-01-15',
+        hour: '14:00:00'
+      }
+    } satisfies ContactFormPayload,
+    subject: '内覧希望: Test User'
+  },
+  {
+    name: 'move-in request',
+    payload: {
+      type: 'move-in',
+      data: {
+        ...payload.data,
+        date: '2030-01-15',
+        stayDuration: '1-month'
+      }
+    } satisfies ContactFormPayload,
+    subject: '入居希望: Test User'
+  }
+] satisfies { name: string; payload: ContactFormPayload; subject: string }[]
+
 describe('submitContactForm', () => {
   let requesterIndex = 0
 
@@ -62,15 +94,25 @@ describe('submitContactForm', () => {
     vi.restoreAllMocks()
   })
 
-  it('returns success when Resend accepts the email', async () => {
-    sendMock.mockResolvedValue({
-      data: { id: 'email-id' },
-      error: null,
-      headers: {}
-    })
+  it.each(successfulSubmissionCases)(
+    'returns success when Resend accepts a $name email',
+    async ({ payload: submission, subject }) => {
+      sendMock.mockResolvedValue({
+        data: { id: 'email-id' },
+        error: null,
+        headers: {}
+      })
 
-    await expect(submitContactForm(payload)).resolves.toEqual({ ok: true })
-  })
+      await expect(submitContactForm(submission)).resolves.toEqual({ ok: true })
+      expect(sendMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          replyTo: 'test@example.com',
+          subject,
+          to: 'dev@guesthouseosaka.com'
+        })
+      )
+    }
+  )
 
   it('returns a delivery failure when Resend returns an API error', async () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined)

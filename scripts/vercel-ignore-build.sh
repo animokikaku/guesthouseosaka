@@ -1,6 +1,14 @@
 #!/bin/sh
 
-git diff --quiet HEAD^ HEAD -- . \
+if [ -n "${VERCEL_GIT_COMMIT_SHA:-}" ] && [ -z "${VERCEL_GIT_PREVIOUS_SHA:-}" ]; then
+  exit 1
+fi
+
+BASE_SHA=${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}
+TARGET_SHA=${VERCEL_GIT_COMMIT_SHA:-HEAD}
+
+git diff --quiet "$BASE_SHA" "$TARGET_SHA" -- . \
+  ':!*.md' \
   ':!**/*.md' \
   ':!**/__tests__/**' \
   ':!**/*.test.*' \

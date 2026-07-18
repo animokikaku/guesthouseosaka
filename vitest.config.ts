@@ -28,7 +28,13 @@ export default defineConfig({
         lines: 40,
         statements: 40
       },
-      exclude: ['components/ui/**', '**/__tests__/**', '**/*.test.{ts,tsx}', '**/__mocks__/**']
+      exclude: [
+        'components/ui/**',
+        'i18n/navigation.ts',
+        '**/__tests__/**',
+        '**/*.test.{ts,tsx}',
+        '**/__mocks__/**'
+      ]
     }
   }
 })

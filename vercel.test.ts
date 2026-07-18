@@ -8,8 +8,17 @@ const { ignoreCommand } = JSON.parse(readFileSync('vercel.json', 'utf8')) as {
 }
 const ignoreScript = readFileSync('scripts/vercel-ignore-build.sh', 'utf8')
 
+type VercelGitEnvironment = {
+  VERCEL_GIT_COMMIT_SHA?: string
+  VERCEL_GIT_PREVIOUS_SHA?: string
+}
+
 function git(cwd: string, ...args: string[]) {
   execFileSync('git', args, { cwd, stdio: 'ignore' })
+}
+
+function currentCommit(cwd: string) {
+  return execFileSync('git', ['rev-parse', 'HEAD'], { cwd, encoding: 'utf8' }).trim()
 }
 
 function commitFile(cwd: string, path: string, content: string) {
@@ -20,9 +29,18 @@ function commitFile(cwd: string, path: string, content: string) {
   git(cwd, 'commit', '-m', `test: update ${path}`)
 }
 
-function isBuildIgnored(cwd: string) {
+function isBuildIgnored(cwd: string, env: VercelGitEnvironment = {}) {
+  const environment = { ...process.env }
+  delete environment.VERCEL_GIT_COMMIT_SHA
+  delete environment.VERCEL_GIT_PREVIOUS_SHA
+  Object.assign(environment, env)
+
   try {
-    execFileSync('sh', ['-c', ignoreCommand], { cwd, stdio: 'ignore' })
+    execFileSync('sh', ['-c', ignoreCommand], {
+      cwd,
+      env: environment,
+      stdio: 'ignore'
+    })
     return true
   } catch {
     return false
@@ -64,4 +82,40 @@ describe('Vercel ignored build command', () => {
       expect(isBuildIgnored(repository)).toBe(true)
     }
   )
+
+  it('builds when an earlier commit since the last deployment changes runtime code', () => {
+    const previousSha = currentCommit(repository)
+    commitFile(repository, 'app/page.tsx', 'runtime change')
+    commitFile(repository, 'README.md', 'later documentation change')
+
+    expect(
+      isBuildIgnored(repository, {
+        VERCEL_GIT_COMMIT_SHA: currentCommit(repository),
+        VERCEL_GIT_PREVIOUS_SHA: previousSha
+      })
+    ).toBe(false)
+  })
+
+  it('ignores multiple non-runtime commits since the last deployment', () => {
+    const previousSha = currentCommit(repository)
+    commitFile(repository, 'README.md', 'documentation change')
+    commitFile(repository, 'e2e/example.spec.ts', 'test change')
+
+    expect(
+      isBuildIgnored(repository, {
+        VERCEL_GIT_COMMIT_SHA: currentCommit(repository),
+        VERCEL_GIT_PREVIOUS_SHA: previousSha
+      })
+    ).toBe(true)
+  })
+
+  it('builds an initial Vercel deployment without a previous SHA', () => {
+    commitFile(repository, 'README.md', 'documentation change')
+
+    expect(
+      isBuildIgnored(repository, {
+        VERCEL_GIT_COMMIT_SHA: currentCommit(repository)
+      })
+    ).toBe(false)
+  })
 })

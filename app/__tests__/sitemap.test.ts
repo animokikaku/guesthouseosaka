@@ -5,8 +5,21 @@ vi.mock('@/lib/env', () => ({
 }))
 
 vi.mock('@/i18n/navigation', () => ({
-  getPathname: ({ href, locale }: { href: string | { pathname: string }; locale: string }) => {
-    const pathname = typeof href === 'string' ? href : href.pathname
+  getPathname: ({
+    href,
+    locale
+  }: {
+    href: string | { pathname: string; params?: Record<string, string> }
+    locale: string
+  }) => {
+    let pathname = typeof href === 'string' ? href : href.pathname
+
+    if (typeof href !== 'string' && href.params) {
+      for (const [key, value] of Object.entries(href.params)) {
+        pathname = pathname.replace(`[${key}]`, value)
+      }
+    }
+
     return `/${locale}${pathname === '/' ? '' : pathname}`
   }
 }))
@@ -31,5 +44,18 @@ describe('sitemap', () => {
         ja: expect.stringContaining('/ja')
       })
     }
+  })
+
+  it('interpolates parameters in dynamic route URLs', () => {
+    const entries = sitemap()
+    const urls = entries.flatMap((entry) => [
+      entry.url,
+      ...Object.values(entry.alternates?.languages ?? {})
+    ])
+
+    expect(entries).toContainEqual(
+      expect.objectContaining({ url: 'https://guesthouseosaka.example/en/orange' })
+    )
+    expect(urls.join('\n')).not.toContain('[')
   })
 })
