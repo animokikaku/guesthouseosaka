@@ -7,6 +7,9 @@ fi
 BASE_SHA=${VERCEL_GIT_PREVIOUS_SHA:-HEAD^}
 TARGET_SHA=${VERCEL_GIT_COMMIT_SHA:-HEAD}
 
+git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null || exit 1
+git cat-file -e "${TARGET_SHA}^{commit}" 2>/dev/null || exit 1
+
 git diff --quiet "$BASE_SHA" "$TARGET_SHA" -- . \
   ':!*.md' \
   ':!**/*.md' \

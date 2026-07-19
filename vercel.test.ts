@@ -118,4 +118,15 @@ describe('Vercel ignored build command', () => {
       })
     ).toBe(false)
   })
+
+  it('builds when the previous deployment commit is unavailable', () => {
+    commitFile(repository, 'README.md', 'documentation change')
+
+    expect(
+      isBuildIgnored(repository, {
+        VERCEL_GIT_COMMIT_SHA: currentCommit(repository),
+        VERCEL_GIT_PREVIOUS_SHA: '5e3b51f6f25193fc0fd395486b477168874dd20d'
+      })
+    ).toBe(false)
+  })
 })
