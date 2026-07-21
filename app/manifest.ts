@@ -6,7 +6,7 @@ import { getTranslations } from 'next-intl/server'
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const locale = routing.defaultLocale
-  const settingsPromise = sanityFetch({ query: settingsQuery, params: { locale } })
+  const settingsPromise = sanityFetch({ query: settingsQuery, params: { locale }, stega: false })
   const t = await getTranslations({ locale, namespace: 'Metadata' })
   const { data: settings } = await settingsPromise
 

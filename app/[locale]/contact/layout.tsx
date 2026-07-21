@@ -12,8 +12,12 @@ import { getLocale, getTranslations } from 'next-intl/server'
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
-  const contactPageMetaPromise = sanityFetch({ query: contactPageMetaQuery, params: { locale } })
-  const settingsPromise = sanityFetch({ query: settingsQuery, params: { locale } })
+  const contactPageMetaPromise = sanityFetch({
+    query: contactPageMetaQuery,
+    params: { locale },
+    stega: false
+  })
+  const settingsPromise = sanityFetch({ query: settingsQuery, params: { locale }, stega: false })
   const t = await getTranslations('Metadata')
   const [{ data: contactPageMeta }, { data: settings }] = await Promise.all([
     contactPageMetaPromise,
