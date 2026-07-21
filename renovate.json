@@ -5,16 +5,17 @@
   "rangeStrategy": "bump",
   "automergeType": "pr",
   "platformAutomerge": true,
+  "timezone": "Asia/Tokyo",
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["before 4am on monday"],
-    "timezone": "Asia/Tokyo",
     "automerge": true
   },
   "packageRules": [
     {
-      "description": "Auto-merge patch and minor updates",
+      "description": "Update and auto-merge non-major dependencies weekly",
       "matchUpdateTypes": ["patch", "minor"],
+      "schedule": ["before 4am on monday"],
       "automerge": true
     },
     {
@@ -29,39 +30,20 @@
       "matchUpdateTypes": ["patch", "minor"]
     },
     {
+      "description": "Group non-major production dependencies",
+      "groupName": "production dependencies",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["patch", "minor"]
+    },
+    {
       "description": "Group Sanity packages",
       "groupName": "sanity",
       "matchPackageNames": ["/^@sanity//", "/^sanity$/", "/^next-sanity$/"]
     },
     {
-      "description": "Group Next.js packages",
-      "groupName": "next.js",
-      "matchPackageNames": ["/^next$/", "/^@next//"]
-    },
-    {
-      "description": "Group React packages",
-      "groupName": "react",
-      "matchPackageNames": ["/^react$/", "/^react-dom$/"]
-    },
-    {
-      "description": "Group TanStack packages",
-      "groupName": "tanstack",
-      "matchPackageNames": ["/^@tanstack//"]
-    },
-    {
-      "description": "Group Oxc toolchain",
-      "groupName": "oxc",
-      "matchPackageNames": ["/^oxlint$/", "/^oxfmt$/"]
-    },
-    {
-      "description": "Group testing packages",
-      "groupName": "testing",
-      "matchPackageNames": ["/^vitest/", "/^@vitest//", "/^@playwright//", "/^playwright$/"]
-    },
-    {
-      "description": "Group TypeScript and types",
-      "groupName": "typescript",
-      "matchPackageNames": ["/^typescript$/", "/^@types//"]
+      "description": "Group Next.js and React packages",
+      "groupName": "next.js and react",
+      "matchPackageNames": ["/^next$/", "/^@next//", "/^react$/", "/^react-dom$/"]
     }
   ]
 }
