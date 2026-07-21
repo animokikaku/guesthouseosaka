@@ -15,6 +15,9 @@
     "knip": "knip",
     "crowdin:pull": "crowdin download translations",
     "crowdin:push": "crowdin upload sources",
+    "eloqnt:lint": "eloqnt lint",
+    "eloqnt:review": "eloqnt review",
+    "eloqnt:translate": "eloqnt translate",
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -66,6 +69,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@eloqnt/cli": "^0.5.1",
     "@faker-js/faker": "^10.5.0",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.3.3",

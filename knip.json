@@ -1,6 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignore": [
+    ".eloqnt/config.ts",
     "global.ts",
     "messages/*.d.json.ts",
     "sanity.types.ts",
