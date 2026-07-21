@@ -18,6 +18,7 @@ import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { toHouseNavItems } from '@/lib/transforms/nav'
 import { cn } from '@/lib/utils'
+import { HOUSE_THEMES } from '@/lib/utils/theme'
 import { sanityFetch, SanityLive } from '@/sanity/lib/live'
 import { housesNavQuery, settingsQuery } from '@/sanity/lib/queries'
 import { type Metadata } from 'next'
@@ -128,11 +129,29 @@ export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'
         <meta name="theme-color" content={META_THEME_COLORS.light} />
       </head>
       <body
+        suppressHydrationWarning
         className={cn(
           'text-foreground group/body theme-default font-sans antialiased [--footer-height:--spacing(14)] [--header-height:--spacing(14)] xl:[--footer-height:--spacing(24)]',
           fontVariables
         )}
       >
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const houseThemes = ${JSON.stringify(HOUSE_THEMES)}
+                const house = window.location.pathname.split('/').filter(Boolean)[1]
+                const theme = Object.hasOwn(houseThemes, house) ? houseThemes[house] : undefined
+                if (theme) {
+                  Array.from(document.body.classList)
+                    .filter((className) => className.startsWith('theme-'))
+                    .forEach((className) => document.body.classList.remove(className))
+                  document.body.classList.add('theme-' + theme)
+                }
+              } catch (_) {}
+            `
+          }}
+        />
         <ThemeProvider>
           <NextIntlClientProvider>
             <div className="bg-background relative z-10 flex min-h-svh flex-col">

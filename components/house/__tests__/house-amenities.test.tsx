@@ -141,16 +141,12 @@ describe('HouseAmenities', () => {
 
       const amenities = screen.getAllByText(/Amenity \d+/)
       expect(amenities).toHaveLength(10)
-      expect(
-        amenities
-          .slice(0, 5)
-          .every((item) => !item.closest('.items-center')?.classList.contains('hidden'))
-      ).toBe(true)
-      expect(
-        amenities
-          .slice(5)
-          .every((item) => item.closest('.items-center')?.classList.contains('hidden'))
-      ).toBe(true)
+      amenities.slice(0, 5).forEach((item) => {
+        expect(item.closest('.items-center')).not.toHaveClass('hidden')
+      })
+      amenities.slice(5).forEach((item) => {
+        expect(item.closest('.items-center')).toHaveClass('hidden')
+      })
     })
 
     it('displays only the featured amenities provided via prop', () => {

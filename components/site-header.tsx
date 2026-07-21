@@ -6,6 +6,7 @@ import { MainNav } from '@/components/main-nav'
 import { MobileNav } from '@/components/mobile-nav'
 import { ModeSwitcher } from '@/components/mode-switcher'
 import { Button } from '@/components/ui/button'
+import { useHouseTheme } from '@/hooks/use-house-theme'
 import { Link } from '@/i18n/navigation'
 import { NavGroupItem, NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -17,6 +18,7 @@ import NextLink from 'next/link'
 
 export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
   const t = useTranslations('SiteHeader')
+  useHouseTheme()
 
   const navItems: NavItems = [
     {

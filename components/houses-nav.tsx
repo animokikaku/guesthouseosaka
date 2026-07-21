@@ -8,25 +8,11 @@ import { cn } from '@/lib/utils'
 import { HousesNavQueryResult } from '@/sanity.types'
 import { stegaClean } from 'next-sanity'
 import { useParams } from 'next/navigation'
-import { useEffect } from 'react'
 
 const THEME_CLASSES: Record<HouseIdentifier, string> = {
   orange: 'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
   apple: 'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500',
   lemon: 'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
-}
-
-const HOUSE_THEMES: Record<HouseIdentifier, string> = {
-  orange: 'orange',
-  apple: 'red',
-  lemon: 'yellow'
-}
-
-function applyActiveTheme(theme: string) {
-  Array.from(document.body.classList)
-    .filter((className) => className.startsWith('theme-'))
-    .forEach((className) => document.body.classList.remove(className))
-  document.body.classList.add(`theme-${theme}`)
 }
 
 export function HousesNav({
@@ -38,14 +24,6 @@ export function HousesNav({
 }) {
   const isMobile = useIsMobile()
   const params = useParams()
-
-  useEffect(() => {
-    const theme = HOUSE_THEMES[params.house as HouseIdentifier]
-    applyActiveTheme(theme ?? 'default')
-    return () => {
-      applyActiveTheme('default')
-    }
-  }, [params.house])
 
   return (
     <div className="relative overflow-hidden">
