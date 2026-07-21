@@ -12,10 +12,9 @@ import { getTranslations } from 'next-intl/server'
 export default async function GalleryPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
   const { house, locale } = await getHouseAndLocale(params)
 
-  const [t, { data }] = await Promise.all([
-    getTranslations('GalleryPage'),
-    sanityFetch({ query: houseQuery, params: { locale, slug: house } })
-  ])
+  const houseDataPromise = sanityFetch({ query: houseQuery, params: { locale, slug: house } })
+  const t = await getTranslations('GalleryPage')
+  const { data } = await houseDataPromise
 
   if (!data) {
     return (

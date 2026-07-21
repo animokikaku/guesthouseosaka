@@ -56,7 +56,6 @@
   "LegalNoticeDialog": {
     "agree_button": "J'accepte",
     "close_button": "Fermer",
-    "description": "Politique de confidentialité et conditions d'utilisation",
     "last_updated": "Dernière mise à jour : {date}"
   },
   "MessageField": {

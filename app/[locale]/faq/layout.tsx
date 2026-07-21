@@ -13,10 +13,16 @@ import { getLocale, getTranslations } from 'next-intl/server'
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
-  const [t, { data: faqPage }, { data: settings }] = await Promise.all([
-    getTranslations('Metadata'),
-    sanityFetch({ query: faqPageMetaQuery, params: { locale }, stega: false }),
-    sanityFetch({ query: settingsQuery, params: { locale }, stega: false })
+  const faqPagePromise = sanityFetch({
+    query: faqPageMetaQuery,
+    params: { locale },
+    stega: false
+  })
+  const settingsPromise = sanityFetch({ query: settingsQuery, params: { locale }, stega: false })
+  const t = await getTranslations('Metadata')
+  const [{ data: faqPage }, { data: settings }] = await Promise.all([
+    faqPagePromise,
+    settingsPromise
   ])
 
   const { openGraph, twitter } = getOpenGraphMetadata({

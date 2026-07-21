@@ -59,7 +59,6 @@ declare const messages: {
   "LegalNoticeDialog": {
     "agree_button": "I agree",
     "close_button": "Close",
-    "description": "Privacy policy and terms of service",
     "last_updated": "Last updated: {date}"
   },
   "MessageField": {
