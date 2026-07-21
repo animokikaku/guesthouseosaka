@@ -6,7 +6,6 @@ import { MainNav } from '@/components/main-nav'
 import { MobileNav } from '@/components/mobile-nav'
 import { ModeSwitcher } from '@/components/mode-switcher'
 import { Button } from '@/components/ui/button'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
 import { NavGroupItem, NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -18,7 +17,6 @@ import NextLink from 'next/link'
 
 export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
   const t = useTranslations('SiteHeader')
-  const isMobile = useIsMobile()
 
   const navItems: NavItems = [
     {
@@ -60,7 +58,7 @@ export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
           </Button>
           <MainNav items={navItems} className="hidden lg:flex" />
           <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
-            <LanguageSwitcher size={isMobile ? 'icon-sm' : 'default'} />
+            <LanguageSwitcher size="responsive" />
             <ModeSwitcher />
             <Button
               variant="ghost"

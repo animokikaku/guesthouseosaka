@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
+import { cn } from '@/lib/utils'
 import { Languages } from 'lucide-react'
 import { hasLocale, Locale, useLocale, useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
@@ -21,7 +22,11 @@ const langs: Record<Locale, string> = {
   fr: 'Français'
 }
 
-export function LanguageSwitcher({ size = 'default' }: { size?: 'icon-sm' | 'default' }) {
+export function LanguageSwitcher({
+  size = 'default'
+}: {
+  size?: 'icon-sm' | 'default' | 'responsive'
+}) {
   const { locales } = routing
   const locale = useLocale()
 
@@ -70,7 +75,7 @@ type LanguageSwitcherSelectProps = {
   variant?: 'outline' | 'ghost'
   onChange?: (code: Locale) => void
   className?: string
-  size?: 'default' | 'icon-sm'
+  size?: 'default' | 'icon-sm' | 'responsive'
 }
 
 function LanguageSwitcherSelect({
@@ -104,8 +109,21 @@ function LanguageSwitcherSelect({
       <DropdownMenuTrigger
         disabled={disabled}
         render={
-          <Button aria-label={t('aria_label')} size={size} className={className} variant={variant}>
-            {size === 'default' ? langs[value] : null}
+          <Button
+            aria-label={t('aria_label')}
+            size={size === 'responsive' ? 'default' : size}
+            className={cn(
+              size === 'responsive' &&
+                'size-8 px-0 has-[>svg]:px-0 md:h-9 md:w-auto md:px-4 md:py-2 md:has-[>svg]:px-3',
+              className
+            )}
+            variant={variant}
+          >
+            {size !== 'icon-sm' ? (
+              <span className={cn(size === 'responsive' && 'hidden md:inline')}>
+                {langs[value]}
+              </span>
+            ) : null}
             <Languages />
           </Button>
         }

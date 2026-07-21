@@ -9,10 +9,10 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ResponsiveModal } from '@/components/ui/responsive-modal'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { Icon } from '@/lib/icons'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import type { AmenityCategoryData, AmenityItemData } from '@/lib/types/components'
+import { cn } from '@/lib/utils'
 import { stegaClean } from '@sanity/client/stega'
 import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
@@ -38,9 +38,9 @@ interface AmenityItemProps extends React.HTMLAttributes<HTMLDivElement> {
   'data-sanity'?: string
 }
 
-function AmenityItem({ amenity, noteLabel, ...props }: AmenityItemProps) {
+function AmenityItem({ amenity, noteLabel, className, ...props }: AmenityItemProps) {
   return (
-    <div className="flex items-center gap-3 py-2" {...props}>
+    <div className={cn('flex items-center gap-3 py-2', className)} {...props}>
       <div className="text-muted-foreground size-5 shrink-0">
         <Icon name={amenity.icon} className="size-5" />
       </div>
@@ -101,7 +101,6 @@ export function HouseAmenities({
   featuredAmenities
 }: HouseAmenitiesProps) {
   const { id, type } = useHouseDocument()
-  const isMobile = useIsMobile()
   const t = useTranslations('HouseAmenities')
 
   const amenityCategories = useSanityOptimisticArray<
@@ -118,9 +117,6 @@ export function HouseAmenities({
     coin: t('notes.coin')
   }
 
-  // Featured amenities: GROQ provides max 10, slice to 5 on mobile
-  const displayedFeatured = isMobile ? featuredAmenities.slice(0, 5) : featuredAmenities
-
   const totalAmenitiesCount = amenityCategories.reduce((sum, cat) => sum + cat.items.length, 0)
 
   return (
@@ -128,10 +124,11 @@ export function HouseAmenities({
       <HouseSectionHeading id="amenities-title">{t('heading')}</HouseSectionHeading>
       <HouseSectionContent>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {displayedFeatured.map((amenity) => (
+          {featuredAmenities.map((amenity, index) => (
             <AmenityItem
               key={amenity._key}
               amenity={amenity}
+              className={index >= 5 ? 'hidden md:flex' : undefined}
               noteLabel={amenity.note ? noteLabels[stegaClean(amenity.note)] : undefined}
             />
           ))}

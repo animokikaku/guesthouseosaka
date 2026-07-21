@@ -5,7 +5,6 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale } from 'next-intl/server'
 
 import '@/app/globals.css'
-import { ActiveThemeProvider } from '@/components/active-theme'
 import { DraftModeIndicator } from '@/components/draft-mode-indicator'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
@@ -135,26 +134,24 @@ export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'
         )}
       >
         <ThemeProvider>
-          <ActiveThemeProvider initialTheme="default">
-            <NextIntlClientProvider>
-              <div className="bg-background relative z-10 flex min-h-svh flex-col">
-                <SiteHeader houseItems={houseItems} />
-                <main className="flex flex-1 flex-col pt-(--header-height)">{children}</main>
-                {settings && <SiteFooter settings={settings} />}
-              </div>
-              <TailwindIndicator />
-              <Toaster position="top-center" />
-              <Analytics />
-              <SpeedInsights />
-              <SanityLive />
-              {(await draftMode()).isEnabled && (
-                <>
-                  <VisualEditing />
-                  <DraftModeIndicator />
-                </>
-              )}
-            </NextIntlClientProvider>
-          </ActiveThemeProvider>
+          <NextIntlClientProvider>
+            <div className="bg-background relative z-10 flex min-h-svh flex-col">
+              <SiteHeader houseItems={houseItems} />
+              <main className="flex flex-1 flex-col pt-(--header-height)">{children}</main>
+              {settings && <SiteFooter settings={settings} />}
+            </div>
+            <TailwindIndicator />
+            <Toaster position="top-center" />
+            <Analytics />
+            <SpeedInsights />
+            <SanityLive />
+            {(await draftMode()).isEnabled && (
+              <>
+                <VisualEditing />
+                <DraftModeIndicator />
+              </>
+            )}
+          </NextIntlClientProvider>
         </ThemeProvider>
       </body>
     </html>

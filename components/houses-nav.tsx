@@ -1,6 +1,5 @@
 'use client'
 
-import { useThemeConfig } from '@/components/active-theme'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
@@ -23,6 +22,13 @@ const HOUSE_THEMES: Record<HouseIdentifier, string> = {
   lemon: 'yellow'
 }
 
+function applyActiveTheme(theme: string) {
+  Array.from(document.body.classList)
+    .filter((className) => className.startsWith('theme-'))
+    .forEach((className) => document.body.classList.remove(className))
+  document.body.classList.add(`theme-${theme}`)
+}
+
 export function HousesNav({
   houses,
   className,
@@ -30,17 +36,16 @@ export function HousesNav({
 }: React.ComponentProps<'div'> & {
   houses: NonNullable<HousesNavQueryResult>
 }) {
-  const { setActiveTheme } = useThemeConfig()
   const isMobile = useIsMobile()
   const params = useParams()
 
   useEffect(() => {
     const theme = HOUSE_THEMES[params.house as HouseIdentifier]
-    if (theme) setActiveTheme(theme)
+    applyActiveTheme(theme ?? 'default')
     return () => {
-      setActiveTheme('default')
+      applyActiveTheme('default')
     }
-  }, [params.house, setActiveTheme])
+  }, [params.house])
 
   return (
     <div className="relative overflow-hidden">
