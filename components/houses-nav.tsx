@@ -1,6 +1,5 @@
 'use client'
 
-import { useThemeConfig } from '@/components/active-theme'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
@@ -9,18 +8,11 @@ import { cn } from '@/lib/utils'
 import { HousesNavQueryResult } from '@/sanity.types'
 import { stegaClean } from 'next-sanity'
 import { useParams } from 'next/navigation'
-import { useEffect } from 'react'
 
 const THEME_CLASSES: Record<HouseIdentifier, string> = {
   orange: 'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
   apple: 'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500',
   lemon: 'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
-}
-
-const HOUSE_THEMES: Record<HouseIdentifier, string> = {
-  orange: 'orange',
-  apple: 'red',
-  lemon: 'yellow'
 }
 
 export function HousesNav({
@@ -30,17 +22,8 @@ export function HousesNav({
 }: React.ComponentProps<'div'> & {
   houses: NonNullable<HousesNavQueryResult>
 }) {
-  const { setActiveTheme } = useThemeConfig()
   const isMobile = useIsMobile()
   const params = useParams()
-
-  useEffect(() => {
-    const theme = HOUSE_THEMES[params.house as HouseIdentifier]
-    if (theme) setActiveTheme(theme)
-    return () => {
-      setActiveTheme('default')
-    }
-  }, [params.house, setActiveTheme])
 
   return (
     <div className="relative overflow-hidden">

@@ -25,6 +25,14 @@ test.describe('House Page', () => {
   // Note: Visibility tests for About, Amenities, Pricing, Location sections
   // are covered by unit tests in components/house/__tests__/
 
+  test('applies the house theme before hydration on direct visits', async ({ page }) => {
+    await page.route('**/_next/static/chunks/*.js', (route) => route.abort())
+
+    await page.goto(`/en/${testHouse}`, { waitUntil: 'domcontentloaded' })
+
+    await expect(page.locator('body')).toHaveClass(/theme-orange/)
+  })
+
   test.describe('Navigation', () => {
     test('can navigate to other houses from tabs', async ({ page }) => {
       await page.goto(`/en/${testHouse}`)
@@ -38,6 +46,7 @@ test.describe('House Page', () => {
 
       // Should navigate to another house page
       await expect(page).toHaveURL(new RegExp(`/en/(orange|apple|lemon)`))
+      await expect(page.locator('body')).toHaveClass(/theme-(orange|red|yellow)/)
     })
   })
 

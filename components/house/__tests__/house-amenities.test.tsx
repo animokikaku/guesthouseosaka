@@ -104,10 +104,8 @@ describe('HouseAmenities', () => {
       expect(screen.getAllByText(/Amenity \d+/)).toHaveLength(10)
     })
 
-    it('renders featured amenities on mobile (max 5)', () => {
-      mockUseIsMobile.mockReturnValue(true)
-
-      // GROQ query provides max 10, component slices to 5 on mobile
+    it('hides featured amenities after the first five on mobile', () => {
+      // GROQ query provides max 10; CSS hides items after the first five on mobile.
       const featuredAmenities = Array.from({ length: 10 }, (_, i) => ({
         _key: `amenity-${i}`,
         label: `Amenity ${i}`,
@@ -141,8 +139,14 @@ describe('HouseAmenities', () => {
         <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
       )
 
-      // Should display max 5 on mobile
-      expect(screen.getAllByText(/Amenity \d+/)).toHaveLength(5)
+      const amenities = screen.getAllByText(/Amenity \d+/)
+      expect(amenities).toHaveLength(10)
+      amenities.slice(0, 5).forEach((item) => {
+        expect(item.closest('.items-center')).not.toHaveClass('hidden')
+      })
+      amenities.slice(5).forEach((item) => {
+        expect(item.closest('.items-center')).toHaveClass('hidden')
+      })
     })
 
     it('displays only the featured amenities provided via prop', () => {

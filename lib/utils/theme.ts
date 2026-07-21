@@ -13,6 +13,25 @@ export interface HouseCardStyles {
   border: string
 }
 
+export const HOUSE_THEMES: Record<HouseIdentifier, string> = {
+  orange: 'orange',
+  apple: 'red',
+  lemon: 'yellow'
+}
+
+export function getHouseTheme(house: string | undefined) {
+  return house && Object.hasOwn(HOUSE_THEMES, house)
+    ? HOUSE_THEMES[house as HouseIdentifier]
+    : 'default'
+}
+
+export function applyActiveTheme(theme: string) {
+  Array.from(document.body.classList)
+    .filter((className) => className.startsWith('theme-'))
+    .forEach((className) => document.body.classList.remove(className))
+  document.body.classList.add(`theme-${theme}`)
+}
+
 export const HOUSE_COLORS: Record<HouseIdentifier, HouseColorVariants> = {
   apple: {
     divider: 'bg-red-600 dark:bg-red-500',
