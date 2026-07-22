@@ -25,7 +25,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         if: github.event.action == 'vercel.deployment.success'
 
-      - name: Cache bun dependencies
+      - name: Cache Bun dependencies
         if: github.event.action == 'vercel.deployment.success'
         uses: actions/cache@v6
         with:
@@ -37,9 +37,17 @@ jobs:
         if: github.event.action == 'vercel.deployment.success'
         run: bun install --frozen-lockfile
 
+      - name: Mount Playwright browser binaries
+        if: github.event.action == 'vercel.deployment.success'
+        uses: useblacksmith/stickydisk@v1
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ github.repository }}-playwright-${{ runner.os }}
+          commit: on-change
+
       - name: Install Playwright browsers
         if: github.event.action == 'vercel.deployment.success'
-        run: bunx playwright install --with-deps --only-shell chromium
+        run: bunx playwright install --only-shell chromium
 
       - name: Run preview tests
         id: preview-tests
