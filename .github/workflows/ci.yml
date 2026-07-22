@@ -87,7 +87,7 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Mount Next.js and Turbopack build cache
+      - name: Mount Next.js build cache
         uses: useblacksmith/stickydisk@v1
         with:
           path: ${{ github.workspace }}/.next/cache
