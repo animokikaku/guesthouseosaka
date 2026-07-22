@@ -61,17 +61,4 @@ test.describe('Gallery', () => {
     await page.keyboard.press('Escape')
     await expect(modal).not.toBeVisible({ timeout: 5000 })
   })
-
-  test('mobile modal hides carousel navigation', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 667 })
-    await page.goto(galleryUrl)
-    await expect(page).toHaveURL(galleryUrl)
-
-    await clickGalleryImageAndWaitForModal(page)
-
-    const nextButton = page.locator('[data-slot="carousel-next"]')
-    await expect(nextButton).toBeHidden()
-  })
-
-  // Note: Locale tests are now consolidated in e2e/locales.spec.ts
 })

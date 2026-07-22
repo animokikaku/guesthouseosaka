@@ -6,12 +6,8 @@ import { expect, type Page, test } from '@playwright/test'
  * This file tests that all locale routes load successfully across all supported locales.
  * Test matrix: [en, ja, fr] x [/, /contact, /orange/gallery] = 9 tests
  *
- * This replaces duplicate locale tests previously scattered across:
- * - homepage.spec.ts (Locale Routes section)
- * - contact-faq.spec.ts (Internationalization sections)
- * - house.spec.ts (Internationalization section)
- * - gallery.spec.ts (Internationalization section)
- * - smoke.spec.ts (Internationalization section)
+ * This keeps locale routing as a whole-app browser boundary instead of
+ * duplicating it in component-focused suites.
  */
 
 const LOCALES = ['en', 'ja', 'fr'] as const

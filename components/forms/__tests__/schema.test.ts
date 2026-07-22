@@ -311,6 +311,15 @@ describe('useGeneralInquirySchema', () => {
     expect(result.success).toBe(false)
   })
 
+  it('requires privacy policy consent', () => {
+    const schema = getSchemaInstance()
+    const result = schema.safeParse({
+      ...validGeneralInquiryData,
+      privacyPolicy: false
+    })
+    expect(result.success).toBe(false)
+  })
+
   it('requires gender', () => {
     const schema = getSchemaInstance()
     const result = schema.safeParse({
