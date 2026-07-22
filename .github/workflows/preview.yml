@@ -25,13 +25,13 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         if: github.event.action == 'vercel.deployment.success'
 
-      - name: Mount Bun package cache
+      - name: Cache Bun dependencies
         if: github.event.action == 'vercel.deployment.success'
-        uses: useblacksmith/stickydisk@v1
+        uses: actions/cache@v6
         with:
           path: ~/.bun/install/cache
-          key: ${{ github.repository }}-bun-cache
-          commit: on-change
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
 
       - name: Install dependencies
         if: github.event.action == 'vercel.deployment.success'

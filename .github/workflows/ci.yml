@@ -36,12 +36,12 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Mount Bun package cache
-        uses: useblacksmith/stickydisk@v1
+      - name: Cache Bun dependencies
+        uses: actions/cache@v6
         with:
           path: ~/.bun/install/cache
-          key: ${{ github.repository }}-bun-cache
-          commit: on-change
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
@@ -77,12 +77,12 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Mount Bun package cache
-        uses: useblacksmith/stickydisk@v1
+      - name: Cache Bun dependencies
+        uses: actions/cache@v6
         with:
           path: ~/.bun/install/cache
-          key: ${{ github.repository }}-bun-cache
-          commit: on-change
+          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
