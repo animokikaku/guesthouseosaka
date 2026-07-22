@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
-import { render, screen, fireEvent } from '@testing-library/react'
-import { CategoryThumbnail } from '../gallery-category-thumbnail'
 import type { GalleryCategory } from '@/lib/gallery'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { CategoryThumbnail } from '../gallery-category-thumbnail'
 
 // Mock stegaClean
 vi.mock('@sanity/client/stega', () => ({
@@ -233,14 +233,16 @@ describe('CategoryThumbnail', () => {
       const mockElement = {
         scrollIntoView: vi.fn()
       }
-      vi.spyOn(document, 'getElementById').mockReturnValue(mockElement as unknown as HTMLElement)
+      const getElementByIdSpy = vi
+        .spyOn(document, 'getElementById')
+        .mockReturnValue(mockElement as unknown as HTMLElement)
 
       render(<CategoryThumbnail category={category} />)
 
       const button = screen.getByRole('button')
       fireEvent.click(button)
 
-      expect(document.getElementById).toHaveBeenCalledWith('category-1')
+      expect(getElementByIdSpy).toHaveBeenCalledWith('category-1')
       expect(mockElement.scrollIntoView).toHaveBeenCalledWith({
         behavior: 'smooth'
       })
