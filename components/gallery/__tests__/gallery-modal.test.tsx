@@ -8,21 +8,6 @@ import {
   resetCarouselMockState
 } from '@/lib/__tests__/utils/carousel-mock'
 
-// Mock matchMedia for carousel
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: vi.fn().mockImplementation((query) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn()
-  }))
-})
-
 // Use vi.hoisted to create state that can be used in vi.mock
 const { carouselState } = vi.hoisted(() => {
   const state: CarouselMockState = {
@@ -87,8 +72,16 @@ vi.mock('@/components/ui/carousel', () => ({
   CarouselItem: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="carousel-item">{children}</div>
   ),
-  CarouselNext: () => <button data-testid="carousel-next">Next</button>,
-  CarouselPrevious: () => <button data-testid="carousel-prev">Previous</button>
+  CarouselNext: ({ className }: { className?: string }) => (
+    <button data-testid="carousel-next" className={className}>
+      Next
+    </button>
+  ),
+  CarouselPrevious: ({ className }: { className?: string }) => (
+    <button data-testid="carousel-prev" className={className}>
+      Previous
+    </button>
+  )
 }))
 
 // Import component after mocks
@@ -244,6 +237,15 @@ describe('GalleryModal', () => {
       const closeButton = screen.getByRole('button', { name: /close/i })
       expect(closeButton).toBeInTheDocument()
       expect(closeButton.querySelector('svg')).toBeInTheDocument()
+    })
+
+    it('shows carousel navigation only from the small breakpoint', () => {
+      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
+
+      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
+
+      expect(screen.getByTestId('carousel-prev')).toHaveClass('hidden', 'sm:flex')
+      expect(screen.getByTestId('carousel-next')).toHaveClass('hidden', 'sm:flex')
     })
   })
 

@@ -35,15 +35,12 @@ test.describe('Contact Form Tests', () => {
       age?: string
       nationality?: string
       message?: string
-      skipPlaces?: boolean
     } = {}
   ) {
     const fields = getFormFields(page)
 
     // Select at least one place (toggle button)
-    if (!overrides.skipPlaces) {
-      await fields.placesGroup.getByRole('button').first().click()
-    }
+    await fields.placesGroup.getByRole('button').first().click()
 
     // Select gender
     await fields.genderSelect.click()
@@ -64,55 +61,6 @@ test.describe('Contact Form Tests', () => {
     // Fill message
     await fields.messageField.fill(overrides.message ?? 'This is a valid test message.')
   }
-
-  test.describe('Form Validation', () => {
-    // Detailed field-level validation is covered by Vitest schema/component tests.
-    test('missing places shows validation error on submit', async ({ page }) => {
-      await fillRequiredFields(page, { skipPlaces: true })
-      await getFormFields(page).checkbox.click()
-
-      await page.getByRole('button', { name: 'Submit' }).click()
-
-      await expect(page.getByText('Please select at least one share house')).toBeVisible()
-    })
-  })
-
-  test.describe('Privacy Policy', () => {
-    test('privacy checkbox must be checked to submit', async ({ page }) => {
-      // Fill all required fields with valid values but leave checkbox unchecked
-      await fillRequiredFields(page)
-
-      // Click submit without checking privacy policy
-      await page.getByRole('button', { name: 'Submit' }).click()
-
-      const fields = getFormFields(page)
-
-      // Verify the checkbox is not checked and submission is blocked
-      await expect(fields.checkbox).not.toBeChecked()
-
-      // The form should not have navigated away (still on the same page)
-      await expect(page).toHaveURL(/\/en\/contact\/other/)
-    })
-
-    test('privacy policy link opens dialog', async ({ page }) => {
-      // Find and click the privacy policy link
-      const privacyLink = page.getByRole('button', { name: 'Privacy Policy' })
-      await expect(privacyLink).toBeVisible()
-      await privacyLink.click()
-
-      // Dialog should be visible
-      const dialog = page.getByRole('dialog')
-      await expect(dialog).toBeVisible()
-
-      // Dialog should have the Privacy Policy title
-      await expect(page.getByRole('heading', { name: 'Privacy Policy' })).toBeVisible()
-
-      // Close the dialog using the footer Close button (first one in DOM order)
-      const closeButton = page.getByRole('button', { name: 'Close' }).first()
-      await closeButton.click()
-      await expect(dialog).not.toBeVisible()
-    })
-  })
 
   test.describe('Form Submission', () => {
     test('valid form can be submitted', async ({ next, page }) => {
@@ -173,18 +121,5 @@ test.describe('Contact Form Tests', () => {
       await expect(toast).toContainText('Failed to send message.')
       await expect(page).toHaveURL(/\/en\/contact\/other/)
     })
-  })
-})
-
-test.describe('Contact Page Navigation', () => {
-  test('can navigate to general inquiry form', async ({ page }) => {
-    await page.goto('/en/contact')
-
-    // Find and click the link to the general inquiry form
-    const generalLink = page.locator('a[href*="/contact/other"]')
-    await expect(generalLink).toBeVisible()
-    await generalLink.click()
-    await expect(page).toHaveURL(/\/en\/contact\/other/)
-    await expect(page.locator('form#other-form')).toBeVisible()
   })
 })

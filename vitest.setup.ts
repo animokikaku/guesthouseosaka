@@ -1,5 +1,20 @@
 import '@testing-library/jest-dom/vitest'
 
+Object.defineProperty(window, 'matchMedia', {
+  configurable: true,
+  writable: true,
+  value: vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn()
+  }))
+})
+
 // Base UI ScrollArea measures overflow after render, which causes act() warnings in
 // consumer tests. The wrapper itself is covered by browser behavior, so unit tests
 // use a static DOM equivalent.
