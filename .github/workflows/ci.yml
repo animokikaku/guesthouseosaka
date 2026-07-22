@@ -111,7 +111,7 @@ jobs:
           commit: on-change
 
       - name: Install Playwright browsers
-        run: bunx playwright install --with-deps --only-shell chromium
+        run: bunx playwright install --only-shell chromium
 
       - name: Run E2E tests
         run: bun run test:e2e
