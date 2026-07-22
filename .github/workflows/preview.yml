@@ -39,7 +39,7 @@ jobs:
 
       - name: Install Playwright browsers
         if: github.event.action == 'vercel.deployment.success'
-        run: bunx playwright install --with-deps chromium
+        run: bunx playwright install --with-deps --only-shell chromium
 
       - name: Run preview tests
         id: preview-tests

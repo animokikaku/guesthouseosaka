@@ -104,7 +104,7 @@ jobs:
           key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
 
       - name: Install Playwright browsers
-        run: bunx playwright install --with-deps chromium
+        run: bunx playwright install --with-deps --only-shell chromium
 
       - name: Run E2E tests
         run: bun run test:e2e
