@@ -258,7 +258,7 @@ describe('HousePageContent', () => {
 
     it('uses only gallery images when featured is missing', () => {
       const props = createBaseProps()
-      props.featuredImage = null as unknown as typeof props.featuredImage
+      props.featuredImage = null
 
       render(<HousePageContent {...props} />)
 
@@ -281,7 +281,7 @@ describe('HousePageContent', () => {
     it('handles empty galleryImages without featured image', () => {
       const props = createBaseProps()
       props.galleryImages = null
-      props.featuredImage = null as unknown as typeof props.featuredImage
+      props.featuredImage = null
 
       render(<HousePageContent {...props} />)
 
@@ -317,7 +317,7 @@ describe('HousePageContent', () => {
 
     it('renders HouseLocation even when map is null', () => {
       const props = createBaseProps()
-      props.map = null as unknown as typeof props.map
+      props.map = null
 
       render(<HousePageContent {...props} />)
 

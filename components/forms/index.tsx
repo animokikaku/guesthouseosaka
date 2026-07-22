@@ -51,6 +51,8 @@ const withFieldGroup = formHook.withFieldGroup
 const userAccountDefaultValues = {
   name: '',
   age: '',
+  // The form starts unselected; schema validation narrows this before submission.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   gender: '' as 'male' | 'female',
   nationality: '',
   email: '',
@@ -60,6 +62,8 @@ const userAccountDefaultValues = {
 export const FieldGroupUserAccount = withFieldGroup({
   defaultValues: userAccountDefaultValues,
   props: {
+    // This placeholder only establishes the field group's prop type; callers provide the config.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
     config: {} as FormFieldsConfig
   },
   render: function Render({ group, config }) {
@@ -172,15 +176,21 @@ export const FieldGroupUserAccount = withFieldGroup({
   }
 })
 
+const fieldGroupPlacesProps: {
+  label: string
+  description: string | undefined
+  houseTitles: HousesTitlesQueryResult
+} = {
+  label: '',
+  description: undefined,
+  houseTitles: []
+}
+
 export const FieldGroupPlaces = withFieldGroup({
   defaultValues: {
     places: [] as HouseIdentifier[]
   },
-  props: {
-    label: '' as string | null | undefined,
-    description: '' as string | null | undefined,
-    houseTitles: [] as HousesTitlesQueryResult
-  },
+  props: fieldGroupPlacesProps,
   render: function Render({ group, description, label, houseTitles }) {
     const placeOptions = houseTitles.map(({ slug, title }) => ({
       value: slug,
@@ -209,7 +219,10 @@ export const contactFormDefaultValues = {
   account: userAccountDefaultValues,
   message: '',
   date: '',
+  // These empty states are invalid until the user completes the form.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   privacyPolicy: false as ContactFormFields['privacyPolicy'],
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   stayDuration: '' as ContactFormFields['stayDuration'],
   hour: ''
 } satisfies ContactFormFields

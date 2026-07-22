@@ -28,7 +28,7 @@ export function PrivacyPolicyField() {
             render={<button type="button" aria-labelledby={labelId} />}
             checked={field.state.value}
             aria-invalid={isInvalid}
-            onCheckedChange={(checked) => field.handleChange(checked === true)}
+            onCheckedChange={(checked) => field.handleChange(checked)}
             onBlur={() => field.handleBlur()}
           />
           <FieldLabel

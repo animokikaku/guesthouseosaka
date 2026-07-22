@@ -10,7 +10,7 @@ type OptimisticReducer = (
 let capturedReducer: OptimisticReducer | null = null
 
 vi.mock('next-sanity/hooks', () => ({
-  useOptimistic: <T, A>(initialValue: T, reducer: (current: T, action: A) => T) => {
+  useOptimistic: <T,>(initialValue: T, reducer: (current: T, action: unknown) => T) => {
     capturedReducer = reducer as unknown as OptimisticReducer
     return initialValue
   }

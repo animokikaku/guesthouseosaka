@@ -41,7 +41,7 @@ export function SiteFooter({ settings }: SiteFooterProps) {
               <SocialLink
                 key={link._key}
                 href={link.url}
-                icon={link.icon as IconName}
+                icon={link.icon}
                 label={link.label}
                 data-sanity={dataAttribute(`socialLinks[_key=="${link._key}"]`)}
               />

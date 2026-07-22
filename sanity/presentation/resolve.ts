@@ -1,9 +1,5 @@
-import { ContactType, ContactTypeValues, HouseIdentifier } from '@/lib/types'
+import { isContactType, type ContactType, type HouseIdentifier } from '@/lib/types'
 import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
-
-function isContactTypeSlug(slug: unknown): slug is ContactType {
-  return typeof slug === 'string' && ContactTypeValues.includes(slug as ContactType)
-}
 
 const l = {
   home: () => ({ title: 'Home', href: '/' }),
@@ -45,7 +41,7 @@ export const resolve: PresentationPluginOptions['resolve'] = {
     contactType: defineLocations({
       select: { slug: 'slug' },
       resolve: (doc) => {
-        if (!isContactTypeSlug(doc?.slug)) {
+        if (!isContactType(doc?.slug)) {
           console.warn(`Invalid contact type slug: ${doc?.slug}`)
           return { locations: [l.contact()] }
         }

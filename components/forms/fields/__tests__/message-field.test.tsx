@@ -284,7 +284,7 @@ describe('MessageField', () => {
         </FieldContextWrapper>
       )
 
-      const textarea = screen.getByRole('textbox') as HTMLTextAreaElement
+      const textarea = screen.getByRole<HTMLTextAreaElement>('textbox')
       expect(textarea.value).toBe('Test message')
     })
 
@@ -297,7 +297,7 @@ describe('MessageField', () => {
         </FieldContextWrapper>
       )
 
-      const textarea = screen.getByRole('textbox') as HTMLTextAreaElement
+      const textarea = screen.getByRole<HTMLTextAreaElement>('textbox')
       expect(textarea.value).toBe('')
     })
   })

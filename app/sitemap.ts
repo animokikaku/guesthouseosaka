@@ -45,10 +45,13 @@ function buildUrl(href: Route, locale: Locale, host: string): string {
 }
 
 function buildAlternates(href: Route, host: string): Record<Locale, string> {
+  // routing.locales is the complete source of supported locales for this record.
+  // oxlint-disable typescript/no-unsafe-type-assertion
   return Object.fromEntries(
     routing.locales.map((locale) => [locale, buildUrl(href, locale, host)])
   ) as Record<Locale, string>
 }
+// oxlint-enable typescript/no-unsafe-type-assertion
 
 function buildSitemapEntry(href: Route, host: string): MetadataRoute.Sitemap[number] {
   return {

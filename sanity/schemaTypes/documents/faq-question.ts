@@ -36,8 +36,13 @@ export const faqQuestion = defineType({
         ]
       },
       hidden: ({ document }) => {
-        const answer = document?.answer as Array<{ value?: unknown }> | undefined
-        return answer?.some((item) => item.value) ?? false
+        if (!Array.isArray(document?.answer)) {
+          return false
+        }
+
+        return document.answer.some(
+          (item) => typeof item === 'object' && item !== null && 'value' in item && !!item.value
+        )
       }
     }),
     orderRankField({ type: 'faqQuestion' })

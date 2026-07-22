@@ -2,13 +2,13 @@ import type {
   AmenityCategoryData,
   AmenityItemData,
   BuildingData,
+  HousePortableTextContent,
   LocationData,
   MapData,
   PricingRowData,
   SanityImage
 } from '@/lib/types/components'
 import type { HouseQueryResult } from '@/sanity.types'
-import type { PortableTextBlock } from '@portabletext/types'
 
 // ============================================
 // Input Types (from Sanity query results)
@@ -60,7 +60,7 @@ export function toLocationData(location: HouseLocation): LocationData {
   }
   return {
     highlight: location.highlight ?? null,
-    details: (location.details as PortableTextBlock[]) ?? null
+    details: location.details ?? null
   }
 }
 
@@ -128,7 +128,7 @@ export function toPricingRows(pricing: HousePricing): PricingRowData[] {
   return pricing.map((row) => ({
     _key: row._key,
     label: row.label,
-    content: row.content as PortableTextBlock[]
+    content: row.content
   }))
 }
 
@@ -197,10 +197,9 @@ export function toFeaturedAmenities(featuredAmenities: HouseFeaturedAmenities): 
  * @param about - Raw about content from Sanity query
  * @returns PortableTextBlock array or null
  */
-export function toAboutContent(about: HouseAbout): PortableTextBlock[] | null {
+export function toAboutContent(about: HouseAbout): HousePortableTextContent {
   if (!about || about.length === 0) {
     return null
   }
-  // Sanity block content is structurally compatible with PortableTextBlock
-  return about as PortableTextBlock[]
+  return about
 }

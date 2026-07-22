@@ -20,7 +20,7 @@ describe('Icon', () => {
   })
 
   it('returns null for unknown icon', () => {
-    const { container } = render(<Icon name={'nonexistent' as 'wifi'} />)
+    const { container } = render(<Icon name="nonexistent" />)
 
     expect(container.firstChild).toBeNull()
   })

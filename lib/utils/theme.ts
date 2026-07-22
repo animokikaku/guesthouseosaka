@@ -1,4 +1,4 @@
-import type { HouseIdentifier } from '@/lib/types'
+import { isHouseIdentifier, type HouseIdentifier } from '@/lib/types'
 
 interface HouseColorVariants {
   divider: string
@@ -20,9 +20,7 @@ export const HOUSE_THEMES: Record<HouseIdentifier, string> = {
 }
 
 export function getHouseTheme(house: string | undefined) {
-  return house && Object.hasOwn(HOUSE_THEMES, house)
-    ? HOUSE_THEMES[house as HouseIdentifier]
-    : 'default'
+  return isHouseIdentifier(house) ? HOUSE_THEMES[house] : 'default'
 }
 
 export function applyActiveTheme(theme: string) {

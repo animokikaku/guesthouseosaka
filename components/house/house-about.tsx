@@ -4,10 +4,9 @@ import {
   HouseSectionContent,
   HouseSectionHeading
 } from '@/components/house/house-section'
-import type { BuildingData } from '@/lib/types/components'
+import type { BuildingData, HousePortableTextContent } from '@/lib/types/components'
 import type { PortableTextComponents } from '@portabletext/react'
 import { PortableText } from '@portabletext/react'
-import type { PortableTextBlock } from '@portabletext/types'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
 
@@ -35,7 +34,7 @@ const portableTextComponents: PortableTextComponents = {
 }
 
 interface HouseAboutProps {
-  about: PortableTextBlock[] | null
+  about: HousePortableTextContent
   title: string | null
   building: BuildingData | null
 }

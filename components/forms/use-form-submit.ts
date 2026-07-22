@@ -1,28 +1,18 @@
 'use client'
 
 import { submitContactForm } from '@/app/actions/contact'
-import type {
-  GeneralInquiryFields,
-  MoveInFormFields,
-  TourFormFields
-} from '@/components/forms/schema'
 import { useRouter } from '@/i18n/navigation'
+import type { ContactFormPayload } from '@/lib/schemas/contact-form'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 
 /**
  * Mapping from form type to its corresponding field types.
  */
+type FormType = ContactFormPayload['type']
 type FormTypeDataMap = {
-  tour: TourFormFields
-  'move-in': MoveInFormFields
-  other: GeneralInquiryFields
+  [T in FormType]: Extract<ContactFormPayload, { type: T }>['data']
 }
-
-/**
- * Form type identifiers matching the ContactFormPayload discriminated union.
- */
-type FormType = keyof FormTypeDataMap
 
 /**
  * Hook that provides shared form submission handlers.
@@ -47,16 +37,16 @@ export function useFormSubmit() {
   const router = useRouter()
 
   const onSubmitInvalid = () => {
-    const firstErrorInput = document.querySelector('[aria-invalid="true"]') as HTMLElement | null
+    const firstErrorInput = document.querySelector<HTMLElement>('[aria-invalid="true"]')
     firstErrorInput?.focus()
   }
 
   const createOnSubmit = <T extends FormType>(formType: T) => {
     return async ({ value }: { value: FormTypeDataMap[T] }) => {
-      const promise = submitContactForm({
-        type: formType,
-        data: value
-      } as Parameters<typeof submitContactForm>[0]).then((result) => {
+      // TypeScript cannot correlate a generic key with its mapped discriminated-union value.
+      // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+      const payload = { type: formType, data: value } as ContactFormPayload
+      const promise = submitContactForm(payload).then((result) => {
         if (!result.ok) {
           throw new Error(result.code)
         }

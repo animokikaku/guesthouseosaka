@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { HouseAbout } from '../house-about'
 import { HouseProvider } from '../house-context'
-import type { PortableTextBlock } from '@portabletext/types'
+import type { HousePortableTextContent } from '@/lib/types/components'
 
 // Mock next-sanity
 vi.mock('next-sanity', () => ({
@@ -69,7 +69,7 @@ describe('HouseAbout', () => {
     })
 
     it('renders paragraph text content', () => {
-      const about: PortableTextBlock[] = [
+      const about: NonNullable<HousePortableTextContent> = [
         {
           _type: 'block',
           _key: 'p1',
@@ -84,7 +84,7 @@ describe('HouseAbout', () => {
     })
 
     it('renders multiple paragraphs', () => {
-      const about: PortableTextBlock[] = [
+      const about: NonNullable<HousePortableTextContent> = [
         {
           _type: 'block',
           _key: 'p1',
@@ -106,7 +106,7 @@ describe('HouseAbout', () => {
     })
 
     it('renders bullet list items', () => {
-      const about: PortableTextBlock[] = [
+      const about: NonNullable<HousePortableTextContent> = [
         {
           _type: 'block',
           _key: 'li1',
@@ -130,7 +130,7 @@ describe('HouseAbout', () => {
     })
 
     it('renders numbered list items', () => {
-      const about: PortableTextBlock[] = [
+      const about: NonNullable<HousePortableTextContent> = [
         {
           _type: 'block',
           _key: 'li1',
