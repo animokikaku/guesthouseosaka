@@ -36,12 +36,12 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Cache bun dependencies
-        uses: actions/cache@v6
+      - name: Mount Bun package cache
+        uses: useblacksmith/stickydisk@v1
         with:
           path: ~/.bun/install/cache
-          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
-          restore-keys: bun-${{ runner.os }}-
+          key: ${{ github.repository_id }}-bun-${{ github.job }}-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}
+          commit: on-change
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
@@ -77,44 +77,35 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Cache bun dependencies
-        uses: actions/cache@v6
+      - name: Mount Bun package cache
+        uses: useblacksmith/stickydisk@v1
         with:
           path: ~/.bun/install/cache
-          key: bun-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
-          restore-keys: bun-${{ runner.os }}-
+          key: ${{ github.repository_id }}-bun-${{ github.job }}-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}
+          commit: on-change
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Restore Next.js cache on pull requests
-        if: github.event_name == 'pull_request'
-        uses: actions/cache/restore@v6
+      - name: Mount Next.js and Turbopack build cache
+        uses: useblacksmith/stickydisk@v1
         with:
           path: ${{ github.workspace }}/.next/cache
-          key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
-          restore-keys: nextjs-v3-${{ runner.os }}-
+          key: ${{ github.repository_id }}-nextjs-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}
+          commit: on-change
 
-      - name: Restore exact Next.js cache on main
-        if: github.event_name == 'push'
-        id: next-cache-main
-        uses: actions/cache/restore@v6
+      - name: Mount Playwright browser binaries
+        uses: useblacksmith/stickydisk@v1
         with:
-          path: ${{ github.workspace }}/.next/cache
-          key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
+          path: ~/.cache/ms-playwright
+          key: ${{ github.repository_id }}-playwright-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}
+          commit: on-change
 
       - name: Install Playwright browsers
         run: bunx playwright install --with-deps --only-shell chromium
 
       - name: Run E2E tests
         run: bun run test:e2e
-
-      - name: Save Next.js cache from main
-        if: github.event_name == 'push' && steps.next-cache-main.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v6
-        with:
-          path: ${{ github.workspace }}/.next/cache
-          key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
 
       - name: Upload Playwright artifacts
         if: failure()
