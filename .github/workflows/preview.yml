@@ -30,7 +30,7 @@ jobs:
         uses: useblacksmith/stickydisk@v1
         with:
           path: ~/.bun/install/cache
-          key: ${{ github.repository_id }}-bun-${{ github.job }}-${{ runner.os }}-${{ runner.arch }}
+          key: ${{ github.repository }}-bun-cache
           commit: on-change
 
       - name: Install dependencies
@@ -42,7 +42,7 @@ jobs:
         uses: useblacksmith/stickydisk@v1
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ github.repository_id }}-playwright-${{ github.job }}-${{ runner.os }}-${{ runner.arch }}
+          key: ${{ github.repository }}-playwright-${{ runner.os }}
           commit: on-change
 
       - name: Install Playwright browsers

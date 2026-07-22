@@ -40,7 +40,7 @@ jobs:
         uses: useblacksmith/stickydisk@v1
         with:
           path: ~/.bun/install/cache
-          key: ${{ github.repository_id }}-bun-${{ github.job }}-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}
+          key: ${{ github.repository }}-bun-cache
           commit: on-change
 
       - name: Install dependencies
@@ -81,7 +81,7 @@ jobs:
         uses: useblacksmith/stickydisk@v1
         with:
           path: ~/.bun/install/cache
-          key: ${{ github.repository_id }}-bun-${{ github.job }}-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}
+          key: ${{ github.repository }}-bun-cache
           commit: on-change
 
       - name: Install dependencies
@@ -91,14 +91,14 @@ jobs:
         uses: useblacksmith/stickydisk@v1
         with:
           path: ${{ github.workspace }}/.next/cache
-          key: ${{ github.repository_id }}-nextjs-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}
+          key: ${{ github.repository }}-nextjs-${{ github.ref_name }}
           commit: on-change
 
       - name: Mount Playwright browser binaries
         uses: useblacksmith/stickydisk@v1
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ github.repository_id }}-playwright-${{ runner.os }}-${{ runner.arch }}-${{ github.ref_name }}
+          key: ${{ github.repository }}-playwright-${{ runner.os }}
           commit: on-change
 
       - name: Install Playwright browsers
