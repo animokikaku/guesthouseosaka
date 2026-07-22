@@ -47,7 +47,9 @@ describe('useFormSubmit', () => {
   describe('onSubmitInvalid', () => {
     it('focuses first input with aria-invalid="true"', () => {
       const mockElement = { focus: vi.fn() }
-      vi.spyOn(document, 'querySelector').mockReturnValue(mockElement as unknown as HTMLElement)
+      const querySelectorSpy = vi
+        .spyOn(document, 'querySelector')
+        .mockReturnValue(mockElement as unknown as HTMLElement)
 
       const { result } = renderHook(() => useFormSubmit())
 
@@ -55,7 +57,7 @@ describe('useFormSubmit', () => {
         result.current.onSubmitInvalid()
       })
 
-      expect(document.querySelector).toHaveBeenCalledWith('[aria-invalid="true"]')
+      expect(querySelectorSpy).toHaveBeenCalledWith('[aria-invalid="true"]')
       expect(mockElement.focus).toHaveBeenCalled()
     })
 

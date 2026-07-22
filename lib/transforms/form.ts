@@ -38,6 +38,8 @@ const FIELD_KEYS: FieldKey[] = [
  * @returns FormFieldsConfig with all available fields
  */
 export function toFormFieldsConfig(fields: NonNullable<ContactTypeFields>): FormFieldsConfig {
+  // FIELD_KEYS exhaustively initializes every FormFieldsConfig property.
+  // oxlint-disable typescript/no-unsafe-type-assertion
   return FIELD_KEYS.reduce((acc, key) => {
     const field = fields[key]
     acc[key] = {
@@ -48,6 +50,7 @@ export function toFormFieldsConfig(fields: NonNullable<ContactTypeFields>): Form
     return acc
   }, {} as FormFieldsConfig)
 }
+// oxlint-enable typescript/no-unsafe-type-assertion
 
 // ============================================
 // Contact Form Config Transformer

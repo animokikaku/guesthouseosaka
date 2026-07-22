@@ -155,6 +155,6 @@ export const structure: StructureResolver = (S) =>
       // OTHER DOCUMENT TYPES (if any remain)
       // ============================================
       ...S.documentTypeListItems().filter(
-        (listItem) => !MANAGED_TYPES.includes(listItem.getId() as string)
+        (listItem) => !MANAGED_TYPES.some((type) => type === listItem.getId())
       )
     ])

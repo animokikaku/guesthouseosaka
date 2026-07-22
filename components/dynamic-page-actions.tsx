@@ -69,6 +69,8 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
           )
         }
 
+        // next-intl cannot infer typed routes from CMS-provided paths after runtime parsing.
+        // oxlint-disable typescript/no-unsafe-type-assertion
         return (
           <Button
             key={_key}
@@ -86,6 +88,7 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
             {stegaClean(label)}
           </Button>
         )
+        // oxlint-enable typescript/no-unsafe-type-assertion
       })}
     </PageActions>
   )

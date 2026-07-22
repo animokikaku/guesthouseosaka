@@ -15,8 +15,7 @@ bun run build        # Production build (run before PRs)
 bun run typegen      # Regenerate Sanity types after schema changes
 bun run test --run   # Run tests once without watch mode
 bun run knip         # Detect unused deps/exports
-bun run lint --fix   # Lint and auto-fix
-bun run typecheck    # Generate Next.js types and run TypeScript checks
+bun run check        # Generate Next.js types, lint, and run TypeScript checks
 bun run format:check # Check formatting without modifying files
 ```
 
@@ -37,7 +36,7 @@ bun run format:check # Check formatting without modifying files
 
 ## Validation
 
-- Routine code changes: run `bun run lint`, `bun run typecheck`, and the relevant tests
+- Routine code changes: run `bun run check` and the relevant tests
 - Formatting: run `bun run format:check`
 - Sanity schema or query changes: run `bun run typegen`
 - User-facing flow changes: run the relevant Playwright tests with `bun run test:e2e`

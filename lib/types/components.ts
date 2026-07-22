@@ -1,6 +1,8 @@
 import type { ContactType } from '@/lib/types'
-import type { SanityImageCrop, SanityImageHotspot } from '@/sanity.types'
-import type { PortableTextBlock } from '@portabletext/react'
+import type { HouseQueryResult, SanityImageCrop, SanityImageHotspot } from '@/sanity.types'
+
+type HouseData = NonNullable<HouseQueryResult>
+export type HousePortableTextContent = HouseData['about']
 
 // ============================================
 // Image Types
@@ -51,7 +53,7 @@ export interface BuildingData {
  */
 export interface LocationData {
   highlight: string | null
-  details: PortableTextBlock[] | null
+  details: NonNullable<HouseData['location']>['details']
 }
 
 /**
@@ -74,7 +76,7 @@ export interface MapData {
 export interface PricingRowData {
   _key: string
   label: string | null
-  content: PortableTextBlock[] | null
+  content: NonNullable<HouseData['pricing']>[number]['content']
 }
 
 /**

@@ -9,7 +9,6 @@
     "lib/transforms/__tests__/mocks.ts"
   ],
   "ignoreBinaries": ["crowdin"],
-  "ignoreDependencies": ["@portabletext/types"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true

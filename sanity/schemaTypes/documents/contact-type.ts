@@ -7,15 +7,18 @@ const fieldConfig = (
   name: string,
   title: string,
   options?: { hiddenFor?: string[]; noPlaceholder?: boolean }
-) =>
-  defineField({
+) => {
+  const hiddenFor = options?.hiddenFor
+
+  return defineField({
     name,
     title,
     type: options?.noPlaceholder ? 'formFieldConfigNoPlaceholder' : 'formFieldConfig',
-    hidden: options?.hiddenFor
-      ? ({ document }) => options.hiddenFor!.includes(document?.slug as string)
+    hidden: hiddenFor
+      ? ({ document }) => typeof document?.slug === 'string' && hiddenFor.includes(document.slug)
       : undefined
   })
+}
 
 export const contactType = defineType({
   name: 'contactType',

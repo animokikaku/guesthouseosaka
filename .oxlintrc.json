@@ -1,5 +1,9 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "options": {
+    "typeAware": true,
+    "typeCheck": true
+  },
   "plugins": ["react", "typescript", "import", "jsx-a11y", "nextjs", "unicorn", "oxc"],
   "categories": {
     "correctness": "error",
@@ -13,6 +17,11 @@
     "jsx-a11y/heading-has-content": "off",
     "nextjs/no-duplicate-head": "off",
     "no-underscore-dangle": "off",
+    "typescript/consistent-return": "off",
+    "typescript/no-unsafe-type-assertion": "error",
+    "typescript/no-unnecessary-boolean-literal-compare": "error",
+    "typescript/no-unnecessary-type-assertion": "error",
+    "typescript/no-unnecessary-type-parameters": "error",
     "no-restricted-imports": [
       "error",
       {
@@ -30,6 +39,14 @@
       }
     ]
   },
+  "overrides": [
+    {
+      "files": ["**/__tests__/**", "**/*.test.ts", "**/*.test.tsx", "e2e/**", "vitest.setup.ts"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off"
+      }
+    }
+  ],
   "ignorePatterns": [
     ".next/**",
     "out/**",
