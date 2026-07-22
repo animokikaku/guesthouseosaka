@@ -4,21 +4,6 @@ import { HouseProvider } from '../house-context'
 import { createAmenityCategory, createAmenityItem } from '@/lib/transforms/__tests__/mocks'
 import type { AmenityCategoryData } from '@/lib/types/components'
 
-// Mock matchMedia for mobile drawer behavior
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: vi.fn().mockImplementation((query) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn()
-  }))
-})
-
 // Mock dependencies
 vi.mock('@/hooks/use-mobile', () => ({
   useIsMobile: vi.fn(() => false)

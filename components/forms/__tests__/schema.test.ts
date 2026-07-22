@@ -318,6 +318,12 @@ describe('useGeneralInquirySchema', () => {
       privacyPolicy: false
     })
     expect(result.success).toBe(false)
+    if (result.success) {
+      throw new Error('Expected privacy policy validation to fail')
+    }
+    expect(result.error.issues).toEqual(
+      expect.arrayContaining([expect.objectContaining({ path: ['privacyPolicy'] })])
+    )
   })
 
   it('requires gender', () => {
