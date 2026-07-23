@@ -24,15 +24,9 @@
       "automerge": false
     },
     {
-      "description": "Group non-major dev dependencies",
-      "groupName": "dev dependencies",
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["patch", "minor"]
-    },
-    {
-      "description": "Group non-major production dependencies",
-      "groupName": "production dependencies",
-      "matchDepTypes": ["dependencies"],
+      "description": "Group non-major dependencies",
+      "groupName": "non-major dependencies",
+      "matchDepTypes": ["dependencies", "devDependencies"],
       "matchUpdateTypes": ["patch", "minor"]
     },
     {
