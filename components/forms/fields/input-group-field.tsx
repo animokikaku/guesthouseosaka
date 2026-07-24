@@ -12,7 +12,14 @@ import { useId } from 'react'
 
 type InputFormProps = Omit<
   React.ComponentProps<typeof InputGroupInput>,
-  'onChange' | 'onBlur' | 'value' | 'aria-invalid' | 'id' | 'name'
+  | 'onChange'
+  | 'onBlur'
+  | 'value'
+  | 'aria-invalid'
+  | 'aria-describedby'
+  | 'aria-errormessage'
+  | 'id'
+  | 'name'
 >
 
 type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
@@ -51,6 +58,7 @@ export function InputGroupField({
         )}
       >
         <InputGroupInput
+          {...props}
           id={inputId}
           name={field.name}
           value={field.state.value}
@@ -63,7 +71,6 @@ export function InputGroupField({
           aria-errormessage={isInvalid ? errorId : undefined}
           onChange={(e) => field.handleChange(e.target.value)}
           onBlur={() => field.handleBlur()}
-          {...props}
         />
         {icon && <InputGroupAddon>{icon}</InputGroupAddon>}
       </InputGroup>

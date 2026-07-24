@@ -246,6 +246,30 @@ describe('InputGroupField', () => {
       const input = screen.getByRole('textbox')
       expect(input).toHaveAttribute('aria-invalid', 'false')
     })
+
+    it('preserves generated ARIA relationships', () => {
+      const fieldApi = createMockFieldApi('amount', '', {
+        isTouched: true,
+        isValid: false,
+        errors: [{ message: 'Required' }]
+      })
+      const conflictingAriaProps = {
+        'aria-describedby': 'custom-description',
+        'aria-errormessage': 'custom-error'
+      }
+
+      render(
+        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
+          <InputGroupField description="Description" {...conflictingAriaProps} />
+        </FieldContextWrapper>
+      )
+
+      const input = screen.getByRole('textbox')
+      const description = screen.getByText('Description')
+      const error = screen.getByRole('alert')
+      expect(input).toHaveAttribute('aria-describedby', `${description.id} ${error.id}`)
+      expect(input).toHaveAttribute('aria-errormessage', error.id)
+    })
   })
 
   describe('input attributes', () => {

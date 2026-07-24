@@ -14,7 +14,14 @@ import { useId } from 'react'
 
 type InputFormProps = Omit<
   React.ComponentProps<typeof Input>,
-  'onChange' | 'onBlur' | 'value' | 'aria-invalid' | 'id' | 'name'
+  | 'onChange'
+  | 'onBlur'
+  | 'value'
+  | 'aria-invalid'
+  | 'aria-describedby'
+  | 'aria-errormessage'
+  | 'id'
+  | 'name'
 >
 
 type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
@@ -45,6 +52,7 @@ export function InputField({
         {isInvalid && <FieldError id={errorId} errors={errors} />}
       </FieldContent>
       <Input
+        {...props}
         id={inputId}
         name={field.name}
         value={field.state.value}
@@ -61,7 +69,6 @@ export function InputField({
           'w-full min-w-0 @md/field-group:w-55 @md/field-group:min-w-55 @md/field-group:max-w-55',
           className
         )}
-        {...props}
       />
     </Field>
   )

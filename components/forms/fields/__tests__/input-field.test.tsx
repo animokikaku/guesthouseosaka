@@ -154,6 +154,29 @@ describe('InputField', () => {
       const input = screen.getByRole('textbox')
       expect(input).toHaveAttribute('aria-invalid', 'true')
     })
+
+    it('preserves generated ARIA relationships', () => {
+      const fieldApi = createMockFieldApi('testInput', '', {
+        isTouched: true,
+        isValid: false,
+        errors: [{ message: 'Required' }]
+      })
+      const conflictingAriaProps = {
+        'aria-describedby': 'custom-description',
+        'aria-errormessage': 'custom-error'
+      }
+
+      renderWithContext(
+        <InputField description="Description" {...conflictingAriaProps} />,
+        fieldApi
+      )
+
+      const input = screen.getByRole('textbox')
+      const description = screen.getByText('Description')
+      const error = screen.getByRole('alert')
+      expect(input).toHaveAttribute('aria-describedby', `${description.id} ${error.id}`)
+      expect(input).toHaveAttribute('aria-errormessage', error.id)
+    })
   })
 
   describe('input types', () => {
