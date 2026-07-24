@@ -106,7 +106,6 @@ declare const messages: {
   "SiteHeader": {
     "logo_label": "Share House Osaka",
     "navigation_label": "Main navigation",
-    "studio_label": "Sanity Studio",
     "navigation": {
       "share_houses": "Share Houses",
       "faq": "FAQ",

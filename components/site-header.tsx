@@ -10,11 +10,7 @@ import { useHouseTheme } from '@/hooks/use-house-theme'
 import { Link } from '@/i18n/navigation'
 import { NavGroupItem, NavItems } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { Settings2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-
-// eslint-disable-next-line no-restricted-imports
-import NextLink from 'next/link'
 
 export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
   const t = useTranslations('SiteHeader')
@@ -65,15 +61,6 @@ export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
           <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
             <LanguageSwitcher size="responsive" />
             <ModeSwitcher />
-            <NextLink
-              href="/studio"
-              target="_blank"
-              prefetch={false}
-              className={buttonVariants({ variant: 'ghost', size: 'icon' })}
-            >
-              <Settings2 aria-hidden="true" className="size-4.5" />
-              <span className="sr-only">{t('studio_label')}</span>
-            </NextLink>
           </div>
         </div>
       </div>
