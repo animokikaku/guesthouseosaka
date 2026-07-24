@@ -26,7 +26,7 @@
   "dependencies": {
     "@base-ui/react": "^1.6.0",
     "@lucide/lab": "^0.1.2",
-    "@portabletext/react": "^6.2.0",
+    "@portabletext/react": "^7.0.1",
     "@sanity/asset-utils": "^2.3.0",
     "@sanity/assist": "^6.1.15",
     "@sanity/client": "^7.24.0",
