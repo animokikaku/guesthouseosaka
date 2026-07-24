@@ -67,7 +67,21 @@ describe('DateField', () => {
       renderWithContext(<DateField label="Start Date" />, fieldApi)
 
       const input = screen.getByLabelText('Start Date')
-      expect(input).toHaveAttribute('id', 'form-tanstack-date-testDate')
+      expect(input.id).toMatch(/^form-tanstack-date-.+-testDate$/)
+    })
+
+    it('generates unique IDs for repeated field instances', () => {
+      const fieldApi = createMockFieldApi('testDate', '')
+
+      renderWithContext(
+        <>
+          <DateField label="Start Date" />
+          <DateField label="End Date" />
+        </>,
+        fieldApi
+      )
+
+      expect(screen.getByLabelText('Start Date').id).not.toBe(screen.getByLabelText('End Date').id)
     })
   })
 
@@ -151,9 +165,9 @@ describe('DateField', () => {
       renderWithContext(<DateField label="Start Date" />, fieldApi)
 
       const input = screen.getByLabelText('Start Date')
+      const error = screen.getByRole('alert')
       expect(input).toHaveAttribute('aria-invalid', 'true')
-      expect(input).toHaveAttribute('aria-errormessage', 'form-tanstack-date-testDate-error')
-      expect(screen.getByRole('alert')).toHaveAttribute('id', 'form-tanstack-date-testDate-error')
+      expect(input).toHaveAttribute('aria-errormessage', error.id)
     })
 
     it('associates the description and error with the input', () => {
@@ -168,10 +182,10 @@ describe('DateField', () => {
         fieldApi
       )
 
-      expect(screen.getByLabelText('Start Date')).toHaveAttribute(
-        'aria-describedby',
-        'form-tanstack-date-testDate-description form-tanstack-date-testDate-error'
-      )
+      const input = screen.getByLabelText('Start Date')
+      const description = screen.getByText('Select a future date')
+      const error = screen.getByRole('alert')
+      expect(input).toHaveAttribute('aria-describedby', `${description.id} ${error.id}`)
     })
   })
 

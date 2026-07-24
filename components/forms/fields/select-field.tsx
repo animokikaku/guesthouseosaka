@@ -15,6 +15,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
+import { useId } from 'react'
 
 type SelectProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange'>
 
@@ -36,7 +37,8 @@ export function SelectField({
   ...props
 }: SelectFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<string>()
-  const triggerId = `form-tanstack-select-${field.name}`
+  const instanceId = useId()
+  const triggerId = `form-tanstack-select-${instanceId}-${field.name}`
   const descriptionId = `${triggerId}-description`
   const errorId = `${triggerId}-error`
   const items = options.map((option) => ({

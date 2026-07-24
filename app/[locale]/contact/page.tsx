@@ -27,7 +27,9 @@ export default async function ContactPage() {
           key={_id}
           render={
             <Link
-              aria-label={title ? stegaClean(title) : t('open_form')}
+              aria-label={
+                title ? stegaClean(title) : description ? stegaClean(description) : t('open_form')
+              }
               href={{
                 pathname: '/contact/[slug]',
                 params: { slug },

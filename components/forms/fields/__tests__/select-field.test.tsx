@@ -86,10 +86,10 @@ describe('SelectField', () => {
       renderWithContext(<SelectField label="Country" options={defaultOptions} />, fieldApi)
 
       const trigger = screen.getByRole('combobox')
-      expect(trigger).toHaveAttribute('id', 'form-tanstack-select-testSelect')
+      expect(trigger.id).toMatch(/^form-tanstack-select-.+-testSelect$/)
 
       const label = screen.getByText('Country')
-      expect(label.closest('label')).toHaveAttribute('for', 'form-tanstack-select-testSelect')
+      expect(label.closest('label')).toHaveAttribute('for', trigger.id)
     })
   })
 
@@ -164,7 +164,7 @@ describe('SelectField', () => {
       renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
 
       const trigger = screen.getByRole('combobox')
-      expect(trigger).toHaveAttribute('id', 'form-tanstack-select-countrySelect')
+      expect(trigger.id).toMatch(/^form-tanstack-select-.+-countrySelect$/)
     })
   })
 })

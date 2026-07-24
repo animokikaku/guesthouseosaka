@@ -77,4 +77,17 @@ describe('ModeSwitcher', () => {
 
     expect(setTheme).not.toHaveBeenCalled()
   })
+
+  it('uses the shortcut in explicitly non-editable content', () => {
+    render(
+      <>
+        <ModeSwitcher />
+        <div contentEditable={false}>Not an editor</div>
+      </>
+    )
+
+    fireEvent.keyDown(screen.getByText('Not an editor'), { key: 'd' })
+
+    expect(setTheme).toHaveBeenCalledWith('dark')
+  })
 })

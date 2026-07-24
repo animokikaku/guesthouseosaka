@@ -65,10 +65,10 @@ describe('InputField', () => {
       renderWithContext(<InputField label="Email" />, fieldApi)
 
       const input = screen.getByRole('textbox')
-      expect(input).toHaveAttribute('id', 'form-tanstack-input-testInput')
+      expect(input.id).toMatch(/^form-tanstack-input-.+-testInput$/)
 
       const label = screen.getByText('Email')
-      expect(label.closest('label')).toHaveAttribute('for', 'form-tanstack-input-testInput')
+      expect(label.closest('label')).toHaveAttribute('for', input.id)
     })
   })
 

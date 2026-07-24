@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import { useId } from 'react'
 
 type InputFormProps = Omit<
   React.ComponentProps<typeof Input>,
@@ -31,7 +32,8 @@ export function InputField({
   ...props
 }: InputFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<string>()
-  const inputId = `form-tanstack-input-${field.name}`
+  const instanceId = useId()
+  const inputId = `form-tanstack-input-${instanceId}-${field.name}`
   const descriptionId = `${inputId}-description`
   const errorId = `${inputId}-error`
 

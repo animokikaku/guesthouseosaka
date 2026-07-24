@@ -10,7 +10,10 @@ import { useTranslations } from 'next-intl'
 function isTypingTarget(target: EventTarget | null) {
   return (
     target instanceof HTMLElement &&
-    (target.matches('input, textarea, select, [contenteditable]') || target.isContentEditable)
+    (target.matches(
+      'input, textarea, select, [contenteditable=""], [contenteditable="true" i], [contenteditable="plaintext-only" i]'
+    ) ||
+      target.isContentEditable)
   )
 }
 

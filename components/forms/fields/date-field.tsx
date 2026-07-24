@@ -15,7 +15,15 @@ import { cn } from '@/lib/utils'
 
 type InputFormProps = Omit<
   React.ComponentProps<typeof Input>,
-  'type' | 'onChange' | 'onBlur' | 'value' | 'aria-invalid' | 'id' | 'name'
+  | 'type'
+  | 'onChange'
+  | 'onBlur'
+  | 'value'
+  | 'aria-invalid'
+  | 'aria-describedby'
+  | 'aria-errormessage'
+  | 'id'
+  | 'name'
 >
 
 interface DateFieldProps extends InputFormProps {
@@ -34,7 +42,8 @@ export function DateField({
   ...props
 }: DateFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<string>()
-  const inputId = `form-tanstack-date-${field.name}`
+  const instanceId = React.useId()
+  const inputId = `form-tanstack-date-${instanceId}-${field.name}`
   const descriptionId = `${inputId}-description`
   const errorId = `${inputId}-error`
 

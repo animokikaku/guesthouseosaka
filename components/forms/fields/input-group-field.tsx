@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/field'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { cn } from '@/lib/utils'
+import { useId } from 'react'
 
 type InputFormProps = Omit<
   React.ComponentProps<typeof InputGroupInput>,
@@ -31,7 +32,8 @@ export function InputGroupField({
   ...props
 }: InputGroupFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<string>()
-  const inputId = `form-tanstack-input-group-${field.name}`
+  const instanceId = useId()
+  const inputId = `form-tanstack-input-group-${instanceId}-${field.name}`
   const descriptionId = `${inputId}-description`
   const errorId = `${inputId}-error`
 

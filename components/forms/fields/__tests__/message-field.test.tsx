@@ -313,7 +313,7 @@ describe('MessageField', () => {
       )
 
       const textarea = screen.getByRole('textbox')
-      expect(textarea).toHaveAttribute('id', 'form-tanstack-message-myMessage')
+      expect(textarea.id).toMatch(/^form-tanstack-message-.+-myMessage$/)
     })
 
     it('sets name attribute based on field name', () => {
