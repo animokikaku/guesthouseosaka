@@ -16,9 +16,6 @@ declare const messages: {
     "exit": "Exit preview",
     "preview": "Preview"
   },
-  "ContactPage": {
-    "open_form": "Open contact form"
-  },
   "ErrorPage": {
     "description": "A temporary problem prevented this page from loading.",
     "retry": "Try again",

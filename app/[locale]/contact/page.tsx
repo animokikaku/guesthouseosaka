@@ -3,12 +3,11 @@ import { Link } from '@/i18n/navigation'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactTypesListQuery } from '@/sanity/lib/queries'
-import { stegaClean } from '@sanity/client/stega'
 import { ChevronRightIcon } from 'lucide-react'
-import { getLocale, getTranslations } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 
 export default async function ContactPage() {
-  const [locale, t] = await Promise.all([getLocale(), getTranslations('ContactPage')])
+  const locale = await getLocale()
 
   // Use separate query to avoid stega deduplication with layout
   const { data: contactTypes } = await sanityFetch({
@@ -27,9 +26,6 @@ export default async function ContactPage() {
           key={_id}
           render={
             <Link
-              aria-label={
-                title ? stegaClean(title) : description ? stegaClean(description) : t('open_form')
-              }
               href={{
                 pathname: '/contact/[slug]',
                 params: { slug },

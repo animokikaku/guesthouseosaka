@@ -58,7 +58,6 @@ export function HouseBuilding({ building }: HouseBuildingProps) {
         data-sanity={dataAttribute('building.floors')}
       />
       <Link
-        aria-label={`${minRent.label}: ${minRent.value}`}
         href={{
           pathname: '/[house]',
           params: { house: slug },

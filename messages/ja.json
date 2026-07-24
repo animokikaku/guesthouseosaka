@@ -13,9 +13,6 @@
     "exit": "プレビューを終了",
     "preview": "プレビュー"
   },
-  "ContactPage": {
-    "open_form": "お問い合わせフォームを開く"
-  },
   "ErrorPage": {
     "description": "一時的な問題により、このページを読み込めませんでした。",
     "retry": "もう一度試す",

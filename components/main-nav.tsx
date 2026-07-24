@@ -103,7 +103,7 @@ export function MainNav({
           return (
             <NavigationMenuItem key={`nav-item-${entry.key}`}>
               <NavigationMenuLink
-                render={<Link href={entry.href} aria-label={entry.label} />}
+                render={<Link href={entry.href} />}
                 data-active={pathname === entry.href}
                 className={cn(navigationMenuTriggerStyle(), 'bg-transparent')}
               >
@@ -174,7 +174,7 @@ function NavigationMenuGroupItem({
                   <li key={item.key}>
                     <NavigationMenuLink
                       data-active={house === item.key}
-                      render={<Link href={item.href} aria-label={item.label} />}
+                      render={<Link href={item.href} />}
                       onFocus={() => setHoverItem(item)}
                       onMouseEnter={() => setHoverItem(item)}
                       className="flex flex-col items-start gap-1 rounded-md text-left"

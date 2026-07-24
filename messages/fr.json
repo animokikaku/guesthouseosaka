@@ -13,9 +13,6 @@
     "exit": "Quitter l'aperçu",
     "preview": "Aperçu"
   },
-  "ContactPage": {
-    "open_form": "Ouvrir le formulaire de contact"
-  },
   "ErrorPage": {
     "description": "Un problème temporaire a empêché le chargement de cette page.",
     "retry": "Réessayer",

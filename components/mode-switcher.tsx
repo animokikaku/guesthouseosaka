@@ -7,16 +7,6 @@ import { Button } from '@/components/ui/button'
 import { useMetaColor } from '@/hooks/use-meta-color'
 import { useTranslations } from 'next-intl'
 
-function isTypingTarget(target: EventTarget | null) {
-  return (
-    target instanceof HTMLElement &&
-    (target.matches(
-      'input, textarea, select, [contenteditable=""], [contenteditable="true" i], [contenteditable="plaintext-only" i]'
-    ) ||
-      target.isContentEditable)
-  )
-}
-
 export function ModeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme()
   const { setMetaColor, metaColor } = useMetaColor()
@@ -29,19 +19,6 @@ export function ModeSwitcher() {
   const toggleTheme = React.useCallback(() => {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
   }, [resolvedTheme, setTheme])
-
-  React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const hasModifier = event.metaKey || event.ctrlKey || event.altKey || event.shiftKey
-      if (hasModifier || isTypingTarget(event.target) || event.key.toLowerCase() !== 'd') return
-
-      event.preventDefault()
-      toggleTheme()
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [toggleTheme])
 
   return (
     <Button

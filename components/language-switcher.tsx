@@ -61,7 +61,6 @@ export function LanguageSwitcher({
       value={locale}
       disabled={isPending}
       aria-busy={isPending}
-      aria-live="polite"
       pendingIndicator={
         isPending ? <LoaderCircle aria-hidden="true" className="animate-spin" /> : undefined
       }
@@ -82,7 +81,6 @@ type LanguageSwitcherSelectProps = {
   className?: string
   size?: 'default' | 'icon-sm' | 'responsive'
   'aria-busy'?: boolean
-  'aria-live'?: 'polite'
   pendingIndicator?: React.ReactNode
 }
 
@@ -94,7 +92,6 @@ function LanguageSwitcherSelect({
   variant = 'outline',
   size = 'default',
   'aria-busy': ariaBusy,
-  'aria-live': ariaLive,
   pendingIndicator,
   onChange,
   className
@@ -123,7 +120,6 @@ function LanguageSwitcherSelect({
           <Button
             aria-label={t('aria_label')}
             aria-busy={ariaBusy}
-            aria-live={ariaLive}
             size={size === 'responsive' ? 'default' : size}
             className={cn(
               size === 'responsive' &&
