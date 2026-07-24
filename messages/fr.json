@@ -9,10 +9,25 @@
     "house": "Maison",
     "within_japan": "Depuis le Japon"
   },
+  "DraftModeIndicator": {
+    "exit": "Quitter l'aperçu",
+    "preview": "Aperçu"
+  },
+  "ContactPage": {
+    "open_form": "Ouvrir le formulaire de contact"
+  },
+  "ErrorPage": {
+    "description": "Un problème temporaire a empêché le chargement de cette page.",
+    "retry": "Réessayer",
+    "title": "Un problème est survenu"
+  },
   "GalleryModal": {
     "close": "Fermer la galerie",
     "description": "Découvrez les photos de {title}",
     "title": "Galerie de la maison"
+  },
+  "GalleryImageButton": {
+    "open_image": "Ouvrir l'image de la galerie"
   },
   "GalleryPage": {
     "close": "Fermer la galerie"
@@ -56,7 +71,8 @@
   "LegalNoticeDialog": {
     "agree_button": "J'accepte",
     "close_button": "Fermer",
-    "last_updated": "Dernière mise à jour : {date}"
+    "last_updated": "Dernière mise à jour : {date}",
+    "title_fallback": "Politique de confidentialité"
   },
   "MessageField": {
     "character_counter": "{count} / {max} caractères",
@@ -89,6 +105,7 @@
   },
   "SiteHeader": {
     "logo_label": "Share House Osaka",
+    "navigation_label": "Navigation principale",
     "studio_label": "Sanity Studio",
     "navigation": {
       "share_houses": "Maisons partagées",

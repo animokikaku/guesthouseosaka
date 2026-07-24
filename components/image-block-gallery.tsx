@@ -1,6 +1,6 @@
 import { GalleryImageFrame } from '@/components/gallery/gallery-image-button'
 import { Icons } from '@/components/icons'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
@@ -31,8 +31,13 @@ function GalleryGrid({
   return (
     <div className="hidden justify-center sm:flex">
       <div className="w-full">
-        <div className="relative aspect-2/1 min-h-[300px] overflow-hidden rounded-xl lg:aspect-7/3">
-          <Link href={href} tabIndex={-1} className="block h-full w-full">
+        <div className="relative aspect-2/1 min-h-75 overflow-hidden rounded-xl lg:aspect-7/3">
+          <Link
+            href={href}
+            aria-label={viewGalleryLabel}
+            tabIndex={-1}
+            className="block h-full w-full"
+          >
             <div className="grid h-full w-full grid-cols-4 grid-rows-2 gap-0.5">
               <GalleryImageFrame
                 className="col-span-2 row-span-2"
@@ -61,15 +66,16 @@ function GalleryGrid({
               />
             </div>
           </Link>
-          <Button
-            variant="secondary"
-            render={<Link href={href} />}
-            nativeButton={false}
-            className="absolute right-4 bottom-4"
+          <Link
+            href={href}
+            className={buttonVariants({
+              variant: 'secondary',
+              className: 'absolute right-4 bottom-4'
+            })}
           >
             <Icons.gallery data-icon="inline-start" />
             <span>{viewGalleryLabel}</span>
-          </Button>
+          </Link>
         </div>
       </div>
     </div>
@@ -97,7 +103,7 @@ export async function ImageBlockGallery({
   if (images.length < 5) {
     return (
       <div className="hidden sm:block">
-        <Empty className="min-h-[300px] rounded-xl border border-dashed">
+        <Empty className="min-h-75 rounded-xl border border-dashed">
           <EmptyHeader>
             <EmptyMedia variant="icon">
               <ImageIcon />

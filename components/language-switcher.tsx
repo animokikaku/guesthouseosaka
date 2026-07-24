@@ -11,7 +11,7 @@ import {
 import { usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { cn } from '@/lib/utils'
-import { Languages } from 'lucide-react'
+import { Languages, LoaderCircle } from 'lucide-react'
 import { hasLocale, Locale, useLocale, useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
@@ -60,6 +60,11 @@ export function LanguageSwitcher({
       languages={languages}
       value={locale}
       disabled={isPending}
+      aria-busy={isPending}
+      aria-live="polite"
+      pendingIndicator={
+        isPending ? <LoaderCircle aria-hidden="true" className="animate-spin" /> : undefined
+      }
       onChange={handleOnChange}
       size={size}
       variant="ghost"
@@ -76,6 +81,9 @@ type LanguageSwitcherSelectProps = {
   onChange?: (code: Locale) => void
   className?: string
   size?: 'default' | 'icon-sm' | 'responsive'
+  'aria-busy'?: boolean
+  'aria-live'?: 'polite'
+  pendingIndicator?: React.ReactNode
 }
 
 function LanguageSwitcherSelect({
@@ -85,6 +93,9 @@ function LanguageSwitcherSelect({
   disabled = false,
   variant = 'outline',
   size = 'default',
+  'aria-busy': ariaBusy,
+  'aria-live': ariaLive,
+  pendingIndicator,
   onChange,
   className
 }: LanguageSwitcherSelectProps) {
@@ -111,6 +122,8 @@ function LanguageSwitcherSelect({
         render={
           <Button
             aria-label={t('aria_label')}
+            aria-busy={ariaBusy}
+            aria-live={ariaLive}
             size={size === 'responsive' ? 'default' : size}
             className={cn(
               size === 'responsive' &&
@@ -124,7 +137,7 @@ function LanguageSwitcherSelect({
                 {langs[value]}
               </span>
             ) : null}
-            <Languages />
+            {pendingIndicator ?? <Languages aria-hidden="true" />}
           </Button>
         }
       />

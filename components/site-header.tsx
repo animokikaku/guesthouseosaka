@@ -5,7 +5,7 @@ import { LanguageSwitcher } from '@/components/language-switcher'
 import { MainNav } from '@/components/main-nav'
 import { MobileNav } from '@/components/mobile-nav'
 import { ModeSwitcher } from '@/components/mode-switcher'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { useHouseTheme } from '@/hooks/use-house-theme'
 import { Link } from '@/i18n/navigation'
 import { NavGroupItem, NavItems } from '@/lib/types'
@@ -48,29 +48,32 @@ export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
       <div className="container-wrapper px-6">
         <div className="flex h-(--header-height) items-center gap-2 **:data-[slot=separator]:h-4!">
           <MobileNav items={navItems} className="flex lg:hidden" />
-          <Button
-            render={<Link href="/" />}
-            nativeButton={false}
-            variant="ghost"
-            size="icon"
-            className="hidden size-8 bg-transparent lg:flex"
+          <Link
+            href="/"
+            className={cn(
+              buttonVariants({
+                variant: 'ghost',
+                size: 'icon'
+              }),
+              'hidden size-8 bg-transparent lg:flex'
+            )}
           >
-            <Icons.logo className="size-5" />
+            <Icons.logo aria-hidden="true" className="size-5" />
             <span className="sr-only">{t('logo_label')}</span>
-          </Button>
-          <MainNav items={navItems} className="hidden lg:flex" />
+          </Link>
+          <MainNav items={navItems} aria-label={t('navigation_label')} className="hidden lg:flex" />
           <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
             <LanguageSwitcher size="responsive" />
             <ModeSwitcher />
-            <Button
-              variant="ghost"
-              size="icon"
-              render={<NextLink href="/studio" target="_blank" prefetch={false} />}
-              nativeButton={false}
+            <NextLink
+              href="/studio"
+              target="_blank"
+              prefetch={false}
+              className={buttonVariants({ variant: 'ghost', size: 'icon' })}
             >
-              <Settings2 className="size-4.5" />
+              <Settings2 aria-hidden="true" className="size-4.5" />
               <span className="sr-only">{t('studio_label')}</span>
-            </Button>
+            </NextLink>
           </div>
         </div>
       </div>

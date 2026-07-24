@@ -1,7 +1,7 @@
 // Note that `app/[locale]/[...rest]/page.tsx`
 // is necessary for this page to render.
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import {
   Empty,
   EmptyContent,
@@ -45,9 +45,9 @@ export default function NotFound() {
         <EmptyDescription className="text-base">{t('description')}</EmptyDescription>
       </EmptyHeader>
       <EmptyContent>
-        <Button render={<Link href="/" />} nativeButton={false} variant="outline" size="lg">
+        <Link href="/" className={buttonVariants({ variant: 'outline', size: 'lg' })}>
           {t('back_home')}
-        </Button>
+        </Link>
         <EmptyDescription>
           {t.rich('contact_us', {
             link: renderContactLink

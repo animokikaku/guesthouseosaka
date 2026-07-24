@@ -69,6 +69,7 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
               <CarouselItem className="relative h-96 w-full select-none" key={_key}>
                 <Image
                   {...imageProps}
+                  alt={imageProps.alt}
                   fill
                   priority={index === 0}
                   fetchPriority={index === 0 ? 'high' : 'auto'}

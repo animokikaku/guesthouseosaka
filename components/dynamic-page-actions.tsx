@@ -1,7 +1,7 @@
 'use client'
 
 import { PageActions } from '@/components/page-header'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Icon } from '@/lib/icons'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
@@ -49,44 +49,32 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
 
         if (isExternal) {
           return (
-            <Button
+            <a
               key={_key}
-              render={
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
-                >
-                  <Icon name={icon} aria-hidden="true" />
-                  {stegaClean(label)}
-                </a>
-              }
-              nativeButton={false}
-              variant={variant}
-              size="sm"
-            />
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
+              className={buttonVariants({ variant, size: 'sm' })}
+            >
+              <Icon name={icon} aria-hidden="true" />
+              {stegaClean(label)}
+            </a>
           )
         }
 
         // next-intl cannot infer typed routes from CMS-provided paths after runtime parsing.
         // oxlint-disable typescript/no-unsafe-type-assertion
         return (
-          <Button
+          <Link
             key={_key}
-            render={
-              <Link
-                href={hasHash ? { pathname: pathname as '/', hash: `#${hash}` } : (href as '/')}
-              />
-            }
-            nativeButton={false}
-            variant={variant}
-            size="sm"
+            href={hasHash ? { pathname: pathname as '/', hash: `#${hash}` } : (href as '/')}
+            className={buttonVariants({ variant, size: 'sm' })}
             data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
           >
             <Icon name={icon} aria-hidden="true" />
             {stegaClean(label)}
-          </Button>
+          </Link>
         )
         // oxlint-enable typescript/no-unsafe-type-assertion
       })}

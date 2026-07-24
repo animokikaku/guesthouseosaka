@@ -141,6 +141,7 @@ function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModal
           >
             <Image
               {...imageProps}
+              alt={imageProps.alt}
               className="max-h-screen object-contain select-none"
               sizes="100vw"
             />

@@ -29,10 +29,10 @@ export function CategoryThumbnail({ category, tabIndex = 0 }: CategoryThumbnailP
       type="button"
       onClick={() => scrollToGalleryCategory(category._id)}
       tabIndex={tabIndex}
-      className="group focus-visible:ring-ring flex h-auto w-[154px] shrink-0 cursor-pointer flex-col gap-2 rounded-lg p-3 text-center transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
+      className="group focus-visible:ring-ring flex h-auto w-38.5 shrink-0 cursor-pointer flex-col gap-2 rounded-lg p-3 text-center transition-colors focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
     >
       <span className="relative mx-auto block aspect-4/3 w-32 overflow-hidden rounded-md">
-        <Image {...imageProps} fill className="object-cover" sizes="128px" />
+        <Image {...imageProps} alt={imageProps.alt} fill className="object-cover" sizes="128px" />
         <Badge
           variant="secondary"
           aria-hidden

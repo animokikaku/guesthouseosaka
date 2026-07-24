@@ -52,6 +52,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
   const formatter = useFormatter()
   const data = useLegalNotice()
   const isMobile = useIsMobile()
+  const title = data?.title || t('title_fallback')
 
   // Fallback to initial policy publication date if lastUpdated is not set
   const lastUpdated = data?.lastUpdated
@@ -85,7 +86,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
         <DrawerTrigger render={trigger} />
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>{data?.title}</DrawerTitle>
+            <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{lastUpdatedText}</DrawerDescription>
           </DrawerHeader>
           <DrawerBody>{content}</DrawerBody>
@@ -106,7 +107,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
       <DialogTrigger render={trigger} />
       <DialogContent className="md:max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{data?.title}</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{lastUpdatedText}</DialogDescription>
         </DialogHeader>
         <div className="max-h-[65vh] overflow-y-auto">{content}</div>

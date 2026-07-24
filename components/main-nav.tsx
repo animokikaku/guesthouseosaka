@@ -103,7 +103,7 @@ export function MainNav({
           return (
             <NavigationMenuItem key={`nav-item-${entry.key}`}>
               <NavigationMenuLink
-                render={<Link href={entry.href} />}
+                render={<Link href={entry.href} aria-label={entry.label} />}
                 data-active={pathname === entry.href}
                 className={cn(navigationMenuTriggerStyle(), 'bg-transparent')}
               >
@@ -136,7 +136,7 @@ function MainNavPositioner({
         disableAnchorTracking
         positionMethod="fixed"
         className={cn(
-          'isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) data-[side=bottom]:before:top-[-10px] data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0',
+          'isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) data-[side=bottom]:before:-top-2.5 data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0',
           className
         )}
         {...props}
@@ -165,16 +165,16 @@ function NavigationMenuGroupItem({
       <NavigationMenuTrigger className="bg-transparent">{title}</NavigationMenuTrigger>
       <NavigationMenuContent>
         {items.length === 0 ? (
-          <PageEmptyState variant="nav" className="w-[300px] border-none" />
+          <PageEmptyState variant="nav" className="w-75 border-none" />
         ) : (
-          <ul className="grid w-[500px] grid-cols-[1fr_1fr] gap-2">
+          <ul className="grid w-125 grid-cols-[1fr_1fr] gap-2">
             <li className="row-span-3">
               <ul className="flex flex-col gap-2">
                 {items.map((item) => (
                   <li key={item.key}>
                     <NavigationMenuLink
                       data-active={house === item.key}
-                      render={<Link href={item.href} />}
+                      render={<Link href={item.href} aria-label={item.label} />}
                       onFocus={() => setHoverItem(item)}
                       onMouseEnter={() => setHoverItem(item)}
                       className="flex flex-col items-start gap-1 rounded-md text-left"

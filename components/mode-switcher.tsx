@@ -7,6 +7,13 @@ import { Button } from '@/components/ui/button'
 import { useMetaColor } from '@/hooks/use-meta-color'
 import { useTranslations } from 'next-intl'
 
+function isTypingTarget(target: EventTarget | null) {
+  return (
+    target instanceof HTMLElement &&
+    (target.matches('input, textarea, select, [contenteditable]') || target.isContentEditable)
+  )
+}
+
 export function ModeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme()
   const { setMetaColor, metaColor } = useMetaColor()
@@ -20,6 +27,19 @@ export function ModeSwitcher() {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
   }, [resolvedTheme, setTheme])
 
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const hasModifier = event.metaKey || event.ctrlKey || event.altKey || event.shiftKey
+      if (hasModifier || isTypingTarget(event.target) || event.key.toLowerCase() !== 'd') return
+
+      event.preventDefault()
+      toggleTheme()
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [toggleTheme])
+
   return (
     <Button
       variant="ghost"
@@ -29,6 +49,7 @@ export function ModeSwitcher() {
       title={t('toggle_theme')}
     >
       <svg
+        aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"

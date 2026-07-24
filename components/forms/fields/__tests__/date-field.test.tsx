@@ -152,6 +152,26 @@ describe('DateField', () => {
 
       const input = screen.getByLabelText('Start Date')
       expect(input).toHaveAttribute('aria-invalid', 'true')
+      expect(input).toHaveAttribute('aria-errormessage', 'form-tanstack-date-testDate-error')
+      expect(screen.getByRole('alert')).toHaveAttribute('id', 'form-tanstack-date-testDate-error')
+    })
+
+    it('associates the description and error with the input', () => {
+      const fieldApi = createMockFieldApi('testDate', '', {
+        isTouched: true,
+        isValid: false,
+        errors: [{ message: 'Required' }]
+      })
+
+      renderWithContext(
+        <DateField label="Start Date" description="Select a future date" />,
+        fieldApi
+      )
+
+      expect(screen.getByLabelText('Start Date')).toHaveAttribute(
+        'aria-describedby',
+        'form-tanstack-date-testDate-description form-tanstack-date-testDate-error'
+      )
     })
   })
 

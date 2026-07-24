@@ -4,6 +4,7 @@ import { GalleryImageButton } from '@/components/gallery/gallery-image-button'
 import type { GalleryItem } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
 import { store } from '@/lib/store'
+import { useTranslations } from 'next-intl'
 
 type DataAttributeFn = (path: string) => string
 
@@ -14,6 +15,7 @@ type GalleryGridItemProps = {
 }
 
 export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGridItemProps) {
+  const t = useTranslations('GalleryImageButton')
   const { _key, image } = item
   if (!image) return null
 
@@ -23,6 +25,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
   return (
     <GalleryImageButton
       type="button"
+      aria-label={imageProps.alt || t('open_image')}
       data-testid="gallery-grid-image"
       onClick={() => store.setState((prev) => ({ ...prev, photoId: _key }))}
       imageProps={imageProps}
