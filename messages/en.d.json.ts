@@ -12,10 +12,22 @@ declare const messages: {
     "house": "House",
     "within_japan": "Within Japan"
   },
+  "DraftModeIndicator": {
+    "exit": "Exit preview",
+    "preview": "Preview"
+  },
+  "ErrorPage": {
+    "description": "A temporary problem prevented this page from loading.",
+    "retry": "Try again",
+    "title": "Something went wrong"
+  },
   "GalleryModal": {
     "close": "Close gallery",
     "description": "Explore photos of {title}",
     "title": "House Gallery"
+  },
+  "GalleryImageButton": {
+    "open_image": "Open gallery image"
   },
   "GalleryPage": {
     "close": "Close gallery"
@@ -59,7 +71,8 @@ declare const messages: {
   "LegalNoticeDialog": {
     "agree_button": "I agree",
     "close_button": "Close",
-    "last_updated": "Last updated: {date}"
+    "last_updated": "Last updated: {date}",
+    "title_fallback": "Privacy Policy"
   },
   "MessageField": {
     "character_counter": "{count} / {max} characters",
@@ -92,6 +105,7 @@ declare const messages: {
   },
   "SiteHeader": {
     "logo_label": "Share House Osaka",
+    "navigation_label": "Main navigation",
     "studio_label": "Sanity Studio",
     "navigation": {
       "share_houses": "Share Houses",

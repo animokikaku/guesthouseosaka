@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/utils/theme'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
+import { stegaClean } from '@sanity/client/stega'
 import Image from 'next/image'
 
 type House = NonNullable<HomePageQueryResult['houses']>[number]
@@ -33,6 +34,7 @@ export function Collection({ houses, className }: CollectionProps) {
           className="h-full flex-col items-start p-0"
         >
           <Link
+            aria-label={house.title ? stegaClean(house.title) : house.slug}
             href={{
               pathname: '/[house]' as const,
               params: { house: house.slug }

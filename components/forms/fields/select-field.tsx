@@ -15,6 +15,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
+import { useId } from 'react'
 
 type SelectProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange'>
 
@@ -36,6 +37,10 @@ export function SelectField({
   ...props
 }: SelectFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<string>()
+  const instanceId = useId()
+  const triggerId = `form-tanstack-select-${instanceId}-${field.name}`
+  const descriptionId = `${triggerId}-description`
+  const errorId = `${triggerId}-error`
   const items = options.map((option) => ({
     label: option.label,
     value: option.value
@@ -44,9 +49,9 @@ export function SelectField({
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
       <FieldContent>
-        {label && <FieldLabel htmlFor={`form-tanstack-select-${field.name}`}>{label}</FieldLabel>}
-        {description && <FieldDescription>{description}</FieldDescription>}
-        {isInvalid && <FieldError errors={errors} />}
+        {label && <FieldLabel htmlFor={triggerId}>{label}</FieldLabel>}
+        {description && <FieldDescription id={descriptionId}>{description}</FieldDescription>}
+        {isInvalid && <FieldError id={errorId} errors={errors} />}
       </FieldContent>
       <Select
         items={items}
@@ -56,10 +61,16 @@ export function SelectField({
         {...props}
       >
         <SelectTrigger
-          id={`form-tanstack-select-${field.name}`}
+          id={triggerId}
           aria-invalid={isInvalid}
+          aria-describedby={
+            [description ? descriptionId : null, isInvalid ? errorId : null]
+              .filter(Boolean)
+              .join(' ') || undefined
+          }
+          aria-errormessage={isInvalid ? errorId : undefined}
           className={cn(
-            'w-full min-w-0 @md/field-group:w-[220px] @md/field-group:min-w-[220px] @md/field-group:max-w-[220px]'
+            'w-full min-w-0 @md/field-group:w-55 @md/field-group:min-w-55 @md/field-group:max-w-55'
           )}
         >
           <SelectValue placeholder={placeholder} />

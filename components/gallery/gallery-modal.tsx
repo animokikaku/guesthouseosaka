@@ -17,7 +17,7 @@ import { useSwipeToClose } from '@/hooks/use-swipe-to-close'
 import { flattenGalleryItems, type GalleryCategories } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
 import { store } from '@/lib/store'
-import { useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
@@ -31,7 +31,7 @@ type GalleryModalProps = {
 }
 
 export function GalleryModal({ galleryCategories, title, dataAttribute }: GalleryModalProps) {
-  const photoId = useStore(store, (state) => state.photoId)
+  const photoId = useSelector(store, (state) => state.photoId)
   const t = useTranslations('GalleryModal')
 
   return (
@@ -66,7 +66,7 @@ type GalleryModalCarouselProps = {
 function GalleryModalCarousel({ galleryCategories, dataAttribute }: GalleryModalCarouselProps) {
   const [api, setApi] = useState<CarouselApi>()
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-  const photoId = useStore(store, (state) => state.photoId)
+  const photoId = useSelector(store, (state) => state.photoId)
 
   const slides = useMemo(
     () =>

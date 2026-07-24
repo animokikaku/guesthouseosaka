@@ -2,7 +2,7 @@ import { Collection } from '@/components/collection'
 import { GalleryWall } from '@/components/gallery-wall'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { PageActions, PageHeader } from '@/components/page-header'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { toGalleryImages } from '@/lib/transforms/gallery'
 import { sanityFetch } from '@/sanity/lib/live'
@@ -74,9 +74,9 @@ export default async function LocalePage() {
             {hero.content && <PortableText value={hero.content} components={heroComponents} />}
             {hero.ctaLabel && (
               <PageActions className="md:justify-start">
-                <Button render={<Link href="/contact" />} nativeButton={false} size="lg">
+                <Link href="/contact" className={buttonVariants({ size: 'lg' })}>
                   {hero.ctaLabel}
-                </Button>
+                </Link>
               </PageActions>
             )}
           </PageHeader>

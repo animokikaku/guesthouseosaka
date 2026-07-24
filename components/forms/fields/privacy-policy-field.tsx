@@ -5,7 +5,7 @@ import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
 import { useTranslations } from 'next-intl'
-import type { ReactNode } from 'react'
+import { useId, type ReactNode } from 'react'
 
 function renderPrivacyPolicyLink(chunks: ReactNode, onAgree: () => void) {
   return <LegalNoticeDialog onAgree={onAgree}>{chunks}</LegalNoticeDialog>
@@ -13,7 +13,8 @@ function renderPrivacyPolicyLink(chunks: ReactNode, onAgree: () => void) {
 
 export function PrivacyPolicyField() {
   const { field, isInvalid, errors } = useFieldValidation<boolean>()
-  const checkboxId = `form-tanstack-checkbox-${field.name}`
+  const instanceId = useId()
+  const checkboxId = `form-tanstack-checkbox-${instanceId}-${field.name}`
   const labelId = `${checkboxId}-label`
   const t = useTranslations('forms')
 

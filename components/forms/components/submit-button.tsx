@@ -1,6 +1,6 @@
 import { useFormContext } from '@/components/forms/form-context'
 import { Button } from '@/components/ui/button'
-import { useStore } from '@tanstack/react-form'
+import { useSelector } from '@tanstack/react-form'
 import { Loader2Icon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -13,7 +13,7 @@ export const SubmitButton = (props: FormSubmitButtonProps) => {
   const form = useFormContext()
   const t = useTranslations('SubmitButton')
 
-  const isSubmitting = useStore(form.store, (state) => state.isSubmitting)
+  const isSubmitting = useSelector(form.store, (state) => state.isSubmitting)
 
   return (
     <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting} {...props}>

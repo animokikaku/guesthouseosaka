@@ -9,10 +9,22 @@
     "house": "ハウス",
     "within_japan": "日本国内"
   },
+  "DraftModeIndicator": {
+    "exit": "プレビューを終了",
+    "preview": "プレビュー"
+  },
+  "ErrorPage": {
+    "description": "一時的な問題により、このページを読み込めませんでした。",
+    "retry": "もう一度試す",
+    "title": "問題が発生しました"
+  },
   "GalleryModal": {
     "close": "ギャラリーを閉じる",
     "description": "{title}の写真を見る",
     "title": "ハウスギャラリー"
+  },
+  "GalleryImageButton": {
+    "open_image": "ギャラリー画像を開く"
   },
   "GalleryPage": {
     "close": "ギャラリーを閉じる"
@@ -56,7 +68,8 @@
   "LegalNoticeDialog": {
     "agree_button": "同意する",
     "close_button": "閉じる",
-    "last_updated": "最終更新日：{date}"
+    "last_updated": "最終更新日：{date}",
+    "title_fallback": "プライバシーポリシー"
   },
   "MessageField": {
     "character_counter": "{count} / {max} 文字",
@@ -89,6 +102,7 @@
   },
   "SiteHeader": {
     "logo_label": "シェアハウス大阪",
+    "navigation_label": "メインナビゲーション",
     "studio_label": "Sanity Studio",
     "navigation": {
       "share_houses": "シェアハウス",

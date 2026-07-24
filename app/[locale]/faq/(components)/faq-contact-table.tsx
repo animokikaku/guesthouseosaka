@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import {
   Item,
   ItemActions,
@@ -10,6 +10,7 @@ import {
   ItemMedia,
   ItemTitle
 } from '@/components/ui/item'
+import { cn } from '@/lib/utils'
 import {
   Table,
   TableBody,
@@ -64,17 +65,15 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
                   <ItemDescription className="font-mono">{phone.international}</ItemDescription>
                 </ItemContent>
                 <ItemActions>
-                  <Button
-                    render={<span />}
-                    nativeButton={false}
-                    size="icon"
-                    variant="outline"
-                    className="pointer-events-none rounded-full"
+                  <span
+                    className={cn(
+                      buttonVariants({ variant: 'outline', size: 'icon' }),
+                      'pointer-events-none rounded-full'
+                    )}
                     aria-hidden="true"
-                    tabIndex={-1}
                   >
                     <Phone />
-                  </Button>
+                  </span>
                 </ItemActions>
               </a>
             }

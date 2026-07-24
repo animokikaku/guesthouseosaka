@@ -3,6 +3,7 @@
 import { useRouter } from '@/i18n/navigation'
 import { useVisualEditingEnvironment } from 'next-sanity/hooks'
 import { LoaderCircle, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useTransition } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -17,6 +18,7 @@ export function DraftModeIndicator() {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const environment = useVisualEditingEnvironment()
+  const t = useTranslations('DraftModeIndicator')
 
   // Only show when in standalone preview mode (not inside Presentation Tool)
   if (environment === 'presentation-iframe' || environment === 'presentation-window') {
@@ -45,7 +47,6 @@ export function DraftModeIndicator() {
           'before:bg-linear-to-r before:from-rose-500/20 before:via-transparent before:via-40% before:to-transparent'
         )}
       >
-        {/* Live indicator */}
         <ButtonGroupText
           className={cn('border-none bg-transparent shadow-none', 'py-1.5 pr-0.5 pl-3')}
         >
@@ -54,16 +55,16 @@ export function DraftModeIndicator() {
             <span className="relative inline-flex size-2 rounded-full bg-rose-500" />
           </span>
           <span className="font-mono text-xs font-medium tracking-widest text-zinc-300 uppercase">
-            Preview
+            {t('preview')}
           </span>
         </ButtonGroupText>
 
-        {/* Exit button */}
         <Button
           variant="ghost"
           size="icon-sm"
           onClick={handleDisable}
           disabled={isPending}
+          aria-busy={isPending}
           className={cn(
             'rounded-l-none rounded-r-full border-none',
             'text-zinc-400',
@@ -72,12 +73,13 @@ export function DraftModeIndicator() {
           )}
         >
           {isPending ? (
-            <span className="inline-flex animate-spin">
+            <span aria-hidden="true" className="inline-flex animate-spin">
               <LoaderCircle />
             </span>
           ) : (
-            <X />
+            <X aria-hidden="true" />
           )}
+          <span className="sr-only">{t('exit')}</span>
         </Button>
       </ButtonGroup>
     </div>

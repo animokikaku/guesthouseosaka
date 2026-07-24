@@ -65,10 +65,10 @@ describe('InputField', () => {
       renderWithContext(<InputField label="Email" />, fieldApi)
 
       const input = screen.getByRole('textbox')
-      expect(input).toHaveAttribute('id', 'form-tanstack-input-testInput')
+      expect(input.id).toMatch(/^form-tanstack-input-.+-testInput$/)
 
       const label = screen.getByText('Email')
-      expect(label.closest('label')).toHaveAttribute('for', 'form-tanstack-input-testInput')
+      expect(label.closest('label')).toHaveAttribute('for', input.id)
     })
   })
 
@@ -153,6 +153,29 @@ describe('InputField', () => {
 
       const input = screen.getByRole('textbox')
       expect(input).toHaveAttribute('aria-invalid', 'true')
+    })
+
+    it('preserves generated ARIA relationships', () => {
+      const fieldApi = createMockFieldApi('testInput', '', {
+        isTouched: true,
+        isValid: false,
+        errors: [{ message: 'Required' }]
+      })
+      const conflictingAriaProps = {
+        'aria-describedby': 'custom-description',
+        'aria-errormessage': 'custom-error'
+      }
+
+      renderWithContext(
+        <InputField description="Description" {...conflictingAriaProps} />,
+        fieldApi
+      )
+
+      const input = screen.getByRole('textbox')
+      const description = screen.getByText('Description')
+      const error = screen.getByRole('alert')
+      expect(input).toHaveAttribute('aria-describedby', `${description.id} ${error.id}`)
+      expect(input).toHaveAttribute('aria-errormessage', error.id)
     })
   })
 

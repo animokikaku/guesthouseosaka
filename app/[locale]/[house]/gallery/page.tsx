@@ -2,7 +2,7 @@ import { getHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { GalleryShell } from '@/components/gallery/gallery-shell'
 import { PageEmptyState } from '@/components/page-empty-state'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery } from '@/sanity/lib/queries'
@@ -34,16 +34,17 @@ export default async function GalleryPage({ params }: PageProps<'/[locale]/[hous
         galleryCategories={data.galleryCategories}
         title={data.title ?? ''}
         backButton={
-          <Button
-            variant="ghost"
-            size="icon"
-            render={<Link href={{ pathname: '/[house]', params: { house } }} />}
-            nativeButton={false}
-            className="shrink-0 rounded-full"
+          <Link
+            href={{ pathname: '/[house]', params: { house } }}
+            className={buttonVariants({
+              variant: 'ghost',
+              size: 'icon',
+              className: 'shrink-0 rounded-full'
+            })}
           >
-            <ArrowLeftIcon className="size-6" />
+            <ArrowLeftIcon aria-hidden="true" className="size-6" />
             <span className="sr-only">{t('close')}</span>
-          </Button>
+          </Link>
         }
       />
     </GalleryShell>

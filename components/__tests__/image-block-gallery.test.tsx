@@ -60,9 +60,7 @@ vi.mock('@/i18n/navigation', () => ({
 }))
 
 vi.mock('@/components/ui/button', () => ({
-  Button: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <button className={className}>{children}</button>
-  )
+  buttonVariants: ({ className }: { className?: string }) => className
 }))
 
 vi.mock('@/components/ui/empty', () => ({

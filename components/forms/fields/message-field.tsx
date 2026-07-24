@@ -13,6 +13,7 @@ import {
   InputGroupTextarea
 } from '@/components/ui/input-group'
 import { useTranslations } from 'next-intl'
+import { useId } from 'react'
 
 type InputGroupTextareaFormProps = Omit<
   React.ComponentProps<typeof InputGroupTextarea>,
@@ -36,16 +37,15 @@ export function MessageField({
   ...props
 }: MessageFieldProps) {
   const { field, isInvalid, errors } = useFieldValidation<string>()
+  const instanceId = useId()
+  const inputId = `form-tanstack-message-${instanceId}-${field.name}`
   const t = useTranslations('MessageField')
 
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
       <FieldContent>
         {label && (
-          <FieldLabel
-            htmlFor={`form-tanstack-message-${field.name}`}
-            className="flex items-center gap-1"
-          >
+          <FieldLabel htmlFor={inputId} className="flex items-center gap-1">
             {label}
             {!required && (
               <span className="text-muted-foreground text-xs">({t('optional_hint')})</span>
@@ -56,7 +56,7 @@ export function MessageField({
       <InputGroup>
         <InputGroupTextarea
           aria-invalid={isInvalid}
-          id={`form-tanstack-message-${field.name}`}
+          id={inputId}
           name={field.name}
           maxLength={MAX_LENGTH}
           value={field.state.value}
