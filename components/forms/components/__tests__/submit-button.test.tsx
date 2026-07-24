@@ -19,11 +19,11 @@ vi.mock('@/components/forms/form-context', async () => {
   }
 })
 
-// Mock @tanstack/react-form useStore
+// Mock @tanstack/react-form useSelector
 let mockStoreState = { isSubmitting: false, canSubmit: true }
 
 vi.mock('@tanstack/react-form', () => ({
-  useStore: (_store: unknown, selector: (state: typeof mockStoreState) => unknown) =>
+  useSelector: (_store: unknown, selector: (state: typeof mockStoreState) => unknown) =>
     selector(mockStoreState)
 }))
 
