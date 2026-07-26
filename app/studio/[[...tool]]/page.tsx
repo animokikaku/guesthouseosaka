@@ -1,7 +1,7 @@
-import { StudioClientWrapper } from './StudioClientWrapper'
+import { NextStudio } from 'next-sanity/studio'
 
-export const dynamic = 'force-static'
+import config from '@/sanity.config'
 
 export default function StudioPage() {
-  return <StudioClientWrapper />
+  return <NextStudio config={config} />
 }
