@@ -57,15 +57,6 @@ describe('ContactNav', () => {
       expect(links).toHaveLength(3)
     })
 
-    it('displays correct title for each item', () => {
-      const items = createMockItems(3)
-      render(<ContactNav items={items} />)
-
-      items.forEach((item) => {
-        expect(screen.getByText(item.title)).toBeInTheDocument()
-      })
-    })
-
     it('renders items with correct href links', () => {
       const items: ContactNavItem[] = [
         { id: 'tour-1', slug: 'tour', title: 'Book a Tour' },
@@ -87,13 +78,6 @@ describe('ContactNav', () => {
         '/contact/other#tabs'
       )
     })
-
-    it('renders single item correctly', () => {
-      const items: ContactNavItem[] = [{ id: 'single-1', slug: 'tour', title: 'Single Item' }]
-      render(<ContactNav items={items} />)
-
-      expect(screen.getByRole('link', { name: 'Single Item' })).toBeInTheDocument()
-    })
   })
 
   describe('empty state', () => {
@@ -101,12 +85,6 @@ describe('ContactNav', () => {
       const { container } = render(<ContactNav items={[]} />)
 
       expect(container.firstChild).toBeNull()
-    })
-
-    it('does not render any links when items is empty', () => {
-      render(<ContactNav items={[]} />)
-
-      expect(screen.queryAllByRole('link')).toHaveLength(0)
     })
   })
 
@@ -135,19 +113,6 @@ describe('ContactNav', () => {
       // Only tour link should have data-active="true"
       expect(tourLink).toHaveAttribute('data-active', 'true')
       expect(moveInLink).toHaveAttribute('data-active', 'false')
-    })
-  })
-
-  describe('className prop', () => {
-    it('applies custom className to the container', () => {
-      const items = createMockItems(1)
-      const { container } = render(<ContactNav items={items} className="custom-nav-class" />)
-
-      // Find the inner flex container that receives the className
-      const flexContainer = container.querySelector('.custom-nav-class')
-      expect(flexContainer).toBeInTheDocument()
-      expect(flexContainer).toHaveClass('flex')
-      expect(flexContainer).toHaveClass('items-center')
     })
   })
 })

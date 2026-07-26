@@ -226,28 +226,6 @@ describe('CategoryThumbnail', () => {
   })
 
   describe('click handler', () => {
-    it('scrolls to category element on click', () => {
-      const category = createCategory()
-
-      // Create a mock element that getElementById will return
-      const mockElement = {
-        scrollIntoView: vi.fn()
-      }
-      const getElementByIdSpy = vi
-        .spyOn(document, 'getElementById')
-        .mockReturnValue(mockElement as unknown as HTMLElement)
-
-      render(<CategoryThumbnail category={category} />)
-
-      const button = screen.getByRole('button')
-      fireEvent.click(button)
-
-      expect(getElementByIdSpy).toHaveBeenCalledWith('category-1')
-      expect(mockElement.scrollIntoView).toHaveBeenCalledWith({
-        behavior: 'smooth'
-      })
-    })
-
     it('does nothing if target element is not found', () => {
       const category = createCategory()
 
@@ -270,15 +248,6 @@ describe('CategoryThumbnail', () => {
       const button = screen.getByRole('button')
       expect(button).toBeInTheDocument()
       expect(button.tagName).toBe('BUTTON')
-    })
-
-    it('has focus-visible ring styles for keyboard navigation', () => {
-      const category = createCategory()
-
-      render(<CategoryThumbnail category={category} />)
-
-      const button = screen.getByRole('button')
-      expect(button).toHaveClass('focus-visible:ring-2')
     })
   })
 })

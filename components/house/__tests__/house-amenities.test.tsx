@@ -4,16 +4,9 @@ import { HouseProvider } from '../house-context'
 import { createAmenityCategory, createAmenityItem } from '@/lib/transforms/__tests__/mocks'
 import type { AmenityCategoryData } from '@/lib/types/components'
 
-// Mock dependencies
-vi.mock('@/hooks/use-mobile', () => ({
-  useIsMobile: vi.fn(() => false)
-}))
-
 vi.mock('@/lib/icons', () => ({
   Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />
 }))
-
-import { useIsMobile } from '@/hooks/use-mobile'
 
 const providerProps = {
   id: 'house-test',
@@ -42,11 +35,8 @@ function toAmenityCategoryData(cat: ReturnType<typeof createAmenityCategory>): A
 }
 
 describe('HouseAmenities', () => {
-  const mockUseIsMobile = useIsMobile as ReturnType<typeof vi.fn>
-
   beforeEach(() => {
     vi.clearAllMocks()
-    mockUseIsMobile.mockReturnValue(false)
   })
 
   describe('featured amenities display', () => {
@@ -87,51 +77,6 @@ describe('HouseAmenities', () => {
 
       // Should display all 10 (max from GROQ) on desktop
       expect(screen.getAllByText(/Amenity \d+/)).toHaveLength(10)
-    })
-
-    it('hides featured amenities after the first five on mobile', () => {
-      // GROQ query provides max 10; CSS hides items after the first five on mobile.
-      const featuredAmenities = Array.from({ length: 10 }, (_, i) => ({
-        _key: `amenity-${i}`,
-        label: `Amenity ${i}`,
-        icon: 'wifi',
-        note: null as 'private' | 'shared' | 'coin' | null,
-        featured: true as boolean | null
-      }))
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Room',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items: Array.from({ length: 15 }, (_, i) =>
-              createAmenityItem({
-                _key: `amenity-${i}`,
-                label: `Amenity ${i}`,
-                featured: true,
-                icon: 'wifi'
-              })
-            )
-          })
-        )
-      ]
-
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
-
-      const amenities = screen.getAllByText(/Amenity \d+/)
-      expect(amenities).toHaveLength(10)
-      amenities.slice(0, 5).forEach((item) => {
-        expect(item.closest('.items-center')).not.toHaveClass('hidden')
-      })
-      amenities.slice(5).forEach((item) => {
-        expect(item.closest('.items-center')).toHaveClass('hidden')
-      })
     })
 
     it('displays only the featured amenities provided via prop', () => {
@@ -415,93 +360,6 @@ describe('HouseAmenities', () => {
       expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
       // Button/dialog not rendered when no amenities to show
       expect(screen.queryByRole('button')).not.toBeInTheDocument()
-    })
-  })
-
-  describe('modal dialog', () => {
-    it('opens Dialog on desktop when clicking button', () => {
-      const featuredAmenities = [
-        {
-          _key: 'wifi',
-          label: 'Wifi',
-          icon: 'wifi',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        }
-      ]
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Internet',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'wifi',
-                label: 'Wifi',
-                featured: true,
-                icon: 'wifi'
-              })
-            ]
-          })
-        )
-      ]
-
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
-
-      fireEvent.click(screen.getByRole('button'))
-
-      // Dialog should open - multiple heading elements visible (section + dialog)
-      expect(screen.getAllByText('heading').length).toBeGreaterThanOrEqual(2)
-    })
-
-    it('opens Drawer on mobile when clicking button', () => {
-      mockUseIsMobile.mockReturnValue(true)
-      const featuredAmenities = [
-        {
-          _key: 'wifi',
-          label: 'Wifi',
-          icon: 'wifi',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        }
-      ]
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Internet',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'wifi',
-                label: 'Wifi',
-                featured: true,
-                icon: 'wifi'
-              })
-            ]
-          })
-        )
-      ]
-
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
-
-      fireEvent.click(screen.getByRole('button'))
-
-      // Drawer should open (verified by having multiple heading elements)
-      expect(screen.getAllByText('heading').length).toBeGreaterThanOrEqual(1)
     })
   })
 

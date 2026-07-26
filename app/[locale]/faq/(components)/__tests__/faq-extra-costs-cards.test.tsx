@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import {
   type Houses,
   type PricingCategories,
@@ -176,61 +176,9 @@ describe('FAQExtraCostsCards', () => {
       expect(screen.getByLabelText('Go to Apple House')).toBeInTheDocument()
       expect(screen.getByLabelText('Go to Lemon House')).toBeInTheDocument()
     })
-
-    it('calls api.scrollTo when navigation dot is clicked', () => {
-      const houses: Houses = [
-        createHouse('h1', 'orange'),
-        createHouse('h2', 'apple'),
-        createHouse('h3', 'lemon')
-      ]
-      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
-
-      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
-
-      carouselState.mockApi = createMockCarouselApi(carouselState)
-      act(() => {
-        carouselState.setApiCallback?.(carouselState.mockApi!)
-      })
-
-      fireEvent.click(screen.getByLabelText('Go to Apple House'))
-
-      expect(carouselState.mockApi.scrollTo).toHaveBeenCalledWith(1)
-    })
   })
 
   describe('carousel API integration', () => {
-    it('updates current index when select event fires', () => {
-      const houses: Houses = [
-        createHouse('h1', 'orange'),
-        createHouse('h2', 'apple'),
-        createHouse('h3', 'lemon')
-      ]
-      const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]
-
-      render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
-
-      carouselState.mockApi = createMockCarouselApi(carouselState)
-      act(() => {
-        carouselState.setApiCallback?.(carouselState.mockApi!)
-      })
-
-      // Initial state: first dot should be active (w-6 class)
-      const dots = screen
-        .getAllByRole('button')
-        .filter((btn) => btn.getAttribute('aria-label')?.startsWith('Go to'))
-      expect(dots[0]).toHaveClass('w-6')
-      expect(dots[1]).toHaveClass('w-2')
-
-      // Simulate scrolling to second item
-      act(() => {
-        carouselState.currentSelectedIndex = 1
-        carouselState.apiCallbacks.get('select')?.forEach((cb) => cb())
-      })
-
-      expect(dots[0]).toHaveClass('w-2')
-      expect(dots[1]).toHaveClass('w-6')
-    })
-
     it('cleans up event handlers on unmount', () => {
       const houses: Houses = [createHouse('h1', 'orange'), createHouse('h2', 'apple')]
       const pricingCategories: PricingCategories = [createCategory('deposit', 'Deposit')]

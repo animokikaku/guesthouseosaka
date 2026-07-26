@@ -33,6 +33,7 @@ export default defineConfig({
         'i18n/navigation.ts',
         '**/__tests__/**',
         '**/*.test.{ts,tsx}',
+        '**/*.story.{ts,tsx}',
         '**/__mocks__/**'
       ]
     }

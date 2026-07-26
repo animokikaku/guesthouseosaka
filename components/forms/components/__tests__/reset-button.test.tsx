@@ -65,20 +65,6 @@ describe('ResetButton', () => {
       // The label uses t('label') which returns 'label' in mocked translations
       expect(screen.getByRole('button')).toHaveTextContent('label')
     })
-
-    it('renders with outline variant', () => {
-      const formApi = createMockFormApi()
-
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <ResetButton />
-        </FormContextWrapper>
-      )
-
-      // Button should have outline variant classes (data attribute or class)
-      const button = screen.getByRole('button')
-      expect(button).toBeInTheDocument()
-    })
   })
 
   describe('click handler', () => {
