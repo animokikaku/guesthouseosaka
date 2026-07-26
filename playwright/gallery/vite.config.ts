@@ -7,7 +7,11 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 
 export default defineConfig({
   root: projectRoot,
+  cacheDir: 'node_modules/.vite-playwright-components',
   plugins: [react()],
+  optimizeDeps: {
+    entries: ['app/**/*.story.tsx', 'components/**/*.story.tsx']
+  },
   resolve: {
     alias: [
       {

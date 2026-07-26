@@ -14,7 +14,10 @@ function isStory(value: unknown): value is Story {
   return typeof value === 'function'
 }
 
-const storyModules = import.meta.glob('../../components/**/*.story.tsx')
+const storyModules = import.meta.glob([
+  '../../app/**/*.story.tsx',
+  '../../components/**/*.story.tsx'
+])
 
 const rootElement = document.querySelector('#root')
 

@@ -9,6 +9,7 @@ type NextImageProps = Omit<ComponentProps<'img'>, 'src'> & {
   placeholder?: string
   preload?: boolean
   priority?: boolean
+  unoptimized?: boolean
 }
 
 export default function NextImage({
@@ -19,6 +20,7 @@ export default function NextImage({
   placeholder: _placeholder,
   preload: _preload,
   priority: _priority,
+  unoptimized: _unoptimized,
   ...props
 }: NextImageProps) {
   return <img {...props} src={typeof src === 'string' ? src : src.src} alt={alt} />
