@@ -1,7 +1,8 @@
 import '@/app/globals.css'
 
-import { createRoot } from 'react-dom/client'
-import type { ComponentType } from 'react'
+import { StrictMode, type ComponentType } from 'react'
+import { flushSync } from 'react-dom'
+import { createRoot, type Root } from 'react-dom/client'
 
 type Story = ComponentType<Record<string, unknown>>
 type MountParams = {
@@ -21,7 +22,7 @@ if (!(rootElement instanceof HTMLElement)) {
   throw new Error('The component gallery requires a #root element.')
 }
 
-const root = createRoot(rootElement)
+let root: Root | undefined
 
 window.mount = async ({ story, props = {} }: MountParams) => {
   const separatorIndex = story.lastIndexOf('/')
@@ -44,9 +45,17 @@ window.mount = async ({ story, props = {} }: MountParams) => {
     throw new Error(`Unknown component story export: ${story}`)
   }
 
-  root.render(<Story {...props} />)
+  root ??= createRoot(rootElement)
+  flushSync(() => {
+    root?.render(
+      <StrictMode>
+        <Story {...props} />
+      </StrictMode>
+    )
+  })
 }
 
 window.unmount = async () => {
-  root.render(null)
+  root?.unmount()
+  root = undefined
 }
