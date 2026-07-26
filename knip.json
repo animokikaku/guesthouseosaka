@@ -19,6 +19,7 @@
       "e2e/**/*.spec.ts",
       "playwright/components/**/*.spec.ts",
       "playwright/gallery/{main,next-image,sanity-image,vite.config}.{ts,tsx}",
+      "app/**/*.story.tsx",
       "components/**/*.story.tsx"
     ]
   },
