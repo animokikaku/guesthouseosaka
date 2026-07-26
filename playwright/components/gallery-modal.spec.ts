@@ -2,6 +2,19 @@ import { expect, test } from '@playwright/test'
 
 const story = 'components/gallery/gallery-modal/Open'
 
+test('opens the selected image from the gallery grid', async ({ mount, page }) => {
+  const component = await mount('components/gallery/gallery-modal/Interactive')
+  const selectedImage = component.getByRole('button', { name: 'First room', exact: true })
+
+  await expect(selectedImage).toBeVisible()
+  await selectedImage.click()
+
+  const dialog = page.getByRole('dialog')
+  await expect(dialog).toBeVisible()
+  await expect(dialog.getByRole('img', { name: 'First room' })).toBeVisible()
+  await expect(dialog.getByText('First room', { exact: true })).toBeVisible()
+})
+
 test('opens at the selected image', async ({ mount, page }) => {
   await mount(story)
 

@@ -1,8 +1,10 @@
 import messages from '@/messages/en.json'
 import { store } from '@/lib/store'
 import type { GalleryCategories } from '@/lib/gallery'
+import { toGalleryCategories } from '@/lib/transforms/gallery'
 import { NextIntlClientProvider } from 'next-intl'
 import { useLayoutEffect } from 'react'
+import { HouseGallery } from './house-gallery'
 import { GalleryModal } from './gallery-modal'
 
 const galleryCategories = [
@@ -57,17 +59,34 @@ const galleryCategories = [
   }
 ] satisfies GalleryCategories
 
-export function Open() {
+function useInitialPhoto(photoId: string | null) {
   useLayoutEffect(() => {
-    store.setState((state) => ({ ...state, photoId: 'first-room' }))
+    store.setState((state) => ({ ...state, photoId }))
 
     return () => {
       store.setState((state) => ({ ...state, photoId: null }))
     }
-  }, [])
+  }, [photoId])
+}
+
+export function Open() {
+  useInitialPhoto('first-room')
 
   return (
     <NextIntlClientProvider locale="en" messages={messages}>
+      <GalleryModal galleryCategories={galleryCategories} title="Orange House" />
+    </NextIntlClientProvider>
+  )
+}
+
+export function Interactive() {
+  useInitialPhoto(null)
+
+  return (
+    <NextIntlClientProvider locale="en" messages={messages}>
+      <main className="p-6">
+        <HouseGallery categories={toGalleryCategories(galleryCategories)} />
+      </main>
       <GalleryModal galleryCategories={galleryCategories} title="Orange House" />
     </NextIntlClientProvider>
   )
