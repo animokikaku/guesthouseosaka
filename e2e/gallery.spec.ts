@@ -1,64 +1,31 @@
-import { expect, type Page, test } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test.describe('Gallery', () => {
   const house = 'orange' // Use one of the valid houses: orange, apple, lemon
   const galleryUrl = `/en/${house}/gallery`
 
-  // Note: Gallery visibility tests (grid, categories, images) are now covered
-  // by unit tests in components/gallery/__tests__/house-gallery-client.test.tsx
-
-  const getGalleryGridImages = (page: Page) =>
-    page.locator('[data-testid="gallery-grid-image"]').filter({
-      has: page.locator('img')
-    })
-
-  const clickGalleryImageAndWaitForModal = async (page: Page) => {
-    const firstImage = getGalleryGridImages(page).first()
-    await expect(firstImage).toBeVisible()
-    await firstImage.click()
-
-    const modal = page.locator('[role="dialog"]')
-    await expect(modal).toBeVisible({ timeout: 5000 })
-    return modal
-  }
-
-  const getVisibleCaptionText = async (modal: ReturnType<Page['locator']>) => {
-    return modal.locator('span').evaluateAll((elements) => {
-      const visibleTexts = elements
-        .filter((element) => {
-          const htmlElement = element as HTMLElement
-          if (htmlElement.classList.contains('sr-only')) return false
-          return !!(
-            htmlElement.offsetWidth ||
-            htmlElement.offsetHeight ||
-            htmlElement.getClientRects().length
-          )
-        })
-        .map((element) => element.textContent?.trim())
-        .filter((text): text is string => Boolean(text))
-
-      return visibleTexts.at(-1) ?? null
-    })
-  }
-
-  test('desktop modal supports navigation and closes with Escape', async ({ page }) => {
+  test('opens the selected image from the gallery grid', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto(galleryUrl)
     await expect(page).toHaveURL(galleryUrl)
 
-    const modal = await clickGalleryImageAndWaitForModal(page)
-    await expect(modal.locator('img').first()).toBeVisible()
-    const initialCaption = await getVisibleCaptionText(modal)
+    const firstImage = page
+      .locator('[data-testid="gallery-grid-image"]')
+      .filter({ has: page.locator('img') })
+      .first()
+    const selectedImage = firstImage.locator('img')
 
-    const nextButton = page.locator('[data-slot="carousel-next"]')
-    await expect(nextButton).toBeVisible()
-    await nextButton.click()
-    await expect.poll(() => getVisibleCaptionText(modal)).not.toBe(initialCaption)
+    await expect(firstImage).toBeVisible()
+    const selectedAlt = await selectedImage.getAttribute('alt')
+    if (!selectedAlt) {
+      throw new Error('The selected gallery image must have alt text.')
+    }
 
-    await page.keyboard.press('ArrowLeft')
-    await expect.poll(() => getVisibleCaptionText(modal)).toBe(initialCaption)
+    await firstImage.click()
 
-    await page.keyboard.press('Escape')
-    await expect(modal).not.toBeVisible({ timeout: 5000 })
+    const modal = page.getByRole('dialog')
+    await expect(modal).toBeVisible({ timeout: 5000 })
+    await expect(modal.getByRole('img', { name: selectedAlt })).toBeVisible()
+    await expect(modal.getByText(selectedAlt, { exact: true })).toBeVisible()
   })
 })

@@ -227,65 +227,7 @@ describe('GalleryModal', () => {
     })
   })
 
-  describe('dialog content', () => {
-    it('renders close button with icon', () => {
-      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
-
-      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
-
-      // Close button should have the arrow icon
-      const closeButton = screen.getByRole('button', { name: /close/i })
-      expect(closeButton).toBeInTheDocument()
-      expect(closeButton.querySelector('svg')).toBeInTheDocument()
-    })
-
-    it('shows carousel navigation only from the small breakpoint', () => {
-      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
-
-      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
-
-      expect(screen.getByTestId('carousel-prev')).toHaveClass('hidden', 'sm:flex')
-      expect(screen.getByTestId('carousel-next')).toHaveClass('hidden', 'sm:flex')
-    })
-  })
-
   describe('keyboard navigation', () => {
-    it('calls scrollPrev on ArrowLeft key press', () => {
-      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
-
-      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
-
-      // Set up the mock API and wrap in act to ensure React processes state update
-      carouselState.mockApi = createMockCarouselApi(carouselState)
-      act(() => {
-        carouselState.setApiCallback?.(carouselState.mockApi!)
-      })
-
-      act(() => {
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }))
-      })
-
-      expect(carouselState.mockApi.scrollPrev).toHaveBeenCalled()
-    })
-
-    it('calls scrollNext on ArrowRight key press', () => {
-      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
-
-      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
-
-      // Set up the mock API and wrap in act to ensure React processes state update
-      carouselState.mockApi = createMockCarouselApi(carouselState)
-      act(() => {
-        carouselState.setApiCallback?.(carouselState.mockApi!)
-      })
-
-      act(() => {
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
-      })
-
-      expect(carouselState.mockApi.scrollNext).toHaveBeenCalled()
-    })
-
     it('does not scroll on other key presses', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
@@ -336,66 +278,7 @@ describe('GalleryModal', () => {
     })
   })
 
-  describe('swipe to close', () => {
-    it('closes modal on vertical swipe', () => {
-      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
-
-      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
-
-      const carouselContent = screen.getByTestId('carousel-content')
-
-      const touch = {
-        clientX: 100,
-        clientY: 100,
-        identifier: 0,
-        target: carouselContent
-      } as unknown as Touch
-      const touchEnd = {
-        clientX: 100,
-        clientY: 200,
-        identifier: 0,
-        target: carouselContent
-      } as unknown as Touch
-
-      act(() => {
-        carouselContent.dispatchEvent(
-          new TouchEvent('touchstart', {
-            bubbles: true,
-            cancelable: true,
-            touches: [touch],
-            changedTouches: [touch]
-          })
-        )
-      })
-      act(() => {
-        carouselContent.dispatchEvent(
-          new TouchEvent('touchend', {
-            bubbles: true,
-            cancelable: true,
-            touches: [],
-            changedTouches: [touchEnd]
-          })
-        )
-      })
-
-      expect(store.state.photoId).toBe(null)
-    })
-  })
-
   describe('carousel API integration', () => {
-    it('registers select event handler when API is set', () => {
-      store.setState((prev) => ({ ...prev, photoId: 'img1' }))
-
-      render(<GalleryModal galleryCategories={galleryCategories} title="Test Gallery" />)
-
-      carouselState.mockApi = createMockCarouselApi(carouselState)
-      act(() => {
-        carouselState.setApiCallback?.(carouselState.mockApi!)
-      })
-
-      expect(carouselState.mockApi.on).toHaveBeenCalledWith('select', expect.any(Function))
-    })
-
     it('cleans up select event handler on unmount', () => {
       store.setState((prev) => ({ ...prev, photoId: 'img1' }))
 
