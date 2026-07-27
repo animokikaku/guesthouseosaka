@@ -55,6 +55,12 @@ export default defineConfig({
   basePath: '/studio',
   projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: env.NEXT_PUBLIC_SANITY_DATASET,
+  scheduledPublishing: {
+    enabled: false
+  },
+  scheduledDrafts: {
+    enabled: false
+  },
   releases: {
     enabled: false
   },
