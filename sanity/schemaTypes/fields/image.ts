@@ -9,8 +9,7 @@ export const ImageField = defineField({
     defineField({
       name: 'alt',
       type: 'internationalizedArrayString',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     })
   ],
   preview: {

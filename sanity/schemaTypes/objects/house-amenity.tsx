@@ -38,8 +38,7 @@ export const houseAmenity = defineType({
       name: 'customLabel',
       title: 'Custom Label',
       type: 'internationalizedArrayString',
-      description: 'Override the default amenity label for this house',
-      options: { aiAssist: { translateAction: true } }
+      description: 'Override the default amenity label for this house'
     })
   ],
   preview: {

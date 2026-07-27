@@ -13,8 +13,7 @@ export const localizedImage = defineType({
       title: 'Alt Text',
       type: 'internationalizedArrayString',
       description: 'Describe this image for screen readers and SEO',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     })
   ],
   preview: {

@@ -14,8 +14,7 @@ export const galleryCategory = defineType({
       title: 'Label',
       type: 'internationalizedArrayString',
       description: 'Display name shown to visitors',
-      validation: (rule) => rule.required().min(1),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required().min(1)
     }),
     defineField({
       name: 'icon',

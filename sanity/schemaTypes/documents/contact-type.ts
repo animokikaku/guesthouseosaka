@@ -70,8 +70,7 @@ export const contactType = defineType({
       type: 'internationalizedArrayString',
       description: 'Short title for navigation tabs (e.g., "Tour request")',
       group: 'main',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'description',
@@ -79,8 +78,7 @@ export const contactType = defineType({
       type: 'internationalizedArrayString',
       description: 'Brief description for navigation and form headers',
       group: 'main',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     // Form field configurations
     defineField({

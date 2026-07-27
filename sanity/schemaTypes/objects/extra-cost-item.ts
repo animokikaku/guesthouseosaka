@@ -18,8 +18,7 @@ export const extraCostItem = defineType({
       title: 'Value',
       type: 'internationalizedArrayPortableText',
       description: 'Cost details with rich text support',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     })
   ],
   preview: {

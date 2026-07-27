@@ -21,8 +21,7 @@ export const amenity = defineType({
       title: 'Label',
       type: 'internationalizedArrayString',
       description: 'Display name shown to visitors',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'icon',

@@ -16,13 +16,11 @@ export const homePage = defineType({
           title: 'Content',
           type: 'internationalizedArrayPortableText',
           description: 'Use H1 for the heading and normal text for the description',
-          options: { aiAssist: { translateAction: true } },
           validation: (rule) => rule.required()
         }),
         defineField({
           name: 'ctaLabel',
           type: 'internationalizedArrayString',
-          options: { aiAssist: { translateAction: true } },
           validation: (rule) => rule.required()
         })
       ],
@@ -48,7 +46,6 @@ export const homePage = defineType({
           title: 'Content',
           type: 'internationalizedArrayPortableText',
           description: 'Use H2 for the heading and normal text for the description',
-          options: { aiAssist: { translateAction: true } },
           validation: (rule) => rule.required()
         })
       ],

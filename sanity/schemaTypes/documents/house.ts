@@ -57,8 +57,7 @@ export const house = defineType({
       title: 'Title',
       type: 'internationalizedArrayString',
       group: 'overview',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'description',
@@ -66,16 +65,14 @@ export const house = defineType({
       type: 'internationalizedArrayText',
       group: 'overview',
       description: 'Main description shown on the house page',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'caption',
       title: 'Navigation Caption',
       type: 'internationalizedArrayText',
       group: 'overview',
-      description: 'Short description shown in navigation dropdown',
-      options: { aiAssist: { translateAction: true } }
+      description: 'Short description shown in navigation dropdown'
     }),
     defineField({
       name: 'image',
@@ -102,8 +99,7 @@ export const house = defineType({
       group: 'content',
       description:
         'Detailed description and highlights of the house. Use bullet points for key features.',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
 
     defineField({
