@@ -1,22 +1,12 @@
-import { render, screen } from '@testing-library/react'
-
-vi.mock('@/sanity/lib/icon-map', () => ({
-  iconMap: {
-    wifi: (props: Record<string, unknown>) => <svg data-testid="wifi-icon" {...props} />
-  }
-}))
-
-vi.mock('@/sanity/lib/allowed-icons', () => ({
-  allowedIcons: ['wifi']
-}))
+import { render } from '@testing-library/react'
 
 import { Icon } from '../icons'
 
 describe('Icon', () => {
   it('renders known icon', () => {
-    render(<Icon name={'wifi' as const} />)
+    const { container } = render(<Icon name="wifi" />)
 
-    expect(screen.getByTestId('wifi-icon')).toBeInTheDocument()
+    expect(container.querySelector('svg')).toBeInTheDocument()
   })
 
   it('returns null for unknown icon', () => {
@@ -26,8 +16,8 @@ describe('Icon', () => {
   })
 
   it('forwards props to icon component', () => {
-    render(<Icon name={'wifi' as const} className="size-6" />)
+    const { container } = render(<Icon name="wifi" className="size-6" />)
 
-    expect(screen.getByTestId('wifi-icon')).toHaveClass('size-6')
+    expect(container.querySelector('svg')).toHaveClass('size-6')
   })
 })

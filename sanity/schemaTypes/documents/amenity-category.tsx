@@ -1,8 +1,7 @@
 import { ComponentIcon } from '@sanity/icons/Component'
 import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { defineField, defineType } from 'sanity'
-import { allowedIcons } from '../../lib/allowed-icons'
-import { IconPreview } from '../../lib/icon-preview'
+import { Icon } from '@/lib/icons'
 
 export const amenityCategory = defineType({
   name: 'amenityCategory',
@@ -22,8 +21,7 @@ export const amenityCategory = defineType({
       name: 'icon',
       title: 'Icon',
       type: 'lucide-icon',
-      description: 'Decorative icon for this category',
-      options: { allowedIcons }
+      description: 'Decorative icon for this category'
     }),
     orderRankField({ type: 'amenityCategory' })
   ],
@@ -36,7 +34,7 @@ export const amenityCategory = defineType({
     prepare({ label, icon }) {
       return {
         title: label || 'No label',
-        media: <IconPreview icon={icon} />
+        media: <Icon name={icon} />
       }
     }
   }

@@ -1,6 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { allowedIcons } from '../../lib/allowed-icons'
-import { IconPreview } from '../../lib/icon-preview'
+import { Icon } from '@/lib/icons'
 
 export const pageAction = defineType({
   name: 'pageAction',
@@ -11,7 +10,6 @@ export const pageAction = defineType({
       name: 'icon',
       title: 'Icon',
       type: 'lucide-icon',
-      options: { allowedIcons },
       validation: (rule) => rule.required()
     }),
     defineField({
@@ -40,7 +38,7 @@ export const pageAction = defineType({
       return {
         title: label?.[0]?.value || 'No label',
         subtitle: href,
-        media: <IconPreview icon={icon} />
+        media: <Icon name={icon} />
       }
     }
   }
