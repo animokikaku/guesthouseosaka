@@ -5,22 +5,19 @@ const labelField = defineField({
   name: 'label',
   title: 'Label',
   type: 'internationalizedArrayString',
-  validation: (rule) => rule.required(),
-  options: { aiAssist: { translateAction: true } }
+  validation: (rule) => rule.required()
 })
 
 const placeholderField = defineField({
   name: 'placeholder',
   title: 'Placeholder',
-  type: 'internationalizedArrayString',
-  options: { aiAssist: { translateAction: true } }
+  type: 'internationalizedArrayString'
 })
 
 const descriptionField = defineField({
   name: 'description',
   title: 'Description',
-  type: 'internationalizedArrayString',
-  options: { aiAssist: { translateAction: true } }
+  type: 'internationalizedArrayString'
 })
 
 const previewConfig = {

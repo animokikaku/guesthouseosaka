@@ -12,8 +12,7 @@ export const legalNotice = defineType({
       title: 'Title',
       type: 'internationalizedArrayString',
       description: 'The title of the legal notice (e.g., Privacy Policy)',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'lastUpdated',
@@ -28,8 +27,7 @@ export const legalNotice = defineType({
       type: 'internationalizedArrayPortableText',
       description:
         'The full content of the legal notice. Use H3 for section headings, normal text for paragraphs, and bullet lists where appropriate.',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     })
   ],
   preview: {

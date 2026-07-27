@@ -10,8 +10,7 @@ export const houseLocation = defineType({
       title: 'Location Highlight',
       type: 'internationalizedArrayText',
       description: 'Key location selling point (e.g., "14 minutes walk to Namba")',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'details',
@@ -19,8 +18,7 @@ export const houseLocation = defineType({
       type: 'internationalizedArrayPortableText',
       description:
         'Use H3 for section headings (e.g., "Getting Around", "Nearby") and bullet lists for items',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     })
   ]
 })

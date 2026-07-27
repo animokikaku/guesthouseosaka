@@ -17,8 +17,7 @@ export const pageAction = defineType({
       title: 'Label',
       type: 'internationalizedArrayString',
       description: 'Button text displayed to the user',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'href',

@@ -13,15 +13,13 @@ export const faqQuestion = defineType({
       name: 'question',
       title: 'Question',
       type: 'internationalizedArrayString',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'answer',
       title: 'Answer',
       type: 'internationalizedArrayPortableText',
       description: 'Rich text answer with formatting support.',
-      options: { aiAssist: { translateAction: true } },
       hidden: ({ document }) => !!document?.componentKey
     }),
     defineField({

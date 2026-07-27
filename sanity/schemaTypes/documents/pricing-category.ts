@@ -13,8 +13,7 @@ export const pricingCategory = defineType({
       title: 'Title',
       type: 'internationalizedArrayString',
       description: 'The display name of the category (e.g., "Deposit", "Common Fees")',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     orderRankField({ type: 'pricingCategory' })
   ],

@@ -18,8 +18,7 @@ export const settings = defineType({
       type: 'internationalizedArrayString',
       description: 'Website name for manifest/UI (e.g., Share House Osaka)',
       group: 'site',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'siteDescription',
@@ -27,8 +26,7 @@ export const settings = defineType({
       type: 'internationalizedArrayString',
       description: 'Default meta description for SEO',
       group: 'site',
-      validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } }
+      validation: (rule) => rule.required()
     }),
     defineField({
       name: 'socialLinks',

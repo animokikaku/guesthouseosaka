@@ -18,7 +18,6 @@ export const contactPage = defineType({
       type: 'internationalizedArrayPortableText',
       description: 'Use H1 for the title and normal text for the description',
       validation: (rule) => rule.required(),
-      options: { aiAssist: { translateAction: true } },
       group: 'content'
     }),
     defineField({
@@ -36,7 +35,6 @@ export const contactPage = defineType({
       type: 'internationalizedArrayString',
       description: 'SEO title for browser tabs and search results',
       validation: (rule) => rule.required().max(60),
-      options: { aiAssist: { translateAction: true } },
       group: 'settings'
     }),
     defineField({
@@ -45,7 +43,6 @@ export const contactPage = defineType({
       type: 'internationalizedArrayString',
       description: 'SEO description for search results',
       validation: (rule) => rule.required().max(155),
-      options: { aiAssist: { translateAction: true } },
       group: 'settings'
     })
   ],
