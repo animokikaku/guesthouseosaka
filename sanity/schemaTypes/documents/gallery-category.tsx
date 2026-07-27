@@ -1,8 +1,7 @@
 import { ImagesIcon } from '@sanity/icons/Images'
 import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { defineField, defineType } from 'sanity'
-import { allowedIcons } from '../../lib/allowed-icons'
-import { IconPreview } from '../../lib/icon-preview'
+import { Icon } from '@/lib/icons'
 
 export const galleryCategory = defineType({
   name: 'galleryCategory',
@@ -22,8 +21,7 @@ export const galleryCategory = defineType({
       name: 'icon',
       title: 'Icon',
       type: 'lucide-icon',
-      description: 'Decorative icon for this category',
-      options: { allowedIcons }
+      description: 'Decorative icon for this category'
     }),
     orderRankField({ type: 'galleryCategory' })
   ],
@@ -36,7 +34,7 @@ export const galleryCategory = defineType({
     prepare({ label, icon }) {
       return {
         title: label || 'No label',
-        media: <IconPreview icon={icon} />
+        media: <Icon name={icon} />
       }
     }
   }

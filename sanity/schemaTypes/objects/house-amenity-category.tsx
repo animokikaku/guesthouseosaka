@@ -1,6 +1,6 @@
 import { ComponentIcon } from '@sanity/icons/Component'
 import { defineArrayMember, defineField, defineType } from 'sanity'
-import { IconPreview } from '../../lib/icon-preview'
+import { Icon } from '@/lib/icons'
 
 export const houseAmenityCategory = defineType({
   name: 'houseAmenityCategory',
@@ -34,7 +34,7 @@ export const houseAmenityCategory = defineType({
       return {
         title: label || 'No category',
         subtitle: `${count} ${count === 1 ? 'amenity' : 'amenities'}`,
-        media: <IconPreview icon={icon} />
+        media: <Icon name={icon} />
       }
     }
   }

@@ -8,14 +8,15 @@ import { assist } from '@sanity/assist'
 import { visionTool } from '@sanity/vision'
 import { defineConfig, defineField } from 'sanity'
 import { internationalizedArray } from 'sanity-plugin-internationalized-array'
-import { lucideIconPicker } from 'sanity-plugin-lucide-icon-picker'
 import { presentationTool } from 'sanity/presentation'
 import { structureTool } from 'sanity/structure'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { routing } from '@/i18n/routing'
 import { env } from '@/lib/env'
+import { iconMap } from '@/lib/icons'
 import { locales } from '@/sanity/config'
+import { lucideIconPicker } from '@/sanity/plugins/lucide-icon-picker'
 import { resolve } from '@/sanity/presentation/resolve'
 import { type DocumentTypeName, documentTypes, schema } from '@/sanity/schemaTypes'
 import { structure } from '@/sanity/structure'
@@ -79,7 +80,7 @@ export default defineConfig({
     }
   },
   plugins: [
-    lucideIconPicker(),
+    lucideIconPicker({ icons: iconMap }),
     assist({
       translate: {
         field: {

@@ -1,6 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { allowedIcons } from '../../lib/allowed-icons'
-import { IconPreview } from '../../lib/icon-preview'
+import { Icon } from '@/lib/icons'
 
 export const socialLink = defineType({
   name: 'socialLink',
@@ -11,7 +10,7 @@ export const socialLink = defineType({
       name: 'icon',
       title: 'Icon',
       type: 'lucide-icon',
-      options: { allowedIcons },
+      options: { allowedIcons: ['facebook', 'instagram'] },
       validation: (rule) => rule.required()
     }),
     defineField({
@@ -41,7 +40,7 @@ export const socialLink = defineType({
       return {
         title: label,
         subtitle: url,
-        media: <IconPreview icon={icon} />
+        media: <Icon name={icon} />
       }
     }
   }

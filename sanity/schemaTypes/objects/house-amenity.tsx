@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { IconPreview } from '../../lib/icon-preview'
+import { Icon } from '@/lib/icons'
 
 export const houseAmenity = defineType({
   name: 'houseAmenity',
@@ -64,7 +64,7 @@ export const houseAmenity = defineType({
       return {
         title: displayLabel,
         subtitle: subtitle || undefined,
-        media: <IconPreview icon={icon} />
+        media: <Icon name={icon} />
       }
     }
   }

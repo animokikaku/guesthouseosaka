@@ -1,7 +1,6 @@
 import { CheckmarkCircleIcon } from '@sanity/icons/CheckmarkCircle'
 import { defineField, defineType } from 'sanity'
-import { allowedIcons } from '../../lib/allowed-icons'
-import { IconPreview } from '../../lib/icon-preview'
+import { Icon } from '@/lib/icons'
 
 export const amenity = defineType({
   name: 'amenity',
@@ -29,7 +28,6 @@ export const amenity = defineType({
       name: 'icon',
       title: 'Icon',
       type: 'lucide-icon',
-      options: { allowedIcons },
       validation: (rule) => rule.required()
     }),
     defineField({
@@ -57,7 +55,7 @@ export const amenity = defineType({
       return {
         title: label || 'No label',
         subtitle: categoryLabel || 'No category',
-        media: <IconPreview icon={icon} />
+        media: <Icon name={icon} />
       }
     }
   }
