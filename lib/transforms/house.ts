@@ -8,6 +8,7 @@ import type {
   PricingRowData,
   SanityImage
 } from '@/lib/types/components'
+import { getGoogleMapsUrl } from '@/lib/google-maps-url'
 import type { HouseQueryResult } from '@/sanity.types'
 
 // ============================================
@@ -107,7 +108,7 @@ export function toMapData(map: HouseMap): MapData | null {
     },
     placeId,
     placeImage: sanityImage,
-    googleMapsUrl
+    googleMapsUrl: getGoogleMapsUrl(googleMapsUrl)
   }
 }
 
