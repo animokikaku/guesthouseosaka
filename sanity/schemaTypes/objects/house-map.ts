@@ -16,7 +16,8 @@ export const houseMap = defineType({
         rule
           .required()
           .custom(
-            (value) => getGoogleMapsUrl(value) !== undefined || 'Enter a valid Google Maps URL'
+            (value) =>
+              !value || getGoogleMapsUrl(value) !== undefined || 'Enter a valid Google Maps URL'
           )
     }),
     defineField({

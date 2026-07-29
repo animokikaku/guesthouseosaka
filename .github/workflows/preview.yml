@@ -9,7 +9,7 @@ on:
 jobs:
   preview_status:
     name: Preview Status
-    if: github.actor == 'vercel[bot]' && github.event.client_payload.environment == 'preview'
+    if: github.event.sender.login == 'vercel[bot]' && github.event.client_payload.environment == 'preview'
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 10
     permissions:
