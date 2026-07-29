@@ -93,6 +93,29 @@ describe('toMapData', () => {
     expect(result?.placeImage.preview).toBe(map.placeImage.preview)
   })
 
+  it('accepts a Google Maps URL', () => {
+    const googleMapsUrl = 'https://maps.google.com/?q=Guest+House+Osaka'
+    const map = createMap({ googleMapsUrl })
+
+    const result = toMapData(map)
+
+    expect(result?.googleMapsUrl).toBe(googleMapsUrl)
+  })
+
+  it.each([
+    'javascript:alert(document.domain)',
+    'data:text/html,<script>alert(document.domain)</script>',
+    '//maps.app.goo.gl/example',
+    'https://example.com/maps',
+    'https://user:password@maps.app.goo.gl/example'
+  ])('rejects unsafe Google Maps URL %s', (googleMapsUrl) => {
+    const map = createMap({ googleMapsUrl })
+
+    const result = toMapData(map)
+
+    expect(result?.googleMapsUrl).toBeUndefined()
+  })
+
   it('returns null for null map data', () => {
     const result = toMapData(null)
 

@@ -8,17 +8,13 @@ import {
 import { env } from '@/lib/env'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
 import type { HouseIdentifier } from '@/lib/types'
-import { headers } from 'next/headers'
 import { Resend, type CreateEmailOptions } from 'resend'
 
 const { emails } = new Resend(env.RESEND_API_KEY)
-const CONTACT_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
-const CONTACT_RATE_LIMIT_MAX_REQUESTS = 5
-const contactSubmissionAttempts = new Map<string, { count: number; resetAt: number }>()
 
 export type ContactSubmissionResult =
   | { ok: true }
-  | { ok: false; code: 'delivery_failed' | 'invalid_submission' | 'rate_limited' }
+  | { ok: false; code: 'delivery_failed' | 'invalid_submission' }
 
 async function sendEmail(payload: CreateEmailOptions): Promise<ContactSubmissionResult> {
   const { error } = await emails.send(payload)
@@ -29,32 +25,6 @@ async function sendEmail(payload: CreateEmailOptions): Promise<ContactSubmission
   }
 
   return { ok: true }
-}
-
-async function getRequesterIdentifier() {
-  const headerList = await headers()
-  const forwardedFor = headerList.get('x-forwarded-for')?.split(',')[0]?.trim()
-  return forwardedFor || headerList.get('x-real-ip') || 'unknown'
-}
-
-function recordSubmissionAttempt(identifier: string) {
-  const now = Date.now()
-  const attempts = contactSubmissionAttempts.get(identifier)
-
-  if (!attempts || attempts.resetAt <= now) {
-    contactSubmissionAttempts.set(identifier, {
-      count: 1,
-      resetAt: now + CONTACT_RATE_LIMIT_WINDOW_MS
-    })
-    return true
-  }
-
-  if (attempts.count >= CONTACT_RATE_LIMIT_MAX_REQUESTS) {
-    return false
-  }
-
-  attempts.count += 1
-  return true
 }
 
 const DEFAULT_CONTACT = {
@@ -76,10 +46,6 @@ const DEFAULT_CONTACT = {
 export async function submitContactForm(
   payload: ContactFormPayload
 ): Promise<ContactSubmissionResult> {
-  if (!recordSubmissionAttempt(await getRequesterIdentifier())) {
-    return { ok: false, code: 'rate_limited' }
-  }
-
   const parsedPayload = contactFormPayloadSchema.safeParse(payload)
   if (!parsedPayload.success) {
     return { ok: false, code: 'invalid_submission' }

@@ -1,3 +1,4 @@
+import { getGoogleMapsUrl } from '@/lib/google-maps-url'
 import { defineField, defineType } from 'sanity'
 
 export const houseMap = defineType({
@@ -11,7 +12,12 @@ export const houseMap = defineType({
       title: 'Google Maps URL',
       type: 'url',
       description: 'Direct link to Google Maps',
-      validation: (rule) => rule.required()
+      validation: (rule) =>
+        rule
+          .required()
+          .custom(
+            (value) => getGoogleMapsUrl(value) !== undefined || 'Enter a valid Google Maps URL'
+          )
     }),
     defineField({
       name: 'placeId',

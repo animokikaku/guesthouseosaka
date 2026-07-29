@@ -155,7 +155,7 @@ export function createMap(overrides: Partial<NonNullable<HouseMap>> = {}): NonNu
       alt: faker.lorem.words(3),
       preview: `data:image/jpeg;base64,${faker.string.alphanumeric(20)}`
     },
-    googleMapsUrl: faker.internet.url(),
+    googleMapsUrl: `https://maps.app.goo.gl/${faker.string.alphanumeric(17)}`,
     address: {
       _type: 'address',
       streetAddress: faker.location.streetAddress(),

@@ -1,10 +1,5 @@
-const { headersMock, sendMock } = vi.hoisted(() => ({
-  headersMock: vi.fn(),
+const { sendMock } = vi.hoisted(() => ({
   sendMock: vi.fn()
-}))
-
-vi.mock('next/headers', () => ({
-  headers: headersMock
 }))
 
 vi.mock('resend', () => ({
@@ -80,14 +75,8 @@ const successfulSubmissionCases = [
 ] satisfies { name: string; payload: ContactFormPayload; subject: string }[]
 
 describe('submitContactForm', () => {
-  let requesterIndex = 0
-
   beforeEach(() => {
     vi.clearAllMocks()
-    requesterIndex += 1
-    headersMock.mockResolvedValue(
-      new Headers({ 'x-forwarded-for': `198.51.100.${requesterIndex}` })
-    )
   })
 
   afterEach(() => {
@@ -150,24 +139,5 @@ describe('submitContactForm', () => {
       code: 'invalid_submission'
     })
     expect(sendMock).not.toHaveBeenCalled()
-  })
-
-  it('returns a rate-limit failure after five attempts from one requester', async () => {
-    headersMock.mockResolvedValue(new Headers({ 'x-forwarded-for': '198.51.100.250' }))
-    sendMock.mockResolvedValue({
-      data: { id: 'email-id' },
-      error: null,
-      headers: {}
-    })
-
-    for (let attempt = 0; attempt < 5; attempt += 1) {
-      await expect(submitContactForm(payload)).resolves.toEqual({ ok: true })
-    }
-
-    await expect(submitContactForm(payload)).resolves.toEqual({
-      ok: false,
-      code: 'rate_limited'
-    })
-    expect(sendMock).toHaveBeenCalledTimes(5)
   })
 })
