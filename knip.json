@@ -17,6 +17,7 @@
     "config": ["playwright.config.ts", "playwright.components.config.ts"],
     "entry": [
       "e2e/**/*.spec.ts",
+      "e2e/mocks/resend-server.ts",
       "playwright/components/**/*.spec.ts",
       "playwright/gallery/{main,next-image,sanity-image,vite.config}.{ts,tsx}",
       "app/**/*.story.tsx",
