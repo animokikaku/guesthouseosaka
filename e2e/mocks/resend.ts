@@ -1,32 +1,33 @@
-import type { NextFixture } from 'next/experimental/testmode/playwright'
+import type { APIRequestContext } from '@playwright/test'
 
-type MockResendAPIOptions = {
-  body?: Record<string, unknown>
-  status?: number
+/** Port the Resend stub server listens on during E2E runs. */
+export const RESEND_MOCK_PORT = Number(process.env.RESEND_MOCK_PORT ?? 3999)
+
+/** Base URL handed to the Next server through `RESEND_BASE_URL`. */
+export const RESEND_MOCK_BASE_URL = `http://localhost:${RESEND_MOCK_PORT}`
+
+/** Reply-to addresses starting with this prefix are rejected by the stub. */
+export const DELIVERY_FAILURE_PREFIX = 'delivery-failure'
+
+/**
+ * Build a unique reply-to address so parallel tests and retries never observe
+ * each other's emails.
+ */
+export function uniqueReplyTo(prefix = 'e2e') {
+  return `${prefix}-${crypto.randomUUID()}@example.com`
 }
 
 /**
- * Mock Resend API responses for E2E tests
+ * Read the emails the stub server received for a given reply-to address.
  * @see https://resend.com/docs/api-reference/emails/send-email
  */
-export function mockResendAPI(next: NextFixture, options: MockResendAPIOptions = {}) {
-  const requests: Record<string, unknown>[] = []
+export async function getSentEmails(request: APIRequestContext, replyTo: string) {
+  const response = await request.get(`${RESEND_MOCK_BASE_URL}/emails`, { params: { replyTo } })
 
-  // Mock the Resend send email endpoint using onFetch
-  next.onFetch(async (request) => {
-    if (request.url === 'https://api.resend.com/emails') {
-      requests.push((await request.json()) as Record<string, unknown>)
-      return Response.json(
-        options.body ?? {
-          id: 'e2e-mock-email-id',
-          object: 'email'
-        },
-        { status: options.status ?? 200 }
-      )
-    }
-    // Let other requests pass through
-    return 'continue'
-  })
+  if (!response.ok()) {
+    throw new Error(`Resend stub returned ${response.status()} when listing emails`)
+  }
 
-  return requests
+  const { data } = (await response.json()) as { data: Record<string, unknown>[] }
+  return data
 }

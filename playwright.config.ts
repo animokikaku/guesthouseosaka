@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
+import { RESEND_MOCK_BASE_URL } from './e2e/mocks/resend'
 
 // Use process.env.PORT by default and fallback to port 3000
 const PORT = process.env.PORT || 3000
@@ -38,16 +39,26 @@ export default defineConfig({
     timeout: 10 * 1000
   },
 
-  // Run E2E tests against a production build. Skip the managed server when
-  // testing an external deployment via BASE_URL.
+  // Run E2E tests against a production build, with outgoing Resend calls
+  // pointed at a local stub. Skip the managed servers when testing an external
+  // deployment via BASE_URL.
   webServer: process.env.BASE_URL
     ? undefined
-    : {
-        command: 'bun run build && bun run start',
-        url: baseURL,
-        timeout: 5 * 60 * 1000,
-        reuseExistingServer: !process.env.CI
-      },
+    : [
+        {
+          command: 'bun run e2e/mocks/resend-server.ts',
+          url: `${RESEND_MOCK_BASE_URL}/emails`,
+          timeout: 30 * 1000,
+          reuseExistingServer: !process.env.CI
+        },
+        {
+          command: 'bun run build && bun run start',
+          url: baseURL,
+          timeout: 5 * 60 * 1000,
+          reuseExistingServer: !process.env.CI,
+          env: { RESEND_BASE_URL: RESEND_MOCK_BASE_URL }
+        }
+      ],
 
   // Shared settings for all the projects below
   use: {

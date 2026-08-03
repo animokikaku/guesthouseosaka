@@ -1,5 +1,5 @@
-import { expect, test, type Page } from 'next/experimental/testmode/playwright'
-import { mockResendAPI } from './mocks/resend'
+import { expect, test, type Page } from '@playwright/test'
+import { DELIVERY_FAILURE_PREFIX, getSentEmails, uniqueReplyTo } from './mocks/resend'
 
 test.describe('Contact Form Tests', () => {
   // Navigate to the "Other" contact form (general inquiry)
@@ -63,12 +63,12 @@ test.describe('Contact Form Tests', () => {
   }
 
   test.describe('Form Submission', () => {
-    test('valid form can be submitted', async ({ next, page }) => {
-      // Mock the Resend API to prevent actual email sending
-      const requests = mockResendAPI(next)
+    test('valid form can be submitted', async ({ page, request }) => {
+      // Unique reply-to so the stubbed Resend API only reports this submission
+      const replyTo = uniqueReplyTo()
 
       // Fill all required fields
-      await fillRequiredFields(page)
+      await fillRequiredFields(page, { email: replyTo })
 
       const fields = getFormFields(page)
 
@@ -85,32 +85,22 @@ test.describe('Contact Form Tests', () => {
 
       await expect(page).toHaveURL(/\/en\/contact(?!\/other)/)
 
-      expect(requests).toHaveLength(1)
-      expect(requests[0]).toMatchObject({
+      const emails = await getSentEmails(request, replyTo)
+      expect(emails).toHaveLength(1)
+      expect(emails[0]).toMatchObject({
         from: 'Guest House Osaka <info@guesthouseosaka.com>',
         html: expect.stringMatching(
           /<!DOCTYPE html[\s\S]*Test User[\s\S]*This is a valid test message/
         ),
-        reply_to: 'test@example.com',
+        reply_to: replyTo,
         subject: 'お問い合わせ: Test User',
         to: 'orange@guesthouseosaka.com'
       })
     })
 
-    test('failed email delivery shows an error without leaving the form', async ({
-      next,
-      page
-    }) => {
-      mockResendAPI(next, {
-        status: 422,
-        body: {
-          message: 'The email could not be delivered.',
-          name: 'validation_error',
-          statusCode: 422
-        }
-      })
-
-      await fillRequiredFields(page)
+    test('failed email delivery shows an error without leaving the form', async ({ page }) => {
+      // The stub rejects submissions from this reply-to prefix with a 422
+      await fillRequiredFields(page, { email: uniqueReplyTo(DELIVERY_FAILURE_PREFIX) })
 
       const fields = getFormFields(page)
       await fields.checkbox.click()
