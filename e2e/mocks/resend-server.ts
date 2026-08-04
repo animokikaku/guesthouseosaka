@@ -42,7 +42,14 @@ const server = Bun.serve({
 
     let email: Record<string, unknown>
     try {
-      email = (await request.json()) as Record<string, unknown>
+      const body: unknown = await request.json()
+      if (typeof body !== 'object' || body === null || Array.isArray(body)) {
+        return json(
+          { message: 'Invalid JSON body', name: 'validation_error', statusCode: 400 },
+          { status: 400 }
+        )
+      }
+      email = body as Record<string, unknown>
     } catch {
       return json(
         { message: 'Invalid JSON body', name: 'validation_error', statusCode: 400 },
