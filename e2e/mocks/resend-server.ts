@@ -1,4 +1,3 @@
-/// <reference types="bun-types" />
 import { DELIVERY_FAILURE_PREFIX, RESEND_MOCK_PORT } from './resend'
 
 /**
