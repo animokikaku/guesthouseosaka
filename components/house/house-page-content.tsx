@@ -19,6 +19,7 @@ import {
   toMapData,
   toPricingRows
 } from '@/lib/transforms/house'
+import type { StegaAware } from '@/lib/types/stega'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/utils/theme'
 import type { HouseQueryResult, HousesNavQueryResult } from '@/sanity.types'
@@ -40,7 +41,7 @@ export function HousePageContent({
   about,
   building,
   houses
-}: NonNullable<HouseQueryResult> & { houses: HousesNavQueryResult }) {
+}: StegaAware<NonNullable<HouseQueryResult>> & { houses: HousesNavQueryResult }) {
   const href: ComponentProps<typeof Link>['href'] = {
     pathname: '/[house]/gallery',
     params: { house: slug }

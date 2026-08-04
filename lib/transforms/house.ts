@@ -9,7 +9,9 @@ import type {
   SanityImage
 } from '@/lib/types/components'
 import { getGoogleMapsUrl } from '@/lib/google-maps-url'
+import type { StegaAware } from '@/lib/types/stega'
 import type { HouseQueryResult } from '@/sanity.types'
+import { stegaClean } from 'next-sanity'
 
 // ============================================
 // Input Types (from Sanity query results)
@@ -19,8 +21,12 @@ type HouseBuilding = NonNullable<HouseQueryResult>['building']
 type HouseLocation = NonNullable<HouseQueryResult>['location']
 type HouseMap = NonNullable<HouseQueryResult>['map']
 type HousePricing = NonNullable<HouseQueryResult>['pricing']
-type HouseAmenityCategories = NonNullable<HouseQueryResult>['amenityCategories']
-type HouseFeaturedAmenities = NonNullable<HouseQueryResult>['featuredAmenities']
+type HouseAmenityCategories =
+  | StegaAware<NonNullable<NonNullable<HouseQueryResult>['amenityCategories']>[number]>[]
+  | null
+type HouseFeaturedAmenities =
+  | StegaAware<NonNullable<NonNullable<HouseQueryResult>['featuredAmenities']>[number]>[]
+  | null
 type HouseAbout = NonNullable<HouseQueryResult>['about']
 
 // ============================================
@@ -160,7 +166,7 @@ export function toAmenityCategories(
       _key: item._key,
       label: item.label,
       icon: item.icon,
-      note: item.note
+      note: item.note ? stegaClean(item.note) : null
     }))
   }))
 }
@@ -180,7 +186,7 @@ export function toFeaturedAmenities(featuredAmenities: HouseFeaturedAmenities): 
     _key: item._key,
     label: item.label,
     icon: item.icon,
-    note: item.note
+    note: item.note ? stegaClean(item.note) : null
   }))
 }
 
