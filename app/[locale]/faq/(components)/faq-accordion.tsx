@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
+import type { StegaAware } from '@/lib/types/stega'
 import type {
   FaqQuestionsQueryResult,
   HousesBuildingQueryResult,
@@ -27,7 +28,7 @@ const components: PortableTextComponents = {
   }
 }
 
-type FaqQuestions = NonNullable<FaqQuestionsQueryResult>
+type FaqQuestions = StegaAware<NonNullable<FaqQuestionsQueryResult>[number]>[]
 type Houses = NonNullable<HousesBuildingQueryResult>
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 
