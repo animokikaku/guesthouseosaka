@@ -1,4 +1,3 @@
-import { createServer } from 'node:http'
 import { DELIVERY_FAILURE_PREFIX, RESEND_MOCK_PORT } from './resend'
 
 /**
@@ -14,69 +13,62 @@ import { DELIVERY_FAILURE_PREFIX, RESEND_MOCK_PORT } from './resend'
  */
 const sentEmails: Record<string, unknown>[] = []
 
-function json(body: unknown) {
-  return JSON.stringify(body)
+function json(body: unknown, init?: ResponseInit) {
+  return Response.json(body, init)
 }
 
-const server = createServer((req, res) => {
-  const { pathname, searchParams } = new URL(req.url ?? '/', `http://localhost:${RESEND_MOCK_PORT}`)
-  res.setHeader('content-type', 'application/json')
+const server = Bun.serve({
+  port: RESEND_MOCK_PORT,
+  async fetch(request) {
+    const { pathname, searchParams } = new URL(request.url)
 
-  if (pathname !== '/emails') {
-    res.writeHead(404)
-    res.end(json({ message: 'Not found', name: 'not_found', statusCode: 404 }))
-    return
-  }
+    if (pathname !== '/emails') {
+      return json({ message: 'Not found', name: 'not_found', statusCode: 404 }, { status: 404 })
+    }
 
-  if (req.method === 'GET') {
-    const replyTo = searchParams.get('replyTo')
-    res.writeHead(200)
-    res.end(
-      json({
+    if (request.method === 'GET') {
+      const replyTo = searchParams.get('replyTo')
+      return json({
         data: replyTo ? sentEmails.filter((email) => email.reply_to === replyTo) : sentEmails
       })
-    )
-    return
-  }
+    }
 
-  if (req.method !== 'POST') {
-    res.writeHead(405)
-    res.end(json({ message: 'Method not allowed', name: 'method_not_allowed', statusCode: 405 }))
-    return
-  }
+    if (request.method !== 'POST') {
+      return json(
+        { message: 'Method not allowed', name: 'method_not_allowed', statusCode: 405 },
+        { status: 405 }
+      )
+    }
 
-  const chunks: Buffer[] = []
-  req.on('data', (chunk: Buffer) => chunks.push(chunk))
-  req.on('end', () => {
     let email: Record<string, unknown>
     try {
-      email = JSON.parse(Buffer.concat(chunks).toString('utf8')) as Record<string, unknown>
+      const body: unknown = await request.json()
+      if (typeof body !== 'object' || body === null || Array.isArray(body)) {
+        return json(
+          { message: 'Invalid JSON body', name: 'validation_error', statusCode: 400 },
+          { status: 400 }
+        )
+      }
+      email = body as Record<string, unknown>
     } catch {
-      res.writeHead(400)
-      res.end(json({ message: 'Invalid JSON body', name: 'validation_error', statusCode: 400 }))
-      return
+      return json(
+        { message: 'Invalid JSON body', name: 'validation_error', statusCode: 400 },
+        { status: 400 }
+      )
     }
 
     sentEmails.push(email)
 
     const replyTo = typeof email.reply_to === 'string' ? email.reply_to : ''
     if (replyTo.startsWith(DELIVERY_FAILURE_PREFIX)) {
-      res.writeHead(422)
-      res.end(
-        json({
-          message: 'The email could not be delivered.',
-          name: 'validation_error',
-          statusCode: 422
-        })
+      return json(
+        { message: 'The email could not be delivered.', name: 'validation_error', statusCode: 422 },
+        { status: 422 }
       )
-      return
     }
 
-    res.writeHead(200)
-    res.end(json({ id: 'e2e-mock-email-id', object: 'email' }))
-  })
+    return json({ id: 'e2e-mock-email-id', object: 'email' })
+  }
 })
 
-server.listen(RESEND_MOCK_PORT, () => {
-  console.log(`Resend stub listening on http://localhost:${RESEND_MOCK_PORT}`)
-})
+console.log(`Resend stub listening on http://localhost:${server.port}`)
