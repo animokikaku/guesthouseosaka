@@ -59,22 +59,12 @@ vi.mock('@/i18n/navigation', () => ({
   )
 }))
 
-vi.mock('@/components/ui/button', () => ({
-  buttonVariants: ({ className }: { className?: string }) => className
-}))
-
 vi.mock('@/components/ui/empty', () => ({
   Empty: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   EmptyDescription: ({ children }: { children: React.ReactNode }) => <p>{children}</p>,
   EmptyHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   EmptyMedia: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   EmptyTitle: ({ children }: { children: React.ReactNode }) => <h2>{children}</h2>
-}))
-
-vi.mock('@/components/icons', () => ({
-  Icons: {
-    gallery: () => <svg data-testid="gallery-icon" />
-  }
 }))
 
 vi.mock('lucide-react', () => ({
@@ -107,7 +97,7 @@ describe('ImageBlockGallery', () => {
     expect(frames[0]).toHaveAttribute('data-alt', 'Gallery image 1')
     expect(frames[0]).toHaveAttribute('data-priority', 'true')
     expect(frames[1]).toHaveAttribute('data-priority', 'false')
-    expect(screen.getByText('View gallery')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'View gallery' })).toBeInTheDocument()
   })
 
   it('prepends the featured image and limits the grid to five images', async () => {

@@ -29,7 +29,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
       data-testid="gallery-grid-image"
       onClick={() => store.setState((prev) => ({ ...prev, photoId: _key }))}
       imageProps={imageProps}
-      className="aspect-square rounded-lg"
+      className="bg-muted/40 relative aspect-square overflow-hidden"
       style={{
         contentVisibility: 'auto',
         containIntrinsicSize: '0 400px'

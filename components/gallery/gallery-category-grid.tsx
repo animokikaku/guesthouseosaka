@@ -18,7 +18,7 @@ export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
       data-sanity={dataAttribute?.(`galleryCategories[_key=="${category._key}"]`)}
     >
       <h3 className="text-xl font-semibold">{category.label}</h3>
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-0.5 lg:grid-cols-3 xl:grid-cols-4">
         {category.items.map((item) => (
           <GalleryGridItem
             key={item._key}
