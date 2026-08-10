@@ -12,13 +12,18 @@ export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
   if (category.items.length === 0) return null
 
   return (
-    <div
+    <section
       id={category._id}
-      className="scroll-mt-3 space-y-4"
+      className="scroll-mt-0"
       data-sanity={dataAttribute?.(`galleryCategories[_key=="${category._key}"]`)}
     >
-      <h3 className="text-xl font-semibold">{category.label}</h3>
-      <div className="grid grid-cols-2 gap-0.5 lg:grid-cols-3 xl:grid-cols-4">
+      <h3 className="flex items-baseline gap-3 px-3 pt-6 pb-4 text-xl font-semibold md:text-2xl">
+        {category.label}
+        <span className="text-muted-foreground text-sm font-normal tabular-nums">
+          {category.items.length}
+        </span>
+      </h3>
+      <div className="grid grid-cols-2 gap-0.5 sm:grid-cols-4 lg:grid-cols-5">
         {category.items.map((item) => (
           <GalleryGridItem
             key={item._key}
@@ -28,6 +33,6 @@ export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
           />
         ))}
       </div>
-    </div>
+    </section>
   )
 }

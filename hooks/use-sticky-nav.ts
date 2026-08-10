@@ -8,50 +8,20 @@ type UseStickyNavOptions = {
 }
 
 type UseStickyNavReturn = {
-  /** Whether the sticky nav should be visible (sentinel scrolled out of view) */
-  isVisible: boolean
-  /** Ref to attach to the sentinel element */
-  sentinelRef: React.RefObject<HTMLDivElement | null>
   /** Currently active section ID */
   activeId: string | null
 }
 
 /**
- * Hook for sticky category navigation with scroll-spy.
- *
- * Uses IntersectionObserver to:
- * 1. Detect when sentinel element leaves viewport (show/hide sticky nav)
- * 2. Track which section is currently in view (for highlighting)
+ * Scroll-spy for the gallery category nav: tracks which category section is in
+ * view within the gallery's scroll container so the nav can highlight it.
  */
 export function useStickyNav({
   sectionIds,
   scrollContainerRef
 }: UseStickyNavOptions): UseStickyNavReturn {
-  const [isVisible, setIsVisible] = React.useState(false)
   const [activeId, setActiveId] = React.useState<string | null>(null)
-  const sentinelRef = React.useRef<HTMLDivElement>(null)
 
-  // Observer for sentinel (show/hide sticky nav)
-  React.useEffect(() => {
-    const sentinel = sentinelRef.current
-    const scrollContainer = scrollContainerRef.current
-    if (!sentinel || !scrollContainer) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(!entry.isIntersecting)
-      },
-      {
-        root: scrollContainer,
-        threshold: 0
-      }
-    )
-
-    observer.observe(sentinel)
-    return () => observer.disconnect()
-  }, [scrollContainerRef])
-
-  // Observer for sections (active state tracking)
   React.useEffect(() => {
     const scrollContainer = scrollContainerRef.current
     if (!scrollContainer || sectionIds.length === 0) return
@@ -87,5 +57,5 @@ export function useStickyNav({
     return () => observer.disconnect()
   }, [scrollContainerRef, sectionIds])
 
-  return { isVisible, sentinelRef, activeId }
+  return { activeId }
 }

@@ -1,61 +1,30 @@
 import { CategoryGrid } from '@/components/gallery/gallery-category-grid'
-import { CategoryThumbnail } from '@/components/gallery/gallery-category-thumbnail'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { type GalleryCategory } from '@/lib/gallery'
-import * as React from 'react'
 
 type DataAttributeFn = (path: string) => string
 
 type HouseGalleryProps = {
   categories: GalleryCategory[]
-  /** Ref for sentinel element (used to detect when thumbnails scroll out of view) */
-  sentinelRef?: React.RefObject<HTMLDivElement | null>
   /** Data attribute helper for Sanity visual editing */
   dataAttribute?: DataAttributeFn
-  /** Whether the sticky nav is visible (thumbnails should be removed from tab order) */
-  stickyNavVisible?: boolean
 }
 
-export function HouseGallery({
-  categories,
-  sentinelRef,
-  dataAttribute,
-  stickyNavVisible = false
-}: HouseGalleryProps) {
+export function HouseGallery({ categories, dataAttribute }: HouseGalleryProps) {
   if (categories.length === 0) {
     return null
   }
 
   return (
-    <div className="space-y-8">
-      {/* Category Navigation with Thumbnails */}
-      <div className="space-y-4">
-        <ScrollArea className="w-full">
-          <div className="flex gap-2 pb-4">
-            {categories.map((category) => (
-              <CategoryThumbnail
-                key={`thumbnail-${category._id}`}
-                category={category}
-                tabIndex={stickyNavVisible ? -1 : 0}
-              />
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-        {/* Sentinel element - when this scrolls out of view, show sticky nav */}
-        {sentinelRef && <div ref={sentinelRef} aria-hidden="true" />}
-      </div>
-
-      {/* All Categories Grid */}
-      <div className="space-y-12">
-        {categories.map((category) => (
-          <CategoryGrid
-            key={`grid-${category._id}`}
-            category={category}
-            dataAttribute={dataAttribute}
-          />
-        ))}
-      </div>
+    // The first section sits flush with the top so jumping to it leaves nothing
+    // to scroll back up to.
+    <div className="pb-10 [&>section:first-child>h3]:pt-0">
+      {categories.map((category) => (
+        <CategoryGrid
+          key={`grid-${category._id}`}
+          category={category}
+          dataAttribute={dataAttribute}
+        />
+      ))}
     </div>
   )
 }
