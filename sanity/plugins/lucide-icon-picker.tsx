@@ -3,18 +3,10 @@
 import { EllipsisHorizontalIcon } from '@sanity/icons/EllipsisHorizontal'
 import { SyncIcon } from '@sanity/icons/Sync'
 import { TrashIcon } from '@sanity/icons/Trash'
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Card,
-  Flex,
-  Menu,
-  MenuItem,
-  Popover,
-  Text,
-  type BaseAutocompleteOption
-} from '@sanity/ui'
+import { Box, Button, Card, Flex, Text } from '@sanity/ui'
+import { Autocomplete, type BaseAutocompleteOption } from '@sanity/ui/autocomplete'
+import { Menu, MenuItem } from '@sanity/ui/menu'
+import { Popover } from '@sanity/ui/popover'
 import { type ComponentType, type SVGProps, useId, useState } from 'react'
 import { definePlugin, defineType, set, type StringInputProps, unset } from 'sanity'
 
