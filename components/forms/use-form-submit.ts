@@ -26,7 +26,7 @@ type FormTypeDataMap = {
  *
  * const form = useAppForm({
  *   defaultValues: {...},
- *   validators: { onSubmit: schema },
+ *   validators: [{ run: schema, triggers: [] }],
  *   onSubmitInvalid,
  *   onSubmit: createOnSubmit('tour')
  * })
@@ -42,7 +42,14 @@ export function useFormSubmit() {
   }
 
   const createOnSubmit = <T extends FormType>(formType: T) => {
-    return async ({ value }: { value: FormTypeDataMap[T] }) => {
+    /**
+     * Reads the form's parsed schema output rather than its raw values: the
+     * editable state allows empty placeholders such as an unselected gender,
+     * and only the parsed output is narrowed to the payload the server action
+     * accepts. `onSubmit` only runs once validation succeeds, so the form's
+     * single schema validator has always produced its output by this point.
+     */
+    return async ({ schemaOutputs: [value] }: { schemaOutputs: FormTypeDataMap[T][] }) => {
       // TypeScript cannot correlate a generic key with its mapped discriminated-union value.
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const payload = { type: formType, data: value } as ContactFormPayload

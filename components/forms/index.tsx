@@ -1,7 +1,10 @@
 'use client'
 
-import { userAccountDefaultValues } from '@/components/forms/user-account-fields'
 import type { ContactFormFields } from '@/components/forms/schema'
+import {
+  userAccountDefaultValues,
+  type UserAccountDraft
+} from '@/components/forms/user-account-fields'
 import type { HouseIdentifier } from '@/lib/types'
 import type { HousesTitlesQueryResult } from '@/sanity.types'
 
@@ -13,18 +16,31 @@ export { useFormSubmit } from './use-form-submit'
 export type HouseTitles = HousesTitlesQueryResult
 
 /**
+ * Every contact form field as the user edits it.
+ *
+ * `privacyPolicy` and `stayDuration` start empty and only become valid once the
+ * user acts, so the editable state is wider than the validated state. Submit
+ * validation narrows both back to the schema type.
+ */
+interface ContactFormDraft extends Omit<
+  ContactFormFields,
+  'account' | 'privacyPolicy' | 'stayDuration'
+> {
+  account: UserAccountDraft
+  privacyPolicy: ContactFormFields['privacyPolicy'] | false
+  stayDuration: ContactFormFields['stayDuration'] | ''
+}
+
+/**
  * Default values for every contact form field. Each form picks the subset it
  * renders, so the shapes stay aligned with their schemas.
  */
-export const contactFormDefaultValues = {
+export const contactFormDefaultValues: ContactFormDraft = {
   places: [] as HouseIdentifier[],
   account: userAccountDefaultValues,
   message: '',
   date: '',
-  // These empty states are invalid until the user completes the form.
-  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-  privacyPolicy: false as ContactFormFields['privacyPolicy'],
-  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-  stayDuration: '' as ContactFormFields['stayDuration'],
+  privacyPolicy: false,
+  stayDuration: '',
   hour: ''
-} satisfies ContactFormFields
+}

@@ -6,21 +6,31 @@ import type { FormFieldsConfig } from '@/lib/types/components'
 import { CakeIcon, GlobeIcon, MailIcon, PhoneIcon, UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
-export const userAccountDefaultValues = {
+type Account = ContactFormFields['account']
+
+/**
+ * The account fields as the user edits them.
+ *
+ * `gender` has no selection until the user picks one, so the editable state is
+ * wider than the validated state. Submit validation narrows it back.
+ */
+export interface UserAccountDraft extends Omit<Account, 'gender'> {
+  gender: Account['gender'] | ''
+}
+
+export const userAccountDefaultValues: UserAccountDraft = {
   name: '',
   age: '',
-  // The form starts unselected; schema validation narrows this before submission.
-  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-  gender: '' as 'male' | 'female',
+  gender: '',
   nationality: '',
   email: '',
   phone: ''
-} satisfies ContactFormFields['account']
+}
 
 const userAccountFieldGroup = defineAppFieldGroup(({ strict }) => ({
   name: strict<string>(),
   age: strict<string>(),
-  gender: strict<'male' | 'female'>(),
+  gender: strict<UserAccountDraft['gender']>(),
   nationality: strict<string>(),
   email: strict<string>(),
   phone: strict<string>()
