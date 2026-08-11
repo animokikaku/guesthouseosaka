@@ -190,3 +190,39 @@ test.describe('Tour and move-in forms', () => {
     await expect(form.locator('[aria-invalid="true"]').first()).toBeFocused()
   })
 })
+
+test.describe('Validation feedback', () => {
+  test('errors clear as the user corrects each field', async ({ page }) => {
+    await page.goto('/en/contact/other')
+
+    const form = page.locator('form#other-form')
+    await expect(form).toBeVisible()
+
+    // Bypass native `required` so the library's own submit validation runs.
+    await form.evaluate((element: HTMLFormElement) => element.setAttribute('novalidate', ''))
+    await page.getByRole('button', { name: 'Submit' }).click()
+
+    const email = form.locator('input[type="email"]')
+    await expect(email).toHaveAttribute('aria-invalid', 'true')
+    const errorsBefore = await form.locator('[data-slot="field-error"]').count()
+
+    // Correcting one field revalidates it without touching the others.
+    await email.fill('someone@example.com')
+    await expect(email).toHaveAttribute('aria-invalid', 'false')
+    expect(await form.locator('[data-slot="field-error"]').count()).toBeLessThan(errorsBefore)
+  })
+
+  test('validation messages follow the active locale', async ({ page }) => {
+    await page.goto('/ja/contact/other')
+
+    const form = page.locator('form#other-form')
+    await expect(form).toBeVisible()
+
+    await form.evaluate((element: HTMLFormElement) => element.setAttribute('novalidate', ''))
+    await page.locator('button[type="submit"]').click()
+
+    await expect(form.locator('[data-slot="field-error"]').first()).toContainText(
+      'シェアハウスを1件以上選択してください。'
+    )
+  })
+})
