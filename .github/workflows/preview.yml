@@ -24,6 +24,8 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
         if: github.event.action == 'vercel.deployment.success'
+        with:
+          bun-version-file: package.json
 
       - name: Cache Bun dependencies
         if: github.event.action == 'vercel.deployment.success'
