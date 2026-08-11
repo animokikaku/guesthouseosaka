@@ -14,7 +14,7 @@ const placesFieldGroup = defineAppFieldGroup(({ strict }) => ({
 interface PlacesFieldsProps {
   fields: typeof placesFieldGroup.fields
   label: string
-  description: string | undefined
+  description?: string
   houseTitles: HousesTitlesQueryResult
 }
 

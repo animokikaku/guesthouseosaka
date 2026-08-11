@@ -5,7 +5,6 @@ import {
   userAccountDefaultValues,
   type UserAccountDraft
 } from '@/components/forms/user-account-fields'
-import type { HouseIdentifier } from '@/lib/types'
 import type { HousesTitlesQueryResult } from '@/sanity.types'
 
 export { useAppForm } from './app-form'
@@ -36,7 +35,7 @@ interface ContactFormDraft extends Omit<
  * renders, so the shapes stay aligned with their schemas.
  */
 export const contactFormDefaultValues: ContactFormDraft = {
-  places: [] as HouseIdentifier[],
+  places: [],
   account: userAccountDefaultValues,
   message: '',
   date: '',
