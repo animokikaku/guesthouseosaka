@@ -63,10 +63,10 @@ describe('TourForm', () => {
   })
 
   describe('form fields', () => {
-    it('renders date field', () => {
+    it('renders the date field as a native date input', () => {
       render(<TourForm {...baseProps} />)
 
-      expect(screen.getByLabelText(/visit date/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/visit date/i)).toHaveAttribute('type', 'date')
     })
 
     it('renders time field', () => {

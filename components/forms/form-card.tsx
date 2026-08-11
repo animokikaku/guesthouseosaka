@@ -1,7 +1,5 @@
 'use client'
 
-import { ResetButton } from '@/components/forms/components/reset-button'
-import { SubmitButton } from '@/components/forms/components/submit-button'
 import {
   Card,
   CardContent,
@@ -10,9 +8,12 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
-import type { AnyReactFormApi } from '@tanstack/react-form'
+import { useSelector, type AnyReactFormApi } from '@tanstack/react-form'
+import { Loader2Icon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 interface FormCardProps {
   title?: string | null
@@ -24,6 +25,9 @@ interface FormCardProps {
 }
 
 export function FormCard({ title, description, formId, form, children, className }: FormCardProps) {
+  const t = useTranslations('SubmitButton')
+  const isSubmitting = useSelector(form.atom, (state) => state.isSubmitting)
+
   return (
     <Card className={cn('mx-auto w-full sm:max-w-2xl', className)}>
       {(title || description) && (
@@ -45,8 +49,15 @@ export function FormCard({ title, description, formId, form, children, className
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <ResetButton formApi={form} />
-          <SubmitButton formApi={form} formId={formId} />
+          {/* Outside the <form>, so it submits through the native `form=` association. */}
+          <Button type="submit" form={formId} disabled={isSubmitting} aria-busy={isSubmitting}>
+            {isSubmitting ? (
+              <span aria-hidden="true" className="inline-flex animate-spin">
+                <Loader2Icon />
+              </span>
+            ) : null}
+            {t('label')}
+          </Button>
         </Field>
       </CardFooter>
     </Card>

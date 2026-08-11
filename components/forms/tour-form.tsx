@@ -42,8 +42,9 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
       <form.Field
         name="date"
         children={(field) => (
-          <field.DateField
+          <field.InputField
             required
+            type="date"
             label={fields.date.label}
             description={fields.date.description}
             orientation="responsive"

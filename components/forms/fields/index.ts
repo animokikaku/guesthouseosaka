@@ -1,4 +1,3 @@
-export { DateField } from './date-field'
 export { InputField } from './input-field'
 export { InputGroupField } from './input-group-field'
 export { MessageField } from './message-field'

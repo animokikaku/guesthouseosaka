@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  DateField,
   InputField,
   InputGroupField,
   MessageField,
@@ -19,7 +18,6 @@ const { fieldComponent } = getFormHookHelpers()
  */
 const formHook = createFormHook({
   fieldComponents: {
-    DateField: fieldComponent.loose(DateField, 'field'),
     InputField: fieldComponent.loose(InputField, 'field'),
     InputGroupField: fieldComponent.loose(InputGroupField, 'field'),
     MessageField: fieldComponent.loose(MessageField, 'field'),

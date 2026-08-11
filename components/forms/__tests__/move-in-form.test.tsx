@@ -63,10 +63,10 @@ describe('MoveInForm', () => {
   })
 
   describe('form fields', () => {
-    it('renders date field', () => {
+    it('renders the date field as a native date input', () => {
       render(<MoveInForm {...baseProps} />)
 
-      expect(screen.getByLabelText(/move-in date/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/move-in date/i)).toHaveAttribute('type', 'date')
     })
 
     it('renders stay duration field', () => {

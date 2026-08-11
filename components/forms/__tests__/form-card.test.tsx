@@ -2,14 +2,12 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { Store, type AnyReactFormApi } from '@tanstack/react-form'
 import { FormCard } from '../form-card'
 
-function createMockForm() {
-  // FormCard forwards this to the real submit/reset buttons, which read
-  // `atom` and `reset`.
+function createMockForm({ isSubmitting = false } = {}) {
+  // FormCard only reads `handleSubmit` and the submitting state.
   // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return {
     handleSubmit: vi.fn(),
-    reset: vi.fn(),
-    atom: new Store({ isSubmitting: false })
+    atom: new Store({ isSubmitting })
   } as unknown as AnyReactFormApi & { handleSubmit: ReturnType<typeof vi.fn> }
 }
 
@@ -104,7 +102,7 @@ describe('FormCard', () => {
       expect(screen.getByTestId('email-input')).toBeInTheDocument()
     })
 
-    it('renders reset and submit buttons', () => {
+    it('renders the submit button', () => {
       const form = createMockForm()
 
       const { container } = render(
@@ -113,7 +111,6 @@ describe('FormCard', () => {
         </FormCard>
       )
 
-      expect(container.querySelector('button[type="reset"]')).toBeInTheDocument()
       expect(container.querySelector('button[type="submit"]')).toBeInTheDocument()
     })
 
@@ -206,6 +203,31 @@ describe('FormCard', () => {
       )
 
       expect(screen.getByText('Contact')).toBeInTheDocument()
+    })
+  })
+  describe('submitting state', () => {
+    it('enables the submit button while the form is idle', () => {
+      const { container } = render(
+        <FormCard formId="test-form" form={createMockForm()}>
+          <TestInput />
+        </FormCard>
+      )
+
+      const button = container.querySelector('button[type="submit"]')
+      expect(button).not.toBeDisabled()
+      expect(button).toHaveAttribute('aria-busy', 'false')
+    })
+
+    it('disables the submit button while submitting', () => {
+      const { container } = render(
+        <FormCard formId="test-form" form={createMockForm({ isSubmitting: true })}>
+          <TestInput />
+        </FormCard>
+      )
+
+      const button = container.querySelector('button[type="submit"]')
+      expect(button).toBeDisabled()
+      expect(button).toHaveAttribute('aria-busy', 'true')
     })
   })
 })
