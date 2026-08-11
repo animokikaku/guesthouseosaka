@@ -12,6 +12,9 @@ declare const messages: {
     "house": "House",
     "within_japan": "Within Japan"
   },
+  "CategoryGrid": {
+    "photo_count": "{count, plural, one {# photo} other {# photos}}"
+  },
   "DraftModeIndicator": {
     "exit": "Exit preview",
     "preview": "Preview"

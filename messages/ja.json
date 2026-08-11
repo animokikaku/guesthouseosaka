@@ -9,6 +9,9 @@
     "house": "ハウス",
     "within_japan": "日本国内"
   },
+  "CategoryGrid": {
+    "photo_count": "{count, plural, other {#枚の写真}}"
+  },
   "DraftModeIndicator": {
     "exit": "プレビューを終了",
     "preview": "プレビュー"

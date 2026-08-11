@@ -1,6 +1,7 @@
 import { GalleryGridItem } from '@/components/gallery/gallery-grid-item'
 import { Badge } from '@/components/ui/badge'
 import type { GalleryCategory } from '@/lib/gallery'
+import { useTranslations } from 'next-intl'
 
 type DataAttributeFn = (path: string) => string
 
@@ -10,6 +11,8 @@ type CategoryGridProps = {
 }
 
 export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
+  const t = useTranslations('CategoryGrid')
+
   if (category.items.length === 0) return null
 
   return (
@@ -23,7 +26,8 @@ export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
         {category.label}
         {/* Nudged down: centring against a large heading reads slightly high */}
         <Badge variant="secondary" className="translate-y-0.5 font-normal tabular-nums">
-          {category.items.length}
+          <span aria-hidden="true">{category.items.length}</span>
+          <span className="sr-only">{t('photo_count', { count: category.items.length })}</span>
         </Badge>
       </h3>
       <div className="grid grid-cols-2 gap-0.5 sm:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6">

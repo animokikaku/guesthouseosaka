@@ -9,6 +9,9 @@
     "house": "Maison",
     "within_japan": "Depuis le Japon"
   },
+  "CategoryGrid": {
+    "photo_count": "{count, plural, one {# photo} other {# photos}}"
+  },
   "DraftModeIndicator": {
     "exit": "Quitter l'aperçu",
     "preview": "Aperçu"

@@ -43,6 +43,9 @@ describe('CategoryGrid', () => {
     render(<CategoryGrid category={toCategory(raw)} />)
 
     expect(screen.getByText('Bedroom')).toBeInTheDocument()
+    // The visible count is decorative; the localized plural carries the unit
+    expect(screen.getByText('2')).toHaveAttribute('aria-hidden', 'true')
+    expect(screen.getByText('photo_count')).toHaveClass('sr-only')
     expect(screen.getByAltText('Bed')).toBeInTheDocument()
     expect(screen.getByAltText('Desk')).toBeInTheDocument()
   })
