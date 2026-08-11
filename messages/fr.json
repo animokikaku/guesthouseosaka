@@ -29,6 +29,9 @@
   "GalleryPage": {
     "close": "Fermer la galerie"
   },
+  "GalleryPageContent": {
+    "gallery_content_label": "Contenu de la galerie"
+  },
   "HouseAbout": {
     "heading": "À propos de {house}"
   },
@@ -55,6 +58,7 @@
     "heading": "Tarifs"
   },
   "ImageBlockGallery": {
+    "overflow_count": "+{count, number}",
     "view_gallery": "Afficher toutes les photos",
     "empty_title": "Aucune image de galerie",
     "empty_description": "Les images de galerie sont gérées via Sanity CMS."

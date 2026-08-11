@@ -7,6 +7,7 @@ import { useStickyNav } from '@/hooks/use-sticky-nav'
 import { type GalleryCategories, type GalleryCategoryData } from '@/lib/gallery'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { toGalleryCategories } from '@/lib/transforms/gallery'
+import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 import { useMemo, useRef, type ReactNode } from 'react'
 
@@ -26,6 +27,8 @@ export function GalleryPageContent({
   title,
   backButton
 }: GalleryPageContentProps) {
+  const t = useTranslations('GalleryPageContent')
+
   const galleryCategories = useSanityOptimisticArray<
     GalleryCategoryData,
     GalleryCategories,
@@ -56,7 +59,7 @@ export function GalleryPageContent({
       <main
         ref={scrollContainerRef}
         className="relative flex-1 overflow-y-auto scroll-smooth"
-        aria-label="Gallery Content"
+        aria-label={t('gallery_content_label')}
       >
         <HouseGallery categories={categories} dataAttribute={dataAttribute} />
       </main>

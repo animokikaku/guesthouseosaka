@@ -19,13 +19,15 @@ function GalleryGrid({
   images,
   href,
   viewGalleryLabel,
-  extraCount
+  extraCount,
+  overflowLabel
 }: {
   images: GalleryImageProps[]
   href: ComponentProps<typeof Link>['href']
   viewGalleryLabel: string
   /** Images beyond the 5 shown in the grid, surfaced as a `+N` overlay on the last tile */
   extraCount: number
+  overflowLabel: string
 }) {
   if (images.length < 5) return null
 
@@ -67,7 +69,7 @@ function GalleryGrid({
                     className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50"
                     aria-hidden="true"
                   >
-                    <span className="text-2xl font-bold text-white">+{extraCount}</span>
+                    <span className="text-2xl font-bold text-white">{overflowLabel}</span>
                   </span>
                 )}
               </GalleryImageFrame>
@@ -93,10 +95,14 @@ export async function ImageBlockGallery({
     galleryImages: validGalleryImages
   })
 
-  const images = slides.slice(0, 5).flatMap(({ image }) => {
+  // Slides without an image asset drop out here, so convert everything before
+  // picking the 5 grid tiles and the `+N` count.
+  const validImages = slides.flatMap(({ image }) => {
     const imageProps = toGalleryImageProps(image, { width: 560 })
     return imageProps ? [imageProps] : []
   })
+
+  const images = validImages.slice(0, 5)
 
   if (images.length < 5) {
     return (
@@ -114,12 +120,15 @@ export async function ImageBlockGallery({
     )
   }
 
+  const extraCount = validImages.length - images.length
+
   return (
     <GalleryGrid
       images={images}
       href={href}
       viewGalleryLabel={t('view_gallery')}
-      extraCount={slides.length - images.length}
+      extraCount={extraCount}
+      overflowLabel={t('overflow_count', { count: extraCount })}
     />
   )
 }

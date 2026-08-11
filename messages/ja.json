@@ -29,6 +29,9 @@
   "GalleryPage": {
     "close": "ギャラリーを閉じる"
   },
+  "GalleryPageContent": {
+    "gallery_content_label": "ギャラリーコンテンツ"
+  },
   "HouseAbout": {
     "heading": "{house}について"
   },
@@ -55,6 +58,7 @@
     "heading": "料金"
   },
   "ImageBlockGallery": {
+    "overflow_count": "+{count, number}",
     "view_gallery": "すべての写真を表示",
     "empty_title": "ギャラリー画像がありません",
     "empty_description": "ギャラリー画像はSanity CMSで管理されています。"

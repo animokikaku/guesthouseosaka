@@ -32,6 +32,9 @@ declare const messages: {
   "GalleryPage": {
     "close": "Close gallery"
   },
+  "GalleryPageContent": {
+    "gallery_content_label": "Gallery content"
+  },
   "HouseAbout": {
     "heading": "About {house}"
   },
@@ -58,6 +61,7 @@ declare const messages: {
     "heading": "Pricing"
   },
   "ImageBlockGallery": {
+    "overflow_count": "+{count, number}",
     "view_gallery": "Show all photos",
     "empty_title": "No gallery images",
     "empty_description": "Gallery images are managed through Sanity CMS."

@@ -4,7 +4,9 @@ import { ImageBlockGallery } from '../image-block-gallery'
 import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 
 vi.mock('next-intl/server', () => ({
-  getTranslations: () => (key: string) => {
+  getTranslations: () => (key: string, values?: Record<string, number>) => {
+    if (key === 'overflow_count') return `+${values?.count}`
+
     const messages: Record<string, string> = {
       view_gallery: 'View gallery',
       empty_title: 'No gallery images',
@@ -35,11 +37,13 @@ vi.mock('@/components/gallery/gallery-image-button', () => ({
   GalleryImageFrame: ({
     imageProps,
     sizes,
-    className
+    className,
+    children
   }: {
     imageProps: { alt: string; priority?: boolean }
     sizes?: string
     className?: string
+    children?: React.ReactNode
   }) => (
     <div
       data-testid="gallery-frame"
@@ -47,7 +51,9 @@ vi.mock('@/components/gallery/gallery-image-button', () => ({
       data-priority={imageProps.priority ? 'true' : 'false'}
       data-sizes={sizes}
       className={className}
-    />
+    >
+      {children}
+    </div>
   )
 }))
 
@@ -120,6 +126,30 @@ describe('ImageBlockGallery', () => {
     expect(frames).toHaveLength(5)
     expect(frames[0]).toHaveAttribute('data-alt', 'Featured image')
     expect(frames[4]).toHaveAttribute('data-alt', 'Gallery image 4')
+  })
+
+  it('skips slides without an image asset when filling the grid and the overflow count', async () => {
+    const galleryImages = [
+      createGalleryItem({ _key: 'missing-asset', image: createSanityImage({ asset: null }) }),
+      ...Array.from({ length: 6 }, (_, index) =>
+        createGalleryItem({
+          _key: `image-${index}`,
+          image: createSanityImage({ alt: `Gallery image ${index + 1}` })
+        })
+      )
+    ]
+
+    render(
+      await ImageBlockGallery({
+        href: galleryHref,
+        galleryImages
+      })
+    )
+
+    const frames = screen.getAllByTestId('gallery-frame')
+    expect(frames).toHaveLength(5)
+    expect(frames[0]).toHaveAttribute('data-alt', 'Gallery image 1')
+    expect(screen.getByText('+1')).toBeInTheDocument()
   })
 
   it('renders the empty state when fewer than five images can be rendered', async () => {
