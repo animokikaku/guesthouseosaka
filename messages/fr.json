@@ -63,6 +63,7 @@
   "ImageBlockGallery": {
     "overflow_count": "+{count, number}",
     "view_gallery": "Afficher toutes les photos",
+    "view_gallery_count": "{count, plural, one {Afficher la # photo} other {Afficher les # photos}}",
     "empty_title": "Aucune image de galerie",
     "empty_description": "Les images de galerie sont gérées via Sanity CMS."
   },

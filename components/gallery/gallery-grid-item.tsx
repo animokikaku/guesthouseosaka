@@ -30,9 +30,12 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
       onClick={() => store.setState((prev) => ({ ...prev, photoId: _key }))}
       imageProps={imageProps}
       className="bg-muted/40 relative aspect-square overflow-hidden"
+      // Tiles are square but their width tracks the column count, so no fixed
+      // placeholder height is right at every breakpoint. `auto` reuses the real
+      // size once a tile has rendered; 400px only covers the first pass.
       style={{
         contentVisibility: 'auto',
-        containIntrinsicSize: '0 400px'
+        containIntrinsicSize: 'auto 400px'
       }}
       // Mirrors the full-bleed column counts in `CategoryGrid`. Tailwind
       // breakpoints are min-width, so each stop sits 1px below them.

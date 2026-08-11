@@ -10,6 +10,7 @@ type NextImageProps = Omit<ComponentProps<'img'>, 'src'> & {
   preload?: boolean
   priority?: boolean
   unoptimized?: boolean
+  loader?: unknown
 }
 
 export default function NextImage({

@@ -66,6 +66,7 @@ declare const messages: {
   "ImageBlockGallery": {
     "overflow_count": "+{count, number}",
     "view_gallery": "Show all photos",
+    "view_gallery_count": "{count, plural, one {Show all # photo} other {Show all # photos}}",
     "empty_title": "No gallery images",
     "empty_description": "Gallery images are managed through Sanity CMS."
   },

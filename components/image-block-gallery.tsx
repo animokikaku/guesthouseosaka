@@ -126,7 +126,11 @@ export async function ImageBlockGallery({
     <GalleryGrid
       images={images}
       href={href}
-      viewGalleryLabel={t('view_gallery')}
+      // The link's label replaces the tiles' alt text for screen readers, and the
+      // `+N` overlay is decorative, so the total has to ride along in the label.
+      viewGalleryLabel={
+        extraCount > 0 ? t('view_gallery_count', { count: validImages.length }) : t('view_gallery')
+      }
       extraCount={extraCount}
       overflowLabel={t('overflow_count', { count: extraCount })}
     />

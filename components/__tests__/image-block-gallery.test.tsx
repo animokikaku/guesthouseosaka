@@ -6,6 +6,7 @@ import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__
 vi.mock('next-intl/server', () => ({
   getTranslations: () => (key: string, values?: Record<string, number>) => {
     if (key === 'overflow_count') return `+${values?.count}`
+    if (key === 'view_gallery_count') return `Show all ${values?.count} photos`
 
     const messages: Record<string, string> = {
       view_gallery: 'View gallery',
@@ -150,6 +151,8 @@ describe('ImageBlockGallery', () => {
     expect(frames).toHaveLength(5)
     expect(frames[0]).toHaveAttribute('data-alt', 'Gallery image 1')
     expect(screen.getByText('+1')).toBeInTheDocument()
+    // The overflow badge is aria-hidden, so the link label carries the total
+    expect(screen.getByRole('link', { name: 'Show all 6 photos' })).toBeInTheDocument()
   })
 
   it('renders the empty state when fewer than five images can be rendered', async () => {

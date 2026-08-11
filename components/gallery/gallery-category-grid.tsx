@@ -18,8 +18,6 @@ export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
   return (
     <section
       id={category._id}
-      // Absorbs most of the heading's top padding so a jump lands on the title
-      // instead of on a band of empty space.
       data-sanity={dataAttribute?.(`galleryCategories[_key=="${category._key}"]`)}
     >
       <h3 className="flex items-center gap-3 px-3 pt-5 pb-3 text-xl font-semibold md:text-2xl">

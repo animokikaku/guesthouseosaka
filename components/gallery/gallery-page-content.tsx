@@ -51,7 +51,9 @@ export function GalleryPageContent({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="bg-background/70 flex shrink-0 items-center gap-2 p-4 backdrop-blur-xl">
+      {/* Sits above the scroll container rather than over it, so it is opaque:
+          nothing ever passes behind it to tint or blur. */}
+      <div className="bg-background border-border/50 flex shrink-0 items-center gap-2 border-b p-4">
         <div className="shrink-0">{backButton}</div>
         <StickyCategoryNav categories={categories} activeId={activeId} />
       </div>
