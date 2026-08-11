@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test, type Locator, type Page } from '@playwright/test'
 import { DELIVERY_FAILURE_PREFIX, getSentEmails, uniqueReplyTo } from './mocks/resend'
 
 test.describe('Contact Form Tests', () => {
@@ -111,5 +111,82 @@ test.describe('Contact Form Tests', () => {
       await expect(toast).toContainText('Failed to send message.')
       await expect(page).toHaveURL(/\/en\/contact\/other/)
     })
+  })
+})
+
+test.describe('Tour and move-in forms', () => {
+  // These forms reuse the same account field group as the general inquiry form
+  // but bind it alongside their own date, hour, and stay-duration fields.
+  const tomorrow = () => new Date(Date.now() + 864e5).toISOString().slice(0, 10)
+
+  async function fillSharedAccount(page: Page, form: Locator, email: string) {
+    await form.locator('[data-slot="checkbox-group"]').first().getByRole('button').first().click()
+
+    await form
+      .getByRole('combobox')
+      .filter({ hasText: /gender|male|female|select/i })
+      .first()
+      .click()
+    await page.getByRole('option', { name: 'Male', exact: true }).click()
+
+    await form.locator('input[autocomplete="name"]').fill('Grace Hopper')
+    await form.locator('input[type="number"]').fill('30')
+    await form.locator('input[autocomplete="country-name"]').fill('Japan')
+    await form.locator('input[type="email"]').fill(email)
+    await form.getByRole('checkbox').click()
+  }
+
+  test('tour form submits successfully', async ({ page, request }) => {
+    const replyTo = uniqueReplyTo()
+    await page.goto('/en/contact/tour')
+
+    const form = page.locator('form#tour-form')
+    await expect(form).toBeVisible()
+
+    await form.locator('input[type="date"]').fill(tomorrow())
+    await form.locator('input[type="time"]').fill('14:00')
+    await fillSharedAccount(page, form, replyTo)
+
+    await page.getByRole('button', { name: 'Submit' }).click()
+
+    await expect(page.locator('[data-sonner-toast]').first()).toContainText(
+      'Message sent successfully!'
+    )
+    expect(await getSentEmails(request, replyTo)).toHaveLength(1)
+  })
+
+  test('move-in form submits successfully', async ({ page, request }) => {
+    const replyTo = uniqueReplyTo()
+    await page.goto('/en/contact/move-in')
+
+    const form = page.locator('form#move-in-form')
+    await expect(form).toBeVisible()
+
+    await form.locator('input[type="date"]').fill(tomorrow())
+    await form.getByRole('combobox').first().click()
+    await page.getByRole('option').first().click()
+    await fillSharedAccount(page, form, replyTo)
+
+    await page.getByRole('button', { name: 'Submit' }).click()
+
+    await expect(page.locator('[data-sonner-toast]').first()).toContainText(
+      'Message sent successfully!'
+    )
+    expect(await getSentEmails(request, replyTo)).toHaveLength(1)
+  })
+
+  test('submit validation reports errors on every invalid field', async ({ page }) => {
+    await page.goto('/en/contact/tour')
+
+    const form = page.locator('form#tour-form')
+    await expect(form).toBeVisible()
+
+    // Bypass native `required` so the library's own submit validation runs.
+    await form.evaluate((element: HTMLFormElement) => element.setAttribute('novalidate', ''))
+    await page.getByRole('button', { name: 'Submit' }).click()
+
+    await expect(form.locator('[data-slot="field-error"]').first()).toBeVisible()
+    // onSubmitInvalid moves focus to the first invalid control.
+    await expect(form.locator('[aria-invalid="true"]').first()).toBeFocused()
   })
 })
