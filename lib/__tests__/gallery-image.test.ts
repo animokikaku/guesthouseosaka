@@ -6,9 +6,9 @@ vi.mock('@sanity/asset-utils', () => ({
   getImageDimensions: () => ({ width: 1920, height: 1080 })
 }))
 
-import { createSanityImage } from '@/lib/transforms/__tests__/mocks'
+import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 import { sanityImageLoader } from '@/lib/sanity-image-loader'
-import { cleanGalleryAlt, toGalleryImageProps } from '../gallery-image'
+import { cleanGalleryAlt, toGalleryImageProps, toGalleryLightboxItem } from '../gallery-image'
 
 describe('cleanGalleryAlt', () => {
   it('returns empty string for null or undefined', () => {
@@ -111,5 +111,40 @@ describe('toGalleryImageProps', () => {
     const result = toGalleryImageProps(image, { size: 'full', alt: 'Override alt' })
 
     expect(result?.alt).toBe('Override alt')
+  })
+})
+
+describe('toGalleryLightboxItem', () => {
+  it('returns null when image has no asset', () => {
+    const item = createGalleryItem({ image: createSanityImage({ asset: undefined }) })
+
+    expect(toGalleryLightboxItem(item)).toBeNull()
+  })
+
+  it('builds a LightboxItem from a gallery item', () => {
+    const item = createGalleryItem({
+      _key: 'img1',
+      image: createSanityImage({ alt: 'Bedroom view' })
+    })
+
+    expect(toGalleryLightboxItem(item)).toEqual({
+      id: 'img1',
+      src: 'https://cdn.sanity.io/images/test/image.jpg',
+      thumb:
+        'https://cdn.sanity.io/images/test/image.jpg?w=400&h=400&dpr=2&fit=crop&auto=format&q=75',
+      alt: 'Bedroom view',
+      caption: 'Bedroom view',
+      width: 1920,
+      height: 1080
+    })
+  })
+
+  // The blur belongs on the trigger, not the lightbox image: next/image paints
+  // the LQIP as an inline background that would cover ramka's thumbnail bridge.
+  it('carries no LQIP, even when the image has a preview', () => {
+    const image = createSanityImage({ alt: 'Bedroom view' })
+
+    expect(image.preview).toBeTruthy()
+    expect(toGalleryLightboxItem(createGalleryItem({ image }))).not.toHaveProperty('blurDataURL')
   })
 })

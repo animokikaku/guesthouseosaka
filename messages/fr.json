@@ -33,7 +33,8 @@
     "close": "Fermer la galerie"
   },
   "GalleryPageContent": {
-    "gallery_content_label": "Contenu de la galerie"
+    "gallery_content_label": "Contenu de la galerie",
+    "gallery_title": "Galerie de la maison"
   },
   "HouseAbout": {
     "heading": "À propos de {house}"

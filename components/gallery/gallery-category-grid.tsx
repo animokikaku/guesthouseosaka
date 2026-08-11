@@ -8,9 +8,10 @@ type DataAttributeFn = (path: string) => string
 type CategoryGridProps = {
   category: GalleryCategory
   dataAttribute?: DataAttributeFn
+  indexByKey: Map<string, number>
 }
 
-export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
+export function CategoryGrid({ category, dataAttribute, indexByKey }: CategoryGridProps) {
   const t = useTranslations('CategoryGrid')
 
   if (category.items.length === 0) return null
@@ -35,6 +36,7 @@ export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
             item={item}
             categoryKey={category._key}
             dataAttribute={dataAttribute}
+            index={indexByKey.get(item._key)}
           />
         ))}
       </div>

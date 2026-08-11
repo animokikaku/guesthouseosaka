@@ -11,6 +11,7 @@ vi.mock('next/image', () => ({
   }
 }))
 
+import { Lightbox } from '@/components/lightbox'
 import { CategoryGrid } from '../gallery-category-grid'
 import {
   createGalleryCategory,
@@ -29,6 +30,10 @@ function toCategory(raw: ReturnType<typeof createGalleryCategory>): GalleryCateg
   }
 }
 
+function indexByKeyFor(category: GalleryCategory) {
+  return new Map(category.items.map((item, index) => [item._key, index]))
+}
+
 describe('CategoryGrid', () => {
   it('renders category with items', () => {
     const raw = createGalleryCategory({
@@ -39,8 +44,13 @@ describe('CategoryGrid', () => {
         createGalleryItem({ _key: 'img2', image: createSanityImage({ alt: 'Desk' }) })
       ]
     })
+    const category = toCategory(raw)
 
-    render(<CategoryGrid category={toCategory(raw)} />)
+    render(
+      <Lightbox.Root>
+        <CategoryGrid category={category} indexByKey={indexByKeyFor(category)} />
+      </Lightbox.Root>
+    )
 
     expect(screen.getByText('Bedroom')).toBeInTheDocument()
     // The visible count is decorative; the localized plural carries the unit
@@ -56,8 +66,13 @@ describe('CategoryGrid', () => {
       category: { _id: 'c1', label: 'Empty', orderRank: '0|a:' },
       items: []
     })
+    const category = toCategory(raw)
 
-    const { container } = render(<CategoryGrid category={toCategory(raw)} />)
+    const { container } = render(
+      <Lightbox.Root>
+        <CategoryGrid category={category} indexByKey={indexByKeyFor(category)} />
+      </Lightbox.Root>
+    )
 
     expect(container.firstChild).toBeNull()
   })

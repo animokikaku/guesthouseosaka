@@ -13,7 +13,6 @@ type GalleryImageContentProps = {
 }
 
 type GalleryImageFrameProps = ComponentPropsWithoutRef<'div'> & GalleryImageContentProps
-type GalleryImageButtonProps = ComponentPropsWithoutRef<'button'> & GalleryImageContentProps
 
 function GalleryImageContent({
   imageClassName,
@@ -78,35 +77,5 @@ export function GalleryImageFrame({
       />
       {children}
     </div>
-  )
-}
-
-export function GalleryImageButton({
-  imageClassName,
-  containerClassName,
-  sizes,
-  imageProps,
-  className,
-  children,
-  ...buttonProps
-}: GalleryImageButtonProps) {
-  return (
-    <button
-      data-slot="gallery-image-button"
-      className={cn(
-        'group relative cursor-pointer overflow-hidden ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-        'appearance-none border-0 bg-transparent p-0 text-left',
-        className
-      )}
-      {...buttonProps}
-    >
-      <GalleryImageContent
-        imageClassName={imageClassName}
-        containerClassName={containerClassName}
-        sizes={sizes}
-        imageProps={imageProps}
-      />
-      {children}
-    </button>
   )
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { render, screen } from '@testing-library/react'
-import { GalleryImageButton, GalleryImageFrame } from '../gallery-image-button'
+import { GalleryImageFrame } from '../gallery-image-button'
 
 vi.mock('next/image', () => ({
   default: function MockImage({
@@ -35,26 +35,5 @@ describe('GalleryImageFrame', () => {
     )
     expect(screen.getByText('Gallery image')).toBeInTheDocument()
     expect(screen.getByRole('img')).toHaveClass('object-cover')
-  })
-})
-
-describe('GalleryImageButton', () => {
-  it('renders gallery image content as a native button', () => {
-    render(
-      <GalleryImageButton type="button" imageProps={imageProps}>
-        <span>Open image</span>
-      </GalleryImageButton>
-    )
-
-    const button = screen.getByRole('button', { name: /gallery image open image/i })
-    expect(button).toHaveAttribute('type', 'button')
-    expect(button).toHaveClass('appearance-none')
-    expect(screen.getByText('Open image')).toBeInTheDocument()
-  })
-
-  it('omits the visual caption for decorative images', () => {
-    render(<GalleryImageButton type="button" imageProps={{ ...imageProps, alt: '' }} />)
-
-    expect(screen.queryByText('Gallery image')).not.toBeInTheDocument()
   })
 })

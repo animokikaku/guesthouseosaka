@@ -7,9 +7,11 @@ type HouseGalleryProps = {
   categories: GalleryCategory[]
   /** Data attribute helper for Sanity visual editing */
   dataAttribute?: DataAttributeFn
+  /** Maps a gallery item key to its index in the flattened Lightbox.Gallery items array */
+  indexByKey: Map<string, number>
 }
 
-export function HouseGallery({ categories, dataAttribute }: HouseGalleryProps) {
+export function HouseGallery({ categories, dataAttribute, indexByKey }: HouseGalleryProps) {
   if (categories.length === 0) {
     return null
   }
@@ -23,6 +25,7 @@ export function HouseGallery({ categories, dataAttribute }: HouseGalleryProps) {
           key={`grid-${category._id}`}
           category={category}
           dataAttribute={dataAttribute}
+          indexByKey={indexByKey}
         />
       ))}
     </div>

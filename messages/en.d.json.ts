@@ -36,7 +36,8 @@ declare const messages: {
     "close": "Close gallery"
   },
   "GalleryPageContent": {
-    "gallery_content_label": "Gallery content"
+    "gallery_content_label": "Gallery content",
+    "gallery_title": "House Gallery"
   },
   "HouseAbout": {
     "heading": "About {house}"

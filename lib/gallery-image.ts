@@ -1,3 +1,4 @@
+import type { LightboxItem } from '@/components/lightbox'
 import type { FeaturedImage, GalleryItem } from '@/lib/gallery'
 import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { urlFor } from '@/sanity/lib/image'
@@ -104,4 +105,30 @@ export function toGalleryImageProps(
   }
 
   return toSizedGalleryImageProps(image, options)
+}
+
+/**
+ * Maps a gallery item to ramka's `LightboxItem` shape for `Lightbox.Gallery`.
+ *
+ * No LQIP here on purpose: the lightbox image must not carry a `blur`
+ * placeholder, because next/image paints it as an inline background that covers
+ * ramka's trigger-thumbnail bridge. The blur belongs on the trigger — see
+ * `toGalleryImageProps`, which the grid tiles use.
+ */
+export function toGalleryLightboxItem(item: GalleryItem): LightboxItem | null {
+  const { image, _key } = item
+  if (!image?.asset) return null
+
+  const dimensions = getImageDimensions(image.asset)
+  const alt = cleanGalleryAlt(image.alt)
+
+  return {
+    id: _key,
+    src: urlFor(image).url(),
+    thumb: urlFor(image).width(400).height(400).dpr(2).fit('crop').auto('format').quality(75).url(),
+    alt,
+    caption: alt,
+    width: dimensions.width,
+    height: dimensions.height
+  }
 }

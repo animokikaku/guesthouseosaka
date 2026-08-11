@@ -33,7 +33,8 @@
     "close": "ギャラリーを閉じる"
   },
   "GalleryPageContent": {
-    "gallery_content_label": "ギャラリーコンテンツ"
+    "gallery_content_label": "ギャラリーコンテンツ",
+    "gallery_title": "ハウスギャラリー"
   },
   "HouseAbout": {
     "heading": "{house}について"
