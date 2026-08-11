@@ -1,4 +1,5 @@
 import { GalleryGridItem } from '@/components/gallery/gallery-grid-item'
+import { Badge } from '@/components/ui/badge'
 import type { GalleryCategory } from '@/lib/gallery'
 
 type DataAttributeFn = (path: string) => string
@@ -14,16 +15,18 @@ export function CategoryGrid({ category, dataAttribute }: CategoryGridProps) {
   return (
     <section
       id={category._id}
-      className="scroll-mt-0"
+      // Absorbs most of the heading's top padding so a jump lands on the title
+      // instead of on a band of empty space.
       data-sanity={dataAttribute?.(`galleryCategories[_key=="${category._key}"]`)}
     >
-      <h3 className="flex items-baseline gap-3 px-3 pt-6 pb-4 text-xl font-semibold md:text-2xl">
+      <h3 className="flex items-center gap-3 px-3 pt-5 pb-3 text-xl font-semibold md:text-2xl">
         {category.label}
-        <span className="text-muted-foreground text-sm font-normal tabular-nums">
+        {/* Nudged down: centring against a large heading reads slightly high */}
+        <Badge variant="secondary" className="translate-y-0.5 font-normal tabular-nums">
           {category.items.length}
-        </span>
+        </Badge>
       </h3>
-      <div className="grid grid-cols-2 gap-0.5 sm:grid-cols-4 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-0.5 sm:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6">
         {category.items.map((item) => (
           <GalleryGridItem
             key={item._key}

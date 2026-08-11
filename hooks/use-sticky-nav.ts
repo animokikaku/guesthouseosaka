@@ -32,22 +32,26 @@ export function useStickyNav({
 
     if (elements.length === 0) return
 
+    // A callback only carries the sections whose state just changed, so the full
+    // picture has to be kept here — otherwise a section going out of view leaves
+    // the highlight on whichever one happened to be in that batch.
+    const isIntersecting = new Map<string, boolean>()
+
     const observer = new IntersectionObserver(
       (entries) => {
-        const intersecting = entries
-          .filter((entry) => entry.isIntersecting)
-          .map((entry) => ({
-            id: entry.target.id,
-            top: entry.boundingClientRect.top
-          }))
-          .toSorted((a, b) => a.top - b.top)
+        for (const entry of entries) {
+          isIntersecting.set(entry.target.id, entry.isIntersecting)
+        }
 
-        if (intersecting.length > 0) {
-          setActiveId(intersecting[0].id)
+        const active = sectionIds.find((id) => isIntersecting.get(id))
+        if (active) {
+          setActiveId(active)
         }
       },
       {
         root: scrollContainer,
+        // Thin band across the middle of the viewport: a category takes over only
+        // once it actually occupies the centre, not the moment it peeks in.
         rootMargin: '-20% 0px -60% 0px',
         threshold: 0
       }

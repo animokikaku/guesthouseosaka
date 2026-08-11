@@ -34,7 +34,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
         contentVisibility: 'auto',
         containIntrinsicSize: '0 400px'
       }}
-      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, (max-width: 1536px) 20vw, 17vw"
       data-sanity={dataAttribute?.(
         `galleryCategories[_key=="${categoryKey}"].items[_key=="${_key}"]`
       )}

@@ -17,7 +17,7 @@ export function HouseGallery({ categories, dataAttribute }: HouseGalleryProps) {
   return (
     // The first section sits flush with the top so jumping to it leaves nothing
     // to scroll back up to.
-    <div className="pb-10 [&>section:first-child>h3]:pt-0">
+    <div className="pb-10">
       {categories.map((category) => (
         <CategoryGrid
           key={`grid-${category._id}`}
