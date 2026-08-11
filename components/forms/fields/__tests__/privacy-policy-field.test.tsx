@@ -120,22 +120,16 @@ describe('PrivacyPolicyField', () => {
   })
 
   describe('error state display', () => {
-    it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi('privacyPolicy', false, {
-        isTouched: false,
-        isValid: false,
-        errors: [{ message: 'You must accept the privacy policy' }]
-      })
+    it('does not show an error when the visibility policy hides it', () => {
+      const fieldApi = createMockFieldApi('privacyPolicy', false, { errors: [] })
 
       render(<PrivacyPolicyField field={fieldApi} />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
-    it('shows error when field is touched and invalid', () => {
+    it('shows the error when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false, {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'You must accept the privacy policy' }]
       })
 
@@ -145,10 +139,8 @@ describe('PrivacyPolicyField', () => {
       expect(screen.getByText('You must accept the privacy policy')).toBeInTheDocument()
     })
 
-    it('sets aria-invalid when field is touched and invalid', () => {
+    it('sets aria-invalid when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false, {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'Required' }]
       })
 
@@ -158,11 +150,7 @@ describe('PrivacyPolicyField', () => {
     })
 
     it('does not set aria-invalid when field is valid', () => {
-      const fieldApi = createMockFieldApi('privacyPolicy', true, {
-        value: true,
-        isTouched: true,
-        isValid: true
-      })
+      const fieldApi = createMockFieldApi('privacyPolicy', true, { value: true })
 
       render(<PrivacyPolicyField field={fieldApi} />)
 

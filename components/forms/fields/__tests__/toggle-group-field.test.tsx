@@ -139,22 +139,16 @@ describe('ToggleGroupField', () => {
   })
 
   describe('error state display', () => {
-    it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi('toggleField', [] as string[], {
-        isTouched: false,
-        isValid: false,
-        errors: [{ message: 'Please select at least one option' }]
-      })
+    it('does not show an error when the visibility policy hides it', () => {
+      const fieldApi = createMockFieldApi('toggleField', [] as string[], { errors: [] })
 
       render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
-    it('shows error when field is touched and invalid', () => {
+    it('shows the error when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[], {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'Please select at least one option' }]
       })
 
@@ -166,8 +160,6 @@ describe('ToggleGroupField', () => {
 
     it('sets aria-invalid on toggle items when field is invalid', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[], {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'Required' }]
       })
 

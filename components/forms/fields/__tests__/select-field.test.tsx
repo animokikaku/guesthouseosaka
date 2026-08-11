@@ -88,22 +88,16 @@ describe('SelectField', () => {
   })
 
   describe('error state display', () => {
-    it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi('testSelect', '', {
-        isTouched: false,
-        isValid: false,
-        errors: [{ message: 'This field is required' }]
-      })
+    it('does not show an error when the visibility policy hides it', () => {
+      const fieldApi = createMockFieldApi('testSelect', '', { errors: [] })
 
       render(<SelectField field={fieldApi} options={defaultOptions} />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
-    it('shows error when field is touched and invalid', () => {
+    it('shows the error when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('testSelect', '', {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'This field is required' }]
       })
 
@@ -113,12 +107,8 @@ describe('SelectField', () => {
       expect(screen.getByText('This field is required')).toBeInTheDocument()
     })
 
-    it('sets aria-invalid when field is touched and invalid', () => {
-      const fieldApi = createMockFieldApi('testSelect', '', {
-        isTouched: true,
-        isValid: false,
-        errors: [{ message: 'Required' }]
-      })
+    it('sets aria-invalid when the field has visible errors', () => {
+      const fieldApi = createMockFieldApi('testSelect', '', { errors: [{ message: 'Required' }] })
 
       render(<SelectField field={fieldApi} options={defaultOptions} />)
 
@@ -127,10 +117,7 @@ describe('SelectField', () => {
     })
 
     it('does not set aria-invalid when field is valid', () => {
-      const fieldApi = createMockFieldApi('testSelect', '', {
-        isTouched: true,
-        isValid: true
-      })
+      const fieldApi = createMockFieldApi('testSelect', '', { errors: [] })
 
       render(<SelectField field={fieldApi} options={defaultOptions} />)
 

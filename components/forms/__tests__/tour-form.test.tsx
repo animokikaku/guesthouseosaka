@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { TourForm } from '../tour-form'
 
 // Mock form submission hook
@@ -107,6 +107,21 @@ describe('TourForm', () => {
 
       const submitButton = container.querySelector('button[form="tour-form"]')
       expect(submitButton).toBeInTheDocument()
+    })
+  })
+  describe('validation', () => {
+    it('surfaces schema errors on the matching fields after an invalid submit', async () => {
+      const { container } = render(<TourForm {...baseProps} />)
+
+      fireEvent.submit(container.querySelector('form#tour-form') as HTMLFormElement)
+
+      // Form-level schema errors are routed to their fields, including the
+      // nested `account.*` paths owned by the user account field group and
+      // this form's own date field.
+      const nameInput = screen.getByLabelText(/your name/i)
+      await waitFor(() => expect(nameInput).toHaveAttribute('aria-invalid', 'true'))
+      expect(screen.getByLabelText('Visit Date')).toHaveAttribute('aria-invalid', 'true')
+      expect(container.querySelectorAll('[data-slot="field-error"]').length).toBeGreaterThan(0)
     })
   })
 })

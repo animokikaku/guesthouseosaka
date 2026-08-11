@@ -106,22 +106,16 @@ describe('DateField', () => {
   })
 
   describe('error state display', () => {
-    it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi('testDate', '', {
-        isTouched: false,
-        isValid: false,
-        errors: [{ message: 'Please select a date' }]
-      })
+    it('does not show an error when the visibility policy hides it', () => {
+      const fieldApi = createMockFieldApi('testDate', '', { errors: [] })
 
       render(<DateField field={fieldApi} label="Start Date" />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
-    it('shows error when field is touched and invalid', () => {
+    it('shows the error when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('testDate', '', {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'Please select a date' }]
       })
 
@@ -131,12 +125,8 @@ describe('DateField', () => {
       expect(screen.getByText('Please select a date')).toBeInTheDocument()
     })
 
-    it('sets aria-invalid when field is touched and invalid', () => {
-      const fieldApi = createMockFieldApi('testDate', '', {
-        isTouched: true,
-        isValid: false,
-        errors: [{ message: 'Required' }]
-      })
+    it('sets aria-invalid when the field has visible errors', () => {
+      const fieldApi = createMockFieldApi('testDate', '', { errors: [{ message: 'Required' }] })
 
       render(<DateField field={fieldApi} label="Start Date" />)
 
@@ -147,11 +137,7 @@ describe('DateField', () => {
     })
 
     it('associates the description and error with the input', () => {
-      const fieldApi = createMockFieldApi('testDate', '', {
-        isTouched: true,
-        isValid: false,
-        errors: [{ message: 'Required' }]
-      })
+      const fieldApi = createMockFieldApi('testDate', '', { errors: [{ message: 'Required' }] })
 
       render(<DateField field={fieldApi} label="Start Date" description="Select a future date" />)
 

@@ -92,22 +92,16 @@ describe('InputField', () => {
   })
 
   describe('error state display', () => {
-    it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi('testInput', '', {
-        isTouched: false,
-        isValid: false,
-        errors: [{ message: 'This field is required' }]
-      })
+    it('does not show an error when the visibility policy hides it', () => {
+      const fieldApi = createMockFieldApi('testInput', '', { errors: [] })
 
       render(<InputField field={fieldApi} label="Email" />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
-    it('shows error when field is touched and invalid', () => {
+    it('shows the error when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('testInput', '', {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'This field is required' }]
       })
 
@@ -117,12 +111,8 @@ describe('InputField', () => {
       expect(screen.getByText('This field is required')).toBeInTheDocument()
     })
 
-    it('sets aria-invalid when field is touched and invalid', () => {
-      const fieldApi = createMockFieldApi('testInput', '', {
-        isTouched: true,
-        isValid: false,
-        errors: [{ message: 'Required' }]
-      })
+    it('sets aria-invalid when the field has visible errors', () => {
+      const fieldApi = createMockFieldApi('testInput', '', { errors: [{ message: 'Required' }] })
 
       render(<InputField field={fieldApi} label="Email" />)
 
@@ -131,11 +121,7 @@ describe('InputField', () => {
     })
 
     it('preserves generated ARIA relationships', () => {
-      const fieldApi = createMockFieldApi('testInput', '', {
-        isTouched: true,
-        isValid: false,
-        errors: [{ message: 'Required' }]
-      })
+      const fieldApi = createMockFieldApi('testInput', '', { errors: [{ message: 'Required' }] })
       const conflictingAriaProps = {
         'aria-describedby': 'custom-description',
         'aria-errormessage': 'custom-error'

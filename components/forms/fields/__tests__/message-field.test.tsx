@@ -142,22 +142,16 @@ describe('MessageField', () => {
   })
 
   describe('error state display', () => {
-    it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi('message', '', {
-        isTouched: false,
-        isValid: false,
-        errors: [{ message: 'Message is required' }]
-      })
+    it('does not show an error when the visibility policy hides it', () => {
+      const fieldApi = createMockFieldApi('message', '', { errors: [] })
 
       render(<MessageField field={fieldApi} />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
-    it('shows error when field is touched and invalid', () => {
+    it('shows the error when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('message', '', {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'Message is required' }]
       })
 
@@ -168,11 +162,7 @@ describe('MessageField', () => {
     })
 
     it('sets aria-invalid on textarea when field is invalid', () => {
-      const fieldApi = createMockFieldApi('message', '', {
-        isTouched: true,
-        isValid: false,
-        errors: [{ message: 'Required' }]
-      })
+      const fieldApi = createMockFieldApi('message', '', { errors: [{ message: 'Required' }] })
 
       render(<MessageField field={fieldApi} />)
 
@@ -181,10 +171,7 @@ describe('MessageField', () => {
     })
 
     it('does not set aria-invalid when field is valid', () => {
-      const fieldApi = createMockFieldApi('message', 'Some text', {
-        isTouched: true,
-        isValid: true
-      })
+      const fieldApi = createMockFieldApi('message', 'Some text', { errors: [] })
 
       render(<MessageField field={fieldApi} />)
 
