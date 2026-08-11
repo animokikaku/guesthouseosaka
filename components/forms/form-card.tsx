@@ -1,5 +1,7 @@
 'use client'
 
+import { ResetButton } from '@/components/forms/components/reset-button'
+import { SubmitButton } from '@/components/forms/components/submit-button'
 import {
   Card,
   CardContent,
@@ -10,18 +12,13 @@ import {
 } from '@/components/ui/card'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
-import * as React from 'react'
+import type { AnyReactFormApi } from '@tanstack/react-form'
 
 interface FormCardProps {
   title?: string | null
   description?: string | null
   formId: string
-  form: {
-    handleSubmit: () => unknown
-    AppForm: React.ComponentType<{ children: Exclude<React.ReactNode, Promise<unknown>> }>
-    ResetButton: React.ComponentType
-    SubmitButton: React.ComponentType<{ form: string }>
-  }
+  form: AnyReactFormApi
   children: React.ReactNode
   className?: string
 }
@@ -40,7 +37,7 @@ export function FormCard({ title, description, formId, form, children, className
           id={formId}
           onSubmit={(e) => {
             e.preventDefault()
-            form.handleSubmit()
+            void form.handleSubmit()
           }}
         >
           <FieldGroup>{children}</FieldGroup>
@@ -48,10 +45,8 @@ export function FormCard({ title, description, formId, form, children, className
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <form.AppForm>
-            <form.ResetButton />
-            <form.SubmitButton form={formId} />
-          </form.AppForm>
+          <ResetButton formApi={form} />
+          <SubmitButton formApi={form} formId={formId} />
         </Field>
       </CardFooter>
     </Card>

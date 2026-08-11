@@ -1,37 +1,11 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { createContext } from 'react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import type { AnyReactFormApi } from '@tanstack/react-form'
 import { ResetButton } from '../reset-button'
 
-// Create a mock form context
-interface MockFormApi {
-  reset: ReturnType<typeof vi.fn>
-}
-
-const testFormContext = createContext<MockFormApi | null>(null)
-
-// Mock the form-context module to provide our test context
-vi.mock('@/components/forms/form-context', async () => {
-  const React = await import('react')
-  return {
-    useFormContext: () => React.useContext(testFormContext)
-  }
-})
-
-// Wrapper component that provides the form context
-function FormContextWrapper({
-  children,
-  formApi
-}: {
-  children: React.ReactNode
-  formApi: MockFormApi
-}) {
-  return <testFormContext.Provider value={formApi}>{children}</testFormContext.Provider>
-}
-
-function createMockFormApi(): MockFormApi {
-  return {
-    reset: vi.fn()
-  }
+function createMockForm() {
+  // The button only calls `reset`.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  return { reset: vi.fn() } as unknown as AnyReactFormApi & { reset: ReturnType<typeof vi.fn> }
 }
 
 describe('ResetButton', () => {
@@ -41,26 +15,13 @@ describe('ResetButton', () => {
 
   describe('rendering', () => {
     it('renders button with reset type', () => {
-      const formApi = createMockFormApi()
+      render(<ResetButton formApi={createMockForm()} />)
 
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <ResetButton />
-        </FormContextWrapper>
-      )
-
-      const button = screen.getByRole('button')
-      expect(button).toHaveAttribute('type', 'reset')
+      expect(screen.getByRole('button')).toHaveAttribute('type', 'reset')
     })
 
     it('renders with translation key label', () => {
-      const formApi = createMockFormApi()
-
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <ResetButton />
-        </FormContextWrapper>
-      )
+      render(<ResetButton formApi={createMockForm()} />)
 
       // The label uses t('label') which returns 'label' in mocked translations
       expect(screen.getByRole('button')).toHaveTextContent('label')
@@ -69,22 +30,13 @@ describe('ResetButton', () => {
 
   describe('click handler', () => {
     it('prevents default behavior on click', () => {
-      const formApi = createMockFormApi()
-
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <ResetButton />
-        </FormContextWrapper>
-      )
+      render(<ResetButton formApi={createMockForm()} />)
 
       const button = screen.getByRole('button')
       const preventDefaultSpy = vi.fn()
 
-      // Create a mock event with preventDefault spy
       const event = new MouseEvent('click', { bubbles: true })
-      Object.defineProperty(event, 'preventDefault', {
-        value: preventDefaultSpy
-      })
+      Object.defineProperty(event, 'preventDefault', { value: preventDefaultSpy })
 
       button.dispatchEvent(event)
 
@@ -92,77 +44,45 @@ describe('ResetButton', () => {
     })
 
     it('calls form.reset() on click', () => {
-      const formApi = createMockFormApi()
+      const form = createMockForm()
 
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <ResetButton />
-        </FormContextWrapper>
-      )
+      render(<ResetButton formApi={form} />)
+      fireEvent.click(screen.getByRole('button'))
 
-      const button = screen.getByRole('button')
-      fireEvent.click(button)
-
-      expect(formApi.reset).toHaveBeenCalled()
+      expect(form.reset).toHaveBeenCalled()
     })
 
-    it('calls form.reset() only once per click', () => {
-      const formApi = createMockFormApi()
+    it('calls form.reset() once per click', () => {
+      const form = createMockForm()
 
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <ResetButton />
-        </FormContextWrapper>
-      )
+      render(<ResetButton formApi={form} />)
+      fireEvent.click(screen.getByRole('button'))
+      fireEvent.click(screen.getByRole('button'))
 
-      const button = screen.getByRole('button')
-      fireEvent.click(button)
-      fireEvent.click(button)
-
-      expect(formApi.reset).toHaveBeenCalledTimes(2)
+      expect(form.reset).toHaveBeenCalledTimes(2)
     })
   })
 
   describe('props forwarding', () => {
     it('forwards className prop', () => {
-      const formApi = createMockFormApi()
+      render(<ResetButton formApi={createMockForm()} className="custom-class" />)
 
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <ResetButton className="custom-class" />
-        </FormContextWrapper>
-      )
-
-      const button = screen.getByRole('button')
-      expect(button).toHaveClass('custom-class')
+      expect(screen.getByRole('button')).toHaveClass('custom-class')
     })
 
     it('forwards disabled prop', () => {
-      const formApi = createMockFormApi()
+      render(<ResetButton formApi={createMockForm()} disabled />)
 
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <ResetButton disabled />
-        </FormContextWrapper>
-      )
-
-      const button = screen.getByRole('button')
-      expect(button).toBeDisabled()
+      expect(screen.getByRole('button')).toBeDisabled()
     })
 
     it('does not call form.reset() when disabled', () => {
-      const formApi = createMockFormApi()
+      const form = createMockForm()
 
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <ResetButton disabled />
-        </FormContextWrapper>
-      )
+      render(<ResetButton formApi={form} disabled />)
+      fireEvent.click(screen.getByRole('button'))
 
-      const button = screen.getByRole('button')
-      fireEvent.click(button)
-
-      expect(formApi.reset).not.toHaveBeenCalled()
+      expect(form.reset).not.toHaveBeenCalled()
     })
   })
 })

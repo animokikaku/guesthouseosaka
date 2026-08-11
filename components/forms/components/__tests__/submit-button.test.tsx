@@ -1,148 +1,68 @@
 import { render, screen } from '@testing-library/react'
-import { createContext } from 'react'
+import { Store, type AnyReactFormApi } from '@tanstack/react-form'
 import { SubmitButton } from '../submit-button'
 
-// Create a mock form context
-interface MockFormApi {
-  store: {
-    subscribe: ReturnType<typeof vi.fn>
-    getState: ReturnType<typeof vi.fn>
-  }
-}
-
-const testFormContext = createContext<MockFormApi | null>(null)
-
-vi.mock('@/components/forms/form-context', async () => {
-  const React = await import('react')
-  return {
-    useFormContext: () => React.useContext(testFormContext)
-  }
-})
-
-// Mock @tanstack/react-form useSelector
-let mockStoreState = { isSubmitting: false, canSubmit: true }
-
-vi.mock('@tanstack/react-form', () => ({
-  useSelector: (_store: unknown, selector: (state: typeof mockStoreState) => unknown) =>
-    selector(mockStoreState)
-}))
-
-function createMockFormApi(): MockFormApi {
-  return {
-    store: {
-      subscribe: vi.fn(),
-      getState: vi.fn(() => mockStoreState)
-    }
-  }
-}
-
-function FormContextWrapper({
-  children,
-  formApi
-}: {
-  children: React.ReactNode
-  formApi: MockFormApi
-}) {
-  return <testFormContext.Provider value={formApi}>{children}</testFormContext.Provider>
+/**
+ * The button subscribes to the real form atom, so back the mock with an actual
+ * store rather than stubbing `useSelector`.
+ */
+function createMockForm(state: { isSubmitting: boolean }) {
+  // The button only reads `atom`.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+  return { atom: new Store(state) } as unknown as AnyReactFormApi
 }
 
 describe('SubmitButton', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockStoreState = { isSubmitting: false, canSubmit: true }
   })
 
   describe('rendering', () => {
     it('renders button with submit type', () => {
-      const formApi = createMockFormApi()
+      render(<SubmitButton formApi={createMockForm({ isSubmitting: false })} formId="test-form" />)
 
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <SubmitButton />
-        </FormContextWrapper>
-      )
-
-      const button = screen.getByRole('button')
-      expect(button).toHaveAttribute('type', 'submit')
+      expect(screen.getByRole('button')).toHaveAttribute('type', 'submit')
     })
 
     it('renders with translation key label', () => {
-      const formApi = createMockFormApi()
-
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <SubmitButton />
-        </FormContextWrapper>
-      )
+      render(<SubmitButton formApi={createMockForm({ isSubmitting: false })} formId="test-form" />)
 
       expect(screen.getByRole('button')).toHaveTextContent('label')
     })
+
+    it('associates the button with its form element', () => {
+      render(<SubmitButton formApi={createMockForm({ isSubmitting: false })} formId="my-form" />)
+
+      expect(screen.getByRole('button')).toHaveAttribute('form', 'my-form')
+    })
   })
 
-  describe('disabled state', () => {
-    it('is enabled when canSubmit is true and not submitting', () => {
-      mockStoreState = { isSubmitting: false, canSubmit: true }
-      const formApi = createMockFormApi()
+  describe('submitting state', () => {
+    it('is enabled when the form is idle', () => {
+      render(<SubmitButton formApi={createMockForm({ isSubmitting: false })} formId="test-form" />)
 
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <SubmitButton />
-        </FormContextWrapper>
-      )
-
-      expect(screen.getByRole('button')).not.toBeDisabled()
+      const button = screen.getByRole('button')
+      expect(button).not.toBeDisabled()
+      expect(button).toHaveAttribute('aria-busy', 'false')
     })
 
-    it('is disabled when submitting', () => {
-      mockStoreState = { isSubmitting: true, canSubmit: true }
-      const formApi = createMockFormApi()
+    it('is disabled while submitting', () => {
+      render(<SubmitButton formApi={createMockForm({ isSubmitting: true })} formId="test-form" />)
 
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <SubmitButton />
-        </FormContextWrapper>
-      )
-
-      expect(screen.getByRole('button')).toBeDisabled()
-    })
-
-    it('stays enabled when canSubmit is false so submit validation can run', () => {
-      mockStoreState = { isSubmitting: false, canSubmit: false }
-      const formApi = createMockFormApi()
-
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <SubmitButton />
-        </FormContextWrapper>
-      )
-
-      expect(screen.getByRole('button')).not.toBeDisabled()
-      expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'false')
-    })
-
-    it('is disabled when both submitting and canSubmit is false', () => {
-      mockStoreState = { isSubmitting: true, canSubmit: false }
-      const formApi = createMockFormApi()
-
-      render(
-        <FormContextWrapper formApi={formApi}>
-          <SubmitButton />
-        </FormContextWrapper>
-      )
-
-      expect(screen.getByRole('button')).toBeDisabled()
-      expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true')
+      const button = screen.getByRole('button')
+      expect(button).toBeDisabled()
+      expect(button).toHaveAttribute('aria-busy', 'true')
     })
   })
 
   describe('props forwarding', () => {
     it('forwards className prop', () => {
-      const formApi = createMockFormApi()
-
       render(
-        <FormContextWrapper formApi={formApi}>
-          <SubmitButton className="custom-class" />
-        </FormContextWrapper>
+        <SubmitButton
+          formApi={createMockForm({ isSubmitting: false })}
+          formId="test-form"
+          className="custom-class"
+        />
       )
 
       expect(screen.getByRole('button')).toHaveClass('custom-class')

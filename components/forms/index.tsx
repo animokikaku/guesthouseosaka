@@ -1,7 +1,5 @@
 'use client'
 
-import { ResetButton } from '@/components/forms/components/reset-button'
-import { SubmitButton } from '@/components/forms/components/submit-button'
 import {
   DateField,
   InputField,
@@ -38,10 +36,7 @@ const formHook = createFormHook({
     SelectField: fieldComponent.loose(SelectField, 'field'),
     ToggleGroupField: fieldComponent.loose(ToggleGroupField, 'field')
   },
-  formComponents: {
-    SubmitButton,
-    ResetButton
-  }
+  formComponents: {}
 })
 
 export const useAppForm = formHook.useAppForm

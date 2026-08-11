@@ -1,19 +1,16 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { Store, type AnyReactFormApi } from '@tanstack/react-form'
 import { FormCard } from '../form-card'
 
 function createMockForm() {
+  // FormCard forwards this to the real submit/reset buttons, which read
+  // `atom` and `reset`.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return {
     handleSubmit: vi.fn(),
-    AppForm: ({ children }: { children?: React.ReactNode }) => (
-      <div data-testid="app-form">{children}</div>
-    ),
-    ResetButton: () => <button type="button">Reset</button>,
-    SubmitButton: ({ form }: { form: string }) => (
-      <button type="submit" form={form}>
-        Submit
-      </button>
-    )
-  }
+    reset: vi.fn(),
+    atom: new Store({ isSubmitting: false })
+  } as unknown as AnyReactFormApi & { handleSubmit: ReturnType<typeof vi.fn> }
 }
 
 function TestInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
@@ -110,26 +107,26 @@ describe('FormCard', () => {
     it('renders reset and submit buttons', () => {
       const form = createMockForm()
 
-      render(
+      const { container } = render(
         <FormCard formId="test-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument()
+      expect(container.querySelector('button[type="reset"]')).toBeInTheDocument()
+      expect(container.querySelector('button[type="submit"]')).toBeInTheDocument()
     })
 
     it('submit button has correct form attribute', () => {
       const form = createMockForm()
 
-      render(
+      const { container } = render(
         <FormCard formId="my-custom-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      const submitButton = screen.getByRole('button', { name: 'Submit' })
+      const submitButton = container.querySelector('button[type="submit"]')
       expect(submitButton).toHaveAttribute('form', 'my-custom-form')
     })
 
@@ -190,13 +187,13 @@ describe('FormCard', () => {
     it('handles null title', () => {
       const form = createMockForm()
 
-      render(
+      const { container } = render(
         <FormCard formId="test-form" form={form} title={null}>
           <TestInput />
         </FormCard>
       )
 
-      expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument()
+      expect(container.querySelector('button[type="submit"]')).toBeInTheDocument()
     })
 
     it('handles null description', () => {

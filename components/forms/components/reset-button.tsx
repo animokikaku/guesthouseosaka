@@ -1,14 +1,15 @@
-import { useFormContext } from '@/components/forms/form-context'
 import { Button } from '@/components/ui/button'
+import type { AnyReactFormApi } from '@tanstack/react-form'
 import { useTranslations } from 'next-intl'
 
 type FormResetButton = Omit<
   React.ComponentProps<typeof Button>,
   'type' | 'variant' | 'onClick' | 'children'
->
+> & {
+  formApi: AnyReactFormApi
+}
 
-export const ResetButton = (props: FormResetButton) => {
-  const form = useFormContext()
+export const ResetButton = ({ formApi, ...props }: FormResetButton) => {
   const t = useTranslations('ResetButton')
 
   return (
@@ -17,7 +18,7 @@ export const ResetButton = (props: FormResetButton) => {
       variant="outline"
       onClick={(e) => {
         e.preventDefault()
-        form.reset()
+        formApi.reset()
       }}
       {...props}
     >
