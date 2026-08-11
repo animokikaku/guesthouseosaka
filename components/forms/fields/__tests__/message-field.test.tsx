@@ -1,16 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
-
-// Create a test field context
-const testFieldContext = createFieldContext<string>()
-
-// Mock the form-context module
-vi.mock('@/components/forms/form-context', async () => {
-  const React = await import('react')
-  return {
-    useFieldContext: () => React.useContext(testFieldContext)
-  }
-})
+import { fireEvent, render, screen } from '@testing-library/react'
+import { createMockFieldApi } from './test-utils'
 
 // Import after mocking
 import { MessageField } from '../message-field'
@@ -24,11 +13,7 @@ describe('MessageField', () => {
     it('renders textarea', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       expect(screen.getByRole('textbox')).toBeInTheDocument()
     })
@@ -36,11 +21,7 @@ describe('MessageField', () => {
     it('renders with label', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField label="Your message" />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} label="Your message" />)
 
       expect(screen.getByText('Your message')).toBeInTheDocument()
     })
@@ -48,11 +29,7 @@ describe('MessageField', () => {
     it('renders without label when not provided', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       // No label element should be present
       expect(screen.queryByRole('label')).not.toBeInTheDocument()
@@ -61,11 +38,7 @@ describe('MessageField', () => {
     it('renders with description', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField description="Enter your message here" />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} description="Enter your message here" />)
 
       expect(screen.getByText('Enter your message here')).toBeInTheDocument()
     })
@@ -73,11 +46,7 @@ describe('MessageField', () => {
     it('does not render description when null', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField description={null} />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} description={null} />)
 
       expect(screen.queryByText('Enter your message here')).not.toBeInTheDocument()
     })
@@ -87,11 +56,7 @@ describe('MessageField', () => {
     it('shows optional hint when required is false', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField label="Message" required={false} />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} label="Message" required={false} />)
 
       // The optional hint uses t('optional_hint') which returns 'optional_hint'
       expect(screen.getByText('(optional_hint)')).toBeInTheDocument()
@@ -100,11 +65,7 @@ describe('MessageField', () => {
     it('does not show optional hint when required is true', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField label="Message" required />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} label="Message" required />)
 
       expect(screen.queryByText('(optional_hint)')).not.toBeInTheDocument()
     })
@@ -112,11 +73,7 @@ describe('MessageField', () => {
     it('does not show optional hint when label is not provided', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField required={false} />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} required={false} />)
 
       // No label means no optional hint displayed
       expect(screen.queryByText('(optional_hint)')).not.toBeInTheDocument()
@@ -129,11 +86,7 @@ describe('MessageField', () => {
         value: 'Hello'
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       // The character counter uses t('character_counter', { count, max })
       // which returns 'character_counter' in the mock
@@ -143,11 +96,7 @@ describe('MessageField', () => {
     it('shows counter for empty message', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       expect(screen.getByText('character_counter')).toBeInTheDocument()
     })
@@ -157,11 +106,7 @@ describe('MessageField', () => {
     it('calls handleChange when text is entered', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       const textarea = screen.getByRole('textbox')
       fireEvent.change(textarea, { target: { value: 'Hello world' } })
@@ -174,11 +119,7 @@ describe('MessageField', () => {
         value: 'existing text'
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       const textarea = screen.getByRole('textbox')
       fireEvent.change(textarea, { target: { value: '' } })
@@ -191,11 +132,7 @@ describe('MessageField', () => {
     it('calls handleBlur when textarea loses focus', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       const textarea = screen.getByRole('textbox')
       fireEvent.blur(textarea)
@@ -212,11 +149,7 @@ describe('MessageField', () => {
         errors: [{ message: 'Message is required' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
@@ -228,11 +161,7 @@ describe('MessageField', () => {
         errors: [{ message: 'Message is required' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
       expect(screen.getByText('Message is required')).toBeInTheDocument()
@@ -245,11 +174,7 @@ describe('MessageField', () => {
         errors: [{ message: 'Required' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       const textarea = screen.getByRole('textbox')
       expect(textarea).toHaveAttribute('aria-invalid', 'true')
@@ -261,11 +186,7 @@ describe('MessageField', () => {
         isValid: true
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       const textarea = screen.getByRole('textbox')
       expect(textarea).toHaveAttribute('aria-invalid', 'false')
@@ -278,11 +199,7 @@ describe('MessageField', () => {
         value: 'Test message'
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       const textarea = screen.getByRole<HTMLTextAreaElement>('textbox')
       expect(textarea.value).toBe('Test message')
@@ -291,11 +208,7 @@ describe('MessageField', () => {
     it('displays empty string when value is empty', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       const textarea = screen.getByRole<HTMLTextAreaElement>('textbox')
       expect(textarea.value).toBe('')
@@ -306,11 +219,7 @@ describe('MessageField', () => {
     it('sets correct id based on field name', () => {
       const fieldApi = createMockFieldApi('myMessage', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       const textarea = screen.getByRole('textbox')
       expect(textarea.id).toMatch(/^form-tanstack-message-.+-myMessage$/)
@@ -319,11 +228,7 @@ describe('MessageField', () => {
     it('sets name attribute based on field name', () => {
       const fieldApi = createMockFieldApi('contactMessage', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} />)
 
       const textarea = screen.getByRole('textbox')
       expect(textarea).toHaveAttribute('name', 'contactMessage')
@@ -334,11 +239,7 @@ describe('MessageField', () => {
     it('forwards placeholder prop', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField placeholder="Enter your message..." />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} placeholder="Enter your message..." />)
 
       const textarea = screen.getByRole('textbox')
       expect(textarea).toHaveAttribute('placeholder', 'Enter your message...')
@@ -347,11 +248,7 @@ describe('MessageField', () => {
     it('forwards rows prop', () => {
       const fieldApi = createMockFieldApi('message', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <MessageField rows={10} />
-        </FieldContextWrapper>
-      )
+      render(<MessageField field={fieldApi} rows={10} />)
 
       const textarea = screen.getByRole('textbox')
       expect(textarea).toHaveAttribute('rows', '10')

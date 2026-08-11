@@ -5,6 +5,7 @@ import {
   FieldGroupPlaces,
   FieldGroupUserAccount,
   HouseTitles,
+  userAccountFieldBindings,
   useAppForm,
   useFormSubmit
 } from '@/components/forms'
@@ -24,9 +25,7 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
 
   const form = useAppForm({
     defaultValues: { places, account, message, date, hour, privacyPolicy },
-    validators: {
-      onSubmit: schema
-    },
+    validators: [{ run: schema, triggers: [] }],
     onSubmitInvalid,
     onSubmit: createOnSubmit('tour')
   })
@@ -40,7 +39,7 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
         description={fields.places.description}
         houseTitles={houseTitles}
       />
-      <form.AppField
+      <form.Field
         name="date"
         children={(field) => (
           <field.DateField
@@ -51,7 +50,7 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
           />
         )}
       />
-      <form.AppField
+      <form.Field
         name="hour"
         children={(field) => (
           <field.InputField
@@ -63,9 +62,9 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
         )}
       />
       <FieldSeparator />
-      <FieldGroupUserAccount fields="account" form={form} config={fields} />
+      <FieldGroupUserAccount fields={userAccountFieldBindings} form={form} config={fields} />
       <FieldSeparator />
-      <form.AppField
+      <form.Field
         name="message"
         children={(field) => (
           <field.MessageField
@@ -77,7 +76,7 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
           />
         )}
       />
-      <form.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
+      <form.Field name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
     </FormCard>
   )
 }

@@ -1,29 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import {
-  createMockFieldApi,
-  createFieldContext,
-  FieldContextWrapper,
-  type MockFieldApi
-} from './test-utils'
-
-const testFieldContext = createFieldContext<string>()
-
-vi.mock('@/components/forms/form-context', async () => {
-  const React = await import('react')
-  return {
-    useFieldContext: () => React.useContext(testFieldContext)
-  }
-})
+import { fireEvent, render, screen } from '@testing-library/react'
+import { createMockFieldApi } from './test-utils'
 
 import { DateField } from '../date-field'
-
-function renderWithContext(ui: React.ReactElement, fieldApi: MockFieldApi<string>) {
-  return render(
-    <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-      {ui}
-    </FieldContextWrapper>
-  )
-}
 
 describe('DateField', () => {
   beforeEach(() => {
@@ -34,7 +12,7 @@ describe('DateField', () => {
     it('renders date input with label', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(<DateField label="Start Date" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" />)
 
       const input = screen.getByLabelText('Start Date')
       expect(input).toBeInTheDocument()
@@ -44,7 +22,7 @@ describe('DateField', () => {
     it('renders date input without label', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(<DateField />, fieldApi)
+      render(<DateField field={fieldApi} />)
 
       const input = document.querySelector('input[type="date"]')
       expect(input).toBeInTheDocument()
@@ -53,9 +31,8 @@ describe('DateField', () => {
     it('renders date input with description', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(
-        <DateField label="Start Date" description="Select your move-in date" />,
-        fieldApi
+      render(
+        <DateField field={fieldApi} label="Start Date" description="Select your move-in date" />
       )
 
       expect(screen.getByText('Select your move-in date')).toBeInTheDocument()
@@ -64,7 +41,7 @@ describe('DateField', () => {
     it('associates label with input via htmlFor', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(<DateField label="Start Date" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" />)
 
       const input = screen.getByLabelText('Start Date')
       expect(input.id).toMatch(/^form-tanstack-date-.+-testDate$/)
@@ -73,12 +50,11 @@ describe('DateField', () => {
     it('generates unique IDs for repeated field instances', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(
+      render(
         <>
-          <DateField label="Start Date" />
-          <DateField label="End Date" />
-        </>,
-        fieldApi
+          <DateField field={fieldApi} label="Start Date" />
+          <DateField field={fieldApi} label="End Date" />
+        </>
       )
 
       expect(screen.getByLabelText('Start Date').id).not.toBe(screen.getByLabelText('End Date').id)
@@ -91,7 +67,7 @@ describe('DateField', () => {
         value: '2025-01-15'
       })
 
-      renderWithContext(<DateField label="Start Date" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" />)
 
       expect(screen.getByLabelText('Start Date')).toHaveValue('2025-01-15')
     })
@@ -99,7 +75,7 @@ describe('DateField', () => {
     it('renders empty when value is empty string', () => {
       const fieldApi = createMockFieldApi('testDate', '', { value: '' })
 
-      renderWithContext(<DateField label="Start Date" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" />)
 
       expect(screen.getByLabelText('Start Date')).toHaveValue('')
     })
@@ -109,7 +85,7 @@ describe('DateField', () => {
     it('calls handleChange when date value changes', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(<DateField label="Start Date" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" />)
 
       const input = screen.getByLabelText('Start Date')
       fireEvent.change(input, { target: { value: '2025-02-20' } })
@@ -120,7 +96,7 @@ describe('DateField', () => {
     it('calls handleBlur when input loses focus', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(<DateField label="Start Date" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" />)
 
       const input = screen.getByLabelText('Start Date')
       fireEvent.blur(input)
@@ -137,7 +113,7 @@ describe('DateField', () => {
         errors: [{ message: 'Please select a date' }]
       })
 
-      renderWithContext(<DateField label="Start Date" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
@@ -149,7 +125,7 @@ describe('DateField', () => {
         errors: [{ message: 'Please select a date' }]
       })
 
-      renderWithContext(<DateField label="Start Date" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" />)
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
       expect(screen.getByText('Please select a date')).toBeInTheDocument()
@@ -162,7 +138,7 @@ describe('DateField', () => {
         errors: [{ message: 'Required' }]
       })
 
-      renderWithContext(<DateField label="Start Date" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" />)
 
       const input = screen.getByLabelText('Start Date')
       const error = screen.getByRole('alert')
@@ -177,10 +153,7 @@ describe('DateField', () => {
         errors: [{ message: 'Required' }]
       })
 
-      renderWithContext(
-        <DateField label="Start Date" description="Select a future date" />,
-        fieldApi
-      )
+      render(<DateField field={fieldApi} label="Start Date" description="Select a future date" />)
 
       const input = screen.getByLabelText('Start Date')
       const description = screen.getByText('Select a future date')
@@ -193,7 +166,7 @@ describe('DateField', () => {
     it('passes through min prop', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(<DateField label="Start Date" min="2025-01-01" />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" min="2025-01-01" />)
 
       expect(screen.getByLabelText('Start Date')).toHaveAttribute('min', '2025-01-01')
     })
@@ -201,7 +174,7 @@ describe('DateField', () => {
     it('passes through step prop', () => {
       const fieldApi = createMockFieldApi('testDate', '')
 
-      renderWithContext(<DateField label="Start Date" step={7} />, fieldApi)
+      render(<DateField field={fieldApi} label="Start Date" step={7} />)
 
       expect(screen.getByLabelText('Start Date')).toHaveAttribute('step', '7')
     })

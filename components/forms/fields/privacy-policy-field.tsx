@@ -1,9 +1,9 @@
 'use client'
 
-import { useFieldValidation } from '@/components/forms/hooks'
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
+import type { FieldWithValue } from '@tanstack/react-form'
 import { useTranslations } from 'next-intl'
 import { useId, type ReactNode } from 'react'
 
@@ -11,8 +11,12 @@ function renderPrivacyPolicyLink(chunks: ReactNode, onAgree: () => void) {
   return <LegalNoticeDialog onAgree={onAgree}>{chunks}</LegalNoticeDialog>
 }
 
-export function PrivacyPolicyField() {
-  const { field, isInvalid, errors } = useFieldValidation<boolean>()
+interface PrivacyPolicyFieldProps {
+  field: FieldWithValue<boolean>
+}
+
+export function PrivacyPolicyField({ field }: PrivacyPolicyFieldProps) {
+  const isInvalid = field.meta.isInvalid
   const instanceId = useId()
   const checkboxId = `form-tanstack-checkbox-${instanceId}-${field.name}`
   const labelId = `${checkboxId}-label`
@@ -27,7 +31,7 @@ export function PrivacyPolicyField() {
             name={field.name}
             nativeButton
             render={<button type="button" aria-labelledby={labelId} />}
-            checked={field.state.value}
+            checked={field.value}
             aria-invalid={isInvalid}
             onCheckedChange={(checked) => field.handleChange(checked)}
             onBlur={() => field.handleBlur()}
@@ -45,7 +49,7 @@ export function PrivacyPolicyField() {
           </FieldLabel>
         </Field>
       </FieldGroup>
-      {isInvalid && <FieldError errors={errors} />}
+      {isInvalid && <FieldError errors={field.errors} />}
     </FieldSet>
   )
 }

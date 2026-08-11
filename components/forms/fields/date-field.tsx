@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 
-import { useFieldValidation } from '@/components/forms/hooks'
 import {
   Field,
   FieldContent,
@@ -12,6 +11,7 @@ import {
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import type { FieldWithValue } from '@tanstack/react-form'
 
 type InputFormProps = Omit<
   React.ComponentProps<typeof Input>,
@@ -27,6 +27,7 @@ type InputFormProps = Omit<
 >
 
 interface DateFieldProps extends InputFormProps {
+  field: FieldWithValue<string>
   label?: React.ReactNode
   description?: string | null
   orientation?: 'vertical' | 'horizontal' | 'responsive'
@@ -35,13 +36,14 @@ interface DateFieldProps extends InputFormProps {
 }
 
 export function DateField({
+  field,
   label,
   description,
   orientation,
   className,
   ...props
 }: DateFieldProps) {
-  const { field, isInvalid, errors } = useFieldValidation<string>()
+  const isInvalid = field.meta.isInvalid
   const instanceId = React.useId()
   const inputId = `form-tanstack-date-${instanceId}-${field.name}`
   const descriptionId = `${inputId}-description`
@@ -52,13 +54,13 @@ export function DateField({
       <FieldContent>
         {label && <FieldLabel htmlFor={inputId}>{label}</FieldLabel>}
         {description && <FieldDescription id={descriptionId}>{description}</FieldDescription>}
-        {isInvalid && <FieldError id={errorId} errors={errors} />}
+        {isInvalid && <FieldError id={errorId} errors={field.errors} />}
       </FieldContent>
       <Input
         type="date"
         id={inputId}
         name={field.name}
-        value={field.state.value}
+        value={field.value}
         aria-invalid={isInvalid}
         aria-describedby={
           [description ? descriptionId : null, isInvalid ? errorId : null]

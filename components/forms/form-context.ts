@@ -1,6 +1,13 @@
 'use client'
 
-import { createFormHookContexts } from '@tanstack/react-form'
+import { createFormHook } from '@tanstack/react-form'
 
-export const { fieldContext, formContext, useFieldContext, useFormContext } =
-  createFormHookContexts()
+/**
+ * Form components registered with `createFormHook` read the surrounding form
+ * through a module-level context, so a component-less hook instance is enough
+ * to expose `useFormContext` without importing the app form hook itself.
+ */
+export const { useFormContext } = createFormHook({
+  fieldComponents: {},
+  formComponents: {}
+})

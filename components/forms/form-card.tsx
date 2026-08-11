@@ -17,8 +17,8 @@ interface FormCardProps {
   description?: string | null
   formId: string
   form: {
-    handleSubmit: () => void
-    AppForm: React.ComponentType<{ children?: React.ReactNode }>
+    handleSubmit: () => unknown
+    AppForm: React.ComponentType<{ children: Exclude<React.ReactNode, Promise<unknown>> }>
     ResetButton: React.ComponentType
     SubmitButton: React.ComponentType<{ form: string }>
   }

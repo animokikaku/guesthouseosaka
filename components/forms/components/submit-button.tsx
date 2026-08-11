@@ -13,7 +13,7 @@ export const SubmitButton = (props: FormSubmitButtonProps) => {
   const form = useFormContext()
   const t = useTranslations('SubmitButton')
 
-  const isSubmitting = useSelector(form.store, (state) => state.isSubmitting)
+  const isSubmitting = useSelector(form.atom, (state) => state.isSubmitting)
 
   return (
     <Button type="submit" disabled={isSubmitting} aria-busy={isSubmitting} {...props}>

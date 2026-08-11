@@ -1,16 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
-
-// Create a test field context
-const testFieldContext = createFieldContext<boolean>()
-
-// Mock the form-context module
-vi.mock('@/components/forms/form-context', async () => {
-  const React = await import('react')
-  return {
-    useFieldContext: () => React.useContext(testFieldContext)
-  }
-})
+import { fireEvent, render, screen } from '@testing-library/react'
+import { createMockFieldApi } from './test-utils'
 
 // Capture onAgree callback from LegalNoticeDialog
 let capturedOnAgree: (() => void) | undefined
@@ -58,11 +47,7 @@ describe('PrivacyPolicyField', () => {
     it('renders checkbox with privacy policy label', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       expect(screen.getByRole('checkbox')).toBeInTheDocument()
       // t.rich calls the link callback with 'link text'
@@ -74,11 +59,7 @@ describe('PrivacyPolicyField', () => {
     it('renders unchecked when value is false', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       expect(screen.getByRole('checkbox')).not.toBeChecked()
     })
@@ -88,11 +69,7 @@ describe('PrivacyPolicyField', () => {
         value: true
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       expect(screen.getByRole('checkbox')).toBeChecked()
     })
@@ -102,11 +79,7 @@ describe('PrivacyPolicyField', () => {
     it('calls handleChange with true when checkbox is clicked', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       fireEvent.click(screen.getByRole('checkbox'))
       expect(fieldApi.handleChange).toHaveBeenCalledWith(true)
@@ -117,11 +90,7 @@ describe('PrivacyPolicyField', () => {
         value: true
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       fireEvent.click(screen.getByRole('checkbox'))
       expect(fieldApi.handleChange).toHaveBeenCalledWith(false)
@@ -130,11 +99,7 @@ describe('PrivacyPolicyField', () => {
     it('calls handleBlur when checkbox loses focus', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       fireEvent.blur(screen.getByRole('checkbox'))
       expect(fieldApi.handleBlur).toHaveBeenCalled()
@@ -145,11 +110,7 @@ describe('PrivacyPolicyField', () => {
     it('calls handleChange(true) when onAgree is triggered', () => {
       const fieldApi = createMockFieldApi('privacyPolicy', false)
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       // onAgree was captured by the LegalNoticeDialog mock
       expect(capturedOnAgree).toBeDefined()
@@ -166,11 +127,7 @@ describe('PrivacyPolicyField', () => {
         errors: [{ message: 'You must accept the privacy policy' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
@@ -182,11 +139,7 @@ describe('PrivacyPolicyField', () => {
         errors: [{ message: 'You must accept the privacy policy' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
       expect(screen.getByText('You must accept the privacy policy')).toBeInTheDocument()
@@ -199,11 +152,7 @@ describe('PrivacyPolicyField', () => {
         errors: [{ message: 'Required' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'true')
     })
@@ -215,11 +164,7 @@ describe('PrivacyPolicyField', () => {
         isValid: true
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <PrivacyPolicyField />
-        </FieldContextWrapper>
-      )
+      render(<PrivacyPolicyField field={fieldApi} />)
 
       expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'false')
     })
