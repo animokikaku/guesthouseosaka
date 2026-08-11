@@ -19,7 +19,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
   const { _key, image } = item
   if (!image) return null
 
-  const imageProps = toGalleryImageProps(image, { width: 400, height: 400, unoptimized: true })
+  const imageProps = toGalleryImageProps(image, { width: 400, height: 400, responsive: true })
   if (!imageProps) return null
 
   return (
@@ -29,12 +29,17 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
       data-testid="gallery-grid-image"
       onClick={() => store.setState((prev) => ({ ...prev, photoId: _key }))}
       imageProps={imageProps}
-      className="aspect-square rounded-lg"
+      className="bg-muted/40 relative aspect-square overflow-hidden"
+      // Tiles are square but their width tracks the column count, so no fixed
+      // placeholder height is right at every breakpoint. `auto` reuses the real
+      // size once a tile has rendered; 400px only covers the first pass.
       style={{
         contentVisibility: 'auto',
-        containIntrinsicSize: '0 400px'
+        containIntrinsicSize: 'auto 400px'
       }}
-      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+      // Mirrors the full-bleed column counts in `CategoryGrid`. Tailwind
+      // breakpoints are min-width, so each stop sits 1px below them.
+      sizes="(max-width: 639px) 50vw, (max-width: 1023px) 25vw, (max-width: 1535px) 20vw, 17vw"
       data-sanity={dataAttribute?.(
         `galleryCategories[_key=="${categoryKey}"].items[_key=="${_key}"]`
       )}

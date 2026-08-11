@@ -1,4 +1,5 @@
 import type { FeaturedImage, GalleryItem } from '@/lib/gallery'
+import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions } from '@sanity/asset-utils'
 import { stegaClean } from '@sanity/client/stega'
@@ -14,7 +15,13 @@ type SizedGalleryImageOptions = {
   fit?: 'clip' | 'crop' | 'fill' | 'fillmax' | 'max' | 'scale' | 'min'
   alt?: string | null
   includeDimensions?: boolean
-  unoptimized?: boolean
+  /**
+   * Serve from Sanity's CDN through {@link sanityImageLoader} rather than the
+   * Next optimizer, letting the browser pick a width from `sizes` instead of
+   * downloading one oversized file. `width`/`height` then only pin the crop
+   * aspect ratio.
+   */
+  responsive?: boolean
 }
 
 type FullGalleryImageOptions = {
@@ -37,7 +44,7 @@ function toSizedGalleryImageProps(
     fit = 'crop',
     alt = image.alt,
     includeDimensions = true,
-    unoptimized = false
+    responsive = false
   }: SizedGalleryImageOptions = {}
 ): GalleryImageProps | null {
   if (!image.asset) return null
@@ -46,9 +53,10 @@ function toSizedGalleryImageProps(
 
   if (width) builder = builder.width(width)
   if (height) builder = builder.height(height)
-  if (dpr) builder = builder.dpr(dpr)
+  // The loader derives each candidate width itself, so a baked-in dpr would
+  // just double every request on top of it.
+  if (dpr && !responsive) builder = builder.dpr(dpr)
   if (fit) builder = builder.fit(fit)
-  if (unoptimized) builder = builder.auto('format').quality(75)
 
   return {
     src: builder.url(),
@@ -57,7 +65,7 @@ function toSizedGalleryImageProps(
     height: includeDimensions ? height : undefined,
     blurDataURL: image.preview ?? undefined,
     placeholder: image.preview ? 'blur' : undefined,
-    ...(unoptimized ? { unoptimized } : {})
+    ...(responsive ? { loader: sanityImageLoader } : {})
   }
 }
 

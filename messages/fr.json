@@ -9,6 +9,9 @@
     "house": "Maison",
     "within_japan": "Depuis le Japon"
   },
+  "CategoryGrid": {
+    "photo_count": "{count, plural, one {# photo} other {# photos}}"
+  },
   "DraftModeIndicator": {
     "exit": "Quitter l'aperçu",
     "preview": "Aperçu"
@@ -28,6 +31,9 @@
   },
   "GalleryPage": {
     "close": "Fermer la galerie"
+  },
+  "GalleryPageContent": {
+    "gallery_content_label": "Contenu de la galerie"
   },
   "HouseAbout": {
     "heading": "À propos de {house}"
@@ -55,7 +61,9 @@
     "heading": "Tarifs"
   },
   "ImageBlockGallery": {
+    "overflow_count": "+{count, number}",
     "view_gallery": "Afficher toutes les photos",
+    "view_gallery_count": "{count, plural, one {Afficher # photo} other {Afficher les # photos}}",
     "empty_title": "Aucune image de galerie",
     "empty_description": "Les images de galerie sont gérées via Sanity CMS."
   },

@@ -8,50 +8,20 @@ type UseStickyNavOptions = {
 }
 
 type UseStickyNavReturn = {
-  /** Whether the sticky nav should be visible (sentinel scrolled out of view) */
-  isVisible: boolean
-  /** Ref to attach to the sentinel element */
-  sentinelRef: React.RefObject<HTMLDivElement | null>
   /** Currently active section ID */
   activeId: string | null
 }
 
 /**
- * Hook for sticky category navigation with scroll-spy.
- *
- * Uses IntersectionObserver to:
- * 1. Detect when sentinel element leaves viewport (show/hide sticky nav)
- * 2. Track which section is currently in view (for highlighting)
+ * Scroll-spy for the gallery category nav: tracks which category section is in
+ * view within the gallery's scroll container so the nav can highlight it.
  */
 export function useStickyNav({
   sectionIds,
   scrollContainerRef
 }: UseStickyNavOptions): UseStickyNavReturn {
-  const [isVisible, setIsVisible] = React.useState(false)
   const [activeId, setActiveId] = React.useState<string | null>(null)
-  const sentinelRef = React.useRef<HTMLDivElement>(null)
 
-  // Observer for sentinel (show/hide sticky nav)
-  React.useEffect(() => {
-    const sentinel = sentinelRef.current
-    const scrollContainer = scrollContainerRef.current
-    if (!sentinel || !scrollContainer) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(!entry.isIntersecting)
-      },
-      {
-        root: scrollContainer,
-        threshold: 0
-      }
-    )
-
-    observer.observe(sentinel)
-    return () => observer.disconnect()
-  }, [scrollContainerRef])
-
-  // Observer for sections (active state tracking)
   React.useEffect(() => {
     const scrollContainer = scrollContainerRef.current
     if (!scrollContainer || sectionIds.length === 0) return
@@ -62,22 +32,26 @@ export function useStickyNav({
 
     if (elements.length === 0) return
 
+    // A callback only carries the sections whose state just changed, so the full
+    // picture has to be kept here — otherwise a section going out of view leaves
+    // the highlight on whichever one happened to be in that batch.
+    const isIntersecting = new Map<string, boolean>()
+
     const observer = new IntersectionObserver(
       (entries) => {
-        const intersecting = entries
-          .filter((entry) => entry.isIntersecting)
-          .map((entry) => ({
-            id: entry.target.id,
-            top: entry.boundingClientRect.top
-          }))
-          .toSorted((a, b) => a.top - b.top)
+        for (const entry of entries) {
+          isIntersecting.set(entry.target.id, entry.isIntersecting)
+        }
 
-        if (intersecting.length > 0) {
-          setActiveId(intersecting[0].id)
+        const active = sectionIds.find((id) => isIntersecting.get(id))
+        if (active) {
+          setActiveId(active)
         }
       },
       {
         root: scrollContainer,
+        // Thin band across the middle of the viewport: a category takes over only
+        // once it actually occupies the centre, not the moment it peeks in.
         rootMargin: '-20% 0px -60% 0px',
         threshold: 0
       }
@@ -87,5 +61,5 @@ export function useStickyNav({
     return () => observer.disconnect()
   }, [scrollContainerRef, sectionIds])
 
-  return { isVisible, sentinelRef, activeId }
+  return { activeId }
 }

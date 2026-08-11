@@ -7,6 +7,7 @@ vi.mock('@sanity/asset-utils', () => ({
 }))
 
 import { createSanityImage } from '@/lib/transforms/__tests__/mocks'
+import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { cleanGalleryAlt, toGalleryImageProps } from '../gallery-image'
 
 describe('cleanGalleryAlt', () => {
@@ -57,13 +58,13 @@ describe('toGalleryImageProps', () => {
     })
   })
 
-  it('requests auto format and quality for direct CDN images', () => {
+  it('attaches the Sanity loader and drops dpr for responsive images', () => {
     const image = createSanityImage()
 
-    expect(toGalleryImageProps(image, { width: 400, height: 400, unoptimized: true })).toEqual(
+    expect(toGalleryImageProps(image, { width: 400, height: 400, responsive: true })).toEqual(
       expect.objectContaining({
-        src: 'https://cdn.sanity.io/images/test/image.jpg?w=400&h=400&dpr=2&fit=crop&auto=format&q=75',
-        unoptimized: true
+        src: 'https://cdn.sanity.io/images/test/image.jpg?w=400&h=400&fit=crop',
+        loader: sanityImageLoader
       })
     )
   })

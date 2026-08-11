@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import type { ImageLoader } from 'next/image'
 import type { ComponentProps } from 'react'
 
 type NextImageProps = Omit<ComponentProps<'img'>, 'src'> & {
@@ -10,6 +11,7 @@ type NextImageProps = Omit<ComponentProps<'img'>, 'src'> & {
   preload?: boolean
   priority?: boolean
   unoptimized?: boolean
+  loader?: ImageLoader
 }
 
 export default function NextImage({
@@ -21,7 +23,14 @@ export default function NextImage({
   preload: _preload,
   priority: _priority,
   unoptimized: _unoptimized,
+  loader,
   ...props
 }: NextImageProps) {
-  return <img {...props} src={typeof src === 'string' ? src : src.src} alt={alt} />
+  const rawSrc = typeof src === 'string' ? src : src.src
+  const width = Number(props.width)
+  // Mirror `next/image`: a custom loader owns the final URL. Without a width
+  // there is no candidate to resolve, so fall back to the source as-is.
+  const resolvedSrc = loader && width > 0 ? loader({ src: rawSrc, width }) : rawSrc
+
+  return <img {...props} src={resolvedSrc} alt={alt} />
 }

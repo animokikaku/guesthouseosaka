@@ -7,6 +7,7 @@ import { useStickyNav } from '@/hooks/use-sticky-nav'
 import { type GalleryCategories, type GalleryCategoryData } from '@/lib/gallery'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { toGalleryCategories } from '@/lib/transforms/gallery'
+import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 import { useMemo, useRef, type ReactNode } from 'react'
 
@@ -26,6 +27,8 @@ export function GalleryPageContent({
   title,
   backButton
 }: GalleryPageContentProps) {
+  const t = useTranslations('GalleryPageContent')
+
   const galleryCategories = useSanityOptimisticArray<
     GalleryCategoryData,
     GalleryCategories,
@@ -41,37 +44,26 @@ export function GalleryPageContent({
   const categories = useMemo(() => toGalleryCategories(galleryCategories), [galleryCategories])
   const sectionIds = useMemo(() => categories.map((c) => c._id), [categories])
 
-  const { isVisible, sentinelRef, activeId } = useStickyNav({
+  const { activeId } = useStickyNav({
     sectionIds,
     scrollContainerRef
   })
 
   return (
     <div className="flex h-full flex-col">
-      <div className="border-border/50 flex shrink-0 items-center gap-2 p-4 md:border-b">
+      {/* Sits above the scroll container rather than over it, so it is opaque:
+          nothing ever passes behind it to tint or blur. */}
+      <div className="bg-background border-border/50 flex shrink-0 items-center gap-2 border-b p-4">
         <div className="shrink-0">{backButton}</div>
-        <div className="container-wrapper min-w-0 flex-1">
-          <div className="container p-0">
-            <StickyCategoryNav categories={categories} activeId={activeId} isVisible={isVisible} />
-          </div>
-        </div>
+        <StickyCategoryNav categories={categories} activeId={activeId} />
       </div>
 
       <main
         ref={scrollContainerRef}
         className="relative flex-1 overflow-y-auto scroll-smooth"
-        aria-label="Gallery Content"
+        aria-label={t('gallery_content_label')}
       >
-        <div className="container-wrapper">
-          <div className="container py-8 md:py-12">
-            <HouseGallery
-              categories={categories}
-              sentinelRef={sentinelRef}
-              dataAttribute={dataAttribute}
-              stickyNavVisible={isVisible}
-            />
-          </div>
-        </div>
+        <HouseGallery categories={categories} dataAttribute={dataAttribute} />
       </main>
 
       <GalleryModal

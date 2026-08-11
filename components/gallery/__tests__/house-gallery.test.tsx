@@ -151,7 +151,7 @@ describe('HouseGallery', () => {
   })
 
   describe('category thumbnails', () => {
-    it('renders category thumbnail buttons', () => {
+    it('renders only grid item buttons (no thumbnail row)', () => {
       const galleryCategories = [
         createGalleryCategory({
           _key: 'cat1',
@@ -162,10 +162,8 @@ describe('HouseGallery', () => {
 
       render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
 
-      // Multiple buttons: thumbnail + grid item
-      // Should have 2 buttons: 1 category thumbnail + 1 grid item
       const buttons = screen.getAllByRole('button')
-      expect(buttons).toHaveLength(2)
+      expect(buttons).toHaveLength(1)
     })
   })
 })

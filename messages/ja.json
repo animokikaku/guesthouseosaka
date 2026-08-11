@@ -9,6 +9,9 @@
     "house": "ハウス",
     "within_japan": "日本国内"
   },
+  "CategoryGrid": {
+    "photo_count": "{count, plural, other {#枚の写真}}"
+  },
   "DraftModeIndicator": {
     "exit": "プレビューを終了",
     "preview": "プレビュー"
@@ -28,6 +31,9 @@
   },
   "GalleryPage": {
     "close": "ギャラリーを閉じる"
+  },
+  "GalleryPageContent": {
+    "gallery_content_label": "ギャラリーコンテンツ"
   },
   "HouseAbout": {
     "heading": "{house}について"
@@ -55,7 +61,9 @@
     "heading": "料金"
   },
   "ImageBlockGallery": {
+    "overflow_count": "+{count, number}",
     "view_gallery": "すべての写真を表示",
+    "view_gallery_count": "{count, plural, other {#枚の写真をすべて表示}}",
     "empty_title": "ギャラリー画像がありません",
     "empty_description": "ギャラリー画像はSanity CMSで管理されています。"
   },

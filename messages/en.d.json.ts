@@ -12,6 +12,9 @@ declare const messages: {
     "house": "House",
     "within_japan": "Within Japan"
   },
+  "CategoryGrid": {
+    "photo_count": "{count, plural, one {# photo} other {# photos}}"
+  },
   "DraftModeIndicator": {
     "exit": "Exit preview",
     "preview": "Preview"
@@ -31,6 +34,9 @@ declare const messages: {
   },
   "GalleryPage": {
     "close": "Close gallery"
+  },
+  "GalleryPageContent": {
+    "gallery_content_label": "Gallery content"
   },
   "HouseAbout": {
     "heading": "About {house}"
@@ -58,7 +64,9 @@ declare const messages: {
     "heading": "Pricing"
   },
   "ImageBlockGallery": {
+    "overflow_count": "+{count, number}",
     "view_gallery": "Show all photos",
+    "view_gallery_count": "{count, plural, one {Show all # photo} other {Show all # photos}}",
     "empty_title": "No gallery images",
     "empty_description": "Gallery images are managed through Sanity CMS."
   },

@@ -1,6 +1,4 @@
 import { GalleryImageFrame } from '@/components/gallery/gallery-image-button'
-import { Icons } from '@/components/icons'
-import { buttonVariants } from '@/components/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
@@ -20,11 +18,16 @@ type ImageBlockGalleryProps = {
 function GalleryGrid({
   images,
   href,
-  viewGalleryLabel
+  viewGalleryLabel,
+  extraCount,
+  overflowLabel
 }: {
   images: GalleryImageProps[]
   href: ComponentProps<typeof Link>['href']
   viewGalleryLabel: string
+  /** Images beyond the 5 shown in the grid, surfaced as a `+N` overlay on the last tile */
+  extraCount: number
+  overflowLabel: string
 }) {
   if (images.length < 5) return null
 
@@ -32,7 +35,8 @@ function GalleryGrid({
     <div className="hidden justify-center sm:flex">
       <div className="w-full">
         <div className="relative aspect-2/1 min-h-75 overflow-hidden rounded-xl lg:aspect-7/3">
-          <Link href={href} aria-hidden="true" tabIndex={-1} className="block h-full w-full">
+          {/* Sole affordance now that the button is gone, so it must stay focusable + labelled */}
+          <Link href={href} aria-label={viewGalleryLabel} className="block h-full w-full">
             <div className="grid h-full w-full grid-cols-4 grid-rows-2 gap-0.5">
               <GalleryImageFrame
                 className="col-span-2 row-span-2"
@@ -58,18 +62,18 @@ function GalleryGrid({
                 className="col-span-1 col-start-4 row-start-2"
                 imageProps={images[4]}
                 sizes="(min-width: 1120px) 280px, 25vw"
-              />
+              >
+                {extraCount > 0 && (
+                  <span
+                    data-slot="gallery-image-overflow"
+                    className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50"
+                    aria-hidden="true"
+                  >
+                    <span className="text-2xl font-bold text-white">{overflowLabel}</span>
+                  </span>
+                )}
+              </GalleryImageFrame>
             </div>
-          </Link>
-          <Link
-            href={href}
-            className={buttonVariants({
-              variant: 'secondary',
-              className: 'absolute right-4 bottom-4'
-            })}
-          >
-            <Icons.gallery data-icon="inline-start" />
-            <span>{viewGalleryLabel}</span>
           </Link>
         </div>
       </div>
@@ -86,14 +90,19 @@ export async function ImageBlockGallery({
 
   const validGalleryImages = galleryImages ?? []
 
-  const images = buildGallerySlides({
+  const slides = buildGallerySlides({
     featuredImage,
-    galleryImages: validGalleryImages,
-    limit: 5
-  }).flatMap(({ image }) => {
+    galleryImages: validGalleryImages
+  })
+
+  // Slides without an image asset drop out here, so convert everything before
+  // picking the 5 grid tiles and the `+N` count.
+  const validImages = slides.flatMap(({ image }) => {
     const imageProps = toGalleryImageProps(image, { width: 560 })
     return imageProps ? [imageProps] : []
   })
+
+  const images = validImages.slice(0, 5)
 
   if (images.length < 5) {
     return (
@@ -111,5 +120,19 @@ export async function ImageBlockGallery({
     )
   }
 
-  return <GalleryGrid images={images} href={href} viewGalleryLabel={t('view_gallery')} />
+  const extraCount = validImages.length - images.length
+
+  return (
+    <GalleryGrid
+      images={images}
+      href={href}
+      // The link's label replaces the tiles' alt text for screen readers, and the
+      // `+N` overlay is decorative, so the total has to ride along in the label.
+      viewGalleryLabel={
+        extraCount > 0 ? t('view_gallery_count', { count: validImages.length }) : t('view_gallery')
+      }
+      extraCount={extraCount}
+      overflowLabel={t('overflow_count', { count: extraCount })}
+    />
+  )
 }
