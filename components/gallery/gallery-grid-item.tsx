@@ -19,7 +19,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
   const { _key, image } = item
   if (!image) return null
 
-  const imageProps = toGalleryImageProps(image, { width: 400, height: 400, unoptimized: true })
+  const imageProps = toGalleryImageProps(image, { width: 400, height: 400, responsive: true })
   if (!imageProps) return null
 
   return (
@@ -34,7 +34,9 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute }: GalleryGri
         contentVisibility: 'auto',
         containIntrinsicSize: '0 400px'
       }}
-      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, (max-width: 1536px) 20vw, 17vw"
+      // Mirrors the full-bleed column counts in `CategoryGrid`. Tailwind
+      // breakpoints are min-width, so each stop sits 1px below them.
+      sizes="(max-width: 639px) 50vw, (max-width: 1023px) 25vw, (max-width: 1535px) 20vw, 17vw"
       data-sanity={dataAttribute?.(
         `galleryCategories[_key=="${categoryKey}"].items[_key=="${_key}"]`
       )}
