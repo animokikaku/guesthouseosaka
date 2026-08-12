@@ -3,6 +3,7 @@
 import { defineAppFieldGroup } from '@/components/forms/app-form'
 import type { ContactFormFields } from '@/components/forms/schema'
 import type { FormFieldsConfig } from '@/lib/types/components'
+import type { FieldGroupFieldBindingsOf } from '@tanstack/react-form'
 import { CakeIcon, GlobeIcon, MailIcon, PhoneIcon, UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -153,11 +154,14 @@ export const FieldGroupUserAccount = userAccountFieldGroup.bindComponent(
   'fields'
 )
 
-export const userAccountFieldBindings = {
+export const userAccountFieldBindings: FieldGroupFieldBindingsOf<
+  typeof userAccountFieldGroup.fields,
+  { account: UserAccountDraft }
+> = {
   name: 'account.name',
   age: 'account.age',
   gender: 'account.gender',
   nationality: 'account.nationality',
   email: 'account.email',
   phone: 'account.phone'
-} as const
+}
