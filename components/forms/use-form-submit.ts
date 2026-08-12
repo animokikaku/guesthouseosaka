@@ -50,6 +50,9 @@ export function useFormSubmit() {
      * single schema validator has always produced its output by this point.
      */
     return async ({ schemaOutputs: [value] }: { schemaOutputs: FormTypeDataMap[T][] }) => {
+      if (!value) {
+        throw new Error(`Missing validated schema output for the "${formType}" form.`)
+      }
       // TypeScript cannot correlate a generic key with its mapped discriminated-union value.
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const payload = { type: formType, data: value } as ContactFormPayload

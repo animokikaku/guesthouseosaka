@@ -71,6 +71,7 @@ export function MoveInForm({ title, description, fields, houseTitles }: MoveInFo
         name="date"
         children={(field) => (
           <field.InputField
+            required
             type="date"
             orientation="responsive"
             label={fields.date.label}

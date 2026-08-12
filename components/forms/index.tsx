@@ -21,7 +21,7 @@ export type HouseTitles = HousesTitlesQueryResult
  * user acts, so the editable state is wider than the validated state. Submit
  * validation narrows both back to the schema type.
  */
-interface ContactFormDraft extends Omit<
+export interface ContactFormDraft extends Omit<
   ContactFormFields,
   'account' | 'privacyPolicy' | 'stayDuration'
 > {

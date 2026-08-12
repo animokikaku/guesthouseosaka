@@ -29,12 +29,12 @@ export const userAccountDefaultValues: UserAccountDraft = {
 }
 
 const userAccountFieldGroup = defineAppFieldGroup(({ strict }) => ({
-  name: strict<string>(),
-  age: strict<string>(),
+  name: strict<UserAccountDraft['name']>(),
+  age: strict<UserAccountDraft['age']>(),
   gender: strict<UserAccountDraft['gender']>(),
-  nationality: strict<string>(),
-  email: strict<string>(),
-  phone: strict<string>()
+  nationality: strict<UserAccountDraft['nationality']>(),
+  email: strict<UserAccountDraft['email']>(),
+  phone: strict<UserAccountDraft['phone']>()
 }))
 
 interface UserAccountFieldsProps {
@@ -101,7 +101,7 @@ function UserAccountFields({ fields, config }: UserAccountFieldsProps) {
           <field.InputGroupField
             required
             orientation="responsive"
-            label={config.nationality?.label}
+            label={config.nationality.label}
             description={config.nationality.description}
             icon={<GlobeIcon />}
             type="text"
