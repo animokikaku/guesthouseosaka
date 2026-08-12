@@ -117,9 +117,11 @@ describe('MoveInForm', () => {
       // nested `account.*` paths owned by the user account field group and
       // this form's own date field.
       const nameInput = screen.getByLabelText(/your name/i)
-      await waitFor(() => expect(nameInput).toHaveAttribute('aria-invalid', 'true'))
-      expect(screen.getByLabelText('Move-In Date')).toHaveAttribute('aria-invalid', 'true')
-      expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
+      await waitFor(() => {
+        expect(nameInput).toHaveAttribute('aria-invalid', 'true')
+        expect(screen.getByLabelText('Move-In Date')).toHaveAttribute('aria-invalid', 'true')
+        expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
+      })
     })
   })
 })
