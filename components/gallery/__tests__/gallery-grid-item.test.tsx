@@ -176,8 +176,7 @@ describe('GalleryGridItem', () => {
 
       render(<GalleryGridItem item={item} categoryKey="cat1" />)
 
-      const button = screen.getByTestId('gallery-grid-image')
-      expect(button.tagName).toBe('BUTTON')
+      const button = screen.getByRole('button', { name: 'Test gallery image' })
       expect(button).toHaveAttribute('type', 'button')
     })
   })

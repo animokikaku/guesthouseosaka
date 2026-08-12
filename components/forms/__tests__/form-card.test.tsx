@@ -24,15 +24,13 @@ describe('FormCard', () => {
     it('renders form with formId', () => {
       const form = createMockForm()
 
-      render(
+      const { container } = render(
         <FormCard formId="test-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      const formElement = document.getElementById('test-form')
-      expect(formElement).toBeInTheDocument()
-      expect(formElement?.tagName).toBe('FORM')
+      expect(container.querySelector('form')).toHaveAttribute('id', 'test-form')
     })
 
     it('renders title when provided', () => {
@@ -105,26 +103,28 @@ describe('FormCard', () => {
     it('renders the submit button', () => {
       const form = createMockForm()
 
-      const { container } = render(
+      render(
         <FormCard formId="test-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      expect(container.querySelector('button[type="submit"]')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'label' })).toBeInTheDocument()
     })
 
     it('submit button has correct form attribute', () => {
       const form = createMockForm()
 
-      const { container } = render(
+      render(
         <FormCard formId="my-custom-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      const submitButton = container.querySelector('button[type="submit"]')
-      expect(submitButton).toHaveAttribute('form', 'my-custom-form')
+      expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute(
+        'form',
+        'my-custom-form'
+      )
     })
 
     it('applies custom className', () => {
@@ -145,13 +145,13 @@ describe('FormCard', () => {
     it('prevents default form submission', () => {
       const form = createMockForm()
 
-      render(
+      const { container } = render(
         <FormCard formId="test-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      const formElement = document.getElementById('test-form') as HTMLFormElement
+      const formElement = container.querySelector('form')!
 
       const submitEvent = new Event('submit', {
         bubbles: true,
@@ -167,13 +167,13 @@ describe('FormCard', () => {
     it('calls handleSubmit on form submission', () => {
       const form = createMockForm()
 
-      render(
+      const { container } = render(
         <FormCard formId="test-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      const formElement = document.getElementById('test-form') as HTMLFormElement
+      const formElement = container.querySelector('form')!
       fireEvent.submit(formElement)
 
       expect(form.handleSubmit).toHaveBeenCalledTimes(1)
@@ -184,13 +184,13 @@ describe('FormCard', () => {
     it('handles null title', () => {
       const form = createMockForm()
 
-      const { container } = render(
+      render(
         <FormCard formId="test-form" form={form} title={null}>
           <TestInput />
         </FormCard>
       )
 
-      expect(container.querySelector('button[type="submit"]')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'label' })).toBeInTheDocument()
     })
 
     it('handles null description', () => {
@@ -207,25 +207,25 @@ describe('FormCard', () => {
   })
   describe('submitting state', () => {
     it('enables the submit button while the form is idle', () => {
-      const { container } = render(
+      render(
         <FormCard formId="test-form" form={createMockForm()}>
           <TestInput />
         </FormCard>
       )
 
-      const button = container.querySelector('button[type="submit"]')
+      const button = screen.getByRole('button', { name: 'label' })
       expect(button).not.toBeDisabled()
       expect(button).toHaveAttribute('aria-busy', 'false')
     })
 
     it('disables the submit button while submitting', () => {
-      const { container } = render(
+      render(
         <FormCard formId="test-form" form={createMockForm({ isSubmitting: true })}>
           <TestInput />
         </FormCard>
       )
 
-      const button = container.querySelector('button[type="submit"]')
+      const button = screen.getByRole('button', { name: 'label' })
       expect(button).toBeDisabled()
       expect(button).toHaveAttribute('aria-busy', 'true')
     })

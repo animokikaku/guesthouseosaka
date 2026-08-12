@@ -98,22 +98,20 @@ describe('TourForm', () => {
     it('has correct form id', () => {
       const { container } = render(<TourForm {...baseProps} />)
 
-      const form = container.querySelector('form#tour-form')
-      expect(form).toBeInTheDocument()
+      expect(container.querySelector('form')).toHaveAttribute('id', 'tour-form')
     })
 
     it('submit button references the form id', () => {
-      const { container } = render(<TourForm {...baseProps} />)
+      render(<TourForm {...baseProps} />)
 
-      const submitButton = container.querySelector('button[form="tour-form"]')
-      expect(submitButton).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute('form', 'tour-form')
     })
   })
   describe('validation', () => {
     it('surfaces schema errors on the matching fields after an invalid submit', async () => {
       const { container } = render(<TourForm {...baseProps} />)
 
-      fireEvent.submit(container.querySelector('form#tour-form') as HTMLFormElement)
+      fireEvent.submit(container.querySelector('form')!)
 
       // Form-level schema errors are routed to their fields, including the
       // nested `account.*` paths owned by the user account field group and
@@ -121,7 +119,7 @@ describe('TourForm', () => {
       const nameInput = screen.getByLabelText(/your name/i)
       await waitFor(() => expect(nameInput).toHaveAttribute('aria-invalid', 'true'))
       expect(screen.getByLabelText('Visit Date')).toHaveAttribute('aria-invalid', 'true')
-      expect(container.querySelectorAll('[data-slot="field-error"]').length).toBeGreaterThan(0)
+      expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
     })
   })
 })

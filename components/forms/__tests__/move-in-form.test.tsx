@@ -98,22 +98,20 @@ describe('MoveInForm', () => {
     it('has correct form id', () => {
       const { container } = render(<MoveInForm {...baseProps} />)
 
-      const form = container.querySelector('form#move-in-form')
-      expect(form).toBeInTheDocument()
+      expect(container.querySelector('form')).toHaveAttribute('id', 'move-in-form')
     })
 
     it('submit button references the form id', () => {
-      const { container } = render(<MoveInForm {...baseProps} />)
+      render(<MoveInForm {...baseProps} />)
 
-      const submitButton = container.querySelector('button[form="move-in-form"]')
-      expect(submitButton).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute('form', 'move-in-form')
     })
   })
   describe('validation', () => {
     it('surfaces schema errors on the matching fields after an invalid submit', async () => {
       const { container } = render(<MoveInForm {...baseProps} />)
 
-      fireEvent.submit(container.querySelector('form#move-in-form') as HTMLFormElement)
+      fireEvent.submit(container.querySelector('form')!)
 
       // Form-level schema errors are routed to their fields, including the
       // nested `account.*` paths owned by the user account field group and
@@ -121,7 +119,7 @@ describe('MoveInForm', () => {
       const nameInput = screen.getByLabelText(/your name/i)
       await waitFor(() => expect(nameInput).toHaveAttribute('aria-invalid', 'true'))
       expect(screen.getByLabelText('Move-In Date')).toHaveAttribute('aria-invalid', 'true')
-      expect(container.querySelectorAll('[data-slot="field-error"]').length).toBeGreaterThan(0)
+      expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
     })
   })
 })
