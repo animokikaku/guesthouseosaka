@@ -1,16 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
-
-// Create a test field context
-const testFieldContext = createFieldContext<string[]>()
-
-// Mock the form-context module
-vi.mock('@/components/forms/form-context', async () => {
-  const React = await import('react')
-  return {
-    useFieldContext: () => React.useContext(testFieldContext)
-  }
-})
+import { fireEvent, render, screen } from '@testing-library/react'
+import { createMockFieldApi } from './test-utils'
 
 // Import after mocking
 import { ToggleGroupField } from '../toggle-group-field'
@@ -30,11 +19,7 @@ describe('ToggleGroupField', () => {
     it('renders toggle group with options', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       expect(screen.getByText('Option 1')).toBeInTheDocument()
       expect(screen.getByText('Option 2')).toBeInTheDocument()
@@ -44,11 +29,7 @@ describe('ToggleGroupField', () => {
     it('renders with label', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField label="Choose options" options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} label="Choose options" options={defaultOptions} />)
 
       expect(screen.getByText('Choose options')).toBeInTheDocument()
     })
@@ -57,9 +38,11 @@ describe('ToggleGroupField', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
       render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} description="Select one or more options" />
-        </FieldContextWrapper>
+        <ToggleGroupField
+          field={fieldApi}
+          options={defaultOptions}
+          description="Select one or more options"
+        />
       )
 
       expect(screen.getByText('Select one or more options')).toBeInTheDocument()
@@ -68,11 +51,7 @@ describe('ToggleGroupField', () => {
     it('renders without description when null', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} description={null} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} description={null} />)
 
       // No description text should be present
       expect(screen.queryByText('Select one or more options')).not.toBeInTheDocument()
@@ -83,11 +62,7 @@ describe('ToggleGroupField', () => {
     it('renders with no options selected initially', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       const buttons = screen.getAllByRole('button')
       buttons.forEach((button) => {
@@ -100,11 +75,7 @@ describe('ToggleGroupField', () => {
         value: ['option1', 'option3']
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       const buttons = screen.getAllByRole('button')
       expect(buttons[0]).toHaveAttribute('data-pressed')
@@ -117,11 +88,7 @@ describe('ToggleGroupField', () => {
     it('calls handleChange when option is toggled on', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       const firstOption = screen.getByText('Option 1').closest('button')!
       fireEvent.click(firstOption)
@@ -134,11 +101,7 @@ describe('ToggleGroupField', () => {
         value: ['option1']
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       const firstOption = screen.getByText('Option 1').closest('button')!
       fireEvent.click(firstOption)
@@ -151,11 +114,7 @@ describe('ToggleGroupField', () => {
         value: ['option1']
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       const secondOption = screen.getByText('Option 2').closest('button')!
       fireEvent.click(secondOption)
@@ -168,11 +127,7 @@ describe('ToggleGroupField', () => {
     it('calls handleBlur when toggle group loses focus', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       // Find the toggle group container by its data-slot attribute
       // There are multiple groups, so we need to be specific
@@ -184,34 +139,20 @@ describe('ToggleGroupField', () => {
   })
 
   describe('error state display', () => {
-    it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi('toggleField', [] as string[], {
-        isTouched: false,
-        isValid: false,
-        errors: [{ message: 'Please select at least one option' }]
-      })
+    it('does not show an error when the visibility policy hides it', () => {
+      const fieldApi = createMockFieldApi('toggleField', [] as string[], { errors: [] })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
-    it('shows error when field is touched and invalid', () => {
+    it('shows the error when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[], {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'Please select at least one option' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
       expect(screen.getByText('Please select at least one option')).toBeInTheDocument()
@@ -219,16 +160,10 @@ describe('ToggleGroupField', () => {
 
     it('sets aria-invalid on toggle items when field is invalid', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[], {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'Required' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={defaultOptions} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={defaultOptions} />)
 
       const buttons = screen.getAllByRole('button')
       buttons.forEach((button) => {
@@ -246,11 +181,7 @@ describe('ToggleGroupField', () => {
         { value: 'opt2', label: 'Option 2', className: 'custom-class-2' }
       ]
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={optionsWithClass} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={optionsWithClass} />)
 
       const buttons = screen.getAllByRole('button')
       expect(buttons[0]).toHaveClass('custom-class-1')
@@ -267,11 +198,7 @@ describe('ToggleGroupField', () => {
         }
       ]
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <ToggleGroupField options={optionsWithNodes} />
-        </FieldContextWrapper>
-      )
+      render(<ToggleGroupField field={fieldApi} options={optionsWithNodes} />)
 
       expect(screen.getByTestId('custom-label')).toBeInTheDocument()
     })

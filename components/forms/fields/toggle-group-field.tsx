@@ -1,7 +1,8 @@
-import { useFieldValidation } from '@/components/forms/hooks'
+import { fieldComponent } from '@/components/forms/field-brand'
 import { FieldDescription, FieldError, FieldLegend, FieldSet } from '@/components/ui/field'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { cn } from '@/lib/utils'
+import type { FieldWithValue } from '@tanstack/react-form'
 
 type ToggleGroupOption = {
   value: string
@@ -14,19 +15,21 @@ interface ToggleGroupFieldProps extends Omit<
   React.ComponentProps<typeof ToggleGroup>,
   'value' | 'onValueChange' | 'onBlur' | 'type' | 'defaultValue'
 > {
+  field: FieldWithValue<string[]>
   label?: React.ReactNode
   options: ToggleGroupOption[]
   description?: string | null
 }
 
 export function ToggleGroupField({
+  field,
   label,
   options,
   description,
   className,
   ...props
 }: ToggleGroupFieldProps) {
-  const { field, isInvalid, errors } = useFieldValidation<string[]>()
+  const isInvalid = field.meta.isInvalid
 
   return (
     <FieldSet data-invalid={isInvalid}>
@@ -41,7 +44,7 @@ export function ToggleGroupField({
           className
         )}
         spacing={2}
-        value={field.state.value}
+        value={field.value}
         onValueChange={(value) => field.handleChange(value)}
         onBlur={() => field.handleBlur()}
         {...props}
@@ -61,7 +64,9 @@ export function ToggleGroupField({
           </ToggleGroupItem>
         ))}
       </ToggleGroup>
-      {isInvalid && <FieldError errors={errors} />}
+      {isInvalid && <FieldError errors={field.errors} />}
     </FieldSet>
   )
 }
+
+export default fieldComponent.loose(ToggleGroupField, 'field')

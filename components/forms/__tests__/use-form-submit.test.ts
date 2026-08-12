@@ -128,7 +128,7 @@ describe('useFormSubmit', () => {
       const onSubmit = result.current.createOnSubmit('tour')
 
       await act(async () => {
-        await onSubmit({ value: mockTourData })
+        await onSubmit({ schemaOutputs: [mockTourData] })
       })
 
       expect(mockSubmitContactForm).toHaveBeenCalledWith({
@@ -143,7 +143,7 @@ describe('useFormSubmit', () => {
       const onSubmit = result.current.createOnSubmit('move-in')
 
       await act(async () => {
-        await onSubmit({ value: mockMoveInData })
+        await onSubmit({ schemaOutputs: [mockMoveInData] })
       })
 
       expect(mockSubmitContactForm).toHaveBeenCalledWith({
@@ -158,7 +158,7 @@ describe('useFormSubmit', () => {
       const onSubmit = result.current.createOnSubmit('other')
 
       await act(async () => {
-        await onSubmit({ value: mockGeneralData })
+        await onSubmit({ schemaOutputs: [mockGeneralData] })
       })
 
       expect(mockSubmitContactForm).toHaveBeenCalledWith({
@@ -173,7 +173,7 @@ describe('useFormSubmit', () => {
       const onSubmit = result.current.createOnSubmit('tour')
 
       await act(async () => {
-        await onSubmit({ value: mockTourData })
+        await onSubmit({ schemaOutputs: [mockTourData] })
       })
 
       expect(mockToastPromise).toHaveBeenCalled()
@@ -192,7 +192,7 @@ describe('useFormSubmit', () => {
       const onSubmit = result.current.createOnSubmit('tour')
 
       let isResolved = false
-      const submission = onSubmit({ value: mockTourData }).then(() => {
+      const submission = onSubmit({ schemaOutputs: [mockTourData] }).then(() => {
         isResolved = true
       })
 
@@ -214,7 +214,7 @@ describe('useFormSubmit', () => {
       const { result } = renderHook(() => useFormSubmit())
       const onSubmit = result.current.createOnSubmit('tour')
 
-      await expect(onSubmit({ value: mockTourData })).rejects.toThrow('delivery_failed')
+      await expect(onSubmit({ schemaOutputs: [mockTourData] })).rejects.toThrow('delivery_failed')
     })
 
     it('success callback redirects to /contact', async () => {
@@ -223,7 +223,7 @@ describe('useFormSubmit', () => {
       const onSubmit = result.current.createOnSubmit('tour')
 
       await act(async () => {
-        await onSubmit({ value: mockTourData })
+        await onSubmit({ schemaOutputs: [mockTourData] })
       })
 
       const [, options] = mockToastPromise.mock.calls[0]
@@ -240,7 +240,7 @@ describe('useFormSubmit', () => {
       const onSubmit = result.current.createOnSubmit('tour')
 
       await act(async () => {
-        await onSubmit({ value: mockTourData })
+        await onSubmit({ schemaOutputs: [mockTourData] })
       })
 
       const [, options] = mockToastPromise.mock.calls[0]

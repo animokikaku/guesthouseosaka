@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { ContactForm } from '../contact-form'
 
 // Mock form submission hook
@@ -113,16 +113,33 @@ describe('ContactForm', () => {
     it('has correct form id', () => {
       const { container } = render(<ContactForm {...baseProps} />)
 
-      const form = container.querySelector('form#other-form')
-      expect(form).toBeInTheDocument()
+      expect(container.querySelector('form')).toHaveAttribute('id', 'other-form')
     })
 
     it('submit button references the form id', () => {
+      render(<ContactForm {...baseProps} />)
+
+      expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute('form', 'other-form')
+    })
+  })
+  describe('validation', () => {
+    it('surfaces schema errors on the matching fields after an invalid submit', async () => {
       const { container } = render(<ContactForm {...baseProps} />)
 
-      // Find submit button by form attribute
-      const submitButton = container.querySelector('button[form="other-form"]')
-      expect(submitButton).toBeInTheDocument()
+      fireEvent.submit(container.querySelector('form')!)
+
+      // Form-level schema errors are routed to their fields, including the
+      // nested `account.*` paths owned by the user account field group.
+      const nameInput = screen.getByLabelText(/your name/i)
+      await waitFor(() => expect(nameInput).toHaveAttribute('aria-invalid', 'true'))
+      expect(screen.getByLabelText(/your email/i)).toHaveAttribute('aria-invalid', 'true')
+      expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
+    })
+
+    it('keeps fields valid before a submit attempt', () => {
+      render(<ContactForm {...baseProps} />)
+
+      expect(screen.getByLabelText(/your name/i)).toHaveAttribute('aria-invalid', 'false')
     })
   })
 })

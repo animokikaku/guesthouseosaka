@@ -1,4 +1,4 @@
-import { useFieldValidation } from '@/components/forms/hooks'
+import { fieldComponent } from '@/components/forms/field-brand'
 import {
   Field,
   FieldContent,
@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/field'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { cn } from '@/lib/utils'
+import type { FieldWithValue } from '@tanstack/react-form'
 import { useId } from 'react'
 
 type InputFormProps = Omit<
@@ -25,12 +26,14 @@ type InputFormProps = Omit<
 type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
 
 interface InputGroupFieldProps extends InputFormProps, Orientation {
+  field: FieldWithValue<string>
   label?: React.ReactNode
   description?: string
   icon?: React.ReactNode
 }
 
 export function InputGroupField({
+  field,
   label,
   description,
   icon,
@@ -38,7 +41,7 @@ export function InputGroupField({
   className,
   ...props
 }: InputGroupFieldProps) {
-  const { field, isInvalid, errors } = useFieldValidation<string>()
+  const isInvalid = field.meta.isInvalid
   const instanceId = useId()
   const inputId = `form-tanstack-input-group-${instanceId}-${field.name}`
   const descriptionId = `${inputId}-description`
@@ -49,7 +52,7 @@ export function InputGroupField({
       <FieldContent>
         {label && <FieldLabel htmlFor={inputId}>{label}</FieldLabel>}
         {description && <FieldDescription id={descriptionId}>{description}</FieldDescription>}
-        {isInvalid && <FieldError id={errorId} errors={errors} />}
+        {isInvalid && <FieldError id={errorId} errors={field.errors} />}
       </FieldContent>
       <InputGroup
         className={cn(
@@ -61,7 +64,7 @@ export function InputGroupField({
           {...props}
           id={inputId}
           name={field.name}
-          value={field.state.value}
+          value={field.value}
           aria-invalid={isInvalid}
           aria-describedby={
             [description ? descriptionId : null, isInvalid ? errorId : null]
@@ -77,3 +80,5 @@ export function InputGroupField({
     </Field>
   )
 }
+
+export default fieldComponent.loose(InputGroupField, 'field')

@@ -1,4 +1,4 @@
-import { useFieldValidation } from '@/components/forms/hooks'
+import { fieldComponent } from '@/components/forms/field-brand'
 import {
   Field,
   FieldContent,
@@ -12,6 +12,7 @@ import {
   InputGroupText,
   InputGroupTextarea
 } from '@/components/ui/input-group'
+import type { FieldWithValue } from '@tanstack/react-form'
 import { useTranslations } from 'next-intl'
 import { useId } from 'react'
 
@@ -23,6 +24,7 @@ type InputGroupTextareaFormProps = Omit<
 type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
 
 interface MessageFieldProps extends InputGroupTextareaFormProps, Orientation {
+  field: FieldWithValue<string>
   label?: React.ReactNode
   description?: string | null
 }
@@ -30,13 +32,14 @@ interface MessageFieldProps extends InputGroupTextareaFormProps, Orientation {
 const MAX_LENGTH = 3000
 
 export function MessageField({
+  field,
   label,
   description,
   orientation,
   required,
   ...props
 }: MessageFieldProps) {
-  const { field, isInvalid, errors } = useFieldValidation<string>()
+  const isInvalid = field.meta.isInvalid
   const instanceId = useId()
   const inputId = `form-tanstack-message-${instanceId}-${field.name}`
   const t = useTranslations('MessageField')
@@ -59,7 +62,7 @@ export function MessageField({
           id={inputId}
           name={field.name}
           maxLength={MAX_LENGTH}
-          value={field.state.value}
+          value={field.value}
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
           {...props}
@@ -67,14 +70,16 @@ export function MessageField({
         <InputGroupAddon align="block-end">
           <InputGroupText className="tabular-nums" aria-live="polite">
             {t('character_counter', {
-              count: `${field.state.value.length}`,
+              count: `${field.value.length}`,
               max: `${MAX_LENGTH}`
             })}
           </InputGroupText>
         </InputGroupAddon>
       </InputGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
-      {isInvalid && <FieldError errors={errors} />}
+      {isInvalid && <FieldError errors={field.errors} />}
     </Field>
   )
 }
+
+export default fieldComponent.loose(MessageField, 'field')

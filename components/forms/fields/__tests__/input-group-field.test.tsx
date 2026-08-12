@@ -1,16 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { createMockFieldApi, createFieldContext, FieldContextWrapper } from './test-utils'
-
-// Create a test field context
-const testFieldContext = createFieldContext<string>()
-
-// Mock the form-context module
-vi.mock('@/components/forms/form-context', async () => {
-  const React = await import('react')
-  return {
-    useFieldContext: () => React.useContext(testFieldContext)
-  }
-})
+import { fireEvent, render, screen } from '@testing-library/react'
+import { createMockFieldApi } from './test-utils'
 
 // Import after mocking
 import { InputGroupField } from '../input-group-field'
@@ -24,11 +13,7 @@ describe('InputGroupField', () => {
     it('renders input with correct name and value', () => {
       const fieldApi = createMockFieldApi('amount', '100')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       const input = screen.getByRole('textbox')
       expect(input).toHaveAttribute('name', 'amount')
@@ -38,11 +23,7 @@ describe('InputGroupField', () => {
     it('renders with label', () => {
       const fieldApi = createMockFieldApi('price', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField label="Price" />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} label="Price" />)
 
       expect(screen.getByText('Price')).toBeInTheDocument()
     })
@@ -50,11 +31,7 @@ describe('InputGroupField', () => {
     it('renders without label when not provided', () => {
       const fieldApi = createMockFieldApi('price', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       // Input should exist but no label
       expect(screen.getByRole('textbox')).toBeInTheDocument()
@@ -64,11 +41,7 @@ describe('InputGroupField', () => {
     it('renders with description', () => {
       const fieldApi = createMockFieldApi('price', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField description="Enter the price in USD" />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} description="Enter the price in USD" />)
 
       expect(screen.getByText('Enter the price in USD')).toBeInTheDocument()
     })
@@ -76,11 +49,7 @@ describe('InputGroupField', () => {
     it('renders without description when not provided', () => {
       const fieldApi = createMockFieldApi('price', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       expect(screen.queryByText('Enter the price')).not.toBeInTheDocument()
     })
@@ -88,11 +57,7 @@ describe('InputGroupField', () => {
     it('renders with icon addon', () => {
       const fieldApi = createMockFieldApi('price', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField icon={<span data-testid="currency-icon">$</span>} />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} icon={<span data-testid="currency-icon">$</span>} />)
 
       expect(screen.getByTestId('currency-icon')).toBeInTheDocument()
     })
@@ -100,11 +65,7 @@ describe('InputGroupField', () => {
     it('renders without icon addon when not provided', () => {
       const fieldApi = createMockFieldApi('price', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       expect(screen.queryByTestId('currency-icon')).not.toBeInTheDocument()
     })
@@ -114,11 +75,7 @@ describe('InputGroupField', () => {
     it('calls handleChange with input value on change', () => {
       const fieldApi = createMockFieldApi('amount', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       const input = screen.getByRole('textbox')
       fireEvent.change(input, { target: { value: '250' } })
@@ -129,11 +86,7 @@ describe('InputGroupField', () => {
     it('calls handleChange on each input change', () => {
       const fieldApi = createMockFieldApi('amount', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       const input = screen.getByRole('textbox')
       fireEvent.change(input, { target: { value: '1' } })
@@ -151,11 +104,7 @@ describe('InputGroupField', () => {
     it('calls handleBlur when input loses focus', () => {
       const fieldApi = createMockFieldApi('amount', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       const input = screen.getByRole('textbox')
       fireEvent.blur(input)
@@ -166,11 +115,7 @@ describe('InputGroupField', () => {
     it('calls handleBlur only once per blur event', () => {
       const fieldApi = createMockFieldApi('amount', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       const input = screen.getByRole('textbox')
       fireEvent.blur(input)
@@ -181,87 +126,52 @@ describe('InputGroupField', () => {
   })
 
   describe('error state', () => {
-    it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi('amount', '', {
-        isTouched: false,
-        isValid: false,
-        errors: [{ message: 'Amount is required' }]
-      })
+    it('does not show an error when the visibility policy hides it', () => {
+      const fieldApi = createMockFieldApi('amount', '', { errors: [] })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
-    it('shows error when field is touched and invalid', () => {
+    it('shows the error when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('amount', '', {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'Amount is required' }]
       })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
       expect(screen.getByText('Amount is required')).toBeInTheDocument()
     })
 
     it('sets aria-invalid on input when field is invalid', () => {
-      const fieldApi = createMockFieldApi('amount', '', {
-        isTouched: true,
-        isValid: false,
-        errors: [{ message: 'Required' }]
-      })
+      const fieldApi = createMockFieldApi('amount', '', { errors: [{ message: 'Required' }] })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       const input = screen.getByRole('textbox')
       expect(input).toHaveAttribute('aria-invalid', 'true')
     })
 
     it('does not set aria-invalid when field is valid', () => {
-      const fieldApi = createMockFieldApi('amount', '100', {
-        isTouched: true,
-        isValid: true
-      })
+      const fieldApi = createMockFieldApi('amount', '100', { errors: [] })
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       const input = screen.getByRole('textbox')
       expect(input).toHaveAttribute('aria-invalid', 'false')
     })
 
     it('preserves generated ARIA relationships', () => {
-      const fieldApi = createMockFieldApi('amount', '', {
-        isTouched: true,
-        isValid: false,
-        errors: [{ message: 'Required' }]
-      })
+      const fieldApi = createMockFieldApi('amount', '', { errors: [{ message: 'Required' }] })
       const conflictingAriaProps = {
         'aria-describedby': 'custom-description',
         'aria-errormessage': 'custom-error'
       }
 
       render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField description="Description" {...conflictingAriaProps} />
-        </FieldContextWrapper>
+        <InputGroupField field={fieldApi} description="Description" {...conflictingAriaProps} />
       )
 
       const input = screen.getByRole('textbox')
@@ -276,11 +186,7 @@ describe('InputGroupField', () => {
     it('generates correct id from field name', () => {
       const fieldApi = createMockFieldApi('monthlyBudget', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} />)
 
       const input = screen.getByRole('textbox')
       expect(input.id).toMatch(/^form-tanstack-input-group-.+-monthlyBudget$/)
@@ -289,11 +195,7 @@ describe('InputGroupField', () => {
     it('forwards additional props to input', () => {
       const fieldApi = createMockFieldApi('amount', '')
 
-      render(
-        <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-          <InputGroupField placeholder="Enter amount" type="number" />
-        </FieldContextWrapper>
-      )
+      render(<InputGroupField field={fieldApi} placeholder="Enter amount" type="number" />)
 
       const input = screen.getByPlaceholderText('Enter amount')
       expect(input).toHaveAttribute('type', 'number')

@@ -5,6 +5,7 @@ import {
   FieldGroupPlaces,
   FieldGroupUserAccount,
   HouseTitles,
+  userAccountFieldBindings,
   useAppForm,
   useFormSubmit
 } from '@/components/forms'
@@ -24,9 +25,7 @@ export function ContactForm({ title, description, fields, houseTitles }: Contact
 
   const form = useAppForm({
     defaultValues: { places, account, message, privacyPolicy },
-    validators: {
-      onSubmit: schema
-    },
+    validators: [{ run: schema, triggers: [] }],
     onSubmitInvalid,
     onSubmit: createOnSubmit('other')
   })
@@ -41,9 +40,9 @@ export function ContactForm({ title, description, fields, houseTitles }: Contact
         houseTitles={houseTitles}
       />
       <FieldSeparator />
-      <FieldGroupUserAccount fields="account" form={form} config={fields} />
+      <FieldGroupUserAccount fields={userAccountFieldBindings} form={form} config={fields} />
       <FieldSeparator />
-      <form.AppField
+      <form.Field
         name="message"
         children={(field) => (
           <field.MessageField
@@ -56,7 +55,7 @@ export function ContactForm({ title, description, fields, houseTitles }: Contact
           />
         )}
       />
-      <form.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
+      <form.Field name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
     </FormCard>
   )
 }

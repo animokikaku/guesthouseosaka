@@ -23,7 +23,6 @@ export type ContactFormValidationMessages = Partial<
   >
 >
 
-const message = (value?: string) => (value ? { message: value } : undefined)
 const error = (value?: string) => (value ? { error: value } : undefined)
 
 function isPositiveNumberString(value: string) {
@@ -52,19 +51,19 @@ export function createContactFormSchema(messages: ContactFormValidationMessages 
     places: z.array(HouseIdentifierSchema).min(1, m('places_min')).max(3, m('places_max')),
     account: z.object({
       name: z.string().min(2, m('name_min')),
-      age: z.string().refine(isPositiveNumberString, message(m('age_positive'))),
+      age: z.string().refine(isPositiveNumberString, error(m('age_positive'))),
       gender: z.enum(['male', 'female'], error(m('gender_required'))),
       nationality: z.string().min(1, m('nationality_required')).max(100, m('nationality_max')),
       email: z.email(m('email')),
-      phone: z.string().refine((value) => (value ? isMobilePhone(value, 'any') : true), {
-        message: m('phone')
-      })
+      phone: z
+        .string()
+        .refine((value) => (value ? isMobilePhone(value, 'any') : true), error(m('phone')))
     }),
     message: z.string().max(3000, m('message_max')),
-    date: z.iso.date().refine(isTodayOrLater, message(m('date_future'))),
+    date: z.iso.date().refine(isTodayOrLater, error(m('date_future'))),
     privacyPolicy: z.literal(true, error(m('privacy_policy'))),
     stayDuration: z.enum(['1-month', '3-months', 'long-term'], error(m('stay_duration'))),
-    hour: z.iso.time().refine(isContactHour, message(m('time_range')))
+    hour: z.iso.time().refine(isContactHour, error(m('time_range')))
   })
 }
 

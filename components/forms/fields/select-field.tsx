@@ -1,4 +1,4 @@
-import { useFieldValidation } from '@/components/forms/hooks'
+import { fieldComponent } from '@/components/forms/field-brand'
 import {
   Field,
   FieldContent,
@@ -15,6 +15,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
+import type { FieldWithValue } from '@tanstack/react-form'
 import { useId } from 'react'
 
 type SelectProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange'>
@@ -22,6 +23,7 @@ type SelectProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 
 type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
 
 interface SelectFieldProps extends SelectProps, Orientation {
+  field: FieldWithValue<string>
   label?: string
   description?: string
   options: { value: string; label: string }[]
@@ -29,6 +31,7 @@ interface SelectFieldProps extends SelectProps, Orientation {
 }
 
 export function SelectField({
+  field,
   label,
   description,
   options,
@@ -36,7 +39,7 @@ export function SelectField({
   orientation,
   ...props
 }: SelectFieldProps) {
-  const { field, isInvalid, errors } = useFieldValidation<string>()
+  const isInvalid = field.meta.isInvalid
   const instanceId = useId()
   const triggerId = `form-tanstack-select-${instanceId}-${field.name}`
   const descriptionId = `${triggerId}-description`
@@ -51,12 +54,12 @@ export function SelectField({
       <FieldContent>
         {label && <FieldLabel htmlFor={triggerId}>{label}</FieldLabel>}
         {description && <FieldDescription id={descriptionId}>{description}</FieldDescription>}
-        {isInvalid && <FieldError id={errorId} errors={errors} />}
+        {isInvalid && <FieldError id={errorId} errors={field.errors} />}
       </FieldContent>
       <Select
         items={items}
         name={field.name}
-        value={field.state.value}
+        value={field.value}
         onValueChange={(value) => field.handleChange(typeof value === 'string' ? value : '')}
         {...props}
       >
@@ -88,3 +91,5 @@ export function SelectField({
     </Field>
   )
 }
+
+export default fieldComponent.loose(SelectField, 'field')

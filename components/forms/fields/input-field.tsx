@@ -1,6 +1,6 @@
 'use client'
 
-import { useFieldValidation } from '@/components/forms/hooks'
+import { fieldComponent } from '@/components/forms/field-brand'
 import {
   Field,
   FieldContent,
@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import type { FieldWithValue } from '@tanstack/react-form'
 import { useId } from 'react'
 
 type InputFormProps = Omit<
@@ -27,18 +28,20 @@ type InputFormProps = Omit<
 type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
 
 interface InputFieldProps extends InputFormProps, Orientation {
+  field: FieldWithValue<string>
   label?: React.ReactNode
   description?: string | null
 }
 
 export function InputField({
+  field,
   label,
   description,
   orientation,
   className,
   ...props
 }: InputFieldProps) {
-  const { field, isInvalid, errors } = useFieldValidation<string>()
+  const isInvalid = field.meta.isInvalid
   const instanceId = useId()
   const inputId = `form-tanstack-input-${instanceId}-${field.name}`
   const descriptionId = `${inputId}-description`
@@ -49,13 +52,13 @@ export function InputField({
       <FieldContent>
         {label && <FieldLabel htmlFor={inputId}>{label}</FieldLabel>}
         {description && <FieldDescription id={descriptionId}>{description}</FieldDescription>}
-        {isInvalid && <FieldError id={errorId} errors={errors} />}
+        {isInvalid && <FieldError id={errorId} errors={field.errors} />}
       </FieldContent>
       <Input
         {...props}
         id={inputId}
         name={field.name}
-        value={field.state.value}
+        value={field.value}
         aria-invalid={isInvalid}
         aria-describedby={
           [description ? descriptionId : null, isInvalid ? errorId : null]
@@ -73,3 +76,5 @@ export function InputField({
     </Field>
   )
 }
+
+export default fieldComponent.loose(InputField, 'field')

@@ -105,9 +105,6 @@
     "title": "Contenu non disponible",
     "description": "Le contenu de cette page est géré dans Sanity CMS. Veuillez ajouter du contenu pour l'afficher ici."
   },
-  "ResetButton": {
-    "label": "Réinitialiser"
-  },
   "SiteHeader": {
     "logo_label": "Share House Osaka",
     "navigation_label": "Navigation principale",

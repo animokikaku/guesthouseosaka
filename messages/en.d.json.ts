@@ -108,9 +108,6 @@ declare const messages: {
     "title": "Content not available",
     "description": "This page content is managed in Sanity CMS. Please add content to display it here."
   },
-  "ResetButton": {
-    "label": "Reset"
-  },
   "SiteHeader": {
     "logo_label": "Share House Osaka",
     "navigation_label": "Main navigation",

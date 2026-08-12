@@ -105,9 +105,6 @@
     "title": "コンテンツがありません",
     "description": "このページのコンテンツはSanity CMSで管理されています。コンテンツを追加してください。"
   },
-  "ResetButton": {
-    "label": "リセット"
-  },
   "SiteHeader": {
     "logo_label": "シェアハウス大阪",
     "navigation_label": "メインナビゲーション",

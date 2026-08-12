@@ -39,7 +39,13 @@ public/                # Static assets only
 
 ### Forms
 
-- Built with `@tanstack/react-form` and Zod validation
+- Built with `@tanstack/react-form` v2 and Zod validation
+- `forms/app-form.tsx` registers the field components with `createFormHook`, so
+  `form.Field` render props expose them typed against the field's value
+- Schemas run as form-level validators (`validators: [{ run: schema, triggers: [] }]`),
+  which validate on submit and route errors to the matching fields
+- Sections reused across forms are field groups created with `defineAppFieldGroup`,
+  bound to concrete paths by the caller
 
 ### Environment
 

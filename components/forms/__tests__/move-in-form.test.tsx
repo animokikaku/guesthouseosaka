@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MoveInForm } from '../move-in-form'
 
 // Mock form submission hook
@@ -63,10 +63,10 @@ describe('MoveInForm', () => {
   })
 
   describe('form fields', () => {
-    it('renders date field', () => {
+    it('renders the date field as a native date input', () => {
       render(<MoveInForm {...baseProps} />)
 
-      expect(screen.getByLabelText(/move-in date/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/move-in date/i)).toHaveAttribute('type', 'date')
     })
 
     it('renders stay duration field', () => {
@@ -98,15 +98,30 @@ describe('MoveInForm', () => {
     it('has correct form id', () => {
       const { container } = render(<MoveInForm {...baseProps} />)
 
-      const form = container.querySelector('form#move-in-form')
-      expect(form).toBeInTheDocument()
+      expect(container.querySelector('form')).toHaveAttribute('id', 'move-in-form')
     })
 
     it('submit button references the form id', () => {
+      render(<MoveInForm {...baseProps} />)
+
+      expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute('form', 'move-in-form')
+    })
+  })
+  describe('validation', () => {
+    it('surfaces schema errors on the matching fields after an invalid submit', async () => {
       const { container } = render(<MoveInForm {...baseProps} />)
 
-      const submitButton = container.querySelector('button[form="move-in-form"]')
-      expect(submitButton).toBeInTheDocument()
+      fireEvent.submit(container.querySelector('form')!)
+
+      // Form-level schema errors are routed to their fields, including the
+      // nested `account.*` paths owned by the user account field group and
+      // this form's own date field.
+      const nameInput = screen.getByLabelText(/your name/i)
+      await waitFor(() => {
+        expect(nameInput).toHaveAttribute('aria-invalid', 'true')
+        expect(screen.getByLabelText('Move-In Date')).toHaveAttribute('aria-invalid', 'true')
+        expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
+      })
     })
   })
 })

@@ -1,19 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import {
-  createFieldContext,
-  createMockFieldApi,
-  FieldContextWrapper,
-  type MockFieldApi
-} from './test-utils'
-
-const testFieldContext = createFieldContext<string>()
-
-vi.mock('@/components/forms/form-context', async () => {
-  const React = await import('react')
-  return {
-    useFieldContext: () => React.useContext(testFieldContext)
-  }
-})
+import { createMockFieldApi } from './test-utils'
 
 import { SelectField } from '../select-field'
 
@@ -22,14 +8,6 @@ const defaultOptions = [
   { value: 'option2', label: 'Option 2' },
   { value: 'option3', label: 'Option 3' }
 ]
-
-function renderWithContext(ui: React.ReactElement, fieldApi: MockFieldApi<string>) {
-  return render(
-    <FieldContextWrapper fieldApi={fieldApi} context={testFieldContext}>
-      {ui}
-    </FieldContextWrapper>
-  )
-}
 
 describe('SelectField', () => {
   beforeEach(() => {
@@ -40,7 +18,7 @@ describe('SelectField', () => {
     it('renders select trigger', () => {
       const fieldApi = createMockFieldApi('testSelect', '')
 
-      renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
+      render(<SelectField field={fieldApi} options={defaultOptions} />)
 
       expect(screen.getByRole('combobox')).toBeInTheDocument()
     })
@@ -48,7 +26,7 @@ describe('SelectField', () => {
     it('renders with label', () => {
       const fieldApi = createMockFieldApi('testSelect', '')
 
-      renderWithContext(<SelectField label="Country" options={defaultOptions} />, fieldApi)
+      render(<SelectField field={fieldApi} label="Country" options={defaultOptions} />)
 
       expect(screen.getByText('Country')).toBeInTheDocument()
     })
@@ -56,7 +34,7 @@ describe('SelectField', () => {
     it('renders without label', () => {
       const fieldApi = createMockFieldApi('testSelect', '')
 
-      const { container } = renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
+      const { container } = render(<SelectField field={fieldApi} options={defaultOptions} />)
 
       expect(container.querySelector('label')).not.toBeInTheDocument()
     })
@@ -64,9 +42,13 @@ describe('SelectField', () => {
     it('renders with description', () => {
       const fieldApi = createMockFieldApi('testSelect', '')
 
-      renderWithContext(
-        <SelectField label="Country" description="Select your country" options={defaultOptions} />,
-        fieldApi
+      render(
+        <SelectField
+          field={fieldApi}
+          label="Country"
+          description="Select your country"
+          options={defaultOptions}
+        />
       )
 
       expect(screen.getByText('Select your country')).toBeInTheDocument()
@@ -75,7 +57,7 @@ describe('SelectField', () => {
     it('renders with placeholder', () => {
       const fieldApi = createMockFieldApi('testSelect', '')
 
-      renderWithContext(<SelectField options={defaultOptions} placeholder="Choose..." />, fieldApi)
+      render(<SelectField field={fieldApi} options={defaultOptions} placeholder="Choose..." />)
 
       expect(screen.getByText('Choose...')).toBeInTheDocument()
     })
@@ -83,7 +65,7 @@ describe('SelectField', () => {
     it('associates label with select via htmlFor', () => {
       const fieldApi = createMockFieldApi('testSelect', '')
 
-      renderWithContext(<SelectField label="Country" options={defaultOptions} />, fieldApi)
+      render(<SelectField field={fieldApi} label="Country" options={defaultOptions} />)
 
       const trigger = screen.getByRole('combobox')
       expect(trigger.id).toMatch(/^form-tanstack-select-.+-testSelect$/)
@@ -99,58 +81,45 @@ describe('SelectField', () => {
         value: 'option2'
       })
 
-      renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
+      render(<SelectField field={fieldApi} options={defaultOptions} />)
 
       expect(screen.getByText('Option 2')).toBeInTheDocument()
     })
   })
 
   describe('error state display', () => {
-    it('does not show error when field is not touched', () => {
-      const fieldApi = createMockFieldApi('testSelect', '', {
-        isTouched: false,
-        isValid: false,
-        errors: [{ message: 'This field is required' }]
-      })
+    it('does not show an error when the visibility policy hides it', () => {
+      const fieldApi = createMockFieldApi('testSelect', '', { errors: [] })
 
-      renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
+      render(<SelectField field={fieldApi} options={defaultOptions} />)
 
       expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
 
-    it('shows error when field is touched and invalid', () => {
+    it('shows the error when the field has visible errors', () => {
       const fieldApi = createMockFieldApi('testSelect', '', {
-        isTouched: true,
-        isValid: false,
         errors: [{ message: 'This field is required' }]
       })
 
-      renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
+      render(<SelectField field={fieldApi} options={defaultOptions} />)
 
       expect(screen.getByRole('alert')).toBeInTheDocument()
       expect(screen.getByText('This field is required')).toBeInTheDocument()
     })
 
-    it('sets aria-invalid when field is touched and invalid', () => {
-      const fieldApi = createMockFieldApi('testSelect', '', {
-        isTouched: true,
-        isValid: false,
-        errors: [{ message: 'Required' }]
-      })
+    it('sets aria-invalid when the field has visible errors', () => {
+      const fieldApi = createMockFieldApi('testSelect', '', { errors: [{ message: 'Required' }] })
 
-      renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
+      render(<SelectField field={fieldApi} options={defaultOptions} />)
 
       const trigger = screen.getByRole('combobox')
       expect(trigger).toHaveAttribute('aria-invalid', 'true')
     })
 
     it('does not set aria-invalid when field is valid', () => {
-      const fieldApi = createMockFieldApi('testSelect', '', {
-        isTouched: true,
-        isValid: true
-      })
+      const fieldApi = createMockFieldApi('testSelect', '', { errors: [] })
 
-      renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
+      render(<SelectField field={fieldApi} options={defaultOptions} />)
 
       const trigger = screen.getByRole('combobox')
       expect(trigger).not.toHaveAttribute('aria-invalid', 'true')
@@ -161,7 +130,7 @@ describe('SelectField', () => {
     it('passes field name to select', () => {
       const fieldApi = createMockFieldApi('countrySelect', '')
 
-      renderWithContext(<SelectField options={defaultOptions} />, fieldApi)
+      render(<SelectField field={fieldApi} options={defaultOptions} />)
 
       const trigger = screen.getByRole('combobox')
       expect(trigger.id).toMatch(/^form-tanstack-select-.+-countrySelect$/)

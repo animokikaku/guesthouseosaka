@@ -5,6 +5,7 @@ import {
   FieldGroupPlaces,
   FieldGroupUserAccount,
   HouseTitles,
+  userAccountFieldBindings,
   useAppForm,
   useFormSubmit
 } from '@/components/forms'
@@ -33,9 +34,7 @@ export function MoveInForm({ title, description, fields, houseTitles }: MoveInFo
       message,
       privacyPolicy
     },
-    validators: {
-      onSubmit: schema
-    },
+    validators: [{ run: schema, triggers: [] }],
     onSubmitInvalid,
     onSubmit: createOnSubmit('move-in')
   })
@@ -68,17 +67,19 @@ export function MoveInForm({ title, description, fields, houseTitles }: MoveInFo
         description={fields.places.description}
         houseTitles={houseTitles}
       />
-      <form.AppField
+      <form.Field
         name="date"
         children={(field) => (
-          <field.DateField
+          <field.InputField
+            required
+            type="date"
             orientation="responsive"
             label={fields.date.label}
             description={fields.date.description}
           />
         )}
       />
-      <form.AppField
+      <form.Field
         name="stayDuration"
         children={(field) => (
           <field.SelectField
@@ -92,9 +93,9 @@ export function MoveInForm({ title, description, fields, houseTitles }: MoveInFo
         )}
       />
       <FieldSeparator />
-      <FieldGroupUserAccount fields="account" form={form} config={fields} />
+      <FieldGroupUserAccount fields={userAccountFieldBindings} form={form} config={fields} />
       <FieldSeparator />
-      <form.AppField
+      <form.Field
         name="message"
         children={(field) => (
           <field.MessageField
@@ -106,7 +107,7 @@ export function MoveInForm({ title, description, fields, houseTitles }: MoveInFo
           />
         )}
       />
-      <form.AppField name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
+      <form.Field name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />
     </FormCard>
   )
 }

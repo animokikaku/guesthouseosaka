@@ -1,19 +1,14 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { Store, type AnyReactFormApi } from '@tanstack/react-form'
 import { FormCard } from '../form-card'
 
-function createMockForm() {
+function createMockForm({ isSubmitting = false } = {}) {
+  // FormCard only reads `handleSubmit` and the submitting state.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return {
     handleSubmit: vi.fn(),
-    AppForm: ({ children }: { children?: React.ReactNode }) => (
-      <div data-testid="app-form">{children}</div>
-    ),
-    ResetButton: () => <button type="button">Reset</button>,
-    SubmitButton: ({ form }: { form: string }) => (
-      <button type="submit" form={form}>
-        Submit
-      </button>
-    )
-  }
+    atom: new Store({ isSubmitting })
+  } as unknown as AnyReactFormApi & { handleSubmit: ReturnType<typeof vi.fn> }
 }
 
 function TestInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
@@ -29,15 +24,13 @@ describe('FormCard', () => {
     it('renders form with formId', () => {
       const form = createMockForm()
 
-      render(
+      const { container } = render(
         <FormCard formId="test-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      const formElement = document.getElementById('test-form')
-      expect(formElement).toBeInTheDocument()
-      expect(formElement?.tagName).toBe('FORM')
+      expect(container.querySelector('form')).toHaveAttribute('id', 'test-form')
     })
 
     it('renders title when provided', () => {
@@ -107,7 +100,7 @@ describe('FormCard', () => {
       expect(screen.getByTestId('email-input')).toBeInTheDocument()
     })
 
-    it('renders reset and submit buttons', () => {
+    it('renders the submit button', () => {
       const form = createMockForm()
 
       render(
@@ -116,8 +109,7 @@ describe('FormCard', () => {
         </FormCard>
       )
 
-      expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'label' })).toBeInTheDocument()
     })
 
     it('submit button has correct form attribute', () => {
@@ -129,8 +121,10 @@ describe('FormCard', () => {
         </FormCard>
       )
 
-      const submitButton = screen.getByRole('button', { name: 'Submit' })
-      expect(submitButton).toHaveAttribute('form', 'my-custom-form')
+      expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute(
+        'form',
+        'my-custom-form'
+      )
     })
 
     it('applies custom className', () => {
@@ -151,13 +145,13 @@ describe('FormCard', () => {
     it('prevents default form submission', () => {
       const form = createMockForm()
 
-      render(
+      const { container } = render(
         <FormCard formId="test-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      const formElement = document.getElementById('test-form') as HTMLFormElement
+      const formElement = container.querySelector('form')!
 
       const submitEvent = new Event('submit', {
         bubbles: true,
@@ -173,13 +167,13 @@ describe('FormCard', () => {
     it('calls handleSubmit on form submission', () => {
       const form = createMockForm()
 
-      render(
+      const { container } = render(
         <FormCard formId="test-form" form={form}>
           <TestInput />
         </FormCard>
       )
 
-      const formElement = document.getElementById('test-form') as HTMLFormElement
+      const formElement = container.querySelector('form')!
       fireEvent.submit(formElement)
 
       expect(form.handleSubmit).toHaveBeenCalledTimes(1)
@@ -196,7 +190,7 @@ describe('FormCard', () => {
         </FormCard>
       )
 
-      expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'label' })).toBeInTheDocument()
     })
 
     it('handles null description', () => {
@@ -209,6 +203,31 @@ describe('FormCard', () => {
       )
 
       expect(screen.getByText('Contact')).toBeInTheDocument()
+    })
+  })
+  describe('submitting state', () => {
+    it('enables the submit button while the form is idle', () => {
+      render(
+        <FormCard formId="test-form" form={createMockForm()}>
+          <TestInput />
+        </FormCard>
+      )
+
+      const button = screen.getByRole('button', { name: 'label' })
+      expect(button).not.toBeDisabled()
+      expect(button).toHaveAttribute('aria-busy', 'false')
+    })
+
+    it('disables the submit button while submitting', () => {
+      render(
+        <FormCard formId="test-form" form={createMockForm({ isSubmitting: true })}>
+          <TestInput />
+        </FormCard>
+      )
+
+      const button = screen.getByRole('button', { name: 'label' })
+      expect(button).toBeDisabled()
+      expect(button).toHaveAttribute('aria-busy', 'true')
     })
   })
 })
