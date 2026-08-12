@@ -1,3 +1,4 @@
+import { fieldComponent } from '@/components/forms/field-brand'
 import {
   Field,
   FieldContent,
@@ -90,3 +91,5 @@ export function SelectField({
     </Field>
   )
 }
+
+export default fieldComponent.loose(SelectField, 'field')

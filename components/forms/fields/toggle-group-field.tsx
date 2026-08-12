@@ -1,3 +1,4 @@
+import { fieldComponent } from '@/components/forms/field-brand'
 import { FieldDescription, FieldError, FieldLegend, FieldSet } from '@/components/ui/field'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { cn } from '@/lib/utils'
@@ -67,3 +68,5 @@ export function ToggleGroupField({
     </FieldSet>
   )
 }
+
+export default fieldComponent.loose(ToggleGroupField, 'field')

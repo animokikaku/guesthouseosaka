@@ -1,5 +1,6 @@
 'use client'
 
+import { fieldComponent } from '@/components/forms/field-brand'
 import {
   Field,
   FieldContent,
@@ -75,3 +76,5 @@ export function InputField({
     </Field>
   )
 }
+
+export default fieldComponent.loose(InputField, 'field')

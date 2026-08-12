@@ -1,6 +1,7 @@
 'use client'
 
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
+import { fieldComponent } from '@/components/forms/field-brand'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
 import type { FieldWithValue } from '@tanstack/react-form'
@@ -53,3 +54,5 @@ export function PrivacyPolicyField({ field }: PrivacyPolicyFieldProps) {
     </FieldSet>
   )
 }
+
+export default fieldComponent.loose(PrivacyPolicyField, 'field')

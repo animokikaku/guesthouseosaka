@@ -1,3 +1,4 @@
+import { fieldComponent } from '@/components/forms/field-brand'
 import {
   Field,
   FieldContent,
@@ -79,3 +80,5 @@ export function InputGroupField({
     </Field>
   )
 }
+
+export default fieldComponent.loose(InputGroupField, 'field')

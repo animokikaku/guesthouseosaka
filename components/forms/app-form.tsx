@@ -1,29 +1,26 @@
 'use client'
 
-import {
-  InputField,
-  InputGroupField,
-  MessageField,
-  PrivacyPolicyField,
-  SelectField,
-  ToggleGroupField
-} from '@/components/forms/fields'
-import { createFormHook, getFormHookHelpers } from '@tanstack/react-form'
-
-const { fieldComponent } = getFormHookHelpers()
+import { default as InputField } from '@/components/forms/fields/input-field'
+import { default as InputGroupField } from '@/components/forms/fields/input-group-field'
+import { default as MessageField } from '@/components/forms/fields/message-field'
+import { default as PrivacyPolicyField } from '@/components/forms/fields/privacy-policy-field'
+import { default as SelectField } from '@/components/forms/fields/select-field'
+import { default as ToggleGroupField } from '@/components/forms/fields/toggle-group-field'
+import { createFormHook } from '@tanstack/react-form'
 
 /**
- * The app-wide form hook. Field components are registered here so that
+ * The app-wide form hook. Each field component self-registers its brand via
+ * `fieldComponent.loose(...)` in its own module; this just assembles them so
  * `form.Field` render props expose them, typed against the field's value.
  */
 const formHook = createFormHook({
   fieldComponents: {
-    InputField: fieldComponent.loose(InputField, 'field'),
-    InputGroupField: fieldComponent.loose(InputGroupField, 'field'),
-    MessageField: fieldComponent.loose(MessageField, 'field'),
-    PrivacyPolicyField: fieldComponent.loose(PrivacyPolicyField, 'field'),
-    SelectField: fieldComponent.loose(SelectField, 'field'),
-    ToggleGroupField: fieldComponent.loose(ToggleGroupField, 'field')
+    InputField,
+    InputGroupField,
+    MessageField,
+    PrivacyPolicyField,
+    SelectField,
+    ToggleGroupField
   },
   formComponents: {}
 })

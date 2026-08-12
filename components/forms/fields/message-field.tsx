@@ -1,3 +1,4 @@
+import { fieldComponent } from '@/components/forms/field-brand'
 import {
   Field,
   FieldContent,
@@ -80,3 +81,5 @@ export function MessageField({
     </Field>
   )
 }
+
+export default fieldComponent.loose(MessageField, 'field')
