@@ -13,7 +13,7 @@ import { createFormHook } from '@tanstack/react-form'
  * `fieldComponent.loose(...)` in its own module; this just assembles them so
  * `form.Field` render props expose them, typed against the field's value.
  */
-const formHook = createFormHook({
+const { useAppForm, defineAppFieldGroup } = createFormHook({
   fieldComponents: {
     InputField,
     InputGroupField,
@@ -25,5 +25,4 @@ const formHook = createFormHook({
   formComponents: {}
 })
 
-export const useAppForm = formHook.useAppForm
-export const defineAppFieldGroup = formHook.defineAppFieldGroup
+export { useAppForm, defineAppFieldGroup }
