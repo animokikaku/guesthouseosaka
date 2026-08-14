@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 /**
  * Default lightbox, Tailwind variant — single-file design-system package
@@ -25,35 +25,35 @@
  * (docs: `demo.tsx`) — not in this module.
  */
 
-import * as React from 'react';
+import * as React from 'react'
 import {
   GalleryHorizontalIcon,
   RectangleHorizontalIcon,
   XIcon,
   ZoomInIcon,
-  ZoomOutIcon,
-} from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import Image from 'next/image';
-import { Lightbox as RamkaLightbox } from 'ramka';
+  ZoomOutIcon
+} from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+import { Lightbox as RamkaLightbox } from 'ramka'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
 /** Item shape for `Lightbox.Gallery` — pass real intrinsic pixel size. */
 export type LightboxItem = {
-  id?: string | number;
-  src: string;
-  thumb: string;
-  alt: string;
-  caption?: string;
-  width: number;
-  height: number;
-};
+  id?: string | number
+  src: string
+  thumb: string
+  alt: string
+  caption?: string
+  width: number
+  height: number
+}
 
-export type SlidesLayout = 'bleed' | 'snug';
+export type SlidesLayout = 'bleed' | 'snug'
 
 /** Inline styles that carry the `--lb-*`/`--lightbox-*` custom properties the skin reads/writes. */
-type CSSVarStyle = React.CSSProperties & Record<`--${string}`, string | number>;
+type CSSVarStyle = React.CSSProperties & Record<`--${string}`, string | number>
 
 /**
  * The snug/bleed choice is a user preference, so it survives across galleries
@@ -61,28 +61,28 @@ type CSSVarStyle = React.CSSProperties & Record<`--${string}`, string | number>;
  * and `window` doesn't exist during SSR (the portal renders nothing while
  * closed, so the pre-hydration value is never visible anyway).
  */
-const SLIDES_LAYOUT_STORAGE_KEY = 'ramka-lightbox-slides-layout';
+const SLIDES_LAYOUT_STORAGE_KEY = 'ramka-lightbox-slides-layout'
 
 function readStoredSlidesLayout(): SlidesLayout | null {
-  if (typeof window === 'undefined') return null;
+  if (typeof window === 'undefined') return null
   try {
-    const value = window.localStorage.getItem(SLIDES_LAYOUT_STORAGE_KEY);
-    return value === 'snug' || value === 'bleed' ? value : null;
+    const value = window.localStorage.getItem(SLIDES_LAYOUT_STORAGE_KEY)
+    return value === 'snug' || value === 'bleed' ? value : null
   } catch {
-    return null;
+    return null
   }
 }
 
 function storeSlidesLayout(layout: SlidesLayout) {
   try {
-    window.localStorage.setItem(SLIDES_LAYOUT_STORAGE_KEY, layout);
+    window.localStorage.setItem(SLIDES_LAYOUT_STORAGE_KEY, layout)
   } catch {
     // Storage unavailable — the toggle still works for this session.
   }
 }
 
 function itemAspectRatio(item: LightboxItem): number {
-  return item.width / item.height;
+  return item.width / item.height
 }
 
 /* ── Shared class recipes ───────────────────────────────────────────────── */
@@ -112,8 +112,8 @@ const controlClass = cn(
   'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
   'dark:hover:bg-[linear-gradient(rgb(255_255_255/0.08),rgb(255_255_255/0.08))]',
   'dark:active:bg-[linear-gradient(rgb(255_255_255/0.12),rgb(255_255_255/0.12))]',
-  'dark:focus-visible:shadow-[0_0_0_2px_rgb(255_255_255/0.4),0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
-);
+  'dark:focus-visible:shadow-[0_0_0_2px_rgb(255_255_255/0.4),0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]'
+)
 
 /**
  * Joined capsule — one glass pill holding several segments (zoom −/+) with a
@@ -127,8 +127,8 @@ const controlGroupClass = cn(
   'shadow-[0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
   'backdrop-blur-2xl backdrop-saturate-150',
   'dark:border-white/25 dark:bg-neutral-900/45',
-  'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
-);
+  'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]'
+)
 
 /**
  * Segment inside `controlGroupClass`: sheds its own glass chrome (the pill
@@ -142,12 +142,12 @@ const controlSegmentClass = cn(
   'active:scale-100',
   'focus-visible:shadow-[inset_0_0_0_2px_rgb(0_0_0/0.25)]',
   'dark:bg-transparent dark:shadow-none',
-  'dark:focus-visible:shadow-[inset_0_0_0_2px_rgb(255_255_255/0.4)]',
-);
+  'dark:focus-visible:shadow-[inset_0_0_0_2px_rgb(255_255_255/0.4)]'
+)
 
 /** Hairline divider on the leading edge of a follow-up capsule segment. */
 const controlSegmentDividerClass =
-  'before:absolute before:inset-y-[22%] before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/20';
+  'before:absolute before:inset-y-[22%] before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/20'
 
 /**
  * Chrome that gets out of the way during gestures. `visibility` (not just
@@ -161,13 +161,13 @@ const chromeGestureHideClass = cn(
   'group-data-pulling/lb:invisible group-data-pulling/lb:opacity-0',
   'group-data-pulling/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
   'group-data-pull-dismissing/lb:invisible group-data-pull-dismissing/lb:opacity-0',
-  'group-data-pull-dismissing/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
-);
+  'group-data-pull-dismissing/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+)
 
 /* ── Styled primitives (design-system re-exports) ───────────────────────── */
 
 function Root(props: React.ComponentProps<typeof RamkaLightbox.Root>) {
-  return <RamkaLightbox.Root {...props} />;
+  return <RamkaLightbox.Root {...props} />
 }
 
 function Trigger({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Trigger>) {
@@ -176,11 +176,11 @@ function Trigger({ className, ...props }: React.ComponentProps<typeof RamkaLight
       data-slot="lightbox-trigger"
       className={cn(
         'cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500',
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function Portal({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Portal>) {
@@ -190,7 +190,7 @@ function Portal({ className, ...props }: React.ComponentProps<typeof RamkaLightb
       className={cn('[--lb-ease-out-expo:cubic-bezier(0.16,1,0.3,1)]', className)}
       {...props}
     />
-  );
+  )
 }
 
 function Backdrop({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Backdrop>) {
@@ -213,11 +213,11 @@ function Backdrop({ className, ...props }: React.ComponentProps<typeof RamkaLigh
         'data-open:opacity-[calc(1-var(--lightbox-pull-progress,0)*0.6)]',
         'data-open:starting:opacity-0',
         'data-pulling:transition-none', // follow the finger
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function Content({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Content>) {
@@ -242,14 +242,18 @@ function Content({ className, ...props }: React.ComponentProps<typeof RamkaLight
         'md:[--lb-inset-top:calc(4.5rem+env(safe-area-inset-top,0px))]',
         'md:[--lb-inset-bottom:calc(7.5rem+env(safe-area-inset-bottom,0px))]',
         'md:[--lb-inset-inline:3rem]',
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
-function Close({ className, children, ...props }: React.ComponentProps<typeof RamkaLightbox.Close>) {
+function Close({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof RamkaLightbox.Close>) {
   return (
     <RamkaLightbox.Close
       data-slot="lightbox-close"
@@ -260,7 +264,7 @@ function Close({ className, children, ...props }: React.ComponentProps<typeof Ra
     >
       {children ?? <XIcon strokeWidth={2.25} />}
     </RamkaLightbox.Close>
-  );
+  )
 }
 
 function Slides({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Slides>) {
@@ -269,11 +273,11 @@ function Slides({ className, ...props }: React.ComponentProps<typeof RamkaLightb
       data-slot="lightbox-slides"
       className={cn(
         'flex-1 gap-5 md:gap-0 scrollbar-none [&::-webkit-scrollbar]:hidden',
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function Slide({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Slide>) {
@@ -282,15 +286,15 @@ function Slide({ className, ...props }: React.ComponentProps<typeof RamkaLightbo
       data-slot="lightbox-slide"
       className={cn(
         'h-full min-w-full flex-[0_0_100%] px-(--lb-inset-inline) pt-(--lb-inset-top) pb-(--lb-inset-bottom)',
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function Item({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Item>) {
-  return <RamkaLightbox.Item data-slot="lightbox-item" className={className} {...props} />;
+  return <RamkaLightbox.Item data-slot="lightbox-item" className={className} {...props} />
 }
 
 function Media({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Media>) {
@@ -300,14 +304,18 @@ function Media({ className, ...props }: React.ComponentProps<typeof RamkaLightbo
       className={cn('overflow-hidden md:rounded-lg [&_img]:select-none', className)}
       {...props}
     />
-  );
+  )
 }
 
 function Zoom(props: React.ComponentProps<typeof RamkaLightbox.Zoom>) {
-  return <RamkaLightbox.Zoom {...props} />;
+  return <RamkaLightbox.Zoom {...props} />
 }
 
-function ZoomIn({ className, children, ...props }: React.ComponentProps<typeof RamkaLightbox.ZoomIn>) {
+function ZoomIn({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof RamkaLightbox.ZoomIn>) {
   return (
     <RamkaLightbox.ZoomIn
       data-slot="lightbox-zoom-in"
@@ -317,10 +325,14 @@ function ZoomIn({ className, children, ...props }: React.ComponentProps<typeof R
     >
       {children ?? <ZoomInIcon strokeWidth={2.25} />}
     </RamkaLightbox.ZoomIn>
-  );
+  )
 }
 
-function ZoomOut({ className, children, ...props }: React.ComponentProps<typeof RamkaLightbox.ZoomOut>) {
+function ZoomOut({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof RamkaLightbox.ZoomOut>) {
   return (
     <RamkaLightbox.ZoomOut
       data-slot="lightbox-zoom-out"
@@ -330,7 +342,7 @@ function ZoomOut({ className, children, ...props }: React.ComponentProps<typeof 
     >
       {children ?? <ZoomOutIcon strokeWidth={2.25} />}
     </RamkaLightbox.ZoomOut>
-  );
+  )
 }
 
 function Counter({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Counter>) {
@@ -341,11 +353,11 @@ function Counter({ className, ...props }: React.ComponentProps<typeof RamkaLight
       // sr-only and keeps only its aria-live announcement role.
       className={cn(
         'text-[0.6875rem] leading-tight text-neutral-500 tabular-nums md:sr-only dark:text-neutral-400',
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function Caption({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Caption>) {
@@ -354,14 +366,17 @@ function Caption({ className, ...props }: React.ComponentProps<typeof RamkaLight
       data-slot="lightbox-caption"
       className={cn(
         'pointer-events-auto block max-w-full truncate text-[0.8125rem] leading-tight font-medium text-neutral-900 select-text dark:text-neutral-50',
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
-function ThumbnailStrip({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.ThumbnailStrip>) {
+function ThumbnailStrip({
+  className,
+  ...props
+}: React.ComponentProps<typeof RamkaLightbox.ThumbnailStrip>) {
   return (
     <RamkaLightbox.ThumbnailStrip
       data-slot="lightbox-thumbnail-strip"
@@ -372,11 +387,11 @@ function ThumbnailStrip({ className, ...props }: React.ComponentProps<typeof Ram
         // pointer-events-auto counteracts the bottom band's click-through.
         'pointer-events-auto w-full min-w-0 self-stretch py-1',
         '[-webkit-mask-image:var(--lb-strip-mask)] mask-(--lb-strip-mask)',
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function ThumbnailStripTrack({
@@ -389,7 +404,7 @@ function ThumbnailStripTrack({
       className={cn('flex w-max items-center gap-2', className)}
       {...props}
     />
-  );
+  )
 }
 
 function Thumbnail({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Thumbnail>) {
@@ -399,27 +414,27 @@ function Thumbnail({ className, ...props }: React.ComponentProps<typeof RamkaLig
       className={cn(
         'relative block size-(--lb-thumb-size) shrink-0 cursor-pointer overflow-hidden rounded-md',
         '[&_img]:block [&_img]:size-full [&_img]:object-cover',
-        className,
+        className
       )}
       {...props}
     />
-  );
+  )
 }
 
 function Previous(props: React.ComponentProps<typeof RamkaLightbox.Previous>) {
-  return <RamkaLightbox.Previous {...props} />;
+  return <RamkaLightbox.Previous {...props} />
 }
 
 function Next(props: React.ComponentProps<typeof RamkaLightbox.Next>) {
-  return <RamkaLightbox.Next {...props} />;
+  return <RamkaLightbox.Next {...props} />
 }
 
 function ItemGroup(props: React.ComponentProps<typeof RamkaLightbox.ItemGroup>) {
-  return <RamkaLightbox.ItemGroup {...props} />;
+  return <RamkaLightbox.ItemGroup {...props} />
 }
 
 function ThumbnailGroup(props: React.ComponentProps<typeof RamkaLightbox.ThumbnailGroup>) {
-  return <RamkaLightbox.ThumbnailGroup {...props} />;
+  return <RamkaLightbox.ThumbnailGroup {...props} />
 }
 
 /* ── Snug layout (aspect-sized cards + peeking neighbors) ───────────────── */
@@ -438,8 +453,8 @@ const snugSlidesClass = cn(
   '[--lb-snug-width-start:min(calc(100cqw-2*var(--lb-inset-inline)),calc((100cqh-var(--lb-inset-top)-var(--lb-inset-bottom))*var(--lb-snug-ratio-start,1)))]',
   '[--lb-snug-width-end:min(calc(100cqw-2*var(--lb-inset-inline)),calc((100cqh-var(--lb-inset-top)-var(--lb-inset-bottom))*var(--lb-snug-ratio-end,1)))]',
   'md:before:pointer-events-none md:before:flex-[0_0_calc((100cqw-var(--lb-snug-width-start))/2-var(--lb-snug-gap))]',
-  'md:after:pointer-events-none md:after:flex-[0_0_calc((100cqw-var(--lb-snug-width-end))/2-var(--lb-snug-gap))]',
-);
+  'md:after:pointer-events-none md:after:flex-[0_0_calc((100cqw-var(--lb-snug-width-end))/2-var(--lb-snug-gap))]'
+)
 
 const snugSlideClass = cn(
   // No horizontal padding on the card itself — the gutter lives in the width
@@ -449,8 +464,8 @@ const snugSlideClass = cn(
   '[--lb-snug-width:min(calc(100cqw-2*var(--lb-inset-inline)),calc((100cqh-var(--lb-inset-top)-var(--lb-inset-bottom))*var(--lb-snug-ratio)))]',
   'md:w-(--lb-snug-width) md:min-w-0 md:flex-[0_0_auto]',
   // The zoomed active card paints above the peeking neighbors.
-  'group-data-zoomed/lb:has-data-active:z-1',
-);
+  'group-data-zoomed/lb:has-data-active:z-1'
+)
 
 /*
  * Neighbor cards dim as the active item is pulled to dismiss
@@ -466,22 +481,22 @@ const snugItemClass = cn(
   'not-data-active:[--lb-neighbor-dim:max(var(--lightbox-pull-progress,0),var(--lightbox-zoom-progress,0))]',
   'not-data-active:opacity-[calc(1-var(--lightbox-pull-progress,0)*0.85)]',
   'not-data-active:[filter:opacity(calc(1-var(--lb-neighbor-dim)))_blur(calc(var(--lb-neighbor-dim)*6px))]',
-  'group-data-pulling/lb:transition-none', // follow the finger
-);
+  'group-data-pulling/lb:transition-none' // follow the finger
+)
 
 /* ── Composed Gallery (product chrome) ──────────────────────────────────── */
 
 /** Strip tabs are `--lb-thumb-size` (3.5rem/56px) and `object-fit: cover` — request 2× that. */
-const THUMBNAIL_SIZE = 112;
+const THUMBNAIL_SIZE = 112
 
 function GalleryThumbnailStrip({
   items,
-  thumbnailsLabel,
+  thumbnailsLabel
 }: {
-  items: LightboxItem[];
-  thumbnailsLabel: string;
+  items: LightboxItem[]
+  thumbnailsLabel: string
 }) {
-  if (items.length <= 1) return null;
+  if (items.length <= 1) return null
 
   return (
     // The strip is desktop-only; mobile shows the counter instead.
@@ -505,7 +520,7 @@ function GalleryThumbnailStrip({
         className="pointer-events-none absolute top-1/2 left-1/2 size-[calc(var(--lb-thumb-size)+8px)] -translate-x-1/2 -translate-y-1/2 rounded-xl border-2 border-black dark:border-white"
       />
     </ThumbnailStrip>
-  );
+  )
 }
 
 /**
@@ -517,51 +532,51 @@ function Gallery({
   items,
   ariaLabel,
   slidesLayout: slidesLayoutProp,
-  onSlidesLayoutChange,
+  onSlidesLayoutChange
 }: {
-  items: LightboxItem[];
-  ariaLabel: string;
-  slidesLayout?: SlidesLayout;
-  onSlidesLayoutChange?: (layout: SlidesLayout) => void;
+  items: LightboxItem[]
+  ariaLabel: string
+  slidesLayout?: SlidesLayout
+  onSlidesLayoutChange?: (layout: SlidesLayout) => void
 }) {
-  const t = useTranslations('Lightbox');
+  const t = useTranslations('Lightbox')
   const [slidesLayoutInternal, setSlidesLayoutInternal] = React.useState<SlidesLayout>(
-    () => readStoredSlidesLayout() ?? 'bleed',
-  );
-  const slidesLayout = slidesLayoutProp ?? slidesLayoutInternal;
-  const snug = slidesLayout === 'snug';
+    () => readStoredSlidesLayout() ?? 'bleed'
+  )
+  const slidesLayout = slidesLayoutProp ?? slidesLayoutInternal
+  const snug = slidesLayout === 'snug'
   // Single item → no thumbnail strip → solo layout (tighter, centered bottom band).
-  const solo = items.length <= 1;
+  const solo = items.length <= 1
 
   const setSlidesLayout = React.useCallback(
     (next: SlidesLayout) => {
-      storeSlidesLayout(next);
-      onSlidesLayoutChange?.(next);
+      storeSlidesLayout(next)
+      onSlidesLayoutChange?.(next)
       if (slidesLayoutProp === undefined) {
-        setSlidesLayoutInternal(next);
+        setSlidesLayoutInternal(next)
       }
     },
-    [onSlidesLayoutChange, slidesLayoutProp],
-  );
+    [onSlidesLayoutChange, slidesLayoutProp]
+  )
 
   const toggleSlidesLayout = React.useCallback(() => {
-    setSlidesLayout(slidesLayout === 'snug' ? 'bleed' : 'snug');
-  }, [setSlidesLayout, slidesLayout]);
+    setSlidesLayout(slidesLayout === 'snug' ? 'bleed' : 'snug')
+  }, [setSlidesLayout, slidesLayout])
 
   const snugEdgeRatios =
     snug && items.length > 0
       ? {
           start: itemAspectRatio(items[0]),
-          end: itemAspectRatio(items[items.length - 1]),
+          end: itemAspectRatio(items[items.length - 1])
         }
-      : null;
+      : null
 
   const slidesStyle: CSSVarStyle | undefined = snugEdgeRatios
     ? {
         '--lb-snug-ratio-start': snugEdgeRatios.start,
-        '--lb-snug-ratio-end': snugEdgeRatios.end,
+        '--lb-snug-ratio-end': snugEdgeRatios.end
       }
-    : undefined;
+    : undefined
 
   return (
     <Portal>
@@ -574,7 +589,7 @@ function Gallery({
           snug && 'md:[--lb-inset-inline:2rem]',
           // Solo (single item — no thumbnail strip): only the caption placard
           // sits below, so match the top inset and keep the letterbox symmetric.
-          solo && 'md:[--lb-inset-bottom:calc(4.5rem+env(safe-area-inset-bottom,0px))]',
+          solo && 'md:[--lb-inset-bottom:calc(4.5rem+env(safe-area-inset-bottom,0px))]'
         )}
         // Consumer-provided handlers on `Content` run before ramka's own Escape
         // handling (see ramka's `mergeProps`), so stopping propagation here
@@ -583,7 +598,7 @@ function Gallery({
         // outer dialog (e.g. the route-intercept gallery modal) in the same
         // keypress.
         onKeyDown={(event) => {
-          if (event.key === 'Escape') event.stopPropagation();
+          if (event.key === 'Escape') event.stopPropagation()
         }}
       >
         <Slides
@@ -594,11 +609,21 @@ function Gallery({
           style={slidesStyle}
         >
           {items.map((item, i) => {
-            const ratio = itemAspectRatio(item);
-            const slideStyle: CSSVarStyle | undefined = snug ? { '--lb-snug-ratio': ratio } : undefined;
+            const ratio = itemAspectRatio(item)
+            const slideStyle: CSSVarStyle | undefined = snug
+              ? { '--lb-snug-ratio': ratio }
+              : undefined
             return (
-              <Slide key={item.id ?? i} className={snug ? snugSlideClass : undefined} style={slideStyle}>
-                <Item index={i} caption={item.caption ?? item.alt} className={snug ? snugItemClass : undefined}>
+              <Slide
+                key={item.id ?? i}
+                className={snug ? snugSlideClass : undefined}
+                style={slideStyle}
+              >
+                <Item
+                  index={i}
+                  caption={item.caption ?? item.alt}
+                  className={snug ? snugItemClass : undefined}
+                >
                   <Zoom maxZoom={6}>
                     <Media width={item.width} height={item.height}>
                       <Image
@@ -617,7 +642,7 @@ function Gallery({
                   </Zoom>
                 </Item>
               </Slide>
-            );
+            )
           })}
         </Slides>
 
@@ -627,7 +652,7 @@ function Gallery({
             chromeGestureHideClass,
             // On mobile, zoom also hides the top controls — the media fills the screen.
             'max-md:group-data-zoomed/lb:invisible max-md:group-data-zoomed/lb:opacity-0',
-            'max-md:group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
+            'max-md:group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
           )}
         >
           {/* Layout toggle: the icon is a miniature of the CURRENT layout —
@@ -667,7 +692,7 @@ function Gallery({
             'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
             // Solo (no strip): center the placard in the bottom inset band
             // instead of pinning it to the viewport edge.
-            solo && 'min-h-(--lb-inset-bottom) justify-center pb-[env(safe-area-inset-bottom,0px)]',
+            solo && 'min-h-(--lb-inset-bottom) justify-center pb-[env(safe-area-inset-bottom,0px)]'
           )}
         >
           {/*
@@ -685,7 +710,7 @@ function Gallery({
         </div>
       </Content>
     </Portal>
-  );
+  )
 }
 
 /**
@@ -715,5 +740,5 @@ export const Lightbox = {
   ThumbnailGroup,
   Previous,
   Next,
-  Gallery,
-};
+  Gallery
+}
