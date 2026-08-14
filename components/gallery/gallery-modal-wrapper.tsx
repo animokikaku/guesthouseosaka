@@ -26,14 +26,7 @@ export function GalleryModalWrapper({ house, title, children }: GalleryModalWrap
   return (
     <GalleryDialog
       open={isOpen}
-      onOpenChange={(open, eventDetails) => {
-        // The lightbox handles Escape on its own content and calls
-        // `preventDefault()`, but Base UI only defers to nested Base UI popups —
-        // without this, one Escape closes the lightbox *and* the dialog.
-        if (!open && eventDetails.reason === 'escape-key' && eventDetails.event.defaultPrevented) {
-          eventDetails.cancel()
-          return
-        }
+      onOpenChange={(open) => {
         if (!open) setIsOpen(false)
       }}
       onOpenChangeComplete={(open) =>

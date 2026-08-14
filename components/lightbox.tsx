@@ -258,7 +258,19 @@ function Gallery({
   return (
     <Portal>
       <Backdrop />
-      <Content aria-label={ariaLabel} className={snug ? 'lb-content-snug' : undefined}>
+      <Content
+        aria-label={ariaLabel}
+        className={snug ? 'lb-content-snug' : undefined}
+        // Consumer-provided handlers on `Content` run before ramka's own Escape
+        // handling (see ramka's `mergeProps`), so stopping propagation here
+        // still lets ramka close the lightbox — it only keeps the keydown from
+        // reaching Base UI's document-level dismiss listener and closing an
+        // outer dialog (e.g. the route-intercept gallery modal) in the same
+        // keypress.
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') event.stopPropagation()
+        }}
+      >
         <Slides
           key={slidesLayout}
           aria-label="Full-size images"
