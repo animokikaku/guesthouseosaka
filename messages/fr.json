@@ -34,12 +34,14 @@
   },
   "GalleryPageContent": {
     "gallery_content_label": "Contenu de la galerie",
-    "gallery_title": "Galerie de la maison",
-    "lightbox_close": "Fermer",
-    "lightbox_full_size_images": "Images en taille réelle",
-    "lightbox_thumbnails": "Vignettes photo",
-    "lightbox_zoom_in": "Zoomer",
-    "lightbox_zoom_out": "Dézoomer"
+    "gallery_title": "Galerie de la maison"
+  },
+  "Lightbox": {
+    "close": "Fermer",
+    "full_size_images": "Images en taille réelle",
+    "thumbnails": "Vignettes photo",
+    "zoom_in": "Zoomer",
+    "zoom_out": "Dézoomer"
   },
   "HouseAbout": {
     "heading": "À propos de {house}"

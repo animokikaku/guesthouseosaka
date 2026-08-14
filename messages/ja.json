@@ -34,12 +34,14 @@
   },
   "GalleryPageContent": {
     "gallery_content_label": "ギャラリーコンテンツ",
-    "gallery_title": "ハウスギャラリー",
-    "lightbox_close": "閉じる",
-    "lightbox_full_size_images": "フルサイズ画像",
-    "lightbox_thumbnails": "写真サムネイル",
-    "lightbox_zoom_in": "ズームイン",
-    "lightbox_zoom_out": "ズームアウト"
+    "gallery_title": "ハウスギャラリー"
+  },
+  "Lightbox": {
+    "close": "閉じる",
+    "full_size_images": "フルサイズ画像",
+    "thumbnails": "写真サムネイル",
+    "zoom_in": "ズームイン",
+    "zoom_out": "ズームアウト"
   },
   "HouseAbout": {
     "heading": "{house}について"

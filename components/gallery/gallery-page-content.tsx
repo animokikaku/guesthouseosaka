@@ -94,17 +94,7 @@ export function GalleryPageContent({
         </main>
       </div>
 
-      <Lightbox.Gallery
-        items={lightboxItems}
-        ariaLabel={title || t('gallery_title')}
-        labels={{
-          close: t('lightbox_close'),
-          zoomIn: t('lightbox_zoom_in'),
-          zoomOut: t('lightbox_zoom_out'),
-          thumbnails: t('lightbox_thumbnails'),
-          slides: t('lightbox_full_size_images')
-        }}
-      />
+      <Lightbox.Gallery items={lightboxItems} ariaLabel={title || t('gallery_title')} />
     </Lightbox.Root>
   )
 }

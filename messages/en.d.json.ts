@@ -37,12 +37,14 @@ declare const messages: {
   },
   "GalleryPageContent": {
     "gallery_content_label": "Gallery content",
-    "gallery_title": "House Gallery",
-    "lightbox_close": "Close",
-    "lightbox_full_size_images": "Full-size images",
-    "lightbox_thumbnails": "Photo thumbnails",
-    "lightbox_zoom_in": "Zoom in",
-    "lightbox_zoom_out": "Zoom out"
+    "gallery_title": "House Gallery"
+  },
+  "Lightbox": {
+    "close": "Close",
+    "full_size_images": "Full-size images",
+    "thumbnails": "Photo thumbnails",
+    "zoom_in": "Zoom in",
+    "zoom_out": "Zoom out"
   },
   "HouseAbout": {
     "heading": "About {house}"

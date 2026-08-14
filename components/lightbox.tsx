@@ -1,19 +1,23 @@
 'use client'
 
 /**
- * Default lightbox — design-system package entry (copy with lightbox.css).
+ * Default lightbox — app-specific skin over ramka's primitives.
  *
  * Re-exports ramka Lightbox primitives with this skin attached, plus composed
  * `Lightbox.Gallery` (bleed or snug slides, glass controls, desktop thumbnail
  * strip). Slides advance by swipe, arrow keys and the thumbnail strip — there
  * is no on-screen prev/next chrome.
  *
- * Package boundary: only the styled primitives + Gallery. Trigger layouts,
- * album grids and other app UI belong in the consuming app, not this module.
+ * Boundary: only the styled primitives + Gallery. Trigger layouts, album
+ * grids and other app UI belong in the consuming app, not this module. The
+ * chrome's own text (close/zoom/thumbnails labels) is translated here via the
+ * `Lightbox` message namespace, since this file is app-specific rather than a
+ * portable copy-paste package.
  */
 
 import Image from 'next/image'
-import { Lightbox as RamkaLightbox, useLightboxContext } from 'ramka'
+import { Lightbox as RamkaLightbox } from 'ramka'
+import { useTranslations } from 'next-intl'
 import * as React from 'react'
 
 import './lightbox.css'
@@ -197,27 +201,6 @@ function ThumbnailGroup(props: React.ComponentProps<typeof RamkaLightbox.Thumbna
 /** Strip tabs are square (`--lb-thumb-h`) and `object-fit: cover` — request 2× that. */
 const THUMBNAIL_SIZE = 128
 
-/**
- * Labels for the chrome's non-visual/decorative controls. Defaults keep the
- * package usable out of the box (see the module doc); the consuming app
- * overrides them with translated strings via `Lightbox.Gallery`'s `labels` prop.
- */
-type GalleryChromeLabels = {
-  close: string
-  zoomIn: string
-  zoomOut: string
-  thumbnails: string
-  slides: string
-}
-
-const DEFAULT_GALLERY_LABELS: GalleryChromeLabels = {
-  close: 'Close',
-  zoomIn: 'Zoom in',
-  zoomOut: 'Zoom out',
-  thumbnails: 'Photo thumbnails',
-  slides: 'Full-size images'
-}
-
 function GalleryThumbnailStrip({
   items,
   thumbnailsLabel
@@ -259,16 +242,13 @@ function GalleryThumbnailStrip({
 function Gallery({
   items,
   ariaLabel,
-  slidesLayout = 'bleed',
-  labels
+  slidesLayout = 'bleed'
 }: {
   items: LightboxItem[]
   ariaLabel: string
   slidesLayout?: SlidesLayout
-  labels?: Partial<GalleryChromeLabels>
 }) {
-  const { activeIndex } = useLightboxContext()
-  const resolvedLabels = { ...DEFAULT_GALLERY_LABELS, ...labels }
+  const t = useTranslations('Lightbox')
   const snug = slidesLayout === 'snug'
 
   const snugEdgeRatios =
@@ -304,7 +284,7 @@ function Gallery({
       >
         <Slides
           key={slidesLayout}
-          aria-label={resolvedLabels.slides}
+          aria-label={t('full_size_images')}
           preload={2}
           className={snug ? 'lb-slides-snug' : undefined}
           style={slidesStyle}
@@ -328,9 +308,10 @@ function Gallery({
                         src={item.src}
                         alt={item.alt}
                         sizes="100vw"
-                        // Only the active slide preloads; neighbors stay lazy
+                        // Only the initially-active slide preloads (the one
+                        // relevant to LCP on open); later slides stay lazy
                         // even though `Slides` keeps a couple mounted for swipe.
-                        preload={i === activeIndex}
+                        preload={i === 0}
                         draggable={false}
                       />
                     </Media>
@@ -342,19 +323,19 @@ function Gallery({
         </Slides>
 
         <div className={cx('lb-top-left', 'lb-chrome-pull-hide')}>
-          <Close aria-label={resolvedLabels.close} />
+          <Close aria-label={t('close')} />
         </div>
 
         <div className={cx('lb-top-right', 'lb-chrome-pull-hide')}>
-          <ZoomOut aria-label={resolvedLabels.zoomOut} />
-          <ZoomIn aria-label={resolvedLabels.zoomIn} />
+          <ZoomOut aria-label={t('zoom_out')} />
+          <ZoomIn aria-label={t('zoom_in')} />
         </div>
 
         <div
           className={cx('lb-bottom', 'lb-chrome-pull-hide', items.length <= 1 && 'lb-bottom-solo')}
         >
           <Caption />
-          <GalleryThumbnailStrip items={items} thumbnailsLabel={resolvedLabels.thumbnails} />
+          <GalleryThumbnailStrip items={items} thumbnailsLabel={t('thumbnails')} />
         </div>
       </Content>
     </Portal>
