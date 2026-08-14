@@ -72,7 +72,7 @@ export function GalleryPageContent({
   })
 
   return (
-    <Lightbox.Root scrollTriggerIntoView={SCROLL_TRIGGER_INTO_VIEW}>
+    <Lightbox.Root scrollTriggerIntoView={SCROLL_TRIGGER_INTO_VIEW} awaitImageDecode={false}>
       <div className="flex h-full flex-col">
         {/* Sits above the scroll container rather than over it, so it is opaque:
             nothing ever passes behind it to tint or blur. */}

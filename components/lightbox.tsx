@@ -27,9 +27,9 @@
 
 import * as React from 'react'
 import {
+  ArrowLeftIcon,
   GalleryHorizontalIcon,
   RectangleHorizontalIcon,
-  XIcon,
   ZoomInIcon,
   ZoomOutIcon
 } from 'lucide-react'
@@ -113,6 +113,20 @@ const controlClass = cn(
   'dark:hover:bg-[linear-gradient(rgb(255_255_255/0.08),rgb(255_255_255/0.08))]',
   'dark:active:bg-[linear-gradient(rgb(255_255_255/0.12),rgb(255_255_255/0.12))]',
   'dark:focus-visible:shadow-[0_0_0_2px_rgb(255_255_255/0.4),0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]'
+)
+
+/**
+ * Ghost icon button — ArrowLeftIcon, `size-9`, `rounded-full`, no glass
+ * chrome. Mirrors `GalleryModalCloseButton` (the gallery page's own back
+ * button) so leaving the lightbox reads as the same gesture as leaving the
+ * gallery, rather than a generic dialog dismiss.
+ */
+const backClass = cn(
+  'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
+  'bg-transparent text-inherit outline-none transition-colors',
+  'hover:bg-accent hover:text-accent-foreground',
+  'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+  '[&_svg]:block [&_svg]:size-6'
 )
 
 /**
@@ -249,6 +263,11 @@ function Content({ className, ...props }: React.ComponentProps<typeof RamkaLight
   )
 }
 
+/**
+ * Exit control — a back arrow, not a glass close button. It mirrors the
+ * gallery page's own back button so leaving the viewer looks like the same
+ * gesture as leaving the gallery.
+ */
 function Close({
   className,
   children,
@@ -257,12 +276,11 @@ function Close({
   return (
     <RamkaLightbox.Close
       data-slot="lightbox-close"
-      // The ✕ glyph is optically lighter than the zoom glyphs — render larger.
-      className={cn(controlClass, '[&_svg]:size-4.5', className)}
+      className={cn(backClass, className)}
       aria-label="Close"
       {...props}
     >
-      {children ?? <XIcon strokeWidth={2.25} />}
+      {children ?? <ArrowLeftIcon strokeWidth={2} />}
     </RamkaLightbox.Close>
   )
 }
@@ -646,6 +664,19 @@ function Gallery({
           })}
         </Slides>
 
+        {/* 0.75rem/1rem insets match the gallery header's own padding, so the
+            back arrow lands where the page's back button sat. */}
+        <div
+          className={cn(
+            'absolute top-[calc(1rem+env(safe-area-inset-top,0px))] left-4 z-1',
+            chromeGestureHideClass,
+            'max-md:group-data-zoomed/lb:invisible max-md:group-data-zoomed/lb:opacity-0',
+            'max-md:group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+          )}
+        >
+          <Close aria-label={t('close')} />
+        </div>
+
         <div
           className={cn(
             'absolute top-[calc(0.75rem+env(safe-area-inset-top,0px))] right-3 z-1 flex gap-2',
@@ -678,7 +709,6 @@ function Gallery({
               aria-label={t('zoom_in')}
             />
           </div>
-          <Close aria-label={t('close')} />
         </div>
 
         <div
