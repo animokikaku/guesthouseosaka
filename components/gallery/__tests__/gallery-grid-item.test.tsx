@@ -94,10 +94,28 @@ describe('GalleryGridItem', () => {
 
       renderItem(item)
 
-      expect(screen.getByTestId('gallery-grid-image')).toBeInTheDocument()
+      const trigger = screen.getByTestId('gallery-grid-image')
       const image = screen.getByTestId('gallery-image')
-      expect(image).toBeInTheDocument()
+      expect(trigger).toBeInTheDocument()
+      expect(trigger).toContainElement(image)
       expect(image).toHaveAttribute('alt', 'Test gallery image')
+    })
+
+    it('uses a full-aspect Sanity URL; the square crop is CSS only', () => {
+      renderItem(createGalleryItem())
+
+      const trigger = screen.getByTestId('gallery-grid-image')
+      const image = screen.getByTestId('gallery-image')
+      const src = image.getAttribute('src') ?? ''
+
+      expect(trigger).toContainElement(image)
+      expect(trigger).toHaveClass('aspect-square', 'overflow-hidden')
+      expect(image).toHaveClass('object-cover')
+      expect(src).toContain('w=800')
+      expect(src).toContain('fit=max')
+      expect(src).not.toMatch(/[?&]h=/)
+      expect(src).not.toContain('fit=crop')
+      expect(src).not.toContain('w=400&h=400')
     })
 
     it('renders with empty alt when alt is null', () => {

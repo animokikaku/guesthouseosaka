@@ -110,6 +110,11 @@ export function toGalleryImageProps(
 /**
  * Maps a gallery item to ramka's `LightboxItem` shape for `Lightbox.Gallery`.
  *
+ * Trigger and destination must share the same photograph and aspect ratio —
+ * square tiles are a CSS crop (`aspect-square` + `object-cover`), not a
+ * Sanity `fit=crop` URL. The destination `src` is the full-aspect Sanity CDN
+ * URL (same pipeline as the trigger via `sanityImageLoader`).
+ *
  * No LQIP here on purpose: the lightbox image must not carry a `blur`
  * placeholder, because next/image paints it as an inline background that covers
  * ramka's trigger-thumbnail bridge. The blur belongs on the trigger — see
@@ -124,9 +129,9 @@ export function toGalleryLightboxItem(item: GalleryItem): LightboxItem | null {
 
   return {
     id: _key,
-    src: urlFor(image).url(),
+    src: urlFor(image).fit('max').url(),
     // 128px matches `THUMBNAIL_SIZE` in `components/lightbox.tsx`, the only
-    // place this is rendered.
+    // place this is rendered. Strip thumbs are not the morph source.
     thumb: urlFor(image).width(128).height(128).dpr(2).fit('crop').auto('format').quality(75).url(),
     alt,
     caption: alt,

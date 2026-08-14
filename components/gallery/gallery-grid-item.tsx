@@ -21,7 +21,11 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute, index }: Gal
   const { _key, image } = item
   if (!image || index === undefined) return null
 
-  const imageProps = toGalleryImageProps(image, { width: 400, height: 400, responsive: true })
+  const imageProps = toGalleryImageProps(image, {
+    width: 800,
+    fit: 'max',
+    responsive: true
+  })
   if (!imageProps) return null
 
   const { alt, width: _width, height: _height, ...restImageProps } = imageProps
