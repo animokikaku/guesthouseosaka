@@ -46,12 +46,6 @@ describe('HouseGallery', () => {
 
       expect(container).toBeEmptyDOMElement()
     })
-
-    it('renders nothing for null galleryCategories', () => {
-      const { container } = renderGallery([])
-
-      expect(container).toBeEmptyDOMElement()
-    })
   })
 
   describe('category rendering', () => {

@@ -125,7 +125,9 @@ export function toGalleryLightboxItem(item: GalleryItem): LightboxItem | null {
   return {
     id: _key,
     src: urlFor(image).url(),
-    thumb: urlFor(image).width(400).height(400).dpr(2).fit('crop').auto('format').quality(75).url(),
+    // 128px matches `THUMBNAIL_SIZE` in `components/lightbox.tsx`, the only
+    // place this is rendered.
+    thumb: urlFor(image).width(128).height(128).dpr(2).fit('crop').auto('format').quality(75).url(),
     alt,
     caption: alt,
     width: dimensions.width,

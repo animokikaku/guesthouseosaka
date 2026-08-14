@@ -13,7 +13,7 @@
  */
 
 import Image from 'next/image'
-import { Lightbox as RamkaLightbox } from 'ramka'
+import { Lightbox as RamkaLightbox, useLightboxContext } from 'ramka'
 import * as React from 'react'
 
 import './lightbox.css'
@@ -197,12 +197,39 @@ function ThumbnailGroup(props: React.ComponentProps<typeof RamkaLightbox.Thumbna
 /** Strip tabs are square (`--lb-thumb-h`) and `object-fit: cover` — request 2× that. */
 const THUMBNAIL_SIZE = 128
 
-function GalleryThumbnailStrip({ items }: { items: LightboxItem[] }) {
+/**
+ * Labels for the chrome's non-visual/decorative controls. Defaults keep the
+ * package usable out of the box (see the module doc); the consuming app
+ * overrides them with translated strings via `Lightbox.Gallery`'s `labels` prop.
+ */
+type GalleryChromeLabels = {
+  close: string
+  zoomIn: string
+  zoomOut: string
+  thumbnails: string
+  slides: string
+}
+
+const DEFAULT_GALLERY_LABELS: GalleryChromeLabels = {
+  close: 'Close',
+  zoomIn: 'Zoom in',
+  zoomOut: 'Zoom out',
+  thumbnails: 'Photo thumbnails',
+  slides: 'Full-size images'
+}
+
+function GalleryThumbnailStrip({
+  items,
+  thumbnailsLabel
+}: {
+  items: LightboxItem[]
+  thumbnailsLabel: string
+}) {
   if (items.length <= 1) return null
 
   return (
     <ThumbnailStrip className="lb-thumbnail-strip-desktop">
-      <ThumbnailStripTrack aria-label="Photo thumbnails">
+      <ThumbnailStripTrack aria-label={thumbnailsLabel}>
         {items.map((item, i) => (
           <Thumbnail key={item.id ?? i} index={i}>
             <Image
@@ -232,12 +259,16 @@ function GalleryThumbnailStrip({ items }: { items: LightboxItem[] }) {
 function Gallery({
   items,
   ariaLabel,
-  slidesLayout = 'bleed'
+  slidesLayout = 'bleed',
+  labels
 }: {
   items: LightboxItem[]
   ariaLabel: string
   slidesLayout?: SlidesLayout
+  labels?: Partial<GalleryChromeLabels>
 }) {
+  const { activeIndex } = useLightboxContext()
+  const resolvedLabels = { ...DEFAULT_GALLERY_LABELS, ...labels }
   const snug = slidesLayout === 'snug'
 
   const snugEdgeRatios =
@@ -273,7 +304,7 @@ function Gallery({
       >
         <Slides
           key={slidesLayout}
-          aria-label="Full-size images"
+          aria-label={resolvedLabels.slides}
           preload={2}
           className={snug ? 'lb-slides-snug' : undefined}
           style={slidesStyle}
@@ -297,7 +328,9 @@ function Gallery({
                         src={item.src}
                         alt={item.alt}
                         sizes="100vw"
-                        priority
+                        // Only the active slide preloads; neighbors stay lazy
+                        // even though `Slides` keeps a couple mounted for swipe.
+                        preload={i === activeIndex}
                         draggable={false}
                       />
                     </Media>
@@ -309,19 +342,19 @@ function Gallery({
         </Slides>
 
         <div className={cx('lb-top-left', 'lb-chrome-pull-hide')}>
-          <Close />
+          <Close aria-label={resolvedLabels.close} />
         </div>
 
         <div className={cx('lb-top-right', 'lb-chrome-pull-hide')}>
-          <ZoomOut />
-          <ZoomIn />
+          <ZoomOut aria-label={resolvedLabels.zoomOut} />
+          <ZoomIn aria-label={resolvedLabels.zoomIn} />
         </div>
 
         <div
           className={cx('lb-bottom', 'lb-chrome-pull-hide', items.length <= 1 && 'lb-bottom-solo')}
         >
           <Caption />
-          <GalleryThumbnailStrip items={items} />
+          <GalleryThumbnailStrip items={items} thumbnailsLabel={resolvedLabels.thumbnails} />
         </div>
       </Content>
     </Portal>

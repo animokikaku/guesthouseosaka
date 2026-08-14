@@ -131,7 +131,7 @@ describe('toGalleryLightboxItem', () => {
       id: 'img1',
       src: 'https://cdn.sanity.io/images/test/image.jpg',
       thumb:
-        'https://cdn.sanity.io/images/test/image.jpg?w=400&h=400&dpr=2&fit=crop&auto=format&q=75',
+        'https://cdn.sanity.io/images/test/image.jpg?w=128&h=128&dpr=2&fit=crop&auto=format&q=75',
       alt: 'Bedroom view',
       caption: 'Bedroom view',
       width: 1920,
@@ -143,8 +143,11 @@ describe('toGalleryLightboxItem', () => {
   // the LQIP as an inline background that would cover ramka's thumbnail bridge.
   it('carries no LQIP, even when the image has a preview', () => {
     const image = createSanityImage({ alt: 'Bedroom view' })
-
     expect(image.preview).toBeTruthy()
-    expect(toGalleryLightboxItem(createGalleryItem({ image }))).not.toHaveProperty('blurDataURL')
+
+    const lightboxItem = toGalleryLightboxItem(createGalleryItem({ image }))
+
+    expect(lightboxItem).not.toBeNull()
+    expect(lightboxItem).not.toHaveProperty('blurDataURL')
   })
 })

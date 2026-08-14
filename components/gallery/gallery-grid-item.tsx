@@ -17,7 +17,7 @@ type GalleryGridItemProps = {
 }
 
 export function GalleryGridItem({ item, categoryKey, dataAttribute, index }: GalleryGridItemProps) {
-  const t = useTranslations('GalleryImageButton')
+  const t = useTranslations('GalleryGridItem')
   const { _key, image } = item
   if (!image || index === undefined) return null
 

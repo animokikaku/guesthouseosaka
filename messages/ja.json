@@ -26,7 +26,7 @@
     "description": "{title}の写真を見る",
     "title": "ハウスギャラリー"
   },
-  "GalleryImageButton": {
+  "GalleryGridItem": {
     "open_image": "ギャラリー画像を開く"
   },
   "GalleryPage": {
@@ -34,7 +34,12 @@
   },
   "GalleryPageContent": {
     "gallery_content_label": "ギャラリーコンテンツ",
-    "gallery_title": "ハウスギャラリー"
+    "gallery_title": "ハウスギャラリー",
+    "lightbox_close": "閉じる",
+    "lightbox_full_size_images": "フルサイズ画像",
+    "lightbox_thumbnails": "写真サムネイル",
+    "lightbox_zoom_in": "ズームイン",
+    "lightbox_zoom_out": "ズームアウト"
   },
   "HouseAbout": {
     "heading": "{house}について"
