@@ -1,345 +1,657 @@
-'use client'
+'use client';
 
 /**
- * Default lightbox — app-specific skin over ramka's primitives.
+ * Default lightbox, Tailwind variant — single-file design-system package
+ * entry (no CSS file to copy). A plain-CSS variant with the identical
+ * component API lives in `../css/lightbox.tsx`.
  *
  * Re-exports ramka Lightbox primitives with this skin attached, plus composed
- * `Lightbox.Gallery` (bleed or snug slides, glass controls, desktop thumbnail
- * strip). Slides advance by swipe, arrow keys and the thumbnail strip — there
- * is no on-screen prev/next chrome.
+ * `Lightbox.Gallery` (bleed or snug slides, glass controls, desktop thumbnail strip).
  *
- * Boundary: only the styled primitives + Gallery. Trigger layouts, album
- * grids and other app UI belong in the consuming app, not this module. The
- * chrome's own text (close/zoom/thumbnails labels) is translated here via the
- * `Lightbox` message namespace, since this file is app-specific rather than a
- * portable copy-paste package.
+ * Conventions:
+ * - Requires Tailwind CSS v4 (`starting:`, `not-*`, bare `data-*` variants)
+ *   plus the shadcn `cn` helper and `lucide-react`.
+ * - Variables named `--lightbox-*` are written by the ramka runtime (gesture
+ *   progress, motion timing) — this file only reads them. Variables named
+ *   `--lb-*` are this skin's own tokens, declared via arbitrary properties.
+ * - Gesture-driven state rides on data attributes ramka sets on Content
+ *   (`data-open`, `data-pulling`, `data-pull-dismissing`, `data-zoomed`),
+ *   consumed here through the named `group/lb` on Content. All
+ *   view-transition CSS (morph group, snapshots, crossfade) is injected by
+ *   the library; the skin ships none of it.
+ *
+ * Package boundary: only the styled primitives + Gallery. Trigger layouts,
+ * album grids, user cards, and other app UI belong in the consuming app
+ * (docs: `demo.tsx`) — not in this module.
  */
 
-import Image from 'next/image'
-import { Lightbox as RamkaLightbox } from 'ramka'
-import { useTranslations } from 'next-intl'
-import * as React from 'react'
+import * as React from 'react';
+import {
+  GalleryHorizontalIcon,
+  RectangleHorizontalIcon,
+  XIcon,
+  ZoomInIcon,
+  ZoomOutIcon,
+} from 'lucide-react';
+import { Lightbox as RamkaLightbox } from 'ramka';
 
-import './lightbox.css'
-
-function cx(...parts: Array<string | false | null | undefined>) {
-  return parts.filter(Boolean).join(' ')
-}
-
-/* ── Icons (inline — no lucide dependency for copy-paste) ───────────────── */
-
-/** Matches the app's `ArrowLeftIcon` so the viewer's exit reads as the page's back button. */
-function IconArrowLeft() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
-      <path d="M19 12H5m7 7-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function IconZoomIn() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.25} aria-hidden>
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3M11 8v6M8 11h6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
-
-function IconZoomOut() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.25} aria-hidden>
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3M8 11h6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
+import { cn } from '@/lib/utils';
 
 /** Item shape for `Lightbox.Gallery` — pass real intrinsic pixel size. */
 export type LightboxItem = {
-  id?: string | number
-  src: string
-  thumb: string
-  alt: string
-  caption?: string
-  width: number
-  height: number
+  id?: string | number;
+  src: string;
+  thumb: string;
+  alt: string;
+  caption?: string;
+  width: number;
+  height: number;
+};
+
+export type SlidesLayout = 'bleed' | 'snug';
+
+/**
+ * The snug/bleed choice is a user preference, so it survives across galleries
+ * and visits. Guarded reads/writes: localStorage throws in some private modes,
+ * and `window` doesn't exist during SSR (the portal renders nothing while
+ * closed, so the pre-hydration value is never visible anyway).
+ */
+const SLIDES_LAYOUT_STORAGE_KEY = 'ramka-lightbox-slides-layout';
+
+function readStoredSlidesLayout(): SlidesLayout | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const value = window.localStorage.getItem(SLIDES_LAYOUT_STORAGE_KEY);
+    return value === 'snug' || value === 'bleed' ? value : null;
+  } catch {
+    return null;
+  }
 }
 
-/** Inline styles that carry the `--lightbox-*` custom properties the skin reads. */
-type CSSVarStyle = React.CSSProperties & Record<`--${string}`, string | number>
-
-/** `snug` sizes each slide to its aspect ratio; `bleed` gives it the full width. */
-export type SlidesLayout = 'bleed' | 'snug'
+function storeSlidesLayout(layout: SlidesLayout) {
+  try {
+    window.localStorage.setItem(SLIDES_LAYOUT_STORAGE_KEY, layout);
+  } catch {
+    // Storage unavailable — the toggle still works for this session.
+  }
+}
 
 function itemAspectRatio(item: LightboxItem): number {
-  return item.width / item.height
+  return item.width / item.height;
 }
+
+/* ── Shared class recipes ───────────────────────────────────────────────── */
+
+/**
+ * Glass control pill (iOS-style liquid glass). The focus ring rides on
+ * box-shadow (the pill clips outlines poorly), so focus-visible restates the
+ * resting shadows plus the ring. Hover/press tint is a background-image
+ * overlay so one recipe serves both the standalone pills (which have a
+ * background-color) and the transparent segments inside a control group.
+ * Note `scale` in the transition list: Tailwind v4 scale utilities write the
+ * `scale` property, not `transform`.
+ */
+const controlClass = cn(
+  'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
+  'border border-black/20 bg-white/55 text-neutral-900',
+  'shadow-[0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
+  'backdrop-blur-[40px] backdrop-saturate-150',
+  'transition-[background-color,box-shadow,transform,scale,opacity,color] duration-150 ease-out',
+  'outline-none',
+  'hover:[background-image:linear-gradient(rgb(0_0_0/0.05),rgb(0_0_0/0.05))]',
+  'active:scale-[0.96] active:[background-image:linear-gradient(rgb(0_0_0/0.09),rgb(0_0_0/0.09))]',
+  'focus-visible:shadow-[0_0_0_2px_rgb(0_0_0/0.25),0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
+  'disabled:pointer-events-none disabled:opacity-30',
+  '[&_svg]:block [&_svg]:size-4',
+  'dark:border-white/25 dark:bg-neutral-900/45 dark:text-white',
+  'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
+  'dark:hover:[background-image:linear-gradient(rgb(255_255_255/0.08),rgb(255_255_255/0.08))]',
+  'dark:active:[background-image:linear-gradient(rgb(255_255_255/0.12),rgb(255_255_255/0.12))]',
+  'dark:focus-visible:shadow-[0_0_0_2px_rgb(255_255_255/0.4),0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
+);
+
+/**
+ * Joined capsule — one glass pill holding several segments (zoom −/+) with a
+ * hairline divider, like iOS grouped controls. The pill owns the glass
+ * chrome; segments (see `controlSegmentClass`) become flat, full-height hit
+ * areas.
+ */
+const controlGroupClass = cn(
+  'inline-flex items-stretch overflow-hidden rounded-full',
+  'border border-black/20 bg-white/55',
+  'shadow-[0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
+  'backdrop-blur-[40px] backdrop-saturate-150',
+  'dark:border-white/25 dark:bg-neutral-900/45',
+  'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
+);
+
+/**
+ * Segment inside `controlGroupClass`: sheds its own glass chrome (the pill
+ * owns it), doesn't shrink on press (the pill is one rigid control), and uses
+ * an inset focus ring (the pill clips outset rings). Each segment is as wide
+ * as the pill is tall → a two-segment capsule is exactly 2:1.
+ */
+const controlSegmentClass = cn(
+  'relative h-auto w-9 rounded-none border-0 bg-transparent shadow-none',
+  'backdrop-blur-none backdrop-saturate-100',
+  'active:scale-100',
+  'focus-visible:shadow-[inset_0_0_0_2px_rgb(0_0_0/0.25)]',
+  'dark:bg-transparent dark:shadow-none',
+  'dark:focus-visible:shadow-[inset_0_0_0_2px_rgb(255_255_255/0.4)]',
+);
+
+/** Hairline divider on the leading edge of a follow-up capsule segment. */
+const controlSegmentDividerClass =
+  'before:absolute before:inset-y-[22%] before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/20';
+
+/**
+ * Chrome that gets out of the way during gestures. `visibility` (not just
+ * opacity/pointer-events) keeps hidden controls out of the tab order; its 0s
+ * flip is delayed to the end of the fade-out, instant on fade-in. Pull-to-
+ * dismiss (and the dismiss animation) hides all gesture chrome; `starting:`
+ * fades it in on open.
+ */
+const chromeGestureHideClass = cn(
+  'visible opacity-100 [transition:opacity_200ms,visibility_0s_linear_0s] starting:opacity-0',
+  'group-data-pulling/lb:invisible group-data-pulling/lb:opacity-0',
+  'group-data-pulling/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
+  'group-data-pull-dismissing/lb:invisible group-data-pull-dismissing/lb:opacity-0',
+  'group-data-pull-dismissing/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
+);
 
 /* ── Styled primitives (design-system re-exports) ───────────────────────── */
 
 function Root(props: React.ComponentProps<typeof RamkaLightbox.Root>) {
-  return <RamkaLightbox.Root {...props} />
+  return <RamkaLightbox.Root {...props} />;
 }
 
 function Trigger({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Trigger>) {
-  return <RamkaLightbox.Trigger className={cx('lb-trigger', className)} {...props} />
+  return (
+    <RamkaLightbox.Trigger
+      data-slot="lightbox-trigger"
+      className={cn(
+        'cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500',
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
 function Portal({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Portal>) {
-  return <RamkaLightbox.Portal className={cx('lb-portal', className)} {...props} />
+  return (
+    <RamkaLightbox.Portal
+      data-slot="lightbox-portal"
+      className={cn('[--lb-ease-out-expo:cubic-bezier(0.16,1,0.3,1)]', className)}
+      {...props}
+    />
+  );
 }
 
 function Backdrop({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Backdrop>) {
-  return <RamkaLightbox.Backdrop className={cx('lb-backdrop', className)} {...props} />
+  return (
+    <RamkaLightbox.Backdrop
+      data-slot="lightbox-backdrop"
+      className={cn(
+        // Solid — the page underneath is fully covered while open.
+        'fixed inset-0 z-[70] bg-white opacity-0 dark:bg-black',
+        // Duration cascade: `--lightbox-pull-snap-*` exist only while a
+        // cancelled pull-to-dismiss springs back (so the refade matches the
+        // item's spring); otherwise `--lightbox-vt-duration` — the Root's
+        // `viewTransition` preset timing, which the library always sets on
+        // the Portal host. The 360ms literal is just a safety net.
+        'transition-opacity',
+        'duration-[var(--lightbox-pull-snap-duration,var(--lightbox-vt-duration,360ms))]',
+        'ease-[var(--lightbox-pull-snap-easing,var(--lb-ease-out-expo))]',
+        // `--lightbox-pull-progress` is 0 → 1 while pull-to-dismiss drags;
+        // `starting:` fades from 0 on the first frame after [data-open].
+        'data-open:opacity-[calc(1_-_var(--lightbox-pull-progress,0)*0.6)]',
+        'data-open:starting:opacity-0',
+        'data-pulling:transition-none', // follow the finger
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
 function Content({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Content>) {
-  return <RamkaLightbox.Content className={cx('lb-content', className)} {...props} />
+  return (
+    <RamkaLightbox.Content
+      data-slot="lightbox-content"
+      className={cn(
+        // `group/lb` publishes ramka's state attributes (data-pulling,
+        // data-pull-dismissing, data-zoomed) to all chrome below.
+        'group/lb fixed inset-0 z-[70] flex flex-col overscroll-contain opacity-0 outline-none',
+        // Same preset clock as the backdrop and the morph.
+        'transition-opacity duration-[var(--lightbox-vt-duration,360ms)] ease-(--lb-ease-out-expo)',
+        'data-open:opacity-100 data-open:starting:opacity-0',
+        // Letterbox insets around the media (read by Slide padding and the
+        // snug width formula). Mobile: equal top/bottom so the media is
+        // vertically centered — 4rem clears the close-button row above and
+        // the caption + counter below. Desktop: roomier, and the bottom adds
+        // the thumbnail-strip row + one-line caption bar.
+        '[--lb-inset-top:calc(4rem_+_env(safe-area-inset-top,0px))]',
+        '[--lb-inset-bottom:calc(4rem_+_env(safe-area-inset-bottom,0px))]',
+        '[--lb-inset-inline:0px]',
+        'md:[--lb-inset-top:calc(4.5rem_+_env(safe-area-inset-top,0px))]',
+        'md:[--lb-inset-bottom:calc(7.5rem_+_env(safe-area-inset-bottom,0px))]',
+        'md:[--lb-inset-inline:3rem]',
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
-/**
- * Exit control — a back arrow at the top left, not a glass close button. It
- * mirrors the gallery page's own back button so leaving the viewer looks like
- * the same gesture as leaving the gallery.
- */
-function Close({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof RamkaLightbox.Close>) {
+function Close({ className, children, ...props }: React.ComponentProps<typeof RamkaLightbox.Close>) {
   return (
-    <RamkaLightbox.Close className={cx('lb-back', className)} aria-label="Close" {...props}>
-      {children ?? <IconArrowLeft />}
+    <RamkaLightbox.Close
+      data-slot="lightbox-close"
+      // The ✕ glyph is optically lighter than the zoom glyphs — render larger.
+      className={cn(controlClass, '[&_svg]:size-4.5', className)}
+      aria-label="Close"
+      {...props}
+    >
+      {children ?? <XIcon strokeWidth={2.25} />}
     </RamkaLightbox.Close>
-  )
+  );
 }
 
 function Slides({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Slides>) {
-  return <RamkaLightbox.Slides className={cx('lb-slides', className)} {...props} />
+  return (
+    <RamkaLightbox.Slides
+      data-slot="lightbox-slides"
+      className={cn(
+        'flex-1 gap-5 md:gap-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
 function Slide({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Slide>) {
-  return <RamkaLightbox.Slide className={cx('lb-slide', className)} {...props} />
+  return (
+    <RamkaLightbox.Slide
+      data-slot="lightbox-slide"
+      className={cn(
+        'h-full min-w-full flex-[0_0_100%] px-(--lb-inset-inline) pt-(--lb-inset-top) pb-(--lb-inset-bottom)',
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
-function Item(props: React.ComponentProps<typeof RamkaLightbox.Item>) {
-  return <RamkaLightbox.Item {...props} />
+function Item({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Item>) {
+  return <RamkaLightbox.Item data-slot="lightbox-item" className={className} {...props} />;
 }
 
 function Media({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Media>) {
-  return <RamkaLightbox.Media className={cx('lb-media', className)} {...props} />
+  return (
+    <RamkaLightbox.Media
+      data-slot="lightbox-media"
+      className={cn('overflow-hidden md:rounded-lg [&_img]:select-none', className)}
+      {...props}
+    />
+  );
 }
 
 function Zoom(props: React.ComponentProps<typeof RamkaLightbox.Zoom>) {
-  return <RamkaLightbox.Zoom {...props} />
+  return <RamkaLightbox.Zoom {...props} />;
 }
 
-function ZoomIn({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof RamkaLightbox.ZoomIn>) {
+function ZoomIn({ className, children, ...props }: React.ComponentProps<typeof RamkaLightbox.ZoomIn>) {
   return (
     <RamkaLightbox.ZoomIn
-      className={cx('lb-control', 'lb-control-md', className)}
+      data-slot="lightbox-zoom-in"
+      className={cn(controlClass, 'max-md:hidden', className)}
       aria-label="Zoom in"
       {...props}
     >
-      {children ?? <IconZoomIn />}
+      {children ?? <ZoomInIcon strokeWidth={2.25} />}
     </RamkaLightbox.ZoomIn>
-  )
+  );
 }
 
-function ZoomOut({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof RamkaLightbox.ZoomOut>) {
+function ZoomOut({ className, children, ...props }: React.ComponentProps<typeof RamkaLightbox.ZoomOut>) {
   return (
     <RamkaLightbox.ZoomOut
-      className={cx('lb-control', 'lb-control-md', className)}
+      data-slot="lightbox-zoom-out"
+      className={cn(controlClass, 'max-md:hidden', className)}
       aria-label="Zoom out"
       {...props}
     >
-      {children ?? <IconZoomOut />}
+      {children ?? <ZoomOutIcon strokeWidth={2.25} />}
     </RamkaLightbox.ZoomOut>
-  )
+  );
+}
+
+function Counter({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Counter>) {
+  return (
+    <RamkaLightbox.Counter
+      data-slot="lightbox-counter"
+      // md+: the thumbnail strip shows position, so the counter collapses to
+      // sr-only and keeps only its aria-live announcement role.
+      className={cn(
+        'text-[0.6875rem] leading-[1.25] text-neutral-500 tabular-nums md:sr-only dark:text-neutral-400',
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
 function Caption({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Caption>) {
-  return <RamkaLightbox.Caption className={cx('lb-caption', className)} {...props} />
+  return (
+    <RamkaLightbox.Caption
+      data-slot="lightbox-caption"
+      className={cn(
+        'pointer-events-auto block max-w-full truncate text-[0.8125rem] leading-[1.25] font-medium text-neutral-900 select-text dark:text-neutral-50',
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
-function ThumbnailStrip({
+function ThumbnailStrip({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.ThumbnailStrip>) {
+  return (
+    <RamkaLightbox.ThumbnailStrip
+      data-slot="lightbox-thumbnail-strip"
+      className={cn(
+        '[--lb-thumb-size:3.5rem] [--lb-strip-fade:32px]',
+        // Soft edge fade over the scrolling thumbs (eased ramp, not linear).
+        '[--lb-strip-mask:linear-gradient(to_right,rgb(0_0_0/0)_0,rgb(0_0_0/0.156)_calc(var(--lb-strip-fade)*0.25),rgb(0_0_0/0.5)_calc(var(--lb-strip-fade)*0.5),rgb(0_0_0/0.844)_calc(var(--lb-strip-fade)*0.75),#000_var(--lb-strip-fade),#000_calc(100%_-_var(--lb-strip-fade)),rgb(0_0_0/0.844)_calc(100%_-_var(--lb-strip-fade)*0.75),rgb(0_0_0/0.5)_calc(100%_-_var(--lb-strip-fade)*0.5),rgb(0_0_0/0.156)_calc(100%_-_var(--lb-strip-fade)*0.25),rgb(0_0_0/0)_100%)]',
+        // pointer-events-auto counteracts the bottom band's click-through.
+        'pointer-events-auto w-full min-w-0 self-stretch py-1',
+        '[-webkit-mask-image:var(--lb-strip-mask)] [mask-image:var(--lb-strip-mask)]',
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+function ThumbnailStripTrack({
   className,
   ...props
-}: React.ComponentProps<typeof RamkaLightbox.ThumbnailStrip>) {
-  return <RamkaLightbox.ThumbnailStrip className={cx('lb-thumbnail-strip', className)} {...props} />
+}: React.ComponentProps<typeof RamkaLightbox.ThumbnailStripTrack>) {
+  return (
+    <RamkaLightbox.ThumbnailStripTrack
+      data-slot="lightbox-thumbnail-strip-track"
+      className={cn('flex w-max items-center gap-2', className)}
+      {...props}
+    />
+  );
 }
 
-function ThumbnailStripTrack(
-  props: React.ComponentProps<typeof RamkaLightbox.ThumbnailStripTrack>
-) {
-  return <RamkaLightbox.ThumbnailStripTrack {...props} />
+function Thumbnail({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Thumbnail>) {
+  return (
+    <RamkaLightbox.Thumbnail
+      data-slot="lightbox-thumbnail"
+      className={cn(
+        'relative block size-(--lb-thumb-size) shrink-0 cursor-pointer overflow-hidden rounded-md',
+        '[&_img]:block [&_img]:size-full [&_img]:object-cover',
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
-function Thumbnail(props: React.ComponentProps<typeof RamkaLightbox.Thumbnail>) {
-  return <RamkaLightbox.Thumbnail {...props} />
+function Previous(props: React.ComponentProps<typeof RamkaLightbox.Previous>) {
+  return <RamkaLightbox.Previous {...props} />;
+}
+
+function Next(props: React.ComponentProps<typeof RamkaLightbox.Next>) {
+  return <RamkaLightbox.Next {...props} />;
 }
 
 function ItemGroup(props: React.ComponentProps<typeof RamkaLightbox.ItemGroup>) {
-  return <RamkaLightbox.ItemGroup {...props} />
+  return <RamkaLightbox.ItemGroup {...props} />;
 }
 
 function ThumbnailGroup(props: React.ComponentProps<typeof RamkaLightbox.ThumbnailGroup>) {
-  return <RamkaLightbox.ThumbnailGroup {...props} />
+  return <RamkaLightbox.ThumbnailGroup {...props} />;
 }
+
+/* ── Snug layout (aspect-sized cards + peeking neighbors) ───────────────── */
+
+/*
+ * Card width = the largest size that fits the letterbox at the item's aspect
+ * ratio: min(scrollport width minus gutters, letterbox height × ratio). The
+ * `--lb-snug-ratio*` values are per-item aspect ratios set inline by the
+ * Gallery; cqw/cqh resolve against the Slides scrollport (the library makes
+ * it a size container). -start/-end are the first/last item's ratios, needed
+ * by the ::before/::after spacers so the first/last card can center in the
+ * scrollport under scroll-snap.
+ */
+const snugSlidesClass = cn(
+  '[--lb-snug-gap:1.25rem] gap-(--lb-snug-gap) md:gap-(--lb-snug-gap)',
+  '[--lb-snug-width-start:min(calc(100cqw_-_2*var(--lb-inset-inline)),calc((100cqh_-_var(--lb-inset-top)_-_var(--lb-inset-bottom))*var(--lb-snug-ratio-start,1)))]',
+  '[--lb-snug-width-end:min(calc(100cqw_-_2*var(--lb-inset-inline)),calc((100cqh_-_var(--lb-inset-top)_-_var(--lb-inset-bottom))*var(--lb-snug-ratio-end,1)))]',
+  'md:before:pointer-events-none md:before:flex-[0_0_calc((100cqw_-_var(--lb-snug-width-start))/2_-_var(--lb-snug-gap))]',
+  'md:after:pointer-events-none md:after:flex-[0_0_calc((100cqw_-_var(--lb-snug-width-end))/2_-_var(--lb-snug-gap))]',
+);
+
+const snugSlideClass = cn(
+  // No horizontal padding on the card itself — the gutter lives in the width
+  // formula only, so neighbors can peek right up to the card edge. z-0 is the
+  // stacking baseline for the zoomed-card promotion below.
+  'z-0 px-0',
+  '[--lb-snug-width:min(calc(100cqw_-_2*var(--lb-inset-inline)),calc((100cqh_-_var(--lb-inset-top)_-_var(--lb-inset-bottom))*var(--lb-snug-ratio)))]',
+  'md:w-(--lb-snug-width) md:min-w-0 md:flex-[0_0_auto]',
+  // The zoomed active card paints above the peeking neighbors.
+  'group-data-zoomed/lb:has-data-active:z-[1]',
+);
+
+/*
+ * Neighbor cards dim as the active item is pulled to dismiss
+ * (`--lightbox-pull-progress`) or zoomed (`--lightbox-zoom-progress`) — both
+ * library-written, 0 → 1. `filter` tracks the gesture 1:1 (transitioning it
+ * would lag the finger); `opacity` transitions so the pull snap-back resolves
+ * on the same spring as the item.
+ */
+const snugItemClass = cn(
+  'transition-opacity',
+  'duration-[var(--lightbox-pull-snap-duration,500ms)]',
+  'ease-[var(--lightbox-pull-snap-easing,var(--lb-ease-out-expo))]',
+  'not-data-active:[--lb-neighbor-dim:max(var(--lightbox-pull-progress,0),var(--lightbox-zoom-progress,0))]',
+  'not-data-active:opacity-[calc(1_-_var(--lightbox-pull-progress,0)*0.85)]',
+  'not-data-active:[filter:opacity(calc(1_-_var(--lb-neighbor-dim)))_blur(calc(var(--lb-neighbor-dim)*6px))]',
+  'group-data-pulling/lb:transition-none', // follow the finger
+);
 
 /* ── Composed Gallery (product chrome) ──────────────────────────────────── */
 
-/** Strip tabs are square (`--lb-thumb-h`) and `object-fit: cover` — request 2× that. */
-const THUMBNAIL_SIZE = 128
-
-function GalleryThumbnailStrip({
-  items,
-  thumbnailsLabel
-}: {
-  items: LightboxItem[]
-  thumbnailsLabel: string
-}) {
-  if (items.length <= 1) return null
+function GalleryThumbnailStrip({ items }: { items: LightboxItem[] }) {
+  if (items.length <= 1) return null;
 
   return (
-    <ThumbnailStrip className="lb-thumbnail-strip-desktop">
-      <ThumbnailStripTrack aria-label={thumbnailsLabel}>
+    // The strip is desktop-only; mobile shows the counter instead.
+    <ThumbnailStrip className="max-md:hidden">
+      <ThumbnailStripTrack aria-label="Photo thumbnails">
         {items.map((item, i) => (
           <Thumbnail key={item.id ?? i} index={i}>
-            <Image
-              src={item.thumb}
-              alt={item.alt}
-              width={THUMBNAIL_SIZE}
-              height={THUMBNAIL_SIZE}
-              draggable={false}
-            />
+            <img src={item.thumb} alt={item.alt} draggable={false} />
           </Thumbnail>
         ))}
       </ThumbnailStripTrack>
-      <span className="lb-thumbnail-strip-indicator" aria-hidden />
+      {/* Decorative ring over the active tab — the track scrolls under it. */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute top-1/2 left-1/2 size-[calc(var(--lb-thumb-size)_+_8px)] -translate-x-1/2 -translate-y-1/2 rounded-[calc(0.375rem_+_2px)] border-2 border-black dark:border-white"
+      />
     </ThumbnailStrip>
-  )
+  );
 }
 
 /**
- * Default product chrome — Portal → Backdrop + Content → Slides/Zoom + back
- * arrow / glass controls / caption / desktop ThumbnailStrip.
- *
- * Two slide layouts, selected with `slidesLayout`: `bleed` (default) gives every
- * slide the full width and letterboxes it, `snug` sizes each slide to its own
- * aspect ratio with peeking neighbours. There is no on-screen toggle — the
- * consuming app picks the layout.
+ * Default product chrome — Portal → Backdrop + Content → Slides/Zoom + glass
+ * controls / caption + counter placard / desktop ThumbnailStrip. Supports bleed (full-width)
+ * and snug (aspect-sized cards) via the top-right layout toggle or `slidesLayout`.
  */
 function Gallery({
   items,
   ariaLabel,
-  slidesLayout = 'bleed'
+  slidesLayout: slidesLayoutProp,
+  onSlidesLayoutChange,
 }: {
-  items: LightboxItem[]
-  ariaLabel: string
-  slidesLayout?: SlidesLayout
+  items: LightboxItem[];
+  ariaLabel: string;
+  slidesLayout?: SlidesLayout;
+  onSlidesLayoutChange?: (layout: SlidesLayout) => void;
 }) {
-  const t = useTranslations('Lightbox')
-  const snug = slidesLayout === 'snug'
+  const [slidesLayoutInternal, setSlidesLayoutInternal] = React.useState<SlidesLayout>(
+    () => readStoredSlidesLayout() ?? 'bleed',
+  );
+  const slidesLayout = slidesLayoutProp ?? slidesLayoutInternal;
+  const snug = slidesLayout === 'snug';
+  // Single item → no thumbnail strip → solo layout (tighter, centered bottom band).
+  const solo = items.length <= 1;
+
+  const setSlidesLayout = React.useCallback(
+    (next: SlidesLayout) => {
+      storeSlidesLayout(next);
+      onSlidesLayoutChange?.(next);
+      if (slidesLayoutProp === undefined) {
+        setSlidesLayoutInternal(next);
+      }
+    },
+    [onSlidesLayoutChange, slidesLayoutProp],
+  );
+
+  const toggleSlidesLayout = React.useCallback(() => {
+    setSlidesLayout(slidesLayout === 'snug' ? 'bleed' : 'snug');
+  }, [setSlidesLayout, slidesLayout]);
 
   const snugEdgeRatios =
     snug && items.length > 0
       ? {
-          start: itemAspectRatio(items[0]),
-          end: itemAspectRatio(items[items.length - 1])
+          start: itemAspectRatio(items[0]!),
+          end: itemAspectRatio(items[items.length - 1]!),
         }
-      : null
-
-  const slidesStyle: CSSVarStyle | undefined = snugEdgeRatios
-    ? {
-        '--lightbox-snug-ratio-start': snugEdgeRatios.start,
-        '--lightbox-snug-ratio-end': snugEdgeRatios.end
-      }
-    : undefined
+      : null;
 
   return (
     <Portal>
       <Backdrop />
       <Content
         aria-label={ariaLabel}
-        className={snug ? 'lb-content-snug' : undefined}
-        // Consumer-provided handlers on `Content` run before ramka's own Escape
-        // handling (see ramka's `mergeProps`), so stopping propagation here
-        // still lets ramka close the lightbox — it only keeps the keydown from
-        // reaching Base UI's document-level dismiss listener and closing an
-        // outer dialog (e.g. the route-intercept gallery modal) in the same
-        // keypress.
-        onKeyDown={(event) => {
-          if (event.key === 'Escape') event.stopPropagation()
-        }}
+        className={cn(
+          // Snug: the horizontal inset is a scrollport gutter consumed by the
+          // card width formula — not per-slide padding.
+          snug && 'md:[--lb-inset-inline:2rem]',
+          // Solo (single item — no thumbnail strip): only the caption placard
+          // sits below, so match the top inset and keep the letterbox symmetric.
+          solo && 'md:[--lb-inset-bottom:calc(4.5rem_+_env(safe-area-inset-bottom,0px))]',
+        )}
       >
         <Slides
           key={slidesLayout}
-          aria-label={t('full_size_images')}
+          aria-label="Full-size images"
           preload={2}
-          className={snug ? 'lb-slides-snug' : undefined}
-          style={slidesStyle}
+          className={snug ? snugSlidesClass : undefined}
+          style={
+            snugEdgeRatios
+              ? ({
+                  '--lb-snug-ratio-start': snugEdgeRatios.start,
+                  '--lb-snug-ratio-end': snugEdgeRatios.end,
+                } as React.CSSProperties)
+              : undefined
+          }
         >
           {items.map((item, i) => {
-            const slideStyle: CSSVarStyle | undefined = snug
-              ? { '--lightbox-snug-ratio': itemAspectRatio(item) }
-              : undefined
+            const ratio = itemAspectRatio(item);
             return (
               <Slide
                 key={item.id ?? i}
-                className={snug ? 'lb-slide-snug' : undefined}
-                style={slideStyle}
+                className={snug ? snugSlideClass : undefined}
+                style={snug ? ({ '--lb-snug-ratio': ratio } as React.CSSProperties) : undefined}
               >
-                <Item index={i} caption={item.caption ?? item.alt}>
+                <Item index={i} caption={item.caption ?? item.alt} className={snug ? snugItemClass : undefined}>
                   <Zoom maxZoom={6}>
                     <Media width={item.width} height={item.height}>
-                      <Image
+                      <img
                         width={item.width}
                         height={item.height}
                         src={item.src}
                         alt={item.alt}
-                        sizes="100vw"
-                        // Only the initially-active slide preloads (the one
-                        // relevant to LCP on open); later slides stay lazy
-                        // even though `Slides` keeps a couple mounted for swipe.
-                        preload={i === 0}
+                        loading="eager"
                         draggable={false}
                       />
                     </Media>
                   </Zoom>
                 </Item>
               </Slide>
-            )
+            );
           })}
         </Slides>
 
-        <div className={cx('lb-top-left', 'lb-chrome-pull-hide')}>
-          <Close aria-label={t('close')} />
-        </div>
-
-        <div className={cx('lb-top-right', 'lb-chrome-pull-hide')}>
-          <ZoomOut aria-label={t('zoom_out')} />
-          <ZoomIn aria-label={t('zoom_in')} />
+        <div
+          className={cn(
+            'absolute top-[calc(0.75rem_+_env(safe-area-inset-top,0px))] right-3 z-[1] flex gap-2',
+            chromeGestureHideClass,
+            // On mobile, zoom also hides the top controls — the media fills the screen.
+            'max-md:group-data-zoomed/lb:invisible max-md:group-data-zoomed/lb:opacity-0',
+            'max-md:group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
+          )}
+        >
+          {/* Layout toggle: the icon is a miniature of the CURRENT layout —
+              snug shows a card with neighbours, bleed one wide slide. */}
+          <button
+            type="button"
+            className={cn(controlClass, 'max-md:hidden [&_svg]:size-4.5')}
+            aria-pressed={snug}
+            aria-label={snug ? 'Switch to full-bleed slides' : 'Switch to snug slides'}
+            onClick={toggleSlidesLayout}
+          >
+            {snug ? (
+              <GalleryHorizontalIcon strokeWidth={2.25} />
+            ) : (
+              <RectangleHorizontalIcon strokeWidth={2.25} />
+            )}
+          </button>
+          {/* Zoom −/+ share one capsule with a hairline divider. */}
+          <div className={cn(controlGroupClass, 'max-md:hidden')}>
+            <ZoomOut className={controlSegmentClass} />
+            <ZoomIn className={cn(controlSegmentClass, controlSegmentDividerClass)} />
+          </div>
+          <Close />
         </div>
 
         <div
-          className={cx('lb-bottom', 'lb-chrome-pull-hide', items.length <= 1 && 'lb-bottom-solo')}
+          className={cn(
+            // Click-through the inset band; caption opts back in for text selection.
+            'pointer-events-none absolute inset-x-0 bottom-0 z-[1] flex flex-col items-center gap-3',
+            'px-3 pb-[calc(1rem_+_env(safe-area-inset-bottom,0px))]',
+            chromeGestureHideClass,
+            // Zoom hides the bottom placard (the zoomed media pans under it).
+            'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
+            'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
+            // Solo (no strip): center the placard in the bottom inset band
+            // instead of pinning it to the viewport edge.
+            solo && 'min-h-(--lb-inset-bottom) justify-center pb-[env(safe-area-inset-bottom,0px)]',
+          )}
         >
-          <Caption />
-          <GalleryThumbnailStrip items={items} thumbnailsLabel={t('thumbnails')} />
+          {/*
+            Caption under the media, placard-style. The counter is visible on
+            mobile where there's no strip to show position; on md+ the strip
+            covers that, so the counter collapses to sr-only and keeps only
+            its aria-live announcement role.
+          */}
+          <div className="flex max-w-full flex-col items-center text-center">
+            <Caption />
+            {/* "1 of 1" is noise — skip the counter for single-item galleries. */}
+            {solo ? null : <Counter>{({ current, total }) => `${current} of ${total}`}</Counter>}
+          </div>
+          <GalleryThumbnailStrip items={items} />
         </div>
       </Content>
     </Portal>
-  )
+  );
 }
 
 /**
@@ -361,10 +673,13 @@ export const Lightbox = {
   Zoom,
   ZoomIn,
   ZoomOut,
+  Counter,
   Caption,
   ThumbnailStrip,
   ThumbnailStripTrack,
   Thumbnail,
   ThumbnailGroup,
-  Gallery
-}
+  Previous,
+  Next,
+  Gallery,
+};
