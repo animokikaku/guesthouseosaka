@@ -33,6 +33,7 @@ import {
   ZoomInIcon,
   ZoomOutIcon,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Lightbox as RamkaLightbox } from 'ramka';
 
 import { cn } from '@/lib/utils';
@@ -466,13 +467,19 @@ const snugItemClass = cn(
 
 /* ── Composed Gallery (product chrome) ──────────────────────────────────── */
 
-function GalleryThumbnailStrip({ items }: { items: LightboxItem[] }) {
+function GalleryThumbnailStrip({
+  items,
+  thumbnailsLabel,
+}: {
+  items: LightboxItem[];
+  thumbnailsLabel: string;
+}) {
   if (items.length <= 1) return null;
 
   return (
     // The strip is desktop-only; mobile shows the counter instead.
     <ThumbnailStrip className="max-md:hidden">
-      <ThumbnailStripTrack aria-label="Photo thumbnails">
+      <ThumbnailStripTrack aria-label={thumbnailsLabel}>
         {items.map((item, i) => (
           <Thumbnail key={item.id ?? i} index={i}>
             <img src={item.thumb} alt={item.alt} draggable={false} />
@@ -504,6 +511,7 @@ function Gallery({
   slidesLayout?: SlidesLayout;
   onSlidesLayoutChange?: (layout: SlidesLayout) => void;
 }) {
+  const t = useTranslations('Lightbox');
   const [slidesLayoutInternal, setSlidesLayoutInternal] = React.useState<SlidesLayout>(
     () => readStoredSlidesLayout() ?? 'bleed',
   );
@@ -548,10 +556,19 @@ function Gallery({
           // sits below, so match the top inset and keep the letterbox symmetric.
           solo && 'md:[--lb-inset-bottom:calc(4.5rem_+_env(safe-area-inset-bottom,0px))]',
         )}
+        // Consumer-provided handlers on `Content` run before ramka's own Escape
+        // handling (see ramka's `mergeProps`), so stopping propagation here
+        // still lets ramka close the lightbox — it only keeps the keydown from
+        // reaching Base UI's document-level dismiss listener and closing an
+        // outer dialog (e.g. the route-intercept gallery modal) in the same
+        // keypress.
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') event.stopPropagation();
+        }}
       >
         <Slides
           key={slidesLayout}
-          aria-label="Full-size images"
+          aria-label={t('full_size_images')}
           preload={2}
           className={snug ? snugSlidesClass : undefined}
           style={
@@ -616,10 +633,13 @@ function Gallery({
           </button>
           {/* Zoom −/+ share one capsule with a hairline divider. */}
           <div className={cn(controlGroupClass, 'max-md:hidden')}>
-            <ZoomOut className={controlSegmentClass} />
-            <ZoomIn className={cn(controlSegmentClass, controlSegmentDividerClass)} />
+            <ZoomOut className={controlSegmentClass} aria-label={t('zoom_out')} />
+            <ZoomIn
+              className={cn(controlSegmentClass, controlSegmentDividerClass)}
+              aria-label={t('zoom_in')}
+            />
           </div>
-          <Close />
+          <Close aria-label={t('close')} />
         </div>
 
         <div
@@ -647,7 +667,7 @@ function Gallery({
             {/* "1 of 1" is noise — skip the counter for single-item galleries. */}
             {solo ? null : <Counter>{({ current, total }) => `${current} of ${total}`}</Counter>}
           </div>
-          <GalleryThumbnailStrip items={items} />
+          <GalleryThumbnailStrip items={items} thumbnailsLabel={t('thumbnails')} />
         </div>
       </Content>
     </Portal>
