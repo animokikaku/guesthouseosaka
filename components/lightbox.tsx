@@ -34,6 +34,7 @@ import {
   ZoomOutIcon,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import { Lightbox as RamkaLightbox } from 'ramka';
 
 import { cn } from '@/lib/utils';
@@ -50,6 +51,9 @@ export type LightboxItem = {
 };
 
 export type SlidesLayout = 'bleed' | 'snug';
+
+/** Inline styles that carry the `--lb-*`/`--lightbox-*` custom properties the skin reads/writes. */
+type CSSVarStyle = React.CSSProperties & Record<`--${string}`, string | number>;
 
 /**
  * The snug/bleed choice is a user preference, so it survives across galleries
@@ -96,18 +100,18 @@ const controlClass = cn(
   'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
   'border border-black/20 bg-white/55 text-neutral-900',
   'shadow-[0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
-  'backdrop-blur-[40px] backdrop-saturate-150',
+  'backdrop-blur-2xl backdrop-saturate-150',
   'transition-[background-color,box-shadow,transform,scale,opacity,color] duration-150 ease-out',
   'outline-none',
-  'hover:[background-image:linear-gradient(rgb(0_0_0/0.05),rgb(0_0_0/0.05))]',
-  'active:scale-[0.96] active:[background-image:linear-gradient(rgb(0_0_0/0.09),rgb(0_0_0/0.09))]',
+  'hover:bg-[linear-gradient(rgb(0_0_0/0.05),rgb(0_0_0/0.05))]',
+  'active:scale-[0.96] active:bg-[linear-gradient(rgb(0_0_0/0.09),rgb(0_0_0/0.09))]',
   'focus-visible:shadow-[0_0_0_2px_rgb(0_0_0/0.25),0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
   'disabled:pointer-events-none disabled:opacity-30',
   '[&_svg]:block [&_svg]:size-4',
   'dark:border-white/25 dark:bg-neutral-900/45 dark:text-white',
   'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
-  'dark:hover:[background-image:linear-gradient(rgb(255_255_255/0.08),rgb(255_255_255/0.08))]',
-  'dark:active:[background-image:linear-gradient(rgb(255_255_255/0.12),rgb(255_255_255/0.12))]',
+  'dark:hover:bg-[linear-gradient(rgb(255_255_255/0.08),rgb(255_255_255/0.08))]',
+  'dark:active:bg-[linear-gradient(rgb(255_255_255/0.12),rgb(255_255_255/0.12))]',
   'dark:focus-visible:shadow-[0_0_0_2px_rgb(255_255_255/0.4),0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
 );
 
@@ -121,7 +125,7 @@ const controlGroupClass = cn(
   'inline-flex items-stretch overflow-hidden rounded-full',
   'border border-black/20 bg-white/55',
   'shadow-[0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
-  'backdrop-blur-[40px] backdrop-saturate-150',
+  'backdrop-blur-2xl backdrop-saturate-150',
   'dark:border-white/25 dark:bg-neutral-900/45',
   'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
 );
@@ -195,18 +199,18 @@ function Backdrop({ className, ...props }: React.ComponentProps<typeof RamkaLigh
       data-slot="lightbox-backdrop"
       className={cn(
         // Solid — the page underneath is fully covered while open.
-        'fixed inset-0 z-[70] bg-white opacity-0 dark:bg-black',
+        'fixed inset-0 z-70 bg-white opacity-0 dark:bg-black',
         // Duration cascade: `--lightbox-pull-snap-*` exist only while a
         // cancelled pull-to-dismiss springs back (so the refade matches the
         // item's spring); otherwise `--lightbox-vt-duration` — the Root's
         // `viewTransition` preset timing, which the library always sets on
         // the Portal host. The 360ms literal is just a safety net.
         'transition-opacity',
-        'duration-[var(--lightbox-pull-snap-duration,var(--lightbox-vt-duration,360ms))]',
-        'ease-[var(--lightbox-pull-snap-easing,var(--lb-ease-out-expo))]',
+        'duration-(--lightbox-pull-snap-duration,var(--lightbox-vt-duration,360ms))',
+        'ease-(--lightbox-pull-snap-easing,var(--lb-ease-out-expo))',
         // `--lightbox-pull-progress` is 0 → 1 while pull-to-dismiss drags;
         // `starting:` fades from 0 on the first frame after [data-open].
-        'data-open:opacity-[calc(1_-_var(--lightbox-pull-progress,0)*0.6)]',
+        'data-open:opacity-[calc(1-var(--lightbox-pull-progress,0)*0.6)]',
         'data-open:starting:opacity-0',
         'data-pulling:transition-none', // follow the finger
         className,
@@ -223,20 +227,20 @@ function Content({ className, ...props }: React.ComponentProps<typeof RamkaLight
       className={cn(
         // `group/lb` publishes ramka's state attributes (data-pulling,
         // data-pull-dismissing, data-zoomed) to all chrome below.
-        'group/lb fixed inset-0 z-[70] flex flex-col overscroll-contain opacity-0 outline-none',
+        'group/lb fixed inset-0 z-70 flex flex-col overscroll-contain opacity-0 outline-none',
         // Same preset clock as the backdrop and the morph.
-        'transition-opacity duration-[var(--lightbox-vt-duration,360ms)] ease-(--lb-ease-out-expo)',
+        'transition-opacity duration-(--lightbox-vt-duration,360ms) ease-(--lb-ease-out-expo)',
         'data-open:opacity-100 data-open:starting:opacity-0',
         // Letterbox insets around the media (read by Slide padding and the
         // snug width formula). Mobile: equal top/bottom so the media is
         // vertically centered — 4rem clears the close-button row above and
         // the caption + counter below. Desktop: roomier, and the bottom adds
         // the thumbnail-strip row + one-line caption bar.
-        '[--lb-inset-top:calc(4rem_+_env(safe-area-inset-top,0px))]',
-        '[--lb-inset-bottom:calc(4rem_+_env(safe-area-inset-bottom,0px))]',
+        '[--lb-inset-top:calc(4rem+env(safe-area-inset-top,0px))]',
+        '[--lb-inset-bottom:calc(4rem+env(safe-area-inset-bottom,0px))]',
         '[--lb-inset-inline:0px]',
-        'md:[--lb-inset-top:calc(4.5rem_+_env(safe-area-inset-top,0px))]',
-        'md:[--lb-inset-bottom:calc(7.5rem_+_env(safe-area-inset-bottom,0px))]',
+        'md:[--lb-inset-top:calc(4.5rem+env(safe-area-inset-top,0px))]',
+        'md:[--lb-inset-bottom:calc(7.5rem+env(safe-area-inset-bottom,0px))]',
         'md:[--lb-inset-inline:3rem]',
         className,
       )}
@@ -264,7 +268,7 @@ function Slides({ className, ...props }: React.ComponentProps<typeof RamkaLightb
     <RamkaLightbox.Slides
       data-slot="lightbox-slides"
       className={cn(
-        'flex-1 gap-5 md:gap-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+        'flex-1 gap-5 md:gap-0 scrollbar-none [&::-webkit-scrollbar]:hidden',
         className,
       )}
       {...props}
@@ -336,7 +340,7 @@ function Counter({ className, ...props }: React.ComponentProps<typeof RamkaLight
       // md+: the thumbnail strip shows position, so the counter collapses to
       // sr-only and keeps only its aria-live announcement role.
       className={cn(
-        'text-[0.6875rem] leading-[1.25] text-neutral-500 tabular-nums md:sr-only dark:text-neutral-400',
+        'text-[0.6875rem] leading-tight text-neutral-500 tabular-nums md:sr-only dark:text-neutral-400',
         className,
       )}
       {...props}
@@ -349,7 +353,7 @@ function Caption({ className, ...props }: React.ComponentProps<typeof RamkaLight
     <RamkaLightbox.Caption
       data-slot="lightbox-caption"
       className={cn(
-        'pointer-events-auto block max-w-full truncate text-[0.8125rem] leading-[1.25] font-medium text-neutral-900 select-text dark:text-neutral-50',
+        'pointer-events-auto block max-w-full truncate text-[0.8125rem] leading-tight font-medium text-neutral-900 select-text dark:text-neutral-50',
         className,
       )}
       {...props}
@@ -364,10 +368,10 @@ function ThumbnailStrip({ className, ...props }: React.ComponentProps<typeof Ram
       className={cn(
         '[--lb-thumb-size:3.5rem] [--lb-strip-fade:32px]',
         // Soft edge fade over the scrolling thumbs (eased ramp, not linear).
-        '[--lb-strip-mask:linear-gradient(to_right,rgb(0_0_0/0)_0,rgb(0_0_0/0.156)_calc(var(--lb-strip-fade)*0.25),rgb(0_0_0/0.5)_calc(var(--lb-strip-fade)*0.5),rgb(0_0_0/0.844)_calc(var(--lb-strip-fade)*0.75),#000_var(--lb-strip-fade),#000_calc(100%_-_var(--lb-strip-fade)),rgb(0_0_0/0.844)_calc(100%_-_var(--lb-strip-fade)*0.75),rgb(0_0_0/0.5)_calc(100%_-_var(--lb-strip-fade)*0.5),rgb(0_0_0/0.156)_calc(100%_-_var(--lb-strip-fade)*0.25),rgb(0_0_0/0)_100%)]',
+        '[--lb-strip-mask:linear-gradient(to_right,rgb(0_0_0/0)_0,rgb(0_0_0/0.156)_calc(var(--lb-strip-fade)*0.25),rgb(0_0_0/0.5)_calc(var(--lb-strip-fade)*0.5),rgb(0_0_0/0.844)_calc(var(--lb-strip-fade)*0.75),#000_var(--lb-strip-fade),#000_calc(100%-var(--lb-strip-fade)),rgb(0_0_0/0.844)_calc(100%-var(--lb-strip-fade)*0.75),rgb(0_0_0/0.5)_calc(100%-var(--lb-strip-fade)*0.5),rgb(0_0_0/0.156)_calc(100%-var(--lb-strip-fade)*0.25),rgb(0_0_0/0)_100%)]',
         // pointer-events-auto counteracts the bottom band's click-through.
         'pointer-events-auto w-full min-w-0 self-stretch py-1',
-        '[-webkit-mask-image:var(--lb-strip-mask)] [mask-image:var(--lb-strip-mask)]',
+        '[-webkit-mask-image:var(--lb-strip-mask)] mask-(--lb-strip-mask)',
         className,
       )}
       {...props}
@@ -431,10 +435,10 @@ function ThumbnailGroup(props: React.ComponentProps<typeof RamkaLightbox.Thumbna
  */
 const snugSlidesClass = cn(
   '[--lb-snug-gap:1.25rem] gap-(--lb-snug-gap) md:gap-(--lb-snug-gap)',
-  '[--lb-snug-width-start:min(calc(100cqw_-_2*var(--lb-inset-inline)),calc((100cqh_-_var(--lb-inset-top)_-_var(--lb-inset-bottom))*var(--lb-snug-ratio-start,1)))]',
-  '[--lb-snug-width-end:min(calc(100cqw_-_2*var(--lb-inset-inline)),calc((100cqh_-_var(--lb-inset-top)_-_var(--lb-inset-bottom))*var(--lb-snug-ratio-end,1)))]',
-  'md:before:pointer-events-none md:before:flex-[0_0_calc((100cqw_-_var(--lb-snug-width-start))/2_-_var(--lb-snug-gap))]',
-  'md:after:pointer-events-none md:after:flex-[0_0_calc((100cqw_-_var(--lb-snug-width-end))/2_-_var(--lb-snug-gap))]',
+  '[--lb-snug-width-start:min(calc(100cqw-2*var(--lb-inset-inline)),calc((100cqh-var(--lb-inset-top)-var(--lb-inset-bottom))*var(--lb-snug-ratio-start,1)))]',
+  '[--lb-snug-width-end:min(calc(100cqw-2*var(--lb-inset-inline)),calc((100cqh-var(--lb-inset-top)-var(--lb-inset-bottom))*var(--lb-snug-ratio-end,1)))]',
+  'md:before:pointer-events-none md:before:flex-[0_0_calc((100cqw-var(--lb-snug-width-start))/2-var(--lb-snug-gap))]',
+  'md:after:pointer-events-none md:after:flex-[0_0_calc((100cqw-var(--lb-snug-width-end))/2-var(--lb-snug-gap))]',
 );
 
 const snugSlideClass = cn(
@@ -442,10 +446,10 @@ const snugSlideClass = cn(
   // formula only, so neighbors can peek right up to the card edge. z-0 is the
   // stacking baseline for the zoomed-card promotion below.
   'z-0 px-0',
-  '[--lb-snug-width:min(calc(100cqw_-_2*var(--lb-inset-inline)),calc((100cqh_-_var(--lb-inset-top)_-_var(--lb-inset-bottom))*var(--lb-snug-ratio)))]',
+  '[--lb-snug-width:min(calc(100cqw-2*var(--lb-inset-inline)),calc((100cqh-var(--lb-inset-top)-var(--lb-inset-bottom))*var(--lb-snug-ratio)))]',
   'md:w-(--lb-snug-width) md:min-w-0 md:flex-[0_0_auto]',
   // The zoomed active card paints above the peeking neighbors.
-  'group-data-zoomed/lb:has-data-active:z-[1]',
+  'group-data-zoomed/lb:has-data-active:z-1',
 );
 
 /*
@@ -457,15 +461,18 @@ const snugSlideClass = cn(
  */
 const snugItemClass = cn(
   'transition-opacity',
-  'duration-[var(--lightbox-pull-snap-duration,500ms)]',
-  'ease-[var(--lightbox-pull-snap-easing,var(--lb-ease-out-expo))]',
+  'duration-(--lightbox-pull-snap-duration,500ms)',
+  'ease-(--lightbox-pull-snap-easing,var(--lb-ease-out-expo))',
   'not-data-active:[--lb-neighbor-dim:max(var(--lightbox-pull-progress,0),var(--lightbox-zoom-progress,0))]',
-  'not-data-active:opacity-[calc(1_-_var(--lightbox-pull-progress,0)*0.85)]',
-  'not-data-active:[filter:opacity(calc(1_-_var(--lb-neighbor-dim)))_blur(calc(var(--lb-neighbor-dim)*6px))]',
+  'not-data-active:opacity-[calc(1-var(--lightbox-pull-progress,0)*0.85)]',
+  'not-data-active:[filter:opacity(calc(1-var(--lb-neighbor-dim)))_blur(calc(var(--lb-neighbor-dim)*6px))]',
   'group-data-pulling/lb:transition-none', // follow the finger
 );
 
 /* ── Composed Gallery (product chrome) ──────────────────────────────────── */
+
+/** Strip tabs are `--lb-thumb-size` (3.5rem/56px) and `object-fit: cover` — request 2× that. */
+const THUMBNAIL_SIZE = 112;
 
 function GalleryThumbnailStrip({
   items,
@@ -482,14 +489,20 @@ function GalleryThumbnailStrip({
       <ThumbnailStripTrack aria-label={thumbnailsLabel}>
         {items.map((item, i) => (
           <Thumbnail key={item.id ?? i} index={i}>
-            <img src={item.thumb} alt={item.alt} draggable={false} />
+            <Image
+              src={item.thumb}
+              alt={item.alt}
+              width={THUMBNAIL_SIZE}
+              height={THUMBNAIL_SIZE}
+              draggable={false}
+            />
           </Thumbnail>
         ))}
       </ThumbnailStripTrack>
       {/* Decorative ring over the active tab — the track scrolls under it. */}
       <span
         aria-hidden
-        className="pointer-events-none absolute top-1/2 left-1/2 size-[calc(var(--lb-thumb-size)_+_8px)] -translate-x-1/2 -translate-y-1/2 rounded-[calc(0.375rem_+_2px)] border-2 border-black dark:border-white"
+        className="pointer-events-none absolute top-1/2 left-1/2 size-[calc(var(--lb-thumb-size)+8px)] -translate-x-1/2 -translate-y-1/2 rounded-xl border-2 border-black dark:border-white"
       />
     </ThumbnailStrip>
   );
@@ -538,10 +551,17 @@ function Gallery({
   const snugEdgeRatios =
     snug && items.length > 0
       ? {
-          start: itemAspectRatio(items[0]!),
-          end: itemAspectRatio(items[items.length - 1]!),
+          start: itemAspectRatio(items[0]),
+          end: itemAspectRatio(items[items.length - 1]),
         }
       : null;
+
+  const slidesStyle: CSSVarStyle | undefined = snugEdgeRatios
+    ? {
+        '--lb-snug-ratio-start': snugEdgeRatios.start,
+        '--lb-snug-ratio-end': snugEdgeRatios.end,
+      }
+    : undefined;
 
   return (
     <Portal>
@@ -554,7 +574,7 @@ function Gallery({
           snug && 'md:[--lb-inset-inline:2rem]',
           // Solo (single item — no thumbnail strip): only the caption placard
           // sits below, so match the top inset and keep the letterbox symmetric.
-          solo && 'md:[--lb-inset-bottom:calc(4.5rem_+_env(safe-area-inset-bottom,0px))]',
+          solo && 'md:[--lb-inset-bottom:calc(4.5rem+env(safe-area-inset-bottom,0px))]',
         )}
         // Consumer-provided handlers on `Content` run before ramka's own Escape
         // handling (see ramka's `mergeProps`), so stopping propagation here
@@ -571,32 +591,26 @@ function Gallery({
           aria-label={t('full_size_images')}
           preload={2}
           className={snug ? snugSlidesClass : undefined}
-          style={
-            snugEdgeRatios
-              ? ({
-                  '--lb-snug-ratio-start': snugEdgeRatios.start,
-                  '--lb-snug-ratio-end': snugEdgeRatios.end,
-                } as React.CSSProperties)
-              : undefined
-          }
+          style={slidesStyle}
         >
           {items.map((item, i) => {
             const ratio = itemAspectRatio(item);
+            const slideStyle: CSSVarStyle | undefined = snug ? { '--lb-snug-ratio': ratio } : undefined;
             return (
-              <Slide
-                key={item.id ?? i}
-                className={snug ? snugSlideClass : undefined}
-                style={snug ? ({ '--lb-snug-ratio': ratio } as React.CSSProperties) : undefined}
-              >
+              <Slide key={item.id ?? i} className={snug ? snugSlideClass : undefined} style={slideStyle}>
                 <Item index={i} caption={item.caption ?? item.alt} className={snug ? snugItemClass : undefined}>
                   <Zoom maxZoom={6}>
                     <Media width={item.width} height={item.height}>
-                      <img
+                      <Image
                         width={item.width}
                         height={item.height}
                         src={item.src}
                         alt={item.alt}
-                        loading="eager"
+                        sizes="100vw"
+                        // Only the initially-active slide preloads (the one
+                        // relevant to LCP on open); later slides stay lazy
+                        // even though `Slides` keeps a couple mounted for swipe.
+                        priority={i === 0}
                         draggable={false}
                       />
                     </Media>
@@ -609,7 +623,7 @@ function Gallery({
 
         <div
           className={cn(
-            'absolute top-[calc(0.75rem_+_env(safe-area-inset-top,0px))] right-3 z-[1] flex gap-2',
+            'absolute top-[calc(0.75rem+env(safe-area-inset-top,0px))] right-3 z-1 flex gap-2',
             chromeGestureHideClass,
             // On mobile, zoom also hides the top controls — the media fills the screen.
             'max-md:group-data-zoomed/lb:invisible max-md:group-data-zoomed/lb:opacity-0',
@@ -645,8 +659,8 @@ function Gallery({
         <div
           className={cn(
             // Click-through the inset band; caption opts back in for text selection.
-            'pointer-events-none absolute inset-x-0 bottom-0 z-[1] flex flex-col items-center gap-3',
-            'px-3 pb-[calc(1rem_+_env(safe-area-inset-bottom,0px))]',
+            'pointer-events-none absolute inset-x-0 bottom-0 z-1 flex flex-col items-center gap-3',
+            'px-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]',
             chromeGestureHideClass,
             // Zoom hides the bottom placard (the zoomed media pans under it).
             'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
