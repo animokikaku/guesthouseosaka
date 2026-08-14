@@ -23,6 +23,10 @@ export default defineConfig({
         replacement: path.resolve(projectRoot, 'playwright/gallery/sanity-image.ts')
       },
       {
+        find: '@/i18n/navigation',
+        replacement: path.resolve(projectRoot, 'playwright/gallery/i18n-navigation.tsx')
+      },
+      {
         find: '@',
         replacement: projectRoot
       }

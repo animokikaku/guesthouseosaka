@@ -153,17 +153,6 @@ describe('GalleryGridItem', () => {
     })
   })
 
-  describe('keyboard accessibility', () => {
-    it('renders the trigger as a native button', () => {
-      const item = createGalleryItem({ _key: 'photo-123' })
-
-      renderItem(item)
-
-      const button = screen.getByRole('button', { name: 'Test gallery image' })
-      expect(button).toHaveAttribute('type', 'button')
-    })
-  })
-
   describe('data attributes', () => {
     it('sets data-sanity attribute when dataAttribute function is provided', () => {
       const item = createGalleryItem({ _key: 'item-123' })

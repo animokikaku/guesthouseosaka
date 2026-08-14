@@ -1,3 +1,5 @@
+import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
+import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import type { GalleryCategories } from '@/lib/gallery'
 import messages from '@/messages/en.json'
@@ -67,6 +69,25 @@ export function Default() {
           backButton={<span>Back</span>}
         />
       </div>
+    </NextIntlClientProvider>
+  )
+}
+
+// Mirrors app/[locale]/[house]/@modal/(.)gallery/page.tsx: the lightbox nested
+// inside the route-intercept modal, so Escape-key handling between the two can
+// be exercised the way it actually renders in production.
+export function WithModal() {
+  return (
+    <NextIntlClientProvider locale="en" messages={messages}>
+      <GalleryModalWrapper house="orange" title="Orange House">
+        <GalleryPageContent
+          documentId="house-1"
+          documentType="house"
+          galleryCategories={galleryCategories}
+          title="Orange House"
+          backButton={<GalleryModalCloseButton />}
+        />
+      </GalleryModalWrapper>
     </NextIntlClientProvider>
   )
 }

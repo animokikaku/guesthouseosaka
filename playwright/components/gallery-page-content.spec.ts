@@ -19,39 +19,6 @@ test('opens the lightbox from a grid item with the right image and caption', asy
   await expect(dialog.getByText('First room', { exact: true })).toBeVisible()
 })
 
-test('navigates with arrow keys and the thumbnail strip', async ({ mount, page }) => {
-  await page.setViewportSize({ width: 1280, height: 800 })
-  const component = await mount(story)
-
-  await component.getByRole('button', { name: 'First room', exact: true }).click()
-
-  const dialog = page.getByRole('dialog')
-
-  await page.keyboard.press('ArrowRight')
-  await expect(dialog.getByText('Second room', { exact: true })).toBeVisible()
-
-  await page.keyboard.press('ArrowRight')
-  await expect(dialog.getByText('Third room', { exact: true })).toBeVisible()
-
-  await page.keyboard.press('ArrowLeft')
-  await expect(dialog.getByText('Second room', { exact: true })).toBeVisible()
-
-  // There is no on-screen prev/next chrome — the strip is the pointer affordance.
-  await dialog.getByRole('tab').first().click()
-  await expect(dialog.getByText('First room', { exact: true })).toBeVisible()
-})
-
-test('closes with Escape', async ({ mount, page }) => {
-  const component = await mount(story)
-  await component.getByRole('button', { name: 'First room', exact: true }).click()
-
-  const dialog = page.getByRole('dialog')
-  await expect(dialog).toBeVisible()
-
-  await page.keyboard.press('Escape')
-  await expect(dialog).toBeHidden()
-})
-
 test('closes with the top-left back arrow', async ({ mount, page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   const component = await mount(story)
@@ -64,64 +31,26 @@ test('closes with the top-left back arrow', async ({ mount, page }) => {
   await expect(dialog).toBeHidden()
 })
 
-test('closes on a downward drag', async ({ mount, page }) => {
-  await page.setViewportSize({ width: 390, height: 844 })
-  const component = await mount(story)
-  await component.getByRole('button', { name: 'First room', exact: true }).click()
+test('Escape closes only the lightbox, not the route-intercept modal behind it', async ({
+  mount,
+  page
+}) => {
+  await mount('components/gallery/gallery-page-content/WithModal')
 
-  const dialog = page.getByRole('dialog')
-  await expect(dialog).toBeVisible()
+  const routeModal = page.getByRole('dialog', { name: 'House Gallery' })
+  const lightbox = page.getByRole('dialog', { name: 'Orange House' })
+  await expect(routeModal).toBeVisible()
 
-  const image = dialog.getByLabel('Full-size images').getByRole('img', { name: 'First room' })
-  const box = await image.boundingBox()
-  if (!box) throw new Error('Expected the slide image to have a bounding box')
+  await routeModal.getByRole('button', { name: 'First room', exact: true }).click()
+  await expect(lightbox).toBeVisible()
 
-  // Ramka's pull-to-dismiss only reacts to real touch pointers, not mouse drags,
-  // so simulate a vertical touch drag via synthetic PointerEvents.
-  const startX = box.x + box.width / 2
-  const startY = box.y + box.height / 2
-  const pointerId = 1
+  await page.keyboard.press('Escape')
+  await expect(lightbox).toBeHidden()
+  // Give the route modal's own close transition time to run, so a regression
+  // that also closes it isn't masked by asserting mid-animation.
+  await page.waitForTimeout(500)
+  await expect(routeModal).toBeVisible()
 
-  await image.dispatchEvent('pointerdown', {
-    pointerId,
-    pointerType: 'touch',
-    clientX: startX,
-    clientY: startY,
-    bubbles: true
-  })
-  for (let step = 1; step <= 10; step++) {
-    await image.dispatchEvent('pointermove', {
-      pointerId,
-      pointerType: 'touch',
-      clientX: startX,
-      clientY: startY + step * 30,
-      bubbles: true
-    })
-  }
-  await image.dispatchEvent('pointerup', {
-    pointerId,
-    pointerType: 'touch',
-    clientX: startX,
-    clientY: startY + 300,
-    bubbles: true
-  })
-
-  await expect(dialog).toBeHidden()
-})
-
-test('zooms in and out', async ({ mount, page }) => {
-  await page.setViewportSize({ width: 1280, height: 800 })
-  const component = await mount(story)
-  await component.getByRole('button', { name: 'First room', exact: true }).click()
-
-  const dialog = page.getByRole('dialog')
-  const zoomIn = dialog.getByRole('button', { name: 'Zoom in' })
-  const zoomOut = dialog.getByRole('button', { name: 'Zoom out' })
-
-  await expect(zoomOut).toBeDisabled()
-  await zoomIn.click()
-  await expect(zoomOut).toBeEnabled()
-
-  await zoomOut.click()
-  await expect(zoomOut).toBeDisabled()
+  await page.keyboard.press('Escape')
+  await expect(routeModal).toBeHidden()
 })

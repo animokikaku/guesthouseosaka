@@ -14,7 +14,7 @@ import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { toGalleryCategories } from '@/lib/transforms/gallery'
 import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
-import { useMemo, useRef, type ComponentProps, type ReactNode } from 'react'
+import { useRef, type ComponentProps, type ReactNode } from 'react'
 
 /**
  * Keeps the grid scrolled to the active trigger so the close morph always lands
@@ -56,25 +56,15 @@ export function GalleryPageContent({
   })
 
   const scrollContainerRef = useRef<HTMLElement>(null)
-  const categories = useMemo(() => toGalleryCategories(galleryCategories), [galleryCategories])
-  const sectionIds = useMemo(() => categories.map((c) => c._id), [categories])
+  const categories = toGalleryCategories(galleryCategories)
+  const sectionIds = categories.map((c) => c._id)
 
-  const lightboxItemEntries = useMemo(
-    () =>
-      flattenGalleryItems(galleryCategories).flatMap((item) => {
-        const lightboxItem = toGalleryLightboxItem(item)
-        return lightboxItem ? [{ key: item._key, lightboxItem }] : []
-      }),
-    [galleryCategories]
-  )
-  const lightboxItems = useMemo(
-    () => lightboxItemEntries.map((entry) => entry.lightboxItem),
-    [lightboxItemEntries]
-  )
-  const indexByKey = useMemo(
-    () => new Map(lightboxItemEntries.map((entry, index) => [entry.key, index])),
-    [lightboxItemEntries]
-  )
+  const lightboxItemEntries = flattenGalleryItems(galleryCategories).flatMap((item) => {
+    const lightboxItem = toGalleryLightboxItem(item)
+    return lightboxItem ? [{ key: item._key, lightboxItem }] : []
+  })
+  const lightboxItems = lightboxItemEntries.map((entry) => entry.lightboxItem)
+  const indexByKey = new Map(lightboxItemEntries.map((entry, index) => [entry.key, index]))
 
   const { activeId } = useStickyNav({
     sectionIds,
