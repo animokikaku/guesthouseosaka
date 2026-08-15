@@ -28,6 +28,8 @@
 import * as React from 'react'
 import {
   ArrowLeftIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   GalleryHorizontalIcon,
   RectangleHorizontalIcon,
   ZoomInIcon,
@@ -113,6 +115,29 @@ const controlClass = cn(
   'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
   'dark:hover:bg-[linear-gradient(rgb(255_255_255/0.08),rgb(255_255_255/0.08))]',
   'dark:active:bg-[linear-gradient(rgb(255_255_255/0.12),rgb(255_255_255/0.12))]',
+  'dark:focus-visible:shadow-[0_0_0_2px_rgb(255_255_255/0.4),0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]'
+)
+
+/**
+ * Previous/Next glass pill — same chrome as `controlClass` (border, glass
+ * fill, shadow, backdrop-blur) but without its hover/active background tint,
+ * since these sit mid-photo: a darkening circle appearing under the cursor
+ * while just moving across the image read as a stray hover state, not a
+ * button. Press feedback stays as a scale, not a fill.
+ */
+const navControlClass = cn(
+  'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
+  'border border-black/20 bg-white/55 text-neutral-900',
+  'shadow-[0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
+  'backdrop-blur-2xl backdrop-saturate-150',
+  'transition-[box-shadow,transform,scale,opacity,color] duration-150 ease-out',
+  'outline-none',
+  'active:scale-[0.96]',
+  'focus-visible:shadow-[0_0_0_2px_rgb(0_0_0/0.25),0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
+  'disabled:pointer-events-none disabled:opacity-30',
+  '[&_svg]:block [&_svg]:size-4.5',
+  'dark:border-white/25 dark:bg-neutral-900/45 dark:text-white',
+  'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
   'dark:focus-visible:shadow-[0_0_0_2px_rgb(255_255_255/0.4),0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]'
 )
 
@@ -286,6 +311,36 @@ function Close({
   )
 }
 
+function Previous({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof RamkaLightbox.Previous>) {
+  return (
+    <RamkaLightbox.Previous
+      data-slot="lightbox-previous"
+      className={cn(navControlClass, className)}
+      aria-label="Previous"
+      {...props}
+    >
+      {children ?? <ChevronLeftIcon strokeWidth={2.25} />}
+    </RamkaLightbox.Previous>
+  )
+}
+
+function Next({ className, children, ...props }: React.ComponentProps<typeof RamkaLightbox.Next>) {
+  return (
+    <RamkaLightbox.Next
+      data-slot="lightbox-next"
+      className={cn(navControlClass, className)}
+      aria-label="Next"
+      {...props}
+    >
+      {children ?? <ChevronRightIcon strokeWidth={2.25} />}
+    </RamkaLightbox.Next>
+  )
+}
+
 function Slides({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Slides>) {
   return (
     <RamkaLightbox.Slides
@@ -441,14 +496,6 @@ function Thumbnail({ className, ...props }: React.ComponentProps<typeof RamkaLig
       {...props}
     />
   )
-}
-
-function Previous(props: React.ComponentProps<typeof RamkaLightbox.Previous>) {
-  return <RamkaLightbox.Previous {...props} />
-}
-
-function Next(props: React.ComponentProps<typeof RamkaLightbox.Next>) {
-  return <RamkaLightbox.Next {...props} />
 }
 
 function ItemGroup(props: React.ComponentProps<typeof RamkaLightbox.ItemGroup>) {
@@ -681,6 +728,34 @@ function Gallery({
         >
           <Close aria-label={t('close')} />
         </div>
+
+        {/* Desktop only — mobile already has swipe, and these would sit over
+            the pull-to-dismiss / pinch-zoom gesture surface. */}
+        {!solo && (
+          <div
+            className={cn(
+              'absolute inset-y-0 left-4 z-1 hidden items-center md:flex',
+              chromeGestureHideClass,
+              'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
+              'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+            )}
+          >
+            <Previous aria-label={t('previous')} />
+          </div>
+        )}
+
+        {!solo && (
+          <div
+            className={cn(
+              'absolute inset-y-0 right-4 z-1 hidden items-center md:flex',
+              chromeGestureHideClass,
+              'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
+              'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+            )}
+          >
+            <Next aria-label={t('next')} />
+          </div>
+        )}
 
         <div
           className={cn(

@@ -39,6 +39,8 @@
   "Lightbox": {
     "close": "Fermer",
     "full_size_images": "Images en taille réelle",
+    "next": "Image suivante",
+    "previous": "Image précédente",
     "thumbnails": "Vignettes photo",
     "zoom_in": "Zoomer",
     "zoom_out": "Dézoomer"

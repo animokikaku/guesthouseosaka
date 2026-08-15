@@ -42,6 +42,8 @@ declare const messages: {
   "Lightbox": {
     "close": "Close",
     "full_size_images": "Full-size images",
+    "next": "Next image",
+    "previous": "Previous image",
     "thumbnails": "Photo thumbnails",
     "zoom_in": "Zoom in",
     "zoom_out": "Zoom out"
