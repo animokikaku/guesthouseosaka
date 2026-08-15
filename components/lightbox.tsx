@@ -119,29 +119,6 @@ const controlClass = cn(
 )
 
 /**
- * Previous/Next glass pill — same chrome as `controlClass` (border, glass
- * fill, shadow, backdrop-blur) but without its hover/active background tint,
- * since these sit mid-photo: a darkening circle appearing under the cursor
- * while just moving across the image read as a stray hover state, not a
- * button. Press feedback stays as a scale, not a fill.
- */
-const navControlClass = cn(
-  'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
-  'border border-black/20 bg-white/55 text-neutral-900',
-  'shadow-[0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
-  'backdrop-blur-2xl backdrop-saturate-150',
-  'transition-[box-shadow,transform,scale,opacity,color] duration-150 ease-out',
-  'outline-none',
-  'active:scale-[0.96]',
-  'focus-visible:shadow-[0_0_0_2px_rgb(0_0_0/0.25),0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
-  'disabled:pointer-events-none disabled:opacity-30',
-  '[&_svg]:block [&_svg]:size-4.5',
-  'dark:border-white/25 dark:bg-neutral-900/45 dark:text-white',
-  'dark:shadow-[0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]',
-  'dark:focus-visible:shadow-[0_0_0_2px_rgb(255_255_255/0.4),0_0_0_0.5px_#000,0_0.5px_1px_rgb(0_0_0/0.45),0_1px_2px_rgb(0_0_0/0.35),inset_0_0.5px_0_rgb(255_255_255/0.14)]'
-)
-
-/**
  * Ghost icon button — ArrowLeftIcon, `size-9`, `rounded-full`, no glass
  * chrome. Mirrors `GalleryModalCloseButton` (the gallery page's own back
  * button) so leaving the lightbox reads as the same gesture as leaving the
@@ -319,7 +296,7 @@ function Previous({
   return (
     <RamkaLightbox.Previous
       data-slot="lightbox-previous"
-      className={cn(navControlClass, className)}
+      className={cn(controlClass, '[&_svg]:size-4.5', className)}
       aria-label="Previous"
       {...props}
     >
@@ -332,7 +309,7 @@ function Next({ className, children, ...props }: React.ComponentProps<typeof Ram
   return (
     <RamkaLightbox.Next
       data-slot="lightbox-next"
-      className={cn(navControlClass, className)}
+      className={cn(controlClass, '[&_svg]:size-4.5', className)}
       aria-label="Next"
       {...props}
     >
