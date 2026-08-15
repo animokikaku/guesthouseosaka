@@ -37,6 +37,7 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { Lightbox as RamkaLightbox } from 'ramka'
 
+import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { cn } from '@/lib/utils'
 
 /** Item shape for `Lightbox.Gallery` — pass real intrinsic pixel size. */
@@ -650,6 +651,7 @@ function Gallery({
                         src={item.src}
                         alt={item.alt}
                         sizes="100vw"
+                        loader={sanityImageLoader}
                         // Only the initially-active slide preloads (the one
                         // relevant to LCP on open); later slides stay lazy
                         // even though `Slides` keeps a couple mounted for swipe.
