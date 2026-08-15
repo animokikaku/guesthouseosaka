@@ -247,12 +247,12 @@ function Content({ className, ...props }: React.ComponentProps<typeof RamkaLight
         'transition-opacity duration-(--lightbox-vt-duration,360ms) ease-(--lb-ease-out-expo)',
         'data-open:opacity-100 data-open:starting:opacity-0',
         // Letterbox insets around the media (read by Slide padding and the
-        // snug width formula). Mobile: equal top/bottom so the media is
-        // vertically centered — 4rem clears the close-button row above and
-        // the caption + counter below. Desktop: roomier, and the bottom adds
+        // snug width formula). Mobile: top clears the close-button row above;
+        // bottom clears a caption that can wrap to 2 lines (see `Caption`)
+        // plus the counter below it. Desktop: roomier, and the bottom adds
         // the thumbnail-strip row + one-line caption bar.
         '[--lb-inset-top:calc(4rem+env(safe-area-inset-top,0px))]',
-        '[--lb-inset-bottom:calc(4rem+env(safe-area-inset-bottom,0px))]',
+        '[--lb-inset-bottom:calc(5rem+env(safe-area-inset-bottom,0px))]',
         '[--lb-inset-inline:0px]',
         'md:[--lb-inset-top:calc(4.5rem+env(safe-area-inset-top,0px))]',
         'md:[--lb-inset-bottom:calc(7.5rem+env(safe-area-inset-bottom,0px))]',
@@ -384,7 +384,10 @@ function Caption({ className, ...props }: React.ComponentProps<typeof RamkaLight
     <RamkaLightbox.Caption
       data-slot="lightbox-caption"
       className={cn(
-        'pointer-events-auto block max-w-full truncate text-[0.8125rem] leading-tight font-medium text-neutral-900 select-text dark:text-neutral-50',
+        // Mobile has no thumbnail strip competing for width, so long captions
+        // wrap instead of cropping — up to 2 lines (`--lb-inset-bottom` above
+        // reserves room for that). Desktop keeps the original one-line bar.
+        'pointer-events-auto line-clamp-2 max-w-full text-[0.8125rem] leading-tight font-medium text-neutral-900 select-text md:line-clamp-1 dark:text-neutral-50',
         className
       )}
       {...props}
