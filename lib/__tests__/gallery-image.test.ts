@@ -72,18 +72,15 @@ describe('toGalleryImageProps', () => {
   it('builds a full-aspect responsive URL without a baked-in crop', () => {
     const image = createSanityImage()
 
-    const result = toGalleryImageProps(image, {
-      width: 800,
-      fit: 'max',
-      responsive: true
-    })
+    const result = toGalleryImageProps(image, { fit: 'max', responsive: true })
 
     expect(result).toEqual(
       expect.objectContaining({
-        src: 'https://cdn.sanity.io/images/test/image.jpg?w=800&fit=max',
+        src: 'https://cdn.sanity.io/images/test/image.jpg?fit=max',
         loader: sanityImageLoader
       })
     )
+    expect(result?.src).not.toMatch(/[?&]w=/)
     expect(result?.src).not.toMatch(/[?&]h=/)
     expect(result?.src).not.toContain('fit=crop')
   })

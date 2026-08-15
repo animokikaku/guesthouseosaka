@@ -111,11 +111,10 @@ describe('GalleryGridItem', () => {
       expect(trigger).toContainElement(image)
       expect(trigger).toHaveClass('aspect-square', 'overflow-hidden')
       expect(image).toHaveClass('object-cover')
-      expect(src).toContain('w=800')
       expect(src).toContain('fit=max')
+      expect(src).not.toMatch(/[?&]w=/)
       expect(src).not.toMatch(/[?&]h=/)
       expect(src).not.toContain('fit=crop')
-      expect(src).not.toContain('w=400&h=400')
     })
 
     it('renders with empty alt when alt is null', () => {
