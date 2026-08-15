@@ -707,11 +707,15 @@ function Gallery({
         </div>
 
         {/* Desktop only — mobile already has swipe, and these would sit over
-            the pull-to-dismiss / pinch-zoom gesture surface. */}
+            the pull-to-dismiss / pinch-zoom gesture surface. `top`/`bottom`
+            (not `inset-y-0`) span the media box, not the full dialog — the
+            insets are asymmetric (desktop reserves more room at the bottom
+            for the strip + caption), so centering on the viewport would drift
+            off the image's actual vertical center. */}
         {!solo && (
           <div
             className={cn(
-              'absolute inset-y-0 left-4 z-1 hidden items-center md:flex',
+              'absolute top-(--lb-inset-top) bottom-(--lb-inset-bottom) left-4 z-1 hidden items-center md:flex',
               chromeGestureHideClass,
               'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
               'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
@@ -724,7 +728,7 @@ function Gallery({
         {!solo && (
           <div
             className={cn(
-              'absolute inset-y-0 right-4 z-1 hidden items-center md:flex',
+              'absolute top-(--lb-inset-top) bottom-(--lb-inset-bottom) right-4 z-1 hidden items-center md:flex',
               chromeGestureHideClass,
               'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
               'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
