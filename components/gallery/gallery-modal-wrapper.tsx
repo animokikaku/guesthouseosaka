@@ -26,7 +26,9 @@ export function GalleryModalWrapper({ house, title, children }: GalleryModalWrap
   return (
     <GalleryDialog
       open={isOpen}
-      onOpenChange={(open) => !open && setIsOpen(false)}
+      onOpenChange={(open) => {
+        if (!open) setIsOpen(false)
+      }}
       onOpenChangeComplete={(open) =>
         !open && router.push({ pathname: '/[house]', params: { house } })
       }

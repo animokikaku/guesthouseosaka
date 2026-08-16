@@ -26,14 +26,27 @@
     "description": "Découvrez les photos de {title}",
     "title": "Galerie de la maison"
   },
-  "GalleryImageButton": {
+  "GalleryGridItem": {
     "open_image": "Ouvrir l'image de la galerie"
   },
   "GalleryPage": {
     "close": "Fermer la galerie"
   },
   "GalleryPageContent": {
-    "gallery_content_label": "Contenu de la galerie"
+    "gallery_content_label": "Contenu de la galerie",
+    "gallery_title": "Galerie de la maison"
+  },
+  "Lightbox": {
+    "close": "Fermer",
+    "counter": "{current} sur {total}",
+    "full_size_images": "Images en taille réelle",
+    "next": "Image suivante",
+    "previous": "Image précédente",
+    "switch_to_bleed_slides": "Passer aux diapositives pleine largeur",
+    "switch_to_snug_slides": "Passer aux diapositives compactes",
+    "thumbnails": "Vignettes photo",
+    "zoom_in": "Zoomer",
+    "zoom_out": "Dézoomer"
   },
   "HouseAbout": {
     "heading": "À propos de {house}"

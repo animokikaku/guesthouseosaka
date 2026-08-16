@@ -26,14 +26,27 @@
     "description": "{title}の写真を見る",
     "title": "ハウスギャラリー"
   },
-  "GalleryImageButton": {
+  "GalleryGridItem": {
     "open_image": "ギャラリー画像を開く"
   },
   "GalleryPage": {
     "close": "ギャラリーを閉じる"
   },
   "GalleryPageContent": {
-    "gallery_content_label": "ギャラリーコンテンツ"
+    "gallery_content_label": "ギャラリーコンテンツ",
+    "gallery_title": "ハウスギャラリー"
+  },
+  "Lightbox": {
+    "close": "閉じる",
+    "counter": "{total} 枚中 {current} 枚目",
+    "full_size_images": "フルサイズ画像",
+    "next": "次の画像",
+    "previous": "前の画像",
+    "switch_to_bleed_slides": "全幅表示に切り替える",
+    "switch_to_snug_slides": "コンパクト表示に切り替える",
+    "thumbnails": "写真サムネイル",
+    "zoom_in": "ズームイン",
+    "zoom_out": "ズームアウト"
   },
   "HouseAbout": {
     "heading": "{house}について"

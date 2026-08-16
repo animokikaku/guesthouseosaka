@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import type { GalleryItem } from '@/lib/gallery'
-import { store } from '@/lib/store'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import { Lightbox } from '@/components/lightbox'
 import { GalleryGridItem } from '../gallery-grid-item'
 
 // Mock stegaClean
@@ -60,12 +60,15 @@ function createGalleryItem(overrides: Partial<GalleryItem> = {}): GalleryItem {
   }
 }
 
-describe('GalleryGridItem', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-    store.setState((prev) => ({ ...prev, photoId: null }))
-  })
+function renderItem(item: GalleryItem, props: Partial<Parameters<typeof GalleryGridItem>[0]> = {}) {
+  return render(
+    <Lightbox.Root>
+      <GalleryGridItem item={item} categoryKey="cat1" index={0} {...props} />
+    </Lightbox.Root>
+  )
+}
 
+describe('GalleryGridItem', () => {
   describe('empty states', () => {
     it('returns null when image is null', () => {
       const item = {
@@ -73,7 +76,13 @@ describe('GalleryGridItem', () => {
         image: null
       } as unknown as GalleryItem
 
-      const { container } = render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      const { container } = renderItem(item)
+
+      expect(container.firstChild).toBeNull()
+    })
+
+    it('returns null when index is undefined', () => {
+      const { container } = renderItem(createGalleryItem(), { index: undefined })
 
       expect(container.firstChild).toBeNull()
     })
@@ -83,12 +92,29 @@ describe('GalleryGridItem', () => {
     it('renders gallery image', () => {
       const item = createGalleryItem()
 
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      renderItem(item)
 
-      expect(screen.getByTestId('gallery-grid-image')).toBeInTheDocument()
+      const trigger = screen.getByTestId('gallery-grid-image')
       const image = screen.getByTestId('gallery-image')
-      expect(image).toBeInTheDocument()
+      expect(trigger).toBeInTheDocument()
+      expect(trigger).toContainElement(image)
       expect(image).toHaveAttribute('alt', 'Test gallery image')
+    })
+
+    it('uses a full-aspect Sanity URL; the square crop is CSS only', () => {
+      renderItem(createGalleryItem())
+
+      const trigger = screen.getByTestId('gallery-grid-image')
+      const image = screen.getByTestId('gallery-image')
+      const src = image.getAttribute('src') ?? ''
+
+      expect(trigger).toContainElement(image)
+      expect(trigger).toHaveClass('aspect-square', 'overflow-hidden')
+      expect(image).toHaveClass('object-cover')
+      expect(src).toContain('fit=max')
+      expect(src).not.toMatch(/[?&]w=/)
+      expect(src).not.toMatch(/[?&]h=/)
+      expect(src).not.toContain('fit=crop')
     })
 
     it('renders with empty alt when alt is null', () => {
@@ -102,7 +128,7 @@ describe('GalleryGridItem', () => {
         }
       })
 
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      renderItem(item)
 
       const image = screen.getByTestId('gallery-image')
       expect(image).toHaveAttribute('alt', '')
@@ -119,7 +145,7 @@ describe('GalleryGridItem', () => {
         }
       })
 
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      renderItem(item)
 
       const image = screen.getByTestId('gallery-image')
       expect(image).toHaveAttribute('data-placeholder', 'blur')
@@ -137,47 +163,10 @@ describe('GalleryGridItem', () => {
         }
       })
 
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
+      renderItem(item)
 
       const image = screen.getByTestId('gallery-image')
       expect(image.getAttribute('data-placeholder')).toBeNull()
-    })
-  })
-
-  describe('click handler', () => {
-    it('sets photoId in store when clicked', () => {
-      const item = createGalleryItem({ _key: 'photo-123' })
-
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
-      fireEvent.click(screen.getByTestId('gallery-grid-image'))
-
-      expect(store.state.photoId).toBe('photo-123')
-    })
-
-    it('sets correct photoId for different items', () => {
-      const item1 = createGalleryItem({ _key: 'photo-1' })
-      const item2 = createGalleryItem({ _key: 'photo-2' })
-
-      const { rerender } = render(<GalleryGridItem item={item1} categoryKey="cat1" />)
-      fireEvent.click(screen.getByTestId('gallery-grid-image'))
-      expect(store.state.photoId).toBe('photo-1')
-
-      store.setState((prev) => ({ ...prev, photoId: null }))
-
-      rerender(<GalleryGridItem item={item2} categoryKey="cat1" />)
-      fireEvent.click(screen.getByTestId('gallery-grid-image'))
-      expect(store.state.photoId).toBe('photo-2')
-    })
-  })
-
-  describe('keyboard accessibility', () => {
-    it('renders the image control as a native button', () => {
-      const item = createGalleryItem({ _key: 'photo-123' })
-
-      render(<GalleryGridItem item={item} categoryKey="cat1" />)
-
-      const button = screen.getByRole('button', { name: 'Test gallery image' })
-      expect(button).toHaveAttribute('type', 'button')
     })
   })
 
@@ -186,20 +175,20 @@ describe('GalleryGridItem', () => {
       const item = createGalleryItem({ _key: 'item-123' })
       const dataAttribute = vi.fn((path: string) => `encoded-path:${path}`)
 
-      render(<GalleryGridItem item={item} categoryKey="cat-abc" dataAttribute={dataAttribute} />)
+      renderItem(item, { dataAttribute })
 
       expect(dataAttribute).toHaveBeenCalledWith(
-        'galleryCategories[_key=="cat-abc"].items[_key=="item-123"]'
+        'galleryCategories[_key=="cat1"].items[_key=="item-123"]'
       )
 
       expect(screen.getByTestId('gallery-grid-image')).toHaveAttribute(
         'data-sanity',
-        'encoded-path:galleryCategories[_key=="cat-abc"].items[_key=="item-123"]'
+        'encoded-path:galleryCategories[_key=="cat1"].items[_key=="item-123"]'
       )
     })
 
     it('does not set data-sanity attribute when dataAttribute is undefined', () => {
-      render(<GalleryGridItem item={createGalleryItem()} categoryKey="cat1" />)
+      renderItem(createGalleryItem())
       expect(screen.getByTestId('gallery-grid-image')).not.toHaveAttribute('data-sanity')
     })
   })

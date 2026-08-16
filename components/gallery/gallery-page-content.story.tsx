@@ -1,11 +1,9 @@
-import messages from '@/messages/en.json'
-import { store } from '@/lib/store'
+import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
+import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
+import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import type { GalleryCategories } from '@/lib/gallery'
-import { toGalleryCategories } from '@/lib/transforms/gallery'
+import messages from '@/messages/en.json'
 import { NextIntlClientProvider } from 'next-intl'
-import { useLayoutEffect } from 'react'
-import { HouseGallery } from './house-gallery'
-import { GalleryModal } from './gallery-modal'
 
 const galleryCategories = [
   {
@@ -59,35 +57,37 @@ const galleryCategories = [
   }
 ] satisfies GalleryCategories
 
-function useInitialPhoto(photoId: string | null) {
-  useLayoutEffect(() => {
-    store.setState((state) => ({ ...state, photoId }))
-
-    return () => {
-      store.setState((state) => ({ ...state, photoId: null }))
-    }
-  }, [photoId])
-}
-
-export function Open() {
-  useInitialPhoto('first-room')
-
+export function Default() {
   return (
     <NextIntlClientProvider locale="en" messages={messages}>
-      <GalleryModal galleryCategories={galleryCategories} title="Orange House" />
+      <div className="h-screen w-screen">
+        <GalleryPageContent
+          documentId="house-1"
+          documentType="house"
+          galleryCategories={galleryCategories}
+          title="Orange House"
+          backButton={<span>Back</span>}
+        />
+      </div>
     </NextIntlClientProvider>
   )
 }
 
-export function Interactive() {
-  useInitialPhoto(null)
-
+// Mirrors app/[locale]/[house]/@modal/(.)gallery/page.tsx: the lightbox nested
+// inside the route-intercept modal, so Escape-key handling between the two can
+// be exercised the way it actually renders in production.
+export function WithModal() {
   return (
     <NextIntlClientProvider locale="en" messages={messages}>
-      <main className="p-6">
-        <HouseGallery categories={toGalleryCategories(galleryCategories)} />
-      </main>
-      <GalleryModal galleryCategories={galleryCategories} title="Orange House" />
+      <GalleryModalWrapper house="orange" title="Orange House">
+        <GalleryPageContent
+          documentId="house-1"
+          documentType="house"
+          galleryCategories={galleryCategories}
+          title="Orange House"
+          backButton={<GalleryModalCloseButton />}
+        />
+      </GalleryModalWrapper>
     </NextIntlClientProvider>
   )
 }

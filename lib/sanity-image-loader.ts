@@ -8,6 +8,11 @@ import type { ImageLoader } from 'next/image'
  * source URL only serve to pin the crop aspect ratio — both are recomputed
  * here. `dpr` is dropped on purpose: the candidate widths already encode
  * device pixel ratio, and keeping it would double every request.
+ *
+ * Lightbox trigger and destination URLs must not pin a different aspect than
+ * the asset. If both `w` and `h` are present, every srcset candidate keeps
+ * that ratio (e.g. a square `w=400&h=400` source stays 1:1). Use CSS
+ * `object-cover` for square tiles instead of baking a crop into the file.
  */
 export const sanityImageLoader: ImageLoader = ({ src, width, quality }) => {
   const url = new URL(src)

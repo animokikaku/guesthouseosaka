@@ -29,14 +29,27 @@ declare const messages: {
     "description": "Explore photos of {title}",
     "title": "House Gallery"
   },
-  "GalleryImageButton": {
+  "GalleryGridItem": {
     "open_image": "Open gallery image"
   },
   "GalleryPage": {
     "close": "Close gallery"
   },
   "GalleryPageContent": {
-    "gallery_content_label": "Gallery content"
+    "gallery_content_label": "Gallery content",
+    "gallery_title": "House Gallery"
+  },
+  "Lightbox": {
+    "close": "Close",
+    "counter": "{current} of {total}",
+    "full_size_images": "Full-size images",
+    "next": "Next image",
+    "previous": "Previous image",
+    "switch_to_bleed_slides": "Switch to full-bleed slides",
+    "switch_to_snug_slides": "Switch to snug slides",
+    "thumbnails": "Photo thumbnails",
+    "zoom_in": "Zoom in",
+    "zoom_out": "Zoom out"
   },
   "HouseAbout": {
     "heading": "About {house}"

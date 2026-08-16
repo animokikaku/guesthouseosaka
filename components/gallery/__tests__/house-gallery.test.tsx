@@ -1,4 +1,6 @@
+import { Lightbox } from '@/components/lightbox'
 import { HouseGallery } from '@/components/gallery/house-gallery'
+import type { GalleryCategory } from '@/lib/gallery'
 import {
   createGalleryCategory,
   createGalleryItem,
@@ -19,20 +21,19 @@ vi.mock('@sanity/client/stega', () => ({
   stegaClean: (value: string) => value
 }))
 
-// Mock GalleryImageButton
-vi.mock('../gallery-image-button', () => ({
-  GalleryImageButton: ({
-    onClick,
-    imageProps
-  }: {
-    onClick: () => void
-    imageProps: { alt: string }
-  }) => (
-    <button data-testid="gallery-image-button" onClick={onClick}>
-      {imageProps.alt}
-    </button>
+function indexByKeyFor(categories: GalleryCategory[]) {
+  return new Map(
+    categories.flatMap((category) => category.items).map((item, index) => [item._key, index])
   )
-}))
+}
+
+function renderGallery(categories: GalleryCategory[]) {
+  return render(
+    <Lightbox.Root>
+      <HouseGallery categories={categories} indexByKey={indexByKeyFor(categories)} />
+    </Lightbox.Root>
+  )
+}
 
 describe('HouseGallery', () => {
   beforeEach(() => {
@@ -41,13 +42,7 @@ describe('HouseGallery', () => {
 
   describe('empty gallery', () => {
     it('renders nothing for empty galleryCategories', () => {
-      const { container } = render(<HouseGallery categories={[]} />)
-
-      expect(container).toBeEmptyDOMElement()
-    })
-
-    it('renders nothing for null galleryCategories', () => {
-      const { container } = render(<HouseGallery categories={[]} />)
+      const { container } = renderGallery([])
 
       expect(container).toBeEmptyDOMElement()
     })
@@ -72,7 +67,7 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
+      renderGallery(toGalleryCategories(galleryCategories))
 
       expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Bedroom')
     })
@@ -91,7 +86,7 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
+      renderGallery(toGalleryCategories(galleryCategories))
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings).toHaveLength(2)
@@ -112,7 +107,7 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
+      renderGallery(toGalleryCategories(galleryCategories))
 
       const headings = screen.getAllByRole('heading', { level: 3 })
       expect(headings[0]).toHaveTextContent('Bedroom')
@@ -121,7 +116,7 @@ describe('HouseGallery', () => {
   })
 
   describe('gallery grid', () => {
-    it('renders image buttons for each gallery item', () => {
+    it('renders a trigger for each gallery item', () => {
       const galleryCategories = [
         createGalleryCategory({
           _key: 'cat1',
@@ -143,10 +138,10 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
+      renderGallery(toGalleryCategories(galleryCategories))
 
-      const buttons = screen.getAllByTestId('gallery-image-button')
-      expect(buttons).toHaveLength(3)
+      const triggers = screen.getAllByTestId('gallery-grid-image')
+      expect(triggers).toHaveLength(3)
     })
   })
 
@@ -160,7 +155,7 @@ describe('HouseGallery', () => {
         })
       ]
 
-      render(<HouseGallery categories={toGalleryCategories(galleryCategories)} />)
+      renderGallery(toGalleryCategories(galleryCategories))
 
       const buttons = screen.getAllByRole('button')
       expect(buttons).toHaveLength(1)
