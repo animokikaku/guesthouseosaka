@@ -38,9 +38,12 @@
   },
   "Lightbox": {
     "close": "Fermer",
+    "counter": "{current} sur {total}",
     "full_size_images": "Images en taille réelle",
     "next": "Image suivante",
     "previous": "Image précédente",
+    "switch_to_bleed_slides": "Passer aux diapositives pleine largeur",
+    "switch_to_snug_slides": "Passer aux diapositives compactes",
     "thumbnails": "Vignettes photo",
     "zoom_in": "Zoomer",
     "zoom_out": "Dézoomer"

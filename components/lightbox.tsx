@@ -753,7 +753,7 @@ function Gallery({
             type="button"
             className={cn(controlClass, 'max-md:hidden [&_svg]:size-4.5')}
             aria-pressed={snug}
-            aria-label={snug ? 'Switch to full-bleed slides' : 'Switch to snug slides'}
+            aria-label={snug ? t('switch_to_bleed_slides') : t('switch_to_snug_slides')}
             onClick={toggleSlidesLayout}
           >
             {snug ? (
@@ -795,7 +795,13 @@ function Gallery({
           <div className="flex max-w-full flex-col items-center text-center">
             <Caption />
             {/* "1 of 1" is noise — skip the counter for single-item galleries. */}
-            {solo ? null : <Counter>{({ current, total }) => `${current} of ${total}`}</Counter>}
+            {solo ? null : (
+              <Counter>
+                {({ current, total }) =>
+                  t('counter', { current: String(current), total: String(total) })
+                }
+              </Counter>
+            )}
           </div>
           <GalleryThumbnailStrip items={items} thumbnailsLabel={t('thumbnails')} />
         </div>
