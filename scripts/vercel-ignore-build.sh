@@ -28,5 +28,5 @@ git diff --quiet "$BASE_SHA" "$TARGET_SHA" -- . \
   ':!knip.json' \
   ':!playwright.config.ts' \
   ':!renovate.json' \
-  ':!vitest.config.ts' \
+  ':!vitest.config.mts' \
   ':!vitest.setup.ts'
