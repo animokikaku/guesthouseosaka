@@ -35,8 +35,16 @@ function GalleryGrid({
     <div className="hidden justify-center sm:flex">
       <div className="w-full">
         <div className="relative aspect-2/1 min-h-75 overflow-hidden rounded-xl lg:aspect-7/3">
-          {/* Sole affordance now that the button is gone, so it must stay focusable + labelled */}
-          <Link href={href} aria-label={viewGalleryLabel} className="block h-full w-full">
+          {/* Sole affordance now that the button is gone, so it must stay focusable + labelled.
+              `group/gallery` lets the `+N` badge below react to this link's own focus state,
+              since it's a plain, unfocusable span. `peer` feeds the sibling ring overlay below —
+              a ring on the link itself would paint *behind* the tiles filling it edge-to-edge
+              (a box's own box-shadow paints before its children). */}
+          <Link
+            href={href}
+            aria-label={viewGalleryLabel}
+            className="group/gallery peer block h-full w-full outline-none"
+          >
             <div className="grid h-full w-full grid-cols-4 grid-rows-2 gap-0.5">
               <GalleryImageFrame
                 className="col-span-2 row-span-2"
@@ -69,12 +77,20 @@ function GalleryGrid({
                     className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50"
                     aria-hidden="true"
                   >
-                    <span className="text-2xl font-bold text-white">{overflowLabel}</span>
+                    <span className="text-2xl font-bold text-white transition-colors group-focus-visible/gallery:text-primary">
+                      {overflowLabel}
+                    </span>
                   </span>
                 )}
               </GalleryImageFrame>
             </div>
           </Link>
+          {/* Single ring around the whole block on focus, rather than one per tile —
+              rendered after the link so it paints on top instead of behind the tiles. */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 rounded-xl ring-primary/50 ring-inset peer-focus-visible:ring-2"
+          />
         </div>
       </div>
     </div>

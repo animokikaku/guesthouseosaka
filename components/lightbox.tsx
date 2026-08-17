@@ -192,7 +192,9 @@ function Trigger({ className, ...props }: React.ComponentProps<typeof RamkaLight
     <RamkaLightbox.Trigger
       data-slot="lightbox-trigger"
       className={cn(
-        'cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500',
+        // Inset, not outset: an outset ring on a tightly-packed grid (2px
+        // gaps) would land on top of the next tile and get painted over.
+        'cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset',
         className
       )}
       {...props}
