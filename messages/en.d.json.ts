@@ -100,6 +100,7 @@ declare const messages: {
     "optional_hint": "optional"
   },
   "MobileHeroImage": {
+    "view_gallery": "Show all photos",
     "empty_title": "No gallery images",
     "empty_description": "Gallery images are managed through Sanity CMS."
   },

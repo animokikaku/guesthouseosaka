@@ -128,7 +128,7 @@ const backClass = cn(
   'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
   'bg-transparent text-inherit outline-none transition-colors',
   'hover:bg-accent hover:text-accent-foreground',
-  'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+  'focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2',
   '[&_svg]:block [&_svg]:size-6'
 )
 

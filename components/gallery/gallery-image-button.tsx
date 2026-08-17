@@ -64,7 +64,7 @@ export function GalleryImageFrame({
     <div
       data-slot="gallery-image-frame"
       className={cn(
-        'group relative cursor-pointer overflow-hidden ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+        'group relative cursor-pointer overflow-hidden ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2',
         className
       )}
       {...divProps}

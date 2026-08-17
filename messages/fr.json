@@ -97,6 +97,7 @@
     "optional_hint": "facultatif"
   },
   "MobileHeroImage": {
+    "view_gallery": "Afficher toutes les photos",
     "empty_title": "Aucune image de galerie",
     "empty_description": "Les images de galerie sont gérées via Sanity CMS."
   },

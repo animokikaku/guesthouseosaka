@@ -39,7 +39,7 @@ export function Collection({ houses, className }: CollectionProps) {
               pathname: '/[house]' as const,
               params: { house: house.slug }
             }}
-            className="group ring-offset-background focus-visible:ring-ring block w-full rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            className="group ring-offset-background focus-visible:ring-ring/50 block w-full rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <ItemHeader className="relative overflow-hidden rounded-sm">
               <CollectionImage image={house.image} />
