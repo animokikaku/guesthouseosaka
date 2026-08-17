@@ -73,7 +73,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute, index }: Gal
           */}
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 ring-ring/50 ring-inset group-focus-visible:ring-2"
+            className="ring-ring/50 pointer-events-none absolute inset-0 ring-inset group-focus-visible:ring-2"
           />
         </>
       )}

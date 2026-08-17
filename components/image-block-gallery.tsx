@@ -77,7 +77,7 @@ function GalleryGrid({
                     className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50"
                     aria-hidden="true"
                   >
-                    <span className="text-2xl font-bold text-white transition-colors group-focus-visible/gallery:text-primary">
+                    <span className="group-focus-visible/gallery:text-primary text-2xl font-bold text-white transition-colors">
                       {overflowLabel}
                     </span>
                   </span>
@@ -89,7 +89,7 @@ function GalleryGrid({
               rendered after the link so it paints on top instead of behind the tiles. */}
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 rounded-xl ring-primary/50 ring-inset peer-focus-visible:ring-2"
+            className="ring-primary/50 pointer-events-none absolute inset-0 rounded-xl ring-inset peer-focus-visible:ring-2"
           />
         </div>
       </div>
