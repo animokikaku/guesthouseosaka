@@ -96,7 +96,7 @@ function FeatureItem({
         {Icon && <Icon className="text-primary size-4" />}
         {value}
       </div>
-      <span className="text-muted-foreground/70 block pt-1 text-[11px] font-medium tracking-wide uppercase">
+      <span className="text-muted-foreground block pt-1 text-[11px] font-medium tracking-wide uppercase">
         {label}
       </span>
     </div>

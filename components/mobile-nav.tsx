@@ -141,7 +141,7 @@ function MobileLink({
         onOpenChange?.(false)
       }}
       className={cn(
-        'focus-visible:ring-ring rounded-sm text-2xl font-medium text-wrap hover:text-primary focus-visible:ring-2 focus-visible:outline-none',
+        'focus-visible:ring-ring/50 rounded-sm text-2xl font-medium text-wrap hover:text-primary focus-visible:ring-2 focus-visible:outline-none',
         className
       )}
       {...props}

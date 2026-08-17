@@ -128,7 +128,7 @@ const backClass = cn(
   'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
   'bg-transparent text-inherit outline-none transition-colors',
   'hover:bg-accent hover:text-accent-foreground',
-  'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+  'focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2',
   '[&_svg]:block [&_svg]:size-6'
 )
 
@@ -192,7 +192,9 @@ function Trigger({ className, ...props }: React.ComponentProps<typeof RamkaLight
     <RamkaLightbox.Trigger
       data-slot="lightbox-trigger"
       className={cn(
-        'cursor-pointer outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500',
+        // Inset, not outset: an outset ring on a tightly-packed grid (2px
+        // gaps) would land on top of the next tile and get painted over.
+        'cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset',
         className
       )}
       {...props}
@@ -473,10 +475,6 @@ function Thumbnail({ className, ...props }: React.ComponentProps<typeof RamkaLig
       {...props}
     />
   )
-}
-
-function ItemGroup(props: React.ComponentProps<typeof RamkaLightbox.ItemGroup>) {
-  return <RamkaLightbox.ItemGroup {...props} />
 }
 
 function ThumbnailGroup(props: React.ComponentProps<typeof RamkaLightbox.ThumbnailGroup>) {
@@ -824,7 +822,6 @@ export const Lightbox = {
   Slides,
   Slide,
   Item,
-  ItemGroup,
   Media,
   Zoom,
   ZoomIn,

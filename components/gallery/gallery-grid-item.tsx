@@ -65,6 +65,16 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute, index }: Gal
               <span className="text-sm font-medium text-white">{alt}</span>
             </div>
           )}
+          {/*
+            `Lightbox.Trigger`'s own focus ring is a box-shadow on the button
+            itself, which paints *behind* this full-bleed `<Image>` (a box's
+            own box-shadow paints before its children) — so it's invisible
+            here. This overlay renders last instead, on top of the image.
+          */}
+          <span
+            aria-hidden="true"
+            className="ring-ring/50 pointer-events-none absolute inset-0 ring-inset group-focus-visible:ring-2"
+          />
         </>
       )}
     </Lightbox.Trigger>

@@ -41,7 +41,7 @@ export function StickyCategoryNav({ categories, activeId }: StickyCategoryNavPro
                 aria-current={isActive ? 'true' : undefined}
                 onClick={() => scrollToGalleryCategory(cat._id)}
                 className={cn(
-                  'shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+                  'shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset',
                   isActive
                     ? 'bg-foreground/10 text-foreground'
                     : 'text-muted-foreground hover:text-foreground'
