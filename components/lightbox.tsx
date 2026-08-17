@@ -475,10 +475,6 @@ function Thumbnail({ className, ...props }: React.ComponentProps<typeof RamkaLig
   )
 }
 
-function ItemGroup(props: React.ComponentProps<typeof RamkaLightbox.ItemGroup>) {
-  return <RamkaLightbox.ItemGroup {...props} />
-}
-
 function ThumbnailGroup(props: React.ComponentProps<typeof RamkaLightbox.ThumbnailGroup>) {
   return <RamkaLightbox.ThumbnailGroup {...props} />
 }
@@ -824,7 +820,6 @@ export const Lightbox = {
   Slides,
   Slide,
   Item,
-  ItemGroup,
   Media,
   Zoom,
   ZoomIn,
