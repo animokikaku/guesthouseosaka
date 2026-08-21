@@ -2,6 +2,7 @@
  * This configuration file lets you run `$ sanity [command]` in this folder
  * Go to https://www.sanity.io/docs/cli to learn more.
  **/
+import react from '@vitejs/plugin-react'
 import { defineCliConfig } from 'sanity/cli'
 import { mergeConfig } from 'vite'
 
@@ -10,7 +11,11 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'development'
 
 export default defineCliConfig({
   api: { projectId, dataset },
-  vite: (config) => mergeConfig(config, { envPrefix: ['NEXT_PUBLIC_'] }),
+  vite: (config) =>
+    mergeConfig(config, {
+      envPrefix: ['NEXT_PUBLIC_'],
+      plugins: [react({ compiler: true })]
+    }),
   typegen: {
     path: [
       './**/*.{ts,tsx,js,jsx}',

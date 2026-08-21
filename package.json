@@ -84,6 +84,7 @@
     "@vitest/ui": "^4.1.11",
     "jsdom": "^30.0.1",
     "knip": "^6.32.2",
+    "oxc-transform-react": "^0.145.0",
     "oxfmt": "^0.64.0",
     "oxlint": "^1.79.0",
     "oxlint-tsgolint": "7.0.2001",
