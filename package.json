@@ -48,7 +48,7 @@
     "next-intl": "^4.13.7",
     "next-sanity": "^13.3.3",
     "next-themes": "^0.4.6",
-    "ramka": "https://pkg.pr.new/arturbien/ramka@38ff33a",
+    "ramka": "https://pkg.pr.new/arturbien/ramka@2fd0fde",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-email": "^6.9.2",

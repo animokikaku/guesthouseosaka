@@ -27,7 +27,7 @@
         "next-intl": "^4.13.7",
         "next-sanity": "^13.3.3",
         "next-themes": "^0.4.6",
-        "ramka": "https://pkg.pr.new/arturbien/ramka@38ff33a",
+        "ramka": "https://pkg.pr.new/arturbien/ramka@2fd0fde",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
         "react-email": "^6.9.2",
@@ -2336,7 +2336,7 @@
 
     "raf-schd": ["raf-schd@4.0.3", "", {}, "sha512-tQkJl2GRWh83ui2DiPTJz9wEiMN20syf+5oKfB03yYP7ioZcJwsIK8FjrtLwH1m7C7e+Tt2yYBlrOpdT+dyeIQ=="],
 
-    "ramka": ["ramka@https://pkg.pr.new/arturbien/ramka@38ff33a", { "dependencies": { "@base-ui/react": "^1.5.0" }, "peerDependencies": { "react": ">=18", "react-dom": ">=18" } }, "sha512-UiVl2VOQnrUjtDB+zbmxWD+pSazLSxSHaDzCFe81y6mSVHUxtfusratGiJs/Oseee0J1zGsP/xcFpmVQYz/ZQw=="],
+    "ramka": ["ramka@https://pkg.pr.new/arturbien/ramka@2fd0fde", { "dependencies": { "@base-ui/react": "^1.5.0" }, "peerDependencies": { "react": ">=18", "react-dom": ">=18" } }, "sha512-d25FfD6H+nT1ZqRwVH+aklxZzW9hM2jdAXbspdOxMS2E7diwvvivgdukqbhbqAyL9b3BgejJQLjHvbMKvhLCLg=="],
 
     "range-parser": ["range-parser@1.3.0", "", {}, "sha512-hek2mFQpPuI4E1BBKrSto+BU3e3x4xuarsbiwr3+lf7p44juvFMV0XFWQAP3xUyqXA4RrXLIoaSUGbSt056ZMw=="],
 
