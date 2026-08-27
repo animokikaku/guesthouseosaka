@@ -76,6 +76,7 @@
   },
   "patchedDependencies": {
     "next-sanity@13.3.3": "patches/next-sanity@13.3.3.patch",
+    "next-intl@4.14.0": "patches/next-intl@4.14.0.patch",
   },
   "overrides": {
     "@sanity/client": "^8.3.0",
