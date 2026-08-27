@@ -1,0 +1,61 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index c8356ca03c482b5db7afc89b4fa74747a3f51e2b..a69033034d3b3e4863a5ddf7acdbd5e3fbd8bc5e 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1,5 +1,5 @@
+ import { t as isCorsOriginError } from "./isCorsOriginError.js";
+-import { createClient, unstable__adapter, unstable__environment } from "@sanity/client";
++import { createClient } from "@sanity/client";
+ import { ClientReturnStega, StegaBranded, StegaBranded as StegaBranded$1, StegaCleaned, StegaCleaned as StegaCleaned$1, StegaString, stegaBrand, stegaClean } from "@sanity/client/stega";
+ import { CreateDataAttribute, CreateDataAttributeProps, createDataAttribute } from "@sanity/visual-editing/create-data-attribute";
+ import { InferComponents as InferComponents$1, InferStrictComponents as InferStrictComponents$1, InferValue as InferValue$1 } from "@portabletext/react";
+@@ -135,5 +135,5 @@ type InferStrictComponents<T> = InferStrictComponents$1<StegaAware<T>>;
+  * @public
+  */
+ declare const variantsApiVersion = "X";
+-export { type ClientReturnStega, type CreateDataAttribute, type CreateDataAttributeProps, type InferComponents, type InferStrictComponents, type InferValue, type StegaBranded, type StegaCleaned, type StegaString, createClient, createDataAttribute, defineQuery, groq, isCorsOriginError, stegaBrand, stegaClean, unstable__adapter, unstable__environment, variantsApiVersion };
++export { type ClientReturnStega, type CreateDataAttribute, type CreateDataAttributeProps, type InferComponents, type InferStrictComponents, type InferValue, type StegaBranded, type StegaCleaned, type StegaString, createClient, createDataAttribute, defineQuery, groq, isCorsOriginError, stegaBrand, stegaClean, variantsApiVersion };
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file
+diff --git a/dist/index.js b/dist/index.js
+index e42c049663ecf90cbae677a8deb47581a2f23c77..ab996f8ee002ce99c78d562d398704d6edda330e 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1,5 +1,5 @@
+ import { t as isCorsOriginError } from "./isCorsOriginError.js";
+-import { createClient, unstable__adapter, unstable__environment } from "@sanity/client";
++import { createClient } from "@sanity/client";
+ import { stegaBrand, stegaClean } from "@sanity/client/stega";
+ import { createDataAttribute } from "@sanity/visual-editing/create-data-attribute";
+ import groq, { defineQuery } from "groq";
+@@ -11,6 +11,6 @@ export * from "@portabletext/react";
+ * @public
+ */
+ const variantsApiVersion = "X";
+-export { createClient, createDataAttribute, defineQuery, groq, isCorsOriginError, stegaBrand, stegaClean, unstable__adapter, unstable__environment, variantsApiVersion };
++export { createClient, createDataAttribute, defineQuery, groq, isCorsOriginError, stegaBrand, stegaClean, variantsApiVersion };
+ 
+ //# sourceMappingURL=index.js.map
+\ No newline at end of file
+diff --git a/package.json b/package.json
+index f1dbdbde580047937c147a4ec6c3d2cd739c32cb..76fef667808f8c8a5a90276df16492014bb8c2e9 100644
+--- a/package.json
++++ b/package.json
+@@ -59,7 +59,7 @@
+   },
+   "dependencies": {
+     "@portabletext/react": "^7.0.1",
+-    "@sanity/client": "^7.26.2",
++    "@sanity/client": "^8.2.0",
+     "@sanity/generate-help-url": "^4.0.0",
+     "@sanity/preview-url-secret": "^4.1.4",
+     "@sanity/visual-editing": "^6.0.4",
+@@ -91,7 +91,7 @@
+     "vitest-package-exports": "^1.2.0"
+   },
+   "peerDependencies": {
+-    "@sanity/client": "^7.26.2",
++    "@sanity/client": "^8.2.0",
+     "next": "^16.0.0-0",
+     "react": "^19.2.3",
+     "react-dom": "^19.2.3",
