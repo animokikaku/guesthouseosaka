@@ -45,7 +45,7 @@
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^1.34.0",
     "next": "^16.3.3",
-    "next-intl": "^4.13.7",
+    "next-intl": "^4.14.0",
     "next-sanity": "^13.3.3",
     "next-themes": "^0.4.6",
     "ramka": "https://pkg.pr.new/arturbien/ramka@2fd0fde",
@@ -66,7 +66,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@eloqnt/cli": "^0.6.23",
+    "@eloqnt/cli": "^0.6.26",
     "@faker-js/faker": "^10.6.0",
     "@playwright/test": "^1.62.1",
     "@sanity/vision": "^6.11.0",
@@ -98,6 +98,7 @@
   },
   "packageManager": "bun@1.4.0",
   "patchedDependencies": {
-    "next-sanity@13.3.3": "patches/next-sanity@13.3.3.patch"
+    "next-sanity@13.3.3": "patches/next-sanity@13.3.3.patch",
+    "next-intl@4.14.0": "patches/next-intl@4.14.0.patch"
   }
 }
