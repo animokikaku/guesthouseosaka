@@ -7,6 +7,7 @@ const withNextIntl = createNextIntlPlugin({
     messages: {
       path: './messages',
       locales: 'infer',
+      sourceLocale: 'en',
       format: 'json',
       precompile: true
     }
