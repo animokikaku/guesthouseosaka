@@ -25,7 +25,7 @@
  * (docs: `demo.tsx`) — not in this module.
  */
 
-import * as React from 'react'
+import * as RamkaLightbox from '@ramka/react/lightbox'
 import {
   ArrowLeftIcon,
   ChevronLeftIcon,
@@ -37,7 +37,7 @@ import {
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { Lightbox as RamkaLightbox } from 'ramka'
+import * as React from 'react'
 
 import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { cn } from '@/lib/utils'
@@ -183,8 +183,8 @@ const chromeGestureHideClass = cn(
 
 /* ── Styled primitives (design-system re-exports) ───────────────────────── */
 
-function Root(props: React.ComponentProps<typeof RamkaLightbox.Root>) {
-  return <RamkaLightbox.Root {...props} />
+function Root({ license = 'gpl', ...props }: React.ComponentProps<typeof RamkaLightbox.Root>) {
+  return <RamkaLightbox.Root license={license} {...props} />
 }
 
 function Trigger({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Trigger>) {
@@ -666,6 +666,7 @@ function Gallery({
                 <Item
                   index={i}
                   caption={item.caption ?? item.alt}
+                  aria-label={t('counter', { current: String(i + 1), total: String(items.length) })}
                   className={snug ? snugItemClass : undefined}
                 >
                   <Zoom maxZoom={6}>
