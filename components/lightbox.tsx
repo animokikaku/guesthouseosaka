@@ -183,10 +183,7 @@ const chromeGestureHideClass = cn(
 
 /* ── Styled primitives (design-system re-exports) ───────────────────────── */
 
-function Root({
-  license = 'gpl',
-  ...props
-}: React.ComponentProps<typeof RamkaLightbox.Root>) {
+function Root({ license = 'gpl', ...props }: React.ComponentProps<typeof RamkaLightbox.Root>) {
   return <RamkaLightbox.Root license={license} {...props} />
 }
 
