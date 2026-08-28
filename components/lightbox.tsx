@@ -183,8 +183,11 @@ const chromeGestureHideClass = cn(
 
 /* ── Styled primitives (design-system re-exports) ───────────────────────── */
 
-function Root(props: React.ComponentProps<typeof RamkaLightbox.Root>) {
-  return <RamkaLightbox.Root {...props} />
+function Root({
+  license = 'gpl',
+  ...props
+}: React.ComponentProps<typeof RamkaLightbox.Root>) {
+  return <RamkaLightbox.Root license={license} {...props} />
 }
 
 function Trigger({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Trigger>) {
@@ -666,6 +669,7 @@ function Gallery({
                 <Item
                   index={i}
                   caption={item.caption ?? item.alt}
+                  aria-label={t('counter', { current: String(i + 1), total: String(items.length) })}
                   className={snug ? snugItemClass : undefined}
                 >
                   <Zoom maxZoom={6}>
