@@ -25,7 +25,7 @@
  * (docs: `demo.tsx`) — not in this module.
  */
 
-import * as React from 'react'
+import * as RamkaLightbox from '@ramka/react/lightbox'
 import {
   ArrowLeftIcon,
   ChevronLeftIcon,
@@ -37,7 +37,7 @@ import {
 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { Lightbox as RamkaLightbox } from 'ramka'
+import * as React from 'react'
 
 import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { cn } from '@/lib/utils'
