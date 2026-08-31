@@ -669,7 +669,7 @@ function Gallery({
                   aria-label={t('counter', { current: String(i + 1), total: String(items.length) })}
                   className={snug ? snugItemClass : undefined}
                 >
-                  <Zoom maxZoom={6}>
+                  <Zoom maxZoom={4}>
                     <Media width={item.width} height={item.height}>
                       <Image
                         width={item.width}
@@ -678,6 +678,7 @@ function Gallery({
                         alt={item.alt}
                         sizes="100vw"
                         loader={sanityImageLoader}
+                        quality={90}
                         // Only the initially-active slide preloads (the one
                         // relevant to LCP on open); later slides stay lazy
                         // even though `Slides` keeps a couple mounted for swipe.
