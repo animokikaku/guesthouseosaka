@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "cn build --full -o generated/cn-tables.ts",
     "dev": "NODE_NO_WARNINGS=1 next dev",
+    "prebuild": "cn build --content \"{app,components,lib}/**/*.{ts,tsx}\" -o generated/cn-tables.ts",
     "build": "NODE_NO_WARNINGS=1 next build",
     "start": "NODE_NO_WARNINGS=1 next start",
     "check": "next typegen && oxlint",
