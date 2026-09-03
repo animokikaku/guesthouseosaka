@@ -44,10 +44,6 @@ const createMockItems = (count: number): ContactNavItem[] =>
   }))
 
 describe('ContactNav', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('rendering', () => {
     it('renders all navigation items', () => {
       const items = createMockItems(3)

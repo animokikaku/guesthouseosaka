@@ -45,10 +45,6 @@ const createSettings = (
 })
 
 describe('SiteFooter', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('visibility', () => {
     it('renders footer element', () => {
       render(<SiteFooter settings={createSettings()} />)

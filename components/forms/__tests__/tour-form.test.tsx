@@ -44,10 +44,6 @@ const baseProps = {
 }
 
 describe('TourForm', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('card structure', () => {
     it('renders card with title', () => {
       render(<TourForm {...baseProps} />)

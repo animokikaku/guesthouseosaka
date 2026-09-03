@@ -35,10 +35,6 @@ function toAmenityCategoryData(cat: ReturnType<typeof createAmenityCategory>): A
 }
 
 describe('HouseAmenities', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('featured amenities display', () => {
     it('renders featured amenities on desktop (max 10)', () => {
       // GROQ query provides max 10 featured amenities

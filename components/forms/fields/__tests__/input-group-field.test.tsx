@@ -5,10 +5,6 @@ import { createMockFieldApi } from './test-utils'
 import { InputGroupField } from '../input-group-field'
 
 describe('InputGroupField', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('rendering', () => {
     it('renders input with correct name and value', () => {
       const fieldApi = createMockFieldApi('amount', '100')

@@ -39,7 +39,6 @@ import { PrivacyPolicyField } from '../privacy-policy-field'
 
 describe('PrivacyPolicyField', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     capturedOnAgree = undefined
   })
 

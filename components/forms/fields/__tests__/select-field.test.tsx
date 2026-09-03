@@ -10,10 +10,6 @@ const defaultOptions = [
 ]
 
 describe('SelectField', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('rendering', () => {
     it('renders select trigger', () => {
       const fieldApi = createMockFieldApi('testSelect', '')

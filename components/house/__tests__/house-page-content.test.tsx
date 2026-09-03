@@ -162,10 +162,6 @@ const createBaseProps = (slugOverride?: HouseSlug): Props => {
 }
 
 describe('HousePageContent', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('page structure', () => {
     it('renders page header with title', () => {
       render(<HousePageContent {...createBaseProps()} />)

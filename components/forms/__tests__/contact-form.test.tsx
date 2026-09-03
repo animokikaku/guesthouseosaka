@@ -44,10 +44,6 @@ const baseProps = {
 }
 
 describe('ContactForm', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('card structure', () => {
     it('renders card with title', () => {
       render(<ContactForm {...baseProps} />)

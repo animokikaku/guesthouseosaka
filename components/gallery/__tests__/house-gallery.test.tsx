@@ -36,10 +36,6 @@ function renderGallery(categories: GalleryCategory[]) {
 }
 
 describe('HouseGallery', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('empty gallery', () => {
     it('renders nothing for empty galleryCategories', () => {
       const { container } = renderGallery([])
