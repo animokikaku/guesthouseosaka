@@ -18,10 +18,9 @@ function MapSkeleton() {
   const t = useTranslations('HouseLocation')
 
   return (
-    <div
+    <output
       aria-busy="true"
       aria-label={t('loading_map')}
-      aria-live="polite"
       className="md:border-border flex min-h-[480px] flex-col gap-6 overflow-hidden md:flex-row md:gap-0 md:rounded-lg md:border"
     >
       {/* PlaceDetails skeleton */}
@@ -43,7 +42,7 @@ function MapSkeleton() {
       <div className="md:w-2/3">
         <Skeleton className="border-border h-[400px] w-full rounded-lg border md:h-full md:rounded-none md:border-0" />
       </div>
-    </div>
+    </output>
   )
 }
 

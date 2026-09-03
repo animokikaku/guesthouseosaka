@@ -50,7 +50,7 @@ export function HousePricing({ pricing }: HousePricingProps) {
               className="border-border/50 flex flex-col border-b last:border-b-0 md:flex-row"
             >
               <div className="bg-muted/50 border-border/50 border-b px-6 py-4 md:w-1/3 md:shrink-0 md:border-r md:border-b-0">
-                <h4 className="text-foreground font-medium">{row.label}</h4>
+                <h3 className="text-foreground font-medium">{row.label}</h3>
               </div>
               <div className="space-y-1 px-6 py-4 md:flex-1">
                 {row.content && (
