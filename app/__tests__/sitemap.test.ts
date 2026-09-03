@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 vi.mock('@/lib/env', () => ({
   env: {
     NEXT_PUBLIC_APP_URL: 'https://guesthouseosaka.example'

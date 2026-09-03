@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import { toContactFormConfig, toFormFieldsConfig } from '../form'
 import { createContactType, createContactTypeFields } from './mocks'
 

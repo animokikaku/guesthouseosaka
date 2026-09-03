@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 vi.mock('@/sanity/lib/image', () => ({
   urlFor: () => ({
     width: () => ({
