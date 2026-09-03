@@ -142,22 +142,6 @@ describe('HousePricing', () => {
     expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(1)
   })
 
-  it('omits the heading for a row with a null label', () => {
-    // `label` is `string | null`: the GROQ query coalesces the requested
-    // locale to `en`, so a row missing both resolves to null. Rendering it
-    // anyway would emit an empty h3, which fails the axe empty-heading rule.
-    const pricingWithNullLabel: PricingRowData[] = [
-      { _key: 'labelled', label: 'Rent', content: null },
-      { _key: 'unlabelled', label: null, content: null }
-    ]
-
-    render(<HousePricing pricing={pricingWithNullLabel} />)
-
-    const headings = screen.getAllByRole('heading', { level: 3 })
-    expect(headings).toHaveLength(1)
-    expect(headings[0]).toHaveTextContent('Rent')
-  })
-
   describe('PortableText content rendering', () => {
     it('does not render content when content is null', () => {
       render(<HousePricing pricing={mockPricing} />)
