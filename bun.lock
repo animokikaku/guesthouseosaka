@@ -10,7 +10,7 @@
         "@portabletext/react": "^8.0.1",
         "@ramka/react": "^0.0.1",
         "@sanity/asset-utils": "^2.3.0",
-        "@sanity/client": "^8.4.0",
+        "@sanity/client": "^8.5.0",
         "@sanity/icons": "^5.2.1",
         "@sanity/image-url": "^2.1.1",
         "@sanity/orderable-document-list": "^2.0.23",
@@ -73,7 +73,7 @@
     },
   },
   "overrides": {
-    "@sanity/client": "^8.4.0",
+    "@sanity/client": "^8.5.0",
   },
   "packages": {
     "@acemir/cssom": ["@acemir/cssom@0.9.31", "", {}, "sha512-ZnR3GSaH+/vJ0YlHau21FjfLYjMpYVIzTD8M8vIEQvIGxeOXyXdzCI140rrCY862p/C/BbzWsjc1dgnM9mkoTA=="],
@@ -952,7 +952,7 @@
 
     "@sanity/cli-core": ["@sanity/cli-core@3.6.0", "", { "dependencies": { "@inquirer/prompts": "^8.5.2", "@oclif/core": "^4.11.14", "@sanity/client": "^8.4.0", "boxen": "^8.0.1", "empathic": "^2.0.1", "get-it": "^9.5.2", "get-tsconfig": "^4.14.3", "import-meta-resolve": "^4.2.0", "jiti": "^2.7.0", "jsdom": "^29.1.1", "json-lexer": "^1.2.0", "log-symbols": "^7.0.1", "obug": "^2.1.4", "ora": "^9.0.0", "rxjs": "^7.8.2", "tsx": "^4.23.12", "vite": "^8.2.2", "vite-node": "^6.0.0", "wrap-ansi": "^9.0.2", "zod": "^4.5.2" }, "peerDependencies": { "babel-plugin-react-compiler": "*", "oxc-transform-react": "*" }, "optionalPeers": ["babel-plugin-react-compiler", "oxc-transform-react"] }, "sha512-yDl4nhkyK7QFzYfMMZ3U5k0mN/AqGO7AC8pgHx4ozWEFhrszmV8ZwFknO05QkreQAmNfJVSkw1JGZ4M8cW59gA=="],
 
-    "@sanity/client": ["@sanity/client@8.4.0", "", { "dependencies": { "eventsource": "^5.1.0", "get-it": "^9.5.0", "obug": "^2.1.4", "rxjs": "^7.8.2" } }, "sha512-rwMtDxH3x9dc8ZiCMRDLStZoCr6MSPrH2LH4NIxWTCZ9Vz5OSgg0RolZy+ccM8p4yzK5lgC9XMF8tF6zsje0gQ=="],
+    "@sanity/client": ["@sanity/client@8.5.0", "", { "dependencies": { "eventsource": "^5.1.1", "get-it": "^9.5.2", "obug": "^2.1.4", "rxjs": "^7.8.2" } }, "sha512-GpTdkeyMOqsuXCB74iCiGqOs7lHBELD7pgWCm+hJ0FrqXL+CIgR6ZvehPSn+O9/8964X9Nb7iFtjZpOYOydtMA=="],
 
     "@sanity/codegen": ["@sanity/codegen@8.0.0", "", { "dependencies": { "@babel/core": "^7.29.7", "@babel/generator": "^7.29.7", "@babel/preset-env": "^7.29.7", "@babel/preset-react": "^7.29.7", "@babel/preset-typescript": "^7.29.7", "@babel/register": "^7.29.7", "@babel/traverse": "^7.29.7", "@babel/types": "^7.29.7", "@sanity/telemetry": "^1.1.0", "@sanity/worker-channels": "^2.0.0", "chokidar": "^3.6.0", "debug": "^4.4.3", "globby": "^11.1.0", "groq": "^6.0.0", "groq-js": "^2.0.0", "json5": "^2.2.3", "lodash-es": "^4.18.1", "prettier": "^3.8.3", "reselect": "^5.2.0", "tsconfig-paths": "^4.2.0", "zod": "^4.4.3" }, "peerDependencies": { "oxfmt": "*" }, "optionalPeers": ["oxfmt"] }, "sha512-TE1yn1j52l7sNkDul0vnDKV1UHHaRvFq+G9iNYGybYvMXmZI/eVDbc2ti4cOK2RXRrO59oQMa9u4+8RlBlqs/Q=="],
 
