@@ -12,7 +12,6 @@ git cat-file -e "${TARGET_SHA}^{commit}" 2>/dev/null || exit 1
 
 git diff --quiet "$BASE_SHA" "$TARGET_SHA" -- . \
   ':!*.md' \
-  ':!**/*.md' \
   ':!**/__tests__/**' \
   ':!**/*.test.*' \
   ':!**/*.spec.*' \

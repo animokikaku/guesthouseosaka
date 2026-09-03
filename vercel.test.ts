@@ -21,12 +21,18 @@ function currentCommit(cwd: string) {
   return execFileSync('git', ['rev-parse', 'HEAD'], { cwd, encoding: 'utf8' }).trim()
 }
 
+function commitFiles(cwd: string, paths: string[], content: string) {
+  for (const path of paths) {
+    const absolutePath = join(cwd, path)
+    mkdirSync(dirname(absolutePath), { recursive: true })
+    writeFileSync(absolutePath, content)
+    git(cwd, 'add', path)
+  }
+  git(cwd, 'commit', '-m', `test: update ${paths.join(', ')}`)
+}
+
 function commitFile(cwd: string, path: string, content: string) {
-  const absolutePath = join(cwd, path)
-  mkdirSync(dirname(absolutePath), { recursive: true })
-  writeFileSync(absolutePath, content)
-  git(cwd, 'add', path)
-  git(cwd, 'commit', '-m', `test: update ${path}`)
+  commitFiles(cwd, [path], content)
 }
 
 function isBuildIgnored(cwd: string, env: VercelGitEnvironment = {}) {
@@ -47,10 +53,15 @@ function isBuildIgnored(cwd: string, env: VercelGitEnvironment = {}) {
   }
 }
 
+// The repository is built once and shared: git subprocesses dominate this file's
+// runtime, and every case stays isolated anyway. Cases without an explicit SHA
+// rely on the script's HEAD^..HEAD default, so each one only sees its own commit;
+// cases with an explicit SHA capture HEAD before committing. Each commit must
+// therefore touch a path no earlier commit left with identical content.
 describe('Vercel ignored build command', () => {
   let repository: string
 
-  beforeEach(() => {
+  beforeAll(() => {
     repository = mkdtempSync(join(tmpdir(), 'guesthouseosaka-vercel-'))
     git(repository, 'init')
     git(repository, 'config', 'user.email', 'tests@example.com')
@@ -59,7 +70,7 @@ describe('Vercel ignored build command', () => {
     commitFile(repository, 'README.md', 'initial')
   })
 
-  afterEach(() => {
+  afterAll(() => {
     rmSync(repository, { recursive: true, force: true })
   })
 
@@ -75,13 +86,44 @@ describe('Vercel ignored build command', () => {
     }
   )
 
-  it.each(['docs/guide.md', 'e2e/example.spec.ts', '.github/workflows/ci.yml'])(
+  it.each(['docs/diagram.svg', 'e2e/example.spec.ts', '.github/workflows/ci.yml'])(
     'stays ignored when only %s changes',
     (path) => {
       commitFile(repository, path, 'non-runtime change')
       expect(isBuildIgnored(repository)).toBe(true)
     }
   )
+
+  // One commit and one assertion covering every remaining exclusion: dropping any
+  // single pathspec from the script leaves its file in the diff and fails this
+  // test. Committing each path separately would cost a git subprocess per case to
+  // prove the same thing. Each path must stay matched by exactly one exclusion,
+  // otherwise a second one masks its deletion.
+  it('stays ignored when only tooling and configuration files change', () => {
+    commitFiles(
+      repository,
+      [
+        '.claude/settings.json',
+        '.coderabbit.yaml',
+        '.codex/config.toml',
+        '.cursor/rules.json',
+        '.vscode/settings.json',
+        'components/example.spec.ts',
+        'crowdin.yml',
+        'e2e/fixtures/rooms.json',
+        'knip.json',
+        'lib/__tests__/helpers.ts',
+        'lib/example.test.ts',
+        'playwright.config.ts',
+        'renovate.json',
+        'vitest.config.mts',
+        'vitest.setup.ts'
+      ],
+      'non-runtime change'
+    )
+
+    expect(isBuildIgnored(repository)).toBe(true)
+  })
 
   it('builds when an earlier commit since the last deployment changes runtime code', () => {
     const previousSha = currentCommit(repository)
@@ -98,8 +140,8 @@ describe('Vercel ignored build command', () => {
 
   it('ignores multiple non-runtime commits since the last deployment', () => {
     const previousSha = currentCommit(repository)
-    commitFile(repository, 'README.md', 'documentation change')
-    commitFile(repository, 'e2e/example.spec.ts', 'test change')
+    commitFile(repository, 'CHANGELOG.md', 'documentation change')
+    commitFile(repository, 'e2e/second.spec.ts', 'test change')
 
     expect(
       isBuildIgnored(repository, {
@@ -110,18 +152,12 @@ describe('Vercel ignored build command', () => {
   })
 
   it('builds an initial Vercel deployment without a previous SHA', () => {
-    commitFile(repository, 'README.md', 'documentation change')
-
-    expect(
-      isBuildIgnored(repository, {
-        VERCEL_GIT_COMMIT_SHA: currentCommit(repository)
-      })
-    ).toBe(false)
+    expect(isBuildIgnored(repository, { VERCEL_GIT_COMMIT_SHA: currentCommit(repository) })).toBe(
+      false
+    )
   })
 
   it('builds when the previous deployment commit is unavailable', () => {
-    commitFile(repository, 'README.md', 'documentation change')
-
     expect(
       isBuildIgnored(repository, {
         VERCEL_GIT_COMMIT_SHA: currentCommit(repository),
