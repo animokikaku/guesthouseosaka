@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 vi.mock('@sanity/client/stega', () => ({
   stegaClean: (value: string | null | undefined) => value ?? ''
 }))

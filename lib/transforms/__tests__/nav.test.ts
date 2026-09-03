@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import { faker } from '@faker-js/faker'
 
 vi.mock('@/sanity/lib/image', () => ({

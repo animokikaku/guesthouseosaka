@@ -1,3 +1,5 @@
+// @vitest-environment node
+
 import { sanityImageLoader } from '../sanity-image-loader'
 
 const SRC = 'https://cdn.sanity.io/images/test/image.jpg?w=400&h=400&fit=crop'
