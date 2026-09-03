@@ -79,7 +79,7 @@ test.describe('Contact Form Tests', () => {
       // Submit the form
       await page.getByRole('button', { name: 'Submit' }).click()
 
-      await expect(page.locator('[data-sonner-toast]').first()).toContainText(
+      await expect(page.locator('[data-slot="toast"]').first()).toContainText(
         'Message sent successfully!'
       )
 
@@ -106,7 +106,7 @@ test.describe('Contact Form Tests', () => {
       await fields.checkbox.click()
       await page.getByRole('button', { name: 'Submit' }).click()
 
-      const toast = page.locator('[data-sonner-toast]').first()
+      const toast = page.locator('[data-slot="toast"]').first()
       await expect(toast).toBeVisible()
       await expect(toast).toContainText('Failed to send message.')
       await expect(page).toHaveURL(/\/en\/contact\/other/)
@@ -149,7 +149,7 @@ test.describe('Tour and move-in forms', () => {
 
     await page.getByRole('button', { name: 'Submit' }).click()
 
-    await expect(page.locator('[data-sonner-toast]').first()).toContainText(
+    await expect(page.locator('[data-slot="toast"]').first()).toContainText(
       'Message sent successfully!'
     )
     expect(await getSentEmails(request, replyTo)).toHaveLength(1)
@@ -169,7 +169,7 @@ test.describe('Tour and move-in forms', () => {
 
     await page.getByRole('button', { name: 'Submit' }).click()
 
-    await expect(page.locator('[data-sonner-toast]').first()).toContainText(
+    await expect(page.locator('[data-slot="toast"]').first()).toContainText(
       'Message sent successfully!'
     )
     expect(await getSentEmails(request, replyTo)).toHaveLength(1)

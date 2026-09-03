@@ -4,7 +4,7 @@ import { submitContactForm } from '@/app/actions/contact'
 import { useRouter } from '@/i18n/navigation'
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
 import { useTranslations } from 'next-intl'
-import { toast } from 'sonner'
+import { toast } from '@/components/ui/toast'
 
 /**
  * Mapping from form type to its corresponding field types.
@@ -62,12 +62,12 @@ export function useFormSubmit() {
         }
       })
 
-      toast.promise(promise, {
-        loading: t('status.sending'),
+      return await toast.promise(promise, {
+        loading: { title: t('status.sending') },
         success: () => {
           router.push('/contact')
           return {
-            message: t('status.success.message'),
+            title: t('status.success.message'),
             description: t('status.success.description', {
               name: value.account.name
             })
@@ -75,15 +75,13 @@ export function useFormSubmit() {
         },
         error: () => {
           return {
-            message: t('status.error.message'),
+            title: t('status.error.message'),
             description: t('status.error.description', {
               email: 'info@guesthouseosaka.com'
             })
           }
         }
       })
-
-      return await promise
     }
   }
 

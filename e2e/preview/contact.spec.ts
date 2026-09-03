@@ -64,7 +64,7 @@ test('preview deployment can send the contact form through Resend', async ({ pag
   await fillPreviewContactForm(page)
   await page.getByRole('button', { name: 'Submit' }).click()
 
-  const toast = page.locator('[data-sonner-toast]').first()
+  const toast = page.locator('[data-slot="toast"]').first()
   await expect(toast).toBeVisible({ timeout: 10000 })
   await expect(toast).toContainText('Message sent successfully!')
 })
