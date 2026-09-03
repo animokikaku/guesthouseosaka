@@ -44,10 +44,6 @@ const baseProps = {
 }
 
 describe('MoveInForm', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('card structure', () => {
     it('renders card with title', () => {
       render(<MoveInForm {...baseProps} />)

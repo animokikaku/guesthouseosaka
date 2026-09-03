@@ -16,10 +16,6 @@ function TestInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
 }
 
 describe('FormCard', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('rendering', () => {
     it('renders form with formId', () => {
       const form = createMockForm()

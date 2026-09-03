@@ -57,5 +57,5 @@ schema.json
 dist/
 backup/
 
-# vitest html report
-html/
+# vitest artifacts (reports, blob reports, attachments)
+/.vitest/

@@ -4,10 +4,6 @@ import { createMockFieldApi } from './test-utils'
 import { InputField } from '../input-field'
 
 describe('InputField', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('rendering', () => {
     it('renders input with label', () => {
       const fieldApi = createMockFieldApi('testInput', '')

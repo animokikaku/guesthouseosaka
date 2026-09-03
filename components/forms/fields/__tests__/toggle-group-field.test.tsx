@@ -11,10 +11,6 @@ const defaultOptions = [
 ]
 
 describe('ToggleGroupField', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('rendering', () => {
     it('renders toggle group with options', () => {
       const fieldApi = createMockFieldApi('toggleField', [] as string[])

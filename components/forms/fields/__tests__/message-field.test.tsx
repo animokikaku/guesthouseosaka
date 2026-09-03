@@ -5,10 +5,6 @@ import { createMockFieldApi } from './test-utils'
 import { MessageField } from '../message-field'
 
 describe('MessageField', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('rendering', () => {
     it('renders textarea', () => {
       const fieldApi = createMockFieldApi('message', '')

@@ -75,10 +75,6 @@ const successfulSubmissionCases = [
 ] satisfies { name: string; payload: ContactFormPayload; subject: string }[]
 
 describe('submitContactForm', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   afterEach(() => {
     vi.restoreAllMocks()
   })

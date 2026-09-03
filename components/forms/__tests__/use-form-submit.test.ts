@@ -39,7 +39,6 @@ function createDeferred<T>() {
 
 describe('useFormSubmit', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockSubmitContactForm.mockResolvedValue({ ok: true })
   })
 

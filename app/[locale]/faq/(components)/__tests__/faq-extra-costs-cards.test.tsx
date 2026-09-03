@@ -52,7 +52,6 @@ import { FAQExtraCostsCards } from '../faq-extra-costs-cards'
 
 describe('FAQExtraCostsCards', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     resetCarouselMockState(carouselState)
   })
 
