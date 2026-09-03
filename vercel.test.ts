@@ -100,7 +100,9 @@ describe('Vercel ignored build command', () => {
   // single pathspec from the script leaves its file in the diff and fails this
   // test. Committing each path separately would cost a git subprocess per case to
   // prove the same thing. Each path must stay matched by exactly one exclusion,
-  // otherwise a second one masks its deletion.
+  // otherwise a second one masks its deletion. Root-level entries are here because
+  // git's wildmatch makes a leading **/ require a directory, so patterns written
+  // that way skip the repository root while still looking correct nested.
   it('stays ignored when only tooling and configuration files change', () => {
     commitFiles(
       repository,
@@ -110,12 +112,15 @@ describe('Vercel ignored build command', () => {
         '.codex/config.toml',
         '.cursor/rules.json',
         '.vscode/settings.json',
+        '__tests__/root-helpers.ts',
         'components/example.spec.ts',
         'crowdin.yml',
         'e2e/fixtures/rooms.json',
         'knip.json',
         'lib/__tests__/helpers.ts',
         'lib/example.test.ts',
+        'root-level.spec.ts',
+        'root-level.test.ts',
         'playwright.config.ts',
         'renovate.json',
         'vitest.config.mts',
