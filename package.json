@@ -99,11 +99,5 @@
   "overrides": {
     "@sanity/client": "$@sanity/client"
   },
-  "browserslist": [
-    "chrome >= 93",
-    "edge >= 93",
-    "firefox >= 92",
-    "safari >= 15.4"
-  ],
   "packageManager": "bun@1.4.0"
 }
