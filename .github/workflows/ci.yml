@@ -113,6 +113,9 @@ jobs:
       - name: Install Playwright browsers
         run: bunx playwright install --only-shell chromium
 
+      - name: Generate cn merge tables
+        run: bun run cn:build
+
       - name: Run component tests
         run: bun run test:components
 
