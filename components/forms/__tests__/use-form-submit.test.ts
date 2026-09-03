@@ -16,9 +16,12 @@ vi.mock('@/i18n/navigation', () => ({
 
 // Mock toast
 const mockToastPromise = vi.fn()
-vi.mock('sonner', () => ({
+vi.mock('@/components/ui/toast', () => ({
   toast: {
-    promise: (promise: Promise<unknown>, options: unknown) => mockToastPromise(promise, options)
+    promise: (promise: Promise<unknown>, options: unknown) => {
+      mockToastPromise(promise, options)
+      return promise
+    }
   }
 }))
 
@@ -230,7 +233,7 @@ describe('useFormSubmit', () => {
       const successResult = options.success()
 
       expect(mockPush).toHaveBeenCalledWith('/contact')
-      expect(successResult).toHaveProperty('message')
+      expect(successResult).toHaveProperty('title')
       expect(successResult).toHaveProperty('description')
     })
 
@@ -246,7 +249,7 @@ describe('useFormSubmit', () => {
       const [, options] = mockToastPromise.mock.calls[0]
       const errorResult = options.error(new Error('Network error'))
 
-      expect(errorResult).toHaveProperty('message', 'status.error.message')
+      expect(errorResult).toHaveProperty('title', 'status.error.message')
       expect(errorResult).toHaveProperty('description')
     })
   })

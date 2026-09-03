@@ -10,7 +10,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
-import { Toaster } from '@/components/ui/sonner'
+import { Toaster } from '@/components/ui/toast'
 import { assets } from '@/lib/assets'
 import { META_THEME_COLORS } from '@/lib/config'
 import { env } from '@/lib/env'
@@ -160,7 +160,7 @@ export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'
               {settings && <SiteFooter settings={settings} />}
             </div>
             <TailwindIndicator />
-            <Toaster position="top-center" />
+            <Toaster />
             <Analytics />
             <SpeedInsights />
             <SanityLive />
