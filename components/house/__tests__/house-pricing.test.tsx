@@ -126,7 +126,7 @@ describe('HousePricing', () => {
   it('renders pricing row labels as headings', () => {
     render(<HousePricing pricing={mockPricing} />)
 
-    const labels = screen.getAllByRole('heading', { level: 4 })
+    const labels = screen.getAllByRole('heading', { level: 3 })
     expect(labels).toHaveLength(3)
     expect(labels[0]).toHaveTextContent('Monthly Rent')
     expect(labels[1]).toHaveTextContent('Deposit')
@@ -139,7 +139,7 @@ describe('HousePricing', () => {
     render(<HousePricing pricing={singlePricing} />)
 
     expect(screen.getByText('Price')).toBeInTheDocument()
-    expect(screen.getAllByRole('heading', { level: 4 })).toHaveLength(1)
+    expect(screen.getAllByRole('heading', { level: 3 })).toHaveLength(1)
   })
 
   describe('PortableText content rendering', () => {
@@ -150,7 +150,7 @@ describe('HousePricing', () => {
       expect(screen.queryByRole('list')).not.toBeInTheDocument()
 
       // Verify the content containers are empty (only contain whitespace)
-      const labels = screen.getAllByRole('heading', { level: 4 })
+      const labels = screen.getAllByRole('heading', { level: 3 })
       labels.forEach((label) => {
         const row = label.closest('div')?.parentElement
         const contentArea = row?.querySelector('div:last-child')

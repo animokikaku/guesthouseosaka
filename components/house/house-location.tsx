@@ -20,10 +20,12 @@ function MapSkeleton() {
   return (
     <div
       aria-busy="true"
-      aria-label={t('loading_map')}
-      aria-live="polite"
       className="md:border-border flex min-h-[480px] flex-col gap-6 overflow-hidden md:flex-row md:gap-0 md:rounded-lg md:border"
     >
+      {/* `output` (implicit role=status) announces the load politely. It only
+          accepts phrasing content, so it wraps the text rather than the
+          skeleton boxes below, which are decorative and expose no text. */}
+      <output className="sr-only">{t('loading_map')}</output>
       {/* PlaceDetails skeleton */}
       <div className="border-border flex min-h-[480px] flex-col overflow-hidden rounded-lg border bg-white md:w-1/3 md:shrink-0 md:rounded-none md:border-0 md:border-r dark:bg-[#131314]">
         {/* Image skeleton - takes half the height, clipped by parent overflow */}
