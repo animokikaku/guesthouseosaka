@@ -173,6 +173,8 @@ export interface GalleryImage {
   blurDataURL: string | null
   width: number
   height: number
+  /** Preloaded as the likely LCP element rather than lazy-loaded. */
+  priority?: boolean
 }
 
 // ============================================
