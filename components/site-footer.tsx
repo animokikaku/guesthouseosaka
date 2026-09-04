@@ -1,6 +1,6 @@
 'use client'
 
-import { Icon, type IconName } from '@/lib/icons'
+import { BrandIcon } from '@/lib/icons/brand'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import type { SettingsQueryResult } from '@/sanity.types'
 import { createDataAttribute, stegaClean } from 'next-sanity'
@@ -61,7 +61,7 @@ function SocialLink({
   ...props
 }: {
   href: string
-  icon: IconName
+  icon: string
   label: string
   'data-sanity'?: string
 } & React.HTMLAttributes<HTMLAnchorElement>) {
@@ -75,7 +75,8 @@ function SocialLink({
       data-sanity={dataSanity}
       {...props}
     >
-      <Icon name={icon} className="size-5" />
+      {/* The anchor owns the accessible name, so the mark is decorative here. */}
+      <BrandIcon name={icon} aria-hidden="true" className="size-5" />
     </a>
   )
 }

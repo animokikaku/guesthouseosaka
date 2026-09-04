@@ -4,13 +4,13 @@ import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { sanityFetch } from '@/sanity/lib/live'
-import { houseQuery } from '@/sanity/lib/queries'
+import { houseGalleryQuery } from '@/sanity/lib/queries'
 
 export default async function GalleryModalPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
   const { house, locale } = await getHouseAndLocale(params)
 
   const { data } = await sanityFetch({
-    query: houseQuery,
+    query: houseGalleryQuery,
     params: { locale, slug: house }
   })
 

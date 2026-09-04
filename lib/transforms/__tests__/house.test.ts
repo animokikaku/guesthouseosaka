@@ -1,9 +1,7 @@
 // @vitest-environment node
 
 import {
-  toAboutContent,
   toAmenityCategories,
-  toBuildingData,
   toFeaturedAmenities,
   toLocationData,
   toMapData,
@@ -12,29 +10,10 @@ import {
 import {
   createAmenityCategory,
   createAmenityItem,
-  createBuilding,
   createLocation,
   createMap,
   createPricingRow
 } from './mocks'
-
-describe('toBuildingData', () => {
-  it('transforms building data preserving all values', () => {
-    const building = createBuilding()
-
-    const result = toBuildingData(building)
-
-    expect(result.rooms).toBe(building.rooms)
-    expect(result.floors).toBe(building.floors)
-    expect(result.startingPrice).toBe(building.startingPrice)
-  })
-
-  it('returns empty object for null building', () => {
-    const result = toBuildingData(null)
-
-    expect(result).toEqual({})
-  })
-})
 
 describe('toLocationData', () => {
   it('transforms location data preserving values', () => {
@@ -55,16 +34,12 @@ describe('toLocationData', () => {
     })
   })
 
-  it('handles location with undefined fields', () => {
-    const location = createLocation({
-      highlight: undefined,
-      details: undefined
-    })
+  // The query coalesces both fields, so they arrive as null rather than absent
+  // — an absent `location` is the only shape that needs normalizing.
+  it('passes a location whose fields are already null straight through', () => {
+    const location = createLocation({ highlight: null, details: null })
 
-    const result = toLocationData(location)
-
-    expect(result.highlight).toBeNull()
-    expect(result.details).toBeNull()
+    expect(toLocationData(location)).toEqual({ highlight: null, details: null })
   })
 })
 
@@ -315,27 +290,5 @@ describe('toFeaturedAmenities', () => {
     const result = toFeaturedAmenities([])
 
     expect(result).toEqual([])
-  })
-})
-
-describe('toAboutContent', () => {
-  it('returns content as PortableTextBlock array', () => {
-    const blocks = [{ _type: 'block' as const, _key: 'b1', children: [], style: 'normal' as const }]
-
-    const result = toAboutContent(blocks)
-
-    expect(result).toEqual(blocks)
-  })
-
-  it('returns null for null input', () => {
-    const result = toAboutContent(null)
-
-    expect(result).toBeNull()
-  })
-
-  it('returns null for empty array', () => {
-    const result = toAboutContent([])
-
-    expect(result).toBeNull()
   })
 })

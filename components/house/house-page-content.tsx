@@ -11,9 +11,7 @@ import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
 import { buildGallerySlides } from '@/lib/gallery'
 import {
-  toAboutContent,
   toAmenityCategories,
-  toBuildingData,
   toFeaturedAmenities,
   toLocationData,
   toMapData,
@@ -32,6 +30,8 @@ export function HousePageContent({
   title,
   description,
   galleryImages,
+  galleryPreview,
+  galleryImageCount,
   featuredImage,
   amenityCategories,
   featuredAmenities,
@@ -70,16 +70,13 @@ export function HousePageContent({
           <div className="theme-container">
             <ImageBlockGallery
               href={href}
-              galleryImages={galleryImages}
+              galleryPreview={galleryPreview}
+              galleryImageCount={galleryImageCount ?? 0}
               featuredImage={featuredImage}
             />
             <HouseProvider id={_id} type={_type} slug={slug}>
               <article id={slug} aria-labelledby={`${slug}-title`} className="space-y-12 pt-8">
-                <HouseAbout
-                  title={title}
-                  about={toAboutContent(about)}
-                  building={toBuildingData(building)}
-                />
+                <HouseAbout title={title} about={about} building={building} />
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
                   featuredAmenities={toFeaturedAmenities(featuredAmenities)}

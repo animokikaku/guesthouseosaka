@@ -1,4 +1,8 @@
-import type { ContactTypeQueryResult, HouseQueryResult } from '@/sanity.types'
+import type {
+  ContactTypeQueryResult,
+  HouseGalleryQueryResult,
+  HouseQueryResult
+} from '@/sanity.types'
 import { faker } from '@faker-js/faker'
 
 // ============================================
@@ -15,7 +19,7 @@ type HouseAmenityCategories = NonNullable<HouseQueryResult>['amenityCategories']
 type HouseAmenityCategory = NonNullable<HouseAmenityCategories>[number]
 type HouseAmenityItem = NonNullable<HouseAmenityCategory['items']>[number]
 type HousePricingRow = NonNullable<HousePricing>[number]
-type HouseGalleryCategories = NonNullable<HouseQueryResult>['galleryCategories']
+type HouseGalleryCategories = NonNullable<HouseGalleryQueryResult>['galleryCategories']
 type HouseGalleryCategory = NonNullable<HouseGalleryCategories>[number]
 type HouseGalleryItem = NonNullable<HouseGalleryCategory['items']>[number]
 

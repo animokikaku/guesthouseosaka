@@ -16,6 +16,17 @@ const imageRefFields = /* groq */ `
 // Wrapped image fragment
 const imageFields = /* groq */ `image{${imageRefFields}}`
 
+// Same shape as imageRefFields, minus the LQIP. The base64 preview is ~600 B
+// per image — 75% of a gallery item — so lists long enough to matter carry it
+// only where a blur placeholder is actually painted.
+const leanImageRefFields = /* groq */ `
+  asset,
+  hotspot,
+  crop,
+  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),
+  "preview": null
+`
+
 // Actions array (used in faqPage, contactPage)
 const actionsFields = /* groq */ `
   "actions": array::compact(actions[]{
@@ -178,27 +189,29 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[language == $locale][0].value, about[language == "en"][0].value),
 
-  // Gallery grouped by category (for gallery page - enables per-category display)
-  // Sorted by category orderRank for consistent display order
-  // Filter out empty categories at query level
-  "galleryCategories": array::compact(galleryCategories[]{
+  // Every gallery image, flattened from the sorted categories, so the mobile
+  // hero carousel can swipe the whole set. Lean: these slides lazy-load one at
+  // a time behind a swipe, and carrying an LQIP for each would cost more than
+  // the rest of the house document put together.
+  //
+  // The asset filter runs inside the projection, not after it: the consumers
+  // drop items that don't resolve to an image, and filtering downstream of a
+  // slice would let an unfinished item eat a slot and push a renderable one out.
+  "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{
     _key,
-    "category": category->{
-      _id,
-      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
-      orderRank
-    },
-    "items": array::compact(items[]{
-      _key,
-      "image": image{${imageRefFields}}
-    })
-  })[count(items) > 0] | order(category.orderRank),
+    "image": image{${leanImageRefFields}}
+  }),
 
-  // Flattened gallery images (for carousel/preview - pre-computed from sorted categories)
-  "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[]{
+  // The five tiles ImageBlockGallery paints above the fold, with their LQIP.
+  // Five covers the grid whether or not a featured image is prepended to it.
+  "galleryPreview": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{
     _key,
     "image": image{${imageRefFields}}
-  }),
+  })[0...5],
+
+  // Total behind the five-tile grid, for its "+N" overflow badge. Counts only
+  // items that resolve to a renderable image, matching what the grid drops.
+  "galleryImageCount": count(galleryCategories[].items[defined(image.asset)]),
 
   // Amenities grouped by category (enables per-category drag-and-drop reordering)
   // Filter out empty categories at query level
@@ -256,6 +269,27 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
     "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)
   })
+}`)
+
+// Gallery grouped by category, for the gallery page and its intercepting modal.
+// Kept out of houseQuery: the two sets are the same images, and no route needs
+// both. Sorted by category orderRank, with empty categories filtered out.
+export const houseGalleryQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
+  _id,
+  _type,
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+  "galleryCategories": array::compact(galleryCategories[]{
+    _key,
+    "category": category->{
+      _id,
+      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
+      orderRank
+    },
+    "items": array::compact(items[]{
+      _key,
+      "image": image{${imageRefFields}}
+    })
+  })[count(items) > 0] | order(category.orderRank)
 }`)
 
 // House slugs for static generation
@@ -348,13 +382,15 @@ export const contactPageQuery = defineQuery(`{
     "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),
     ${actionsFields}
   },
+  // No form field config here: the only consumer is toContactNavItems, which
+  // reads _id/slug/title. contactTypeQuery carries the fields for the one
+  // contact type actually being rendered as a form.
   "contactTypes": *[_type == "contactType"] | order(orderRank){
     _id,
     _type,
     slug,
     "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
-    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
-    ${contactFormFields}
+    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)
   }
 }`)
 

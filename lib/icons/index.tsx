@@ -1,4 +1,4 @@
-import { createElement } from 'react'
+import { brandIconMap, type IconComponent } from '@/lib/icons/brand'
 import {
   ArrowUpDown,
   Bath,
@@ -35,34 +35,13 @@ import {
   Wifi,
   Wind
 } from 'lucide-react'
-import { siFacebook, siInstagram } from 'simple-icons'
-
-type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>
-
-function createSimpleIcon(icon: { path: string; title: string }): IconComponent {
-  return function SimpleIcon(props) {
-    return createElement(
-      'svg',
-      {
-        viewBox: '0 0 24 24',
-        fill: 'currentColor',
-        role: 'img',
-        'aria-label': icon.title,
-        ...props
-      },
-      createElement('path', { d: icon.path })
-    )
-  }
-}
-
-const FacebookIcon = createSimpleIcon(siFacebook)
-const InstagramIcon = createSimpleIcon(siInstagram)
 
 /**
  * Shared icon registry for frontend rendering and the Sanity Studio picker.
  * Keys are persisted in Sanity and must remain stable.
  */
 export const iconMap: Record<string, IconComponent> = {
+  ...brandIconMap,
   'arrow-up-down': ArrowUpDown,
   bath: Bath,
   bed: Bed,
@@ -73,10 +52,8 @@ export const iconMap: Record<string, IconComponent> = {
   'chef-hat': ChefHat,
   cigarette: Cigarette,
   coffee: Coffee,
-  facebook: FacebookIcon,
   flower: Flower,
   'house-plug': HousePlug,
-  instagram: InstagramIcon,
   lock: Lock,
   mail: Mail,
   mailbox: Mailbox,
@@ -112,6 +89,11 @@ export interface IconProps extends React.SVGProps<SVGSVGElement> {
  * Falls back to null for unknown icons.
  */
 export function Icon({ name, ...props }: IconProps) {
+  // Own-property check, not a truthiness check: `iconMap['toString']` resolves
+  // up the prototype chain to a function, which React would then try to render
+  // as a component. Reachable here — pageAction has no `allowedIcons`.
+  if (!Object.hasOwn(iconMap, name)) return null
+
   const IconComponent = iconMap[name]
   if (!IconComponent) return null
   return <IconComponent {...props} />

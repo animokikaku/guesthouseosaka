@@ -1,4 +1,5 @@
 import type { GalleryCategories, GalleryCategory } from '@/lib/gallery'
+import { GALLERY_WALL_SLOTS, slotPixelSize } from '@/lib/gallery-wall'
 import type { GalleryImage } from '@/lib/types/components'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
@@ -10,23 +11,6 @@ import { urlFor } from '@/sanity/lib/image'
 type GalleryWallImages = NonNullable<NonNullable<HomePageQueryResult>['page']>['galleryWall']
 
 // ============================================
-// Gallery Layout Configuration
-// ============================================
-
-/**
- * Fixed layout positions for the 6 gallery images
- * Each layout defines the size and position for responsive percentage-based rendering
- */
-const GALLERY_LAYOUTS = [
-  { width: 142, height: 142 },
-  { width: 272, height: 272 },
-  { width: 123, height: 123 },
-  { width: 168, height: 168 },
-  { width: 129, height: 129 },
-  { width: 194, height: 194 }
-] as const
-
-// ============================================
 // Gallery Transformer
 // ============================================
 
@@ -34,22 +18,33 @@ const GALLERY_LAYOUTS = [
  * Transforms Sanity gallery wall images to GalleryImage array
  * Pre-builds all image URLs using urlFor() to decouple components from Sanity helpers
  *
+ * Crop sizes come from GALLERY_WALL_SLOTS, the same config GalleryWall lays the
+ * collage out from, so a tile can't be cropped to one size and rendered at
+ * another.
+ *
  * @param images - Raw gallery wall images from Sanity query
  * @returns Array of GalleryImage with pre-built URLs
  */
 export function toGalleryImages(images: GalleryWallImages): GalleryImage[] {
   // Query already limits to 6 images via galleryWall[0...6]
-  return images.map((img, index) => {
-    const layout = GALLERY_LAYOUTS[index]
+  return images.flatMap((img, index) => {
+    const slot = GALLERY_WALL_SLOTS[index]
+    if (!slot) return []
 
-    return {
-      _key: img._key,
-      src: urlFor(img).width(layout.width).height(layout.height).dpr(2).fit('crop').url(),
-      alt: img.alt,
-      blurDataURL: img.preview,
-      width: layout.width,
-      height: layout.height
-    }
+    // Tiles are square, and dpr(2) covers retina at the collage's display size.
+    const size = slotPixelSize(slot)
+
+    return [
+      {
+        _key: img._key,
+        src: urlFor(img).width(size).height(size).dpr(2).fit('crop').url(),
+        alt: img.alt,
+        blurDataURL: img.preview,
+        width: size,
+        height: size,
+        priority: slot.priority ?? false
+      }
+    ]
   })
 }
 
