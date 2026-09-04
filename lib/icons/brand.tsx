@@ -1,42 +1,6 @@
 import { createElement } from 'react'
-import {
-  ArrowUpDown,
-  Bath,
-  Bed,
-  Bike,
-  BookText,
-  Building,
-  Cable,
-  ChefHat,
-  Cigarette,
-  Coffee,
-  Flower,
-  HousePlug,
-  Lock,
-  Mail,
-  Mailbox,
-  Map,
-  MapPin,
-  Microwave,
-  PartyPopper,
-  PencilRuler,
-  Phone,
-  Plug,
-  Refrigerator,
-  ShowerHead,
-  Sofa,
-  Sun,
-  ThermometerSnowflake,
-  Toilet,
-  Tv,
-  Utensils,
-  UtensilsCrossed,
-  WashingMachine,
-  Wifi,
-  Wind
-} from 'lucide-react'
 
-type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>
+export type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>
 
 /**
  * Brand marks, inlined from Simple Icons (CC0-1.0). The package ships a single
@@ -45,7 +9,7 @@ type IconComponent = React.ComponentType<React.SVGProps<SVGSVGElement>>
  * https://simpleicons.org if a brand restyles.
  */
 function createBrandIcon(title: string, path: string): IconComponent {
-  return function BrandIcon(props) {
+  return function BrandMark(props) {
     return createElement(
       'svg',
       {
@@ -70,60 +34,18 @@ const InstagramIcon = createBrandIcon(
 )
 
 /**
- * Shared icon registry for frontend rendering and the Sanity Studio picker.
- * Keys are persisted in Sanity and must remain stable.
+ * Brand marks, kept out of the main registry: SiteFooter renders in the root
+ * layout and `socialLink` pins it to these two via `allowedIcons`, so importing
+ * the full map there would put every amenity glyph in the shared client chunk.
  */
-export const iconMap: Record<string, IconComponent> = {
-  'arrow-up-down': ArrowUpDown,
-  bath: Bath,
-  bed: Bed,
-  bike: Bike,
-  'book-text': BookText,
-  building: Building,
-  cable: Cable,
-  'chef-hat': ChefHat,
-  cigarette: Cigarette,
-  coffee: Coffee,
+export const brandIconMap: Record<string, IconComponent> = {
   facebook: FacebookIcon,
-  flower: Flower,
-  'house-plug': HousePlug,
-  instagram: InstagramIcon,
-  lock: Lock,
-  mail: Mail,
-  mailbox: Mailbox,
-  map: Map,
-  'map-pin': MapPin,
-  microwave: Microwave,
-  'party-popper': PartyPopper,
-  'pencil-ruler': PencilRuler,
-  phone: Phone,
-  plug: Plug,
-  refrigerator: Refrigerator,
-  'shower-head': ShowerHead,
-  sofa: Sofa,
-  sun: Sun,
-  'thermometer-snowflake': ThermometerSnowflake,
-  toilet: Toilet,
-  tv: Tv,
-  utensils: Utensils,
-  'utensils-crossed': UtensilsCrossed,
-  'washing-machine': WashingMachine,
-  wifi: Wifi,
-  wind: Wind
+  instagram: InstagramIcon
 }
 
-export type IconName = string
-
-export interface IconProps extends React.SVGProps<SVGSVGElement> {
-  name: IconName
-}
-
-/**
- * Renders an icon by its persisted Sanity name.
- * Falls back to null for unknown icons.
- */
-export function Icon({ name, ...props }: IconProps) {
-  const IconComponent = iconMap[name]
-  if (!IconComponent) return null
-  return <IconComponent {...props} />
+/** Renders a brand mark by its persisted Sanity name; null for unknown names. */
+export function BrandIcon({ name, ...props }: React.SVGProps<SVGSVGElement> & { name: string }) {
+  const Component = brandIconMap[name]
+  if (!Component) return null
+  return <Component {...props} />
 }

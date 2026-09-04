@@ -1,5 +1,5 @@
 import { defineField, defineType } from 'sanity'
-import { Icon } from '@/lib/icons'
+import { BrandIcon } from '@/lib/icons/brand'
 
 export const socialLink = defineType({
   name: 'socialLink',
@@ -40,7 +40,7 @@ export const socialLink = defineType({
       return {
         title: label,
         subtitle: url,
-        media: <Icon name={icon} />
+        media: <BrandIcon name={icon} />
       }
     }
   }
