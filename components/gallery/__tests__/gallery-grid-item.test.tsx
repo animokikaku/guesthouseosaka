@@ -1,50 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 import type { GalleryItem } from '@/lib/gallery'
 import { render, screen } from '@testing-library/react'
 import { Lightbox } from '@/components/lightbox'
 import { GalleryGridItem } from '../gallery-grid-item'
 
-// Mock stegaClean
-vi.mock('@sanity/client/stega', () => ({
-  stegaClean: (value: string) => value
-}))
-
-// Mock next/image
-vi.mock('next/image', () => ({
-  default: function MockImage({
-    src,
-    alt,
-    width,
-    height,
-    blurDataURL,
-    placeholder,
-    className,
-    sizes
-  }: {
-    src: string
-    alt: string
-    width: number
-    height: number
-    blurDataURL?: string
-    placeholder?: string
-    className?: string
-    sizes?: string
-  }) {
-    return (
-      <img
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        data-blur-url={blurDataURL}
-        data-placeholder={placeholder}
-        data-sizes={sizes}
-        className={className}
-        data-testid="gallery-image"
-      />
-    )
-  }
-}))
+vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
 
 function createGalleryItem(overrides: Partial<GalleryItem> = {}): GalleryItem {
   return {
@@ -95,7 +54,7 @@ describe('GalleryGridItem', () => {
       renderItem(item)
 
       const trigger = screen.getByTestId('gallery-grid-image')
-      const image = screen.getByTestId('gallery-image')
+      const image = screen.getByTestId('next-image')
       expect(trigger).toBeInTheDocument()
       expect(trigger).toContainElement(image)
       expect(image).toHaveAttribute('alt', 'Test gallery image')
@@ -105,7 +64,7 @@ describe('GalleryGridItem', () => {
       renderItem(createGalleryItem())
 
       const trigger = screen.getByTestId('gallery-grid-image')
-      const image = screen.getByTestId('gallery-image')
+      const image = screen.getByTestId('next-image')
       const src = image.getAttribute('src') ?? ''
 
       expect(trigger).toContainElement(image)
@@ -130,7 +89,7 @@ describe('GalleryGridItem', () => {
 
       renderItem(item)
 
-      const image = screen.getByTestId('gallery-image')
+      const image = screen.getByTestId('next-image')
       expect(image).toHaveAttribute('alt', '')
     })
 
@@ -147,7 +106,7 @@ describe('GalleryGridItem', () => {
 
       renderItem(item)
 
-      const image = screen.getByTestId('gallery-image')
+      const image = screen.getByTestId('next-image')
       expect(image).toHaveAttribute('data-placeholder', 'blur')
       expect(image).toHaveAttribute('data-blur-url', 'data:image/jpeg;base64,preview123')
     })
@@ -165,7 +124,7 @@ describe('GalleryGridItem', () => {
 
       renderItem(item)
 
-      const image = screen.getByTestId('gallery-image')
+      const image = screen.getByTestId('next-image')
       expect(image.getAttribute('data-placeholder')).toBeNull()
     })
   })

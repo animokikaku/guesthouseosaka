@@ -65,8 +65,9 @@ export default defineConfig({
     // Use baseURL for navigations
     baseURL,
 
-    // Collect trace when retrying the failed test
-    trace: process.env.CI ? 'on' : 'retain-on-failure',
+    // Collect a trace when a failed test is retried. Tracing every CI test
+    // slows each one down and uploads artifacts nobody looks at.
+    trace: process.env.CI ? 'on-first-retry' : 'retain-on-failure',
 
     // Record videos on CI when test fails
     video: process.env.CI ? 'retain-on-failure' : undefined,

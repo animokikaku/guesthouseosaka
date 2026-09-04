@@ -1,14 +1,10 @@
 import { expect, test } from '@playwright/test'
 
-test.describe('Smoke Tests', () => {
-  test('homepage loads successfully', async ({ page }) => {
-    await page.goto('/')
+// Locale routes themselves are covered in locales.spec.ts; this pins the
+// unprefixed entry point, which is the only path the proxy has to resolve.
+test('the root path resolves to a localized homepage', async ({ page }) => {
+  await page.goto('/')
 
-    // Verify the page loaded by checking for essential elements
-    await expect(page).toHaveURL(/\/(en|ja|fr)?$/)
-
-    // Page should have a title
-    const title = await page.title()
-    expect(title).toBeTruthy()
-  })
+  await expect(page).toHaveURL(/\/(en|ja|fr)?$/)
+  await expect(page.getByRole('heading').first()).toBeVisible()
 })

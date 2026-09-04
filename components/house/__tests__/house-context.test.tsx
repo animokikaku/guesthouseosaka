@@ -1,5 +1,4 @@
-import { renderHook } from '@testing-library/react'
-import { render, screen } from '@testing-library/react'
+import { render, renderHook, screen } from '@testing-library/react'
 import { HouseProvider, useHouseDocument } from '../house-context'
 
 describe('HouseProvider', () => {

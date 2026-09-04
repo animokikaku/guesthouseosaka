@@ -9,17 +9,7 @@ import {
 import { toGalleryCategories } from '@/lib/transforms/gallery'
 import { render, screen } from '@testing-library/react'
 
-// Mock next/image
-vi.mock('next/image', () => ({
-  default: ({ src, alt }: { src: string; alt: string }): React.ReactElement => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={src} alt={alt} data-testid="gallery-image" />
-  )
-}))
-
-vi.mock('@sanity/client/stega', () => ({
-  stegaClean: (value: string) => value
-}))
+vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
 
 function indexByKeyFor(categories: GalleryCategory[]) {
   return new Map(

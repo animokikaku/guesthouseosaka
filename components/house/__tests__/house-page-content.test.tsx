@@ -12,53 +12,42 @@ import {
   createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
 
-// Mock all child components to focus on integration logic
+// Every child is stubbed down to the props this component is responsible for
+// choosing, so the suite covers composition rather than the children themselves.
 vi.mock('@/components/house/house-about', () => ({
-  HouseAbout: ({ title }: { title: string }) => (
-    <div data-testid="house-about" data-title={title}>
-      HouseAbout
-    </div>
-  )
+  HouseAbout: ({ title }: { title: string }) => <div data-testid="house-about" data-title={title} />
 }))
 
 vi.mock('@/components/house/house-amenities', () => ({
   HouseAmenities: ({ amenityCategories }: { amenityCategories: unknown[] }) => (
-    <div data-testid="house-amenities" data-count={amenityCategories?.length ?? 0}>
-      HouseAmenities
-    </div>
+    <div data-testid="house-amenities" data-count={amenityCategories?.length ?? 0} />
   )
 }))
 
 vi.mock('@/components/house/house-location', () => ({
-  HouseLocation: () => <div data-testid="house-location">HouseLocation</div>
+  HouseLocation: () => <div data-testid="house-location" />
 }))
 
 vi.mock('@/components/house/house-pricing', () => ({
   HousePricing: ({ pricing }: { pricing: unknown[] }) => (
-    <div data-testid="house-pricing" data-count={pricing?.length ?? 0}>
-      HousePricing
-    </div>
+    <div data-testid="house-pricing" data-count={pricing?.length ?? 0} />
   )
 }))
 
 vi.mock('@/components/house/mobile-hero-image', () => ({
   MobileHeroImage: ({ images }: { images: unknown[] }) => (
-    <div data-testid="mobile-hero" data-count={images?.length ?? 0}>
-      MobileHeroImage
-    </div>
+    <div data-testid="mobile-hero" data-count={images?.length ?? 0} />
   )
 }))
 
 vi.mock('@/components/houses-nav', () => ({
   HousesNav: ({ houses }: { houses: unknown[] }) => (
-    <div data-testid="houses-nav" data-count={houses.length}>
-      HousesNav
-    </div>
+    <div data-testid="houses-nav" data-count={houses.length} />
   )
 }))
 
 vi.mock('@/components/image-block-gallery', () => ({
-  ImageBlockGallery: () => <div data-testid="image-block-gallery">ImageBlockGallery</div>
+  ImageBlockGallery: () => <div data-testid="image-block-gallery" />
 }))
 
 vi.mock('@/components/page-header', () => ({
@@ -81,17 +70,16 @@ vi.mock('@/components/page-nav', () => ({
 
 vi.mock('@/i18n/navigation', () => ({
   Link: ({ children, href }: { children: React.ReactNode; href: unknown }) => (
-    // eslint-disable-next-line jsx-a11y/anchor-is-valid -- test mock
-    <a data-testid="nav-link" data-href={JSON.stringify(href)}>
+    <span data-testid="nav-link" data-href={JSON.stringify(href)}>
       {children}
-    </a>
+    </span>
   )
 }))
 
 type HouseSlug = 'orange' | 'apple' | 'lemon'
 type Props = NonNullable<HouseQueryResult> & { houses: HousesNavQueryResult }
 
-// Create mock image with expanded asset structure expected by HouseQueryResult
+// Mock image with the expanded asset structure HouseQueryResult carries
 const createMockImage = (alt: string) => ({
   asset: {
     _id: 'image-123',
@@ -107,7 +95,7 @@ const createMockImage = (alt: string) => ({
   lqip: 'data:image/jpeg;base64,test'
 })
 
-const createBaseProps = (slugOverride?: HouseSlug): Props => {
+const createBaseProps = (overrides: Partial<Props> = {}): Props => {
   // Cast to satisfy complex generated Sanity types while testing behavior
   return {
     _id: 'house-123',
@@ -115,7 +103,7 @@ const createBaseProps = (slugOverride?: HouseSlug): Props => {
     _createdAt: '2024-01-01',
     _updatedAt: '2024-01-01',
     _rev: 'rev-123',
-    slug: slugOverride ?? 'orange',
+    slug: 'orange',
     title: 'Orange House',
     description: 'A beautiful orange house',
     caption: 'Welcome to Orange House',
@@ -132,15 +120,7 @@ const createBaseProps = (slugOverride?: HouseSlug): Props => {
     location: createLocation(),
     map: createMap(),
     pricing: [createPricingRow({ _key: 'p1' })],
-    about: [
-      {
-        _type: 'block',
-        _key: 'b1',
-        children: [],
-        style: 'normal',
-        markDefs: []
-      }
-    ],
+    about: [{ _type: 'block', _key: 'b1', children: [], style: 'normal', markDefs: [] }],
     building: createBuilding(),
     houses: [
       {
@@ -157,181 +137,69 @@ const createBaseProps = (slugOverride?: HouseSlug): Props => {
         caption: null,
         image: createMockImage('Apple')
       }
-    ]
+    ],
+    ...overrides
   } as unknown as Props
 }
 
 describe('HousePageContent', () => {
-  describe('page structure', () => {
-    it('renders page header with title', () => {
-      render(<HousePageContent {...createBaseProps()} />)
+  it('renders the header and article landmark for the house', () => {
+    const { container } = render(<HousePageContent {...createBaseProps()} />)
 
-      expect(screen.getByTestId('page-heading')).toHaveTextContent('Orange House')
-    })
-
-    it('renders page header with description', () => {
-      render(<HousePageContent {...createBaseProps()} />)
-
-      expect(screen.getByTestId('page-description')).toHaveTextContent('A beautiful orange house')
-    })
-
-    it('renders article with correct id', () => {
-      const { container } = render(<HousePageContent {...createBaseProps()} />)
-
-      const article = container.querySelector('article#orange')
-      expect(article).toBeInTheDocument()
-    })
-
-    it('renders article with aria-labelledby', () => {
-      const { container } = render(<HousePageContent {...createBaseProps()} />)
-
-      const article = container.querySelector('article[aria-labelledby="orange-title"]')
-      expect(article).toBeInTheDocument()
-    })
+    expect(screen.getByTestId('page-heading')).toHaveTextContent('Orange House')
+    expect(screen.getByTestId('page-description')).toHaveTextContent('A beautiful orange house')
+    expect(container.querySelector('article#orange')).toHaveAttribute(
+      'aria-labelledby',
+      'orange-title'
+    )
   })
 
-  describe('theme colors', () => {
-    it('applies orange theme color for orange house', () => {
-      const { container } = render(<HousePageContent {...createBaseProps()} />)
+  it('hands each child the slice of the document it owns', () => {
+    render(<HousePageContent {...createBaseProps()} />)
 
-      const colorBar = container.querySelector('[aria-hidden="true"]')
-      expect(colorBar).toHaveClass('bg-orange-500')
-    })
-
-    it('applies red theme color for apple house', () => {
-      const { container } = render(<HousePageContent {...createBaseProps('apple')} />)
-
-      const colorBar = container.querySelector('[aria-hidden="true"]')
-      expect(colorBar).toHaveClass('bg-red-600')
-    })
-
-    it('applies yellow theme color for lemon house', () => {
-      const { container } = render(<HousePageContent {...createBaseProps('lemon')} />)
-
-      const colorBar = container.querySelector('[aria-hidden="true"]')
-      expect(colorBar).toHaveClass('bg-yellow-400')
-    })
+    expect(screen.getByTestId('house-about')).toHaveAttribute('data-title', 'Orange House')
+    // Categories, not the individual amenities inside them
+    expect(screen.getByTestId('house-amenities')).toHaveAttribute('data-count', '1')
+    expect(screen.getByTestId('house-pricing')).toHaveAttribute('data-count', '1')
+    expect(screen.getByTestId('image-block-gallery')).toBeInTheDocument()
+    expect(screen.getByTestId('houses-nav')).toHaveAttribute('data-count', '2')
   })
 
-  describe('child components', () => {
-    it('renders HouseAbout with correct props', () => {
-      render(<HousePageContent {...createBaseProps()} />)
+  it.each([
+    ['orange', 'bg-orange-500'],
+    ['apple', 'bg-red-600'],
+    ['lemon', 'bg-yellow-400']
+  ] as const)('paints the %s house color bar', (slug: HouseSlug, className) => {
+    const { container } = render(<HousePageContent {...createBaseProps({ slug })} />)
 
-      const about = screen.getByTestId('house-about')
-      expect(about).toHaveAttribute('data-title', 'Orange House')
-    })
-
-    it('renders HouseAmenities with transformed amenity categories', () => {
-      render(<HousePageContent {...createBaseProps()} />)
-
-      const amenities = screen.getByTestId('house-amenities')
-      // Count of categories, not individual items
-      expect(amenities).toHaveAttribute('data-count', '1')
-    })
-
-    it('renders HousePricing with transformed pricing rows', () => {
-      render(<HousePageContent {...createBaseProps()} />)
-
-      const pricing = screen.getByTestId('house-pricing')
-      expect(pricing).toHaveAttribute('data-count', '1')
-    })
-
-    it('renders ImageBlockGallery', () => {
-      render(<HousePageContent {...createBaseProps()} />)
-
-      expect(screen.getByTestId('image-block-gallery')).toBeInTheDocument()
-    })
+    expect(container.querySelector('[aria-hidden="true"]')).toHaveClass(className)
   })
 
-  describe('mobile hero images', () => {
-    it('includes featured image first when present', () => {
-      render(<HousePageContent {...createBaseProps()} />)
+  it.each([
+    ['the featured image first, then the gallery', {}, '3'],
+    ['only gallery images when featured is missing', { featuredImage: null }, '2'],
+    ['only the featured image when the gallery is empty', { galleryImages: null }, '1'],
+    ['nothing when both are missing', { featuredImage: null, galleryImages: null }, '0']
+  ] as const)('stacks the mobile hero with %s', (_name, overrides, count) => {
+    render(<HousePageContent {...createBaseProps(overrides)} />)
 
-      const mobileHero = screen.getByTestId('mobile-hero')
-      // Featured + 2 gallery = 3 images
-      expect(mobileHero).toHaveAttribute('data-count', '3')
-    })
-
-    it('uses only gallery images when featured is missing', () => {
-      const props = createBaseProps()
-      props.featuredImage = null
-
-      render(<HousePageContent {...props} />)
-
-      const mobileHero = screen.getByTestId('mobile-hero')
-      // Only 2 gallery images
-      expect(mobileHero).toHaveAttribute('data-count', '2')
-    })
-
-    it('handles empty galleryImages with featured image', () => {
-      const props = createBaseProps()
-      props.galleryImages = null
-
-      render(<HousePageContent {...props} />)
-
-      const mobileHero = screen.getByTestId('mobile-hero')
-      // Only featured image
-      expect(mobileHero).toHaveAttribute('data-count', '1')
-    })
-
-    it('handles empty galleryImages without featured image', () => {
-      const props = createBaseProps()
-      props.galleryImages = null
-      props.featuredImage = null
-
-      render(<HousePageContent {...props} />)
-
-      const mobileHero = screen.getByTestId('mobile-hero')
-      expect(mobileHero).toHaveAttribute('data-count', '0')
-    })
+    expect(screen.getByTestId('mobile-hero')).toHaveAttribute('data-count', count)
   })
 
-  describe('houses navigation', () => {
-    it('renders HousesNav when houses exist', () => {
-      render(<HousePageContent {...createBaseProps()} />)
+  // HouseLocation owns its own empty states, so it renders whatever the map holds.
+  it.each([
+    ['a full map', {}],
+    ['no map', { map: null }],
+    ['a map without coordinates', { map: { ...createMap(), coordinates: null } }]
+  ] as const)('always renders HouseLocation, given %s', (_name, overrides) => {
+    render(<HousePageContent {...createBaseProps(overrides as Partial<Props>)} />)
 
-      const nav = screen.getByTestId('houses-nav')
-      expect(nav).toHaveAttribute('data-count', '2')
-    })
-
-    it('renders HousesNav with empty houses array', () => {
-      const props = createBaseProps()
-      props.houses = []
-
-      render(<HousePageContent {...props} />)
-
-      expect(screen.getByTestId('houses-nav')).toBeInTheDocument()
-    })
+    expect(screen.getByTestId('house-location')).toBeInTheDocument()
   })
 
-  describe('HouseLocation conditional rendering', () => {
-    it('renders HouseLocation when map data is valid', () => {
-      render(<HousePageContent {...createBaseProps()} />)
+  it('still renders the houses nav when there are no other houses', () => {
+    render(<HousePageContent {...createBaseProps({ houses: [] })} />)
 
-      expect(screen.getByTestId('house-location')).toBeInTheDocument()
-    })
-
-    it('renders HouseLocation even when map is null', () => {
-      const props = createBaseProps()
-      props.map = null
-
-      render(<HousePageContent {...props} />)
-
-      // HouseLocation is always rendered, map handling is internal
-      expect(screen.getByTestId('house-location')).toBeInTheDocument()
-    })
-
-    it('renders HouseLocation even when map coordinates are missing', () => {
-      const props = createBaseProps()
-      props.map = {
-        ...props.map,
-        coordinates: null
-      } as unknown as typeof props.map
-
-      render(<HousePageContent {...props} />)
-
-      // HouseLocation is always rendered, map handling is internal
-      expect(screen.getByTestId('house-location')).toBeInTheDocument()
-    })
+    expect(screen.getByTestId('houses-nav')).toHaveAttribute('data-count', '0')
   })
 })

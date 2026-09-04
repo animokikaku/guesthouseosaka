@@ -1,123 +1,49 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fields, houseTitles } from './fixtures'
 import { MoveInForm } from '../move-in-form'
 
-// Mock form submission hook
-vi.mock('../use-form-submit', () => ({
-  useFormSubmit: () => ({
-    onSubmitInvalid: vi.fn(),
-    createOnSubmit: () => vi.fn()
-  })
-}))
-
-// Mock LegalNoticeDialog for privacy policy field
-vi.mock('@/components/legal-notice-dialog', () => ({
-  LegalNoticeDialog: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="legal-notice-dialog">{children}</div>
-  )
-}))
+vi.mock('../use-form-submit', () => import('./mocks/use-form-submit'))
+vi.mock('@/components/legal-notice-dialog', () => import('./mocks/legal-notice-dialog'))
 
 const baseProps = {
   title: 'Move-In Application',
   description: 'Apply to live with us',
-  houseTitles: [
-    { slug: 'orange' as const, title: 'Orange House' },
-    { slug: 'apple' as const, title: 'Apple House' },
-    { slug: 'lemon' as const, title: 'Lemon House' }
-  ],
-  fields: {
-    places: { label: 'Preferred Houses', description: 'Choose up to 3' },
-    date: { label: 'Move-In Date', description: 'Select a date' },
-    hour: { label: 'Hour' },
-    stayDuration: { label: 'Stay Duration', description: 'How long?' },
-    name: { label: 'Your Name', placeholder: 'Enter name' },
-    age: { label: 'Your Age', placeholder: 'Enter age' },
-    gender: { label: 'Gender', placeholder: 'Select gender' },
-    nationality: { label: 'Nationality', placeholder: 'Enter nationality' },
-    email: { label: 'Your Email', placeholder: 'Enter email' },
-    phone: { label: 'Phone', placeholder: 'Enter phone' },
-    message: {
-      label: 'Message',
-      placeholder: 'Tell us about yourself',
-      description: 'Optional'
-    }
-  }
+  fields,
+  houseTitles
 }
 
 describe('MoveInForm', () => {
-  describe('card structure', () => {
-    it('renders card with title', () => {
-      render(<MoveInForm {...baseProps} />)
+  it('renders the card header and the fields this form owns', () => {
+    render(<MoveInForm {...baseProps} />)
 
-      expect(screen.getByText('Move-In Application')).toBeInTheDocument()
-    })
-
-    it('renders card with description', () => {
-      render(<MoveInForm {...baseProps} />)
-
-      expect(screen.getByText('Apply to live with us')).toBeInTheDocument()
-    })
+    expect(screen.getByText('Move-In Application')).toBeInTheDocument()
+    expect(screen.getByText('Apply to live with us')).toBeInTheDocument()
+    expect(screen.getByLabelText(/preferred date/i)).toHaveAttribute('type', 'date')
+    expect(screen.getByLabelText(/stay duration/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/your name/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/your email/i)).toBeInTheDocument()
+    expect(screen.getByRole('checkbox')).toBeInTheDocument()
   })
 
-  describe('form fields', () => {
-    it('renders the date field as a native date input', () => {
-      render(<MoveInForm {...baseProps} />)
+  it('wires the submit button to the form id', () => {
+    const { container } = render(<MoveInForm {...baseProps} />)
 
-      expect(screen.getByLabelText(/move-in date/i)).toHaveAttribute('type', 'date')
-    })
-
-    it('renders stay duration field', () => {
-      render(<MoveInForm {...baseProps} />)
-
-      expect(screen.getByLabelText(/stay duration/i)).toBeInTheDocument()
-    })
-
-    it('renders name input field', () => {
-      render(<MoveInForm {...baseProps} />)
-
-      expect(screen.getByLabelText(/your name/i)).toBeInTheDocument()
-    })
-
-    it('renders email input field', () => {
-      render(<MoveInForm {...baseProps} />)
-
-      expect(screen.getByLabelText(/your email/i)).toBeInTheDocument()
-    })
-
-    it('renders privacy policy checkbox', () => {
-      render(<MoveInForm {...baseProps} />)
-
-      expect(screen.getByRole('checkbox')).toBeInTheDocument()
-    })
+    expect(container.querySelector('form')).toHaveAttribute('id', 'move-in-form')
+    expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute('form', 'move-in-form')
   })
 
-  describe('form attributes', () => {
-    it('has correct form id', () => {
-      const { container } = render(<MoveInForm {...baseProps} />)
+  it('surfaces schema errors on the matching fields after an invalid submit', async () => {
+    const { container } = render(<MoveInForm {...baseProps} />)
 
-      expect(container.querySelector('form')).toHaveAttribute('id', 'move-in-form')
-    })
+    fireEvent.submit(container.querySelector('form')!)
 
-    it('submit button references the form id', () => {
-      render(<MoveInForm {...baseProps} />)
-
-      expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute('form', 'move-in-form')
-    })
-  })
-  describe('validation', () => {
-    it('surfaces schema errors on the matching fields after an invalid submit', async () => {
-      const { container } = render(<MoveInForm {...baseProps} />)
-
-      fireEvent.submit(container.querySelector('form')!)
-
-      // Form-level schema errors are routed to their fields, including the
-      // nested `account.*` paths owned by the user account field group and
-      // this form's own date field.
-      const nameInput = screen.getByLabelText(/your name/i)
-      await waitFor(() => {
-        expect(nameInput).toHaveAttribute('aria-invalid', 'true')
-        expect(screen.getByLabelText('Move-In Date')).toHaveAttribute('aria-invalid', 'true')
-        expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
-      })
-    })
+    // Form-level schema errors are routed to their fields, including the
+    // nested `account.*` paths owned by the user account field group and
+    // this form's own date field.
+    await waitFor(() =>
+      expect(screen.getByLabelText(/your name/i)).toHaveAttribute('aria-invalid', 'true')
+    )
+    expect(screen.getByLabelText('Preferred Date')).toHaveAttribute('aria-invalid', 'true')
+    expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
   })
 })
