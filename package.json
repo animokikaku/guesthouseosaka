@@ -61,6 +61,7 @@
     "sanity": "^6.12.0",
     "sanity-plugin-internationalized-array": "^5.2.3",
     "schema-dts": "^2.0.0",
+    "simple-icons": "^16.29.0",
     "styled-components": "^6.5.3",
     "validator": "^13.15.35",
     "vaul-base": "^1.0.0",
