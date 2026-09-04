@@ -49,10 +49,14 @@ export function Collection({ houses, className }: CollectionProps) {
                   HOUSE_COLORS[house.slug].accent
                 )}
               >
+                {/* Lazy, not eager: the overlay is opacity-0 until hover, and
+                    the collection sits a full viewport below the hero — so
+                    eager loading cost three requests during the initial load
+                    for art nobody had asked to see. next/image starts these as
+                    the section scrolls into view, well ahead of any hover. */}
                 <Image
                   {...assets[house.slug].icon}
                   alt={assets[house.slug].icon.alt}
-                  loading="eager"
                   className="size-12 object-contain opacity-90 drop-shadow-lg"
                 />
               </div>
