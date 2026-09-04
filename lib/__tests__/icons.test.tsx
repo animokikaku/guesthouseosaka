@@ -15,6 +15,17 @@ describe('Icon', () => {
     expect(container.firstChild).toBeNull()
   })
 
+  // A plain object literal inherits these, and each resolves to a truthy
+  // function that React would try to render as a component.
+  it.each(['toString', 'constructor', 'valueOf'])(
+    'returns null for the inherited name %s',
+    (name) => {
+      const { container } = render(<Icon name={name} />)
+
+      expect(container.firstChild).toBeNull()
+    }
+  )
+
   it('forwards props to icon component', () => {
     const { container } = render(<Icon name="wifi" className="size-6" />)
 

@@ -43,6 +43,11 @@ export const brandIconMap: Record<string, IconComponent> = {
 
 /** Renders a brand mark by its persisted Sanity name; null for unknown names. */
 export function BrandIcon({ name, ...props }: React.SVGProps<SVGSVGElement> & { name: string }) {
+  // Own-property check, not a truthiness check: `brandIconMap['toString']`
+  // resolves up the prototype chain to a function, which React would then try
+  // to render as a component.
+  if (!Object.hasOwn(brandIconMap, name)) return null
+
   const Component = brandIconMap[name]
   if (!Component) return null
   return <Component {...props} />

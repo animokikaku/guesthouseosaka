@@ -155,6 +155,32 @@ describe('ImageBlockGallery', () => {
     expect(screen.getByRole('link', { name: 'Show all 6 photos' })).toBeInTheDocument()
   })
 
+  // The query filters `defined(image.asset)` before capping the preview at 10.
+  // If it capped first, unfinished items would eat preview slots and push
+  // renderable ones out — with five of them, a house with a full gallery would
+  // render the empty state.
+  it('fills the grid from a preview the query has already filtered', async () => {
+    const galleryImages = Array.from({ length: 10 }, (_, index) =>
+      createGalleryItem({
+        _key: `image-${index}`,
+        image: createSanityImage({ alt: `Gallery image ${index + 1}` })
+      })
+    )
+
+    render(
+      await ImageBlockGallery({
+        href: galleryHref,
+        galleryImageCount: 59,
+        galleryImages
+      })
+    )
+
+    const frames = screen.getAllByTestId('gallery-frame')
+    expect(frames).toHaveLength(5)
+    expect(frames[0]).toHaveAttribute('data-alt', 'Gallery image 1')
+    expect(screen.getByText('+54')).toBeInTheDocument()
+  })
+
   it('renders the empty state when fewer than five images can be rendered', async () => {
     const galleryImages = [
       ...Array.from({ length: 4 }, (_, index) =>

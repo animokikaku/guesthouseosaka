@@ -182,7 +182,13 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // Pre-computed from sorted categories, and capped: both consumers show a
   // handful of images and link out to the gallery page for the rest. The full
   // per-category set lives in houseGalleryQuery.
-  "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[]{
+  //
+  // The asset filter runs before the cap on purpose. The consumers drop items
+  // that don't resolve to an image, so filtering afterwards would let an
+  // unfinished item eat a preview slot and push a renderable one out — enough
+  // of them and the 5-tile grid falls back to its empty state on a house that
+  // has plenty of photos.
+  "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{
     _key,
     "image": image{${imageRefFields}}
   })[0...10],

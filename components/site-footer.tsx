@@ -75,7 +75,8 @@ function SocialLink({
       data-sanity={dataSanity}
       {...props}
     >
-      <BrandIcon name={icon} className="size-5" />
+      {/* The anchor owns the accessible name, so the mark is decorative here. */}
+      <BrandIcon name={icon} aria-hidden="true" className="size-5" />
     </a>
   )
 }

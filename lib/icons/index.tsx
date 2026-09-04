@@ -89,6 +89,11 @@ export interface IconProps extends React.SVGProps<SVGSVGElement> {
  * Falls back to null for unknown icons.
  */
 export function Icon({ name, ...props }: IconProps) {
+  // Own-property check, not a truthiness check: `iconMap['toString']` resolves
+  // up the prototype chain to a function, which React would then try to render
+  // as a component. Reachable here — pageAction has no `allowedIcons`.
+  if (!Object.hasOwn(iconMap, name)) return null
+
   const IconComponent = iconMap[name]
   if (!IconComponent) return null
   return <IconComponent {...props} />
