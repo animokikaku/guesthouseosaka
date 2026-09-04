@@ -1,18 +1,16 @@
 // @vitest-environment node
 
-vi.mock('@/sanity/lib/image', () => ({
-  urlFor: () => ({
-    width: () => ({
-      height: () => ({
-        dpr: () => ({
-          fit: () => ({
-            url: () => 'https://cdn.sanity.io/images/test/gallery.jpg'
-          })
-        })
-      })
-    })
-  })
-}))
+vi.mock('@/sanity/lib/image', () => {
+  const builder = {
+    width: () => builder,
+    height: () => builder,
+    dpr: () => builder,
+    fit: () => builder,
+    url: () => 'https://cdn.sanity.io/images/test/gallery.jpg'
+  }
+
+  return { urlFor: () => builder }
+})
 
 import {
   createGalleryCategory,

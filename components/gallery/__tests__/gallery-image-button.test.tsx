@@ -1,22 +1,7 @@
-/* eslint-disable @next/next/no-img-element */
 import { render, screen } from '@testing-library/react'
 import { GalleryImageFrame } from '../gallery-image-button'
 
-vi.mock('next/image', () => ({
-  default: function MockImage({
-    src,
-    alt,
-    className,
-    sizes
-  }: {
-    src: string
-    alt: string
-    className?: string
-    sizes?: string
-  }) {
-    return <img src={src} alt={alt} className={className} data-sizes={sizes} />
-  }
-}))
+vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
 
 const imageProps = {
   src: 'https://cdn.sanity.io/images/test/gallery.jpg',

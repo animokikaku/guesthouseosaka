@@ -1,8 +1,17 @@
 import { renderHook } from '@testing-library/react'
 import { useIsMobile, getServerSnapshot, getSnapshot } from '../use-mobile'
 
+const originalInnerWidth = window.innerWidth
+
+function setViewportWidth(value: number) {
+  Object.defineProperty(window, 'innerWidth', { writable: true, value })
+}
+
+afterEach(() => {
+  setViewportWidth(originalInnerWidth)
+})
+
 describe('useIsMobile', () => {
-  const originalInnerWidth = window.innerWidth
   const originalMatchMedia = window.matchMedia
   let addEventListenerSpy: ReturnType<typeof vi.fn>
   let removeEventListenerSpy: ReturnType<typeof vi.fn>
@@ -20,44 +29,23 @@ describe('useIsMobile', () => {
 
   afterEach(() => {
     window.matchMedia = originalMatchMedia
-    Object.defineProperty(window, 'innerWidth', {
-      writable: true,
-      value: originalInnerWidth
-    })
   })
 
-  it('returns false initially (SSR-safe default)', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, value: 1024 })
+  it.each([
+    [500, true],
+    [1024, false]
+  ])('reports %ipx as mobile=%s', (width, isMobile) => {
+    setViewportWidth(width)
 
     const { result } = renderHook(() => useIsMobile())
 
-    expect(result.current).toBe(false)
+    expect(result.current).toBe(isMobile)
   })
 
-  it('returns true when window width < 768', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, value: 500 })
-
-    const { result } = renderHook(() => useIsMobile())
-
-    expect(result.current).toBe(true)
-  })
-
-  it('returns false when window width >= 768', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, value: 1024 })
-
-    const { result } = renderHook(() => useIsMobile())
-
-    expect(result.current).toBe(false)
-  })
-
-  it('registers change event listener on mount', () => {
-    renderHook(() => useIsMobile())
+  it('subscribes to the media query and cleans up on unmount', () => {
+    const { unmount } = renderHook(() => useIsMobile())
 
     expect(addEventListenerSpy).toHaveBeenCalledWith('change', expect.any(Function))
-  })
-
-  it('removes event listener on unmount', () => {
-    const { unmount } = renderHook(() => useIsMobile())
 
     unmount()
 
@@ -72,32 +60,15 @@ describe('getServerSnapshot', () => {
 })
 
 describe('getSnapshot', () => {
-  const originalInnerWidth = window.innerWidth
+  // The breakpoint is 768px, so 767 is the widest mobile viewport.
+  it.each([
+    [500, true],
+    [767, true],
+    [768, false],
+    [1024, false]
+  ])('reports %ipx as mobile=%s', (width, isMobile) => {
+    setViewportWidth(width)
 
-  afterEach(() => {
-    Object.defineProperty(window, 'innerWidth', {
-      writable: true,
-      value: originalInnerWidth
-    })
-  })
-
-  it('returns true when window width < 768', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, value: 500 })
-    expect(getSnapshot()).toBe(true)
-  })
-
-  it('returns false when window width >= 768', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, value: 1024 })
-    expect(getSnapshot()).toBe(false)
-  })
-
-  it('returns false at exactly 768px', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, value: 768 })
-    expect(getSnapshot()).toBe(false)
-  })
-
-  it('returns true at 767px', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, value: 767 })
-    expect(getSnapshot()).toBe(true)
+    expect(getSnapshot()).toBe(isMobile)
   })
 })

@@ -1,22 +1,16 @@
 import { LocationData } from '@/lib/types/components'
 import { render, screen } from '@testing-library/react'
 
-// Use vi.hoisted to declare variables that will be used in mocks
-const { mockStorage } = vi.hoisted(() => {
-  const storage: { loadingFn: (() => React.ReactNode) | null } = {
-    loadingFn: null
-  }
-  return { mockStorage: storage }
-})
+// `next/dynamic` is replaced with a synchronous stub so the map renders inline,
+// and the loading fallback it was given is captured for its own assertion.
+const { dynamicOptions } = vi.hoisted(() => ({
+  dynamicOptions: { loading: null as (() => React.ReactNode) | null }
+}))
 
-// Mock next/dynamic to render synchronously and capture loading function
 vi.mock('next/dynamic', () => ({
   default: (_importFn: () => Promise<unknown>, options?: { loading?: () => React.ReactNode }) => {
-    // Capture the loading function for testing
-    if (options?.loading) {
-      mockStorage.loadingFn = options.loading
-    }
-    // Return a mock HouseMap component
+    dynamicOptions.loading = options?.loading ?? null
+
     return function MockHouseMap(props: {
       center: { lat: number; lng: number }
       placeId: string | null
@@ -27,17 +21,13 @@ vi.mock('next/dynamic', () => ({
           data-lat={props.center.lat}
           data-lng={props.center.lng}
           data-place-id={props.placeId}
-        >
-          HouseMap Mock
-        </div>
+        />
       )
     }
   }
 }))
 
-import { HouseLocation } from '../house-location'
-
-// Mock HouseLocationModal - matches real component behavior
+// Mirrors the real modal, which renders nothing without details
 vi.mock('@/components/house/house-location-modal', () => ({
   HouseLocationModal: ({
     children,
@@ -45,177 +35,76 @@ vi.mock('@/components/house/house-location-modal', () => ({
   }: {
     children: React.ReactNode
     details: LocationData['details']
-  }) => {
-    if (!details) return null
-    return (
-      <div data-testid="location-modal" data-details-count={details.length}>
-        {children}
-      </div>
-    )
-  }
+  }) => (details ? <div data-testid="location-modal">{children}</div> : null)
 }))
 
-const mockPlaceImage = {
-  asset: { _ref: 'image-test-123', _type: 'reference' as const },
-  hotspot: null,
-  crop: null,
-  alt: 'Place image',
-  preview: null
-}
-
-const mockDetails = [
-  {
-    _type: 'block' as const,
-    _key: 'd1',
-    style: 'normal' as const,
-    children: [
-      {
-        _type: 'span' as const,
-        _key: 's1',
-        text: 'Near train station',
-        marks: []
-      }
-    ],
-    markDefs: []
-  }
-]
+import { HouseLocation } from '../house-location'
 
 const baseProps = {
   location: {
     highlight: 'Great location near the station',
-    details: mockDetails
+    details: [
+      {
+        _type: 'block' as const,
+        _key: 'd1',
+        style: 'normal' as const,
+        children: [{ _type: 'span' as const, _key: 's1', text: 'Near train station', marks: [] }],
+        markDefs: []
+      }
+    ]
   },
   map: {
     coordinates: { lat: 34.6937, lng: 135.5023 },
     placeId: 'ChIJA9KNRIL-AGARZtCjpPbTMCs',
-    placeImage: mockPlaceImage,
+    placeImage: {
+      asset: { _ref: 'image-test-123', _type: 'reference' as const },
+      hotspot: null,
+      crop: null,
+      alt: 'Place image',
+      preview: null
+    },
     googleMapsUrl: 'https://maps.google.com/...'
   }
 }
 
 describe('HouseLocation', () => {
-  describe('section structure', () => {
-    it('renders section with heading', () => {
-      render(<HouseLocation {...baseProps} />)
+  it('renders the heading, highlight, and map for a complete location', () => {
+    render(<HouseLocation {...baseProps} />)
 
-      expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
-    })
+    expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
+    expect(screen.getByText('Great location near the station')).toBeInTheDocument()
 
-    it('renders highlight text', () => {
-      render(<HouseLocation {...baseProps} />)
-
-      expect(screen.getByText('Great location near the station')).toBeInTheDocument()
-    })
+    const map = screen.getByTestId('house-map')
+    expect(map).toHaveAttribute('data-lat', '34.6937')
+    expect(map).toHaveAttribute('data-lng', '135.5023')
+    expect(map).toHaveAttribute('data-place-id', 'ChIJA9KNRIL-AGARZtCjpPbTMCs')
   })
 
-  describe('HouseMap integration', () => {
-    it('renders HouseMap when map data exists', () => {
-      render(<HouseLocation {...baseProps} />)
+  it('keeps the section and the modal when there is no map', () => {
+    render(<HouseLocation {...baseProps} map={null} />)
 
-      const map = screen.getByTestId('house-map')
-      expect(map).toBeInTheDocument()
-      expect(map).toHaveAttribute('data-lat', '34.6937')
-      expect(map).toHaveAttribute('data-lng', '135.5023')
-    })
-
-    it('passes placeId to HouseMap', () => {
-      render(<HouseLocation {...baseProps} />)
-
-      const map = screen.getByTestId('house-map')
-      expect(map).toHaveAttribute('data-place-id', 'ChIJA9KNRIL-AGARZtCjpPbTMCs')
-    })
-
-    it('does not render HouseMap when map is null', () => {
-      const props = {
-        ...baseProps,
-        map: null
-      }
-
-      render(<HouseLocation {...props} />)
-
-      expect(screen.queryByTestId('house-map')).not.toBeInTheDocument()
-    })
-
-    it('still renders section content when map is null', () => {
-      const props = {
-        ...baseProps,
-        map: null
-      }
-
-      render(<HouseLocation {...props} />)
-
-      // Section heading and highlight text should still be visible
-      expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
-      expect(screen.getByText('Great location near the station')).toBeInTheDocument()
-      // Modal trigger should still be available
-      expect(screen.getByTestId('location-modal')).toBeInTheDocument()
-    })
+    expect(screen.queryByTestId('house-map')).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
+    expect(screen.getByText('Great location near the station')).toBeInTheDocument()
+    expect(screen.getByTestId('location-modal')).toBeInTheDocument()
   })
 
-  describe('HouseLocationModal integration', () => {
-    it('renders modal with trigger button', () => {
-      render(<HouseLocation {...baseProps} />)
+  it.each<[string, LocationData['details'], boolean]>([
+    ['details are present', baseProps.location.details, true],
+    ['details are empty', [], true],
+    ['details are null', null, false]
+  ])('%s: modal rendered = %s', (_name, details, isRendered) => {
+    render(<HouseLocation {...baseProps} location={{ ...baseProps.location, details }} />)
 
-      expect(screen.getByTestId('location-modal')).toBeInTheDocument()
-      expect(screen.getByRole('button')).toBeInTheDocument()
-    })
-
-    it('renders modal with empty details', () => {
-      const props = {
-        ...baseProps,
-        location: {
-          ...baseProps.location,
-          details: []
-        }
-      }
-
-      render(<HouseLocation {...props} />)
-
-      expect(screen.getByTestId('location-modal')).toBeInTheDocument()
-    })
-
-    it('does not render modal when details is null', () => {
-      const props = {
-        ...baseProps,
-        location: {
-          ...baseProps.location,
-          details: null as unknown as typeof baseProps.location.details
-        }
-      }
-
-      render(<HouseLocation {...props} />)
-
-      expect(screen.queryByTestId('location-modal')).not.toBeInTheDocument()
-    })
+    expect(screen.queryByTestId('location-modal') !== null).toBe(isRendered)
   })
 
-  describe('loading skeleton', () => {
-    function renderLoadingSkeleton() {
-      // Render component to trigger the dynamic import mock
-      render(<HouseLocation {...baseProps} />)
-      expect(mockStorage.loadingFn).not.toBeNull()
-      const { container } = render(<>{mockStorage.loadingFn?.()}</>)
-      return container
-    }
+  it('falls back to a skeleton while the map chunk loads', () => {
+    render(<HouseLocation {...baseProps} />)
+    expect(dynamicOptions.loading).not.toBeNull()
 
-    it('renders a loading state while map component loads', () => {
-      const container = renderLoadingSkeleton()
+    const { container } = render(<>{dynamicOptions.loading?.()}</>)
 
-      // Verify loading state is rendered (not empty)
-      expect(container.firstChild).not.toBeNull()
-      expect(container.children.length).toBeGreaterThan(0)
-
-      // Verify it has skeleton elements indicating loading
-      const hasSkeletonElements = container.querySelector('[data-slot="skeleton"]')
-      expect(hasSkeletonElements).toBeTruthy()
-    })
-
-    it('renders multiple skeleton placeholders for content areas', () => {
-      const container = renderLoadingSkeleton()
-
-      // Should have multiple skeleton elements for various content areas
-      const skeletons = container.querySelectorAll('[data-slot="skeleton"]')
-      expect(skeletons.length).toBeGreaterThan(1)
-    })
+    expect(container.querySelectorAll('[data-slot="skeleton"]').length).toBeGreaterThan(1)
   })
 })

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { render, screen } from '@testing-library/react'
 import { ImageBlockGallery } from '../image-block-gallery'
 import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
@@ -28,10 +27,6 @@ vi.mock('@/sanity/lib/image', () => ({
     }
     return builder
   }
-}))
-
-vi.mock('@sanity/client/stega', () => ({
-  stegaClean: (value: string | null | undefined) => value ?? ''
 }))
 
 vi.mock('@/components/gallery/gallery-image-button', () => ({

@@ -1,15 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import { render, screen } from '@testing-library/react'
 
-vi.mock('@sanity/client/stega', () => ({
-  stegaClean: (value: string) => value
-}))
-
-vi.mock('next/image', () => ({
-  default: function MockImage({ alt }: { alt: string }) {
-    return <img alt={alt} />
-  }
-}))
+vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
 
 import { Lightbox } from '@/components/lightbox'
 import { CategoryGrid } from '../gallery-category-grid'

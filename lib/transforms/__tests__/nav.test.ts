@@ -2,19 +2,17 @@
 
 import { faker } from '@faker-js/faker'
 
-vi.mock('@/sanity/lib/image', () => ({
-  urlFor: () => ({
-    width: () => ({
-      height: () => ({
-        dpr: () => ({
-          fit: () => ({
-            url: () => 'https://cdn.sanity.io/images/test/nav.jpg'
-          })
-        })
-      })
-    })
-  })
-}))
+vi.mock('@/sanity/lib/image', () => {
+  const builder = {
+    width: () => builder,
+    height: () => builder,
+    dpr: () => builder,
+    fit: () => builder,
+    url: () => 'https://cdn.sanity.io/images/test/nav.jpg'
+  }
+
+  return { urlFor: () => builder }
+})
 
 vi.mock('@/lib/env', () => ({
   env: {

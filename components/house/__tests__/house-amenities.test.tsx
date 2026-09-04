@@ -1,542 +1,108 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { HouseAmenities } from '../house-amenities'
 import { HouseProvider } from '../house-context'
-import { createAmenityCategory, createAmenityItem } from '@/lib/transforms/__tests__/mocks'
-import type { AmenityCategoryData } from '@/lib/types/components'
+import type { AmenityCategoryData, AmenityItemData } from '@/lib/types/components'
 
 vi.mock('@/lib/icons', () => ({
   Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />
 }))
 
-const providerProps = {
-  id: 'house-test',
-  type: 'house',
-  slug: 'orange' as const
+// The component takes the flattened shape the GROQ query already produces, so
+// these build it directly rather than going through a Sanity document mock.
+function amenity(label: string, icon = 'wifi', note: AmenityItemData['note'] = null) {
+  return { _key: label, label, icon, note } satisfies AmenityItemData
 }
 
-function renderWithProvider(ui: React.ReactElement) {
-  return render(<HouseProvider {...providerProps}>{ui}</HouseProvider>)
+function category(label: string, items: AmenityItemData[]) {
+  return { _key: label, _id: label, label, icon: null, items } satisfies AmenityCategoryData
 }
 
-// Helper to create amenity category data matching component's expected type
-function toAmenityCategoryData(cat: ReturnType<typeof createAmenityCategory>): AmenityCategoryData {
-  return {
-    _key: cat._key,
-    _id: cat.category._id,
-    label: cat.category.label ?? null,
-    icon: cat.category.icon ?? null,
-    items: (cat.items ?? []).map((item: ReturnType<typeof createAmenityItem>) => ({
-      _key: item._key,
-      label: item.label ?? null,
-      icon: item.icon,
-      note: item.note ?? null
-    }))
-  }
+function numberedAmenities(count: number) {
+  return Array.from({ length: count }, (_, index) => amenity(`Amenity ${index}`))
+}
+
+function renderAmenities(
+  featuredAmenities: AmenityItemData[],
+  amenityCategories: AmenityCategoryData[] = [category('Room', featuredAmenities)]
+) {
+  return render(
+    <HouseProvider id="house-test" type="house" slug="orange">
+      <HouseAmenities amenityCategories={amenityCategories} featuredAmenities={featuredAmenities} />
+    </HouseProvider>
+  )
 }
 
 describe('HouseAmenities', () => {
   describe('featured amenities display', () => {
-    it('renders featured amenities on desktop (max 10)', () => {
-      // GROQ query provides max 10 featured amenities
-      const featuredAmenities = Array.from({ length: 10 }, (_, i) => ({
-        _key: `amenity-${i}`,
-        label: `Amenity ${i}`,
-        icon: 'wifi',
-        note: null as 'private' | 'shared' | 'coin' | null,
-        featured: true as boolean | null
-      }))
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Room',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items: Array.from({ length: 15 }, (_, i) =>
-              createAmenityItem({
-                _key: `amenity-${i}`,
-                label: `Amenity ${i}`,
-                featured: true,
-                icon: 'wifi'
-              })
-            )
-          })
-        )
-      ]
+    it('renders every featured amenity the query provides', () => {
+      // The GROQ query caps the featured list at 10, and the category it comes
+      // from stays larger, so this also pins that the grid ignores the categories.
+      renderAmenities(numberedAmenities(10), [category('Room', numberedAmenities(15))])
 
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
-
-      // Should display all 10 (max from GROQ) on desktop
       expect(screen.getAllByText(/Amenity \d+/)).toHaveLength(10)
     })
 
     it('displays only the featured amenities provided via prop', () => {
-      // Featured amenities are now pre-filtered by GROQ query
-      const featuredAmenities = [
-        {
-          _key: 'featured-1',
-          label: 'Featured 1',
-          icon: 'wifi',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        },
-        {
-          _key: 'featured-2',
-          label: 'Featured 2',
-          icon: 'utensils',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        }
-      ]
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Room',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'featured-1',
-                label: 'Featured 1',
-                featured: true,
-                icon: 'wifi'
-              }),
-              createAmenityItem({
-                _key: 'not-featured',
-                label: 'Not Featured',
-                featured: false,
-                icon: 'bed'
-              }),
-              createAmenityItem({
-                _key: 'featured-2',
-                label: 'Featured 2',
-                featured: true,
-                icon: 'utensils'
-              })
-            ]
-          })
-        )
-      ]
+      const featured = [amenity('Featured 1'), amenity('Featured 2', 'utensils')]
 
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
+      renderAmenities(featured, [
+        category('Room', [featured[0], amenity('Not Featured', 'bed'), featured[1]])
+      ])
 
       expect(screen.getByText('Featured 1')).toBeInTheDocument()
       expect(screen.getByText('Featured 2')).toBeInTheDocument()
-      // 'Not Featured' is in categories but not in featuredAmenities prop
       expect(screen.queryByText('Not Featured')).not.toBeInTheDocument()
     })
   })
 
-  describe('section heading', () => {
-    it('renders section heading with translation key', () => {
-      const featuredAmenities = [
-        {
-          _key: 'wifi',
-          label: 'Wifi',
-          icon: 'wifi',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        }
-      ]
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            items: [createAmenityItem({ featured: true, icon: 'wifi' })]
-          })
-        )
-      ]
+  it('renders the section heading and show-all button from translation keys', () => {
+    renderAmenities(numberedAmenities(10), [category('Room', numberedAmenities(25))])
 
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
-
-      // The heading uses t('heading') which returns 'heading' in mocked translations
-      expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('heading')
-    })
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('heading')
+    expect(screen.getByRole('button')).toHaveTextContent('show_all')
   })
 
-  describe('show all button', () => {
-    it('renders button with show_all translation key', () => {
-      const featuredAmenities = Array.from({ length: 10 }, (_, i) => ({
-        _key: `amenity-${i}`,
-        label: `Amenity ${i}`,
-        icon: 'wifi',
-        note: null as 'private' | 'shared' | 'coin' | null,
-        featured: true as boolean | null
-      }))
-      const items = Array.from({ length: 25 }, (_, i) =>
-        createAmenityItem({
-          _key: `amenity-${i}`,
-          featured: i < 10,
-          icon: 'wifi'
-        })
-      )
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Room',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items
-          })
-        )
-      ]
+  it('renders a translated badge for each amenity note', () => {
+    renderAmenities([
+      amenity('Wifi', 'wifi', 'shared'),
+      amenity('Bath', 'bath', 'private'),
+      amenity('Laundry', 'shirt', 'coin'),
+      amenity('Kitchen', 'utensils')
+    ])
 
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
-
-      // Button uses show_all translation key (mocked)
-      expect(screen.getByRole('button')).toHaveTextContent('show_all')
-    })
+    expect(screen.getByText('notes.shared')).toBeInTheDocument()
+    expect(screen.getByText('notes.private')).toBeInTheDocument()
+    expect(screen.getByText('notes.coin')).toBeInTheDocument()
   })
 
-  describe('note badges', () => {
-    it('renders note badges for amenities with notes', () => {
-      const featuredAmenities = [
-        {
-          _key: 'shared-wifi',
-          label: 'Wifi',
-          icon: 'wifi',
-          note: 'shared' as const,
-          featured: true as boolean | null
-        },
-        {
-          _key: 'private-bath',
-          label: 'Bath',
-          icon: 'bath',
-          note: 'private' as const,
-          featured: true as boolean | null
-        },
-        {
-          _key: 'coin-laundry',
-          label: 'Laundry',
-          icon: 'shirt',
-          note: 'coin' as const,
-          featured: true as boolean | null
-        },
-        {
-          _key: 'no-note',
-          label: 'Kitchen',
-          icon: 'utensils',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        }
-      ]
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Room',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'shared-wifi',
-                label: 'Wifi',
-                note: 'shared',
-                featured: true,
-                icon: 'wifi'
-              }),
-              createAmenityItem({
-                _key: 'private-bath',
-                label: 'Bath',
-                note: 'private',
-                featured: true,
-                icon: 'bath'
-              }),
-              createAmenityItem({
-                _key: 'coin-laundry',
-                label: 'Laundry',
-                note: 'coin',
-                featured: true,
-                icon: 'shirt'
-              }),
-              createAmenityItem({
-                _key: 'no-note',
-                label: 'Kitchen',
-                note: null,
-                featured: true,
-                icon: 'utensils'
-              })
-            ]
-          })
-        )
-      ]
+  it('renders the icon named by each amenity', () => {
+    renderAmenities([amenity('Wifi', 'wifi'), amenity('Bed', 'bed')])
 
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
-
-      // Note labels use translation keys
-      expect(screen.getByText('notes.shared')).toBeInTheDocument()
-      expect(screen.getByText('notes.private')).toBeInTheDocument()
-      expect(screen.getByText('notes.coin')).toBeInTheDocument()
-    })
+    expect(screen.getByTestId('icon-wifi')).toBeInTheDocument()
+    expect(screen.getByTestId('icon-bed')).toBeInTheDocument()
   })
 
-  describe('amenity icons', () => {
-    it('renders amenity icons correctly', () => {
-      const featuredAmenities = [
-        {
-          _key: 'wifi',
-          label: 'Wifi',
-          icon: 'wifi',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        },
-        {
-          _key: 'bed',
-          label: 'Bed',
-          icon: 'bed',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        }
-      ]
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Room',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'wifi',
-                label: 'Wifi',
-                icon: 'wifi',
-                featured: true
-              }),
-              createAmenityItem({
-                _key: 'bed',
-                label: 'Bed',
-                icon: 'bed',
-                featured: true
-              })
-            ]
-          })
-        )
-      ]
+  it('keeps the section but drops the dialog when there is nothing to show', () => {
+    renderAmenities([], [])
 
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
-
-      expect(screen.getByTestId('icon-wifi')).toBeInTheDocument()
-      expect(screen.getByTestId('icon-bed')).toBeInTheDocument()
-    })
+    expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
-  describe('empty amenities', () => {
-    it('handles empty amenity categories array', () => {
-      renderWithProvider(<HouseAmenities amenityCategories={[]} featuredAmenities={[]} />)
-
-      // Should render section with heading
-      expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
-      // Button/dialog not rendered when no amenities to show
-      expect(screen.queryByRole('button')).not.toBeInTheDocument()
-    })
-  })
-
-  describe('category grouping in modal', () => {
-    it('displays categories with their labels in modal', () => {
-      const featuredAmenities = [
-        {
-          _key: 'wifi',
-          label: 'Wifi',
-          icon: 'wifi',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        },
-        {
-          _key: 'router',
-          label: 'Router',
-          icon: 'router',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        },
-        {
-          _key: 'bed',
-          label: 'Bed',
-          icon: 'bed',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        }
+  it('lists the categories in order inside the dialog', () => {
+    renderAmenities(
+      [amenity('Wifi'), amenity('Router', 'router'), amenity('Bed', 'bed')],
+      [
+        category('Internet', [amenity('Wifi'), amenity('Router', 'router')]),
+        category('Bedroom', [amenity('Bed', 'bed')]),
+        category('Kitchen', [amenity('Kitchen', 'utensils')])
       ]
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Internet Access',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'wifi',
-                label: 'Wifi',
-                featured: true,
-                icon: 'wifi'
-              }),
-              createAmenityItem({
-                _key: 'router',
-                label: 'Router',
-                featured: true,
-                icon: 'router'
-              })
-            ]
-          })
-        ),
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat2',
-            category: {
-              _id: 'c2',
-              label: 'Bedroom',
-              icon: null,
-              orderRank: '0|b00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'bed',
-                label: 'Bed',
-                featured: true,
-                icon: 'bed'
-              })
-            ]
-          })
-        )
-      ]
+    )
 
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
+    fireEvent.click(screen.getByRole('button'))
 
-      fireEvent.click(screen.getByRole('button'))
-
-      // Should have category labels as h3
-      expect(screen.getByText('Internet Access')).toBeInTheDocument()
-      expect(screen.getByText('Bedroom')).toBeInTheDocument()
-    })
-
-    it('preserves category order in modal', () => {
-      const featuredAmenities = [
-        {
-          _key: 'wifi',
-          label: 'Wifi',
-          icon: 'wifi',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        },
-        {
-          _key: 'bed',
-          label: 'Bed',
-          icon: 'bed',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        },
-        {
-          _key: 'kitchen',
-          label: 'Kitchen',
-          icon: 'utensils',
-          note: null as 'private' | 'shared' | 'coin' | null,
-          featured: true as boolean | null
-        }
-      ]
-      const categories = [
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat1',
-            category: {
-              _id: 'c1',
-              label: 'Internet',
-              icon: null,
-              orderRank: '0|a00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'wifi',
-                label: 'Wifi',
-                featured: true,
-                icon: 'wifi'
-              })
-            ]
-          })
-        ),
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat2',
-            category: {
-              _id: 'c2',
-              label: 'Bedroom',
-              icon: null,
-              orderRank: '0|b00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'bed',
-                label: 'Bed',
-                featured: true,
-                icon: 'bed'
-              })
-            ]
-          })
-        ),
-        toAmenityCategoryData(
-          createAmenityCategory({
-            _key: 'cat3',
-            category: {
-              _id: 'c3',
-              label: 'Kitchen',
-              icon: null,
-              orderRank: '0|c00000:'
-            },
-            items: [
-              createAmenityItem({
-                _key: 'kitchen',
-                label: 'Kitchen',
-                featured: true,
-                icon: 'utensils'
-              })
-            ]
-          })
-        )
-      ]
-
-      renderWithProvider(
-        <HouseAmenities amenityCategories={categories} featuredAmenities={featuredAmenities} />
-      )
-
-      fireEvent.click(screen.getByRole('button'))
-
-      // Get all h3 elements and verify order
-      const h3Elements = screen.getAllByRole('heading', { level: 3 })
-      expect(h3Elements[0]).toHaveTextContent('Internet')
-      expect(h3Elements[1]).toHaveTextContent('Bedroom')
-      expect(h3Elements[2]).toHaveTextContent('Kitchen')
-    })
+    expect(
+      screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)
+    ).toEqual(['Internet', 'Bedroom', 'Kitchen'])
   })
 })

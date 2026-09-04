@@ -1,141 +1,57 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fields, houseTitles } from './fixtures'
 import { ContactForm } from '../contact-form'
 
-// Mock form submission hook
-vi.mock('../use-form-submit', () => ({
-  useFormSubmit: () => ({
-    onSubmitInvalid: vi.fn(),
-    createOnSubmit: () => vi.fn()
-  })
-}))
-
-// Mock LegalNoticeDialog for privacy policy field
-vi.mock('@/components/legal-notice-dialog', () => ({
-  LegalNoticeDialog: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="legal-notice-dialog">{children}</div>
-  )
-}))
+vi.mock('../use-form-submit', () => import('./mocks/use-form-submit'))
+vi.mock('@/components/legal-notice-dialog', () => import('./mocks/legal-notice-dialog'))
 
 const baseProps = {
   title: 'Contact Us',
   description: 'Send us a message',
-  fields: {
-    places: { label: 'Places' },
-    date: { label: 'Date' },
-    hour: { label: 'Hour' },
-    stayDuration: { label: 'Stay Duration' },
-    name: { label: 'Your Name', placeholder: 'Enter name' },
-    age: { label: 'Age' },
-    gender: { label: 'Gender' },
-    nationality: { label: 'Nationality', placeholder: 'Enter nationality' },
-    email: { label: 'Your Email', placeholder: 'Enter email' },
-    phone: { label: 'Phone' },
-    message: {
-      label: 'Your Message',
-      placeholder: 'Enter message',
-      description: 'Min 5 characters'
-    }
-  },
-  houseTitles: [
-    { slug: 'orange' as const, title: 'Orange House' },
-    { slug: 'apple' as const, title: 'Apple House' },
-    { slug: 'lemon' as const, title: 'Lemon House' }
-  ]
+  fields,
+  houseTitles
 }
 
 describe('ContactForm', () => {
-  describe('card structure', () => {
-    it('renders card with title', () => {
-      render(<ContactForm {...baseProps} />)
+  it('renders the card header and the fields this form owns', () => {
+    render(<ContactForm {...baseProps} />)
 
-      expect(screen.getByText('Contact Us')).toBeInTheDocument()
-    })
-
-    it('renders card with description', () => {
-      render(<ContactForm {...baseProps} />)
-
-      expect(screen.getByText('Send us a message')).toBeInTheDocument()
-    })
-
-    it('renders without header when title and description are empty', () => {
-      render(<ContactForm {...baseProps} title="" description={null} />)
-
-      expect(screen.queryByText('Contact Us')).not.toBeInTheDocument()
-    })
+    expect(screen.getByText('Contact Us')).toBeInTheDocument()
+    expect(screen.getByText('Send us a message')).toBeInTheDocument()
+    expect(screen.getByLabelText(/your name/i)).toHaveAttribute('placeholder', 'Enter name')
+    expect(screen.getByLabelText(/your email/i)).toHaveAttribute('placeholder', 'Enter email')
+    expect(screen.getByLabelText(/your message/i)).toHaveAttribute('placeholder', 'Enter message')
+    expect(screen.getByRole('checkbox')).toBeInTheDocument()
+    // Submit and reset
+    expect(screen.getAllByRole('button').length).toBeGreaterThanOrEqual(2)
   })
 
-  describe('form fields', () => {
-    it('renders name input field', () => {
-      render(<ContactForm {...baseProps} />)
+  it('renders without header when title and description are empty', () => {
+    render(<ContactForm {...baseProps} title="" description={null} />)
 
-      expect(screen.getByLabelText(/your name/i)).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('Enter name')).toBeInTheDocument()
-    })
-
-    it('renders email input field', () => {
-      render(<ContactForm {...baseProps} />)
-
-      expect(screen.getByLabelText(/your email/i)).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('Enter email')).toBeInTheDocument()
-    })
-
-    it('renders message textarea', () => {
-      render(<ContactForm {...baseProps} />)
-
-      expect(screen.getByLabelText(/your message/i)).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('Enter message')).toBeInTheDocument()
-    })
-
-    it('renders privacy policy checkbox', () => {
-      render(<ContactForm {...baseProps} />)
-
-      // The privacy policy field should render a checkbox
-      const checkbox = screen.getByRole('checkbox')
-      expect(checkbox).toBeInTheDocument()
-    })
+    expect(screen.queryByText('Contact Us')).not.toBeInTheDocument()
   })
 
-  describe('form actions', () => {
-    it('renders action buttons', () => {
-      render(<ContactForm {...baseProps} />)
+  it('wires the submit button to the form id', () => {
+    const { container } = render(<ContactForm {...baseProps} />)
 
-      // Both submit and reset buttons should be present
-      const buttons = screen.getAllByRole('button')
-      expect(buttons.length).toBeGreaterThanOrEqual(2)
-    })
+    expect(container.querySelector('form')).toHaveAttribute('id', 'other-form')
+    expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute('form', 'other-form')
   })
 
-  describe('form attributes', () => {
-    it('has correct form id', () => {
-      const { container } = render(<ContactForm {...baseProps} />)
+  it('surfaces schema errors on the matching fields after an invalid submit', async () => {
+    const { container } = render(<ContactForm {...baseProps} />)
 
-      expect(container.querySelector('form')).toHaveAttribute('id', 'other-form')
-    })
+    expect(screen.getByLabelText(/your name/i)).toHaveAttribute('aria-invalid', 'false')
 
-    it('submit button references the form id', () => {
-      render(<ContactForm {...baseProps} />)
+    fireEvent.submit(container.querySelector('form')!)
 
-      expect(screen.getByRole('button', { name: 'label' })).toHaveAttribute('form', 'other-form')
-    })
-  })
-  describe('validation', () => {
-    it('surfaces schema errors on the matching fields after an invalid submit', async () => {
-      const { container } = render(<ContactForm {...baseProps} />)
-
-      fireEvent.submit(container.querySelector('form')!)
-
-      // Form-level schema errors are routed to their fields, including the
-      // nested `account.*` paths owned by the user account field group.
-      const nameInput = screen.getByLabelText(/your name/i)
-      await waitFor(() => expect(nameInput).toHaveAttribute('aria-invalid', 'true'))
-      expect(screen.getByLabelText(/your email/i)).toHaveAttribute('aria-invalid', 'true')
-      expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
-    })
-
-    it('keeps fields valid before a submit attempt', () => {
-      render(<ContactForm {...baseProps} />)
-
-      expect(screen.getByLabelText(/your name/i)).toHaveAttribute('aria-invalid', 'false')
-    })
+    // Form-level schema errors are routed to their fields, including the
+    // nested `account.*` paths owned by the user account field group.
+    await waitFor(() =>
+      expect(screen.getByLabelText(/your name/i)).toHaveAttribute('aria-invalid', 'true')
+    )
+    expect(screen.getByLabelText(/your email/i)).toHaveAttribute('aria-invalid', 'true')
+    expect(screen.getAllByRole('alert').length).toBeGreaterThan(0)
   })
 })
