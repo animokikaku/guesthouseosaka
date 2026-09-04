@@ -142,6 +142,8 @@ describe.concurrent('Vercel ignored build command', () => {
       'lib/example.test.ts',
       'root-level.spec.ts',
       'root-level.test.ts',
+      'playwright/gallery/harness.mts',
+      'playwright.components.config.ts',
       'playwright.config.ts',
       'renovate.json',
       'vitest.config.mts',

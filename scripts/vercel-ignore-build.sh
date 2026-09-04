@@ -29,10 +29,12 @@ git diff --quiet "$BASE_SHA" "$TARGET_SHA" -- . \
   ':!.vscode/**' \
   ':!docs/**' \
   ':!e2e/**' \
+  ':!playwright/**' \
   ':!.coderabbit.yaml' \
   ':!crowdin.yml' \
   ':!knip.json' \
   ':!playwright.config.ts' \
+  ':!playwright.components.config.ts' \
   ':!renovate.json' \
   ':!vitest.config.mts' \
   ':!vitest.setup.ts'
