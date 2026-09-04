@@ -1,8 +1,6 @@
 import type {
   AmenityCategoryData,
   AmenityItemData,
-  BuildingData,
-  HousePortableTextContent,
   LocationData,
   MapData,
   PricingRowData,
@@ -17,7 +15,6 @@ import { stegaClean } from 'next-sanity'
 // Input Types (from Sanity query results)
 // ============================================
 
-type HouseBuilding = NonNullable<HouseQueryResult>['building']
 type HouseLocation = NonNullable<HouseQueryResult>['location']
 type HouseMap = NonNullable<HouseQueryResult>['map']
 type HousePricing = NonNullable<HouseQueryResult>['pricing']
@@ -27,48 +24,18 @@ type HouseAmenityCategories =
 type HouseFeaturedAmenities =
   | StegaAware<NonNullable<NonNullable<HouseQueryResult>['featuredAmenities']>[number]>[]
   | null
-type HouseAbout = NonNullable<HouseQueryResult>['about']
-
-// ============================================
-// Building Transformer
-// ============================================
-
-/**
- * Transforms house building data to BuildingData interface
- * @param building - Raw building data from Sanity query
- * @returns BuildingData with rooms, floors, and startingPrice
- */
-export function toBuildingData(building: HouseBuilding): BuildingData {
-  if (!building) {
-    return {}
-  }
-  return {
-    rooms: building.rooms,
-    floors: building.floors,
-    startingPrice: building.startingPrice
-  }
-}
 
 // ============================================
 // Location Transformer
 // ============================================
 
 /**
- * Transforms house location data to LocationData interface
- * @param location - Raw location data from Sanity query
- * @returns LocationData with highlight and details
+ * Supplies the null object HouseLocation destructures. Both fields are already
+ * nullable in the query result, so an absent `location` is the only case to
+ * normalize.
  */
 export function toLocationData(location: HouseLocation): LocationData {
-  if (!location) {
-    return {
-      highlight: null,
-      details: null
-    }
-  }
-  return {
-    highlight: location.highlight ?? null,
-    details: location.details ?? null
-  }
+  return location ?? { highlight: null, details: null }
 }
 
 // ============================================
@@ -123,20 +90,11 @@ export function toMapData(map: HouseMap): MapData | null {
 // ============================================
 
 /**
- * Transforms house pricing array to PricingRowData array
- * @param pricing - Raw pricing data from Sanity query
- * @returns Array of PricingRowData with _key, label, and content
+ * PricingRowData already mirrors the query row, so this only supplies the empty
+ * array HousePricing checks the length of.
  */
 export function toPricingRows(pricing: HousePricing): PricingRowData[] {
-  if (!pricing) {
-    return []
-  }
-
-  return pricing.map((row) => ({
-    _key: row._key,
-    label: row.label,
-    content: row.content
-  }))
+  return pricing ?? []
 }
 
 // ============================================
@@ -188,25 +146,4 @@ export function toFeaturedAmenities(featuredAmenities: HouseFeaturedAmenities): 
     icon: item.icon,
     note: item.note ? stegaClean(item.note) : null
   }))
-}
-
-// ============================================
-// About Content Transformer
-// ============================================
-
-/**
- * Transforms house about content to PortableTextBlock array
- *
- * The Sanity-generated type is structurally compatible with PortableTextBlock
- * but TypeScript doesn't recognize them as the same due to literal types.
- * This transformer handles the type narrowing explicitly.
- *
- * @param about - Raw about content from Sanity query
- * @returns PortableTextBlock array or null
- */
-export function toAboutContent(about: HouseAbout): HousePortableTextContent {
-  if (!about || about.length === 0) {
-    return null
-  }
-  return about
 }
