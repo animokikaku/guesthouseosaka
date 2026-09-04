@@ -11,9 +11,9 @@ type GalleryImages = GalleryItem[] | null
 
 type ImageBlockGalleryProps = {
   href: ComponentProps<typeof Link>['href']
-  /** Capped preview slice from `houseQuery` — not the full gallery. */
-  galleryImages: GalleryImages
-  /** Total images behind the capped preview, for the `+N` overflow badge. */
+  /** The five LQIP-bearing tiles from `houseQuery` — not the full gallery. */
+  galleryPreview: GalleryImages
+  /** Total images behind the five tiles, for the `+N` overflow badge. */
   galleryImageCount: number
   featuredImage?: FeaturedImage
 }
@@ -102,7 +102,7 @@ function GalleryGrid({
 
 export async function ImageBlockGallery({
   href,
-  galleryImages,
+  galleryPreview,
   galleryImageCount,
   featuredImage
 }: ImageBlockGalleryProps) {
@@ -110,13 +110,12 @@ export async function ImageBlockGallery({
 
   const slides = buildGallerySlides({
     featuredImage,
-    galleryImages: galleryImages ?? []
+    galleryImages: galleryPreview ?? []
   })
 
-  // Slides without an image asset drop out here, so a few more than 5 are
-  // converted before slicing. `slides` is capped by the query, so this stays
-  // bounded no matter how large the gallery is — the real total for the `+N`
-  // badge comes from `galleryImageCount` instead.
+  // The query hands over five tiles at most, so this stays bounded no matter
+  // how large the gallery is — the real total for the `+N` badge comes from
+  // `galleryImageCount` instead.
   const images = slides
     .flatMap(({ image }) => {
       const imageProps = toGalleryImageProps(image, { width: 560 })

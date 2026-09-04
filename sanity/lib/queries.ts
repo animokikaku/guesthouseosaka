@@ -16,6 +16,17 @@ const imageRefFields = /* groq */ `
 // Wrapped image fragment
 const imageFields = /* groq */ `image{${imageRefFields}}`
 
+// Same shape as imageRefFields, minus the LQIP. The base64 preview is ~600 B
+// per image — 75% of a gallery item — so lists long enough to matter carry it
+// only where a blur placeholder is actually painted.
+const leanImageRefFields = /* groq */ `
+  asset,
+  hotspot,
+  crop,
+  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),
+  "preview": null
+`
+
 // Actions array (used in faqPage, contactPage)
 const actionsFields = /* groq */ `
   "actions": array::compact(actions[]{
@@ -178,23 +189,28 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[language == $locale][0].value, about[language == "en"][0].value),
 
-  // Flattened gallery preview (for the hero carousel and the 5-tile block).
-  // Pre-computed from sorted categories, and capped: both consumers show a
-  // handful of images and link out to the gallery page for the rest. The full
-  // per-category set lives in houseGalleryQuery.
+  // Every gallery image, flattened from the sorted categories, so the mobile
+  // hero carousel can swipe the whole set. Lean: these slides lazy-load one at
+  // a time behind a swipe, and carrying an LQIP for each would cost more than
+  // the rest of the house document put together.
   //
-  // The asset filter runs before the cap on purpose. The consumers drop items
-  // that don't resolve to an image, so filtering afterwards would let an
-  // unfinished item eat a preview slot and push a renderable one out — enough
-  // of them and the 5-tile grid falls back to its empty state on a house that
-  // has plenty of photos.
+  // The asset filter runs inside the projection, not after it: the consumers
+  // drop items that don't resolve to an image, and filtering downstream of a
+  // slice would let an unfinished item eat a slot and push a renderable one out.
   "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{
     _key,
-    "image": image{${imageRefFields}}
-  })[0...10],
+    "image": image{${leanImageRefFields}}
+  }),
 
-  // Total behind the capped preview, for the "+N" overflow badge. Counts only
-  // items that resolve to a renderable image, matching what the preview drops.
+  // The five tiles ImageBlockGallery paints above the fold, with their LQIP.
+  // Five covers the grid whether or not a featured image is prepended to it.
+  "galleryPreview": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{
+    _key,
+    "image": image{${imageRefFields}}
+  })[0...5],
+
+  // Total behind the five-tile grid, for its "+N" overflow badge. Counts only
+  // items that resolve to a renderable image, matching what the grid drops.
   "galleryImageCount": count(galleryCategories[].items[defined(image.asset)]),
 
   // Amenities grouped by category (enables per-category drag-and-drop reordering)

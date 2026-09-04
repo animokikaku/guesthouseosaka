@@ -30,6 +30,7 @@ export function HousePageContent({
   title,
   description,
   galleryImages,
+  galleryPreview,
   galleryImageCount,
   featuredImage,
   amenityCategories,
@@ -69,7 +70,7 @@ export function HousePageContent({
           <div className="theme-container">
             <ImageBlockGallery
               href={href}
-              galleryImages={galleryImages}
+              galleryPreview={galleryPreview}
               galleryImageCount={galleryImageCount ?? 0}
               featuredImage={featuredImage}
             />

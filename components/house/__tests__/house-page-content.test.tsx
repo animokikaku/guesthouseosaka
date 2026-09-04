@@ -110,6 +110,7 @@ const createBaseProps = (overrides: Partial<Props> = {}): Props => {
     phone: { domestic: '06-1234-5678', international: '+81-6-1234-5678' },
     image: createMockImage('House image'),
     galleryImages: [createGalleryItem({ _key: 'g1' }), createGalleryItem({ _key: 'g2' })],
+    galleryPreview: [createGalleryItem({ _key: 'g1' }), createGalleryItem({ _key: 'g2' })],
     galleryImageCount: 2,
     featuredImage: createSanityImage({ alt: 'Featured image' }),
     amenityCategories: [

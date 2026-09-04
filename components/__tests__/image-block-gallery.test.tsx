@@ -90,7 +90,7 @@ describe('ImageBlockGallery', () => {
     render(
       await ImageBlockGallery({
         href: galleryHref,
-        galleryImages,
+        galleryPreview: galleryImages,
         galleryImageCount: galleryImages.length
       })
     )
@@ -114,7 +114,7 @@ describe('ImageBlockGallery', () => {
     render(
       await ImageBlockGallery({
         href: galleryHref,
-        galleryImages,
+        galleryPreview: galleryImages,
         galleryImageCount: galleryImages.length,
         featuredImage: createSanityImage({ alt: 'Featured image' })
       })
@@ -143,7 +143,7 @@ describe('ImageBlockGallery', () => {
         // The query counts only items with an asset, so the missing-asset slide
         // is excluded here the same way it is dropped from the grid.
         galleryImageCount: 6,
-        galleryImages
+        galleryPreview: galleryImages
       })
     )
 
@@ -155,12 +155,12 @@ describe('ImageBlockGallery', () => {
     expect(screen.getByRole('link', { name: 'Show all 6 photos' })).toBeInTheDocument()
   })
 
-  // The query filters `defined(image.asset)` before capping the preview at 10.
-  // If it capped first, unfinished items would eat preview slots and push
-  // renderable ones out — with five of them, a house with a full gallery would
-  // render the empty state.
+  // The query filters `defined(image.asset)` inside the projection, before
+  // slicing to five. If it filtered downstream of the slice, unfinished items
+  // would eat tiles and push renderable ones out — five of them and a house
+  // with a full gallery would render the empty state.
   it('fills the grid from a preview the query has already filtered', async () => {
-    const galleryImages = Array.from({ length: 10 }, (_, index) =>
+    const galleryImages = Array.from({ length: 5 }, (_, index) =>
       createGalleryItem({
         _key: `image-${index}`,
         image: createSanityImage({ alt: `Gallery image ${index + 1}` })
@@ -171,7 +171,7 @@ describe('ImageBlockGallery', () => {
       await ImageBlockGallery({
         href: galleryHref,
         galleryImageCount: 59,
-        galleryImages
+        galleryPreview: galleryImages
       })
     )
 
@@ -199,7 +199,7 @@ describe('ImageBlockGallery', () => {
       await ImageBlockGallery({
         href: galleryHref,
         galleryImageCount: 4,
-        galleryImages
+        galleryPreview: galleryImages
       })
     )
 
