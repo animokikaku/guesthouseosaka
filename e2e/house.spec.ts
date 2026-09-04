@@ -12,12 +12,10 @@ test.describe('House Page', () => {
       test(`${slug} house page loads correctly`, async ({ page }) => {
         await page.goto(`/en/${slug}`)
 
-        // Verify the page loaded with correct URL
         await expect(page).toHaveURL(new RegExp(`/en/${slug}`))
-
-        // Page should have a title
-        const title = await page.title()
-        expect(title).toBeTruthy()
+        // The document is data-driven, so an empty title means the query failed
+        await expect(page).toHaveTitle(/\S/)
+        await expect(page.locator(`article#${slug}`)).toBeVisible()
       })
     }
   })

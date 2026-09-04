@@ -46,9 +46,12 @@ test('Escape closes only the lightbox, not the route-intercept modal behind it',
 
   await page.keyboard.press('Escape')
   await expect(lightbox).toBeHidden()
-  // Give the route modal's own close transition time to run, so a regression
-  // that also closes it isn't masked by asserting mid-animation.
-  await page.waitForTimeout(500)
+  // A regression that also closes the route modal would only show once its exit
+  // transition finished, so wait on the animations themselves rather than a
+  // fixed delay: this settles immediately when nothing is animating.
+  await routeModal.evaluate((element) =>
+    Promise.all(element.getAnimations({ subtree: true }).map((animation) => animation.finished))
+  )
   await expect(routeModal).toBeVisible()
 
   await page.keyboard.press('Escape')
