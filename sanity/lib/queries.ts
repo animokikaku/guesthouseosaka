@@ -178,27 +178,18 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[language == $locale][0].value, about[language == "en"][0].value),
 
-  // Gallery grouped by category (for gallery page - enables per-category display)
-  // Sorted by category orderRank for consistent display order
-  // Filter out empty categories at query level
-  "galleryCategories": array::compact(galleryCategories[]{
-    _key,
-    "category": category->{
-      _id,
-      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
-      orderRank
-    },
-    "items": array::compact(items[]{
-      _key,
-      "image": image{${imageRefFields}}
-    })
-  })[count(items) > 0] | order(category.orderRank),
-
-  // Flattened gallery images (for carousel/preview - pre-computed from sorted categories)
+  // Flattened gallery preview (for the hero carousel and the 5-tile block).
+  // Pre-computed from sorted categories, and capped: both consumers show a
+  // handful of images and link out to the gallery page for the rest. The full
+  // per-category set lives in houseGalleryQuery.
   "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[]{
     _key,
     "image": image{${imageRefFields}}
-  }),
+  })[0...10],
+
+  // Total behind the capped preview, for the "+N" overflow badge. Counts only
+  // items that resolve to a renderable image, matching what the preview drops.
+  "galleryImageCount": count(galleryCategories[].items[defined(image.asset)]),
 
   // Amenities grouped by category (enables per-category drag-and-drop reordering)
   // Filter out empty categories at query level
@@ -256,6 +247,27 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
     "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)
   })
+}`)
+
+// Gallery grouped by category, for the gallery page and its intercepting modal.
+// Kept out of houseQuery: the two sets are the same images, and no route needs
+// both. Sorted by category orderRank, with empty categories filtered out.
+export const houseGalleryQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
+  _id,
+  _type,
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+  "galleryCategories": array::compact(galleryCategories[]{
+    _key,
+    "category": category->{
+      _id,
+      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
+      orderRank
+    },
+    "items": array::compact(items[]{
+      _key,
+      "image": image{${imageRefFields}}
+    })
+  })[count(items) > 0] | order(category.orderRank)
 }`)
 
 // House slugs for static generation

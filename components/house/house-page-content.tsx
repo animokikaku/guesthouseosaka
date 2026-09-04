@@ -32,6 +32,7 @@ export function HousePageContent({
   title,
   description,
   galleryImages,
+  galleryImageCount,
   featuredImage,
   amenityCategories,
   featuredAmenities,
@@ -71,6 +72,7 @@ export function HousePageContent({
             <ImageBlockGallery
               href={href}
               galleryImages={galleryImages}
+              galleryImageCount={galleryImageCount ?? 0}
               featuredImage={featuredImage}
             />
             <HouseProvider id={_id} type={_type} slug={slug}>

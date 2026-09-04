@@ -1,7 +1,7 @@
-import type { HouseQueryResult } from '@/sanity.types'
+import type { HouseGalleryQueryResult, HouseQueryResult } from '@/sanity.types'
 
 // Types from Sanity query result - gallery is now pre-grouped by category
-export type GalleryCategories = NonNullable<HouseQueryResult>['galleryCategories']
+export type GalleryCategories = NonNullable<HouseGalleryQueryResult>['galleryCategories']
 export type GalleryCategoryData = NonNullable<GalleryCategories>[number]
 export type GalleryItem = NonNullable<GalleryCategoryData['items']>[number]
 export type FeaturedImage = NonNullable<HouseQueryResult>['featuredImage']

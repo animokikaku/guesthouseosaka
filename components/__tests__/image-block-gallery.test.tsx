@@ -90,7 +90,8 @@ describe('ImageBlockGallery', () => {
     render(
       await ImageBlockGallery({
         href: galleryHref,
-        galleryImages
+        galleryImages,
+        galleryImageCount: galleryImages.length
       })
     )
 
@@ -114,6 +115,7 @@ describe('ImageBlockGallery', () => {
       await ImageBlockGallery({
         href: galleryHref,
         galleryImages,
+        galleryImageCount: galleryImages.length,
         featuredImage: createSanityImage({ alt: 'Featured image' })
       })
     )
@@ -138,6 +140,9 @@ describe('ImageBlockGallery', () => {
     render(
       await ImageBlockGallery({
         href: galleryHref,
+        // The query counts only items with an asset, so the missing-asset slide
+        // is excluded here the same way it is dropped from the grid.
+        galleryImageCount: 6,
         galleryImages
       })
     )
@@ -167,6 +172,7 @@ describe('ImageBlockGallery', () => {
     render(
       await ImageBlockGallery({
         href: galleryHref,
+        galleryImageCount: 4,
         galleryImages
       })
     )

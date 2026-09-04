@@ -11,7 +11,10 @@ type GalleryImages = GalleryItem[] | null
 
 type ImageBlockGalleryProps = {
   href: ComponentProps<typeof Link>['href']
+  /** Capped preview slice from `houseQuery` — not the full gallery. */
   galleryImages: GalleryImages
+  /** Total images behind the capped preview, for the `+N` overflow badge. */
+  galleryImageCount: number
   featuredImage?: FeaturedImage
 }
 
@@ -100,25 +103,26 @@ function GalleryGrid({
 export async function ImageBlockGallery({
   href,
   galleryImages,
+  galleryImageCount,
   featuredImage
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
 
-  const validGalleryImages = galleryImages ?? []
-
   const slides = buildGallerySlides({
     featuredImage,
-    galleryImages: validGalleryImages
+    galleryImages: galleryImages ?? []
   })
 
-  // Slides without an image asset drop out here, so convert everything before
-  // picking the 5 grid tiles and the `+N` count.
-  const validImages = slides.flatMap(({ image }) => {
-    const imageProps = toGalleryImageProps(image, { width: 560 })
-    return imageProps ? [imageProps] : []
-  })
-
-  const images = validImages.slice(0, 5)
+  // Slides without an image asset drop out here, so a few more than 5 are
+  // converted before slicing. `slides` is capped by the query, so this stays
+  // bounded no matter how large the gallery is — the real total for the `+N`
+  // badge comes from `galleryImageCount` instead.
+  const images = slides
+    .flatMap(({ image }) => {
+      const imageProps = toGalleryImageProps(image, { width: 560 })
+      return imageProps ? [imageProps] : []
+    })
+    .slice(0, 5)
 
   if (images.length < 5) {
     return (
@@ -136,7 +140,8 @@ export async function ImageBlockGallery({
     )
   }
 
-  const extraCount = validImages.length - images.length
+  const totalCount = galleryImageCount + (featuredImage?.asset ? 1 : 0)
+  const extraCount = Math.max(totalCount - images.length, 0)
 
   return (
     <GalleryGrid
@@ -145,7 +150,7 @@ export async function ImageBlockGallery({
       // The link's label replaces the tiles' alt text for screen readers, and the
       // `+N` overlay is decorative, so the total has to ride along in the label.
       viewGalleryLabel={
-        extraCount > 0 ? t('view_gallery_count', { count: validImages.length }) : t('view_gallery')
+        extraCount > 0 ? t('view_gallery_count', { count: totalCount }) : t('view_gallery')
       }
       extraCount={extraCount}
       overflowLabel={t('overflow_count', { count: extraCount })}
