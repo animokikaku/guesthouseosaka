@@ -32,7 +32,6 @@ function createContactType(overrides: Partial<ContactTypes[number]> = {}): Conta
     slug: faker.helpers.arrayElement(['tour', 'move-in', 'other'] as const),
     title: faker.lorem.words(2),
     description: faker.lorem.sentence(),
-    fields: {} as ContactTypes[number]['fields'],
     ...overrides
   }
 }

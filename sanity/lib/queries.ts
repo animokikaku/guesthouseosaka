@@ -348,13 +348,15 @@ export const contactPageQuery = defineQuery(`{
     "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),
     ${actionsFields}
   },
+  // No form field config here: the only consumer is toContactNavItems, which
+  // reads _id/slug/title. contactTypeQuery carries the fields for the one
+  // contact type actually being rendered as a form.
   "contactTypes": *[_type == "contactType"] | order(orderRank){
     _id,
     _type,
     slug,
     "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
-    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
-    ${contactFormFields}
+    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)
   }
 }`)
 
