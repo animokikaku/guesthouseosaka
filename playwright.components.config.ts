@@ -16,7 +16,7 @@ export default defineConfig({
     timeout: 10 * 1000
   },
   webServer: {
-    command: `bunx vite --config playwright/gallery/vite.config.ts --host 127.0.0.1 --port ${PORT}`,
+    command: `bunx vite --config playwright/gallery/vite.config.mts --host 127.0.0.1 --port ${PORT}`,
     url: galleryURL,
     reuseExistingServer: !process.env.CI
   },

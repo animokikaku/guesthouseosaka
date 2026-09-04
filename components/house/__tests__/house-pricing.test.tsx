@@ -12,14 +12,14 @@ function row(
     _key: label,
     label,
     content: entries.length
-      ? (entries.map((text, index) => ({
-          _type: 'block',
+      ? entries.map((text, index) => ({
+          _type: 'block' as const,
           _key: `${label}-${index}`,
           style: 'normal',
           ...(listItem ? { listItem, level: 1 } : {}),
-          children: [{ _type: 'span', _key: `${label}-${index}-span`, text, marks: [] }],
+          children: [{ _type: 'span' as const, _key: `${label}-${index}-span`, text, marks: [] }],
           markDefs: []
-        })) as PricingRowData['content'])
+        }))
       : null
   }
 }

@@ -19,7 +19,7 @@
       "e2e/**/*.spec.ts",
       "e2e/mocks/resend-server.ts",
       "playwright/components/**/*.spec.ts",
-      "playwright/gallery/{main,next-image,sanity-image,i18n-navigation,vite.config}.{ts,tsx}",
+      "playwright/gallery/{main,next-image,sanity-image,i18n-navigation,vite.config}.{ts,tsx,mts}",
       "app/**/*.story.tsx",
       "components/**/*.story.tsx"
     ]

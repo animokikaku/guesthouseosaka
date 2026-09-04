@@ -4,8 +4,8 @@ import { expect, type Locator, type Page } from '@playwright/test'
  * Locators for the shared user-account field group. Every contact form binds the
  * same group, so both the local and the preview suites drive it through here.
  *
- * Fields are addressed by input type and autocomplete attribute rather than by
- * label, so the helpers work in any locale.
+ * Inputs are addressed by type and autocomplete attribute rather than by their
+ * label, which keeps them stable as the copy changes.
  */
 export function getAccountFields(form: Locator) {
   return {
@@ -33,6 +33,11 @@ type AccountOverrides = {
 /**
  * Fill every required field of the account group, leaving the form's own fields
  * (date, hour, stay duration) to the caller. Does not tick the privacy checkbox.
+ *
+ * The gender option is picked by its English label. Base UI renders no value on
+ * a select item, so matching the option any other way would mean adding a test
+ * hook to the component; every caller loads the /en routes, so this stays put
+ * until one of them needs another locale.
  */
 export async function fillAccountFields(
   page: Page,
@@ -56,7 +61,7 @@ export async function fillAccountFields(
   return fields
 }
 
-/** Open a contact form and wait for it to be interactive. */
+/** Open one of the English contact forms and wait for it to be interactive. */
 export async function gotoContactForm(page: Page, slug: 'tour' | 'move-in' | 'other') {
   await page.goto(`/en/contact/${slug}`)
 
