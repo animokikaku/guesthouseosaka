@@ -99,5 +99,8 @@
   "overrides": {
     "@sanity/client": "$@sanity/client"
   },
-  "packageManager": "bun@1.4.2"
+  "packageManager": "bun@1.4.2",
+  "patchedDependencies": {
+    "next@16.3.4": "patches/next@16.3.4.patch"
+  }
 }

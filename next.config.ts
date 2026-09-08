@@ -82,6 +82,9 @@ const nextConfig: NextConfig = {
     typedEnv: true,
     turbopackFileSystemCacheForBuild: true,
     turbopackFileSystemCacheForDev: true,
+    // Only for the Playwright suite, which mocks outbound Resend calls through
+    // next/experimental/testmode; never enabled for a production build.
+    testProxy: process.env.NEXT_TEST_PROXY === '1',
     turbopackRustReactCompiler: true,
     useTypeScriptCli: true
   },
