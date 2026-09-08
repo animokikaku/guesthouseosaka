@@ -11,7 +11,9 @@ const tomorrow = () => new Date(Date.now() + 864e5).toISOString().slice(0, 10)
 
 // Next throws "Proxy request aborted" for any server-side fetch a test leaves
 // unhandled, so every test needs a fallback. Handlers run last registered
-// first, which keeps this one behind the per-test Resend mocks.
+// first, which keeps this one behind the per-test Resend mocks. Resend itself
+// can never reach here: `mockResendAPI` answers everything on its origin, and
+// `RESEND_BASE_URL` does not resolve even if it somehow did.
 test.beforeEach(async ({ next, page }) => {
   next.onFetch(() => 'continue')
 
@@ -51,7 +53,7 @@ test.describe('General inquiry form', () => {
   })
 
   test('failed email delivery shows an error without leaving the form', async ({ next, page }) => {
-    mockResendAPI(next, {
+    const requests = mockResendAPI(next, {
       status: 422,
       body: {
         message: 'The email could not be delivered.',
@@ -69,6 +71,10 @@ test.describe('General inquiry form', () => {
 
     await expect(submissionToast(page)).toContainText('Failed to send message.')
     await expect(page).toHaveURL(/\/en\/contact\/other/)
+
+    // The action maps every failure to this one toast, so without asserting the
+    // request the test would also pass if the payload never reached Resend.
+    expect(requests).toHaveLength(1)
   })
 })
 

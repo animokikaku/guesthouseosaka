@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
+import { RESEND_MOCK_BASE_URL } from './e2e/mocks/resend'
 
 // Use process.env.PORT by default and fallback to port 3000
 const PORT = process.env.PORT || 3000
@@ -39,7 +40,9 @@ export default defineConfig({
   },
 
   // Run E2E tests against a production build with Next's test proxy enabled, so
-  // outgoing Resend calls are mocked in-process. Skip the managed server when
+  // outgoing Resend calls are mocked in-process. `RESEND_BASE_URL` points the
+  // SDK at an unresolvable host as a second line of defence: a call the mock
+  // misses fails instead of reaching the real API. Skip the managed server when
   // testing an external deployment via BASE_URL.
   webServer: process.env.BASE_URL
     ? undefined
@@ -48,7 +51,7 @@ export default defineConfig({
         url: baseURL,
         timeout: 5 * 60 * 1000,
         reuseExistingServer: !process.env.CI,
-        env: { NEXT_TEST_PROXY: '1' }
+        env: { NEXT_TEST_PROXY: '1', RESEND_BASE_URL: RESEND_MOCK_BASE_URL }
       },
 
   // Shared settings for all the projects below
