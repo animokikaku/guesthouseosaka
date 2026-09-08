@@ -57,7 +57,7 @@ export function LegalNoticeDialog({ children, onAgree }: LegalNoticeDialogProps)
   // Fallback to initial policy publication date if lastUpdated is not set
   const lastUpdated = data?.lastUpdated
     ? new Date(data.lastUpdated)
-    : new Date(Date.UTC(2025, 11, 4))
+    : new Date('2025-12-04T00:00:00Z')
   const lastUpdatedText = t('last_updated', {
     date: formatter.dateTime(lastUpdated, {
       dateStyle: 'long'
