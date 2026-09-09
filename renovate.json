@@ -38,6 +38,11 @@
       "description": "Group Next.js and React packages",
       "groupName": "next.js and react",
       "matchPackageNames": ["/^next$/", "/^@next//", "/^react$/", "/^react-dom$/"]
+    },
+    {
+      "description": "next is patched in patches/next@<version>.patch, whose filename pins an exact version. An automerged bump would silently drop the patch and break the E2E test proxy, so require a human to rebuild it.",
+      "matchPackageNames": ["/^next$/"],
+      "automerge": false
     }
   ]
 }
