@@ -44,13 +44,18 @@ export default defineConfig({
   // SDK at an unresolvable host as a second line of defence: a call the mock
   // misses fails instead of reaching the real API. Skip the managed server when
   // testing an external deployment via BASE_URL.
+  //
+  // Never reuse an existing server: a `bun run dev` already on this port has
+  // neither variable, so the fixture's headers are ignored and a submission
+  // reaches the real Resend API with the key from `.env.local`. The build is
+  // the cost of both defences actually being in place.
   webServer: process.env.BASE_URL
     ? undefined
     : {
         command: 'bun run build && bun run start',
         url: baseURL,
         timeout: 5 * 60 * 1000,
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: false,
         env: { NEXT_TEST_PROXY: '1', RESEND_BASE_URL: RESEND_MOCK_BASE_URL }
       },
 

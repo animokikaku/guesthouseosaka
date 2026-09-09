@@ -5,9 +5,10 @@ import type { NextFixture } from 'next/experimental/testmode/playwright'
  *
  * `.invalid` is reserved by RFC 2606 and never resolves, so a submission this
  * mock fails to match cannot reach the real API with a live key — it fails the
- * test instead.
+ * test instead. `https` so that a resolver which hijacks NXDOMAIN still cannot
+ * see the key: the handshake fails before the `Authorization` header is sent.
  */
-export const RESEND_MOCK_BASE_URL = 'http://resend.invalid'
+export const RESEND_MOCK_BASE_URL = 'https://resend.invalid'
 
 const RESEND_MOCK_ORIGIN = new URL(RESEND_MOCK_BASE_URL).origin
 
