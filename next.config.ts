@@ -1,3 +1,4 @@
+import { withCn } from 'cn/next'
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
@@ -105,4 +106,7 @@ const nextConfig: NextConfig = {
   }
 }
 
-export default withNextIntl(nextConfig)
+export default withCn(withNextIntl(nextConfig), {
+  content: ['{app,components,lib}/**/*.{ts,tsx}'],
+  out: 'generated/cn-tables.ts'
+})

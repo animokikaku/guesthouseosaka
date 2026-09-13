@@ -4,13 +4,9 @@
   "private": true,
   "scripts": {
     "cn:build": "cn build --content \"{app,components,lib}/**/*.{ts,tsx}\" -o generated/cn-tables.ts",
-    "cn:build:full": "cn build --full -o generated/cn-tables.ts",
-    "predev": "bun run cn:build:full",
     "dev": "next dev",
-    "prebuild": "bun run cn:build",
     "build": "next build",
     "start": "next start",
-    "precheck": "bun run cn:build",
     "check": "next typegen && oxlint",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
