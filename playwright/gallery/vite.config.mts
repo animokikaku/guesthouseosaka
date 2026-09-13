@@ -1,6 +1,7 @@
+import react from '@vitejs/plugin-react'
+import { cn } from 'cn/vite'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
@@ -8,7 +9,10 @@ const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 export default defineConfig({
   root: projectRoot,
   cacheDir: 'node_modules/.vite-playwright-components',
-  plugins: [react()],
+  plugins: [
+    react(),
+    cn({ content: ['{app,components,lib}/**/*.{ts,tsx}'], out: 'generated/cn-tables.ts' })
+  ],
   optimizeDeps: {
     entries: ['app/**/*.story.tsx', 'components/**/*.story.tsx']
   },

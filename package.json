@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "cn:build": "cn build --content \"{app,components,lib}/**/*.{ts,tsx}\" -o generated/cn-tables.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
