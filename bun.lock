@@ -35,7 +35,7 @@
         "sanity": "^6.15.0",
         "sanity-plugin-internationalized-array": "^5.3.0",
         "schema-dts": "^2.0.0",
-        "simple-icons": "^16.31.0",
+        "simple-icons": "^16.32.0",
         "styled-components": "^6.5.3",
         "validator": "^13.15.35",
         "vaul-base": "^1.0.0",
@@ -51,7 +51,7 @@
         "@testing-library/react": "^16.3.3",
         "@types/bun": "^1.4.2",
         "@types/google.maps": "^3.66.3",
-        "@types/node": "^26.6.1",
+        "@types/node": "^26.6.2",
         "@types/react": "^19.3.0",
         "@types/react-dom": "^19.3.0",
         "@types/validator": "^13.15.10",
@@ -59,7 +59,7 @@
         "@vitest/coverage-v8": "^5.0.1",
         "@vitest/ui": "^5.0.1",
         "jsdom": "^30.1.0",
-        "knip": "^6.36.0",
+        "knip": "^6.37.0",
         "oxfmt": "^0.68.0",
         "oxlint": "^1.83.0",
         "oxlint-tsgolint": "7.0.2002",
@@ -1197,7 +1197,7 @@
 
     "@types/hast": ["@types/hast@3.0.5", "", { "dependencies": { "@types/unist": "*" } }, "sha512-rp/ezSWaD1m44dPKICGhiskI13nVr7qTloFwDa/IYkhhf5nzwP+zIQcIJh3WIFSBOy/H1PzB40jPjMDksN4F+g=="],
 
-    "@types/node": ["@types/node@26.6.1", "", { "dependencies": { "undici-types": "~8.9.0" } }, "sha512-VqGJBMCtdhqkBUCcBLvywI0NJ+KLuVzgNnlBUNFOQjqVxzo2lxLUNg1DSey8+u2u6ktswSAxg+s68QLzWHNOuA=="],
+    "@types/node": ["@types/node@26.6.2", "", { "dependencies": { "undici-types": "~8.9.0" } }, "sha512-X1P21scMv4zGKLYqjdGjaKa7COa0RKVYYZZN/NfvLQ1JegxFhdhpZG/Lyn8AXx6CDUavKAd11v6BvfpkDByK8g=="],
 
     "@types/prismjs": ["@types/prismjs@1.26.6", "", {}, "sha512-vqlvI7qlMvcCBbVe0AKAb4f97//Hy0EBTaiW8AalRnG/xAN5zOiWWyrNqNXeq8+KAuvRewjCVY1+IPxk4RdNYw=="],
 
@@ -2445,7 +2445,7 @@
 
     "signal-exit": ["signal-exit@4.1.0", "", {}, "sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw=="],
 
-    "simple-icons": ["simple-icons@16.31.0", "", {}, "sha512-dDEqvQrmxL7ZnqQtGHGjCNW6CfiwzAif+83Hol9JXAnAB6wh2zsZD7Sc1kWT0O/RRAKt7xfG8W6UZhYBPD+GAA=="],
+    "simple-icons": ["simple-icons@16.32.0", "", {}, "sha512-BwqATHxAulx7X6kNdTkecy7PBjLkgtAHcgrwYLd9iA+cD2At9DzhJwdwaSELk2+aZe01IfiM/Wxtyp68Dvup2A=="],
 
     "simple-wcswidth": ["simple-wcswidth@1.1.2", "", {}, "sha512-j7piyCjAeTDSjzTSQ7DokZtMNwNlEAyxqSZeCS+CXH7fJ4jx3FuJ/mTW3mE+6JLs4VJBbcll0Kjn+KXI5t21Iw=="],
 
