@@ -5,7 +5,8 @@ import { createContext, use, type ReactNode } from 'react'
 
 type LegalNoticeData = NonNullable<LegalNoticeQueryResult>
 
-const LegalNoticeContext = createContext<LegalNoticeData | null>(null)
+// `undefined` marks a missing provider; `null` is a provider with no legal notice.
+const LegalNoticeContext = createContext<LegalNoticeData | null | undefined>(undefined)
 
 export function LegalNoticeProvider({
   children,

@@ -2,8 +2,9 @@ import { ContactNav } from '@/components/contact-nav'
 import { PageNav } from '@/components/page-nav'
 import { LegalNoticeProvider } from '@/hooks/use-legal-notice'
 import { toContactNavItems } from '@/lib/transforms/nav'
+import { getContactPage } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
-import { contactPageQuery, legalNoticeQuery } from '@/sanity/lib/queries'
+import { legalNoticeQuery } from '@/sanity/lib/queries'
 import { getLocale } from 'next-intl/server'
 
 export default async function Layout({ children }: LayoutProps<'/[locale]/contact'>) {
@@ -14,15 +15,8 @@ export default async function Layout({ children }: LayoutProps<'/[locale]/contac
       query: legalNoticeQuery,
       params: { locale }
     }),
-    sanityFetch({
-      query: contactPageQuery,
-      params: { locale }
-    })
+    getContactPage(locale)
   ])
-
-  if (!contactPage) {
-    return null
-  }
 
   const navItems = toContactNavItems(contactPage.contactTypes)
 

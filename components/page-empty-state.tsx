@@ -46,3 +46,14 @@ export function PageEmptyState({
     </Empty>
   )
 }
+
+/** {@link PageEmptyState} laid out as a route's whole content, for pages whose document is missing. */
+export function PageEmptyStateSection() {
+  return (
+    <div className="container-wrapper section-soft flex-1 pb-12">
+      <div className="mx-auto w-full max-w-2xl">
+        <PageEmptyState />
+      </div>
+    </div>
+  )
+}

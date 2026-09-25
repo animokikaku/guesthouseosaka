@@ -39,6 +39,7 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import * as React from 'react'
 
+import { LIGHTBOX_THUMBNAIL_SIZE } from '@/lib/gallery-image'
 import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { cn } from '@/lib/utils'
 
@@ -530,9 +531,6 @@ const snugItemClass = cn(
 
 /* ── Composed Gallery (product chrome) ──────────────────────────────────── */
 
-/** Strip tabs are `--lb-thumb-size` (3.5rem/56px) and `object-fit: cover` — request 2× that. */
-const THUMBNAIL_SIZE = 112
-
 function GalleryThumbnailStrip({
   items,
   thumbnailsLabel
@@ -550,9 +548,10 @@ function GalleryThumbnailStrip({
           <Thumbnail key={item.id ?? i} index={i}>
             <Image
               src={item.thumb}
+              loader={sanityImageLoader}
               alt={item.alt}
-              width={THUMBNAIL_SIZE}
-              height={THUMBNAIL_SIZE}
+              width={LIGHTBOX_THUMBNAIL_SIZE}
+              height={LIGHTBOX_THUMBNAIL_SIZE}
               draggable={false}
             />
           </Thumbnail>
@@ -682,7 +681,7 @@ function Gallery({
                         // Only the initially-active slide preloads (the one
                         // relevant to LCP on open); later slides stay lazy
                         // even though `Slides` keeps a couple mounted for swipe.
-                        priority={i === 0}
+                        preload={i === 0}
                         draggable={false}
                       />
                     </Media>

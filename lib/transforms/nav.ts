@@ -49,7 +49,7 @@ export function toHouseNavItems(houses: HousesNavQueryResult): NavGroupItem[] {
     })
     .map(({ slug, title, description, caption, image }) => {
       const asset = assets[slug]
-      const src = urlFor(image).width(250).height(150).dpr(2).fit('crop').url()
+      const src = urlFor(image).width(250).height(150).fit('crop').url()
 
       return {
         key: slug,

@@ -37,7 +37,7 @@ export default function NotFound() {
     <Empty>
       <EmptyHeader>
         <EmptyMedia>
-          <Image priority {...assets.notFound} alt={assets.notFound.alt} />
+          <Image preload {...assets.notFound} alt={assets.notFound.alt} />
         </EmptyMedia>
         <EmptyTitle className="text-2xl font-bold tracking-tight sm:text-4xl">
           {t('title')}

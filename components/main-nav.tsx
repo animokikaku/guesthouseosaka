@@ -1,6 +1,7 @@
 'use client'
 
 import { PageEmptyState } from '@/components/page-empty-state'
+import { SanityImage } from '@/components/sanity-image'
 import {
   NavigationMenuContent,
   NavigationMenuItem,
@@ -33,7 +34,7 @@ function PreviewImageItem({ item: it, isActive }: PreviewImageItemProps) {
         isActive ? 'opacity-100' : 'pointer-events-none opacity-0'
       )}
     >
-      <Image
+      <SanityImage
         src={it.background.src}
         alt={it.background.alt}
         placeholder={it.background.blurDataURL ? 'blur' : undefined}

@@ -1,11 +1,11 @@
 'use client'
 
+import { SanityImage as SanityImageComponent } from '@/components/sanity-image'
 import type { SanityImage } from '@/lib/types/components'
 import { urlFor } from '@/sanity/lib/image'
 import { ColorScheme, useMapsLibrary } from '@vis.gl/react-google-maps'
 import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
-import Image from 'next/image'
 import { memo } from 'react'
 
 interface PlaceDetailsProps {
@@ -52,8 +52,8 @@ function PlaceDetailsCompact({
   return (
     <div className="overflow-hidden">
       <div className="relative w-full overflow-hidden">
-        <Image
-          src={urlFor(placeImage).width(600).height(400).dpr(2).fit('crop').url()}
+        <SanityImageComponent
+          src={urlFor(placeImage).width(600).height(400).fit('crop').url()}
           alt={placeImage.alt ?? t('fallback_alt')}
           width={600}
           height={400}

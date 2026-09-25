@@ -1,8 +1,8 @@
-import { getHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { HousePageContent } from '@/components/house/house-page-content'
-import { PageEmptyState } from '@/components/page-empty-state'
+import { PageEmptyStateSection } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
 import { env } from '@/lib/env'
+import { getHouseAndLocale } from '@/lib/house-params'
 import { urlFor } from '@/sanity/lib/image'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery, housesNavQuery } from '@/sanity/lib/queries'
@@ -17,13 +17,7 @@ export default async function HousePage({ params }: PageProps<'/[locale]/[house]
   ])
 
   if (!data) {
-    return (
-      <div className="container-wrapper section-soft flex-1 pb-12">
-        <div className="mx-auto w-full max-w-2xl">
-          <PageEmptyState />
-        </div>
-      </div>
-    )
+    return <PageEmptyStateSection />
   }
 
   const url = new URL(`/${locale}/${house}`, env.NEXT_PUBLIC_APP_URL).toString()

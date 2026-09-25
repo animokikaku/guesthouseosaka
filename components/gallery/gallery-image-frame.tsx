@@ -1,8 +1,6 @@
-'use client'
-
 import type { GalleryImageProps } from '@/lib/gallery-image'
+import { SanityImage } from '@/components/sanity-image'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
 import { ComponentPropsWithoutRef } from 'react'
 
 type GalleryImageContentProps = {
@@ -20,15 +18,15 @@ function GalleryImageContent({
   sizes,
   imageProps
 }: GalleryImageContentProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { alt, height, width, ...restImageProps } = imageProps
+  // `fill` sizes the image from its container, so the intrinsic dimensions are dropped.
+  const { alt, height: _height, width: _width, ...restImageProps } = imageProps
 
   return (
     <div
       data-slot="gallery-image-media"
       className={cn('bg-muted/40 relative h-full w-full overflow-hidden', containerClassName)}
     >
-      <Image
+      <SanityImage
         fill
         alt={alt}
         className={cn(

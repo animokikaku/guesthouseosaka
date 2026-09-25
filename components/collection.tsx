@@ -14,6 +14,7 @@ import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { stegaClean } from '@sanity/client/stega'
 import Image from 'next/image'
+import { SanityImage } from '@/components/sanity-image'
 
 type House = NonNullable<HomePageQueryResult['houses']>[number]
 
@@ -85,7 +86,7 @@ function CollectionImage({ image }: CollectionImageProps) {
 
   return (
     <>
-      <Image
+      <SanityImage
         src={urlFor(image).fit('crop').width(800).height(400).url()}
         alt={alt}
         width={800}
@@ -95,7 +96,7 @@ function CollectionImage({ image }: CollectionImageProps) {
         quality={90}
         className="block aspect-2/1 w-full object-cover md:hidden"
       />
-      <Image
+      <SanityImage
         src={urlFor(image).fit('crop').width(800).height(800).url()}
         alt={alt}
         width={800}

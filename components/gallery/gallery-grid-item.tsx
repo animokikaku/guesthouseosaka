@@ -1,10 +1,10 @@
 'use client'
 
 import { Lightbox } from '@/components/lightbox'
+import { SanityImage } from '@/components/sanity-image'
 import type { GalleryItem } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
 import { useTranslations } from 'next-intl'
-import Image from 'next/image'
 
 type DataAttributeFn = (path: string) => string
 
@@ -21,7 +21,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute, index }: Gal
   const { _key, image } = item
   if (!image || index === undefined) return null
 
-  const imageProps = toGalleryImageProps(image, { fit: 'max', responsive: true })
+  const imageProps = toGalleryImageProps(image, { fit: 'max' })
   if (!imageProps) return null
 
   const { alt, ...restImageProps } = imageProps
@@ -46,7 +46,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute, index }: Gal
     >
       {({ imageRef }) => (
         <>
-          <Image
+          <SanityImage
             ref={imageRef}
             fill
             alt={alt}

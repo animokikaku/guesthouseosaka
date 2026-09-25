@@ -1,9 +1,9 @@
-import { getHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { GalleryShell } from '@/components/gallery/gallery-shell'
-import { PageEmptyState } from '@/components/page-empty-state'
+import { PageEmptyStateSection } from '@/components/page-empty-state'
 import { buttonVariants } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
+import { getHouseAndLocale } from '@/lib/house-params'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseGalleryQuery } from '@/sanity/lib/queries'
 import { ArrowLeftIcon } from 'lucide-react'
@@ -20,13 +20,7 @@ export default async function GalleryPage({ params }: PageProps<'/[locale]/[hous
   const { data } = await houseDataPromise
 
   if (!data) {
-    return (
-      <div className="container-wrapper section-soft flex-1 pb-12">
-        <div className="mx-auto w-full max-w-2xl">
-          <PageEmptyState />
-        </div>
-      </div>
-    )
+    return <PageEmptyStateSection />
   }
 
   return (

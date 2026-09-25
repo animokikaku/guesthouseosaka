@@ -29,14 +29,14 @@ vi.mock('@/sanity/lib/image', () => ({
   }
 }))
 
-vi.mock('@/components/gallery/gallery-image-button', () => ({
+vi.mock('@/components/gallery/gallery-image-frame', () => ({
   GalleryImageFrame: ({
     imageProps,
     sizes,
     className,
     children
   }: {
-    imageProps: { alt: string; priority?: boolean }
+    imageProps: { alt: string; fetchPriority?: string }
     sizes?: string
     className?: string
     children?: React.ReactNode
@@ -44,7 +44,7 @@ vi.mock('@/components/gallery/gallery-image-button', () => ({
     <div
       data-testid="gallery-frame"
       data-alt={imageProps.alt}
-      data-priority={imageProps.priority ? 'true' : 'false'}
+      data-fetch-priority={imageProps.fetchPriority}
       data-sizes={sizes}
       className={className}
     >
@@ -98,8 +98,8 @@ describe('ImageBlockGallery', () => {
     const frames = screen.getAllByTestId('gallery-frame')
     expect(frames).toHaveLength(5)
     expect(frames[0]).toHaveAttribute('data-alt', 'Gallery image 1')
-    expect(frames[0]).toHaveAttribute('data-priority', 'true')
-    expect(frames[1]).toHaveAttribute('data-priority', 'false')
+    expect(frames[0]).toHaveAttribute('data-fetch-priority', 'high')
+    expect(frames[1]).not.toHaveAttribute('data-fetch-priority')
     expect(screen.getByRole('link', { name: 'View gallery' })).toBeInTheDocument()
   })
 

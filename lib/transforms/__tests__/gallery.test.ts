@@ -6,10 +6,8 @@ vi.mock('@/sanity/lib/image', () => ({
   urlFor: () => ({
     width: () => ({
       height: () => ({
-        dpr: () => ({
-          fit: () => ({
-            url: () => 'https://cdn.sanity.io/images/test/gallery.jpg'
-          })
+        fit: () => ({
+          url: () => 'https://cdn.sanity.io/images/test/gallery.jpg'
         })
       })
     })

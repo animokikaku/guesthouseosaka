@@ -1,4 +1,4 @@
-import { GalleryImageFrame } from '@/components/gallery/gallery-image-button'
+import { GalleryImageFrame } from '@/components/gallery/gallery-image-frame'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
@@ -51,8 +51,11 @@ function GalleryGrid({
             <div className="grid h-full w-full grid-cols-4 grid-rows-2 gap-0.5">
               <GalleryImageFrame
                 className="col-span-2 row-span-2"
-                sizes="(min-width: 1120px) 560px, 50vw"
-                imageProps={{ ...images[0], priority: true }}
+                // Desktop LCP candidate. Like the mobile hero, eager + high
+                // priority rather than `preload`, and a zero size below `sm`
+                // where the grid is hidden, so phones skip it.
+                sizes="(max-width: 639px) 0, (min-width: 1120px) 560px, 50vw"
+                imageProps={{ ...images[0], loading: 'eager', fetchPriority: 'high' }}
               />
               <GalleryImageFrame
                 className="col-span-1 col-start-3 row-start-1"
