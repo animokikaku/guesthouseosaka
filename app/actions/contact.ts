@@ -51,34 +51,26 @@ export async function submitContactForm(
     return { ok: false, code: 'invalid_submission' }
   }
 
-  const { type, data } = parsedPayload.data
-  const { from, to } = DEFAULT_CONTACT
-  const { name, email } = data.account
+  const { data } = parsedPayload.data
+
+  return sendEmail({
+    from: DEFAULT_CONTACT.from,
+    to: DEFAULT_CONTACT.to(data.places),
+    replyTo: data.account.email,
+    ...composeEmail(parsedPayload.data)
+  })
+}
+
+/** The per-form-type part of the notification: its subject line and template. */
+function composeEmail({ type, data }: ContactFormPayload) {
+  const { name } = data.account
 
   switch (type) {
     case 'tour':
-      return sendEmail({
-        from,
-        to: to(data.places),
-        replyTo: email,
-        subject: `内覧希望: ${name}`,
-        react: TourRequestEmail({ data })
-      })
+      return { subject: `内覧希望: ${name}`, react: TourRequestEmail({ data }) }
     case 'move-in':
-      return sendEmail({
-        from,
-        to: to(data.places),
-        replyTo: email,
-        subject: `入居希望: ${name}`,
-        react: MoveInRequestEmail({ data })
-      })
+      return { subject: `入居希望: ${name}`, react: MoveInRequestEmail({ data }) }
     case 'other':
-      return sendEmail({
-        from,
-        to: to(data.places),
-        replyTo: email,
-        subject: `お問い合わせ: ${name}`,
-        react: GeneralInquiryEmail({ data })
-      })
+      return { subject: `お問い合わせ: ${name}`, react: GeneralInquiryEmail({ data }) }
   }
 }
