@@ -1,7 +1,7 @@
 import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
 import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
-import { PageEmptyState } from '@/components/page-empty-state'
+import { PageEmptyStateSection } from '@/components/page-empty-state'
 import { getHouseAndLocale } from '@/lib/house-params'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseGalleryQuery } from '@/sanity/lib/queries'
@@ -15,13 +15,7 @@ export default async function GalleryModalPage({ params }: PageProps<'/[locale]/
   })
 
   if (!data) {
-    return (
-      <div className="container-wrapper section-soft flex-1 pb-12">
-        <div className="mx-auto w-full max-w-2xl">
-          <PageEmptyState />
-        </div>
-      </div>
-    )
+    return <PageEmptyStateSection />
   }
 
   return (
