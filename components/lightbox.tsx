@@ -681,7 +681,7 @@ function Gallery({
                         // Only the initially-active slide preloads (the one
                         // relevant to LCP on open); later slides stay lazy
                         // even though `Slides` keeps a couple mounted for swipe.
-                        priority={i === 0}
+                        preload={i === 0}
                         draggable={false}
                       />
                     </Media>

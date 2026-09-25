@@ -70,7 +70,10 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
                 <SanityImage
                   {...imageProps}
                   fill
-                  priority={index === 0}
+                  // Mobile LCP candidate. Eager + high priority rather than
+                  // `preload`: the desktop grid has its own LCP tile, and a
+                  // preload link would fetch this one on every viewport.
+                  loading={index === 0 ? 'eager' : 'lazy'}
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   className="object-cover"
                   sizes="(max-width: 639px) 100vw, 0"
