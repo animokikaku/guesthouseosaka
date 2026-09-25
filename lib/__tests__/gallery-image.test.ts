@@ -27,7 +27,6 @@ describe('toGalleryImageProps', () => {
     const image = createSanityImage({ asset: undefined })
 
     expect(toGalleryImageProps(image, { width: 400, height: 400 })).toBeNull()
-    expect(toGalleryImageProps(image, { size: 'full' })).toBeNull()
   })
 
   it('builds sized image props with dimensions by default', () => {
@@ -88,27 +87,6 @@ describe('toGalleryImageProps', () => {
       blurDataURL: undefined,
       placeholder: undefined
     })
-  })
-
-  it('builds full-size image props', () => {
-    const image = createSanityImage({ alt: 'Full view' })
-
-    expect(toGalleryImageProps(image, { size: 'full' })).toEqual({
-      src: 'https://cdn.sanity.io/images/test/image.jpg',
-      alt: 'Full view',
-      width: 1920,
-      height: 1080,
-      blurDataURL: image.preview,
-      placeholder: 'blur'
-    })
-  })
-
-  it('uses custom alt for full-size images', () => {
-    const image = createSanityImage({ alt: 'Original alt' })
-
-    const result = toGalleryImageProps(image, { size: 'full', alt: 'Override alt' })
-
-    expect(result?.alt).toBe('Override alt')
   })
 })
 

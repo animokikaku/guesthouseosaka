@@ -15,20 +15,13 @@ export const LIGHTBOX_THUMBNAIL_SIZE = 56
 export type SanityGalleryImage = NonNullable<GalleryItem['image']> | NonNullable<FeaturedImage>
 export type GalleryImageProps = Omit<ImageProps, 'fill' | 'className' | 'loader'>
 
-type SizedGalleryImageOptions = {
+type ToGalleryImagePropsOptions = {
   width?: number
   height?: number
   fit?: 'clip' | 'crop' | 'fill' | 'fillmax' | 'max' | 'scale' | 'min'
   alt?: string | null
   includeDimensions?: boolean
 }
-
-type FullGalleryImageOptions = {
-  size: 'full'
-  alt?: string | null
-}
-
-export type ToGalleryImagePropsOptions = SizedGalleryImageOptions | FullGalleryImageOptions
 
 export function cleanGalleryAlt(alt?: string | null): string {
   return stegaClean(alt) ?? ''
@@ -39,7 +32,7 @@ export function cleanGalleryAlt(alt?: string | null): string {
  * the source URL: `width`/`height` only pin the crop aspect ratio, and no `dpr`
  * is baked in because the candidate widths already cover device pixel ratio.
  */
-function toSizedGalleryImageProps(
+export function toGalleryImageProps(
   image: SanityGalleryImage,
   {
     width,
@@ -47,7 +40,7 @@ function toSizedGalleryImageProps(
     fit = 'crop',
     alt = image.alt,
     includeDimensions = true
-  }: SizedGalleryImageOptions = {}
+  }: ToGalleryImagePropsOptions = {}
 ): GalleryImageProps | null {
   if (!image.asset) return null
 
@@ -65,43 +58,6 @@ function toSizedGalleryImageProps(
     blurDataURL: image.preview ?? undefined,
     placeholder: image.preview ? 'blur' : undefined
   }
-}
-
-function toFullGalleryImageProps(
-  image: SanityGalleryImage,
-  { alt = image.alt }: FullGalleryImageOptions
-): GalleryImageProps | null {
-  if (!image.asset) return null
-
-  const dimensions = getImageDimensions(image.asset)
-
-  return {
-    src: urlFor(image).url(),
-    alt: cleanGalleryAlt(alt),
-    width: dimensions.width,
-    height: dimensions.height,
-    blurDataURL: image.preview ?? undefined,
-    placeholder: image.preview ? 'blur' : undefined
-  }
-}
-
-export function toGalleryImageProps(
-  image: SanityGalleryImage,
-  options: FullGalleryImageOptions
-): GalleryImageProps | null
-export function toGalleryImageProps(
-  image: SanityGalleryImage,
-  options?: SizedGalleryImageOptions
-): GalleryImageProps | null
-export function toGalleryImageProps(
-  image: SanityGalleryImage,
-  options: ToGalleryImagePropsOptions = {}
-): GalleryImageProps | null {
-  if ('size' in options && options.size === 'full') {
-    return toFullGalleryImageProps(image, options)
-  }
-
-  return toSizedGalleryImageProps(image, options)
 }
 
 /**
