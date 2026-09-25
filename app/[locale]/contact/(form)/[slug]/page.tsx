@@ -5,7 +5,7 @@ import { PageEmptyState } from '@/components/page-empty-state'
 import { routing } from '@/i18n/routing'
 import { staticParamsForLocales } from '@/lib/static-params'
 import { toContactFormConfig } from '@/lib/transforms/form'
-import { ContactType, ContactTypeSchema } from '@/lib/types'
+import { isContactType, type ContactType } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactTypeQuery, contactTypeSlugsQuery, housesTitlesQuery } from '@/sanity/lib/queries'
 import { getLocale } from 'next-intl/server'
@@ -16,10 +16,6 @@ const FORM_BY_SLUG = {
   'move-in': MoveInForm,
   other: ContactForm
 } as const satisfies Record<ContactType, typeof TourForm>
-
-export function hasContactType(slug: string): slug is ContactType {
-  return ContactTypeSchema.safeParse(slug).success
-}
 
 export async function generateStaticParams() {
   const { data: contactTypes } = await sanityFetch({
@@ -38,7 +34,7 @@ export async function generateStaticParams() {
 export default async function ContactTypePage({ params }: PageProps<'/[locale]/contact/[slug]'>) {
   const [{ slug }, locale] = await Promise.all([params, getLocale()])
 
-  if (!hasContactType(slug)) {
+  if (!isContactType(slug)) {
     notFound()
   }
 

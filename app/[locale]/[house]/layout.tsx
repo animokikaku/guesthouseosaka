@@ -2,7 +2,7 @@ import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { staticParamsForLocales } from '@/lib/static-params'
-import { HouseIdentifier, HouseIdentifierSchema } from '@/lib/types'
+import { isHouseIdentifier, type HouseIdentifier } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseMetaQuery, houseSlugsQuery, settingsQuery } from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
@@ -10,14 +10,10 @@ import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { use } from 'react'
 
-function hasHouse(house: string): house is HouseIdentifier {
-  return HouseIdentifierSchema.safeParse(house).success
-}
-
 /** Params + locale for pages under HouseLayout (slug validity is enforced there). */
 export async function getHouseAndLocale(params: Promise<{ house: string }>) {
   const [{ house }, locale] = await Promise.all([params, getLocale()])
-  // The parent layout validates this segment with hasHouse before rendering its children.
+  // The parent layout validates this segment with isHouseIdentifier before rendering its children.
   // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return { house: house as HouseIdentifier, locale }
 }
@@ -41,7 +37,7 @@ export async function generateMetadata(
 ): Promise<Metadata | undefined> {
   const [{ house }, locale] = await Promise.all([props.params, getLocale()])
 
-  if (!hasHouse(house)) {
+  if (!isHouseIdentifier(house)) {
     return undefined
   }
 
@@ -67,7 +63,7 @@ export async function generateMetadata(
 export default function HouseLayout({ children, modal, params }: LayoutProps<'/[locale]/[house]'>) {
   const { house } = use(params)
 
-  if (!hasHouse(house)) {
+  if (!isHouseIdentifier(house)) {
     notFound()
   }
 
