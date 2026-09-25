@@ -45,7 +45,7 @@
     "cn": "^0.4.0",
     "embla-carousel-react": "^8.6.0",
     "lucide-react": "^1.47.0",
-    "next": "^16.3.5",
+    "next": "^16.3.6",
     "next-intl": "^4.14.6",
     "next-sanity": "^13.3.4",
     "next-themes": "^0.4.6",
@@ -96,6 +96,6 @@
   },
   "packageManager": "bun@1.4.2",
   "patchedDependencies": {
-    "next@16.3.5": "patches/next@16.3.5.patch"
+    "next@16.3.6": "patches/next@16.3.6.patch"
   }
 }
