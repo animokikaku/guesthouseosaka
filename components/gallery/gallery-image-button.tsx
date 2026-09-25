@@ -1,5 +1,3 @@
-'use client'
-
 import type { GalleryImageProps } from '@/lib/gallery-image'
 import { SanityImage } from '@/components/sanity-image'
 import { cn } from '@/lib/utils'
