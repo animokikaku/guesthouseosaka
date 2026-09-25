@@ -128,8 +128,7 @@ describe('toGalleryLightboxItem', () => {
     expect(toGalleryLightboxItem(item)).toEqual({
       id: 'img1',
       src: 'https://cdn.sanity.io/images/test/image.jpg?fit=max',
-      thumb:
-        'https://cdn.sanity.io/images/test/image.jpg?w=128&h=128&dpr=2&fit=crop&auto=format&q=75',
+      thumb: 'https://cdn.sanity.io/images/test/image.jpg?w=56&h=56&fit=crop',
       alt: 'Bedroom view',
       caption: 'Bedroom view',
       width: 1920,

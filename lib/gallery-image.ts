@@ -5,6 +5,13 @@ import { getImageDimensions } from '@sanity/asset-utils'
 import { stegaClean } from '@sanity/client/stega'
 import type { ImageProps } from 'next/image'
 
+/**
+ * Lightbox strip tabs are `--lb-thumb-size` (3.5rem/56px) with `object-fit:
+ * cover`; the Sanity loader adds the 2x candidate. Lives here rather than in
+ * the client-only lightbox module so server code can read the value.
+ */
+export const LIGHTBOX_THUMBNAIL_SIZE = 56
+
 export type SanityGalleryImage = NonNullable<GalleryItem['image']> | NonNullable<FeaturedImage>
 export type GalleryImageProps = Omit<ImageProps, 'fill' | 'className' | 'loader'>
 
@@ -120,9 +127,12 @@ export function toGalleryLightboxItem(item: GalleryItem): LightboxItem | null {
   return {
     id: _key,
     src: urlFor(image).fit('max').url(),
-    // 128px matches `THUMBNAIL_SIZE` in `components/lightbox.tsx`, the only
-    // place this is rendered. Strip thumbs are not the morph source.
-    thumb: urlFor(image).width(128).height(128).dpr(2).fit('crop').auto('format').quality(75).url(),
+    // Strip thumbs are not the morph source, so a square crop is fine here.
+    thumb: urlFor(image)
+      .width(LIGHTBOX_THUMBNAIL_SIZE)
+      .height(LIGHTBOX_THUMBNAIL_SIZE)
+      .fit('crop')
+      .url(),
     alt,
     caption: alt,
     width: dimensions.width,
