@@ -1,6 +1,6 @@
-import { Link } from '@/i18n/navigation'
-import { assets } from '@/lib/assets'
-import { ComponentProps } from 'react'
+import type { Link } from '@/i18n/navigation'
+import type { assets } from '@/lib/assets'
+import type { ComponentProps } from 'react'
 import { z } from 'zod'
 
 export const HouseIdentifierValues = ['orange', 'apple', 'lemon'] as const
