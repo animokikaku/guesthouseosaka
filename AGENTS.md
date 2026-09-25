@@ -23,6 +23,8 @@ bun run format:check # Check formatting without modifying files
 
 - Use the `vercel-react-best-practices` skill when writing, reviewing, or refactoring React or Next.js code
 - Use the `web-design-guidelines` skill when auditing UI, UX, or accessibility
+- React Compiler is enabled: skip manual-memoization advice (`useMemo`, `useCallback`, `memo`) from skills unless profiling shows a need
+- Treat skill rules that introduce `swr`, `lru-cache`, or `better-all` as production dependency additions and ask first
 - Follow Conventional Commits, including `feat:`, `fix:`, `refactor:`, `chore:`, `docs:`, `test:`, `perf:`, `ci:`, and `build:`
 - Put all user-facing strings in `messages/en.json`; never hardcode them in components
 - Keep `messages/fr.json` and `messages/ja.json` structurally synchronized with `messages/en.json`
@@ -41,6 +43,14 @@ bun run format:check # Check formatting without modifying files
 - Sanity schema or query changes: run `bun run typegen`
 - User-facing flow changes: run the relevant Playwright tests with `bun run test:e2e`
 - Before a pull request: run `bun run build`
+
+## Skills
+
+- The Playwright skills in `.claude/skills/playwright-*` are vendored from `node_modules/playwright-core/lib/tools/skills/`; after upgrading Playwright, re-sync them instead of editing them
+- `.cursor/skills/vercel-react-best-practices` and `.codex/skills/vercel-react-best-practices` are symlinks to `.claude/skills/vercel-react-best-practices`
+- Where skills use `npx playwright …` or `npm`, use `bunx playwright …` and `bun`
+- Component tests (overrides the generic setup in `playwright-component-testing`): run with `bun run test:components`; config is `playwright.components.config.ts`, the gallery is a standalone Vite server in `playwright/gallery/` on port 3100, specs live in `playwright/components/`, and stories are `*.story.tsx` files next to components in `app/` or `components/`
+- Story ids are the full path from the repo root without `.story.tsx`, plus the export name (`components/gallery/gallery-page-content/WithModal`); unique suffixes are not resolved
 
 ## Documentation
 

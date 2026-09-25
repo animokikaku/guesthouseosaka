@@ -55,12 +55,12 @@ npx playwright trace actions --errors-only
 npx playwright trace action <action-id>
 ```
 
-The `action` command displays available snapshot phases (before, input, after) and the exact command to extract them.
+The `action` command displays available snapshot phases (before, action, after) and the exact command to extract them.
 
 ### Requests
 
 ```bash
-# All network requests: method, status, URL, duration, size
+# All network requests: start time (on the `trace actions` clock), method, status, URL, duration, size
 npx playwright trace requests
 
 # Filter by URL pattern
@@ -94,6 +94,9 @@ npx playwright trace console --browser
 
 # Only stdout/stderr (no browser console)
 npx playwright trace console --stdio
+
+# Filter by message text pattern
+npx playwright trace console --grep "failed to fetch"
 ```
 
 ### Errors
@@ -112,7 +115,7 @@ The `snapshot` command loads the DOM snapshot for an action into a headless brow
 npx playwright trace snapshot <action-id>
 
 # Use a specific phase
-npx playwright trace snapshot <action-id> --name before
+npx playwright trace snapshot <action-id> --phase before
 
 # Run eval to query the DOM
 npx playwright trace snapshot <action-id> -- eval "document.title"
