@@ -1,8 +1,8 @@
-import { getHouseAndLocale } from '@/app/[locale]/[house]/layout'
 import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
 import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { PageEmptyState } from '@/components/page-empty-state'
+import { getHouseAndLocale } from '@/lib/house-params'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseGalleryQuery } from '@/sanity/lib/queries'
 

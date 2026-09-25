@@ -2,21 +2,13 @@ import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { staticParamsForLocales } from '@/lib/static-params'
-import { isHouseIdentifier, type HouseIdentifier } from '@/lib/types'
+import { isHouseIdentifier } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseMetaQuery, houseSlugsQuery, settingsQuery } from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { use } from 'react'
-
-/** Params + locale for pages under HouseLayout (slug validity is enforced there). */
-export async function getHouseAndLocale(params: Promise<{ house: string }>) {
-  const [{ house }, locale] = await Promise.all([params, getLocale()])
-  // The parent layout validates this segment with isHouseIdentifier before rendering its children.
-  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
-  return { house: house as HouseIdentifier, locale }
-}
 
 export async function generateStaticParams() {
   const { data: houses } = await sanityFetch({
