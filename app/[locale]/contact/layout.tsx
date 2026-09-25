@@ -4,8 +4,9 @@ import { PageHeader } from '@/components/page-header'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { pageHeaderComponents } from '@/lib/portable-text/page-header-components'
+import { getContactPage } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
-import { contactPageMetaQuery, contactPageQuery, settingsQuery } from '@/sanity/lib/queries'
+import { contactPageMetaQuery, settingsQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
@@ -41,10 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ContactLayout({ children }: LayoutProps<'/[locale]/contact'>) {
   const locale = await getLocale()
 
-  const { data } = await sanityFetch({
-    query: contactPageQuery,
-    params: { locale }
-  })
+  const { data } = await getContactPage(locale)
 
   const page = data?.page
 
