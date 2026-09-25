@@ -31,13 +31,13 @@ export function toGalleryImages(images: GalleryWallImages): GalleryImage[] {
     const slot = GALLERY_WALL_SLOTS[index]
     if (!slot) return []
 
-    // Tiles are square, and dpr(2) covers retina at the collage's display size.
+    // Tiles are square; SanityImage's loader adds the retina candidates.
     const size = slotPixelSize(slot)
 
     return [
       {
         _key: img._key,
-        src: urlFor(img).width(size).height(size).dpr(2).fit('crop').url(),
+        src: urlFor(img).width(size).height(size).fit('crop').url(),
         alt: img.alt,
         blurDataURL: img.preview,
         width: size,

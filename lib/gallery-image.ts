@@ -1,28 +1,19 @@
 import type { LightboxItem } from '@/components/lightbox'
 import type { FeaturedImage, GalleryItem } from '@/lib/gallery'
-import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions } from '@sanity/asset-utils'
 import { stegaClean } from '@sanity/client/stega'
 import type { ImageProps } from 'next/image'
 
 export type SanityGalleryImage = NonNullable<GalleryItem['image']> | NonNullable<FeaturedImage>
-export type GalleryImageProps = Omit<ImageProps, 'fill' | 'className'>
+export type GalleryImageProps = Omit<ImageProps, 'fill' | 'className' | 'loader'>
 
 type SizedGalleryImageOptions = {
   width?: number
   height?: number
-  dpr?: number
   fit?: 'clip' | 'crop' | 'fill' | 'fillmax' | 'max' | 'scale' | 'min'
   alt?: string | null
   includeDimensions?: boolean
-  /**
-   * Serve from Sanity's CDN through {@link sanityImageLoader} rather than the
-   * Next optimizer, letting the browser pick a width from `sizes` instead of
-   * downloading one oversized file. `width`/`height` then only pin the crop
-   * aspect ratio.
-   */
-  responsive?: boolean
 }
 
 type FullGalleryImageOptions = {
@@ -36,16 +27,19 @@ export function cleanGalleryAlt(alt?: string | null): string {
   return stegaClean(alt) ?? ''
 }
 
+/**
+ * Props for `SanityImage`, whose loader derives every `srcset` candidate from
+ * the source URL: `width`/`height` only pin the crop aspect ratio, and no `dpr`
+ * is baked in because the candidate widths already cover device pixel ratio.
+ */
 function toSizedGalleryImageProps(
   image: SanityGalleryImage,
   {
     width,
     height,
-    dpr = 2,
     fit = 'crop',
     alt = image.alt,
-    includeDimensions = true,
-    responsive = false
+    includeDimensions = true
   }: SizedGalleryImageOptions = {}
 ): GalleryImageProps | null {
   if (!image.asset) return null
@@ -54,9 +48,6 @@ function toSizedGalleryImageProps(
 
   if (width) builder = builder.width(width)
   if (height) builder = builder.height(height)
-  // The loader derives each candidate width itself, so a baked-in dpr would
-  // just double every request on top of it.
-  if (dpr && !responsive) builder = builder.dpr(dpr)
   if (fit) builder = builder.fit(fit)
 
   return {
@@ -65,8 +56,7 @@ function toSizedGalleryImageProps(
     width: includeDimensions ? width : undefined,
     height: includeDimensions ? height : undefined,
     blurDataURL: image.preview ?? undefined,
-    placeholder: image.preview ? 'blur' : undefined,
-    ...(responsive ? { loader: sanityImageLoader } : {})
+    placeholder: image.preview ? 'blur' : undefined
   }
 }
 
@@ -113,7 +103,7 @@ export function toGalleryImageProps(
  * Trigger and destination must share the same photograph and aspect ratio —
  * square tiles are a CSS crop (`aspect-square` + `object-cover`), not a
  * Sanity `fit=crop` URL. The destination `src` is the full-aspect Sanity CDN
- * URL (same pipeline as the trigger via `sanityImageLoader`).
+ * URL (same `sanityImageLoader` pipeline as the trigger's `SanityImage`).
  *
  * No LQIP here on purpose: the lightbox image must not carry a `blur`
  * placeholder, because next/image paints it as an inline background that covers

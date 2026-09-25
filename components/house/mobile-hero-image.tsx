@@ -1,5 +1,6 @@
 'use client'
 
+import { SanityImage } from '@/components/sanity-image'
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
@@ -7,7 +8,6 @@ import type { GallerySlide } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
 import { ImageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import Image from 'next/image'
 import { ComponentProps, useEffect, useState } from 'react'
 
 type MobileHeroImageProps = {
@@ -67,7 +67,7 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
 
             return (
               <CarouselItem className="relative h-96 w-full select-none" key={_key}>
-                <Image
+                <SanityImage
                   {...imageProps}
                   fill
                   priority={index === 0}

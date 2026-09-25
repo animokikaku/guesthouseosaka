@@ -9,7 +9,6 @@ vi.mock('@sanity/asset-utils', () => ({
 }))
 
 import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
-import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { cleanGalleryAlt, toGalleryImageProps, toGalleryLightboxItem } from '../gallery-image'
 
 describe('cleanGalleryAlt', () => {
@@ -35,7 +34,7 @@ describe('toGalleryImageProps', () => {
     const image = createSanityImage({ alt: 'Kitchen' })
 
     expect(toGalleryImageProps(image, { width: 560, height: 400 })).toEqual({
-      src: 'https://cdn.sanity.io/images/test/image.jpg?w=560&h=400&dpr=2&fit=crop',
+      src: 'https://cdn.sanity.io/images/test/image.jpg?w=560&h=400&fit=crop',
       alt: 'Kitchen',
       width: 560,
       height: 400,
@@ -54,37 +53,18 @@ describe('toGalleryImageProps', () => {
     })
 
     expect(result).toMatchObject({
-      src: 'https://cdn.sanity.io/images/test/image.jpg?w=256&h=192&dpr=2&fit=crop',
+      src: 'https://cdn.sanity.io/images/test/image.jpg?w=256&h=192&fit=crop',
       width: undefined,
       height: undefined
     })
   })
 
-  it('attaches the Sanity loader and drops dpr for responsive images', () => {
+  it('builds a full-aspect URL without a baked-in crop', () => {
     const image = createSanityImage()
 
-    expect(toGalleryImageProps(image, { width: 400, height: 400, responsive: true })).toEqual(
-      expect.objectContaining({
-        src: 'https://cdn.sanity.io/images/test/image.jpg?w=400&h=400&fit=crop',
-        loader: sanityImageLoader
-      })
-    )
-  })
+    const result = toGalleryImageProps(image, { fit: 'max' })
 
-  it('builds a full-aspect responsive URL without a baked-in crop', () => {
-    const image = createSanityImage()
-
-    const result = toGalleryImageProps(image, { fit: 'max', responsive: true })
-
-    expect(result).toEqual(
-      expect.objectContaining({
-        src: 'https://cdn.sanity.io/images/test/image.jpg?fit=max',
-        loader: sanityImageLoader
-      })
-    )
-    expect(result?.src).not.toMatch(/[?&]w=/)
-    expect(result?.src).not.toMatch(/[?&]h=/)
-    expect(result?.src).not.toContain('fit=crop')
+    expect(result?.src).toBe('https://cdn.sanity.io/images/test/image.jpg?fit=max')
   })
 
   it('uses custom alt when provided', () => {

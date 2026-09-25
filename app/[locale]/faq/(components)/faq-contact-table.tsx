@@ -1,5 +1,6 @@
 'use client'
 
+import { SanityImage } from '@/components/sanity-image'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Item,
@@ -21,11 +22,9 @@ import {
 } from '@/components/ui/table'
 import type { HousesBuildingQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
-import { getImageDimensions } from '@sanity/asset-utils'
 import { Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
-import { default as Image } from 'next/image'
 
 type House = Pick<
   NonNullable<HousesBuildingQueryResult>[number],
@@ -134,6 +133,9 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
   )
 }
 
+/** Rendered in a `size-12` (48px) slot; the loader adds the 2x candidate. */
+const HOUSE_IMAGE_SIZE = 48
+
 type HouseImageProps = {
   image: NonNullable<House['image']>
   alt: string
@@ -142,17 +144,14 @@ type HouseImageProps = {
 function HouseImage({ image, alt }: HouseImageProps) {
   if (!image.asset) return null
 
-  const dimensions = getImageDimensions(image.asset)
-  const src = urlFor(image).fit('crop').width(96).height(96).url()
-
   return (
-    <Image
-      src={src}
+    <SanityImage
+      src={urlFor(image).fit('crop').width(HOUSE_IMAGE_SIZE).height(HOUSE_IMAGE_SIZE).url()}
       alt={alt}
       placeholder={image.preview ? 'blur' : undefined}
       blurDataURL={image.preview ?? undefined}
-      width={dimensions.width}
-      height={dimensions.height}
+      width={HOUSE_IMAGE_SIZE}
+      height={HOUSE_IMAGE_SIZE}
       className="size-full object-cover"
     />
   )

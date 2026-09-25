@@ -550,6 +550,7 @@ function GalleryThumbnailStrip({
           <Thumbnail key={item.id ?? i} index={i}>
             <Image
               src={item.thumb}
+              loader={sanityImageLoader}
               alt={item.alt}
               width={THUMBNAIL_SIZE}
               height={THUMBNAIL_SIZE}

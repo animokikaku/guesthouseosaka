@@ -1,7 +1,7 @@
+import { SanityImage } from '@/components/sanity-image'
 import { GALLERY_WALL_SLOTS } from '@/lib/gallery-wall'
 import { cn } from '@/lib/utils'
 import type { GalleryImage } from '@/lib/types/components'
-import Image from 'next/image'
 
 export function GalleryWall({ images, className }: { images: GalleryImage[]; className?: string }) {
   return (
@@ -24,7 +24,7 @@ export function GalleryWall({ images, className }: { images: GalleryImage[]; cla
                 top: `${slot.top}%`
               }}
             >
-              <Image
+              <SanityImage
                 src={image.src}
                 alt={image.alt || ''}
                 width={image.width}

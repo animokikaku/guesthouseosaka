@@ -1,8 +1,8 @@
 'use client'
 
 import type { GalleryImageProps } from '@/lib/gallery-image'
+import { SanityImage } from '@/components/sanity-image'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
 import { ComponentPropsWithoutRef } from 'react'
 
 type GalleryImageContentProps = {
@@ -28,7 +28,7 @@ function GalleryImageContent({
       data-slot="gallery-image-media"
       className={cn('bg-muted/40 relative h-full w-full overflow-hidden', containerClassName)}
     >
-      <Image
+      <SanityImage
         fill
         alt={alt}
         className={cn(
