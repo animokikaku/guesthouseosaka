@@ -18,10 +18,6 @@ export default async function Layout({ children }: LayoutProps<'/[locale]/contac
     getContactPage(locale)
   ])
 
-  if (!contactPage) {
-    return null
-  }
-
   const navItems = toContactNavItems(contactPage.contactTypes)
 
   return (
