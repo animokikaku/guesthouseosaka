@@ -1,4 +1,4 @@
-import { GalleryImageFrame } from '@/components/gallery/gallery-image-button'
+import { GalleryImageFrame } from '@/components/gallery/gallery-image-frame'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'

@@ -29,7 +29,7 @@ vi.mock('@/sanity/lib/image', () => ({
   }
 }))
 
-vi.mock('@/components/gallery/gallery-image-button', () => ({
+vi.mock('@/components/gallery/gallery-image-frame', () => ({
   GalleryImageFrame: ({
     imageProps,
     sizes,

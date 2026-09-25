@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { GalleryImageFrame } from '../gallery-image-button'
+import { GalleryImageFrame } from '../gallery-image-frame'
 
 vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
 
