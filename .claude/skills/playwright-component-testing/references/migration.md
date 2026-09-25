@@ -22,6 +22,9 @@ form for the test to assert on). Plain data props travel through `mount(storyId,
 | `ctViteConfig`, `ctPort`, `ctTemplateDir`, `ctCacheDir` | Gone — the gallery runs through the app's own dev server; port lives in `webServer` + `baseURL`; location is `playwright/gallery/` |
 | `defineConfig` from `@playwright/experimental-ct-react` | Plain `defineConfig` from `@playwright/test`, with `baseURL` = gallery URL, `serviceWorkers: 'block'`, `reuseContext: true` (see `SKILL.md`) |
 
+The CT packages were removed in Playwright 1.63 and are no longer published, so migrate while
+pinned to Playwright 1.62 and upgrade once the last spec is ported.
+
 ## Steps
 
 1. Set up the gallery and config per `SKILL.md`. Keep the old CT project running until the last
@@ -39,13 +42,14 @@ form for the test to assert on). Plain data props travel through `mount(storyId,
 4. Port `beforeMount` hooks: app-wide setup into the gallery's `window.mount`; per-test
    `hooksConfig` branches into props interpreted by a story or decorator.
 5. When all specs are green, delete the CT project from the config, drop the
-   `@playwright/experimental-ct-*` dependency, and remove `playwright/index.html`,
-   `playwright/index.ts*` and `playwright/.cache`.
+   `@playwright/experimental-ct-*` dependency, remove `playwright/index.html`,
+   `playwright/index.ts*` and `playwright/.cache`, and lift the Playwright version pin.
 
 ## Gotchas
 
 - **Story ids are strings.** Renaming or moving a story breaks specs at runtime, not compile time
   — and the suffix-matching resolution can silently match a different story after a rename.
+  Gallery types (`typing.md`) turn registered ids into a compile-time check.
 - **Per-test JSX is gone.** Any test that built a different JSX tree per test (children matrices,
   inline wrappers) becomes one story export per composition.
 
