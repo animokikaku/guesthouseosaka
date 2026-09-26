@@ -60,7 +60,10 @@ function PlaceDetailsCompact({
           placeholder={placeImage.preview ? 'blur' : 'empty'}
           blurDataURL={placeImage.preview ?? undefined}
           className="h-auto w-full object-cover"
-          sizes="(max-width: 768px) 100vw, 400px"
+          // The HouseMap panel: full width below md, then md:w-1/3 of the
+          // house page's `container max-w-6xl`, less its borders. Keep in
+          // sync with house-map.tsx and house-page-content.tsx.
+          sizes="(min-width: 1168px) 361px, (min-width: 1024px) calc(33.33vw - 28px), (min-width: 768px) calc(33.33vw - 18px), calc(100vw - 50px)"
         />
       </div>
       <gmp-place-details-compact style={{ colorScheme }} className={className}>
