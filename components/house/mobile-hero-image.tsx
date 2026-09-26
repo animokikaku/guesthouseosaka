@@ -3,12 +3,13 @@
 import { SanityImage } from '@/components/sanity-image'
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import { useCarouselIndex } from '@/hooks/use-carousel-index'
 import { Link } from '@/i18n/navigation'
 import type { GallerySlide } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
 import { ImageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { ComponentProps, useEffect, useState } from 'react'
+import { ComponentProps, useState } from 'react'
 
 type MobileHeroImageProps = {
   href: ComponentProps<typeof Link>['href']
@@ -18,24 +19,7 @@ type MobileHeroImageProps = {
 export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
   const t = useTranslations('MobileHeroImage')
   const [api, setApi] = useState<CarouselApi>()
-  const [currentIndex, setCurrentIndex] = useState(1)
-
-  useEffect(() => {
-    if (!api) return
-
-    const updateIndex = () => {
-      setCurrentIndex(api.selectedScrollSnap() + 1)
-    }
-
-    updateIndex()
-    api.on('select', updateIndex)
-    api.on('reInit', updateIndex)
-
-    return () => {
-      api.off('select', updateIndex)
-      api.off('reInit', updateIndex)
-    }
-  }, [api])
+  const currentIndex = useCarouselIndex(api)
 
   if (images.length === 0) {
     return (
@@ -83,7 +67,7 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
           })}
         </CarouselContent>
         <div className="absolute right-3 bottom-12 z-10 rounded bg-black/60 px-3 py-1 text-xs text-white backdrop-blur">
-          {currentIndex} / {images.length}
+          {currentIndex + 1} / {images.length}
         </div>
       </Carousel>
     </Link>

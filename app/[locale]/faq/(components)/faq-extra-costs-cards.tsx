@@ -1,12 +1,13 @@
 'use client'
 
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel'
+import { useCarouselIndex } from '@/hooks/use-carousel-index'
 import { cn } from '@/lib/utils'
 import { HOUSE_CARD_STYLES, type HouseCardStyles } from '@/lib/utils/theme'
 import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from 'next-sanity'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const portableTextComponents: PortableTextComponents = {
   block: {
@@ -32,24 +33,7 @@ type FAQExtraCostsCardsProps = {
 
 export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsCardsProps) {
   const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(0)
-
-  useEffect(() => {
-    if (!api) return
-
-    const updateIndex = () => {
-      setCurrent(api.selectedScrollSnap())
-    }
-
-    updateIndex()
-    api.on('select', updateIndex)
-    api.on('reInit', updateIndex)
-
-    return () => {
-      api.off('select', updateIndex)
-      api.off('reInit', updateIndex)
-    }
-  }, [api])
+  const current = useCarouselIndex(api)
 
   if (houses.length === 0 || pricingCategories.length === 0) return null
 
