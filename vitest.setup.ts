@@ -1,4 +1,11 @@
 import '@testing-library/jest-dom/vitest'
+import * as webStreams from 'node:stream/web'
+
+// The vmThreads pool runs each file in a VM context whose globals come from jsdom,
+// which has no web streams. The Sanity client (via undici) reads them at import time.
+for (const [name, value] of Object.entries(webStreams)) {
+  if (!(name in globalThis)) Object.assign(globalThis, { [name]: value })
+}
 
 // Tests that never touch the DOM opt out of jsdom with `// @vitest-environment
 // node`, which makes creating the environment the suite's largest single cost only

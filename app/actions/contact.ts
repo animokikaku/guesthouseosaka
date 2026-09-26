@@ -5,6 +5,7 @@ import {
   MoveInRequestEmail,
   TourRequestEmail
 } from '@/components/email-template'
+import { CONTACT_EMAIL, CONTACT_EMAIL_DOMAIN } from '@/lib/config'
 import { env } from '@/lib/env'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
 import type { HouseIdentifier } from '@/lib/types'
@@ -28,18 +29,18 @@ async function sendEmail(payload: CreateEmailOptions): Promise<ContactSubmission
 }
 
 const DEFAULT_CONTACT = {
-  from: 'Guest House Osaka <info@guesthouseosaka.com>',
+  from: `Guest House Osaka <${CONTACT_EMAIL}>`,
   to: (places?: HouseIdentifier[]) => {
     if (env.VERCEL_ENV === 'preview') {
       return 'delivered+guesthouseosaka@resend.dev'
     }
     if (env.NODE_ENV !== 'production') {
-      return 'dev@guesthouseosaka.com'
+      return `dev@${CONTACT_EMAIL_DOMAIN}`
     }
     if (places?.length === 1) {
-      return `${places[0]}@guesthouseosaka.com`
+      return `${places[0]}@${CONTACT_EMAIL_DOMAIN}`
     }
-    return 'info@guesthouseosaka.com'
+    return CONTACT_EMAIL
   }
 }
 

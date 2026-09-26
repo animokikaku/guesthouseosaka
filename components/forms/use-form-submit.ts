@@ -2,6 +2,7 @@
 
 import { submitContactForm } from '@/app/actions/contact'
 import { useRouter } from '@/i18n/navigation'
+import { CONTACT_EMAIL } from '@/lib/config'
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
 import { useTranslations } from 'next-intl'
 import { toast } from '@/components/ui/toast'
@@ -77,7 +78,7 @@ export function useFormSubmit() {
           return {
             title: t('status.error.message'),
             description: t('status.error.description', {
-              email: 'info@guesthouseosaka.com'
+              email: CONTACT_EMAIL
             })
           }
         }

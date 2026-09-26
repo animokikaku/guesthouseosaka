@@ -20,6 +20,7 @@ function useValidationMessages(): ContactFormValidationMessages {
     places_min: t('places_min'),
     places_max: t('places_max'),
     name_min: t('name_min'),
+    name_max: t('name_max'),
     age_positive: t('age_positive'),
     gender_required: t('gender_required'),
     nationality_required: t('nationality_required'),

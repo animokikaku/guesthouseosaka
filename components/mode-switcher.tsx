@@ -1,10 +1,10 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import * as React from 'react'
+import { useEffect, useEffectEvent } from 'react'
 
 import { Button } from '@/components/ui/button'
-import { useMetaColor } from '@/hooks/use-meta-color'
+import { useSyncMetaColor } from '@/hooks/use-meta-color'
 import { useTranslations } from 'next-intl'
 
 function isEditableTarget(target: EventTarget | null) {
@@ -20,28 +20,26 @@ function isEditableTarget(target: EventTarget | null) {
 
 export function ModeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme()
-  const { setMetaColor, metaColor } = useMetaColor()
   const t = useTranslations('ModeSwitcher')
+  useSyncMetaColor()
 
-  React.useEffect(() => {
-    setMetaColor(metaColor)
-  }, [metaColor, setMetaColor])
-
-  const toggleTheme = React.useCallback(() => {
+  const toggleTheme = () => {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-  }, [resolvedTheme, setTheme])
+  }
 
-  React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) return
-      if (isEditableTarget(event.target) || event.key.toLowerCase() !== 'd') return
+  const onShortcutKeyDown = useEffectEvent((event: KeyboardEvent) => {
+    if (event.repeat || event.metaKey || event.ctrlKey || event.altKey) return
+    if (isEditableTarget(event.target) || event.key.toLowerCase() !== 'd') return
 
-      toggleTheme()
-    }
+    toggleTheme()
+  })
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => onShortcutKeyDown(event)
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [toggleTheme])
+  }, [])
 
   return (
     <Button

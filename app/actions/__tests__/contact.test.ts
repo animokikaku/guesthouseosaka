@@ -138,4 +138,17 @@ describe('submitContactForm', () => {
     })
     expect(sendMock).not.toHaveBeenCalled()
   })
+
+  it('rejects names longer than 100 characters', async () => {
+    const longName = {
+      ...payload.data,
+      account: { ...payload.data.account, name: 'a'.repeat(101) }
+    }
+
+    await expect(submitContactForm({ type: 'other', data: longName })).resolves.toEqual({
+      ok: false,
+      code: 'invalid_submission'
+    })
+    expect(sendMock).not.toHaveBeenCalled()
+  })
 })

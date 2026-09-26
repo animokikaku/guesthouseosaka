@@ -180,6 +180,7 @@ declare const messages: {
       "gender_required": "Please select your gender.",
       "message_max": "Message must be at most 3000 characters.",
       "message_min": "Message must be at least 5 characters long.",
+      "name_max": "Name must be at most 100 characters.",
       "name_min": "Name must be at least 2 characters long.",
       "nationality_max": "Nationality must be at most 100 characters.",
       "nationality_required": "Please enter your nationality.",
