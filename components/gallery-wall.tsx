@@ -1,5 +1,5 @@
 import { SanityImage } from '@/components/sanity-image'
-import { GALLERY_WALL_SLOTS } from '@/lib/gallery-wall'
+import { GALLERY_WALL_SLOTS, slotSizes } from '@/lib/gallery-wall'
 import { cn } from '@/lib/utils'
 import type { GalleryImage } from '@/lib/types/components'
 
@@ -29,6 +29,7 @@ export function GalleryWall({ images, className }: { images: GalleryImage[]; cla
                 alt={image.alt || ''}
                 width={image.width}
                 height={image.height}
+                sizes={slotSizes(slot)}
                 blurDataURL={image.blurDataURL || undefined}
                 placeholder={image.blurDataURL ? 'blur' : undefined}
                 // The collage sits in the hero, so its largest tile is the

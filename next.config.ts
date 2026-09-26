@@ -92,7 +92,9 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [75, 90],
     deviceSizes: [480, 640, 750, 828, 1080, 1200, 1600],
-    imageSizes: [16, 32, 64, 128, 256, 384],
+    // 16 and 32 went unused (the smallest images are 40–56px icons); 192 fills
+    // the 128→256 gap small gallery-wall tiles fell into at 1x.
+    imageSizes: [64, 128, 192, 256, 384],
     remotePatterns: [
       {
         protocol: 'https',

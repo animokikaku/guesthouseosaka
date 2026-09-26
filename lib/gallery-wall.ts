@@ -72,3 +72,34 @@ export const GALLERY_WALL_SLOTS: readonly GalleryWallSlot[] = [
 export function slotPixelSize(slot: GalleryWallSlot): number {
   return Math.round((slot.size / 100) * CONTENT_WIDTH)
 }
+
+/**
+ * Rendered collage width per breakpoint, mirroring the home hero layout in
+ * `app/[locale]/page.tsx`: `container-wrapper` (px-2, max-w-7xl) around
+ * `container` (px-4, lg:px-8), with the collage full width below md and
+ * `md:w-3/5` beside the header above it. Keep in sync with those classes.
+ *
+ * Each entry is `[minViewportWidth, vwFraction, fixedPx]`, for a width of
+ * `vwFraction * 100vw + fixedPx`; the first matching entry wins.
+ */
+const COLLAGE_WIDTHS: readonly (readonly [minWidth: number, vw: number, px: number])[] = [
+  // max-w-7xl caps the wrapper at 1280px: (1280 - 16 - 64) * 0.6
+  [1280, 0, 720],
+  // lg: (100vw - 16 - 64) * 0.6
+  [1024, 0.6, -48],
+  // md: (100vw - 16 - 32) * 0.6
+  [768, 0.6, -28.8],
+  // (100vw - 16 - 32)
+  [0, 1, -48]
+]
+
+/** `sizes` for a tile, so the browser picks a srcset width by its rendered size. */
+export function slotSizes(slot: GalleryWallSlot): string {
+  const ratio = slot.size / 100
+  return COLLAGE_WIDTHS.map(([minWidth, vw, px]) => {
+    const fixed = Math.round(px * ratio)
+    const width =
+      vw === 0 ? `${fixed}px` : `calc(${+(vw * ratio * 100).toFixed(2)}vw - ${-fixed}px)`
+    return minWidth === 0 ? width : `(min-width: ${minWidth}px) ${width}`
+  }).join(', ')
+}

@@ -1,3 +1,4 @@
+import { SanityImage } from '@/components/sanity-image'
 import {
   Item,
   ItemContent,
@@ -14,7 +15,6 @@ import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { stegaClean } from '@sanity/client/stega'
 import Image from 'next/image'
-import { SanityImage } from '@/components/sanity-image'
 
 type House = NonNullable<HomePageQueryResult['houses']>[number]
 
@@ -84,6 +84,10 @@ function CollectionImage({ image }: CollectionImageProps) {
   const blurDataURL = image.preview || undefined
   const placeholder = image.preview ? 'blur' : undefined
 
+  // Card widths in the home page's collection grid: the nested
+  // container-wrapper/container padding (32px a side, 48px from lg) and the
+  // md:grid-cols-3 gap-8 columns, capped by max-w-7xl. Keep in sync with
+  // app/[locale]/page.tsx and PageHeader.
   return (
     <>
       <SanityImage
@@ -93,7 +97,7 @@ function CollectionImage({ image }: CollectionImageProps) {
         height={400}
         blurDataURL={blurDataURL}
         placeholder={placeholder}
-        quality={90}
+        sizes="calc(100vw - 64px)"
         className="block aspect-2/1 w-full object-cover md:hidden"
       />
       <SanityImage
@@ -103,6 +107,7 @@ function CollectionImage({ image }: CollectionImageProps) {
         height={800}
         blurDataURL={blurDataURL}
         placeholder={placeholder}
+        sizes="(min-width: 1280px) 373px, (min-width: 1024px) calc(33.33vw - 53px), calc(33.33vw - 43px)"
         className="hidden aspect-square w-full object-cover transition-transform duration-300 group-focus-visible:scale-[1.02] md:block pointer-fine:group-hover:scale-[1.02]"
       />
     </>
