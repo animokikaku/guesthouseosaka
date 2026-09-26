@@ -7,6 +7,7 @@ export type ContactFormValidationMessages = Partial<
     | 'places_min'
     | 'places_max'
     | 'name_min'
+    | 'name_max'
     | 'age_positive'
     | 'gender_required'
     | 'nationality_required'
@@ -30,12 +31,17 @@ function isPositiveNumberString(value: string) {
   return !Number.isNaN(age) && age > 0
 }
 
+// `en-CA` formats dates as YYYY-MM-DD, matching the date input's value.
+const tokyoDateFormat = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' })
+
+/**
+ * Compares against today's date in Osaka, where the tour or move-in happens,
+ * rather than the local date: the browser and the server (UTC) disagree on
+ * "today" for part of the day, which let a date pass in the form and then fail
+ * on the server.
+ */
 function isTodayOrLater(value: string) {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const day = String(today.getDate()).padStart(2, '0')
-  return value >= `${year}-${month}-${day}`
+  return value >= tokyoDateFormat.format(new Date())
 }
 
 function isContactHour(value: string) {
@@ -50,7 +56,7 @@ export function createContactFormSchema(messages: ContactFormValidationMessages 
   return z.object({
     places: z.array(HouseIdentifierSchema).min(1, m('places_min')).max(3, m('places_max')),
     account: z.object({
-      name: z.string().min(2, m('name_min')),
+      name: z.string().min(2, m('name_min')).max(100, m('name_max')),
       age: z.string().refine(isPositiveNumberString, error(m('age_positive'))),
       gender: z.enum(['male', 'female'], error(m('gender_required'))),
       nationality: z.string().min(1, m('nationality_required')).max(100, m('nationality_max')),

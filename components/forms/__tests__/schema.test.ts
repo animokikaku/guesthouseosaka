@@ -167,6 +167,18 @@ describe('useTourFormSchema', () => {
 
       expect(result.success).toBe(true)
     })
+
+    it('compares against the current date in Tokyo', () => {
+      vi.stubEnv('TZ', 'America/New_York')
+      vi.useFakeTimers()
+      // 20:00 on Jan 14 in New York is already 10:00 on Jan 15 in Tokyo.
+      vi.setSystemTime(new Date('2026-01-15T01:00:00Z'))
+
+      const schema = getSchemaInstance()
+
+      expect(schema.safeParse({ ...validTourData, date: '2026-01-15' }).success).toBe(true)
+      expect(schema.safeParse({ ...validTourData, date: '2026-01-14' }).success).toBe(false)
+    })
   })
 
   describe('hour field', () => {
