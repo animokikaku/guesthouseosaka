@@ -8,6 +8,9 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    // Reuses one jsdom per worker while keeping each file in its own VM context,
+    // roughly halving the run. See vitest.setup.ts for the globals the VM lacks.
+    pool: 'vmThreads',
     setupFiles: ['./vitest.setup.ts'],
     globals: true,
     include: ['**/__tests__/**/*.test.{ts,tsx}', '**/*.test.{ts,tsx}'],
