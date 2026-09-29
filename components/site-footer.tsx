@@ -18,6 +18,7 @@ export function SiteFooter({ settings }: SiteFooterProps) {
     NonNullable<SettingsQueryResult>
   >(settings._id, settings.socialLinks, (document) => document.socialLinks ?? undefined)
 
+  // oxlint-disable-next-line react/purity -- display-only; changes once a year and the site rebuilds weekly
   const year = new Date().getFullYear()
 
   const dataAttribute = createDataAttribute({
@@ -30,8 +31,8 @@ export function SiteFooter({ settings }: SiteFooterProps) {
       <div className="container-wrapper px-4 xl:px-6">
         <div className="flex min-h-(--footer-height) flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:flex-nowrap">
           <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">
-            <span className="sr-only">ゲストハウス大阪 ー Guest House Osaka</span>© {year}{' '}
-            {settings.companyName}
+            <span className="sr-only">ゲストハウス大阪 ー Guest House Osaka</span>©{' '}
+            <span suppressHydrationWarning>{year}</span> {settings.companyName}
           </div>
           <div
             className="flex shrink-0 items-center gap-3"
