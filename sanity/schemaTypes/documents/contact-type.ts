@@ -1,4 +1,4 @@
-import { ContactTypeSchema, ContactTypeValues } from '@/lib/types'
+import { ContactTypeValues, isContactType } from '@/lib/types'
 import { EnvelopeIcon } from '@sanity/icons/Envelope'
 import { defineField, defineType, type StringFieldProps } from 'sanity'
 
@@ -54,7 +54,7 @@ export const contactType = defineType({
       group: 'main',
       validation: (rule) =>
         rule.required().custom((value) => {
-          if (!ContactTypeSchema.safeParse(value).success) {
+          if (!isContactType(value)) {
             return `Must be one of: ${ContactTypeValues.join(', ')}`
           }
           return true

@@ -5,7 +5,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale } from 'next-intl/server'
 
 import '@/app/globals.css'
-import { DraftModeIndicator } from '@/components/draft-mode-indicator'
+import { LazyDraftModeIndicator } from '@/components/lazy-draft-mode-indicator'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -164,7 +164,7 @@ export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'
             {(await draftMode()).isEnabled && (
               <>
                 <VisualEditing />
-                <DraftModeIndicator />
+                <LazyDraftModeIndicator />
               </>
             )}
           </NextIntlClientProvider>

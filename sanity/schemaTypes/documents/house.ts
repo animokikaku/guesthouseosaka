@@ -1,4 +1,4 @@
-import { HouseIdentifierSchema, HouseIdentifierValues } from '@/lib/types'
+import { HouseIdentifierValues, isHouseIdentifier } from '@/lib/types'
 import { HomeIcon } from '@sanity/icons/Home'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
@@ -46,7 +46,7 @@ export const house = defineType({
       },
       validation: (rule) =>
         rule.required().custom((value) => {
-          if (!HouseIdentifierSchema.safeParse(value).success) {
+          if (!isHouseIdentifier(value)) {
             return `Must be one of: ${HouseIdentifierValues.join(', ')}`
           }
           return true
