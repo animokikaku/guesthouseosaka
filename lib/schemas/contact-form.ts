@@ -1,6 +1,10 @@
-import { HouseIdentifierSchema } from '@/lib/types'
+import { HouseIdentifierValues } from '@/lib/types'
 import { isMobilePhone } from 'validator'
-import { z } from 'zod'
+import { en } from 'zod/locales'
+import * as z from 'zod/mini'
+
+// zod/mini ships without default error messages; keep the same English defaults as zod.
+z.config(en())
 
 export type ContactFormValidationMessages = Partial<
   Record<
@@ -54,27 +58,31 @@ export function createContactFormSchema(messages: ContactFormValidationMessages 
   const m = (key: keyof ContactFormValidationMessages) => messages[key]
 
   return z.object({
-    places: z.array(HouseIdentifierSchema).min(1, m('places_min')).max(3, m('places_max')),
+    places: z
+      .array(z.enum(HouseIdentifierValues))
+      .check(z.minLength(1, m('places_min')), z.maxLength(3, m('places_max'))),
     account: z.object({
-      name: z.string().min(2, m('name_min')).max(100, m('name_max')),
-      age: z.string().refine(isPositiveNumberString, error(m('age_positive'))),
+      name: z.string().check(z.minLength(2, m('name_min')), z.maxLength(100, m('name_max'))),
+      age: z.string().check(z.refine(isPositiveNumberString, error(m('age_positive')))),
       gender: z.enum(['male', 'female'], error(m('gender_required'))),
-      nationality: z.string().min(1, m('nationality_required')).max(100, m('nationality_max')),
+      nationality: z
+        .string()
+        .check(z.minLength(1, m('nationality_required')), z.maxLength(100, m('nationality_max'))),
       email: z.email(m('email')),
       phone: z
         .string()
-        .refine((value) => (value ? isMobilePhone(value, 'any') : true), error(m('phone')))
+        .check(z.refine((value) => (value ? isMobilePhone(value, 'any') : true), error(m('phone'))))
     }),
-    message: z.string().max(3000, m('message_max')),
-    date: z.iso.date().refine(isTodayOrLater, error(m('date_future'))),
+    message: z.string().check(z.maxLength(3000, m('message_max'))),
+    date: z.iso.date().check(z.refine(isTodayOrLater, error(m('date_future')))),
     privacyPolicy: z.literal(true, error(m('privacy_policy'))),
     stayDuration: z.enum(['1-month', '3-months', 'long-term'], error(m('stay_duration'))),
-    hour: z.iso.time().refine(isContactHour, error(m('time_range')))
+    hour: z.iso.time().check(z.refine(isContactHour, error(m('time_range'))))
   })
 }
 
 export function createTourFormSchema(messages?: ContactFormValidationMessages) {
-  return createContactFormSchema(messages).pick({
+  return z.pick(createContactFormSchema(messages), {
     places: true,
     date: true,
     hour: true,
@@ -85,7 +93,7 @@ export function createTourFormSchema(messages?: ContactFormValidationMessages) {
 }
 
 export function createMoveInFormSchema(messages?: ContactFormValidationMessages) {
-  return createContactFormSchema(messages).pick({
+  return z.pick(createContactFormSchema(messages), {
     places: true,
     date: true,
     stayDuration: true,
@@ -97,17 +105,12 @@ export function createMoveInFormSchema(messages?: ContactFormValidationMessages)
 
 export function createGeneralInquirySchema(messages?: ContactFormValidationMessages) {
   const schema = createContactFormSchema(messages)
-  return schema
-    .pick({
-      places: true,
-      account: true,
-      privacyPolicy: true
-    })
-    .extend({
-      message: schema.shape.message.refine((value) => value.length >= 5, {
-        message: messages?.message_min
-      })
-    })
+  const baseSchema = z.pick(schema, { places: true, account: true, privacyPolicy: true })
+  return z.extend(baseSchema, {
+    message: schema.shape.message.check(
+      z.refine((value) => value.length >= 5, { message: messages?.message_min })
+    )
+  })
 }
 
 export type ContactFormFields = z.infer<ReturnType<typeof createContactFormSchema>>

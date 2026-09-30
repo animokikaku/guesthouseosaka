@@ -1,19 +1,16 @@
 import type { Link } from '@/i18n/navigation'
 import type { assets } from '@/lib/assets'
 import type { ComponentProps } from 'react'
-import { z } from 'zod'
 
 export const HouseIdentifierValues = ['orange', 'apple', 'lemon'] as const
-export const HouseIdentifierSchema = z.enum(HouseIdentifierValues)
-export type HouseIdentifier = z.infer<typeof HouseIdentifierSchema>
+export type HouseIdentifier = (typeof HouseIdentifierValues)[number]
 
 export function isHouseIdentifier(value: unknown): value is HouseIdentifier {
   return typeof value === 'string' && HouseIdentifierValues.some((house) => house === value)
 }
 
 export const ContactTypeValues = ['tour', 'move-in', 'other'] as const
-export const ContactTypeSchema = z.enum(ContactTypeValues)
-export type ContactType = z.infer<typeof ContactTypeSchema>
+export type ContactType = (typeof ContactTypeValues)[number]
 
 export function isContactType(value: unknown): value is ContactType {
   return typeof value === 'string' && ContactTypeValues.some((type) => type === value)
