@@ -10,6 +10,14 @@ import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { use } from 'react'
 
+// Public Sanity content: fail the build if anything here would render per request.
+export const ensureStatic = 'navigation'
+
+// instant = false: kept on purpose, this layout validates the house param
+// before rendering anything, so there is no shared App Shell worth
+// prefetching. Links here use `prefetch` to load the full static page.
+export const instant = false
+
 export async function generateStaticParams() {
   const { data: houses } = await sanityFetch({
     query: houseSlugsQuery,

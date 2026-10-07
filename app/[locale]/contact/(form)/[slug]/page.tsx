@@ -31,6 +31,10 @@ export async function generateStaticParams() {
   return staticParamsForLocales(routing.locales, contactTypes, 'slug')
 }
 
+// instant = false: kept on purpose, the whole form depends on the contact type, so there is no shared App Shell
+// worth prefetching. Links here use `prefetch` to load the full static page.
+export const instant = false
+
 export default async function ContactTypePage({ params }: PageProps<'/[locale]/contact/[slug]'>) {
   const [{ slug }, locale] = await Promise.all([params, getLocale()])
 

@@ -44,30 +44,31 @@ const createSettings = (
   ...overrides
 })
 
+const YEAR = 2026
+
 describe('SiteFooter', () => {
   describe('visibility', () => {
     it('renders footer element', () => {
-      render(<SiteFooter settings={createSettings()} />)
+      render(<SiteFooter year={YEAR} settings={createSettings()} />)
 
       expect(screen.getByRole('contentinfo')).toBeInTheDocument()
     })
 
     it('displays company name', () => {
-      render(<SiteFooter settings={createSettings()} />)
+      render(<SiteFooter year={YEAR} settings={createSettings()} />)
 
       // Company name appears in footer outside sr-only text
       expect(screen.getAllByText(/Guest House Osaka/).length).toBeGreaterThan(0)
     })
 
-    it('displays current year in copyright', () => {
-      render(<SiteFooter settings={createSettings()} />)
+    it('displays the given year in copyright', () => {
+      render(<SiteFooter year={YEAR} settings={createSettings()} />)
 
-      const currentYear = new Date().getFullYear().toString()
-      expect(screen.getByText(new RegExp(currentYear))).toBeInTheDocument()
+      expect(screen.getByText(new RegExp(String(YEAR)))).toBeInTheDocument()
     })
 
     it('renders social links with external target', () => {
-      render(<SiteFooter settings={createSettings()} />)
+      render(<SiteFooter year={YEAR} settings={createSettings()} />)
 
       const socialLinks = screen.getAllByRole('link')
       expect(socialLinks.length).toBeGreaterThan(0)
@@ -79,7 +80,7 @@ describe('SiteFooter', () => {
     })
 
     it('renders social links with rel noopener noreferrer', () => {
-      render(<SiteFooter settings={createSettings()} />)
+      render(<SiteFooter year={YEAR} settings={createSettings()} />)
 
       const socialLinks = screen.getAllByRole('link')
       socialLinks.forEach((link) => {
@@ -88,7 +89,7 @@ describe('SiteFooter', () => {
     })
 
     it('renders social links with correct href', () => {
-      render(<SiteFooter settings={createSettings()} />)
+      render(<SiteFooter year={YEAR} settings={createSettings()} />)
 
       const facebookLink = screen.getByRole('link', { name: 'Facebook' })
       expect(facebookLink).toHaveAttribute('href', 'https://facebook.com/example')
@@ -98,7 +99,7 @@ describe('SiteFooter', () => {
     })
 
     it('renders social links with data-sanity attribute for visual editing', () => {
-      render(<SiteFooter settings={createSettings()} />)
+      render(<SiteFooter year={YEAR} settings={createSettings()} />)
 
       const facebookLink = screen.getByRole('link', { name: 'Facebook' })
       expect(facebookLink).toHaveAttribute('data-sanity')
@@ -112,7 +113,7 @@ describe('SiteFooter', () => {
 
   describe('empty states', () => {
     it('handles missing social links gracefully', () => {
-      render(<SiteFooter settings={createSettings({ socialLinks: null })} />)
+      render(<SiteFooter year={YEAR} settings={createSettings({ socialLinks: null })} />)
 
       // Footer should still render
       expect(screen.getByRole('contentinfo')).toBeInTheDocument()
@@ -121,7 +122,7 @@ describe('SiteFooter', () => {
     })
 
     it('handles empty social links array', () => {
-      render(<SiteFooter settings={createSettings({ socialLinks: [] })} />)
+      render(<SiteFooter year={YEAR} settings={createSettings({ socialLinks: [] })} />)
 
       expect(screen.getByRole('contentinfo')).toBeInTheDocument()
       expect(screen.queryAllByRole('link')).toHaveLength(0)
@@ -130,6 +131,7 @@ describe('SiteFooter', () => {
     it('renders social link with custom label', () => {
       render(
         <SiteFooter
+          year={YEAR}
           settings={createSettings({
             socialLinks: [
               {
@@ -150,13 +152,13 @@ describe('SiteFooter', () => {
 
   describe('accessibility', () => {
     it('renders screen reader text for company info', () => {
-      render(<SiteFooter settings={createSettings()} />)
+      render(<SiteFooter year={YEAR} settings={createSettings()} />)
 
       expect(screen.getByText(/ゲストハウス大阪/)).toHaveClass('sr-only')
     })
 
     it('social links have aria-label for platform name', () => {
-      render(<SiteFooter settings={createSettings()} />)
+      render(<SiteFooter year={YEAR} settings={createSettings()} />)
 
       expect(screen.getByRole('link', { name: 'Facebook' })).toBeInTheDocument()
       expect(screen.getByRole('link', { name: 'Instagram' })).toBeInTheDocument()
@@ -185,7 +187,7 @@ describe('SiteFooter', () => {
 
     it('returns updated links when action matches settings id', () => {
       const settings = createSettings()
-      render(<SiteFooter settings={settings} />)
+      render(<SiteFooter year={YEAR} settings={settings} />)
 
       expect(capturedReducer).not.toBeNull()
 
@@ -217,7 +219,7 @@ describe('SiteFooter', () => {
 
     it('returns current links when action id does not match', () => {
       const settings = createSettings()
-      render(<SiteFooter settings={settings} />)
+      render(<SiteFooter year={YEAR} settings={settings} />)
 
       expect(capturedReducer).not.toBeNull()
 
@@ -231,7 +233,7 @@ describe('SiteFooter', () => {
 
     it('returns current links when action has no socialLinks', () => {
       const settings = createSettings()
-      render(<SiteFooter settings={settings} />)
+      render(<SiteFooter year={YEAR} settings={settings} />)
 
       expect(capturedReducer).not.toBeNull()
 

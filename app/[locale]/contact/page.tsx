@@ -26,6 +26,7 @@ export default async function ContactPage() {
           key={_id}
           render={
             <Link
+              prefetch
               href={{
                 pathname: '/contact/[slug]',
                 params: { slug },

@@ -44,6 +44,7 @@ function GalleryGrid({
               a ring on the link itself would paint *behind* the tiles filling it edge-to-edge
               (a box's own box-shadow paints before its children). */}
           <Link
+            prefetch
             href={href}
             aria-label={viewGalleryLabel}
             className="group/gallery peer block h-full w-full outline-none"

@@ -23,6 +23,7 @@ export function ContactNav({ className, items, ...props }: ContactNavProps) {
         <div className={cn('flex items-center', className)} {...props}>
           {items.map(({ id, slug, title }) => (
             <Link
+              prefetch
               key={id}
               href={{
                 pathname: '/contact/[slug]',

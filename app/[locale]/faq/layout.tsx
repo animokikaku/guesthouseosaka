@@ -11,6 +11,9 @@ import { PortableText } from '@portabletext/react'
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
 
+// Public Sanity content: fail the build if anything here would render per request.
+export const ensureStatic = 'navigation'
+
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
   const faqPagePromise = sanityFetch({

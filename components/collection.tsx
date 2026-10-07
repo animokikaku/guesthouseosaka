@@ -35,6 +35,7 @@ export function Collection({ houses, className }: CollectionProps) {
           className="h-full flex-col items-start p-0"
         >
           <Link
+            prefetch
             aria-label={house.title ? stegaClean(house.title) : house.slug}
             href={{
               pathname: '/[house]' as const,

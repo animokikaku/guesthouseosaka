@@ -113,7 +113,7 @@ function MobileListSection({
       ) : (
         <div className="flex flex-col gap-3">
           {items.map((item) => (
-            <MobileLink key={item.key} href={item.href} onOpenChange={onOpenChange}>
+            <MobileLink prefetch key={item.key} href={item.href} onOpenChange={onOpenChange}>
               {item.label}
             </MobileLink>
           ))}

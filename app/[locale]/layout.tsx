@@ -22,9 +22,16 @@ import { HOUSE_THEMES } from '@/lib/utils/theme'
 import { sanityFetch, SanityLive } from '@/sanity/lib/live'
 import { housesNavQuery, settingsQuery } from '@/sanity/lib/queries'
 import { type Metadata } from 'next'
+import { cacheLife } from 'next/cache'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import { draftMode } from 'next/headers'
 import { Organization, WithContext } from 'schema-dts'
+
+async function getCurrentYear() {
+  'use cache'
+  cacheLife('days')
+  return new Date().getFullYear()
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
@@ -74,13 +81,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'>) {
-  const locale = await getLocale()
+  const [locale, { isEnabled: isDraftMode }] = await Promise.all([getLocale(), draftMode()])
 
   const url = env.NEXT_PUBLIC_APP_URL
 
-  const [{ data: settings }, { data: houses }] = await Promise.all([
+  const [{ data: settings }, { data: houses }, year] = await Promise.all([
     sanityFetch({ query: settingsQuery, params: { locale } }),
-    sanityFetch({ query: housesNavQuery, params: { locale } })
+    sanityFetch({ query: housesNavQuery, params: { locale } }),
+    getCurrentYear()
   ])
 
   // Transform houses data server-side to reduce client-side work
@@ -154,14 +162,14 @@ export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'
             <div className="bg-background relative z-10 flex min-h-svh flex-col">
               <SiteHeader houseItems={houseItems} />
               <main className="flex flex-1 flex-col pt-(--header-height)">{children}</main>
-              {settings && <SiteFooter settings={settings} />}
+              {settings && <SiteFooter settings={settings} year={year} />}
             </div>
             <TailwindIndicator />
             <Toaster />
             <Analytics />
             <SpeedInsights />
-            <SanityLive />
-            {(await draftMode()).isEnabled && (
+            <SanityLive includeDrafts={isDraftMode} />
+            {isDraftMode && (
               <>
                 <VisualEditing />
                 <LazyDraftModeIndicator />

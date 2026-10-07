@@ -16,6 +16,8 @@ const withNextIntl = createNextIntlPlugin({
 })
 
 const nextConfig: NextConfig = {
+  cacheComponents: true,
+  partialPrefetching: true,
   reactCompiler: true,
   transpilePackages: ['@react-email/render', 'prettier'],
   typedRoutes: true,

@@ -175,7 +175,7 @@ function NavigationMenuGroupItem({
                   <li key={item.key}>
                     <NavigationMenuLink
                       data-active={house === item.key}
-                      render={<Link href={item.href} />}
+                      render={<Link prefetch href={item.href} />}
                       onFocus={() => setHoverItem(item)}
                       onMouseEnter={() => setHoverItem(item)}
                       className="flex flex-col items-start gap-1 rounded-md text-left"
