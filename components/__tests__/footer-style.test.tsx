@@ -17,6 +17,9 @@ describe('FooterStyle', () => {
     const { container: plain } = render(<FooterStyle plain />)
     expect(getStyle(plain).textContent).toContain('background-color: transparent')
     expect(getStyle(plain).textContent).not.toContain('scroll-snap-align')
+
+    const { container: none } = render(<FooterStyle />)
+    expect(none.querySelector('style')).toBeNull()
   })
 
   it('applies only while mounted', () => {

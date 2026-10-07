@@ -24,6 +24,8 @@ export function FooterStyle({ snap = false, plain = false }: FooterStyleProps) {
     plain && '[data-slot="site-footer"] { background-color: transparent; }'
   ].filter(Boolean)
 
+  if (rules.length === 0) return null
+
   return (
     <style
       media="not all"
