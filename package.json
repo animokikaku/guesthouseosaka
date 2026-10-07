@@ -15,7 +15,7 @@
     "eloqnt:lint": "eloqnt lint",
     "eloqnt:review": "eloqnt review",
     "eloqnt:translate": "eloqnt translate",
-    "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate",
+    "typegen": "sanity schema extract --enforce-required-fields --force && sanity typegen generate",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
