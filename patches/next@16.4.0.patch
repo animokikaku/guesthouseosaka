@@ -1,0 +1,16 @@
+diff --git a/dist/experimental/testmode/playwright/next-worker-fixture.js b/dist/experimental/testmode/playwright/next-worker-fixture.js
+index 67c8b82745cd2930d66b512c507e8f63f88c4a90..f03b9f7c41affe602c507d43f594aa7a4a3c60c2 100644
+--- a/dist/experimental/testmode/playwright/next-worker-fixture.js
++++ b/dist/experimental/testmode/playwright/next-worker-fixture.js
+@@ -31,7 +31,10 @@ class NextWorkerFixtureImpl {
+     }
+     async handleProxyFetch(testId, request) {
+         const handler = this.proxyFetchMap.get(testId);
+-        return handler == null ? void 0 : handler(request);
++        if (handler == null) {
++            return 'continue';
++        }
++        return handler(request);
+     }
+     constructor(){
+         this.proxyPort = 0;
