@@ -8,6 +8,11 @@ import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery, housesNavQuery } from '@/sanity/lib/queries'
 import { Accommodation, WithContext } from 'schema-dts'
 
+// instant = false: kept on purpose, the whole page depends on the house, so there is
+// no shared App Shell worth prefetching. Links here use `prefetch` to load the
+// full static page.
+export const instant = false
+
 export default async function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
   const { house, locale } = await getHouseAndLocale(params)
 

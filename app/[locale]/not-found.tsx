@@ -1,6 +1,7 @@
 // Note that `app/[locale]/[...rest]/page.tsx`
 // is necessary for this page to render.
 
+import { FooterStyle } from '@/components/footer-style'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Empty,
@@ -19,6 +20,7 @@ import type { ReactNode } from 'react'
 function renderContactLink(chunks: ReactNode) {
   return (
     <Link
+      prefetch
       href={{
         pathname: '/contact/[slug]',
         params: { slug: 'other' },
@@ -35,6 +37,7 @@ export default function NotFound() {
 
   return (
     <Empty>
+      <FooterStyle plain />
       <EmptyHeader>
         <EmptyMedia>
           <Image preload {...assets.notFound} alt={assets.notFound.alt} />

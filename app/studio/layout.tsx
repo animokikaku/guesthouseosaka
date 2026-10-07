@@ -2,8 +2,6 @@
 // build time instead of being injected at runtime.
 import '@sanity/ui/styles.css'
 
-export const dynamic = 'force-static'
-
 export { metadata, viewport } from 'next-sanity/studio'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

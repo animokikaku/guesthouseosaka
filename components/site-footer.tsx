@@ -7,19 +7,17 @@ import { createDataAttribute, stegaClean } from 'next-sanity'
 
 type SiteFooterProps = {
   settings: NonNullable<SettingsQueryResult>
+  year: number
 }
 
 type SocialLink = NonNullable<NonNullable<SettingsQueryResult>['socialLinks']>[number]
 
-export function SiteFooter({ settings }: SiteFooterProps) {
+export function SiteFooter({ settings, year }: SiteFooterProps) {
   const links = useSanityOptimisticArray<
     SocialLink,
     NonNullable<SettingsQueryResult>['socialLinks'],
     NonNullable<SettingsQueryResult>
   >(settings._id, settings.socialLinks, (document) => document.socialLinks ?? undefined)
-
-  // oxlint-disable-next-line react/purity -- display-only; changes once a year and the site rebuilds weekly
-  const year = new Date().getFullYear()
 
   const dataAttribute = createDataAttribute({
     id: settings._id,
@@ -27,12 +25,12 @@ export function SiteFooter({ settings }: SiteFooterProps) {
   })
 
   return (
-    <footer className="group-has-[.section-soft]/body:bg-surface/40 group-has-[.snap-footer]/body:md:snap-end dark:bg-transparent">
+    <footer data-slot="site-footer" className="bg-surface/40 dark:bg-transparent">
       <div className="container-wrapper px-4 xl:px-6">
         <div className="flex min-h-(--footer-height) flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:flex-nowrap">
           <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">
-            <span className="sr-only">ゲストハウス大阪 ー Guest House Osaka</span>©{' '}
-            <span suppressHydrationWarning>{year}</span> {settings.companyName}
+            <span className="sr-only">ゲストハウス大阪 ー Guest House Osaka</span>© {year}{' '}
+            {settings.companyName}
           </div>
           <div
             className="flex shrink-0 items-center gap-3"

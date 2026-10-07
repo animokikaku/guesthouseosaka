@@ -5,9 +5,9 @@ import { PageEmptyState } from '@/components/page-empty-state'
 import { routing } from '@/i18n/routing'
 import { staticParamsForLocales } from '@/lib/static-params'
 import { toContactFormConfig } from '@/lib/transforms/form'
-import { isContactType, type ContactType } from '@/lib/types'
+import { ContactTypeValues, isContactType, type ContactType } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
-import { contactTypeQuery, contactTypeSlugsQuery, housesTitlesQuery } from '@/sanity/lib/queries'
+import { contactTypeQuery, housesTitlesQuery } from '@/sanity/lib/queries'
 import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
@@ -17,19 +17,20 @@ const FORM_BY_SLUG = {
   other: ContactForm
 } as const satisfies Record<ContactType, typeof TourForm>
 
-export async function generateStaticParams() {
-  const { data: contactTypes } = await sanityFetch({
-    query: contactTypeSlugsQuery,
-    perspective: 'published',
-    stega: false
-  })
-
-  if (contactTypes.length === 0) {
-    return []
-  }
-
-  return staticParamsForLocales(routing.locales, contactTypes, 'slug')
+// The page only renders known contact types, so every one is prerendered; a
+// type missing from Sanity renders its empty state.
+export function generateStaticParams() {
+  return staticParamsForLocales(
+    routing.locales,
+    ContactTypeValues.map((slug) => ({ slug })),
+    'slug'
+  )
 }
+
+// instant = false: kept on purpose, the whole form depends on the contact type, so there is
+// no shared App Shell worth prefetching. Links here use `prefetch` to load the
+// full static page.
+export const instant = false
 
 export default async function ContactTypePage({ params }: PageProps<'/[locale]/contact/[slug]'>) {
   const [{ slug }, locale] = await Promise.all([params, getLocale()])

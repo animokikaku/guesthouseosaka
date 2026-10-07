@@ -35,6 +35,7 @@ export function HousesNav({
             const title = stegaClean(house.title)
             return (
               <Link
+                prefetch
                 key={`house-nav-${slug}`}
                 href={{ pathname: '/[house]', params: { house: slug } }}
                 aria-current={slug === params.house ? 'page' : undefined}

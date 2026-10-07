@@ -1,4 +1,5 @@
 import { Collection } from '@/components/collection'
+import { FooterStyle } from '@/components/footer-style'
 import { GalleryWall } from '@/components/gallery-wall'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { PageActions, PageHeader } from '@/components/page-header'
@@ -9,6 +10,9 @@ import { sanityFetch } from '@/sanity/lib/live'
 import { homePageQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { getLocale } from 'next-intl/server'
+
+// Public Sanity content: fail the build if anything here would render per request.
+export const ensureStatic = 'navigation'
 
 const heroComponents: PortableTextComponents = {
   block: {
@@ -66,7 +70,8 @@ export default async function LocalePage() {
   const { hero, collection, galleryWall } = page
 
   return (
-    <div className="snap-footer section-soft flex flex-col">
+    <div className="section-soft flex flex-col">
+      <FooterStyle snap />
       <section className="container-wrapper relative flex min-h-[calc(100dvh-var(--header-height))] max-w-7xl snap-none items-center justify-center py-8 md:snap-end md:py-0">
         <div className="container flex flex-col items-center gap-12 md:flex-row md:gap-8">
           {/* Text content - expands to fill available space */}
