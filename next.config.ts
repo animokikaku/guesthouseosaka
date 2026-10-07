@@ -80,6 +80,7 @@ const nextConfig: NextConfig = {
     }
   ],
   experimental: {
+    agentUpgrade: 'latest',
     typedEnv: true,
     turbopackFileSystemCacheForBuild: true,
     turbopackFileSystemCacheForDev: true,
