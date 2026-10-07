@@ -2,9 +2,9 @@ import { routing } from '@/i18n/routing'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { staticParamsForLocales } from '@/lib/static-params'
-import { isHouseIdentifier } from '@/lib/types'
+import { HouseIdentifierValues, isHouseIdentifier } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
-import { houseMetaQuery, houseSlugsQuery, settingsQuery } from '@/sanity/lib/queries'
+import { houseMetaQuery, settingsQuery } from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -18,18 +18,14 @@ export const ensureStatic = 'navigation'
 // prefetching. Links here use `prefetch` to load the full static page.
 export const instant = false
 
-export async function generateStaticParams() {
-  const { data: houses } = await sanityFetch({
-    query: houseSlugsQuery,
-    perspective: 'published',
-    stega: false
-  })
-
-  if (houses.length === 0) {
-    return []
-  }
-
-  return staticParamsForLocales(routing.locales, houses, 'house')
+// The layout only renders known houses, so every one is prerendered; a house
+// missing from Sanity renders its empty state.
+export function generateStaticParams() {
+  return staticParamsForLocales(
+    routing.locales,
+    HouseIdentifierValues.map((slug) => ({ slug })),
+    'house'
+  )
 }
 
 export async function generateMetadata(

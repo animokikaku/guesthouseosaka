@@ -292,11 +292,6 @@ export const houseGalleryQuery = defineQuery(`*[_type == "house" && slug == $slu
   })[count(items) > 0] | order(category.orderRank)
 }`)
 
-// House slugs for static generation
-export const houseSlugsQuery = defineQuery(`*[_type == "house" && defined(slug)]{
-  "slug": slug
-}`)
-
 // House titles for forms (ordered by global orderRank)
 export const housesTitlesQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   "slug": slug,
@@ -413,8 +408,6 @@ export const contactTypeQuery = defineQuery(`*[_type == "contactType" && slug ==
   "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
   ${contactFormFields}
 }`)
-
-export const contactTypeSlugsQuery = defineQuery(`*[_type == "contactType"]{ slug }`)
 
 // =============================================================================
 // LEGAL NOTICE

@@ -4,9 +4,8 @@ import { PageHeader } from '@/components/page-header'
 import { assets } from '@/lib/assets'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { pageHeaderComponents } from '@/lib/portable-text/page-header-components'
-import { getFaqPage } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
-import { faqPageMetaQuery, settingsQuery } from '@/sanity/lib/queries'
+import { faqPageMetaQuery, faqPageQuery, settingsQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import type { Metadata } from 'next'
 import { getLocale, getTranslations } from 'next-intl/server'
@@ -45,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function FAQLayout({ children }: LayoutProps<'/[locale]/faq'>) {
   const locale = await getLocale()
 
-  const { data } = await getFaqPage(locale)
+  const { data } = await sanityFetch({ query: faqPageQuery, params: { locale } })
 
   return (
     <>

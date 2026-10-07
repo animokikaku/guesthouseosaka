@@ -6,8 +6,9 @@ import { getHouseAndLocale } from '@/lib/house-params'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseGalleryQuery } from '@/sanity/lib/queries'
 
-// instant = false: kept on purpose, the whole modal depends on the house, so there is no shared App Shell
-// worth prefetching. Links here use `prefetch` to load the full static page.
+// instant = false: kept on purpose, the whole modal depends on the house, so there is
+// no shared App Shell worth prefetching. Links here use `prefetch` to load the
+// full static page.
 export const instant = false
 
 export default async function GalleryModalPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {

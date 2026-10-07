@@ -9,8 +9,9 @@ import { houseGalleryQuery } from '@/sanity/lib/queries'
 import { ArrowLeftIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 
-// instant = false: kept on purpose, the whole page depends on the house, so there is no shared App Shell
-// worth prefetching. Links here use `prefetch` to load the full static page.
+// instant = false: kept on purpose, the whole page depends on the house, so there is
+// no shared App Shell worth prefetching. Links here use `prefetch` to load the
+// full static page.
 export const instant = false
 
 export default async function GalleryPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {

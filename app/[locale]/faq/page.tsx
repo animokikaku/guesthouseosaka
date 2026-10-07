@@ -1,9 +1,9 @@
 import { FAQAccordion } from '@/app/[locale]/faq/(components)/faq-accordion'
 import FAQCard from '@/app/[locale]/faq/(components)/faq-card'
 import { PageEmptyState } from '@/components/page-empty-state'
-import { getFaqPage } from '@/sanity/lib/cached-queries'
 import { sanityFetch } from '@/sanity/lib/live'
 import {
+  faqPageQuery,
   faqQuestionsQuery,
   housesBuildingQuery,
   pricingCategoriesQuery
@@ -23,7 +23,10 @@ export default async function FAQPage() {
       query: housesBuildingQuery,
       params: { locale }
     }),
-    getFaqPage(locale),
+    sanityFetch({
+      query: faqPageQuery,
+      params: { locale }
+    }),
     sanityFetch({
       query: pricingCategoriesQuery,
       params: { locale }
