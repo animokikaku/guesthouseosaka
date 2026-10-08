@@ -10,7 +10,7 @@ import { GalleryShell } from '@/components/gallery/gallery-shell'
 import { useRouter } from '@/i18n/navigation'
 import type { HouseIdentifier } from '@/lib/types'
 import { useTranslations } from 'next-intl'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useLayoutEffect, useState } from 'react'
 
 type GalleryModalWrapperProps = {
   house: HouseIdentifier
@@ -22,6 +22,11 @@ export function GalleryModalWrapper({ house, title, children }: GalleryModalWrap
   const router = useRouter()
   const t = useTranslations('GalleryModal')
   const [isOpen, setIsOpen] = useState(true)
+
+  // Cache Components hides this route in <Activity> instead of unmounting it,
+  // so reopen the dialog once it is hidden or returning to the gallery would
+  // restore it closed.
+  useLayoutEffect(() => () => setIsOpen(true), [])
 
   return (
     <GalleryDialog

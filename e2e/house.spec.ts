@@ -48,5 +48,46 @@ test.describe('House Page', () => {
     })
   })
 
+  test.describe('Gallery Modal', () => {
+    // Cache Components keeps the closed modal alive in <Activity>, so reopening
+    // it must not restore its closed state.
+    test('reopens after being closed', async ({ page }) => {
+      await page.goto(`/en/${testHouse}`)
+
+      const galleryLink = page.getByRole('link', { name: /Show all/ }).first()
+      const dialog = page.getByRole('dialog')
+
+      await galleryLink.click()
+      await expect(page).toHaveURL(new RegExp(`/en/${testHouse}/gallery$`))
+      await expect(dialog).toBeVisible()
+
+      await dialog.getByRole('button', { name: 'Close gallery' }).click()
+      await expect(page).toHaveURL(new RegExp(`/en/${testHouse}$`))
+      await expect(dialog).toBeHidden()
+
+      await galleryLink.click()
+      await expect(page).toHaveURL(new RegExp(`/en/${testHouse}/gallery$`))
+      await expect(dialog).toBeVisible()
+    })
+
+    test('reopens after browser back navigation', async ({ page }) => {
+      await page.goto(`/en/${testHouse}`)
+
+      const galleryLink = page.getByRole('link', { name: /Show all/ }).first()
+      const dialog = page.getByRole('dialog')
+
+      await galleryLink.click()
+      await expect(dialog).toBeVisible()
+
+      await page.goBack()
+      await expect(page).toHaveURL(new RegExp(`/en/${testHouse}$`))
+      await expect(dialog).toBeHidden()
+
+      await galleryLink.click()
+      await expect(page).toHaveURL(new RegExp(`/en/${testHouse}/gallery$`))
+      await expect(dialog).toBeVisible()
+    })
+  })
+
   // Note: Locale tests are now consolidated in e2e/locales.spec.ts
 })
