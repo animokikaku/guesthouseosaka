@@ -20,7 +20,7 @@ import {
 import type { StegaAware } from '@/lib/types/stega'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/utils/theme'
-import type { HouseQueryResult, HousesNavQueryResult } from '@/sanity.types'
+import type { HouseQueryResult, HousesTitlesQueryResult } from '@/sanity.types'
 import type { ComponentProps } from 'react'
 
 export function HousePageContent({
@@ -41,7 +41,7 @@ export function HousePageContent({
   about,
   building,
   houses
-}: StegaAware<NonNullable<HouseQueryResult>> & { houses: HousesNavQueryResult }) {
+}: StegaAware<NonNullable<HouseQueryResult>> & { houses: HousesTitlesQueryResult }) {
   const href: ComponentProps<typeof Link>['href'] = {
     pathname: '/[house]/gallery',
     params: { house: slug }

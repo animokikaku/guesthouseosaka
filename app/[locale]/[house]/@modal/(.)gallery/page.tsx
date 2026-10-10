@@ -5,13 +5,29 @@ import { PageEmptyStateSection } from '@/components/page-empty-state'
 import { getHouseAndLocale } from '@/lib/house-params'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseGalleryQuery } from '@/sanity/lib/queries'
+import { Suspense } from 'react'
 
 // instant = false: kept on purpose, the whole modal depends on the house, so there is
 // no shared App Shell worth prefetching. Links here use `prefetch` to load the
 // full static page.
 export const instant = false
 
-export default async function GalleryModalPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
+type GalleryModalPageProps = PageProps<'/[locale]/[house]/gallery'>
+
+export default function GalleryModalPage({ params }: GalleryModalPageProps) {
+  // The intercepted route fills the house layout's `children` slot with Next's
+  // built-in default, which has no `instant` export and so is validated as
+  // instant, pulling this page in despite its opt-out. Reading params behind
+  // Suspense satisfies that. The gallery link prefetches the full modal, so the
+  // empty fallback only shows when the prefetch hasn't landed.
+  return (
+    <Suspense fallback={null}>
+      <GalleryModal params={params} />
+    </Suspense>
+  )
+}
+
+async function GalleryModal({ params }: Pick<GalleryModalPageProps, 'params'>) {
   const { house, locale } = await getHouseAndLocale(params)
 
   const { data } = await sanityFetch({

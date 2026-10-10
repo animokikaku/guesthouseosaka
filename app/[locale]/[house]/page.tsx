@@ -5,7 +5,7 @@ import { env } from '@/lib/env'
 import { getHouseAndLocale } from '@/lib/house-params'
 import { urlFor } from '@/sanity/lib/image'
 import { sanityFetch } from '@/sanity/lib/live'
-import { houseQuery, housesNavQuery } from '@/sanity/lib/queries'
+import { houseQuery, housesTitlesQuery } from '@/sanity/lib/queries'
 import { Accommodation, WithContext } from 'schema-dts'
 
 // instant = false: kept on purpose, the whole page depends on the house, so there is
@@ -18,7 +18,7 @@ export default async function HousePage({ params }: PageProps<'/[locale]/[house]
 
   const [{ data }, { data: houses }] = await Promise.all([
     sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
-    sanityFetch({ query: housesNavQuery, params: { locale } })
+    sanityFetch({ query: housesTitlesQuery, params: { locale } })
   ])
 
   if (!data) {

@@ -164,21 +164,14 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   slug,
   "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
   "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
-  "caption": coalesce(caption[language == $locale][0].value, caption[language == "en"][0].value),
   building,
   phone,
 
-  // Hero Image
+  // Only read by urlFor for the page's JSON-LD image, so no alt or LQIP
   image{
-    asset->{
-      _id,
-      url,
-      "dimensions": metadata.dimensions,
-      "lqip": metadata.lqip
-    },
+    asset,
     hotspot,
-    crop,
-    "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value)
+    crop
   },
 
   // Featured Image (optional, prepended to gallery grids)
@@ -292,7 +285,7 @@ export const houseGalleryQuery = defineQuery(`*[_type == "house" && slug == $slu
   })[count(items) > 0] | order(category.orderRank)
 }`)
 
-// House titles for forms (ordered by global orderRank)
+// House titles for the contact forms and the house page's HousesNav (ordered by global orderRank)
 export const housesTitlesQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   "slug": slug,
   "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value)

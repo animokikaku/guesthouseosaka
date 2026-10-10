@@ -6,7 +6,6 @@ import type { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/utils/theme'
 import type { HousesTitlesQueryResult } from '@/sanity.types'
-import { useMemo } from 'react'
 
 const placesFieldGroup = defineAppFieldGroup(({ strict }) => ({
   places: strict<HouseIdentifier[]>()
@@ -20,20 +19,16 @@ interface PlacesFieldsProps {
 }
 
 function PlacesFields({ fields, description, label, houseTitles }: PlacesFieldsProps) {
-  const placeOptions = useMemo(
-    () =>
-      houseTitles.map(({ slug, title }) => ({
-        value: slug,
-        label: (
-          <>
-            <HouseIcon name={slug} strokeWidth={1.25} />
-            <span className="text-muted-foreground sm:text-inherit">{title ?? slug}</span>
-          </>
-        ),
-        className: cn('data-pressed:bg-transparent', HOUSE_COLORS[slug].toggleSvg)
-      })),
-    [houseTitles]
-  )
+  const placeOptions = houseTitles.map(({ slug, title }) => ({
+    value: slug,
+    label: (
+      <>
+        <HouseIcon name={slug} strokeWidth={1.25} />
+        <span className="text-muted-foreground sm:text-inherit">{title ?? slug}</span>
+      </>
+    ),
+    className: cn('data-pressed:bg-transparent', HOUSE_COLORS[slug].toggleSvg)
+  }))
 
   return (
     <fields.Field

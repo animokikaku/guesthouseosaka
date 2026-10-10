@@ -37,27 +37,15 @@ interface HouseLocationModalProps {
 }
 
 export function HouseLocationModal({ children, details, title }: HouseLocationModalProps) {
-  const [open, setOpen] = React.useState(false)
-
   if (!details) {
     return null
   }
 
   return (
-    <ResponsiveModal trigger={children} title={title} open={open} onOpenChange={setOpen}>
-      <LocationSections details={details} />
+    <ResponsiveModal trigger={children} title={title}>
+      <div className="space-y-2">
+        <PortableText value={details} components={portableTextComponents} />
+      </div>
     </ResponsiveModal>
-  )
-}
-
-interface LocationSectionsProps {
-  details: NonNullable<LocationData['details']>
-}
-
-function LocationSections({ details }: LocationSectionsProps) {
-  return (
-    <div className="space-y-2">
-      <PortableText value={details} components={portableTextComponents} />
-    </div>
   )
 }

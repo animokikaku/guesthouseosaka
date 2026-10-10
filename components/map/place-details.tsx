@@ -6,7 +6,6 @@ import { urlFor } from '@/sanity/lib/image'
 import { ColorScheme, useMapsLibrary } from '@vis.gl/react-google-maps'
 import { useTranslations } from 'next-intl'
 import { useTheme } from 'next-themes'
-import { memo } from 'react'
 
 interface PlaceDetailsProps {
   placeId: string
@@ -14,11 +13,7 @@ interface PlaceDetailsProps {
   className?: string
 }
 
-export const PlaceDetails = memo(function PlaceDetailsComponent({
-  placeId,
-  placeImage,
-  className
-}: PlaceDetailsProps) {
+export function PlaceDetails({ placeId, placeImage, className }: PlaceDetailsProps) {
   const { resolvedTheme } = useTheme()
   const colorScheme = resolvedTheme === 'dark' ? ColorScheme.DARK : ColorScheme.LIGHT
 
@@ -32,7 +27,7 @@ export const PlaceDetails = memo(function PlaceDetailsComponent({
       className={className}
     />
   )
-})
+}
 
 interface GoogleMapsPlaceDetailsProps {
   id: string

@@ -4,6 +4,8 @@ interface HouseColorVariants {
   divider: string
   accent: string
   text: string
+  /** Text color for the active link in HousesNav. */
+  activeText: string
   toggleSvg: string
 }
 
@@ -35,18 +37,21 @@ export const HOUSE_COLORS: Record<HouseIdentifier, HouseColorVariants> = {
     divider: 'bg-red-600 dark:bg-red-500',
     accent: 'bg-red-600/50',
     text: 'text-red-600',
+    activeText: 'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500',
     toggleSvg: 'data-pressed:*:[svg]:fill-red-500 data-pressed:*:[svg]:stroke-red-500'
   },
   lemon: {
     divider: 'bg-yellow-400 dark:bg-yellow-500',
     accent: 'bg-yellow-600/50',
     text: 'text-yellow-600',
+    activeText: 'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500',
     toggleSvg: 'data-pressed:*:[svg]:fill-yellow-500 data-pressed:*:[svg]:stroke-yellow-500'
   },
   orange: {
     divider: 'bg-orange-500 dark:bg-orange-600',
     accent: 'bg-orange-600/50',
     text: 'text-orange-600',
+    activeText: 'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
     toggleSvg: 'data-pressed:*:[svg]:fill-orange-500 data-pressed:*:[svg]:stroke-orange-500'
   }
 }

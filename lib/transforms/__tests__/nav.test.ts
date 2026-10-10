@@ -175,7 +175,7 @@ describe('toHouseNavItems', () => {
 
     expect(result).toHaveLength(1)
     expect(result[0].key).toBe('apple')
-    expect(consoleSpy).toHaveBeenCalledWith('Missing asset for house slug: invalid-slug')
+    expect(consoleSpy).toHaveBeenCalledWith('Unknown house slug: invalid-slug')
 
     consoleSpy.mockRestore()
   })

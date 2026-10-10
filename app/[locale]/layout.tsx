@@ -42,7 +42,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
   const { data: settings } = await sanityFetch({
     query: settingsQuery,
-    params: { locale }
+    params: { locale },
+    stega: false
   })
 
   const siteName = settings?.siteName

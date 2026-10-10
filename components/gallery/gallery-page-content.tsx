@@ -1,6 +1,6 @@
 'use client'
 
-import { Lightbox } from '@/components/lightbox'
+import { Lightbox, type LightboxItem } from '@/components/lightbox'
 import { HouseGallery } from '@/components/gallery/house-gallery'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
 import { useStickyNav } from '@/hooks/use-sticky-nav'
@@ -59,12 +59,14 @@ export function GalleryPageContent({
   const categories = toGalleryCategories(galleryCategories)
   const sectionIds = categories.map((c) => c._id)
 
-  const lightboxItemEntries = flattenGalleryItems(galleryCategories).flatMap((item) => {
+  const lightboxItems: LightboxItem[] = []
+  const indexByKey = new Map<string, number>()
+  for (const item of flattenGalleryItems(galleryCategories)) {
     const lightboxItem = toGalleryLightboxItem(item)
-    return lightboxItem ? [{ key: item._key, lightboxItem }] : []
-  })
-  const lightboxItems = lightboxItemEntries.map((entry) => entry.lightboxItem)
-  const indexByKey = new Map(lightboxItemEntries.map((entry, index) => [entry.key, index]))
+    if (!lightboxItem) continue
+    indexByKey.set(item._key, lightboxItems.length)
+    lightboxItems.push(lightboxItem)
+  }
 
   const { activeId } = useStickyNav({
     sectionIds,

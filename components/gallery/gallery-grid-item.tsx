@@ -5,8 +5,7 @@ import { SanityImage } from '@/components/sanity-image'
 import type { GalleryItem } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
 import { useTranslations } from 'next-intl'
-
-type DataAttributeFn = (path: string) => string
+import type { DataAttributeFn } from '@/lib/types/stega'
 
 type GalleryGridItemProps = {
   item: GalleryItem
