@@ -14,3 +14,6 @@ import type { StegaBranded, StegaCleaned } from 'next-sanity'
  * stega-aware `PortableText` types, which it does not export.
  */
 export type StegaAware<T> = StegaCleaned<T> | StegaBranded<T>
+
+/** Builds a Visual Editing `data-sanity` value for a path in the current document. */
+export type DataAttributeFn = (path: string) => string

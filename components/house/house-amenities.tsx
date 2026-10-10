@@ -16,8 +16,7 @@ import { cn } from '@/lib/utils'
 import { stegaClean } from '@sanity/client/stega'
 import { useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
-
-type DataAttributeFn = (path: string) => string
+import type { DataAttributeFn } from '@/lib/types/stega'
 
 interface HouseAmenitiesProps {
   amenityCategories: AmenityCategoryData[]

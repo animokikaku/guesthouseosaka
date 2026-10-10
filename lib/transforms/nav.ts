@@ -1,5 +1,5 @@
 import { assets } from '@/lib/assets'
-import type { NavGroupItem } from '@/lib/types'
+import { isHouseIdentifier, type NavGroupItem } from '@/lib/types'
 import type { ContactNavItem } from '@/lib/types/components'
 import type { ContactPageQueryResult, HousesNavQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
@@ -33,17 +33,17 @@ export function toContactNavItems(contactTypes: ContactTypes): ContactNavItem[] 
 
 /**
  * Transforms Sanity houses query result to NavGroupItem array
- * Filters out houses without matching assets
+ * Filters out houses whose slug isn't a known house identifier
  *
  * @param houses - Raw houses from Sanity query
  * @returns Array of NavGroupItem with navigation data and images
  */
 export function toHouseNavItems(houses: HousesNavQueryResult): NavGroupItem[] {
   return (houses ?? [])
-    .filter((house): house is typeof house & { slug: keyof typeof assets } => {
-      const isValidSlug = house.slug in assets
+    .filter((house) => {
+      const isValidSlug = isHouseIdentifier(house.slug)
       if (!isValidSlug) {
-        console.warn(`Missing asset for house slug: ${house.slug}`)
+        console.warn(`Unknown house slug: ${house.slug}`)
       }
       return isValidSlug
     })

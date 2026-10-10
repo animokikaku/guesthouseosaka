@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 import { Languages } from 'lucide-react'
 import { hasLocale, Locale, useLocale, useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
-import { useCallback, useState, useTransition } from 'react'
+import { useTransition } from 'react'
 
 const langs: Record<Locale, string> = {
   en: 'English',
@@ -22,12 +22,13 @@ const langs: Record<Locale, string> = {
   fr: 'Français'
 }
 
+const languages = routing.locales.map((code) => ({ code, label: langs[code] }))
+
 export function LanguageSwitcher({
   size = 'default'
 }: {
   size?: 'icon-sm' | 'default' | 'responsive'
 }) {
-  const { locales } = routing
   const locale = useLocale()
 
   const router = useRouter()
@@ -35,29 +36,20 @@ export function LanguageSwitcher({
   const pathname = usePathname()
   const params = useParams()
 
-  const handleOnChange = useCallback(
-    (lang: Locale) => {
-      startTransition(() => {
-        router.replace(
-          // @ts-expect-error -- TypeScript will validate that only known `params`
-          // are used in combination with a given `pathname`. Since the two will
-          // always match for the current route, we can skip runtime checks.
-          { pathname, params },
-          { locale: lang, scroll: false }
-        )
-      })
-    },
-    [router, pathname, params]
-  )
-
-  const languages = locales.map((loc) => ({
-    code: loc,
-    label: langs[loc]
-  }))
+  const handleOnChange = (lang: Locale) => {
+    startTransition(() => {
+      router.replace(
+        // @ts-expect-error -- TypeScript will validate that only known `params`
+        // are used in combination with a given `pathname`. Since the two will
+        // always match for the current route, we can skip runtime checks.
+        { pathname, params },
+        { locale: lang, scroll: false }
+      )
+    })
+  }
 
   return (
     <LanguageSwitcherSelect
-      languages={languages}
       value={locale}
       disabled={isPending}
       onChange={handleOnChange}
@@ -68,7 +60,6 @@ export function LanguageSwitcher({
 }
 
 type LanguageSwitcherSelectProps = {
-  languages: { code: Locale; label: React.ReactNode }[]
   value: Locale
   disabled?: boolean
   align?: 'start' | 'center' | 'end'
@@ -79,7 +70,6 @@ type LanguageSwitcherSelectProps = {
 }
 
 function LanguageSwitcherSelect({
-  languages,
   value,
   align = 'end',
   disabled = false,
@@ -89,23 +79,19 @@ function LanguageSwitcherSelect({
   className
 }: LanguageSwitcherSelectProps) {
   const t = useTranslations('LanguageSwitcher')
-  const [open, setOpen] = useState(false)
 
-  const handleValueChange = useCallback(
-    (val: string) => {
-      if (!hasLocale(routing.locales, val)) {
-        return
-      }
+  const handleValueChange = (val: string) => {
+    if (!hasLocale(routing.locales, val)) {
+      return
+    }
 
-      if (val !== value) {
-        onChange?.(val)
-      }
-    },
-    [onChange, value]
-  )
+    if (val !== value) {
+      onChange?.(val)
+    }
+  }
 
   return (
-    <DropdownMenu modal={false} open={open} onOpenChange={setOpen}>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         disabled={disabled}
         render={
@@ -131,12 +117,7 @@ function LanguageSwitcherSelect({
       <DropdownMenuContent align={align} disableAnchorTracking positionMethod="fixed">
         <DropdownMenuRadioGroup onValueChange={handleValueChange} value={value}>
           {languages.map(({ code, label }) => (
-            <DropdownMenuRadioItem
-              key={code}
-              lang={code}
-              onClick={() => setOpen(false)}
-              value={code}
-            >
+            <DropdownMenuRadioItem key={code} lang={code} value={code} closeOnClick>
               {label}
             </DropdownMenuRadioItem>
           ))}

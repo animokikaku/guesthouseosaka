@@ -3,17 +3,11 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
-import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { HOUSE_COLORS } from '@/lib/utils/theme'
 import type { HousesTitlesQueryResult } from '@/sanity.types'
 import { stegaClean } from 'next-sanity'
 import { useParams } from 'next/navigation'
-
-const THEME_CLASSES: Record<HouseIdentifier, string> = {
-  orange: 'data-[active=true]:text-orange-600 dark:data-[active=true]:text-orange-500',
-  apple: 'data-[active=true]:text-red-600 dark:data-[active=true]:text-red-500',
-  lemon: 'data-[active=true]:text-yellow-400 dark:data-[active=true]:text-yellow-500'
-}
 
 export function HousesNav({
   houses,
@@ -42,7 +36,7 @@ export function HousesNav({
                 data-active={slug === params.house}
                 className={cn(
                   'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center rounded-md px-4 text-center text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset',
-                  THEME_CLASSES[slug]
+                  HOUSE_COLORS[slug].activeText
                 )}
                 scroll={!isMobile}
               >

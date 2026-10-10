@@ -1,7 +1,6 @@
 import { CategoryGrid } from '@/components/gallery/gallery-category-grid'
 import { type GalleryCategory } from '@/lib/gallery'
-
-type DataAttributeFn = (path: string) => string
+import type { DataAttributeFn } from '@/lib/types/stega'
 
 type HouseGalleryProps = {
   categories: GalleryCategory[]
