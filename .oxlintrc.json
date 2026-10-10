@@ -1,8 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "options": {
-    "typeAware": true,
-    "typeCheck": true
+    "typeAware": true
   },
   "plugins": ["react", "typescript", "import", "jsx-a11y", "nextjs", "unicorn", "oxc"],
   "categories": {
