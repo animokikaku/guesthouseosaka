@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { HousePageContent } from '../house-page-content'
-import type { HouseQueryResult, HousesNavQueryResult } from '@/sanity.types'
+import type { HouseQueryResult, HousesTitlesQueryResult } from '@/sanity.types'
 import {
   createBuilding,
   createLocation,
@@ -77,23 +77,13 @@ vi.mock('@/i18n/navigation', () => ({
 }))
 
 type HouseSlug = 'orange' | 'apple' | 'lemon'
-type Props = NonNullable<HouseQueryResult> & { houses: HousesNavQueryResult }
+type Props = NonNullable<HouseQueryResult> & { houses: HousesTitlesQueryResult }
 
-// Mock image with the expanded asset structure HouseQueryResult carries
-const createMockImage = (alt: string) => ({
-  asset: {
-    _id: 'image-123',
-    _ref: 'image-123',
-    _type: 'reference' as const,
-    url: 'https://cdn.sanity.io/test.jpg',
-    dimensions: { width: 1920, height: 1080, aspectRatio: 16 / 9 },
-    lqip: 'data:image/jpeg;base64,test'
-  },
+const mockImage = {
+  asset: { _ref: 'image-123', _type: 'reference' as const },
   hotspot: null,
-  crop: null,
-  alt,
-  lqip: 'data:image/jpeg;base64,test'
-})
+  crop: null
+}
 
 const createBaseProps = (overrides: Partial<Props> = {}): Props => {
   // Cast to satisfy complex generated Sanity types while testing behavior
@@ -106,9 +96,8 @@ const createBaseProps = (overrides: Partial<Props> = {}): Props => {
     slug: 'orange',
     title: 'Orange House',
     description: 'A beautiful orange house',
-    caption: 'Welcome to Orange House',
     phone: { domestic: '06-1234-5678', international: '+81-6-1234-5678' },
-    image: createMockImage('House image'),
+    image: mockImage,
     galleryImages: [createGalleryItem({ _key: 'g1' }), createGalleryItem({ _key: 'g2' })],
     galleryPreview: [createGalleryItem({ _key: 'g1' }), createGalleryItem({ _key: 'g2' })],
     galleryImageCount: 2,
@@ -125,20 +114,8 @@ const createBaseProps = (overrides: Partial<Props> = {}): Props => {
     about: [{ _type: 'block', _key: 'b1', children: [], style: 'normal', markDefs: [] }],
     building: createBuilding(),
     houses: [
-      {
-        slug: 'orange',
-        title: 'Orange House',
-        description: null,
-        caption: null,
-        image: createMockImage('Orange')
-      },
-      {
-        slug: 'apple',
-        title: 'Apple House',
-        description: null,
-        caption: null,
-        image: createMockImage('Apple')
-      }
+      { slug: 'orange', title: 'Orange House' },
+      { slug: 'apple', title: 'Apple House' }
     ],
     ...overrides
   } as unknown as Props

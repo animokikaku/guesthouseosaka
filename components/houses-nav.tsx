@@ -5,7 +5,7 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
 import { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { HousesNavQueryResult } from '@/sanity.types'
+import type { HousesTitlesQueryResult } from '@/sanity.types'
 import { stegaClean } from 'next-sanity'
 import { useParams } from 'next/navigation'
 
@@ -20,7 +20,7 @@ export function HousesNav({
   className,
   ...props
 }: React.ComponentProps<'div'> & {
-  houses: NonNullable<HousesNavQueryResult>
+  houses: HousesTitlesQueryResult
 }) {
   const isMobile = useIsMobile()
   const params = useParams()
