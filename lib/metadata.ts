@@ -5,7 +5,9 @@ import { Locale } from 'next-intl'
 const openGraphLocaleMap: Record<Locale, string> = {
   en: 'en_US',
   ja: 'ja_JP',
-  fr: 'fr_FR'
+  fr: 'fr_FR',
+  'zh-CN': 'zh_CN',
+  'zh-TW': 'zh_TW'
 }
 
 export function getOpenGraphMetadata({

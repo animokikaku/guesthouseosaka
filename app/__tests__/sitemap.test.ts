@@ -6,25 +6,34 @@ vi.mock('@/lib/env', () => ({
   }
 }))
 
-vi.mock('@/i18n/navigation', () => ({
-  getPathname: ({
-    href,
-    locale
-  }: {
-    href: string | { pathname: string; params?: Record<string, string> }
-    locale: string
-  }) => {
-    let pathname = typeof href === 'string' ? href : href.pathname
+vi.mock('@/i18n/navigation', async () => {
+  const { routing } = await import('@/i18n/routing')
+  const { localePrefix } = routing
+  const prefixes: Partial<Record<string, string>> =
+    typeof localePrefix === 'object' && 'prefixes' in localePrefix
+      ? (localePrefix.prefixes ?? {})
+      : {}
 
-    if (typeof href !== 'string' && href.params) {
-      for (const [key, value] of Object.entries(href.params)) {
-        pathname = pathname.replace(`[${key}]`, value)
+  return {
+    getPathname: ({
+      href,
+      locale
+    }: {
+      href: string | { pathname: string; params?: Record<string, string> }
+      locale: string
+    }) => {
+      let pathname = typeof href === 'string' ? href : href.pathname
+
+      if (typeof href !== 'string' && href.params) {
+        for (const [key, value] of Object.entries(href.params)) {
+          pathname = pathname.replace(`[${key}]`, value)
+        }
       }
-    }
 
-    return `/${locale}${pathname === '/' ? '' : pathname}`
+      return `${prefixes[locale] ?? `/${locale}`}${pathname === '/' ? '' : pathname}`
+    }
   }
-}))
+})
 
 import sitemap, { routes } from '../sitemap'
 
@@ -43,7 +52,9 @@ describe('sitemap', () => {
       expect(entry.alternates?.languages).toEqual({
         en: expect.stringContaining('/en'),
         fr: expect.stringContaining('/fr'),
-        ja: expect.stringContaining('/ja')
+        ja: expect.stringContaining('/ja'),
+        'zh-CN': expect.stringContaining('/zh-cn'),
+        'zh-TW': expect.stringContaining('/zh-tw')
       })
     }
   })

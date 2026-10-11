@@ -4,13 +4,14 @@ import { expect, type Page, test } from '@playwright/test'
  * Consolidated locale route tests.
  *
  * This file tests that all locale routes load successfully across all supported locales.
- * Test matrix: [en, ja, fr] x [/, /contact, /orange/gallery] = 9 tests
+ * Test matrix: [en, ja, fr, zh-cn, zh-tw] x [/, /contact, /orange/gallery] = 15 tests
  *
  * This keeps locale routing as a whole-app browser boundary instead of
  * duplicating it in component-focused suites.
  */
 
-const LOCALES = ['en', 'ja', 'fr'] as const
+// URL prefixes (zh-CN and zh-TW are served under lowercase prefixes)
+const LOCALES = ['en', 'ja', 'fr', 'zh-cn', 'zh-tw'] as const
 
 const ROUTES = [
   { path: '', name: 'homepage', selector: 'heading' },

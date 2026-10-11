@@ -25,39 +25,49 @@ const nextConfig: NextConfig = {
     { source: '/jp', destination: '/ja', permanent: true },
     { source: '/jp/:path*', destination: '/ja/:path*', permanent: true },
 
-    // Unsupported locales → default (en)
-    { source: '/:locale(ko|kr|zh)', destination: '/en', permanent: true },
+    // Chinese locale aliases → region-based locales
+    { source: '/:locale(zh|zh-hans|zh-sg)', destination: '/zh-cn', permanent: true },
+    { source: '/:locale(zh|zh-hans|zh-sg)/:path*', destination: '/zh-cn/:path*', permanent: true },
+    { source: '/:locale(zh-hant|zh-hk|zh-mo)', destination: '/zh-tw', permanent: true },
     {
-      source: '/:locale(ko|kr|zh)/:path*',
+      source: '/:locale(zh-hant|zh-hk|zh-mo)/:path*',
+      destination: '/zh-tw/:path*',
+      permanent: true
+    },
+
+    // Unsupported locales → default (en)
+    { source: '/:locale(ko|kr)', destination: '/en', permanent: true },
+    {
+      source: '/:locale(ko|kr)/:path*',
       destination: '/en/:path*',
       permanent: true
     },
 
     // Renamed pages
     {
-      source: '/:locale(en|ja|fr)/orange-house',
+      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/orange-house',
       destination: '/:locale/orange',
       permanent: true
     },
     {
-      source: '/:locale(en|ja|fr)/oranged',
+      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/oranged',
       destination: '/:locale/orange',
       permanent: true
     },
     {
-      source: '/:locale(en|ja|fr)/:house(orange|apple|lemon)/access',
+      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/:house(orange|apple|lemon)/access',
       destination: '/:locale/:house',
       permanent: true
     },
 
     // Removed houses
     {
-      source: '/:locale(en|ja|fr)/:house(banana|melon)',
+      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/:house(banana|melon)',
       destination: '/:locale',
       permanent: true
     },
     {
-      source: '/:locale(en|ja|fr)/:house(banana|melon)/:path*',
+      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/:house(banana|melon)/:path*',
       destination: '/:locale',
       permanent: true
     },
@@ -65,17 +75,18 @@ const nextConfig: NextConfig = {
     // Removed pages
     {
       source:
-        '/:locale(en|ja|fr)/:path(column|seo-blog|category|location|review|feed|rss|blog|news|about|gallery|rooms|price|prices|access|privacy|terms|link)',
+        '/:locale(en|ja|fr|zh-cn|zh-tw)/:path(column|seo-blog|category|location|review|feed|rss|blog|news|about|gallery|rooms|price|prices|access|privacy|terms|link)',
       destination: '/:locale',
       permanent: true
     },
     {
-      source: '/:locale(en|ja|fr)/:path(column|seo-blog|category|2013|wp-content)/:rest*',
+      source:
+        '/:locale(en|ja|fr|zh-cn|zh-tw)/:path(column|seo-blog|category|2013|wp-content)/:rest*',
       destination: '/:locale',
       permanent: true
     },
     {
-      source: '/:locale(en|ja|fr)/:path(reservation|booking|contact-us)',
+      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/:path(reservation|booking|contact-us)',
       destination: '/:locale/contact',
       permanent: true
     }

@@ -5,6 +5,6 @@ import { expect, test } from '@playwright/test'
 test('the root path resolves to a localized homepage', async ({ page }) => {
   await page.goto('/')
 
-  await expect(page).toHaveURL(/\/(en|ja|fr)?$/)
+  await expect(page).toHaveURL(/\/(en|ja|fr|zh-cn|zh-tw)?$/)
   await expect(page.getByRole('heading').first()).toBeVisible()
 })

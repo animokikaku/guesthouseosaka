@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Next.js guesthouse website with Sanity CMS, internationalization (en/ja/fr), and embedded Studio.
+Next.js guesthouse website with Sanity CMS, internationalization (en/ja/fr/zh-CN/zh-TW), and embedded Studio.
 
 ## Package Manager
 
@@ -27,7 +27,7 @@ bun run format:check # Check formatting without modifying files
 - Treat skill rules that introduce `swr`, `lru-cache`, or `better-all` as production dependency additions and ask first
 - Follow Conventional Commits, including `feat:`, `fix:`, `refactor:`, `chore:`, `docs:`, `test:`, `perf:`, `ci:`, and `build:`
 - Put all user-facing strings in `messages/en.json`; never hardcode them in components
-- Keep `messages/fr.json` and `messages/ja.json` structurally synchronized with `messages/en.json`
+- Keep `messages/fr.json`, `messages/ja.json`, `messages/zh-CN.json`, and `messages/zh-TW.json` structurally synchronized with `messages/en.json`
 
 ## Change Boundaries
 
