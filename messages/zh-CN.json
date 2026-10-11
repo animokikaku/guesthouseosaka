@@ -1,0 +1,192 @@
+{
+  "FAQAccordion": {
+    "floors_and_rooms": {
+      "format": "<floorsTag>{floors}层楼</floorsTag>，共<roomsTag>{rooms}间房</roomsTag>。"
+    }
+  },
+  "FAQContactTable": {
+    "from_overseas": "从海外拨打",
+    "house": "房屋",
+    "within_japan": "在日本境内拨打"
+  },
+  "CategoryGrid": {
+    "photo_count": "{count, plural, other {#张照片}}"
+  },
+  "DraftModeIndicator": {
+    "exit": "退出预览",
+    "preview": "预览"
+  },
+  "ErrorPage": {
+    "description": "由于临时问题，此页面无法加载。",
+    "retry": "重试",
+    "title": "出错了"
+  },
+  "GalleryModal": {
+    "close": "关闭相册",
+    "description": "浏览{title}的照片",
+    "title": "房屋相册"
+  },
+  "GalleryGridItem": {
+    "open_image": "打开相册图片"
+  },
+  "GalleryPage": {
+    "close": "关闭相册"
+  },
+  "GalleryPageContent": {
+    "gallery_content_label": "相册内容",
+    "gallery_title": "房屋相册"
+  },
+  "Lightbox": {
+    "close": "关闭",
+    "counter": "{current} / {total}",
+    "full_size_images": "全尺寸图片",
+    "next": "下一张",
+    "previous": "上一张",
+    "switch_to_bleed_slides": "切换为全幅显示",
+    "switch_to_snug_slides": "切换为适应显示",
+    "thumbnails": "照片缩略图",
+    "zoom_in": "放大",
+    "zoom_out": "缩小"
+  },
+  "HouseAbout": {
+    "heading": "关于{house}"
+  },
+  "HouseAmenities": {
+    "heading": "设施与服务",
+    "notes": {
+      "coin": "投币式",
+      "private": "独用",
+      "shared": "共用"
+    },
+    "show_all": "显示全部{count}项设施"
+  },
+  "HouseBuilding": {
+    "floors_label": "楼层",
+    "min_rent_label": "最低租金",
+    "rooms_label": "房间"
+  },
+  "HouseLocation": {
+    "heading": "位置",
+    "modal_trigger": "显示更多",
+    "loading_map": "正在加载地图"
+  },
+  "HousePricing": {
+    "heading": "价格"
+  },
+  "ImageBlockGallery": {
+    "overflow_count": "+{count, number}",
+    "view_gallery": "显示所有照片",
+    "view_gallery_count": "{count, plural, other {显示全部#张照片}}",
+    "empty_title": "暂无相册图片",
+    "empty_description": "相册图片通过 Sanity CMS 管理。"
+  },
+  "StickyCategoryNav": {
+    "gallery_categories_label": "相册分类"
+  },
+  "LanguageSwitcher": {
+    "aria_label": "选择语言"
+  },
+  "LegalNoticeDialog": {
+    "agree_button": "我同意",
+    "close_button": "关闭",
+    "last_updated": "最后更新：{date}",
+    "title_fallback": "隐私政策"
+  },
+  "MessageField": {
+    "character_counter": "{count} / {max} 字",
+    "optional_hint": "选填"
+  },
+  "MobileHeroImage": {
+    "view_gallery": "显示所有照片",
+    "empty_title": "暂无相册图片",
+    "empty_description": "相册图片通过 Sanity CMS 管理。"
+  },
+  "MobileNav": {
+    "home_label": "首页",
+    "menu_label": "菜单",
+    "toggle_menu": "切换菜单"
+  },
+  "ModeSwitcher": {
+    "toggle_theme": "切换主题"
+  },
+  "NotFound": {
+    "back_home": "返回首页",
+    "contact_us": "需要帮助？<link>联系我们</link>。",
+    "description": "找不到您要访问的页面，建议您返回首页。",
+    "title": "哎呀！"
+  },
+  "PageEmptyState": {
+    "title": "内容暂不可用",
+    "description": "此页面内容通过 Sanity CMS 管理。请添加内容以在此显示。"
+  },
+  "SiteHeader": {
+    "logo_label": "大阪合租公寓",
+    "navigation_label": "主导航",
+    "navigation": {
+      "share_houses": "合租公寓",
+      "faq": "常见问题",
+      "contact": "联系我们"
+    }
+  },
+  "PlaceDetails": {
+    "fallback_alt": "地点照片"
+  },
+  "Metadata": {
+    "contact_title": "联系我们",
+    "faq_title": "常见问题",
+    "manifest_name": "大阪合租公寓"
+  },
+  "SubmitButton": {
+    "label": "提交"
+  },
+  "forms": {
+    "fields": {
+      "gender": {
+        "options": {
+          "female": "女",
+          "male": "男"
+        }
+      },
+      "phone": {
+        "optional": "（选填）"
+      },
+      "privacy_policy_agreement": "提交此表单即表示您同意<link>隐私政策</link>。",
+      "stay_duration": {
+        "options": {
+          "long_term": "长期",
+          "one_month": "1个月以上",
+          "three_month": "3个月以上"
+        }
+      }
+    },
+    "status": {
+      "error": {
+        "description": "请稍后重试，或直接发送邮件至 {email} 与我们联系。",
+        "message": "消息发送失败。"
+      },
+      "sending": "正在发送消息…",
+      "success": {
+        "description": "{name}，感谢您的咨询。我们会尽快回复您。",
+        "message": "消息发送成功！"
+      }
+    },
+    "validation": {
+      "age_positive": "年龄必须为正数。",
+      "date_future": "日期必须为今天或之后。",
+      "email": "电子邮件地址无效。",
+      "gender_required": "请选择您的性别。",
+      "message_max": "消息不能超过3000个字符。",
+      "message_min": "消息至少需要5个字符。",
+      "name_max": "姓名不能超过100个字符。",
+      "name_min": "姓名至少需要2个字符。",
+      "nationality_max": "国籍不能超过100个字符。",
+      "nationality_required": "请输入您的国籍。",
+      "phone": "电话号码无效。",
+      "places_max": "最多可选择3处合租公寓。",
+      "places_min": "请至少选择一处合租公寓。",
+      "privacy_policy": "您必须同意隐私政策。",
+      "stay_duration": "请选择您希望的最短入住期限。",
+      "time_range": "时间必须在10:00至20:00之间。"
+    }
+  }
+}

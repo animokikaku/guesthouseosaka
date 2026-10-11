@@ -6,3 +6,8 @@ preserve_hierarchy: true
 files:
   - source: /messages/en.json
     translation: /messages/%two_letters_code%.json
+    # %two_letters_code% is "zh" for both Chinese variants; keep them in separate files
+    languages_mapping:
+      two_letters_code:
+        zh-CN: zh-CN
+        zh-TW: zh-TW

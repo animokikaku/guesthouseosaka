@@ -19,7 +19,9 @@ import { useTransition } from 'react'
 const langs: Record<Locale, string> = {
   en: 'English',
   ja: '日本語',
-  fr: 'Français'
+  fr: 'Français',
+  'zh-CN': '简体中文',
+  'zh-TW': '繁體中文'
 }
 
 const languages = routing.locales.map((code) => ({ code, label: langs[code] }))

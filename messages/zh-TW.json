@@ -1,0 +1,192 @@
+{
+  "FAQAccordion": {
+    "floors_and_rooms": {
+      "format": "<floorsTag>{floors}層樓</floorsTag>，共<roomsTag>{rooms}間房</roomsTag>。"
+    }
+  },
+  "FAQContactTable": {
+    "from_overseas": "從海外撥打",
+    "house": "房屋",
+    "within_japan": "在日本境內撥打"
+  },
+  "CategoryGrid": {
+    "photo_count": "{count, plural, other {#張照片}}"
+  },
+  "DraftModeIndicator": {
+    "exit": "結束預覽",
+    "preview": "預覽"
+  },
+  "ErrorPage": {
+    "description": "由於暫時性問題，此頁面無法載入。",
+    "retry": "重試",
+    "title": "發生錯誤"
+  },
+  "GalleryModal": {
+    "close": "關閉相簿",
+    "description": "瀏覽{title}的照片",
+    "title": "房屋相簿"
+  },
+  "GalleryGridItem": {
+    "open_image": "開啟相簿圖片"
+  },
+  "GalleryPage": {
+    "close": "關閉相簿"
+  },
+  "GalleryPageContent": {
+    "gallery_content_label": "相簿內容",
+    "gallery_title": "房屋相簿"
+  },
+  "Lightbox": {
+    "close": "關閉",
+    "counter": "{current} / {total}",
+    "full_size_images": "完整尺寸圖片",
+    "next": "下一張",
+    "previous": "上一張",
+    "switch_to_bleed_slides": "切換為滿版顯示",
+    "switch_to_snug_slides": "切換為合適顯示",
+    "thumbnails": "照片縮圖",
+    "zoom_in": "放大",
+    "zoom_out": "縮小"
+  },
+  "HouseAbout": {
+    "heading": "關於{house}"
+  },
+  "HouseAmenities": {
+    "heading": "設施與服務",
+    "notes": {
+      "coin": "投幣式",
+      "private": "獨立",
+      "shared": "共用"
+    },
+    "show_all": "顯示全部{count}項設施"
+  },
+  "HouseBuilding": {
+    "floors_label": "樓層",
+    "min_rent_label": "最低租金",
+    "rooms_label": "房間"
+  },
+  "HouseLocation": {
+    "heading": "位置",
+    "modal_trigger": "顯示更多",
+    "loading_map": "正在載入地圖"
+  },
+  "HousePricing": {
+    "heading": "價格"
+  },
+  "ImageBlockGallery": {
+    "overflow_count": "+{count, number}",
+    "view_gallery": "顯示所有照片",
+    "view_gallery_count": "{count, plural, other {顯示全部#張照片}}",
+    "empty_title": "尚無相簿圖片",
+    "empty_description": "相簿圖片透過 Sanity CMS 管理。"
+  },
+  "StickyCategoryNav": {
+    "gallery_categories_label": "相簿分類"
+  },
+  "LanguageSwitcher": {
+    "aria_label": "選擇語言"
+  },
+  "LegalNoticeDialog": {
+    "agree_button": "我同意",
+    "close_button": "關閉",
+    "last_updated": "最後更新：{date}",
+    "title_fallback": "隱私權政策"
+  },
+  "MessageField": {
+    "character_counter": "{count} / {max} 字",
+    "optional_hint": "選填"
+  },
+  "MobileHeroImage": {
+    "view_gallery": "顯示所有照片",
+    "empty_title": "尚無相簿圖片",
+    "empty_description": "相簿圖片透過 Sanity CMS 管理。"
+  },
+  "MobileNav": {
+    "home_label": "首頁",
+    "menu_label": "選單",
+    "toggle_menu": "切換選單"
+  },
+  "ModeSwitcher": {
+    "toggle_theme": "切換主題"
+  },
+  "NotFound": {
+    "back_home": "返回首頁",
+    "contact_us": "需要協助嗎？<link>聯絡我們</link>。",
+    "description": "找不到您要瀏覽的頁面，建議您返回首頁。",
+    "title": "糟糕！"
+  },
+  "PageEmptyState": {
+    "title": "內容暫時無法顯示",
+    "description": "此頁面內容透過 Sanity CMS 管理。請新增內容以在此顯示。"
+  },
+  "SiteHeader": {
+    "logo_label": "大阪共享住宅",
+    "navigation_label": "主要導覽",
+    "navigation": {
+      "share_houses": "共享住宅",
+      "faq": "常見問題",
+      "contact": "聯絡我們"
+    }
+  },
+  "PlaceDetails": {
+    "fallback_alt": "地點照片"
+  },
+  "Metadata": {
+    "contact_title": "聯絡我們",
+    "faq_title": "常見問題",
+    "manifest_name": "大阪共享住宅"
+  },
+  "SubmitButton": {
+    "label": "送出"
+  },
+  "forms": {
+    "fields": {
+      "gender": {
+        "options": {
+          "female": "女",
+          "male": "男"
+        }
+      },
+      "phone": {
+        "optional": "（選填）"
+      },
+      "privacy_policy_agreement": "送出此表單即表示您同意<link>隱私權政策</link>。",
+      "stay_duration": {
+        "options": {
+          "long_term": "長期",
+          "one_month": "1個月以上",
+          "three_month": "3個月以上"
+        }
+      }
+    },
+    "status": {
+      "error": {
+        "description": "請稍後再試，或直接寄信至 {email} 與我們聯絡。",
+        "message": "訊息傳送失敗。"
+      },
+      "sending": "正在傳送訊息…",
+      "success": {
+        "description": "{name}，感謝您的來信。我們會盡快回覆您。",
+        "message": "訊息已成功送出！"
+      }
+    },
+    "validation": {
+      "age_positive": "年齡必須為正數。",
+      "date_future": "日期必須為今天或之後。",
+      "email": "電子郵件地址無效。",
+      "gender_required": "請選擇您的性別。",
+      "message_max": "訊息不得超過3000個字元。",
+      "message_min": "訊息至少需要5個字元。",
+      "name_max": "姓名不得超過100個字元。",
+      "name_min": "姓名至少需要2個字元。",
+      "nationality_max": "國籍不得超過100個字元。",
+      "nationality_required": "請輸入您的國籍。",
+      "phone": "電話號碼無效。",
+      "places_max": "最多可選擇3間共享住宅。",
+      "places_min": "請至少選擇一間共享住宅。",
+      "privacy_policy": "您必須同意隱私權政策。",
+      "stay_duration": "請選擇您希望的最短入住期間。",
+      "time_range": "時間必須在10:00至20:00之間。"
+    }
+  }
+}
