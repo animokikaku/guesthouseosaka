@@ -9,7 +9,7 @@ A multilingual website for a guest house in Osaka, built with Next.js and Sanity
 - **Framework**: Next.js 16 (App Router)
 - **CMS**: Sanity v6 with embedded Studio at `/studio`
 - **Styling**: Tailwind CSS v4
-- **i18n**: next-intl (English, Japanese, French)
+- **i18n**: next-intl (English, Japanese, French, Simplified Chinese, Traditional Chinese)
 - **Forms**: TanStack React Form + Zod validation
 - **UI Components**: Base UI primitives (shadcn/ui)
 - **Email**: Resend + React Email
@@ -38,7 +38,7 @@ bun dev        # Start dev server at http://localhost:3000
 
 ```
 app/
-  [locale]/           # Locale-based routing (en, ja, fr)
+  [locale]/           # Locale-based routing (en, ja, fr, zh-cn, zh-tw)
     [house]/          # Dynamic house pages with gallery
     contact/          # Contact forms
     faq/              # FAQ page
@@ -56,7 +56,7 @@ sanity/
   schemaTypes/        # Sanity document and object schemas
   lib/                # GROQ queries and utilities
 
-messages/             # Translation files (en.json, ja.json, fr.json)
+messages/             # Translation files (en, ja, fr, zh-CN, zh-TW)
 ```
 
 ## Environment Variables

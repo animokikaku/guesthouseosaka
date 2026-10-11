@@ -4,7 +4,7 @@
 
 ```
 app/
-├── [locale]/          # Locale-based routing (en, ja, fr)
+├── [locale]/          # Locale-based routing (en, ja, fr, zh-cn, zh-tw)
 ├── studio/            # Embedded Sanity Studio at /studio
 └── layout.tsx         # Root layout with shared wrappers
 
@@ -19,7 +19,7 @@ sanity/
 ├── schemaTypes/       # Document and block type definitions
 └── lib/queries.ts     # GROQ queries using defineQuery()
 
-messages/              # Translation JSON files (en.json, ja.json, fr.json)
+messages/              # Translation JSON files (en, ja, fr, zh-CN, zh-TW)
 lib/                   # Shared utilities and config
 hooks/                 # Custom React hooks
 public/                # Static assets only
