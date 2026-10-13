@@ -5,14 +5,21 @@ import { PageEmptyState } from '@/components/page-empty-state'
 import { PageActions, PageHeader } from '@/components/page-header'
 import { buttonVariants } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
+import { getCanonicalMetadata } from '@/lib/metadata'
 import { toGalleryImages } from '@/lib/transforms/gallery'
 import { sanityFetch } from '@/sanity/lib/live'
 import { homePageQuery } from '@/sanity/lib/queries'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
+import type { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 
 // Public Sanity content: fail the build if anything here would render per request.
 export const ensureStatic = 'navigation'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  return { alternates: getCanonicalMetadata('/', locale) }
+}
 
 const heroComponents: PortableTextComponents = {
   block: {

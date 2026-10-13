@@ -1,17 +1,27 @@
 import { HousePageContent } from '@/components/house/house-page-content'
 import { PageEmptyStateSection } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
-import { env } from '@/lib/env'
 import { getHouseAndLocale } from '@/lib/house-params'
+import { getCanonicalMetadata, getCanonicalUrl } from '@/lib/metadata'
 import { urlFor } from '@/sanity/lib/image'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery, housesTitlesQuery } from '@/sanity/lib/queries'
+import type { Metadata } from 'next'
 import { Accommodation, WithContext } from 'schema-dts'
 
 // instant = false: kept on purpose, the whole page depends on the house, so there is
 // no shared App Shell worth prefetching. Links here use `prefetch` to load the
 // full static page.
 export const instant = false
+
+export async function generateMetadata({
+  params
+}: PageProps<'/[locale]/[house]'>): Promise<Metadata> {
+  const { house, locale } = await getHouseAndLocale(params)
+  return {
+    alternates: getCanonicalMetadata({ pathname: '/[house]', params: { house } }, locale)
+  }
+}
 
 export default async function HousePage({ params }: PageProps<'/[locale]/[house]'>) {
   const { house, locale } = await getHouseAndLocale(params)
@@ -25,7 +35,7 @@ export default async function HousePage({ params }: PageProps<'/[locale]/[house]
     return <PageEmptyStateSection />
   }
 
-  const url = new URL(`/${locale}/${house}`, env.NEXT_PUBLIC_APP_URL).toString()
+  const url = getCanonicalUrl({ pathname: '/[house]', params: { house } }, locale)
   const { title, description, map, building, phone, image } = data
 
   const jsonLd: WithContext<Accommodation> = {

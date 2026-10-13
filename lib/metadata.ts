@@ -1,4 +1,6 @@
+import { getPathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
+import { env } from '@/lib/env'
 import { Metadata } from 'next'
 import { Locale } from 'next-intl'
 
@@ -35,4 +37,16 @@ export function getOpenGraphMetadata({
   } satisfies Metadata['twitter']
 
   return { openGraph, twitter }
+}
+
+type Href = Parameters<typeof getPathname>[0]['href']
+
+/** Absolute URL on the production origin, using the public locale prefix (e.g. /zh-cn). */
+export function getCanonicalUrl(href: Href, locale: Locale) {
+  return new URL(getPathname({ href, locale }), env.NEXT_PUBLIC_APP_URL).toString()
+}
+
+/** Self-referencing canonical on the production origin, so copies served elsewhere defer to it. */
+export function getCanonicalMetadata(href: Href, locale: Locale) {
+  return { canonical: getCanonicalUrl(href, locale) } satisfies Metadata['alternates']
 }

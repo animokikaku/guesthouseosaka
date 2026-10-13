@@ -34,6 +34,12 @@ test.describe('Locale Routes', () => {
           // Verify URL loaded correctly
           await expect(page).toHaveURL(new RegExp(`/${locale}${route.path}/?$`))
 
+          // Self-referencing canonical, so copies served on other hosts defer to this URL
+          await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+            'href',
+            new RegExp(`^https?://[^/]+/${locale}${route.path}$`)
+          )
+
           // Verify page has content based on route type
           await verifyPageContent(page, route)
         })

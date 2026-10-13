@@ -1,10 +1,17 @@
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import { Link } from '@/i18n/navigation'
 import { PageEmptyState } from '@/components/page-empty-state'
+import { getCanonicalMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactTypesListQuery } from '@/sanity/lib/queries'
 import { ChevronRightIcon } from 'lucide-react'
+import type { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  return { alternates: getCanonicalMetadata('/contact', locale) }
+}
 
 export default async function ContactPage() {
   const locale = await getLocale()
