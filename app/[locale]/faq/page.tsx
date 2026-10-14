@@ -1,6 +1,7 @@
 import { FAQAccordion } from '@/app/[locale]/faq/(components)/faq-accordion'
 import FAQCard from '@/app/[locale]/faq/(components)/faq-card'
 import { PageEmptyState } from '@/components/page-empty-state'
+import { getCanonicalMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
 import {
   faqPageQuery,
@@ -8,7 +9,13 @@ import {
   housesBuildingQuery,
   pricingCategoriesQuery
 } from '@/sanity/lib/queries'
+import type { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  return { alternates: getCanonicalMetadata('/faq', locale) }
+}
 
 export default async function FAQPage() {
   const locale = await getLocale()

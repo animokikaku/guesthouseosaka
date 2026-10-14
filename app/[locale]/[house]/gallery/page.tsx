@@ -4,15 +4,26 @@ import { PageEmptyStateSection } from '@/components/page-empty-state'
 import { buttonVariants } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { getHouseAndLocale } from '@/lib/house-params'
+import { getCanonicalMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseGalleryQuery } from '@/sanity/lib/queries'
 import { ArrowLeftIcon } from 'lucide-react'
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 
 // instant = false: kept on purpose, the whole page depends on the house, so there is
 // no shared App Shell worth prefetching. Links here use `prefetch` to load the
 // full static page.
 export const instant = false
+
+export async function generateMetadata({
+  params
+}: PageProps<'/[locale]/[house]/gallery'>): Promise<Metadata> {
+  const { house, locale } = await getHouseAndLocale(params)
+  return {
+    alternates: getCanonicalMetadata({ pathname: '/[house]/gallery', params: { house } }, locale)
+  }
+}
 
 export default async function GalleryPage({ params }: PageProps<'/[locale]/[house]/gallery'>) {
   const { house, locale } = await getHouseAndLocale(params)

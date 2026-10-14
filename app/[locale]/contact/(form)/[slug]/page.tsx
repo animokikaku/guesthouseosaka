@@ -3,11 +3,13 @@ import { MoveInForm } from '@/components/forms/move-in-form'
 import { TourForm } from '@/components/forms/tour-form'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { routing } from '@/i18n/routing'
+import { getCanonicalMetadata } from '@/lib/metadata'
 import { staticParamsForLocales } from '@/lib/static-params'
 import { toContactFormConfig } from '@/lib/transforms/form'
 import { ContactTypeValues, isContactType, type ContactType } from '@/lib/types'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactTypeQuery, housesTitlesQuery } from '@/sanity/lib/queries'
+import type { Metadata } from 'next'
 import { getLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
@@ -31,6 +33,20 @@ export function generateStaticParams() {
 // no shared App Shell worth prefetching. Links here use `prefetch` to load the
 // full static page.
 export const instant = false
+
+export async function generateMetadata({
+  params
+}: PageProps<'/[locale]/contact/[slug]'>): Promise<Metadata | undefined> {
+  const [{ slug }, locale] = await Promise.all([params, getLocale()])
+
+  if (!isContactType(slug)) {
+    return undefined
+  }
+
+  return {
+    alternates: getCanonicalMetadata({ pathname: '/contact/[slug]', params: { slug } }, locale)
+  }
+}
 
 export default async function ContactTypePage({ params }: PageProps<'/[locale]/contact/[slug]'>) {
   const [{ slug }, locale] = await Promise.all([params, getLocale()])
