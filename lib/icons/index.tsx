@@ -78,10 +78,8 @@ export const iconMap: Record<string, IconComponent> = {
   wind: Wind
 }
 
-export type IconName = string
-
 export interface IconProps extends React.SVGProps<SVGSVGElement> {
-  name: IconName
+  name: string
 }
 
 /**
@@ -95,6 +93,5 @@ export function Icon({ name, ...props }: IconProps) {
   if (!Object.hasOwn(iconMap, name)) return null
 
   const IconComponent = iconMap[name]
-  if (!IconComponent) return null
   return <IconComponent {...props} />
 }

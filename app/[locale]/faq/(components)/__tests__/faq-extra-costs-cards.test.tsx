@@ -171,9 +171,8 @@ describe('FAQExtraCostsCards', () => {
 
       render(<FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />)
 
-      expect(screen.getByLabelText('Go to Orange House')).toBeInTheDocument()
-      expect(screen.getByLabelText('Go to Apple House')).toBeInTheDocument()
-      expect(screen.getByLabelText('Go to Lemon House')).toBeInTheDocument()
+      // The global next-intl mock returns the message key without interpolation.
+      expect(screen.getAllByLabelText('go_to_house')).toHaveLength(3)
     })
   })
 

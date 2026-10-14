@@ -1,7 +1,6 @@
 'use client'
 
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { scrollToGalleryCategory } from '@/lib/gallery-scroll'
 import type { GalleryCategory } from '@/lib/gallery'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
@@ -39,7 +38,9 @@ export function StickyCategoryNav({ categories, activeId }: StickyCategoryNavPro
                 ref={isActive ? activeButtonRef : undefined}
                 type="button"
                 aria-current={isActive ? 'true' : undefined}
-                onClick={() => scrollToGalleryCategory(cat._id)}
+                onClick={() =>
+                  document.getElementById(cat._id)?.scrollIntoView({ behavior: 'smooth' })
+                }
                 className={cn(
                   'shrink-0 rounded-full px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset',
                   isActive

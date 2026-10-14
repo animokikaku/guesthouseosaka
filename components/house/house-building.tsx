@@ -19,42 +19,18 @@ export function HouseBuilding({ building }: HouseBuildingProps) {
 
   const dataAttribute = createDataAttribute({ id, type })
 
-  const currency = (amount: number) =>
-    formatter.number(amount, { style: 'currency', currency: 'JPY' })
-
-  const number = (value: number) => formatter.number(value)
-
-  const details = [
-    {
-      label: t('rooms_label'),
-      value: number(building?.rooms ?? 0),
-      icon: BedDoubleIcon
-    },
-    {
-      label: t('floors_label'),
-      value: number(building?.floors ?? 0),
-      icon: LayersIcon
-    },
-    {
-      label: t('min_rent_label'),
-      value: currency(building?.startingPrice ?? 0)
-    }
-  ]
-
-  const [rooms, floors, minRent] = details
-
   return (
     <div className="text-muted-foreground grid grid-cols-3 gap-2 text-center text-xs">
       <FeatureItem
-        label={rooms.label}
-        value={rooms.value}
-        Icon={rooms.icon}
+        label={t('rooms_label')}
+        value={formatter.number(building?.rooms ?? 0)}
+        Icon={BedDoubleIcon}
         data-sanity={dataAttribute('building.rooms')}
       />
       <FeatureItem
-        label={floors.label}
-        value={floors.value}
-        Icon={floors.icon}
+        label={t('floors_label')}
+        value={formatter.number(building?.floors ?? 0)}
+        Icon={LayersIcon}
         data-sanity={dataAttribute('building.floors')}
       />
       <Link
@@ -65,8 +41,11 @@ export function HouseBuilding({ building }: HouseBuildingProps) {
         }}
       >
         <FeatureItem
-          label={minRent.label}
-          value={minRent.value}
+          label={t('min_rent_label')}
+          value={formatter.number(building?.startingPrice ?? 0, {
+            style: 'currency',
+            currency: 'JPY'
+          })}
           data-sanity={dataAttribute('building.startingPrice')}
         />
       </Link>

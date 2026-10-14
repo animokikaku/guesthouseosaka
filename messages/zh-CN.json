@@ -4,6 +4,9 @@
       "format": "<floorsTag>{floors}层楼</floorsTag>，共<roomsTag>{rooms}间房</roomsTag>。"
     }
   },
+  "FAQExtraCostsCards": {
+    "go_to_house": "前往{house}"
+  },
   "FAQContactTable": {
     "from_overseas": "从海外拨打",
     "house": "房屋",

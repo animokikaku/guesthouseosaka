@@ -21,7 +21,9 @@ function PageHeaderHeading({ className, ...props }: React.ComponentProps<'h1'>) 
   return (
     <h1
       className={cn(
-        'text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance xl:text-5xl xl:tracking-tighter',
+        // `leading-tighter` follows `text-4xl`: `cn` drops a line-height that
+        // precedes a font size, since the font size sets its own.
+        'text-primary max-w-2xl text-4xl leading-tighter font-semibold tracking-tight text-balance xl:text-5xl xl:tracking-tighter',
         className
       )}
       {...props}

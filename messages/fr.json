@@ -4,6 +4,9 @@
       "format": "Bâtiment de <floorsTag>{floors} étages</floorsTag> avec <roomsTag>{rooms} chambres</roomsTag>."
     }
   },
+  "FAQExtraCostsCards": {
+    "go_to_house": "Aller à {house}"
+  },
   "FAQContactTable": {
     "from_overseas": "Depuis l'étranger",
     "house": "Maison",

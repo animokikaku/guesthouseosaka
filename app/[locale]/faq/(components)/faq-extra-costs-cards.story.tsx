@@ -1,5 +1,7 @@
 import { FAQExtraCostsCards } from '@/app/[locale]/faq/(components)/faq-extra-costs-cards'
+import messages from '@/messages/en.json'
 import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
+import { NextIntlClientProvider } from 'next-intl'
 
 type Houses = NonNullable<HousesBuildingQueryResult>
 type PricingCategories = NonNullable<PricingCategoriesQueryResult>
@@ -53,8 +55,10 @@ const houses = (
 
 export function ThreeHouses() {
   return (
-    <main className="mx-auto max-w-lg p-6">
-      <FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />
-    </main>
+    <NextIntlClientProvider locale="en" messages={messages}>
+      <main className="mx-auto max-w-lg p-6">
+        <FAQExtraCostsCards houses={houses} pricingCategories={pricingCategories} />
+      </main>
+    </NextIntlClientProvider>
   )
 }

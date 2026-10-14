@@ -120,12 +120,7 @@ export function toAmenityCategories(
     _id: cat.category._id,
     label: cat.category.label,
     icon: cat.category.icon,
-    items: (cat.items ?? []).map((item) => ({
-      _key: item._key,
-      label: item.label,
-      icon: item.icon,
-      note: item.note ? stegaClean(item.note) : null
-    }))
+    items: (cat.items ?? []).map(toAmenityItem)
   }))
 }
 
@@ -140,10 +135,18 @@ export function toFeaturedAmenities(featuredAmenities: HouseFeaturedAmenities): 
     return []
   }
 
-  return featuredAmenities.map((item) => ({
-    _key: item._key,
-    label: item.label,
-    icon: item.icon,
-    note: item.note ? stegaClean(item.note) : null
-  }))
+  return featuredAmenities.map(toAmenityItem)
+}
+
+/** Drops the query-only fields and cleans `note`, which is compared against literals. */
+function toAmenityItem({
+  _key,
+  label,
+  icon,
+  note
+}: Pick<
+  NonNullable<HouseFeaturedAmenities>[number],
+  '_key' | 'label' | 'icon' | 'note'
+>): AmenityItemData {
+  return { _key, label, icon, note: note ? stegaClean(note) : null }
 }

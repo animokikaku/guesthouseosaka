@@ -4,6 +4,9 @@
       "format": "<floorsTag>{floors}階建て</floorsTag>・<roomsTag>{rooms}室</roomsTag>"
     }
   },
+  "FAQExtraCostsCards": {
+    "go_to_house": "{house}へ移動"
+  },
   "FAQContactTable": {
     "from_overseas": "海外から",
     "house": "ハウス",

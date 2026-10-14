@@ -4,12 +4,15 @@ import { defineQuery } from 'next-sanity'
 // GROQ FRAGMENTS (static only - no dynamic functions for typegen compatibility)
 // =============================================================================
 
-// Image fields with asset reference (for Next.js Image component optimization)
-const imageRefFields = /* groq */ `
+// Image fields with asset reference, minus the preview (shared by the two variants below)
+const imageBaseFields = /* groq */ `
   asset,
   hotspot,
   crop,
-  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),
+  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value)`
+
+// Image fields with asset reference (for Next.js Image component optimization)
+const imageRefFields = /* groq */ `${imageBaseFields},
   "preview": asset->metadata.lqip
 `
 
@@ -19,11 +22,7 @@ const imageFields = /* groq */ `image{${imageRefFields}}`
 // Same shape as imageRefFields, minus the LQIP. The base64 preview is ~600 B
 // per image — 75% of a gallery item — so lists long enough to matter carry it
 // only where a blur placeholder is actually painted.
-const leanImageRefFields = /* groq */ `
-  asset,
-  hotspot,
-  crop,
-  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),
+const leanImageRefFields = /* groq */ `${imageBaseFields},
   "preview": null
 `
 

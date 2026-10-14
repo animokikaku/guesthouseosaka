@@ -14,35 +14,11 @@ interface PlaceDetailsProps {
 }
 
 export function PlaceDetails({ placeId, placeImage, className }: PlaceDetailsProps) {
+  const t = useTranslations('PlaceDetails')
   const { resolvedTheme } = useTheme()
   const colorScheme = resolvedTheme === 'dark' ? ColorScheme.DARK : ColorScheme.LIGHT
 
   useMapsLibrary('places')
-
-  return (
-    <PlaceDetailsCompact
-      id={placeId}
-      placeImage={placeImage}
-      colorScheme={colorScheme}
-      className={className}
-    />
-  )
-}
-
-interface GoogleMapsPlaceDetailsProps {
-  id: string
-  placeImage: SanityImage
-  colorScheme: ColorScheme
-  className?: string
-}
-
-function PlaceDetailsCompact({
-  id,
-  placeImage,
-  colorScheme,
-  className
-}: GoogleMapsPlaceDetailsProps) {
-  const t = useTranslations('PlaceDetails')
 
   return (
     <div className="overflow-hidden">
@@ -62,7 +38,7 @@ function PlaceDetailsCompact({
         />
       </div>
       <gmp-place-details-compact style={{ colorScheme }} className={className}>
-        <gmp-place-details-place-request place={id}></gmp-place-details-place-request>
+        <gmp-place-details-place-request place={placeId}></gmp-place-details-place-request>
         <gmp-place-content-config>
           <gmp-place-address></gmp-place-address>
           <gmp-place-rating></gmp-place-rating>

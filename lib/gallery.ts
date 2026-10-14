@@ -28,18 +28,14 @@ export function featuredToGallerySlide(image: NonNullable<FeaturedImage>): Galle
 
 export function buildGallerySlides({
   featuredImage,
-  galleryImages,
-  limit
+  galleryImages
 }: {
   featuredImage?: FeaturedImage
   galleryImages: GalleryItem[] | null
-  limit?: number
 }): GallerySlide[] {
-  const slides: GallerySlide[] = featuredImage?.asset
+  return featuredImage?.asset
     ? [featuredToGallerySlide(featuredImage), ...(galleryImages ?? [])]
     : (galleryImages ?? [])
-
-  return typeof limit === 'number' ? slides.slice(0, limit) : slides
 }
 
 // Flatten all gallery items from categories (for modal navigation)
