@@ -1,4 +1,4 @@
-import { LocationData } from '@/lib/types/components'
+import type { LocationData, MapData } from '@/lib/types/components'
 import { render, screen } from '@testing-library/react'
 
 // `next/dynamic` is replaced with a synchronous stub so the map renders inline,
@@ -11,16 +11,13 @@ vi.mock('next/dynamic', () => ({
   default: (_importFn: () => Promise<unknown>, options?: { loading?: () => React.ReactNode }) => {
     dynamicOptions.loading = options?.loading ?? null
 
-    return function MockHouseMap(props: {
-      center: { lat: number; lng: number }
-      placeId: string | null
-    }) {
+    return function MockHouseMap({ map }: { map: MapData }) {
       return (
         <div
           data-testid="house-map"
-          data-lat={props.center.lat}
-          data-lng={props.center.lng}
-          data-place-id={props.placeId}
+          data-lat={map.coordinates.lat}
+          data-lng={map.coordinates.lng}
+          data-place-id={map.placeId}
         />
       )
     }
@@ -87,6 +84,14 @@ describe('HouseLocation', () => {
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
     expect(screen.getByText('Great location near the station')).toBeInTheDocument()
     expect(screen.getByTestId('location-modal')).toBeInTheDocument()
+  })
+
+  it('keeps the heading but drops the modal when there is no location', () => {
+    render(<HouseLocation {...baseProps} location={null} />)
+
+    expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
+    expect(screen.queryByText('Great location near the station')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('location-modal')).not.toBeInTheDocument()
   })
 
   it.each<[string, LocationData['details'], boolean]>([

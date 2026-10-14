@@ -10,13 +10,7 @@ import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/componen
 import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
 import { buildGallerySlides } from '@/lib/gallery'
-import {
-  toAmenityCategories,
-  toFeaturedAmenities,
-  toLocationData,
-  toMapData,
-  toPricingRows
-} from '@/lib/transforms/house'
+import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
 import type { StegaAware } from '@/lib/types/stega'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/utils/theme'
@@ -79,10 +73,10 @@ export function HousePageContent({
                 <HouseAbout title={title} about={about} building={building} />
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
-                  featuredAmenities={toFeaturedAmenities(featuredAmenities)}
+                  featuredAmenities={featuredAmenities?.map(toAmenityItem) ?? []}
                 />
-                <HouseLocation location={toLocationData(location)} map={toMapData(map)} />
-                <HousePricing pricing={toPricingRows(pricing)} />
+                <HouseLocation location={location} map={toMapData(map)} />
+                <HousePricing pricing={pricing} />
               </article>
             </HouseProvider>
           </div>

@@ -1,47 +1,7 @@
 // @vitest-environment node
 
-import {
-  toAmenityCategories,
-  toFeaturedAmenities,
-  toLocationData,
-  toMapData,
-  toPricingRows
-} from '../house'
-import {
-  createAmenityCategory,
-  createAmenityItem,
-  createLocation,
-  createMap,
-  createPricingRow
-} from './mocks'
-
-describe('toLocationData', () => {
-  it('transforms location data preserving values', () => {
-    const location = createLocation()
-
-    const result = toLocationData(location)
-
-    expect(result.highlight).toBe(location.highlight)
-    expect(result.details).toEqual(location.details)
-  })
-
-  it('returns null values for null location', () => {
-    const result = toLocationData(null)
-
-    expect(result).toEqual({
-      highlight: null,
-      details: null
-    })
-  })
-
-  // The query coalesces both fields, so they arrive as null rather than absent
-  // — an absent `location` is the only shape that needs normalizing.
-  it('passes a location whose fields are already null straight through', () => {
-    const location = createLocation({ highlight: null, details: null })
-
-    expect(toLocationData(location)).toEqual({ highlight: null, details: null })
-  })
-})
+import { toAmenityCategories, toAmenityItem, toMapData } from '../house'
+import { createAmenityCategory, createAmenityItem, createMap } from './mocks'
 
 describe('toMapData', () => {
   it('transforms map data with coordinates and image', () => {
@@ -56,18 +16,12 @@ describe('toMapData', () => {
     expect(result?.googleMapsUrl).toBe(map.googleMapsUrl)
   })
 
-  it('transforms placeImage asset reference', () => {
+  it('passes placeImage through unchanged', () => {
     const map = createMap()
 
     const result = toMapData(map)
 
-    expect(result?.placeImage.asset).toEqual({
-      _id: map.placeImage.asset!._ref,
-      _ref: map.placeImage.asset!._ref,
-      _type: 'reference'
-    })
-    expect(result?.placeImage.alt).toBe(map.placeImage.alt)
-    expect(result?.placeImage.preview).toBe(map.placeImage.preview)
+    expect(result?.placeImage).toBe(map.placeImage)
   })
 
   it('accepts a Google Maps URL', () => {
@@ -143,43 +97,6 @@ describe('toMapData', () => {
     const result = toMapData(map)
 
     expect(result?.placeImage.asset).toBeNull()
-  })
-})
-
-describe('toPricingRows', () => {
-  it('transforms array of pricing rows preserving values', () => {
-    const row1 = createPricingRow()
-    const row2 = createPricingRow()
-    const pricing = [row1, row2]
-
-    const result = toPricingRows(pricing)
-
-    expect(result).toHaveLength(2)
-    expect(result[0]._key).toBe(row1._key)
-    expect(result[0].label).toBe(row1.label)
-    expect(result[0].content).toEqual(row1.content)
-    expect(result[1]._key).toBe(row2._key)
-  })
-
-  it('returns empty array for null pricing', () => {
-    const result = toPricingRows(null)
-
-    expect(result).toEqual([])
-  })
-
-  it('returns empty array for empty pricing array', () => {
-    const result = toPricingRows([])
-
-    expect(result).toEqual([])
-  })
-
-  it('handles pricing rows with null label', () => {
-    const row = createPricingRow({ label: null, content: null })
-
-    const result = toPricingRows([row])
-
-    expect(result[0].label).toBeNull()
-    expect(result[0].content).toBeNull()
   })
 })
 
@@ -266,29 +183,27 @@ describe('toAmenityCategories', () => {
   })
 })
 
-describe('toFeaturedAmenities', () => {
-  it('transforms featured amenities preserving values', () => {
-    const items = [
-      createAmenityItem({ _key: 'wifi', label: 'Wifi', icon: 'wifi', note: 'shared' }),
-      createAmenityItem({ _key: 'bed', label: 'Bed', icon: 'bed', note: null })
-    ]
+describe('toAmenityItem', () => {
+  it('keeps the display fields and drops the query-only ones', () => {
+    const item = createAmenityItem({
+      _key: 'wifi',
+      label: 'Wifi',
+      icon: 'wifi',
+      note: 'shared',
+      featured: true
+    })
 
-    const result = toFeaturedAmenities(items)
-
-    expect(result).toHaveLength(2)
-    expect(result[0]).toEqual({ _key: 'wifi', label: 'Wifi', icon: 'wifi', note: 'shared' })
-    expect(result[1]).toEqual({ _key: 'bed', label: 'Bed', icon: 'bed', note: null })
+    expect(toAmenityItem(item)).toEqual({
+      _key: 'wifi',
+      label: 'Wifi',
+      icon: 'wifi',
+      note: 'shared'
+    })
   })
 
-  it('returns empty array for null input', () => {
-    const result = toFeaturedAmenities(null)
+  it('keeps a null note', () => {
+    const item = createAmenityItem({ note: null })
 
-    expect(result).toEqual([])
-  })
-
-  it('returns empty array for empty array', () => {
-    const result = toFeaturedAmenities([])
-
-    expect(result).toEqual([])
+    expect(toAmenityItem(item).note).toBeNull()
   })
 })

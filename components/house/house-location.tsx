@@ -50,14 +50,7 @@ const HouseMap = dynamic(() => import('@/components/house/house-map').then((mod)
   loading: () => <MapSkeleton />
 })
 
-interface LazyHouseMapProps {
-  center: { lat: number; lng: number }
-  placeId: string
-  placeImage: MapData['placeImage']
-  mapsUrl?: string
-}
-
-function LazyHouseMap({ center, placeId, placeImage, mapsUrl }: LazyHouseMapProps) {
+function LazyHouseMap({ map }: { map: MapData }) {
   const [isVisible, setIsVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -82,40 +75,24 @@ function LazyHouseMap({ center, placeId, placeImage, mapsUrl }: LazyHouseMapProp
     return () => observer.disconnect()
   }, [])
 
-  return (
-    <div ref={containerRef}>
-      {isVisible ? (
-        <HouseMap center={center} placeId={placeId} placeImage={placeImage} mapsUrl={mapsUrl} />
-      ) : (
-        <MapSkeleton />
-      )}
-    </div>
-  )
+  return <div ref={containerRef}>{isVisible ? <HouseMap map={map} /> : <MapSkeleton />}</div>
 }
 
 interface HouseLocationProps {
-  location: LocationData
+  location: LocationData | null
   map: MapData | null
 }
 
 export function HouseLocation({ location, map }: HouseLocationProps) {
-  const { highlight, details } = location
   const t = useTranslations('HouseLocation')
 
   return (
     <section id="location" aria-labelledby="location-title">
       <HouseSectionHeading id="location-title">{t('heading')}</HouseSectionHeading>
       <HouseSectionContent>
-        <p className="text-foreground text-base leading-relaxed">{highlight}</p>
-        {map && (
-          <LazyHouseMap
-            center={map.coordinates}
-            placeId={map.placeId}
-            placeImage={map.placeImage}
-            mapsUrl={map.googleMapsUrl}
-          />
-        )}
-        <HouseLocationModal details={details} title={t('heading')}>
+        <p className="text-foreground text-base leading-relaxed">{location?.highlight}</p>
+        {map && <LazyHouseMap map={map} />}
+        <HouseLocationModal details={location?.details ?? null} title={t('heading')}>
           <Button variant="outline">{t('modal_trigger')}</Button>
         </HouseLocationModal>
       </HouseSectionContent>

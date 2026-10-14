@@ -4,26 +4,12 @@ import type { GalleryImage } from '@/lib/types/components'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 
-// ============================================
-// Input Types (from Sanity query results)
-// ============================================
-
 type GalleryWallImages = NonNullable<NonNullable<HomePageQueryResult>['page']>['galleryWall']
 
-// ============================================
-// Gallery Transformer
-// ============================================
-
 /**
- * Transforms Sanity gallery wall images to GalleryImage array
- * Pre-builds all image URLs using urlFor() to decouple components from Sanity helpers
- *
  * Crop sizes come from GALLERY_WALL_SLOTS, the same config GalleryWall lays the
  * collage out from, so a tile can't be cropped to one size and rendered at
  * another.
- *
- * @param images - Raw gallery wall images from Sanity query
- * @returns Array of GalleryImage with pre-built URLs
  */
 export function toGalleryImages(images: GalleryWallImages): GalleryImage[] {
   // Query already limits to 6 images via galleryWall[0...6]

@@ -70,13 +70,7 @@ export function MoveInForm({ title, description, fields, houseTitles }: MoveInFo
       <form.Field
         name="date"
         children={(field) => (
-          <field.InputField
-            required
-            type="date"
-            orientation="responsive"
-            label={fields.date.label}
-            description={fields.date.description}
-          />
+          <field.InputField required type="date" orientation="responsive" {...fields.date} />
         )}
       />
       <form.Field
@@ -85,9 +79,7 @@ export function MoveInForm({ title, description, fields, houseTitles }: MoveInFo
           <field.SelectField
             required
             orientation="responsive"
-            label={fields.stayDuration.label}
-            description={fields.stayDuration.description}
-            placeholder={fields.stayDuration.placeholder}
+            {...fields.stayDuration}
             options={stayDurationOptions}
           />
         )}
@@ -98,13 +90,7 @@ export function MoveInForm({ title, description, fields, houseTitles }: MoveInFo
       <form.Field
         name="message"
         children={(field) => (
-          <field.MessageField
-            label={fields.message.label}
-            rows={6}
-            className="min-h-24 resize-none"
-            placeholder={fields.message.placeholder}
-            description={fields.message.description}
-          />
+          <field.MessageField {...fields.message} rows={6} className="min-h-24 resize-none" />
         )}
       />
       <form.Field name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />

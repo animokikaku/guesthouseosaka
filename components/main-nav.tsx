@@ -114,39 +114,21 @@ export function MainNav({
           )
         })}
       </NavigationMenuList>
-      <MainNavPositioner align={align} />
+      <NavigationMenuPrimitive.Portal>
+        <NavigationMenuPrimitive.Positioner
+          side="bottom"
+          sideOffset={8}
+          align={align}
+          disableAnchorTracking
+          positionMethod="fixed"
+          className="isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) data-[side=bottom]:before:-top-2.5 data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0"
+        >
+          <NavigationMenuPrimitive.Popup className="data-ending-style:ease-out-ui xs:w-(--popup-width) bg-popover text-popover-foreground ring-foreground/10 ease-out-ui relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin) rounded-lg shadow ring-1 transition-[opacity,transform,width,height,scale,translate] duration-200 outline-none data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150 data-starting-style:scale-90 data-starting-style:opacity-0">
+            <NavigationMenuPrimitive.Viewport className="relative size-full overflow-hidden" />
+          </NavigationMenuPrimitive.Popup>
+        </NavigationMenuPrimitive.Positioner>
+      </NavigationMenuPrimitive.Portal>
     </NavigationMenuPrimitive.Root>
-  )
-}
-
-function MainNavPositioner({
-  className,
-  side = 'bottom',
-  sideOffset = 8,
-  align = 'start',
-  alignOffset = 0,
-  ...props
-}: NavigationMenuPrimitive.Positioner.Props) {
-  return (
-    <NavigationMenuPrimitive.Portal>
-      <NavigationMenuPrimitive.Positioner
-        side={side}
-        sideOffset={sideOffset}
-        align={align}
-        alignOffset={alignOffset}
-        disableAnchorTracking
-        positionMethod="fixed"
-        className={cn(
-          'isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) data-[side=bottom]:before:-top-2.5 data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0',
-          className
-        )}
-        {...props}
-      >
-        <NavigationMenuPrimitive.Popup className="data-ending-style:ease-out-ui xs:w-(--popup-width) bg-popover text-popover-foreground ring-foreground/10 ease-out-ui relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin) rounded-lg shadow ring-1 transition-[opacity,transform,width,height,scale,translate] duration-200 outline-none data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150 data-starting-style:scale-90 data-starting-style:opacity-0">
-          <NavigationMenuPrimitive.Viewport className="relative size-full overflow-hidden" />
-        </NavigationMenuPrimitive.Popup>
-      </NavigationMenuPrimitive.Positioner>
-    </NavigationMenuPrimitive.Portal>
   )
 }
 

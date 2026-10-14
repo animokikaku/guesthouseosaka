@@ -4,23 +4,9 @@ import type { ContactNavItem } from '@/lib/types/components'
 import type { ContactPageQueryResult, HousesNavQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 
-// ============================================
-// Input Types (from Sanity query results)
-// ============================================
-
 type ContactTypes = NonNullable<ContactPageQueryResult>['contactTypes']
 
-// ============================================
-// Navigation Transformers
-// ============================================
-
-/**
- * Transforms Sanity contact types to ContactNavItem array
- * Filters out items without valid titles
- *
- * @param contactTypes - Raw contact types from Sanity query
- * @returns Array of ContactNavItem with id, slug, and title
- */
+/** Drops contact types without a title, which would render an empty tab. */
 export function toContactNavItems(contactTypes: ContactTypes): ContactNavItem[] {
   return contactTypes
     .filter((item): item is typeof item & { title: string } => item.title != null)
@@ -31,13 +17,7 @@ export function toContactNavItems(contactTypes: ContactTypes): ContactNavItem[] 
     }))
 }
 
-/**
- * Transforms Sanity houses query result to NavGroupItem array
- * Filters out houses whose slug isn't a known house identifier
- *
- * @param houses - Raw houses from Sanity query
- * @returns Array of NavGroupItem with navigation data and images
- */
+/** Drops (and warns about) houses whose slug isn't a known house identifier. */
 export function toHouseNavItems(houses: HousesNavQueryResult): NavGroupItem[] {
   return (houses ?? [])
     .filter((house) => {
