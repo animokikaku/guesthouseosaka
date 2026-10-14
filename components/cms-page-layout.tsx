@@ -1,5 +1,5 @@
 import { DynamicPageActions } from '@/components/dynamic-page-actions'
-import { PageHeader } from '@/components/page-header'
+import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { sanityFetch } from '@/sanity/lib/live'
 import { settingsQuery } from '@/sanity/lib/queries'
@@ -9,19 +9,10 @@ import type { Locale } from 'next-intl'
 import { getTranslations } from 'next-intl/server'
 import type { ComponentProps, ReactNode } from 'react'
 
-// Raw class strings rather than PageHeaderHeading/PageHeaderDescription: their
-// `cn()` lets tailwind-merge drop `leading-tighter` in favor of `text-4xl`'s own
-// line height.
 const headerComponents: PortableTextComponents = {
   block: {
-    h1: ({ children }) => (
-      <h1 className="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance xl:text-5xl xl:tracking-tighter">
-        {children}
-      </h1>
-    ),
-    normal: ({ children }) => (
-      <p className="text-foreground max-w-3xl text-base text-balance sm:text-lg">{children}</p>
-    )
+    h1: ({ children }) => <PageHeaderHeading>{children}</PageHeaderHeading>,
+    normal: ({ children }) => <PageHeaderDescription>{children}</PageHeaderDescription>
   }
 }
 
