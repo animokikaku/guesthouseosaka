@@ -36,11 +36,11 @@ export const instant = false
 
 export async function generateMetadata({
   params
-}: PageProps<'/[locale]/contact/[slug]'>): Promise<Metadata | undefined> {
+}: PageProps<'/[locale]/contact/[slug]'>): Promise<Metadata> {
   const [{ slug }, locale] = await Promise.all([params, getLocale()])
 
   if (!isContactType(slug)) {
-    return undefined
+    notFound()
   }
 
   return {

@@ -1,6 +1,5 @@
-import { getPathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
-import { env } from '@/lib/env'
+import { getCanonicalUrl } from '@/lib/metadata'
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import type { MetadataRoute } from 'next'
 
@@ -40,29 +39,24 @@ export const routes: Route[] = [
   ...galleryRoutes
 ]
 
-function buildUrl(href: Route, locale: Locale, host: string): string {
-  return new URL(getPathname({ href, locale }), host).toString()
-}
-
-function buildAlternates(href: Route, host: string): Record<Locale, string> {
+function buildAlternates(href: Route): Record<Locale, string> {
   // routing.locales is the complete source of supported locales for this record.
   // oxlint-disable typescript/no-unsafe-type-assertion
   return Object.fromEntries(
-    routing.locales.map((locale) => [locale, buildUrl(href, locale, host)])
+    routing.locales.map((locale) => [locale, getCanonicalUrl(href, locale)])
   ) as Record<Locale, string>
 }
 // oxlint-enable typescript/no-unsafe-type-assertion
 
-function buildSitemapEntry(href: Route, host: string): MetadataRoute.Sitemap[number] {
+function buildSitemapEntry(href: Route): MetadataRoute.Sitemap[number] {
   return {
-    url: buildUrl(href, routing.defaultLocale, host),
+    url: getCanonicalUrl(href, routing.defaultLocale),
     alternates: {
-      languages: buildAlternates(href, host)
+      languages: buildAlternates(href)
     }
   }
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const host = env.NEXT_PUBLIC_APP_URL
-  return routes.map((route) => buildSitemapEntry(route, host))
+  return routes.map(buildSitemapEntry)
 }
