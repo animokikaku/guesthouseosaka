@@ -1,19 +1,10 @@
 import type { ContactFormConfig, FormFieldsConfig } from '@/lib/types/components'
 import type { ContactTypeQueryResult } from '@/sanity.types'
 
-// ============================================
-// Input Types (from Sanity query results)
-// ============================================
-
 type ContactTypeFields = NonNullable<ContactTypeQueryResult>['fields']
-
-// ============================================
-// Field Key Type
-// ============================================
 
 type FieldKey = keyof FormFieldsConfig
 
-// All possible field keys
 const FIELD_KEYS: FieldKey[] = [
   'places',
   'date',
@@ -28,15 +19,7 @@ const FIELD_KEYS: FieldKey[] = [
   'message'
 ]
 
-// ============================================
-// Form Fields Transformer
-// ============================================
-
-/**
- * Transforms ContactTypeQueryResult fields to FormFieldsConfig
- * @param fields - Raw fields object from Sanity query
- * @returns FormFieldsConfig with all available fields
- */
+/** Turns the query's nulls into the empty label and absent props the form fields expect. */
 export function toFormFieldsConfig(fields: NonNullable<ContactTypeFields>): FormFieldsConfig {
   // FIELD_KEYS exhaustively initializes every FormFieldsConfig property.
   // oxlint-disable typescript/no-unsafe-type-assertion
@@ -52,24 +35,12 @@ export function toFormFieldsConfig(fields: NonNullable<ContactTypeFields>): Form
 }
 // oxlint-enable typescript/no-unsafe-type-assertion
 
-// ============================================
-// Contact Form Config Transformer
-// ============================================
-
-/**
- * Transforms full ContactTypeQueryResult to ContactFormConfig
- *
- * Note: `title` is guaranteed non-null by schema validation + coalesce query.
- * The fallback empty string should never be reached in production.
- *
- * @param contactType - Raw contact type data from Sanity query
- * @returns ContactFormConfig with title, description, and fields
- */
+/** `title` is required by the schema, so its empty-string fallback is only a safety net. */
 export function toContactFormConfig(
   contactType: NonNullable<ContactTypeQueryResult>
 ): ContactFormConfig {
   return {
-    title: contactType.title ?? '', // Guaranteed by schema, fallback for safety
+    title: contactType.title ?? '',
     description: contactType.description,
     fields: toFormFieldsConfig(contactType.fields)
   }

@@ -47,11 +47,9 @@ export function ContactForm({ title, description, fields, houseTitles }: Contact
         children={(field) => (
           <field.MessageField
             required
-            label={fields.message.label}
+            {...fields.message}
             rows={6}
             className="min-h-24 resize-none"
-            placeholder={fields.message.placeholder}
-            description={fields.message.description}
           />
         )}
       />

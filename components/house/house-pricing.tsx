@@ -25,13 +25,13 @@ const portableTextComponents: PortableTextComponents = {
 }
 
 interface HousePricingProps {
-  pricing: PricingRowData[]
+  pricing: PricingRowData[] | null
 }
 
 export function HousePricing({ pricing }: HousePricingProps) {
   const t = useTranslations('HousePricing')
 
-  if (pricing.length === 0) {
+  if (!pricing?.length) {
     return null
   }
 

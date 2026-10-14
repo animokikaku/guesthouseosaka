@@ -42,24 +42,13 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
       <form.Field
         name="date"
         children={(field) => (
-          <field.InputField
-            required
-            type="date"
-            label={fields.date.label}
-            description={fields.date.description}
-            orientation="responsive"
-          />
+          <field.InputField required type="date" {...fields.date} orientation="responsive" />
         )}
       />
       <form.Field
         name="hour"
         children={(field) => (
-          <field.InputField
-            label={fields.hour.label}
-            description={fields.hour.description}
-            orientation="responsive"
-            type="time"
-          />
+          <field.InputField {...fields.hour} orientation="responsive" type="time" />
         )}
       />
       <FieldSeparator />
@@ -68,13 +57,7 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
       <form.Field
         name="message"
         children={(field) => (
-          <field.MessageField
-            label={fields.message.label}
-            rows={6}
-            className="min-h-24 resize-none"
-            placeholder={fields.message.placeholder}
-            description={fields.message.description}
-          />
+          <field.MessageField {...fields.message} rows={6} className="min-h-24 resize-none" />
         )}
       />
       <form.Field name="privacyPolicy" children={(field) => <field.PrivacyPolicyField />} />

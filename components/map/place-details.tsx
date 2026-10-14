@@ -1,7 +1,7 @@
 'use client'
 
-import { SanityImage as SanityImageComponent } from '@/components/sanity-image'
-import type { SanityImage } from '@/lib/types/components'
+import { SanityImage } from '@/components/sanity-image'
+import type { MapData } from '@/lib/types/components'
 import { urlFor } from '@/sanity/lib/image'
 import { ColorScheme, useMapsLibrary } from '@vis.gl/react-google-maps'
 import { useTranslations } from 'next-intl'
@@ -9,7 +9,7 @@ import { useTheme } from 'next-themes'
 
 interface PlaceDetailsProps {
   placeId: string
-  placeImage: SanityImage
+  placeImage: MapData['placeImage']
   className?: string
 }
 
@@ -23,7 +23,7 @@ export function PlaceDetails({ placeId, placeImage, className }: PlaceDetailsPro
   return (
     <div className="overflow-hidden">
       <div className="relative w-full overflow-hidden">
-        <SanityImageComponent
+        <SanityImage
           src={urlFor(placeImage).width(600).height(400).fit('crop').url()}
           alt={placeImage.alt ?? t('fallback_alt')}
           width={600}

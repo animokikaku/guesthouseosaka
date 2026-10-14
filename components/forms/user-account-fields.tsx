@@ -52,9 +52,7 @@ function UserAccountFields({ fields, config }: UserAccountFieldsProps) {
           <field.SelectField
             required
             orientation="responsive"
-            label={config.gender.label}
-            placeholder={config.gender.placeholder}
-            description={config.gender.description}
+            {...config.gender}
             options={[
               { label: t('fields.gender.options.male'), value: 'male' },
               { label: t('fields.gender.options.female'), value: 'female' }
@@ -67,10 +65,8 @@ function UserAccountFields({ fields, config }: UserAccountFieldsProps) {
         children={(field) => (
           <field.InputGroupField
             required
-            placeholder={config.name.placeholder}
+            {...config.name}
             orientation="responsive"
-            description={config.name.description}
-            label={config.name.label}
             icon={<UserIcon />}
             type="text"
             autoComplete="name"
@@ -82,11 +78,9 @@ function UserAccountFields({ fields, config }: UserAccountFieldsProps) {
         children={(field) => (
           <field.InputGroupField
             required
-            description={config.age.description}
+            {...config.age}
             icon={<CakeIcon />}
             orientation="responsive"
-            placeholder={config.age.placeholder}
-            label={config.age.label}
             type="number"
             min={1}
             inputMode="numeric"
@@ -100,11 +94,9 @@ function UserAccountFields({ fields, config }: UserAccountFieldsProps) {
           <field.InputGroupField
             required
             orientation="responsive"
-            label={config.nationality.label}
-            description={config.nationality.description}
+            {...config.nationality}
             icon={<GlobeIcon />}
             type="text"
-            placeholder={config.nationality.placeholder}
             autoComplete="country-name"
           />
         )}
@@ -115,10 +107,8 @@ function UserAccountFields({ fields, config }: UserAccountFieldsProps) {
           <field.InputGroupField
             required
             orientation="responsive"
-            placeholder={config.email.placeholder}
-            description={config.email.description}
+            {...config.email}
             type="email"
-            label={config.email.label}
             icon={<MailIcon />}
             autoComplete="email"
             spellCheck={false}
@@ -130,9 +120,8 @@ function UserAccountFields({ fields, config }: UserAccountFieldsProps) {
         children={(field) => (
           <field.InputGroupField
             orientation="responsive"
-            placeholder={config.phone.placeholder}
+            {...config.phone}
             type="tel"
-            description={config.phone.description}
             label={
               <div>
                 {config.phone.label}{' '}

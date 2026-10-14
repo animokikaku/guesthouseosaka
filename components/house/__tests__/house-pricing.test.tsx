@@ -37,8 +37,11 @@ describe('HousePricing', () => {
     ).toEqual(['Monthly Rent', 'Deposit', 'Utilities'])
   })
 
-  it('returns null when no pricing', () => {
-    const { container } = render(<HousePricing pricing={[]} />)
+  it.each([
+    ['empty', []],
+    ['missing', null]
+  ])('renders nothing when pricing is %s', (_name, pricing) => {
+    const { container } = render(<HousePricing pricing={pricing} />)
 
     expect(container).toBeEmptyDOMElement()
   })
