@@ -7,6 +7,9 @@ declare const messages: {
       "format": "<floorsTag>{floors}-story building</floorsTag> with <roomsTag>{rooms} rooms</roomsTag>."
     }
   },
+  "FAQExtraCostsCards": {
+    "go_to_house": "Go to {house}"
+  },
   "FAQContactTable": {
     "from_overseas": "From overseas",
     "house": "House",

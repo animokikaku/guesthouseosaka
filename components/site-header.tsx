@@ -59,7 +59,7 @@ export function SiteHeader({ houseItems }: { houseItems: NavGroupItem[] }) {
           </Link>
           <MainNav items={navItems} aria-label={t('navigation_label')} className="hidden lg:flex" />
           <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
-            <LanguageSwitcher size="responsive" />
+            <LanguageSwitcher />
             <ModeSwitcher />
           </div>
         </div>

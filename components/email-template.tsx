@@ -3,7 +3,7 @@ import { HouseIdentifier } from '@/lib/types'
 import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from 'react-email'
 
 // Helper for date formatting
-const formatDate = (date: string | Date) => {
+const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: 'long',
@@ -27,28 +27,16 @@ interface TourRequestEmailProps {
 }
 
 export function TourRequestEmail({ data }: TourRequestEmailProps) {
-  const { account, message, places, date, hour } = data
-
   return (
-    <Html>
-      <Head />
-      <Preview>Guesthouse Osakaから新しい内覧希望が届きました</Preview>
-      <Body style={main}>
-        <Container style={container}>
-          <Heading style={h1}>内覧希望</Heading>
-          <AccountDetails account={account} />
-          <Hr style={hr} />
-          <Text style={text}>
-            <strong>希望物件:</strong> {formatPlaces(places)}
-          </Text>
-          <Text style={text}>
-            <strong>希望日時:</strong> {formatDate(date)} {hour}
-          </Text>
-          <Hr style={hr} />
-          <MessageSection message={message} />
-        </Container>
-      </Body>
-    </Html>
+    <InquiryEmail
+      preview="Guesthouse Osakaから新しい内覧希望が届きました"
+      heading="内覧希望"
+      data={data}
+    >
+      <Text style={text}>
+        <strong>希望日時:</strong> {formatDate(data.date)} {data.hour}
+      </Text>
+    </InquiryEmail>
   )
 }
 
@@ -58,38 +46,26 @@ interface MoveInRequestEmailProps {
   data: Pick<ContactFormFields, 'places' | 'date' | 'stayDuration' | 'account' | 'message'>
 }
 
+const stayDurationLabels: Record<ContactFormFields['stayDuration'], string> = {
+  '1-month': '1ヶ月以上',
+  '3-months': '3ヶ月以上',
+  'long-term': '長期'
+}
+
 export function MoveInRequestEmail({ data }: MoveInRequestEmailProps) {
-  const { account, message, places, date, stayDuration } = data
-
-  const stayDurationLabel = {
-    '1-month': '1ヶ月以上',
-    '3-months': '3ヶ月以上',
-    'long-term': '長期'
-  }[stayDuration]
-
   return (
-    <Html>
-      <Head />
-      <Preview>Guesthouse Osakaから新しい入居希望が届きました</Preview>
-      <Body style={main}>
-        <Container style={container}>
-          <Heading style={h1}>入居希望</Heading>
-          <AccountDetails account={account} />
-          <Hr style={hr} />
-          <Text style={text}>
-            <strong>希望物件:</strong> {formatPlaces(places)}
-          </Text>
-          <Text style={text}>
-            <strong>希望日:</strong> {formatDate(date)}
-          </Text>
-          <Text style={text}>
-            <strong>滞在期間:</strong> {stayDurationLabel}
-          </Text>
-          <Hr style={hr} />
-          <MessageSection message={message} />
-        </Container>
-      </Body>
-    </Html>
+    <InquiryEmail
+      preview="Guesthouse Osakaから新しい入居希望が届きました"
+      heading="入居希望"
+      data={data}
+    >
+      <Text style={text}>
+        <strong>希望日:</strong> {formatDate(data.date)}
+      </Text>
+      <Text style={text}>
+        <strong>滞在期間:</strong> {stayDurationLabels[data.stayDuration]}
+      </Text>
+    </InquiryEmail>
   )
 }
 
@@ -100,20 +76,42 @@ interface GeneralInquiryEmailProps {
 }
 
 export function GeneralInquiryEmail({ data }: GeneralInquiryEmailProps) {
-  const { account, message, places } = data
+  return (
+    <InquiryEmail
+      preview="Guesthouse Osakaから新しいお問い合わせが届きました"
+      heading="お問い合わせ"
+      data={data}
+    />
+  )
+}
 
+// --- Shared Components ---
+
+/** Every inquiry email: the sender's details, their chosen houses, any form-specific lines, then the message. */
+function InquiryEmail({
+  preview,
+  heading,
+  data: { account, places, message },
+  children
+}: {
+  preview: string
+  heading: string
+  data: Pick<ContactFormFields, 'places' | 'account' | 'message'>
+  children?: React.ReactNode
+}) {
   return (
     <Html>
       <Head />
-      <Preview>Guesthouse Osakaから新しいお問い合わせが届きました</Preview>
+      <Preview>{preview}</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Heading style={h1}>お問い合わせ</Heading>
+          <Heading style={h1}>{heading}</Heading>
           <AccountDetails account={account} />
           <Hr style={hr} />
           <Text style={text}>
             <strong>希望物件:</strong> {formatPlaces(places)}
           </Text>
+          {children}
           <Hr style={hr} />
           <MessageSection message={message} />
         </Container>
@@ -121,8 +119,6 @@ export function GeneralInquiryEmail({ data }: GeneralInquiryEmailProps) {
     </Html>
   )
 }
-
-// --- Shared Components ---
 
 function AccountDetails({ account }: { account: ContactFormFields['account'] }) {
   return (

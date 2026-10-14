@@ -1,11 +1,7 @@
 'use client'
 
 import { useHouseDocument } from '@/components/house/house-context'
-import {
-  HouseSection,
-  HouseSectionContent,
-  HouseSectionHeading
-} from '@/components/house/house-section'
+import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ResponsiveModal } from '@/components/ui/responsive-modal'
@@ -62,7 +58,7 @@ function AmenitiesDialog({
   amenityCategories,
   dataAttribute
 }: AmenitiesDialogProps) {
-  if (!amenityCategories || amenityCategories.length === 0) return null
+  if (amenityCategories.length === 0) return null
 
   return (
     <ResponsiveModal trigger={trigger} title={title}>
@@ -119,7 +115,7 @@ export function HouseAmenities({
   const totalAmenitiesCount = amenityCategories.reduce((sum, cat) => sum + cat.items.length, 0)
 
   return (
-    <HouseSection id="amenities" aria-labelledby="amenities-title">
+    <section id="amenities" aria-labelledby="amenities-title">
       <HouseSectionHeading id="amenities-title">{t('heading')}</HouseSectionHeading>
       <HouseSectionContent>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -147,6 +143,6 @@ export function HouseAmenities({
           }
         />
       </HouseSectionContent>
-    </HouseSection>
+    </section>
   )
 }

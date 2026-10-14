@@ -1,11 +1,10 @@
 import { fieldComponent } from '@/components/forms/field-brand'
 import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldLabel
-} from '@/components/ui/field'
+  FieldControlHeader,
+  fieldControlWidthClass,
+  useFieldControl
+} from '@/components/forms/fields/field-control'
+import { Field } from '@/components/ui/field'
 import {
   Select,
   SelectContent,
@@ -14,9 +13,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { cn } from '@/lib/utils'
 import type { FieldWithValue } from '@tanstack/react-form'
-import { useId } from 'react'
 
 type SelectProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange'>
 
@@ -39,48 +36,24 @@ export function SelectField({
   orientation,
   ...props
 }: SelectFieldProps) {
-  const isInvalid = field.meta.isInvalid
-  const instanceId = useId()
-  const triggerId = `form-tanstack-select-${instanceId}-${field.name}`
-  const descriptionId = `${triggerId}-description`
-  const errorId = `${triggerId}-error`
-  const items = options.map((option) => ({
-    label: option.label,
-    value: option.value
-  }))
+  const { isInvalid, ids, controlProps } = useFieldControl('select', field, description)
 
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
-      <FieldContent>
-        {label && <FieldLabel htmlFor={triggerId}>{label}</FieldLabel>}
-        {description && <FieldDescription id={descriptionId}>{description}</FieldDescription>}
-        {isInvalid && <FieldError id={errorId} errors={field.errors} />}
-      </FieldContent>
+      <FieldControlHeader field={field} ids={ids} label={label} description={description} />
       <Select
-        items={items}
+        items={options}
         name={field.name}
         value={field.value}
         onValueChange={(value) => field.handleChange(typeof value === 'string' ? value : '')}
         {...props}
       >
-        <SelectTrigger
-          id={triggerId}
-          aria-invalid={isInvalid}
-          aria-describedby={
-            [description ? descriptionId : null, isInvalid ? errorId : null]
-              .filter(Boolean)
-              .join(' ') || undefined
-          }
-          aria-errormessage={isInvalid ? errorId : undefined}
-          className={cn(
-            'w-full min-w-0 @md/field-group:w-55 @md/field-group:min-w-55 @md/field-group:max-w-55'
-          )}
-        >
+        <SelectTrigger {...controlProps} className={fieldControlWidthClass}>
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {items.map((option) => (
+            {options.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
               </SelectItem>

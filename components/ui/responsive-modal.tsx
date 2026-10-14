@@ -18,52 +18,41 @@ import {
     DrawerTrigger
 } from '@/components/ui/drawer';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
 import * as React from 'react';
 
 interface ResponsiveModalProps {
   children: React.ReactNode
   trigger: React.ReactElement
   title: string
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-  contentClassName?: string
 }
 
-export function ResponsiveModal({
-  children,
-  trigger,
-  title,
-  open,
-  onOpenChange,
-  contentClassName
-}: ResponsiveModalProps) {
+export function ResponsiveModal({ children, trigger, title }: ResponsiveModalProps) {
   const isMobile = useIsMobile()
 
   if (isMobile) {
     return (
-      <Drawer open={open} onOpenChange={onOpenChange}>
+      <Drawer>
         <DrawerTrigger render={trigger} />
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription className="sr-only">{title}</DrawerDescription>
           </DrawerHeader>
-          <DrawerBody className={contentClassName}>{children}</DrawerBody>
+          <DrawerBody>{children}</DrawerBody>
         </DrawerContent>
       </Drawer>
     )
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog>
       <DialogTrigger render={trigger} />
       <DialogContent className="theme-container md:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription className="sr-only">{title}</DialogDescription>
         </DialogHeader>
-        <div className={cn('max-h-[65vh] overflow-y-auto', contentClassName)}>{children}</div>
+        <div className="max-h-[65vh] overflow-y-auto">{children}</div>
       </DialogContent>
     </Dialog>
   )

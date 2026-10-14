@@ -1,16 +1,11 @@
 'use client'
 
 /**
- * Default lightbox, Tailwind variant — single-file design-system package
- * entry (no CSS file to copy). A plain-CSS variant with the identical
- * component API lives in `../css/lightbox.tsx`.
- *
- * Re-exports ramka Lightbox primitives with this skin attached, plus composed
- * `Lightbox.Gallery` (bleed or snug slides, glass controls, desktop thumbnail strip).
+ * Ramka lightbox primitives with this site's Tailwind skin, plus the composed
+ * `Lightbox.Gallery` (bleed or snug slides, glass controls, desktop thumbnail
+ * strip).
  *
  * Conventions:
- * - Requires Tailwind CSS v4 (`starting:`, `not-*`, bare `data-*` variants)
- *   plus the shadcn `cn` helper and `lucide-react`.
  * - Variables named `--lightbox-*` are written by the ramka runtime (gesture
  *   progress, motion timing) — this file only reads them. Variables named
  *   `--lb-*` are this skin's own tokens, declared via arbitrary properties.
@@ -19,10 +14,6 @@
  *   consumed here through the named `group/lb` on Content. All
  *   view-transition CSS (morph group, snapshots, crossfade) is injected by
  *   the library; the skin ships none of it.
- *
- * Package boundary: only the styled primitives + Gallery. Trigger layouts,
- * album grids, user cards, and other app UI belong in the consuming app
- * (docs: `demo.tsx`) — not in this module.
  */
 
 import * as RamkaLightbox from '@ramka/react/lightbox'
@@ -54,7 +45,7 @@ export type LightboxItem = {
   height: number
 }
 
-export type SlidesLayout = 'bleed' | 'snug'
+type SlidesLayout = 'bleed' | 'snug'
 
 /** Inline styles that carry the `--lb-*`/`--lightbox-*` custom properties the skin reads/writes. */
 type CSSVarStyle = React.CSSProperties & Record<`--${string}`, string | number>
@@ -180,6 +171,18 @@ const chromeGestureHideClass = cn(
   'group-data-pulling/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
   'group-data-pull-dismissing/lb:invisible group-data-pull-dismissing/lb:opacity-0',
   'group-data-pull-dismissing/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+)
+
+/** Chrome that also hides while the media is zoomed. */
+const chromeZoomHideClass = cn(
+  'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
+  'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+)
+
+/** Same, mobile only — on desktop the top controls stay usable while zoomed. */
+const mobileChromeZoomHideClass = cn(
+  'max-md:group-data-zoomed/lb:invisible max-md:group-data-zoomed/lb:opacity-0',
+  'max-md:group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
 )
 
 /* ── Styled primitives (design-system re-exports) ───────────────────────── */
@@ -478,10 +481,6 @@ function Thumbnail({ className, ...props }: React.ComponentProps<typeof RamkaLig
   )
 }
 
-function ThumbnailGroup(props: React.ComponentProps<typeof RamkaLightbox.ThumbnailGroup>) {
-  return <RamkaLightbox.ThumbnailGroup {...props} />
-}
-
 /* ── Snug layout (aspect-sized cards + peeking neighbors) ───────────────── */
 
 /*
@@ -568,58 +567,31 @@ function GalleryThumbnailStrip({
 
 /**
  * Default product chrome — Portal → Backdrop + Content → Slides/Zoom + glass
- * controls / caption + counter placard / desktop ThumbnailStrip. Supports bleed (full-width)
- * and snug (aspect-sized cards) via the top-right layout toggle or `slidesLayout`.
+ * controls / caption + counter placard / desktop ThumbnailStrip. Supports bleed
+ * (full-width) and snug (aspect-sized cards) via the top-right layout toggle.
  */
-function Gallery({
-  items,
-  ariaLabel,
-  slidesLayout: slidesLayoutProp,
-  onSlidesLayoutChange
-}: {
-  items: LightboxItem[]
-  ariaLabel: string
-  slidesLayout?: SlidesLayout
-  onSlidesLayoutChange?: (layout: SlidesLayout) => void
-}) {
+function Gallery({ items, ariaLabel }: { items: LightboxItem[]; ariaLabel: string }) {
   const t = useTranslations('Lightbox')
-  const [slidesLayoutInternal, setSlidesLayoutInternal] = React.useState<SlidesLayout>(
+  const [slidesLayout, setSlidesLayout] = React.useState<SlidesLayout>(
     () => readStoredSlidesLayout() ?? 'bleed'
   )
-  const slidesLayout = slidesLayoutProp ?? slidesLayoutInternal
   const snug = slidesLayout === 'snug'
   // Single item → no thumbnail strip → solo layout (tighter, centered bottom band).
   const solo = items.length <= 1
 
-  const setSlidesLayout = React.useCallback(
-    (next: SlidesLayout) => {
-      storeSlidesLayout(next)
-      onSlidesLayoutChange?.(next)
-      if (slidesLayoutProp === undefined) {
-        setSlidesLayoutInternal(next)
-      }
-    },
-    [onSlidesLayoutChange, slidesLayoutProp]
-  )
+  const toggleSlidesLayout = () => {
+    const next = snug ? 'bleed' : 'snug'
+    storeSlidesLayout(next)
+    setSlidesLayout(next)
+  }
 
-  const toggleSlidesLayout = React.useCallback(() => {
-    setSlidesLayout(slidesLayout === 'snug' ? 'bleed' : 'snug')
-  }, [setSlidesLayout, slidesLayout])
-
-  const snugEdgeRatios =
+  const slidesStyle: CSSVarStyle | undefined =
     snug && items.length > 0
       ? {
-          start: itemAspectRatio(items[0]),
-          end: itemAspectRatio(items[items.length - 1])
+          '--lb-snug-ratio-start': itemAspectRatio(items[0]),
+          '--lb-snug-ratio-end': itemAspectRatio(items[items.length - 1])
         }
-      : null
-
-  const slidesStyle: CSSVarStyle | undefined = snugEdgeRatios
-    ? {
-        '--lb-snug-ratio-start': snugEdgeRatios.start,
-        '--lb-snug-ratio-end': snugEdgeRatios.end
-      }
-    : undefined
+      : undefined
 
   return (
     <Portal>
@@ -698,8 +670,7 @@ function Gallery({
           className={cn(
             'absolute top-[calc(1rem+env(safe-area-inset-top,0px))] left-4 z-1',
             chromeGestureHideClass,
-            'max-md:group-data-zoomed/lb:invisible max-md:group-data-zoomed/lb:opacity-0',
-            'max-md:group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+            mobileChromeZoomHideClass
           )}
         >
           <Close aria-label={t('close')} />
@@ -716,8 +687,7 @@ function Gallery({
             className={cn(
               'absolute top-(--lb-inset-top) bottom-(--lb-inset-bottom) left-4 z-1 hidden items-center md:flex',
               chromeGestureHideClass,
-              'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
-              'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+              chromeZoomHideClass
             )}
           >
             <Previous aria-label={t('previous')} />
@@ -729,8 +699,7 @@ function Gallery({
             className={cn(
               'absolute top-(--lb-inset-top) bottom-(--lb-inset-bottom) right-4 z-1 hidden items-center md:flex',
               chromeGestureHideClass,
-              'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
-              'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+              chromeZoomHideClass
             )}
           >
             <Next aria-label={t('next')} />
@@ -742,8 +711,7 @@ function Gallery({
             'absolute top-[calc(0.75rem+env(safe-area-inset-top,0px))] right-3 z-1 flex gap-2',
             chromeGestureHideClass,
             // On mobile, zoom also hides the top controls — the media fills the screen.
-            'max-md:group-data-zoomed/lb:invisible max-md:group-data-zoomed/lb:opacity-0',
-            'max-md:group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
+            mobileChromeZoomHideClass
           )}
         >
           {/* Layout toggle: the icon is a miniature of the CURRENT layout —
@@ -778,8 +746,7 @@ function Gallery({
             'px-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]',
             chromeGestureHideClass,
             // Zoom hides the bottom placard (the zoomed media pans under it).
-            'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
-            'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
+            chromeZoomHideClass,
             // Solo (no strip): center the placard in the bottom inset band
             // instead of pinning it to the viewport edge.
             solo && 'min-h-(--lb-inset-bottom) justify-center pb-[env(safe-area-inset-bottom,0px)]'
@@ -832,7 +799,6 @@ export const Lightbox = {
   ThumbnailStrip,
   ThumbnailStripTrack,
   Thumbnail,
-  ThumbnailGroup,
   Previous,
   Next,
   Gallery

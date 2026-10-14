@@ -1,6 +1,6 @@
 'use client'
 
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { PageNavTabs, pageNavTabClass } from '@/components/page-nav'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { Link } from '@/i18n/navigation'
 import type { ContactNavItem } from '@/lib/types/components'
@@ -11,38 +11,31 @@ type ContactNavProps = React.ComponentProps<'div'> & {
   items: ContactNavItem[]
 }
 
-export function ContactNav({ className, items, ...props }: ContactNavProps) {
+export function ContactNav({ items, ...props }: ContactNavProps) {
   const isMobile = useIsMobile()
   const segment = useSelectedLayoutSegment()
 
   if (items.length === 0) return null
 
   return (
-    <div className="relative overflow-hidden">
-      <ScrollArea className="max-w-[600px] lg:max-w-none">
-        <div className={cn('flex items-center', className)} {...props}>
-          {items.map(({ id, slug, title }) => (
-            <Link
-              prefetch
-              key={id}
-              href={{
-                pathname: '/contact/[slug]',
-                params: { slug },
-                hash: '#tabs'
-              }}
-              aria-current={segment === slug ? 'page' : undefined}
-              data-active={segment === slug}
-              className={cn(
-                'text-muted-foreground hover:text-primary data-[active=true]:text-primary flex h-7 shrink-0 items-center justify-center rounded-md px-4 text-center text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset'
-              )}
-              scroll={!isMobile}
-            >
-              {title}
-            </Link>
-          ))}
-        </div>
-        <ScrollBar orientation="horizontal" className="invisible" />
-      </ScrollArea>
-    </div>
+    <PageNavTabs {...props}>
+      {items.map(({ id, slug, title }) => (
+        <Link
+          prefetch
+          key={id}
+          href={{
+            pathname: '/contact/[slug]',
+            params: { slug },
+            hash: '#tabs'
+          }}
+          aria-current={segment === slug ? 'page' : undefined}
+          data-active={segment === slug}
+          className={cn(pageNavTabClass, 'data-[active=true]:text-primary')}
+          scroll={!isMobile}
+        >
+          {title}
+        </Link>
+      ))}
+    </PageNavTabs>
   )
 }

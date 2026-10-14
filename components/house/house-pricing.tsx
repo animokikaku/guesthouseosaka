@@ -1,8 +1,4 @@
-import {
-  HouseSection,
-  HouseSectionContent,
-  HouseSectionHeading
-} from '@/components/house/house-section'
+import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import type { PricingRowData } from '@/lib/types/components'
 import type { PortableTextComponents } from '@portabletext/react'
 import { PortableText } from '@portabletext/react'
@@ -40,7 +36,7 @@ export function HousePricing({ pricing }: HousePricingProps) {
   }
 
   return (
-    <HouseSection id="pricing" aria-labelledby="pricing-title" className="pb-8">
+    <section id="pricing" aria-labelledby="pricing-title" className="pb-8">
       <HouseSectionHeading id="pricing-title">{t('heading')}</HouseSectionHeading>
       <HouseSectionContent>
         <div className="border-border overflow-hidden rounded-lg border">
@@ -61,6 +57,6 @@ export function HousePricing({ pricing }: HousePricingProps) {
           ))}
         </div>
       </HouseSectionContent>
-    </HouseSection>
+    </section>
   )
 }

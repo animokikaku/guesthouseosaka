@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 import { HOUSE_CARD_STYLES, type HouseCardStyles } from '@/lib/utils/theme'
 import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
+import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
 import { useState } from 'react'
 
@@ -32,6 +33,7 @@ type FAQExtraCostsCardsProps = {
 }
 
 export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsCardsProps) {
+  const t = useTranslations('FAQExtraCostsCards')
   const [api, setApi] = useState<CarouselApi>()
   const current = useCarouselIndex(api)
 
@@ -63,7 +65,7 @@ export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsC
               'h-2 rounded-full transition-[background-color,width] duration-300',
               current === index ? 'bg-foreground w-6' : 'bg-muted-foreground/30 w-2'
             )}
-            aria-label={`Go to ${title}`}
+            aria-label={t('go_to_house', { house: stegaClean(title) ?? '' })}
           />
         ))}
       </div>
@@ -72,7 +74,7 @@ export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsC
 }
 
 interface ExtraCostsCardProps {
-  styles: HouseCardStyles | undefined
+  styles: HouseCardStyles
   title: string | null
   extraCosts: Houses[number]['extraCosts']
   pricingCategories: PricingCategories
@@ -85,11 +87,11 @@ function ExtraCostsCard({ styles, title, extraCosts, pricingCategories }: ExtraC
       <div
         className={cn(
           'overflow-hidden rounded-xl border shadow-sm transition-shadow',
-          styles?.border
+          styles.border
         )}
       >
-        <div className={cn('px-4 py-3', styles?.headerBg)}>
-          <h4 className={cn('text-base font-semibold tracking-tight', styles?.text)}>
+        <div className={cn('px-4 py-3', styles.headerBg)}>
+          <h4 className={cn('text-base font-semibold tracking-tight', styles.text)}>
             {stegaClean(title)}
           </h4>
         </div>

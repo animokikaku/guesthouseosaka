@@ -5,7 +5,6 @@ import { AdvancedMarker, AdvancedMarkerProps } from '@vis.gl/react-google-maps'
 
 interface HouseMarkerProps extends Omit<AdvancedMarkerProps, 'position' | 'onClick'> {
   center?: { lat: number; lng: number }
-  isActive?: boolean
   mapsUrl?: string
 }
 
