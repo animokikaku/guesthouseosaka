@@ -1,4 +1,5 @@
 import { expect, type Page, test } from '@playwright/test'
+import { existsSync } from 'node:fs'
 
 /**
  * Consolidated locale route tests.
@@ -21,6 +22,12 @@ const ROUTES = [
 
 type Route = (typeof ROUTES)[number]
 
+// Origin the app was built with: CI sets it in the environment (which wins, as in Next),
+// local builds read it from .env.local.
+if (existsSync('.env.local')) process.loadEnvFile('.env.local')
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL
+if (!APP_URL) throw new Error('NEXT_PUBLIC_APP_URL is required to check canonical links')
+
 test.describe('Locale Routes', () => {
   test.describe.parallel('All locale and route combinations', () => {
     for (const locale of LOCALES) {
@@ -37,7 +44,7 @@ test.describe('Locale Routes', () => {
           // Self-referencing canonical, so copies served on other hosts defer to this URL
           await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
             'href',
-            new RegExp(`^https?://[^/]+/${locale}${route.path}$`)
+            new URL(fullPath, APP_URL).toString()
           )
 
           // Verify page has content based on route type
