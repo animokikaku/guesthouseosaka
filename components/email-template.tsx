@@ -2,12 +2,13 @@ import type { ContactFormFields } from '@/lib/schemas/contact-form'
 import { HouseIdentifier } from '@/lib/types'
 import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from 'react-email'
 
-// Helper for date formatting
+/** Formats the form's `YYYY-MM-DD` value, which `Date` parses as UTC midnight. */
 const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString('ja-JP', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   })
 }
 

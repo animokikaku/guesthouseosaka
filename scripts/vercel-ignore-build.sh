@@ -31,6 +31,8 @@ git diff --quiet "$BASE_SHA" "$TARGET_SHA" -- . \
   ':!e2e/**' \
   ':!playwright/**' \
   ':!.coderabbit.yaml' \
+  ':!codecov.yml' \
+  ':!coverage.config.ts' \
   ':!crowdin.yml' \
   ':!knip.json' \
   ':!playwright.config.ts' \

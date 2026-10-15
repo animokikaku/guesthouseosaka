@@ -10,6 +10,26 @@ import { createDataAttribute, stegaClean } from 'next-sanity'
 
 type PageAction = NonNullable<NonNullable<FaqPageQueryResult>['actions']>[number]
 
+/**
+ * Where a CMS page action points. Editors enter either an absolute URL or an
+ * internal path, optionally with a hash (`/faq#phone`, or just `#phone` for
+ * the page the action sits on).
+ */
+type PageActionHref =
+  | { external: true; href: string }
+  | { external: false; pathname: string; hash?: string }
+
+function resolvePageActionHref(href: string, currentPathname: string): PageActionHref {
+  if (href.startsWith('http://') || href.startsWith('https://')) {
+    return { external: true, href }
+  }
+
+  const [pathname, hash] = href.split('#')
+  return hash === undefined
+    ? { external: false, pathname }
+    : { external: false, pathname: pathname || currentPathname, hash: `#${hash}` }
+}
+
 interface DynamicPageActionsProps {
   documentId: string
   documentType: string
@@ -38,20 +58,13 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
         // First action is 'default' variant, others are 'ghost'
         const variant = index === 0 ? 'default' : 'ghost'
 
-        // Check if href is external or internal
-        const isExternal = href.startsWith('http://') || href.startsWith('https://')
+        const target = resolvePageActionHref(href, currentPathname)
 
-        // Parse href for internal links with hash
-        const hasHash = href.includes('#')
-        const [rawPathname, hash] = href.split('#')
-        // Handle hash-only links (e.g., "#section") by using current pathname
-        const pathname = rawPathname || currentPathname
-
-        if (isExternal) {
+        if (target.external) {
           return (
             <a
               key={_key}
-              href={href}
+              href={target.href}
               target="_blank"
               rel="noopener noreferrer"
               data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
@@ -68,7 +81,11 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
         return (
           <Link
             key={_key}
-            href={hasHash ? { pathname: pathname as '/', hash: `#${hash}` } : (href as '/')}
+            href={
+              target.hash
+                ? { pathname: target.pathname as '/', hash: target.hash }
+                : (target.pathname as '/')
+            }
             className={buttonVariants({ variant, size: 'sm' })}
             data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
           >

@@ -19,9 +19,12 @@ interface HouseAmenitiesProps {
   featuredAmenities: AmenityItemData[]
 }
 
+/** Badge text per amenity note; `note` is stega-cleaned by `toAmenityItem`. */
+type NoteLabels = Record<NonNullable<AmenityItemData['note']>, string>
+
 interface AmenitiesDialogProps {
   amenityCategories: AmenityCategoryData[]
-  noteLabels: Record<string, string>
+  noteLabels: NoteLabels
   trigger: React.ReactElement
   title: string
   dataAttribute?: DataAttributeFn
@@ -77,7 +80,7 @@ function AmenitiesDialog({
                     ...amenity,
                     label: amenity.label ? stegaClean(amenity.label) : null
                   }}
-                  noteLabel={amenity.note ? noteLabels[stegaClean(amenity.note)] : undefined}
+                  noteLabel={amenity.note ? noteLabels[amenity.note] : undefined}
                   data-sanity={dataAttribute?.(
                     `amenityCategories[_key=="${cat._key}"].items[_key=="${amenity._key}"]`
                   )}
@@ -106,7 +109,7 @@ export function HouseAmenities({
 
   const dataAttribute = createDataAttribute({ id, type })
 
-  const noteLabels: Record<string, string> = {
+  const noteLabels: NoteLabels = {
     private: t('notes.private'),
     shared: t('notes.shared'),
     coin: t('notes.coin')
@@ -124,7 +127,7 @@ export function HouseAmenities({
               key={amenity._key}
               amenity={amenity}
               className={index >= 5 ? 'hidden md:flex' : undefined}
-              noteLabel={amenity.note ? noteLabels[stegaClean(amenity.note)] : undefined}
+              noteLabel={amenity.note ? noteLabels[amenity.note] : undefined}
             />
           ))}
         </div>

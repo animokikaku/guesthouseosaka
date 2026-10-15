@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 test('opens and closes the real desktop dialog with focus restoration', async ({ mount, page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
@@ -25,7 +25,7 @@ test('records agreement through the real mobile drawer callback', async ({ mount
 
   const drawer = page.locator('[data-slot="drawer-content"]')
   await expect(drawer).toBeVisible()
-  await drawer.getByRole('button', { name: 'I agree' }).click()
+  await drawer.getByRole('button', { name: /\bagree\b/i }).click()
 
   await expect(component.getByTestId('agreement-count')).toHaveValue('1')
   await expect(drawer).toBeHidden()

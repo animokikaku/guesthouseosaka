@@ -16,6 +16,10 @@ export default defineConfig({
   // Look for files with .spec.ts or .e2e.ts extension
   testMatch: '*.@(spec|e2e).ts',
 
+  // Each config owns a subfolder, since CI runs this suite alongside the
+  // component tests and Playwright empties its output folder on start.
+  outputDir: 'test-results/e2e',
+
   // Run tests in files in parallel
   fullyParallel: true,
 

@@ -21,7 +21,7 @@ interface InputFieldProps extends InputFormProps, FieldOrientation {
   description?: string | null
 }
 
-export function InputField({
+function InputField({
   field,
   label,
   description,

@@ -1,88 +1,75 @@
-import { renderHook } from '@testing-library/react'
-import { getServerSnapshot, getSnapshot, useIsMobile } from '../use-mobile'
+import { act, renderHook } from '@testing-library/react'
+import { getServerSnapshot, useIsMobile } from '../use-mobile'
 
 const originalMatchMedia = window.matchMedia
 
-let addEventListenerSpy: ReturnType<typeof vi.fn>
-let removeEventListenerSpy: ReturnType<typeof vi.fn>
-let matchMediaSpy: ReturnType<typeof vi.fn<typeof window.matchMedia>>
+/** A stand-in for the browser's media query, which tests can flip like a resize would. */
+function viewport(initiallyMobile: boolean) {
+  let matches = initiallyMobile
+  const listeners = new Set<() => void>()
+  const queries: string[] = []
 
-/** Stands in for the browser reporting whether the mobile media query matches. */
-function setMatches(matches: boolean) {
-  matchMediaSpy.mockImplementation(
-    () =>
-      ({
-        matches,
-        addEventListener: addEventListenerSpy,
-        removeEventListener: removeEventListenerSpy
-      }) as unknown as MediaQueryList
-  )
+  window.matchMedia = (query: string) => {
+    queries.push(query)
+    // Only the parts of MediaQueryList the hook uses.
+    // oxlint-disable-next-line typescript/no-unsafe-type-assertion
+    return {
+      get matches() {
+        return matches
+      },
+      addEventListener: (_type: string, listener: () => void) => listeners.add(listener),
+      removeEventListener: (_type: string, listener: () => void) => listeners.delete(listener)
+    } as unknown as MediaQueryList
+  }
+
+  return {
+    queries,
+    resize(mobile: boolean) {
+      matches = mobile
+      listeners.forEach((listener) => listener())
+    }
+  }
 }
-
-beforeEach(() => {
-  addEventListenerSpy = vi.fn()
-  removeEventListenerSpy = vi.fn()
-  matchMediaSpy = vi.fn<typeof window.matchMedia>()
-  window.matchMedia = matchMediaSpy
-  setMatches(false)
-})
 
 afterEach(() => {
   window.matchMedia = originalMatchMedia
 })
 
 describe('useIsMobile', () => {
-  it.each([
-    [true, true],
-    [false, false]
-  ])('reports matches=%s as mobile=%s', (matches, isMobile) => {
-    setMatches(matches)
+  // The breakpoint is Tailwind's `md` (768px), so 767px is the widest mobile viewport.
+  it('asks the same breakpoint the layout uses', () => {
+    const { queries } = viewport(false)
 
+    renderHook(() => useIsMobile())
+
+    expect(queries).toContain('(max-width: 767px)')
+  })
+
+  it('follows the viewport across the breakpoint', () => {
+    const screen = viewport(false)
     const { result } = renderHook(() => useIsMobile())
+    expect(result.current).toBe(false)
 
-    expect(result.current).toBe(isMobile)
+    act(() => screen.resize(true))
+    expect(result.current).toBe(true)
+
+    act(() => screen.resize(false))
+    expect(result.current).toBe(false)
   })
 
-  it('subscribes to the media query and cleans up on unmount', () => {
-    const { unmount } = renderHook(() => useIsMobile())
-
-    expect(addEventListenerSpy).toHaveBeenCalledWith('change', expect.any(Function))
-
-    unmount()
-
-    expect(removeEventListenerSpy).toHaveBeenCalledWith('change', expect.any(Function))
-  })
-})
-
-describe('getServerSnapshot', () => {
-  it('returns false for SSR compatibility', () => {
-    expect(getServerSnapshot()).toBe(false)
-  })
-})
-
-describe('getSnapshot', () => {
-  // The breakpoint is 768px, so 767 is the widest mobile viewport.
-  it('asks for the breakpoint the layout uses', () => {
-    getSnapshot()
-
-    expect(matchMediaSpy).toHaveBeenCalledWith('(max-width: 767px)')
-  })
-
-  it('never reads layout, which would force a reflow on every render', () => {
+  // Reading layout on every render forces a synchronous reflow; the media query
+  // already holds the answer.
+  it('never reads layout', () => {
+    viewport(true)
     const innerWidth = vi.spyOn(window, 'innerWidth', 'get')
 
-    getSnapshot()
+    renderHook(() => useIsMobile())
 
     expect(innerWidth).not.toHaveBeenCalled()
     innerWidth.mockRestore()
   })
 
-  it.each([
-    [true, true],
-    [false, false]
-  ])('reports matches=%s as mobile=%s', (matches, isMobile) => {
-    setMatches(matches)
-
-    expect(getSnapshot()).toBe(isMobile)
+  it('renders the desktop layout on the server', () => {
+    expect(getServerSnapshot()).toBe(false)
   })
 })

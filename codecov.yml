@@ -1,0 +1,10 @@
+# Two uploads per commit: Vitest's from the unit job and the component suite's
+# browser coverage from the E2E job (see .github/workflows/ci.yml). Codecov
+# merges them into one figure for the codebase.
+codecov:
+  notify:
+    # Wait for both, so the unit report alone never reads as a drop.
+    after_n_builds: 2
+
+comment:
+  after_n_builds: 2

@@ -9,7 +9,7 @@ test.describe('Homepage', () => {
       await page.goto('/en')
 
       const nav = page.getByRole('navigation')
-      const contactLink = nav.getByRole('link', { name: /contact/i })
+      const contactLink = nav.getByRole('link', { name: /\bcontact\b/i })
       await contactLink.first().click()
 
       await expect(page).toHaveURL(/\/en\/contact/)
@@ -44,7 +44,7 @@ test.describe('Homepage', () => {
 
       // Open language switcher
       const languageSwitcher = page.getByRole('button', {
-        name: /select language/i
+        name: /\blanguage\b/i
       })
       await languageSwitcher.click()
 

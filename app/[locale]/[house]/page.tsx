@@ -1,14 +1,12 @@
 import { HousePageContent } from '@/components/house/house-page-content'
 import { JsonLd } from '@/components/json-ld'
 import { PageEmptyStateSection } from '@/components/page-empty-state'
-import { assets } from '@/lib/assets'
 import { getHouseAndLocale } from '@/lib/house-params'
 import { getCanonicalMetadata, getCanonicalUrl } from '@/lib/metadata'
-import { urlFor } from '@/sanity/lib/image'
+import { houseJsonLd } from '@/lib/structured-data'
 import { sanityFetch } from '@/sanity/lib/live'
 import { houseQuery, housesTitlesQuery } from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
-import { Accommodation, WithContext } from 'schema-dts'
 
 // instant = false: kept on purpose, the whole page depends on the house, so there is
 // no shared App Shell worth prefetching. Links here use `prefetch` to load the
@@ -37,41 +35,10 @@ export default async function HousePage({ params }: PageProps<'/[locale]/[house]
   }
 
   const url = getCanonicalUrl({ pathname: '/[house]', params: { house } }, locale)
-  const { title, description, map, building, phone, image } = data
-
-  const jsonLd: WithContext<Accommodation> = {
-    '@context': 'https://schema.org',
-    '@type': 'House',
-    '@id': `${url}#house`,
-    url,
-    name: title ?? undefined,
-    description: description ?? undefined,
-    image: urlFor(image).width(1200).height(630).fit('crop').url(),
-    ...(map?.coordinates && {
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: map.coordinates.lat,
-        longitude: map.coordinates.lng
-      }
-    }),
-    hasMap: map?.googleMapsUrl ?? undefined,
-    logo: assets.logo[house].src,
-    ...(map?.address && {
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: map.address.streetAddress,
-        addressLocality: map.address.locality,
-        postalCode: map.address.postalCode,
-        addressCountry: map.address.country
-      }
-    }),
-    numberOfRooms: building?.rooms,
-    telephone: phone.international
-  }
 
   return (
     <>
-      <JsonLd data={jsonLd} />
+      <JsonLd data={houseJsonLd(data, house, url)} />
       <HousePageContent {...data} houses={houses} />
     </>
   )

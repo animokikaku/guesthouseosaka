@@ -6,30 +6,10 @@ const { selectedSegment } = vi.hoisted(() => ({
   selectedSegment: { current: null as string | null }
 }))
 
-vi.mock('@/hooks/use-mobile', () => ({
-  useIsMobile: () => false
-}))
-
-vi.mock('next/navigation', () => ({
+vi.mock('next/navigation', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('next/navigation')>()),
+  usePathname: () => '/',
   useSelectedLayoutSegment: () => selectedSegment.current
-}))
-
-vi.mock('@/i18n/navigation', () => ({
-  Link: ({
-    children,
-    href,
-    scroll: _scroll,
-    ...props
-  }: {
-    children: React.ReactNode
-    href: { pathname: string; params: { slug: string }; hash: string }
-    scroll?: boolean
-    [key: string]: unknown
-  }) => (
-    <a href={`/contact/${href.params.slug}${href.hash}`} {...props}>
-      {children}
-    </a>
-  )
 }))
 
 const items: ContactNavItem[] = [
@@ -49,15 +29,15 @@ describe('ContactNav', () => {
     expect(screen.getAllByRole('link')).toHaveLength(3)
     expect(screen.getByRole('link', { name: 'Book a Tour' })).toHaveAttribute(
       'href',
-      '/contact/tour#tabs'
+      '/en/contact/tour#tabs'
     )
     expect(screen.getByRole('link', { name: 'Move In' })).toHaveAttribute(
       'href',
-      '/contact/move-in#tabs'
+      '/en/contact/move-in#tabs'
     )
     expect(screen.getByRole('link', { name: 'Other Inquiries' })).toHaveAttribute(
       'href',
-      '/contact/other#tabs'
+      '/en/contact/other#tabs'
     )
   })
 

@@ -20,8 +20,21 @@ test.describe('House Page', () => {
     }
   })
 
-  // Note: Visibility tests for About, Amenities, Pricing, Location sections
-  // are covered by unit tests in components/house/__tests__/
+  // Search engines read the house as a lodging business from this block.
+  test('describes the house in structured data', async ({ page }) => {
+    await page.goto(`/en/${testHouse}`)
+
+    const blocks = await page.locator('script[type="application/ld+json"]').allTextContents()
+    const house = blocks.map((block) => JSON.parse(block)).find((data) => data['@type'] === 'House')
+
+    expect(house).toMatchObject({
+      '@context': 'https://schema.org',
+      url: expect.stringMatching(new RegExp(`/en/${testHouse}$`)),
+      name: expect.any(String),
+      telephone: expect.stringMatching(/^\+81/),
+      image: expect.stringContaining('cdn.sanity.io')
+    })
+  })
 
   test('applies the house theme before hydration on direct visits', async ({ page }) => {
     await page.route('**/_next/static/chunks/*.js', (route) => route.abort())
@@ -54,14 +67,17 @@ test.describe('House Page', () => {
     test('reopens after being closed', async ({ page }) => {
       await page.goto(`/en/${testHouse}`)
 
-      const galleryLink = page.getByRole('link', { name: /Show all/ }).first()
+      const galleryLink = page
+        .locator(`a[href="/en/${testHouse}/gallery"]`)
+        .filter({ visible: true })
+        .first()
       const dialog = page.getByRole('dialog')
 
       await galleryLink.click()
       await expect(page).toHaveURL(new RegExp(`/en/${testHouse}/gallery$`))
       await expect(dialog).toBeVisible()
 
-      await dialog.getByRole('button', { name: 'Close gallery' }).click()
+      await dialog.getByRole('button', { name: /\bclose\b/i }).click()
       await expect(page).toHaveURL(new RegExp(`/en/${testHouse}$`))
       await expect(dialog).toBeHidden()
 
@@ -73,7 +89,10 @@ test.describe('House Page', () => {
     test('reopens after browser back navigation', async ({ page }) => {
       await page.goto(`/en/${testHouse}`)
 
-      const galleryLink = page.getByRole('link', { name: /Show all/ }).first()
+      const galleryLink = page
+        .locator(`a[href="/en/${testHouse}/gallery"]`)
+        .filter({ visible: true })
+        .first()
       const dialog = page.getByRole('dialog')
 
       await galleryLink.click()

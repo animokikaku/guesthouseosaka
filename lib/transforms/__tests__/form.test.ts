@@ -11,10 +11,10 @@ describe('toFormFieldsConfig', () => {
 
     expect(Object.keys(result)).toHaveLength(11)
     // Verify each field is transformed with its label
-    expect(result.places.label).toBe(fields.places.label)
-    expect(result.date.label).toBe(fields.date.label)
-    expect(result.stayDuration.label).toBe(fields.stayDuration.label)
-    expect(result.nationality.label).toBe(fields.nationality.label)
+    expect(result.places.label).toBe(fields.places?.label)
+    expect(result.date.label).toBe(fields.date?.label)
+    expect(result.stayDuration.label).toBe(fields.stayDuration?.label)
+    expect(result.nationality.label).toBe(fields.nationality?.label)
   })
 
   it('preserves placeholder and description values', () => {
@@ -23,11 +23,19 @@ describe('toFormFieldsConfig', () => {
     const result = toFormFieldsConfig(fields)
 
     // Fields with placeholders should preserve them
-    expect(result.stayDuration.placeholder).toBe(fields.stayDuration.placeholder)
-    expect(result.email.placeholder).toBe(fields.email.placeholder)
+    expect(result.stayDuration.placeholder).toBe(fields.stayDuration?.placeholder)
+    expect(result.email.placeholder).toBe(fields.email?.placeholder)
     // Fields without placeholders should be undefined
     expect(result.places.placeholder).toBeUndefined()
     expect(result.date.placeholder).toBeUndefined()
+  })
+
+  it('falls back to an empty label when a field config is missing', () => {
+    const fields = { ...createContactTypeFields(), hour: null }
+
+    const result = toFormFieldsConfig(fields)
+
+    expect(result.hour).toEqual({ label: '', placeholder: undefined, description: undefined })
   })
 })
 
@@ -39,7 +47,7 @@ describe('toContactFormConfig', () => {
 
     expect(result.title).toBe(contactType.title)
     expect(result.description).toBe(contactType.description)
-    expect(result.fields.places.label).toBe(contactType.fields.places.label)
+    expect(result.fields.places.label).toBe(contactType.fields.places?.label)
   })
 
   it('handles contact type with null title', () => {

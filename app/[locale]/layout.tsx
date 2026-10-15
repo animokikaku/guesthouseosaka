@@ -12,11 +12,11 @@ import { SiteHeader } from '@/components/site-header'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toast'
-import { assets } from '@/lib/assets'
 import { META_THEME_COLORS } from '@/lib/config'
 import { env } from '@/lib/env'
 import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
+import { organizationJsonLd } from '@/lib/structured-data'
 import { toHouseNavItems } from '@/lib/transforms/nav'
 import { cn } from '@/lib/utils'
 import { HOUSE_THEMES } from '@/lib/house-theme'
@@ -26,7 +26,6 @@ import { type Metadata } from 'next'
 import { cacheLife } from 'next/cache'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import { draftMode } from 'next/headers'
-import { Organization, WithContext } from 'schema-dts'
 
 async function getCurrentYear() {
   'use cache'
@@ -96,23 +95,6 @@ export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'
   // Transform houses data server-side to reduce client-side work
   const houseItems = toHouseNavItems(houses)
 
-  const jsonLd: WithContext<Organization> = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    '@id': `${url}/#organization`,
-    name: 'Guest House Osaka',
-    alternateName: 'ゲストハウス大阪',
-    logo: assets.logo.sho.src,
-    image: assets.openGraph.home.src,
-    ...(settings && {
-      legalName: settings.companyName,
-      telephone: settings.phone,
-      email: settings.email,
-      sameAs: settings.socialLinks?.map((link) => link.url),
-      address: settings.address ? { '@type': 'PostalAddress', ...settings.address } : undefined
-    })
-  }
-
   return (
     <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
@@ -127,7 +109,7 @@ export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'
             `
           }}
         />
-        <JsonLd data={jsonLd} />
+        <JsonLd data={organizationJsonLd(settings, url)} />
         <meta name="theme-color" content={META_THEME_COLORS.light} />
       </head>
       <body

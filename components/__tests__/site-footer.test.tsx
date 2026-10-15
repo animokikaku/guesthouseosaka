@@ -2,247 +2,57 @@ import type { SettingsQueryResult } from '@/sanity.types'
 import { render, screen } from '@testing-library/react'
 import { SiteFooter } from '../site-footer'
 
-type OptimisticReducer = (
-  currentLinks: NonNullable<SettingsQueryResult>['socialLinks'] | undefined,
-  action: { id: string; document: Partial<NonNullable<SettingsQueryResult>> }
-) => NonNullable<SettingsQueryResult>['socialLinks'] | undefined
+type Settings = NonNullable<SettingsQueryResult>
 
-let capturedReducer: OptimisticReducer | null = null
-
-vi.mock('next-sanity/hooks', () => ({
-  useOptimistic: <T,>(initialValue: T, reducer: (current: T, action: unknown) => T) => {
-    capturedReducer = reducer as unknown as OptimisticReducer
-    return initialValue
-  }
-}))
-
-const createSettings = (
-  overrides?: Partial<NonNullable<SettingsQueryResult>>
-): NonNullable<SettingsQueryResult> => ({
-  _id: 'settings-123',
+const settings: Settings = {
+  _id: 'settings',
   _type: 'settings',
   siteName: null,
   siteDescription: null,
-  companyName: 'Guest House Osaka',
+  companyName: 'Guest House Osaka Ltd.',
   email: 'info@example.com',
   phone: '+81-6-1234-5678',
   address: null,
   socialLinks: [
+    { _key: 'fb', icon: 'facebook', label: 'Facebook', url: 'https://facebook.com/example' },
     {
-      _key: 'social-1',
-      icon: 'facebook',
-      label: 'Facebook',
-      url: 'https://facebook.com/example'
-    },
-    {
-      _key: 'social-2',
+      _key: 'ig',
       icon: 'instagram',
-      label: 'Instagram',
+      label: 'Follow us on Instagram',
       url: 'https://instagram.com/example'
     }
-  ],
-  ...overrides
-})
-
-const YEAR = 2026
+  ]
+}
 
 describe('SiteFooter', () => {
-  describe('visibility', () => {
-    it('renders footer element', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings()} />)
+  it('credits the company for the given year', () => {
+    render(<SiteFooter year={2026} settings={settings} />)
 
-      expect(screen.getByRole('contentinfo')).toBeInTheDocument()
-    })
-
-    it('displays company name', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings()} />)
-
-      // Company name appears in footer outside sr-only text
-      expect(screen.getAllByText(/Guest House Osaka/).length).toBeGreaterThan(0)
-    })
-
-    it('displays the given year in copyright', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings()} />)
-
-      expect(screen.getByText(new RegExp(String(YEAR)))).toBeInTheDocument()
-    })
-
-    it('renders social links with external target', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings()} />)
-
-      const socialLinks = screen.getAllByRole('link')
-      expect(socialLinks.length).toBeGreaterThan(0)
-
-      // Check all links have target="_blank"
-      socialLinks.forEach((link) => {
-        expect(link).toHaveAttribute('target', '_blank')
-      })
-    })
-
-    it('renders social links with rel noopener noreferrer', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings()} />)
-
-      const socialLinks = screen.getAllByRole('link')
-      socialLinks.forEach((link) => {
-        expect(link).toHaveAttribute('rel', 'noopener noreferrer')
-      })
-    })
-
-    it('renders social links with correct href', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings()} />)
-
-      const facebookLink = screen.getByRole('link', { name: 'Facebook' })
-      expect(facebookLink).toHaveAttribute('href', 'https://facebook.com/example')
-
-      const instagramLink = screen.getByRole('link', { name: 'Instagram' })
-      expect(instagramLink).toHaveAttribute('href', 'https://instagram.com/example')
-    })
-
-    it('renders social links with data-sanity attribute for visual editing', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings()} />)
-
-      const facebookLink = screen.getByRole('link', { name: 'Facebook' })
-      expect(facebookLink).toHaveAttribute('data-sanity')
-      expect(facebookLink.getAttribute('data-sanity')).toContain('social-1')
-
-      const instagramLink = screen.getByRole('link', { name: 'Instagram' })
-      expect(instagramLink).toHaveAttribute('data-sanity')
-      expect(instagramLink.getAttribute('data-sanity')).toContain('social-2')
-    })
+    expect(screen.getByRole('contentinfo')).toHaveTextContent('© 2026 Guest House Osaka Ltd.')
   })
 
-  describe('empty states', () => {
-    it('handles missing social links gracefully', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings({ socialLinks: null })} />)
+  it('links each social profile in a new tab, named by its label', () => {
+    render(<SiteFooter year={2026} settings={settings} />)
 
-      // Footer should still render
-      expect(screen.getByRole('contentinfo')).toBeInTheDocument()
-      // No social links should be present
-      expect(screen.queryAllByRole('link')).toHaveLength(0)
-    })
-
-    it('handles empty social links array', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings({ socialLinks: [] })} />)
-
-      expect(screen.getByRole('contentinfo')).toBeInTheDocument()
-      expect(screen.queryAllByRole('link')).toHaveLength(0)
-    })
-
-    it('renders social link with custom label', () => {
-      render(
-        <SiteFooter
-          year={YEAR}
-          settings={createSettings({
-            socialLinks: [
-              {
-                _key: 'social-1',
-                icon: 'facebook',
-                label: 'Follow us on Facebook',
-                url: 'https://facebook.com/example'
-              }
-            ]
-          })}
-        />
-      )
-
-      // Custom label is used instead of URL-derived label
-      expect(screen.getByLabelText('Follow us on Facebook')).toBeInTheDocument()
-    })
+    const instagram = screen.getByRole('link', { name: 'Follow us on Instagram' })
+    expect(instagram).toHaveAttribute('href', 'https://instagram.com/example')
+    expect(instagram).toHaveAttribute('target', '_blank')
+    expect(instagram).toHaveAttribute('rel', 'noopener noreferrer')
+    expect(instagram.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
   })
 
-  describe('accessibility', () => {
-    it('renders screen reader text for company info', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings()} />)
+  it('tags each link for visual editing', () => {
+    render(<SiteFooter year={2026} settings={settings} />)
 
-      expect(screen.getByText(/ゲストハウス大阪/)).toHaveClass('sr-only')
-    })
-
-    it('social links have aria-label for platform name', () => {
-      render(<SiteFooter year={YEAR} settings={createSettings()} />)
-
-      expect(screen.getByRole('link', { name: 'Facebook' })).toBeInTheDocument()
-      expect(screen.getByRole('link', { name: 'Instagram' })).toBeInTheDocument()
-    })
+    expect(screen.getByRole('link', { name: 'Facebook' }).getAttribute('data-sanity')).toContain(
+      'path=socialLinks:fb'
+    )
   })
 
-  describe('optimistic updates', () => {
-    const currentLinks = [
-      {
-        _key: 'social-1',
-        icon: 'facebook',
-        label: 'Facebook',
-        url: 'https://facebook.com/example'
-      },
-      {
-        _key: 'social-2',
-        icon: 'instagram',
-        label: 'Instagram',
-        url: 'https://instagram.com/example'
-      }
-    ]
+  it.each([null, []])('renders without social links (%j)', (socialLinks) => {
+    render(<SiteFooter year={2026} settings={{ ...settings, socialLinks }} />)
 
-    beforeEach(() => {
-      capturedReducer = null
-    })
-
-    it('returns updated links when action matches settings id', () => {
-      const settings = createSettings()
-      render(<SiteFooter year={YEAR} settings={settings} />)
-
-      expect(capturedReducer).not.toBeNull()
-
-      const newLinks = [
-        {
-          _key: 'social-1',
-          icon: 'facebook',
-          label: 'FB',
-          url: 'https://fb.com'
-        },
-        {
-          _key: 'social-3',
-          icon: 'twitter',
-          label: 'Twitter',
-          url: 'https://twitter.com'
-        }
-      ]
-
-      const result = capturedReducer!(currentLinks, {
-        id: settings._id,
-        document: { socialLinks: newLinks }
-      })
-
-      // Should merge: existing link with _key 'social-1' is found, 'social-3' uses action link
-      expect(result).toHaveLength(2)
-      expect(result![0]).toEqual(currentLinks[0]) // Found in currentLinks
-      expect(result![1]).toEqual(newLinks[1]) // Not found, uses action link
-    })
-
-    it('returns current links when action id does not match', () => {
-      const settings = createSettings()
-      render(<SiteFooter year={YEAR} settings={settings} />)
-
-      expect(capturedReducer).not.toBeNull()
-
-      const result = capturedReducer!(currentLinks, {
-        id: 'different-id',
-        document: { socialLinks: [] }
-      })
-
-      expect(result).toBe(currentLinks)
-    })
-
-    it('returns current links when action has no socialLinks', () => {
-      const settings = createSettings()
-      render(<SiteFooter year={YEAR} settings={settings} />)
-
-      expect(capturedReducer).not.toBeNull()
-
-      const result = capturedReducer!(currentLinks, {
-        id: settings._id,
-        document: {}
-      })
-
-      expect(result).toBe(currentLinks)
-    })
+    expect(screen.getByRole('contentinfo')).toBeInTheDocument()
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })
 })

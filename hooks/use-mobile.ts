@@ -19,7 +19,7 @@ function subscribe(callback: () => void) {
   return () => mql.removeEventListener('change', callback)
 }
 
-export function getSnapshot() {
+function getSnapshot() {
   return mediaQuery().matches
 }
 

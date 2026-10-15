@@ -1,8 +1,12 @@
 // @vitest-environment node
 
-const { sendMock } = vi.hoisted(() => ({
-  sendMock: vi.fn()
-}))
+const { sendMock, env } = vi.hoisted(() => {
+  const mutableEnv: { NODE_ENV: string; RESEND_API_KEY: string; VERCEL_ENV?: string } = {
+    NODE_ENV: 'test',
+    RESEND_API_KEY: 're_test'
+  }
+  return { sendMock: vi.fn(), env: mutableEnv }
+})
 
 vi.mock('resend', () => ({
   Resend: class ResendMock {
@@ -10,19 +14,7 @@ vi.mock('resend', () => ({
   }
 }))
 
-vi.mock('@/lib/env', () => ({
-  env: {
-    NODE_ENV: 'test',
-    RESEND_API_KEY: 're_test',
-    VERCEL_ENV: undefined
-  }
-}))
-
-vi.mock('@/components/email-template', () => ({
-  GeneralInquiryEmail: vi.fn(() => null),
-  MoveInRequestEmail: vi.fn(() => null),
-  TourRequestEmail: vi.fn(() => null)
-}))
+vi.mock('@/lib/env', () => ({ env }))
 
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
 import { submitContactForm } from '../contact'
@@ -77,19 +69,59 @@ const successfulSubmissionCases = [
 ] satisfies { name: string; payload: ContactFormPayload; subject: string }[]
 
 describe('submitContactForm', () => {
+  beforeEach(() => {
+    sendMock.mockReset().mockResolvedValue({ data: { id: 'email-id' }, error: null, headers: {} })
+    Object.assign(env, { NODE_ENV: 'test', VERCEL_ENV: undefined })
+  })
+
   afterEach(() => {
     vi.restoreAllMocks()
+  })
+
+  // Each house has its own inbox; a question about several goes to the shared
+  // one. Previews and local runs must never reach a real inbox.
+  it.each([
+    {
+      name: 'one house in production',
+      nodeEnv: 'production',
+      vercelEnv: undefined,
+      places: ['apple'],
+      to: 'apple@guesthouseosaka.com'
+    },
+    {
+      name: 'several houses in production',
+      nodeEnv: 'production',
+      vercelEnv: 'production',
+      places: ['apple', 'lemon'],
+      to: 'info@guesthouseosaka.com'
+    },
+    {
+      name: 'a preview deployment',
+      nodeEnv: 'production',
+      vercelEnv: 'preview',
+      places: ['apple'],
+      to: 'delivered+guesthouseosaka@resend.dev'
+    },
+    {
+      name: 'local development',
+      nodeEnv: 'development',
+      vercelEnv: undefined,
+      places: ['apple'],
+      to: 'dev@guesthouseosaka.com'
+    }
+  ] as const)('sends $name to $to', async ({ nodeEnv, vercelEnv, places, to }) => {
+    Object.assign(env, { NODE_ENV: nodeEnv, VERCEL_ENV: vercelEnv })
+
+    await submitContactForm({ ...payload, data: { ...payload.data, places: [...places] } })
+
+    expect(sendMock).toHaveBeenCalledWith(
+      expect.objectContaining({ from: 'Guest House Osaka <info@guesthouseosaka.com>', to })
+    )
   })
 
   it.each(successfulSubmissionCases)(
     'returns success when Resend accepts a $name email',
     async ({ payload: submission, subject }) => {
-      sendMock.mockResolvedValue({
-        data: { id: 'email-id' },
-        error: null,
-        headers: {}
-      })
-
       await expect(submitContactForm(submission)).resolves.toEqual({ ok: true })
       expect(sendMock).toHaveBeenCalledWith(
         expect.objectContaining({

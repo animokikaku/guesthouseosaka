@@ -6,6 +6,10 @@ const galleryURL = `http://127.0.0.1:${PORT}/playwright/gallery/index.html`
 export default defineConfig({
   testDir: './playwright/components',
   testMatch: '*.spec.ts',
+  // Kept apart from the E2E output, which runs at the same time in CI.
+  outputDir: 'test-results/components',
+  // Browser coverage for Codecov when COVERAGE=1 (see playwright/coverage.ts).
+  globalSetup: './playwright/coverage.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

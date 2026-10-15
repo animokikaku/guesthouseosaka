@@ -108,11 +108,20 @@ jobs:
       - name: Install Playwright browsers
         run: bunx playwright install --only-shell chromium
 
-      - name: Run component tests
-        run: bun run test:components
+      # The E2E suite spends most of its time on the production build, so the
+      # component tests (their own Vite server on another port) run alongside it.
+      - name: Run component and E2E tests
+        run: bun run --parallel --no-exit-on-error test:components test:e2e
+        env:
+          # Component coverage for Codecov (see playwright/coverage.ts).
+          COVERAGE: '1'
 
-      - name: Run E2E tests
-        run: bun run test:e2e
+      - name: Upload component coverage to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage-playwright/lcov.info
+          disable_search: true
 
       - name: Save Next.js cache from main
         if: github.event_name == 'push' && steps.next-cache-main.outputs.cache-hit != 'true'

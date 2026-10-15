@@ -5,7 +5,7 @@ import { existsSync } from 'node:fs'
  * Consolidated locale route tests.
  *
  * This file tests that all locale routes load successfully across all supported locales.
- * Test matrix: [en, ja, fr, zh-cn, zh-tw] x [/, /contact, /orange/gallery] = 15 tests
+ * Test matrix: [en, ja, fr, zh-cn, zh-tw] x [/, /faq, /contact, /orange/gallery] = 20 tests
  *
  * This keeps locale routing as a whole-app browser boundary instead of
  * duplicating it in component-focused suites.
@@ -16,6 +16,7 @@ const LOCALES = ['en', 'ja', 'fr', 'zh-cn', 'zh-tw'] as const
 
 const ROUTES = [
   { path: '', name: 'homepage', selector: 'heading' },
+  { path: '/faq', name: 'faq', selector: 'heading' },
   { path: '/contact', name: 'contact', selector: 'a[href*="/contact/"]' },
   { path: '/orange/gallery', name: 'gallery', selector: 'img' }
 ] as const
@@ -61,7 +62,7 @@ test.describe('Locale Routes', () => {
 async function verifyPageContent(page: Page, route: Route) {
   switch (route.selector) {
     case 'heading': {
-      // Homepage and house pages should have a heading
+      // CMS pages lead with their page heading
       const heading = page.getByRole('heading').first()
       await expect(heading).toBeVisible()
       break

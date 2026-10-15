@@ -1,17 +1,5 @@
 // @vitest-environment node
 
-vi.mock('@/sanity/lib/image', () => {
-  const builder = {
-    width: () => builder,
-    height: () => builder,
-    dpr: () => builder,
-    fit: () => builder,
-    url: () => 'https://cdn.sanity.io/images/test/gallery.jpg'
-  }
-
-  return { urlFor: () => builder }
-})
-
 import {
   createGalleryCategory,
   createGalleryItem,
@@ -21,143 +9,67 @@ import { buildGallerySlides, flattenGalleryItems } from '../gallery'
 import { toGalleryCategories } from '../transforms/gallery'
 
 describe('buildGallerySlides', () => {
-  it('prepends the featured image with _key: "featured"', () => {
-    const image = createSanityImage()
-    const item = createGalleryItem({ _key: 'item1' })
-    const result = buildGallerySlides({ featuredImage: image, galleryImages: [item] })
+  const gallery = [createGalleryItem({ _key: 'a' }), createGalleryItem({ _key: 'b' })]
 
-    expect(result).toEqual([{ _key: 'featured', image }, item])
+  it('leads with the featured image, then the gallery', () => {
+    const featuredImage = createSanityImage()
+
+    expect(buildGallerySlides({ featuredImage, galleryImages: gallery })).toEqual([
+      { _key: 'featured', image: featuredImage },
+      ...gallery
+    ])
+  })
+
+  it('skips a featured image that has no asset yet', () => {
+    const featuredImage = createSanityImage({ asset: null })
+
+    expect(buildGallerySlides({ featuredImage, galleryImages: gallery })).toEqual(gallery)
+  })
+
+  it('handles a house with no gallery', () => {
+    expect(buildGallerySlides({ featuredImage: null, galleryImages: null })).toEqual([])
   })
 })
 
 describe('flattenGalleryItems', () => {
-  it('returns empty array for null categories', () => {
-    expect(flattenGalleryItems(null)).toEqual([])
-  })
-
-  it('returns empty array for empty categories', () => {
-    expect(flattenGalleryItems([])).toEqual([])
-  })
-
-  it('flattens items from multiple categories', () => {
+  it('keeps the category order, then each category’s item order', () => {
     const categories = [
       createGalleryCategory({
-        _key: 'cat1',
-        items: [createGalleryItem({ _key: 'img1' }), createGalleryItem({ _key: 'img2' })]
+        items: [createGalleryItem({ _key: '1' }), createGalleryItem({ _key: '2' })]
       }),
-      createGalleryCategory({
-        _key: 'cat2',
-        items: [createGalleryItem({ _key: 'img3' })]
-      })
+      createGalleryCategory({ items: [] }),
+      createGalleryCategory({ items: [createGalleryItem({ _key: '3' })] })
     ]
 
-    const result = flattenGalleryItems(categories)
-
-    expect(result).toHaveLength(3)
-    expect(result.map((i) => i._key)).toEqual(['img1', 'img2', 'img3'])
+    expect(flattenGalleryItems(categories).map((item) => item._key)).toEqual(['1', '2', '3'])
   })
 
-  it('handles categories with empty items', () => {
-    const categories = [
-      createGalleryCategory({ _key: 'cat1', items: [] }),
-      createGalleryCategory({
-        _key: 'cat2',
-        items: [createGalleryItem({ _key: 'img1' })]
-      })
-    ]
-
-    const result = flattenGalleryItems(categories)
-
-    expect(result).toHaveLength(1)
-    expect(result[0]._key).toBe('img1')
+  it('handles a missing gallery', () => {
+    expect(flattenGalleryItems(null)).toEqual([])
   })
 })
 
 describe('toGalleryCategories', () => {
-  it('returns empty array for null data', () => {
+  it('flattens each category reference and uses its first photo as the thumbnail', () => {
+    const first = createGalleryItem()
+    const category = createGalleryCategory({
+      _key: 'bedroom',
+      category: { _id: 'cat-bedroom', label: 'Bedroom', orderRank: '0|a:' },
+      items: [first, createGalleryItem()]
+    })
+
+    expect(toGalleryCategories([category])).toEqual([
+      {
+        _key: 'bedroom',
+        _id: 'cat-bedroom',
+        label: 'Bedroom',
+        thumbnail: first.image,
+        items: category.items
+      }
+    ])
+  })
+
+  it('handles a missing gallery', () => {
     expect(toGalleryCategories(null)).toEqual([])
-  })
-
-  it('returns empty array for empty data', () => {
-    expect(toGalleryCategories([])).toEqual([])
-  })
-
-  it('computes count field correctly', () => {
-    const categories = [
-      createGalleryCategory({
-        _key: 'cat1',
-        category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a:' },
-        items: [createGalleryItem(), createGalleryItem(), createGalleryItem()]
-      })
-    ]
-
-    const result = toGalleryCategories(categories)
-
-    expect(result).toHaveLength(1)
-    expect(result[0].items).toHaveLength(3)
-    expect(result[0]._id).toBe('id1')
-  })
-
-  it('sets thumbnail to first image of category', () => {
-    const firstImage = createSanityImage({ alt: 'First kitchen image' })
-    const categories = [
-      createGalleryCategory({
-        items: [createGalleryItem({ image: firstImage }), createGalleryItem(), createGalleryItem()]
-      })
-    ]
-
-    const result = toGalleryCategories(categories)
-
-    expect(result[0].thumbnail).toBe(firstImage)
-  })
-
-  it('handles categories with empty items (filtering is done at GROQ level)', () => {
-    // Empty categories are filtered by GROQ query, but transform still handles them gracefully
-    const categories = [
-      createGalleryCategory({ _key: 'empty', items: [] }),
-      createGalleryCategory({
-        _key: 'hasItems',
-        items: [createGalleryItem()]
-      })
-    ]
-
-    const result = toGalleryCategories(categories)
-
-    // Both categories are transformed (GROQ filters before this)
-    expect(result).toHaveLength(2)
-    expect(result[0].items).toHaveLength(0)
-    expect(result[1].items).toHaveLength(1)
-  })
-
-  it('preserves category order', () => {
-    const categories = [
-      createGalleryCategory({
-        _key: 'first',
-        category: { _id: '1', label: 'A', orderRank: '0|a:' },
-        items: [createGalleryItem()]
-      }),
-      createGalleryCategory({
-        _key: 'second',
-        category: { _id: '2', label: 'B', orderRank: '0|b:' },
-        items: [createGalleryItem()]
-      })
-    ]
-
-    const result = toGalleryCategories(categories)
-
-    expect(result.map((c) => c._key)).toEqual(['first', 'second'])
-  })
-
-  it('includes _key from original category container', () => {
-    const categories = [
-      createGalleryCategory({
-        _key: 'my-key',
-        items: [createGalleryItem()]
-      })
-    ]
-
-    const result = toGalleryCategories(categories)
-
-    expect(result[0]._key).toBe('my-key')
   })
 })

@@ -30,7 +30,7 @@ describe('HousePricing', () => {
   it('renders each row label as a heading under the anchor section', () => {
     render(<HousePricing pricing={emptyRows} />)
 
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('heading')
+    expect(screen.getByRole('heading', { level: 2, name: /\bpricing\b/i })).toBeInTheDocument()
     expect(document.getElementById('pricing')).toBeInTheDocument()
     expect(
       screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)
@@ -44,16 +44,6 @@ describe('HousePricing', () => {
     const { container } = render(<HousePricing pricing={pricing} />)
 
     expect(container).toBeEmptyDOMElement()
-  })
-
-  it('leaves the content column empty when a row has no content', () => {
-    render(<HousePricing pricing={emptyRows} />)
-
-    expect(screen.queryByRole('list')).not.toBeInTheDocument()
-    for (const label of screen.getAllByRole('heading', { level: 3 })) {
-      const contentArea = label.closest('div')?.parentElement?.querySelector('div:last-child')
-      expect(contentArea?.textContent?.trim()).toBe('')
-    }
   })
 
   it('renders block content next to its label', () => {

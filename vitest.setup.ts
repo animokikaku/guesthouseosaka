@@ -1,5 +1,9 @@
 import '@testing-library/jest-dom/vitest'
+import { faker } from '@faker-js/faker'
 import * as webStreams from 'node:stream/web'
+
+// Fixtures draw from faker; a fixed seed keeps every run on the same data.
+faker.seed(20260101)
 
 // The vmThreads pool runs each file in a VM context whose globals come from jsdom,
 // which has no web streams. The Sanity client (via undici) reads them at import time.
@@ -55,44 +59,6 @@ vi.mock('@/components/ui/scroll-area', async () => {
   }
 })
 
-vi.mock('@/sanity/lib/image', () => {
-  type MockImageBuilder = {
-    width: (value: number) => MockImageBuilder
-    height: (value: number) => MockImageBuilder
-    dpr: (value: number) => MockImageBuilder
-    fit: (value: string) => MockImageBuilder
-    auto: (value: string) => MockImageBuilder
-    quality: (value: number) => MockImageBuilder
-    url: () => string
-  }
-
-  function createBuilder(params = new URLSearchParams()): MockImageBuilder {
-    const withParam = (key: string, value: number | string) => {
-      const nextParams = new URLSearchParams(params)
-      nextParams.set(key, String(value))
-      return createBuilder(nextParams)
-    }
-
-    return {
-      width: (value) => withParam('w', value),
-      height: (value) => withParam('h', value),
-      dpr: (value) => withParam('dpr', value),
-      fit: (value) => withParam('fit', value),
-      auto: (value) => withParam('auto', value),
-      quality: (value) => withParam('q', value),
-      url: () => {
-        const query = params.toString()
-        const url = 'https://cdn.sanity.io/images/test/image.jpg'
-        return query ? `${url}?${query}` : url
-      }
-    }
-  }
-
-  return {
-    urlFor: () => createBuilder()
-  }
-})
-
 // Mock IntersectionObserver for lazy loading and scroll-spy components
 class IntersectionObserverMock implements IntersectionObserver {
   readonly root: Element | Document | null = null
@@ -128,26 +94,45 @@ class IntersectionObserverMock implements IntersectionObserver {
 }
 vi.stubGlobal('IntersectionObserver', IntersectionObserverMock)
 
-// Mock next-intl
-vi.mock('next-intl', () => {
-  const t = (key: string) => key
-  // Add rich method for ICU message formatting
-  t.rich = (key: string) => key
-  t.raw = (key: string) => key
-  t.markup = (key: string) => key
+// Translations resolve against the real English catalog, so assertions read
+// as the copy users see and a broken key or ICU message fails the test. Bound
+// here rather than through a provider so server and client components share it.
+vi.mock('next-intl', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('next-intl')>()
+  const { bindTestIntl } = await import('@/lib/__tests__/utils/intl')
+  const { getTranslator, getFormatter } = bindTestIntl(actual)
 
   return {
-    useTranslations: () => t,
-    useLocale: () => 'en',
-    useFormatter: () => ({
-      number: (n: number) => String(n)
-    })
+    ...actual,
+    useTranslations: getTranslator,
+    useFormatter: getFormatter,
+    useLocale: () => 'en'
   }
 })
 
-// Mock next/navigation
-vi.mock('next/navigation', () => ({
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+// next-intl's navigation reads the locale from use-intl directly, so the real
+// `Link` from `@/i18n/navigation` renders localized hrefs without a provider.
+vi.mock('use-intl', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  useLocale: () => 'en'
+}))
+
+vi.mock('next-intl/server', async () => {
+  const actual = await vi.importActual<typeof import('next-intl')>('next-intl')
+  const { bindTestIntl } = await import('@/lib/__tests__/utils/intl')
+  const { getTranslator } = bindTestIntl(actual)
+
+  return {
+    getTranslations: async (options?: string | { namespace?: string }) =>
+      getTranslator(typeof options === 'string' ? options : options?.namespace),
+    getLocale: async () => 'en'
+  }
+})
+
+// Client hooks need an app router that tests don't mount; the rest of the module is real.
+vi.mock('next/navigation', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('next/navigation')>()),
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn(), refresh: vi.fn() }),
   usePathname: () => '/',
   useParams: () => ({})
 }))

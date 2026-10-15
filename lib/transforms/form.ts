@@ -19,16 +19,19 @@ const FIELD_KEYS: FieldKey[] = [
   'message'
 ]
 
-/** Turns the query's nulls into the empty label and absent props the form fields expect. */
+/**
+ * Turns the query's nulls, including a field config missing from the document,
+ * into the empty label and absent props the form fields expect.
+ */
 export function toFormFieldsConfig(fields: NonNullable<ContactTypeFields>): FormFieldsConfig {
   // FIELD_KEYS exhaustively initializes every FormFieldsConfig property.
   // oxlint-disable typescript/no-unsafe-type-assertion
   return FIELD_KEYS.reduce((acc, key) => {
     const field = fields[key]
     acc[key] = {
-      label: field.label ?? '',
-      placeholder: field.placeholder ?? undefined,
-      description: field.description ?? undefined
+      label: field?.label ?? '',
+      placeholder: field?.placeholder ?? undefined,
+      description: field?.description ?? undefined
     }
     return acc
   }, {} as FormFieldsConfig)

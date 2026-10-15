@@ -49,7 +49,11 @@ export async function fillAccountFields(
   await fields.placesGroup.first().getByRole('button').first().click()
 
   await fields.genderSelect.click()
-  await page.getByRole('option', { name: 'Male', exact: true }).click()
+  await page
+    .getByRole('option', {
+      name: /\bmale\b/i
+    })
+    .click()
 
   await fields.nameField.fill(overrides.name ?? 'Test User')
   await fields.ageField.fill(overrides.age ?? '25')
