@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test'
+import { message } from '../../lib/__tests__/utils/messages'
 
 /**
  * Locators for the shared user-account field group. Every contact form binds the
@@ -49,7 +50,12 @@ export async function fillAccountFields(
   await fields.placesGroup.first().getByRole('button').first().click()
 
   await fields.genderSelect.click()
-  await page.getByRole('option', { name: 'Male', exact: true }).click()
+  await page
+    .getByRole('option', {
+      name: message('forms.fields.gender.options.male'),
+      exact: true
+    })
+    .click()
 
   await fields.nameField.fill(overrides.name ?? 'Test User')
   await fields.ageField.fill(overrides.age ?? '25')

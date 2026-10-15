@@ -3,6 +3,8 @@ import { MoveInForm } from '@/components/forms/move-in-form'
 import { TourForm } from '@/components/forms/tour-form'
 import { LegalNoticeProvider } from '@/components/legal-notice-context'
 import { Toaster } from '@/components/ui/toast'
+import { message } from '@/lib/__tests__/utils/messages'
+import { CONTACT_EMAIL } from '@/lib/config'
 import type { ContactFormConfig } from '@/lib/types/components'
 import type { HousesTitlesQueryResult } from '@/sanity.types'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
@@ -68,7 +70,7 @@ const forms = [
     Form: MoveInForm,
     fill: () => {
       setInput('Date', '2099-01-15')
-      choose('Length of stay', '3 months or more')
+      choose('Length of stay', message('forms.fields.stay_duration.options.three_month'))
     },
     data: {
       places: ['orange'],
@@ -111,7 +113,7 @@ function choose(label: string, option: string) {
 /** Everything the three forms share: a house, the account group, a message and consent. */
 function fillSharedFields() {
   fireEvent.click(screen.getByRole('button', { name: 'Orange House' }))
-  choose('Gender', 'Male')
+  choose('Gender', message('forms.fields.gender.options.male'))
   setInput('Name', account.name)
   setInput('Age', account.age)
   setInput('Nationality', account.nationality)
@@ -124,7 +126,7 @@ function fillSharedFields() {
 }
 
 function submit() {
-  fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
+  fireEvent.click(screen.getByRole('button', { name: message('SubmitButton.label') }))
 }
 
 /** Submits past the browser's own `required` checks, so the form's validation runs. */
@@ -147,7 +149,7 @@ describe.each(forms)('$type form', ({ type, Form, fill, data }) => {
     submit()
 
     await waitFor(() => expect(submitContactForm).toHaveBeenCalledWith({ type, data }))
-    expect(await screen.findByText('Message sent successfully!')).toBeInTheDocument()
+    expect(await screen.findByText(message('forms.status.success.message'))).toBeInTheDocument()
     expect(router.push).toHaveBeenCalledWith('/contact')
   })
 
@@ -162,10 +164,10 @@ describe.each(forms)('$type form', ({ type, Form, fill, data }) => {
     // Each error is announced and tied to its control.
     const error = document.getElementById(name.getAttribute('aria-errormessage')!)
     expect(error).toHaveAttribute('role', 'alert')
-    expect(error).toHaveTextContent('Name must be at least 2 characters long.')
+    expect(error).toHaveTextContent(message('forms.validation.name_min'))
     expect(screen.getByLabelText('Email')).toHaveAttribute('aria-invalid', 'true')
-    expect(screen.getByText('Please select at least one share house.')).toBeInTheDocument()
-    expect(screen.getByText('You must agree to the privacy policy.')).toBeInTheDocument()
+    expect(screen.getByText(message('forms.validation.places_min'))).toBeInTheDocument()
+    expect(screen.getByText(message('forms.validation.privacy_policy'))).toBeInTheDocument()
     expect(submitContactForm).not.toHaveBeenCalled()
   })
 })
@@ -187,12 +189,16 @@ describe('form validation and feedback', () => {
 
     const email = screen.getByLabelText('Email')
     await waitFor(() => expect(email).toHaveAttribute('aria-invalid', 'true'))
-    expect(email).toHaveAccessibleDescription('We reply to this address. Invalid email address.')
+    expect(email).toHaveAccessibleDescription(
+      `We reply to this address. ${message('forms.validation.email')}`
+    )
   })
 
   it('marks the message optional only where it is', () => {
     const { unmount } = renderForm(TourForm)
-    expect(screen.getByRole('textbox', { name: 'Message (optional)' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('textbox', { name: `Message (${message('MessageField.optional_hint')})` })
+    ).toBeInTheDocument()
     unmount()
 
     renderForm(ContactForm)
@@ -204,7 +210,9 @@ describe('form validation and feedback', () => {
 
     setInput('Message', 'Hello')
 
-    expect(screen.getByText('5 / 3000 characters')).toBeInTheDocument()
+    expect(
+      screen.getByText(message('MessageField.character_counter', { count: '5', max: '3000' }))
+    ).toBeInTheDocument()
   })
 
   it('blocks a second submit while the first is in flight', async () => {
@@ -215,7 +223,7 @@ describe('form validation and feedback', () => {
     fillSharedFields()
     submit()
 
-    const button = screen.getByRole('button', { name: 'Submit' })
+    const button = screen.getByRole('button', { name: message('SubmitButton.label') })
     await waitFor(() => expect(button).toBeDisabled())
     expect(button).toHaveAttribute('aria-busy', 'true')
 
@@ -230,9 +238,9 @@ describe('form validation and feedback', () => {
     fillSharedFields()
     submit()
 
-    expect(await screen.findByText('Failed to send message.')).toBeInTheDocument()
+    expect(await screen.findByText(message('forms.status.error.message'))).toBeInTheDocument()
     expect(
-      screen.getByText('Please try again later or contact us directly at info@guesthouseosaka.com.')
+      screen.getByText(message('forms.status.error.description', { email: CONTACT_EMAIL }))
     ).toBeInTheDocument()
     expect(router.push).not.toHaveBeenCalled()
   })

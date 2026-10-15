@@ -1,3 +1,4 @@
+import { message } from '@/lib/__tests__/utils/messages'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 const { replaceMock } = vi.hoisted(() => ({
@@ -17,7 +18,7 @@ describe('LanguageSwitcher', () => {
   })
 
   async function openLanguageMenu() {
-    fireEvent.click(screen.getByRole('button', { name: 'Select language' }))
+    fireEvent.click(screen.getByRole('button', { name: message('LanguageSwitcher.aria_label') }))
     return screen.findByRole('menuitemradio', { name: 'English' })
   }
 

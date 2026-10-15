@@ -1,3 +1,4 @@
+import { message } from '@/lib/__tests__/utils/messages'
 import { HouseGallery } from '@/components/gallery/house-gallery'
 import { Lightbox } from '@/components/lightbox'
 import type { GalleryCategory } from '@/lib/gallery'
@@ -45,12 +46,14 @@ describe('HouseGallery', () => {
 
     const headings = screen.getAllByRole('heading', { level: 3 })
     expect(headings.map((heading) => heading.textContent)).toEqual([
-      'Bedroom22 photos',
-      'Kitchen11 photo'
+      `Bedroom2${message('CategoryGrid.photo_count', { count: 2 })}`,
+      `Kitchen1${message('CategoryGrid.photo_count', { count: 1 })}`
     ])
     // The visible number is decorative; screen readers hear the localized plural.
     expect(within(headings[0]).getByText('2')).toHaveAttribute('aria-hidden', 'true')
-    expect(within(headings[0]).getByText('2 photos')).toHaveClass('sr-only')
+    expect(
+      within(headings[0]).getByText(message('CategoryGrid.photo_count', { count: 2 }))
+    ).toHaveClass('sr-only')
   })
 
   it('anchors each category for the sticky nav to jump to', () => {
@@ -69,7 +72,9 @@ describe('HouseGallery', () => {
   it('names a photo without alt text generically', () => {
     renderGallery(toGalleryCategories([createGalleryCategory({ items: [photo('x', null)] })]))
 
-    expect(screen.getByRole('button', { name: 'Open gallery image' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: message('GalleryGridItem.open_image') })
+    ).toBeInTheDocument()
   })
 
   // Tiles are square through CSS only: the lightbox morphs from this very image,

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { message } from '../lib/__tests__/utils/messages'
 
 // House slugs defined in lib/types/index.ts
 const HOUSE_SLUGS = ['orange', 'apple', 'lemon'] as const
@@ -67,14 +68,17 @@ test.describe('House Page', () => {
     test('reopens after being closed', async ({ page }) => {
       await page.goto(`/en/${testHouse}`)
 
-      const galleryLink = page.getByRole('link', { name: /Show all/ }).first()
+      const galleryLink = page
+        .locator(`a[href="/en/${testHouse}/gallery"]`)
+        .filter({ visible: true })
+        .first()
       const dialog = page.getByRole('dialog')
 
       await galleryLink.click()
       await expect(page).toHaveURL(new RegExp(`/en/${testHouse}/gallery$`))
       await expect(dialog).toBeVisible()
 
-      await dialog.getByRole('button', { name: 'Close gallery' }).click()
+      await dialog.getByRole('button', { name: message('GalleryModal.close') }).click()
       await expect(page).toHaveURL(new RegExp(`/en/${testHouse}$`))
       await expect(dialog).toBeHidden()
 
@@ -86,7 +90,10 @@ test.describe('House Page', () => {
     test('reopens after browser back navigation', async ({ page }) => {
       await page.goto(`/en/${testHouse}`)
 
-      const galleryLink = page.getByRole('link', { name: /Show all/ }).first()
+      const galleryLink = page
+        .locator(`a[href="/en/${testHouse}/gallery"]`)
+        .filter({ visible: true })
+        .first()
       const dialog = page.getByRole('dialog')
 
       await galleryLink.click()

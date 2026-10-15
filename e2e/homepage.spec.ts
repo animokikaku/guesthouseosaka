@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { message } from '../lib/__tests__/utils/messages'
 
 test.describe('Homepage', () => {
   // Note: Footer visibility tests are now covered by unit tests in
@@ -9,7 +10,7 @@ test.describe('Homepage', () => {
       await page.goto('/en')
 
       const nav = page.getByRole('navigation')
-      const contactLink = nav.getByRole('link', { name: /contact/i })
+      const contactLink = nav.getByRole('link', { name: message('SiteHeader.navigation.contact') })
       await contactLink.first().click()
 
       await expect(page).toHaveURL(/\/en\/contact/)
@@ -44,7 +45,7 @@ test.describe('Homepage', () => {
 
       // Open language switcher
       const languageSwitcher = page.getByRole('button', {
-        name: /select language/i
+        name: message('LanguageSwitcher.aria_label')
       })
       await languageSwitcher.click()
 

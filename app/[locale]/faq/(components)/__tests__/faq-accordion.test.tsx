@@ -1,3 +1,4 @@
+import { message } from '@/lib/__tests__/utils/messages'
 import { createHouse } from '@/lib/__tests__/utils/faq-fixtures'
 import { fireEvent, render, screen } from '@testing-library/react'
 import type { ComponentProps } from 'react'
@@ -90,6 +91,13 @@ describe('FAQAccordion', () => {
 
     const items = screen.getAllByRole('listitem')
     expect(items).toHaveLength(1)
-    expect(items[0]).toHaveTextContent('Orange House: 3-story building with 12 rooms.')
+    expect(items[0]).toHaveTextContent(
+      `Orange House: ${message.markup('FAQAccordion.floors_and_rooms.format', {
+        floors: '3',
+        rooms: '12',
+        floorsTag: (chunks) => chunks,
+        roomsTag: (chunks) => chunks
+      })}`
+    )
   })
 })

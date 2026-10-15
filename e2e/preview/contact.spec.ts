@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 import { fillAccountFields, submissionToast } from '../helpers/contact-form'
+import { message } from '../../lib/__tests__/utils/messages'
 
 test.skip(!process.env.BASE_URL, 'Preview tests require a deployed preview URL.')
 
@@ -47,7 +48,7 @@ test('preview deployment can send the contact form through Resend', async ({ pag
   })
   await fields.checkbox.click()
 
-  await page.getByRole('button', { name: 'Submit' }).click()
+  await page.getByRole('button', { name: message('SubmitButton.label') }).click()
 
-  await expect(submissionToast(page)).toContainText('Message sent successfully!')
+  await expect(submissionToast(page)).toContainText(message('forms.status.success.message'))
 })

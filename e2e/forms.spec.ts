@@ -6,6 +6,7 @@ import {
   submissionToast
 } from './helpers/contact-form'
 import { mockResendAPI } from './mocks/resend'
+import { japaneseMessage, message } from '../lib/__tests__/utils/messages'
 
 const tomorrow = () => new Date(Date.now() + 864e5).toISOString().slice(0, 10)
 
@@ -35,9 +36,9 @@ test.describe('General inquiry form', () => {
     await fields.checkbox.click()
     await expect(fields.checkbox).toBeChecked()
 
-    await page.getByRole('button', { name: 'Submit' }).click()
+    await page.getByRole('button', { name: message('SubmitButton.label') }).click()
 
-    await expect(submissionToast(page)).toContainText('Message sent successfully!')
+    await expect(submissionToast(page)).toContainText(message('forms.status.success.message'))
     await expect(page).toHaveURL(/\/en\/contact(?!\/other)/)
 
     expect(requests).toHaveLength(1)
@@ -67,9 +68,9 @@ test.describe('General inquiry form', () => {
     const fields = await fillAccountFields(page, form)
     await fields.checkbox.click()
 
-    await page.getByRole('button', { name: 'Submit' }).click()
+    await page.getByRole('button', { name: message('SubmitButton.label') }).click()
 
-    await expect(submissionToast(page)).toContainText('Failed to send message.')
+    await expect(submissionToast(page)).toContainText(message('forms.status.error.message'))
     await expect(page).toHaveURL(/\/en\/contact\/other/)
 
     // The action maps every failure to this one toast, so without asserting the
@@ -90,9 +91,9 @@ test.describe('Tour and move-in forms', () => {
     const fields = await fillAccountFields(page, form)
     await fields.checkbox.click()
 
-    await page.getByRole('button', { name: 'Submit' }).click()
+    await page.getByRole('button', { name: message('SubmitButton.label') }).click()
 
-    await expect(submissionToast(page)).toContainText('Message sent successfully!')
+    await expect(submissionToast(page)).toContainText(message('forms.status.success.message'))
     expect(requests).toHaveLength(1)
   })
 
@@ -107,9 +108,9 @@ test.describe('Tour and move-in forms', () => {
     const fields = await fillAccountFields(page, form)
     await fields.checkbox.click()
 
-    await page.getByRole('button', { name: 'Submit' }).click()
+    await page.getByRole('button', { name: message('SubmitButton.label') }).click()
 
-    await expect(submissionToast(page)).toContainText('Message sent successfully!')
+    await expect(submissionToast(page)).toContainText(message('forms.status.success.message'))
     expect(requests).toHaveLength(1)
   })
 })
@@ -120,7 +121,7 @@ test.describe('Validation feedback', () => {
 
     // Bypass native `required` so the library's own submit validation runs.
     await form.evaluate((element: HTMLFormElement) => element.setAttribute('novalidate', ''))
-    await page.getByRole('button', { name: 'Submit' }).click()
+    await page.getByRole('button', { name: message('SubmitButton.label') }).click()
 
     await expect(form.locator('[data-slot="field-error"]').first()).toBeVisible()
     // onSubmitInvalid moves focus to the first invalid control.
@@ -131,7 +132,7 @@ test.describe('Validation feedback', () => {
     const form = await gotoContactForm(page, 'other')
 
     await form.evaluate((element: HTMLFormElement) => element.setAttribute('novalidate', ''))
-    await page.getByRole('button', { name: 'Submit' }).click()
+    await page.getByRole('button', { name: message('SubmitButton.label') }).click()
 
     const email = getAccountFields(form).emailField
     await expect(email).toHaveAttribute('aria-invalid', 'true')
@@ -153,7 +154,7 @@ test.describe('Validation feedback', () => {
     await page.locator('button[type="submit"]').click()
 
     await expect(form.locator('[data-slot="field-error"]').first()).toContainText(
-      'シェアハウスを1件以上選択してください。'
+      japaneseMessage('forms.validation.places_min')
     )
   })
 })

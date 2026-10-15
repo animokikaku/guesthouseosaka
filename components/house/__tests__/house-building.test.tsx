@@ -1,3 +1,4 @@
+import { message } from '@/lib/__tests__/utils/messages'
 import type { BuildingData } from '@/lib/types/components'
 import { render, screen } from '@testing-library/react'
 import { HouseBuilding } from '../house-building'
@@ -21,7 +22,7 @@ function renderBuilding(building: BuildingData | null) {
   )
 }
 
-/** The figure shown above a label, e.g. `figure('Rooms')`. */
+/** The figure shown above a label, e.g. `figure(message('HouseBuilding.rooms_label'))`. */
 function figure(label: string) {
   return screen.getByText(label).previousElementSibling?.textContent
 }
@@ -30,31 +31,33 @@ describe('HouseBuilding', () => {
   it('summarizes rooms, floors and the starting rent in yen', () => {
     renderBuilding({ rooms: 12, floors: 3, startingPrice: 45000 })
 
-    expect(figure('Rooms')).toBe('12')
-    expect(figure('Floors')).toBe('3')
-    expect(figure('Min Rent')).toBe('¥45,000')
+    expect(figure(message('HouseBuilding.rooms_label'))).toBe('12')
+    expect(figure(message('HouseBuilding.floors_label'))).toBe('3')
+    expect(figure(message('HouseBuilding.min_rent_label'))).toBe('¥45,000')
   })
 
   it('links the starting rent to the pricing section', () => {
     renderBuilding({ rooms: 12, floors: 3, startingPrice: 45000 })
 
     expect(screen.getByRole('link')).toHaveAttribute('href', '/orange#pricing')
-    expect(screen.getByRole('link')).toHaveTextContent('Min Rent')
+    expect(screen.getByRole('link')).toHaveTextContent(message('HouseBuilding.min_rent_label'))
   })
 
   it('shows zero for figures the house has not filled in', () => {
     renderBuilding({ rooms: 5 })
 
-    expect(figure('Rooms')).toBe('5')
-    expect(figure('Floors')).toBe('0')
-    expect(figure('Min Rent')).toBe('¥0')
+    expect(figure(message('HouseBuilding.rooms_label'))).toBe('5')
+    expect(figure(message('HouseBuilding.floors_label'))).toBe('0')
+    expect(figure(message('HouseBuilding.min_rent_label'))).toBe('¥0')
   })
 
   it('tags each figure for visual editing', () => {
     renderBuilding(null)
 
-    expect(screen.getByText('Rooms').parentElement?.getAttribute('data-sanity')).toContain(
-      'building.rooms'
-    )
+    expect(
+      screen
+        .getByText(message('HouseBuilding.rooms_label'))
+        .parentElement?.getAttribute('data-sanity')
+    ).toContain('building.rooms')
   })
 })

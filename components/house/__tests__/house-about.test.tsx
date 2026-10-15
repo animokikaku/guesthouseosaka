@@ -1,3 +1,4 @@
+import { message } from '@/lib/__tests__/utils/messages'
 import { render, screen } from '@testing-library/react'
 import { HouseAbout } from '../house-about'
 import { HouseProvider } from '../house-context'
@@ -30,7 +31,12 @@ describe('HouseAbout', () => {
   it('introduces the house by name above its building summary', () => {
     renderAbout()
 
-    expect(screen.getByRole('heading', { level: 2, name: 'About Test House' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', {
+        level: 2,
+        name: message('HouseAbout.heading', { house: 'Test House' })
+      })
+    ).toBeInTheDocument()
     expect(screen.getByTestId('house-building')).toBeInTheDocument()
   })
 

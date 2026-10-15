@@ -1,3 +1,4 @@
+import { message } from '@/lib/__tests__/utils/messages'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { HouseAmenities } from '../house-amenities'
 import { HouseProvider } from '../house-context'
@@ -57,8 +58,12 @@ describe('HouseAmenities', () => {
       category('Kitchen', numberedAmenities(10))
     ])
 
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('What this place offers')
-    expect(screen.getByRole('button')).toHaveTextContent('Show all 25 amenities')
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
+      message('HouseAmenities.heading')
+    )
+    expect(screen.getByRole('button')).toHaveTextContent(
+      message('HouseAmenities.show_all', { count: '25' })
+    )
   })
 
   it('renders a translated badge for each amenity note', () => {
@@ -69,9 +74,15 @@ describe('HouseAmenities', () => {
       amenity('Kitchen', 'utensils')
     ])
 
-    expect(screen.getByText('Wifi').nextSibling).toHaveTextContent('Shared')
-    expect(screen.getByText('Bath').nextSibling).toHaveTextContent('Private')
-    expect(screen.getByText('Laundry').nextSibling).toHaveTextContent('Coin')
+    expect(screen.getByText('Wifi').nextSibling).toHaveTextContent(
+      message('HouseAmenities.notes.shared')
+    )
+    expect(screen.getByText('Bath').nextSibling).toHaveTextContent(
+      message('HouseAmenities.notes.private')
+    )
+    expect(screen.getByText('Laundry').nextSibling).toHaveTextContent(
+      message('HouseAmenities.notes.coin')
+    )
     expect(screen.getByText('Kitchen').nextSibling).toBeNull()
   })
 
