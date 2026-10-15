@@ -212,13 +212,11 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     "category": category->{
       _id,
       "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
-      icon,
-      orderRank
+      icon
     },
     "items": array::compact(items[]{
       _key,
       note,
-      featured,
       "label": coalesce(
         customLabel[language == $locale][0].value,
         amenity->label[language == $locale][0].value,
@@ -286,7 +284,7 @@ export const houseGalleryQuery = defineQuery(`*[_type == "house" && slug == $slu
 
 // House titles for the contact forms and the house page's HousesNav (ordered by global orderRank)
 export const housesTitlesQuery = defineQuery(`*[_type == "house"] | order(orderRank){
-  "slug": slug,
+  slug,
   "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value)
 }`)
 
@@ -332,8 +330,6 @@ export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   _id,
   _type,
   "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),
-  "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),
-  "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value),
   ${actionsFields},
   "contactSection": coalesce(contactSection[language == $locale][0].value, contactSection[language == "en"][0].value),
   "contactNote": coalesce(contactNote[language == $locale][0].value, contactNote[language == "en"][0].value)
@@ -374,10 +370,8 @@ export const contactPageQuery = defineQuery(`{
   // contact type actually being rendered as a form.
   "contactTypes": *[_type == "contactType"] | order(orderRank){
     _id,
-    _type,
     slug,
-    "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
-    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)
+    "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value)
   }
 }`)
 
@@ -419,6 +413,5 @@ export const legalNoticeQuery = defineQuery(`*[_type == "legalNotice"][0]{
 
 export const pricingCategoriesQuery = defineQuery(`*[_type == "pricingCategory"] | order(orderRank){
   _id,
-  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
-  orderRank
+  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value)
 }`)

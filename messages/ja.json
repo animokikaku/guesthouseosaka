@@ -76,12 +76,14 @@
   "HousePricing": {
     "heading": "料金"
   },
+  "GalleryEmptyState": {
+    "title": "ギャラリー画像がありません",
+    "description": "ギャラリー画像はSanity CMSで管理されています。"
+  },
   "ImageBlockGallery": {
     "overflow_count": "+{count, number}",
     "view_gallery": "すべての写真を表示",
-    "view_gallery_count": "{count, plural, other {#枚の写真をすべて表示}}",
-    "empty_title": "ギャラリー画像がありません",
-    "empty_description": "ギャラリー画像はSanity CMSで管理されています。"
+    "view_gallery_count": "{count, plural, other {#枚の写真をすべて表示}}"
   },
   "StickyCategoryNav": {
     "gallery_categories_label": "ギャラリーカテゴリ"
@@ -100,9 +102,7 @@
     "optional_hint": "任意"
   },
   "MobileHeroImage": {
-    "view_gallery": "すべての写真を表示",
-    "empty_title": "ギャラリー画像がありません",
-    "empty_description": "ギャラリー画像はSanity CMSで管理されています。"
+    "view_gallery": "すべての写真を表示"
   },
   "MobileNav": {
     "home_label": "ホーム",

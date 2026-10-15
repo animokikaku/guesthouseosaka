@@ -1,9 +1,8 @@
+import { GalleryEmptyState } from '@/components/gallery/gallery-empty-state'
 import { GalleryImageFrame } from '@/components/gallery/gallery-image-frame'
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { Link } from '@/i18n/navigation'
 import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
 import { toGalleryImageProps, type GalleryImageProps } from '@/lib/gallery-image'
-import { ImageIcon } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { ComponentProps } from 'react'
 
@@ -130,15 +129,7 @@ export async function ImageBlockGallery({
   if (images.length < 5) {
     return (
       <div className="hidden sm:block">
-        <Empty className="min-h-75 rounded-xl border border-dashed">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <ImageIcon />
-            </EmptyMedia>
-            <EmptyTitle>{t('empty_title')}</EmptyTitle>
-            <EmptyDescription>{t('empty_description')}</EmptyDescription>
-          </EmptyHeader>
-        </Empty>
+        <GalleryEmptyState className="min-h-75 rounded-xl" />
       </div>
     )
   }

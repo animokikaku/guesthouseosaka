@@ -40,7 +40,7 @@ export function GalleryModalWrapper({ house, title, children }: GalleryModalWrap
     >
       <GalleryDialogContent
         overlayClassName="bg-background backdrop-blur-2xl"
-        className="bg-background text-foreground fixed inset-0 z-60 flex h-full max-w-none translate-none flex-col gap-0 rounded-none p-0 ring-0"
+        className="flex flex-col"
       >
         <GalleryDialogTitle className="sr-only">{t('title')}</GalleryDialogTitle>
         <GalleryDialogDescription className="sr-only">

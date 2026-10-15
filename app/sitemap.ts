@@ -1,45 +1,34 @@
 import { routing } from '@/i18n/routing'
-import { getCanonicalUrl } from '@/lib/metadata'
+import { getCanonicalUrl, type Href } from '@/lib/metadata'
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import type { MetadataRoute } from 'next'
+import type { Locale } from 'next-intl'
 
-type Locale = (typeof routing.locales)[number]
-type Pathname = keyof typeof routing.pathnames
+const staticRoutes: Href[] = [{ pathname: '/' }, { pathname: '/faq' }, { pathname: '/contact' }]
 
-type Route =
-  | '/'
-  | {
-      pathname: Exclude<Pathname, '/[house]' | '/[house]/gallery' | '/contact/[slug]'>
-    }
-  | { pathname: '/[house]'; params: { house: string } }
-  | { pathname: '/[house]/gallery'; params: { house: string } }
-  | { pathname: '/contact/[slug]'; params: { slug: string } }
-
-const staticRoutes: Route[] = [{ pathname: '/' }, { pathname: '/faq' }, { pathname: '/contact' }]
-
-const contactTypeRoutes: Route[] = ContactTypeValues.map((slug) => ({
+const contactTypeRoutes: Href[] = ContactTypeValues.map((slug) => ({
   pathname: '/contact/[slug]',
   params: { slug }
 }))
 
-const houseRoutes: Route[] = HouseIdentifierValues.map((house) => ({
+const houseRoutes: Href[] = HouseIdentifierValues.map((house) => ({
   pathname: '/[house]',
   params: { house }
 }))
 
-const galleryRoutes: Route[] = HouseIdentifierValues.map((house) => ({
+const galleryRoutes: Href[] = HouseIdentifierValues.map((house) => ({
   pathname: '/[house]/gallery',
   params: { house }
 }))
 
-export const routes: Route[] = [
+export const routes: Href[] = [
   ...staticRoutes,
   ...contactTypeRoutes,
   ...houseRoutes,
   ...galleryRoutes
 ]
 
-function buildAlternates(href: Route): Record<Locale, string> {
+function buildAlternates(href: Href): Record<Locale, string> {
   // routing.locales is the complete source of supported locales for this record.
   // oxlint-disable typescript/no-unsafe-type-assertion
   return Object.fromEntries(
@@ -48,7 +37,7 @@ function buildAlternates(href: Route): Record<Locale, string> {
 }
 // oxlint-enable typescript/no-unsafe-type-assertion
 
-function buildSitemapEntry(href: Route): MetadataRoute.Sitemap[number] {
+function buildSitemapEntry(href: Href): MetadataRoute.Sitemap[number] {
   return {
     url: getCanonicalUrl(href, routing.defaultLocale),
     alternates: {

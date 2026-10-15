@@ -1,7 +1,7 @@
 'use client'
 
 import { defineAppFieldGroup } from '@/components/forms/app-form'
-import type { ContactFormFields } from '@/components/forms/schema'
+import type { ContactFormFields } from '@/lib/schemas/contact-form'
 import type { FormFieldsConfig } from '@/lib/types/components'
 import { CakeIcon, GlobeIcon, MailIcon, PhoneIcon, UserIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'

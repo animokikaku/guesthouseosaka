@@ -1,5 +1,6 @@
 'use client'
 
+import type { FaqHouses } from '@/app/[locale]/faq/(components)/types'
 import { SanityImage } from '@/components/sanity-image'
 import { buttonVariants } from '@/components/ui/button'
 import {
@@ -20,16 +21,12 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import type { HousesBuildingQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { Phone } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
 
-type House = Pick<
-  NonNullable<HousesBuildingQueryResult>[number],
-  '_id' | 'title' | 'phone' | 'image'
->
+type House = Pick<FaqHouses[number], '_id' | 'title' | 'phone' | 'image'>
 
 type FAQContactTableProps = {
   houses: House[]

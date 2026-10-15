@@ -4,7 +4,7 @@ import { defineAppFieldGroup } from '@/components/forms/app-form'
 import { HouseIcon } from '@/components/house-icon'
 import type { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { HOUSE_COLORS } from '@/lib/utils/theme'
+import { HOUSE_COLORS } from '@/lib/house-theme'
 import type { HousesTitlesQueryResult } from '@/sanity.types'
 
 const placesFieldGroup = defineAppFieldGroup(({ strict }) => ({

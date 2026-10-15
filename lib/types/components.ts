@@ -32,7 +32,6 @@ export interface PricingRowData {
   content: NonNullable<HouseData['pricing']>[number]['content']
 }
 
-/** `featured` is filtered in the GROQ query, so the frontend never reads it. */
 export interface AmenityItemData {
   _key: string
   label: string | null
@@ -88,22 +87,6 @@ export interface ContactFormConfig {
   title: string
   description: string | null
   fields: FormFieldsConfig
-}
-
-// ============================================
-// Gallery Components
-// ============================================
-
-/** Pre-built image data with every URL computed, so components don't need Sanity helpers. */
-export interface GalleryImage {
-  _key: string
-  src: string
-  alt: string | null
-  blurDataURL: string | null
-  width: number
-  height: number
-  /** Preloaded as the likely LCP element rather than lazy-loaded. */
-  priority?: boolean
 }
 
 // ============================================

@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getLocale } from 'next-intl/server'
 
 import '@/app/globals.css'
+import { JsonLd } from '@/components/json-ld'
 import { LazyDraftModeIndicator } from '@/components/lazy-draft-mode-indicator'
 import { SiteFooter } from '@/components/site-footer'
 import { SiteHeader } from '@/components/site-header'
@@ -18,7 +19,7 @@ import { fontVariables } from '@/lib/fonts'
 import { getOpenGraphMetadata } from '@/lib/metadata'
 import { toHouseNavItems } from '@/lib/transforms/nav'
 import { cn } from '@/lib/utils'
-import { HOUSE_THEMES } from '@/lib/utils/theme'
+import { HOUSE_THEMES } from '@/lib/house-theme'
 import { sanityFetch, SanityLive } from '@/sanity/lib/live'
 import { housesNavQuery, settingsQuery } from '@/sanity/lib/queries'
 import { type Metadata } from 'next'
@@ -126,12 +127,7 @@ export default async function LocaleLayout({ children }: LayoutProps<'/[locale]'
             `
           }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c')
-          }}
-        />
+        <JsonLd data={jsonLd} />
         <meta name="theme-color" content={META_THEME_COLORS.light} />
       </head>
       <body

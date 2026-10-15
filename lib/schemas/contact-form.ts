@@ -1,32 +1,15 @@
 import { HouseIdentifierValues } from '@/lib/types'
+import { z } from '@/lib/zod'
+import type { Messages } from 'next-intl'
 import { isMobilePhone } from 'validator'
-import { en } from 'zod/locales'
-import * as z from 'zod/mini'
 
-// zod/mini ships without default error messages; keep the same English defaults as zod.
-z.config(en())
+type ValidationMessageKey = keyof Messages['forms']['validation']
 
-export type ContactFormValidationMessages = Partial<
-  Record<
-    | 'places_min'
-    | 'places_max'
-    | 'name_min'
-    | 'name_max'
-    | 'age_positive'
-    | 'gender_required'
-    | 'nationality_required'
-    | 'nationality_max'
-    | 'email'
-    | 'phone'
-    | 'message_max'
-    | 'message_min'
-    | 'date_future'
-    | 'privacy_policy'
-    | 'stay_duration'
-    | 'time_range',
-    string
-  >
->
+/**
+ * Resolves a validation message, e.g. `useTranslations('forms.validation')`.
+ * The server parses without one and falls back to zod's English defaults.
+ */
+export type ValidationMessage = (key: ValidationMessageKey) => string
 
 const error = (value?: string) => (value ? { error: value } : undefined)
 
@@ -54,8 +37,8 @@ function isContactHour(value: string) {
   return totalMinutes >= 10 * 60 && totalMinutes <= 20 * 60
 }
 
-export function createContactFormSchema(messages: ContactFormValidationMessages = {}) {
-  const m = (key: keyof ContactFormValidationMessages) => messages[key]
+export function createContactFormSchema(message?: ValidationMessage) {
+  const m = (key: ValidationMessageKey) => message?.(key)
 
   return z.object({
     places: z
@@ -81,8 +64,8 @@ export function createContactFormSchema(messages: ContactFormValidationMessages 
   })
 }
 
-export function createTourFormSchema(messages?: ContactFormValidationMessages) {
-  return z.pick(createContactFormSchema(messages), {
+export function createTourFormSchema(message?: ValidationMessage) {
+  return z.pick(createContactFormSchema(message), {
     places: true,
     date: true,
     hour: true,
@@ -92,8 +75,8 @@ export function createTourFormSchema(messages?: ContactFormValidationMessages) {
   })
 }
 
-export function createMoveInFormSchema(messages?: ContactFormValidationMessages) {
-  return z.pick(createContactFormSchema(messages), {
+export function createMoveInFormSchema(message?: ValidationMessage) {
+  return z.pick(createContactFormSchema(message), {
     places: true,
     date: true,
     stayDuration: true,
@@ -103,12 +86,12 @@ export function createMoveInFormSchema(messages?: ContactFormValidationMessages)
   })
 }
 
-export function createGeneralInquirySchema(messages?: ContactFormValidationMessages) {
-  const schema = createContactFormSchema(messages)
+export function createGeneralInquirySchema(message?: ValidationMessage) {
+  const schema = createContactFormSchema(message)
   const baseSchema = z.pick(schema, { places: true, account: true, privacyPolicy: true })
   return z.extend(baseSchema, {
     message: schema.shape.message.check(
-      z.refine((value) => value.length >= 5, { message: messages?.message_min })
+      z.refine((value) => value.length >= 5, { message: message?.('message_min') })
     )
   })
 }

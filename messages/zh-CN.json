@@ -76,12 +76,14 @@
   "HousePricing": {
     "heading": "价格"
   },
+  "GalleryEmptyState": {
+    "title": "暂无相册图片",
+    "description": "相册图片通过 Sanity CMS 管理。"
+  },
   "ImageBlockGallery": {
     "overflow_count": "+{count, number}",
     "view_gallery": "显示所有照片",
-    "view_gallery_count": "{count, plural, other {显示全部#张照片}}",
-    "empty_title": "暂无相册图片",
-    "empty_description": "相册图片通过 Sanity CMS 管理。"
+    "view_gallery_count": "{count, plural, other {显示全部#张照片}}"
   },
   "StickyCategoryNav": {
     "gallery_categories_label": "相册分类"
@@ -100,9 +102,7 @@
     "optional_hint": "选填"
   },
   "MobileHeroImage": {
-    "view_gallery": "显示所有照片",
-    "empty_title": "暂无相册图片",
-    "empty_description": "相册图片通过 Sanity CMS 管理。"
+    "view_gallery": "显示所有照片"
   },
   "MobileNav": {
     "home_label": "首页",

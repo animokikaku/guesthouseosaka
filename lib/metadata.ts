@@ -1,16 +1,9 @@
+import { localeConfig } from '@/i18n/locales'
 import { getPathname } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { env } from '@/lib/env'
 import { Metadata } from 'next'
 import { Locale } from 'next-intl'
-
-const openGraphLocaleMap: Record<Locale, string> = {
-  en: 'en_US',
-  ja: 'ja_JP',
-  fr: 'fr_FR',
-  'zh-CN': 'zh_CN',
-  'zh-TW': 'zh_TW'
-}
 
 export function getOpenGraphMetadata({
   image,
@@ -25,10 +18,10 @@ export function getOpenGraphMetadata({
     type: 'website',
     images: image,
     siteName: siteName ?? undefined,
-    locale: openGraphLocaleMap[locale],
+    locale: localeConfig[locale].openGraph,
     alternateLocale: routing.locales
       .filter((currentLocale) => currentLocale !== locale)
-      .map((otherLocale) => openGraphLocaleMap[otherLocale])
+      .map((otherLocale) => localeConfig[otherLocale].openGraph)
   } satisfies Metadata['openGraph']
 
   const twitter = {
@@ -39,7 +32,8 @@ export function getOpenGraphMetadata({
   return { openGraph, twitter }
 }
 
-type Href = Parameters<typeof getPathname>[0]['href']
+/** A typed route, as `Link` and `getPathname` accept it. */
+export type Href = Parameters<typeof getPathname>[0]['href']
 
 /** Absolute URL on the production origin, using the public locale prefix (e.g. /zh-cn). */
 export function getCanonicalUrl(href: Href, locale: Locale) {

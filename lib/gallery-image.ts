@@ -48,7 +48,7 @@ export function toGalleryImageProps(
 
   if (width) builder = builder.width(width)
   if (height) builder = builder.height(height)
-  if (fit) builder = builder.fit(fit)
+  builder = builder.fit(fit)
 
   return {
     src: builder.url(),

@@ -66,6 +66,26 @@ const objectTypes = [
 
 export type DocumentTypeName = (typeof documentTypes)[number]['name']
 
+/** One document each, opened directly from the desk structure. */
+export const singletonTypes: DocumentTypeName[] = [
+  'settings',
+  'homePage',
+  'faqPage',
+  'contactPage',
+  'legalNotice'
+]
+
+/** Documents the site routes on: no creating, duplicating or unpublishing. */
+export const fixedSetTypes: DocumentTypeName[] = [...singletonTypes, 'house', 'contactType']
+
+/** Fixed documents and the taxonomies houses reference: no deleting. */
+export const protectedTypes: DocumentTypeName[] = [
+  ...fixedSetTypes,
+  'galleryCategory',
+  'amenityCategory',
+  'pricingCategory'
+]
+
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [...documentTypes, ...objectTypes]
 }

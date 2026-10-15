@@ -1,5 +1,9 @@
 import { act, renderHook } from '@testing-library/react'
-import type { GeneralInquiryFields, MoveInFormFields, TourFormFields } from '../schema'
+import type {
+  GeneralInquiryFields,
+  MoveInFormFields,
+  TourFormFields
+} from '@/lib/schemas/contact-form'
 import { useFormSubmit } from '../use-form-submit'
 
 // Mock the contact action

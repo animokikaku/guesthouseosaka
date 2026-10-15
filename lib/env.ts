@@ -1,9 +1,5 @@
 import { createEnv } from '@t3-oss/env-nextjs'
-import { en } from 'zod/locales'
-import * as z from 'zod/mini'
-
-// zod/mini ships without default error messages; keep the same English defaults as zod.
-z.config(en())
+import { z } from './zod'
 
 const vercelBlobHostname = /\.public\.blob\.vercel-storage\.com$/i
 

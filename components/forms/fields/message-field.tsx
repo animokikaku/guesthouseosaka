@@ -1,5 +1,10 @@
 import { fieldComponent } from '@/components/forms/field-brand'
 import {
+  useFieldControl,
+  type FieldOrientation,
+  type FieldOwnedProps
+} from '@/components/forms/fields/field-control'
+import {
   Field,
   FieldContent,
   FieldDescription,
@@ -14,16 +19,13 @@ import {
 } from '@/components/ui/input-group'
 import type { FieldWithValue } from '@tanstack/react-form'
 import { useTranslations } from 'next-intl'
-import { useId } from 'react'
 
 type InputGroupTextareaFormProps = Omit<
   React.ComponentProps<typeof InputGroupTextarea>,
-  'onChange' | 'onBlur' | 'value' | 'aria-invalid' | 'id' | 'name'
+  FieldOwnedProps
 >
 
-type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
-
-interface MessageFieldProps extends InputGroupTextareaFormProps, Orientation {
+interface MessageFieldProps extends InputGroupTextareaFormProps, FieldOrientation {
   field: FieldWithValue<string>
   label?: React.ReactNode
   description?: string | null
@@ -39,16 +41,14 @@ export function MessageField({
   required,
   ...props
 }: MessageFieldProps) {
-  const isInvalid = field.meta.isInvalid
-  const instanceId = useId()
-  const inputId = `form-tanstack-message-${instanceId}-${field.name}`
+  const { isInvalid, ids, controlProps } = useFieldControl('message', field, description)
   const t = useTranslations('MessageField')
 
   return (
     <Field orientation={orientation} data-invalid={isInvalid}>
       <FieldContent>
         {label && (
-          <FieldLabel htmlFor={inputId} className="flex items-center gap-1">
+          <FieldLabel htmlFor={ids.control} className="flex items-center gap-1">
             {label}
             {!required && (
               <span className="text-muted-foreground text-xs">({t('optional_hint')})</span>
@@ -58,14 +58,13 @@ export function MessageField({
       </FieldContent>
       <InputGroup>
         <InputGroupTextarea
-          aria-invalid={isInvalid}
-          id={inputId}
-          name={field.name}
           maxLength={MAX_LENGTH}
+          {...props}
+          {...controlProps}
+          name={field.name}
           value={field.value}
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange(e.target.value)}
-          {...props}
         />
         <InputGroupAddon align="block-end">
           <InputGroupText className="tabular-nums" aria-live="polite">
@@ -76,8 +75,8 @@ export function MessageField({
           </InputGroupText>
         </InputGroupAddon>
       </InputGroup>
-      {description && <FieldDescription>{description}</FieldDescription>}
-      {isInvalid && <FieldError errors={field.errors} />}
+      {description && <FieldDescription id={ids.description}>{description}</FieldDescription>}
+      {isInvalid && <FieldError id={ids.error} errors={field.errors} />}
     </Field>
   )
 }

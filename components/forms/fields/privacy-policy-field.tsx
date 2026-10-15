@@ -2,11 +2,12 @@
 
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import { fieldComponent } from '@/components/forms/field-brand'
+import { useFieldControl } from '@/components/forms/fields/field-control'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
 import type { FieldWithValue } from '@tanstack/react-form'
 import { useTranslations } from 'next-intl'
-import { useId, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 function renderPrivacyPolicyLink(chunks: ReactNode, onAgree: () => void) {
   return <LegalNoticeDialog onAgree={onAgree}>{chunks}</LegalNoticeDialog>
@@ -17,10 +18,8 @@ interface PrivacyPolicyFieldProps {
 }
 
 export function PrivacyPolicyField({ field }: PrivacyPolicyFieldProps) {
-  const isInvalid = field.meta.isInvalid
-  const instanceId = useId()
-  const checkboxId = `form-tanstack-checkbox-${instanceId}-${field.name}`
-  const labelId = `${checkboxId}-label`
+  const { isInvalid, ids, controlProps } = useFieldControl('checkbox', field)
+  const labelId = `${ids.control}-label`
   const t = useTranslations('forms')
 
   return (
@@ -28,18 +27,17 @@ export function PrivacyPolicyField({ field }: PrivacyPolicyFieldProps) {
       <FieldGroup data-slot="checkbox-group">
         <Field orientation="horizontal" data-invalid={isInvalid}>
           <Checkbox
-            id={checkboxId}
+            {...controlProps}
             name={field.name}
             nativeButton
             render={<button type="button" aria-labelledby={labelId} />}
             checked={field.value}
-            aria-invalid={isInvalid}
             onCheckedChange={(checked) => field.handleChange(checked)}
             onBlur={() => field.handleBlur()}
           />
           <FieldLabel
             id={labelId}
-            htmlFor={checkboxId}
+            htmlFor={ids.control}
             className="text-muted-foreground font-normal"
           >
             <span className="text-muted-foreground">
@@ -50,7 +48,7 @@ export function PrivacyPolicyField({ field }: PrivacyPolicyFieldProps) {
           </FieldLabel>
         </Field>
       </FieldGroup>
-      {isInvalid && <FieldError errors={field.errors} />}
+      {isInvalid && <FieldError id={ids.error} errors={field.errors} />}
     </FieldSet>
   )
 }

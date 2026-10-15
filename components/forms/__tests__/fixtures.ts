@@ -1,7 +1,7 @@
-import type { HouseTitles } from '@/components/forms'
+import type { HousesTitlesQueryResult } from '@/sanity.types'
 import type { ContactFormConfig } from '@/lib/types/components'
 
-export const houseTitles: HouseTitles = [
+export const houseTitles: HousesTitlesQueryResult = [
   { slug: 'orange', title: 'Orange House' },
   { slug: 'apple', title: 'Apple House' },
   { slug: 'lemon', title: 'Lemon House' }

@@ -201,7 +201,6 @@ export function createAmenityItem(overrides: Partial<HouseAmenityItem> = {}): Ho
     label: faker.word.noun(),
     icon: faker.helpers.arrayElement(['wifi', 'bed', 'utensils', 'bath', 'tv']),
     note: faker.helpers.arrayElement(['shared', 'private', 'coin', null]),
-    featured: faker.datatype.boolean(),
     ...overrides
   }
 }
@@ -214,8 +213,7 @@ export function createAmenityCategory(
     category: {
       _id: faker.string.uuid(),
       label: faker.word.noun(),
-      icon: faker.helpers.arrayElement(['globe', 'home', 'star', null]),
-      orderRank: `0|${String.fromCharCode(97 + faker.number.int({ min: 0, max: 9 }))}00000:`
+      icon: faker.helpers.arrayElement(['globe', 'home', 'star', null])
     },
     items: [createAmenityItem(), createAmenityItem()],
     ...overrides

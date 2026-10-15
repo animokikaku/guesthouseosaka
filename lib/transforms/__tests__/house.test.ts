@@ -154,14 +154,12 @@ describe('toAmenityCategories', () => {
       category: {
         _id: 'cat1',
         label: null,
-        icon: null,
-        orderRank: '0|a00000:'
+        icon: null
       },
       items: [
         createAmenityItem({
           label: null,
-          note: null,
-          featured: null
+          note: null
         })
       ]
     })
@@ -184,13 +182,12 @@ describe('toAmenityCategories', () => {
 })
 
 describe('toAmenityItem', () => {
-  it('keeps the display fields and drops the query-only ones', () => {
+  it('keeps the display fields', () => {
     const item = createAmenityItem({
       _key: 'wifi',
       label: 'Wifi',
       icon: 'wifi',
-      note: 'shared',
-      featured: true
+      note: 'shared'
     })
 
     expect(toAmenityItem(item)).toEqual({

@@ -1,6 +1,5 @@
 import type { GalleryCategories, GalleryCategory } from '@/lib/gallery'
-import { GALLERY_WALL_SLOTS, slotPixelSize } from '@/lib/gallery-wall'
-import type { GalleryImage } from '@/lib/types/components'
+import { GALLERY_WALL_SLOTS, slotPixelSize, type GalleryWallImage } from '@/lib/gallery-wall'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 
@@ -11,7 +10,7 @@ type GalleryWallImages = NonNullable<NonNullable<HomePageQueryResult>['page']>['
  * collage out from, so a tile can't be cropped to one size and rendered at
  * another.
  */
-export function toGalleryImages(images: GalleryWallImages): GalleryImage[] {
+export function toGalleryImages(images: GalleryWallImages): GalleryWallImage[] {
   // Query already limits to 6 images via galleryWall[0...6]
   return images.flatMap((img, index) => {
     const slot = GALLERY_WALL_SLOTS[index]

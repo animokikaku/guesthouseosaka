@@ -1,8 +1,27 @@
-import { FieldContent, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field'
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldLabel
+} from '@/components/ui/field'
 import type { FieldWithValue } from '@tanstack/react-form'
-import { useId } from 'react'
+import { useId, type ComponentProps } from 'react'
 
-type FieldState = Pick<FieldWithValue<string>, 'name' | 'meta' | 'errors'>
+type FieldState = Pick<FieldWithValue<unknown>, 'name' | 'meta' | 'errors'>
+
+/** Control props a field component sets itself, so they are omitted from its own props. */
+export type FieldOwnedProps =
+  | 'onChange'
+  | 'onBlur'
+  | 'value'
+  | 'aria-invalid'
+  | 'aria-describedby'
+  | 'aria-errormessage'
+  | 'id'
+  | 'name'
+
+export type FieldOrientation = Pick<ComponentProps<typeof Field>, 'orientation'>
 
 type FieldControlIds = { control: string; description: string; error: string }
 

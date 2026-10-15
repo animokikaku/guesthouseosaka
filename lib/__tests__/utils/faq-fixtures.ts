@@ -6,8 +6,7 @@ export type ExtraCost = NonNullable<Houses[number]['extraCosts']>[number]
 
 export const createCategory = (id: string, title: string): PricingCategories[number] => ({
   _id: id,
-  title,
-  orderRank: `0|${id}:`
+  title
 })
 
 export const createHouse = (

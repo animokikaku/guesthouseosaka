@@ -4,19 +4,20 @@ import {
   contactFormDefaultValues,
   FieldGroupPlaces,
   FieldGroupUserAccount,
-  HouseTitles,
   userAccountFieldBindings,
   useAppForm,
   useFormSubmit
 } from '@/components/forms'
 import { FormCard } from '@/components/forms/form-card'
-import { useMoveInFormSchema, type ContactFormFields } from '@/components/forms/schema'
+import { useMoveInFormSchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
+import type { ContactFormFields } from '@/lib/schemas/contact-form'
 import type { ContactFormConfig } from '@/lib/types/components'
+import type { HousesTitlesQueryResult } from '@/sanity.types'
 import { useTranslations } from 'next-intl'
 
 interface MoveInFormProps extends ContactFormConfig {
-  houseTitles: HouseTitles
+  houseTitles: HousesTitlesQueryResult
 }
 
 export function MoveInForm({ title, description, fields, houseTitles }: MoveInFormProps) {

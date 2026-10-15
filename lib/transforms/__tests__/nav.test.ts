@@ -28,10 +28,8 @@ type ContactTypes = NonNullable<ContactPageQueryResult>['contactTypes']
 function createContactType(overrides: Partial<ContactTypes[number]> = {}): ContactTypes[number] {
   return {
     _id: faker.string.uuid(),
-    _type: 'contactType',
     slug: faker.helpers.arrayElement(['tour', 'move-in', 'other'] as const),
     title: faker.lorem.words(2),
-    description: faker.lorem.sentence(),
     ...overrides
   }
 }

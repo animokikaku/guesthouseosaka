@@ -11,45 +11,19 @@ import { presentationTool } from 'sanity/presentation'
 import { structureTool } from 'sanity/structure'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
+import { localeConfig } from '@/i18n/locales'
 import { routing } from '@/i18n/routing'
 import { env } from '@/lib/env'
 import { iconMap } from '@/lib/icons'
-import { locales } from '@/sanity/config'
 import { lucideIconPicker } from '@/sanity/plugins/lucide-icon-picker'
 import { resolve } from '@/sanity/presentation/resolve'
-import { type DocumentTypeName, documentTypes, schema } from '@/sanity/schemaTypes'
+import { documentTypes, fixedSetTypes, protectedTypes, schema } from '@/sanity/schemaTypes'
 import { structure } from '@/sanity/structure'
 
-const languages = locales.map(({ name, label }) => ({
-  id: name,
-  title: label
+const languages = routing.locales.map((locale) => ({
+  id: locale,
+  title: localeConfig[locale].label
 }))
-
-// Document types that cannot be deleted (essential/singleton documents)
-const protectedDocumentTypes: string[] = [
-  'homePage',
-  'faqPage',
-  'contactPage',
-  'house',
-  'contactType',
-  'legalNotice',
-  'settings',
-  // Taxonomy (referenced by houses)
-  'galleryCategory',
-  'amenityCategory',
-  'pricingCategory'
-] satisfies DocumentTypeName[]
-
-// Document types where new documents cannot be created (singletons/fixed set)
-const noCreateDocumentTypes: string[] = [
-  'homePage',
-  'faqPage',
-  'contactPage',
-  'settings',
-  'contactType',
-  'house',
-  'legalNotice'
-] satisfies DocumentTypeName[]
 
 export default defineConfig({
   basePath: '/studio',
@@ -74,12 +48,12 @@ export default defineConfig({
       let actions = prev
 
       // Remove delete action for protected document types
-      if (protectedDocumentTypes.includes(context.schemaType)) {
+      if (protectedTypes.some((type) => type === context.schemaType)) {
         actions = actions.filter(({ action }) => action !== 'delete')
       }
 
       // Remove duplicate and unpublish actions for singletons/fixed document sets
-      if (noCreateDocumentTypes.includes(context.schemaType)) {
+      if (fixedSetTypes.some((type) => type === context.schemaType)) {
         actions = actions.filter(({ action }) => action !== 'duplicate' && action !== 'unpublish')
       }
 
@@ -87,7 +61,7 @@ export default defineConfig({
     },
     // Hide certain types from the "Create new document" menu
     newDocumentOptions: (prev) => {
-      return prev.filter(({ templateId }) => !noCreateDocumentTypes.includes(templateId))
+      return prev.filter(({ templateId }) => !fixedSetTypes.some((type) => type === templateId))
     }
   },
   plugins: [

@@ -18,14 +18,7 @@ export interface GalleryCategory {
   items: GalleryItem[]
 }
 
-// Transform featured image to match GallerySlide shape (for MobileHeroImage)
-export function featuredToGallerySlide(image: NonNullable<FeaturedImage>): GallerySlide {
-  return {
-    _key: 'featured',
-    image
-  }
-}
-
+/** The featured image (when it has an asset) followed by the gallery images. */
 export function buildGallerySlides({
   featuredImage,
   galleryImages
@@ -34,7 +27,7 @@ export function buildGallerySlides({
   galleryImages: GalleryItem[] | null
 }): GallerySlide[] {
   return featuredImage?.asset
-    ? [featuredToGallerySlide(featuredImage), ...(galleryImages ?? [])]
+    ? [{ _key: 'featured', image: featuredImage }, ...(galleryImages ?? [])]
     : (galleryImages ?? [])
 }
 
