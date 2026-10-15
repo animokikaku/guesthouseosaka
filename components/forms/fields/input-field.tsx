@@ -4,28 +4,18 @@ import { fieldComponent } from '@/components/forms/field-brand'
 import {
   FieldControlHeader,
   fieldControlWidthClass,
-  useFieldControl
+  useFieldControl,
+  type FieldOrientation,
+  type FieldOwnedProps
 } from '@/components/forms/fields/field-control'
 import { Field } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import type { FieldWithValue } from '@tanstack/react-form'
 
-type InputFormProps = Omit<
-  React.ComponentProps<typeof Input>,
-  | 'onChange'
-  | 'onBlur'
-  | 'value'
-  | 'aria-invalid'
-  | 'aria-describedby'
-  | 'aria-errormessage'
-  | 'id'
-  | 'name'
->
+type InputFormProps = Omit<React.ComponentProps<typeof Input>, FieldOwnedProps>
 
-type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
-
-interface InputFieldProps extends InputFormProps, Orientation {
+interface InputFieldProps extends InputFormProps, FieldOrientation {
   field: FieldWithValue<string>
   label?: React.ReactNode
   description?: string | null

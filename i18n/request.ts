@@ -9,10 +9,6 @@ export const formats = {
     currency: {
       style: 'currency',
       currency: 'JPY'
-    },
-    minute: {
-      style: 'unit',
-      unit: 'minute'
     }
   }
 } satisfies Formats

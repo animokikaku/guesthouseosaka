@@ -1,4 +1,9 @@
-import { url } from './utils/blob-storage'
+import { env } from '@/lib/env'
+
+/** Absolute URL of a file in the Vercel Blob store. */
+function url(path: string): string {
+  return new URL(path, env.NEXT_PUBLIC_BLOB_STORAGE_URL).toString()
+}
 
 export const assets = {
   notFound: {

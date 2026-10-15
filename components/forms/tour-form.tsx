@@ -4,7 +4,6 @@ import {
   contactFormDefaultValues,
   FieldGroupPlaces,
   FieldGroupUserAccount,
-  HouseTitles,
   userAccountFieldBindings,
   useAppForm,
   useFormSubmit
@@ -13,9 +12,10 @@ import { FormCard } from '@/components/forms/form-card'
 import { useTourFormSchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormConfig } from '@/lib/types/components'
+import type { HousesTitlesQueryResult } from '@/sanity.types'
 
 interface TourFormProps extends ContactFormConfig {
-  houseTitles: HouseTitles
+  houseTitles: HousesTitlesQueryResult
 }
 
 export function TourForm({ title, description, fields, houseTitles }: TourFormProps) {

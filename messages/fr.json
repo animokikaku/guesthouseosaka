@@ -76,12 +76,14 @@
   "HousePricing": {
     "heading": "Tarifs"
   },
+  "GalleryEmptyState": {
+    "title": "Aucune image de galerie",
+    "description": "Les images de galerie sont gérées via Sanity CMS."
+  },
   "ImageBlockGallery": {
     "overflow_count": "+{count, number}",
     "view_gallery": "Afficher toutes les photos",
-    "view_gallery_count": "{count, plural, one {Afficher # photo} other {Afficher les # photos}}",
-    "empty_title": "Aucune image de galerie",
-    "empty_description": "Les images de galerie sont gérées via Sanity CMS."
+    "view_gallery_count": "{count, plural, one {Afficher # photo} other {Afficher les # photos}}"
   },
   "StickyCategoryNav": {
     "gallery_categories_label": "Catégories de la galerie"
@@ -100,9 +102,7 @@
     "optional_hint": "facultatif"
   },
   "MobileHeroImage": {
-    "view_gallery": "Afficher toutes les photos",
-    "empty_title": "Aucune image de galerie",
-    "empty_description": "Les images de galerie sont gérées via Sanity CMS."
+    "view_gallery": "Afficher toutes les photos"
   },
   "MobileNav": {
     "home_label": "Accueil",

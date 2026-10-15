@@ -1,6 +1,6 @@
 'use client'
 
-import { applyActiveTheme, getHouseTheme } from '@/lib/utils/theme'
+import { applyActiveTheme, getHouseTheme } from '@/lib/house-theme'
 import { useParams } from 'next/navigation'
 import { useEffect } from 'react'
 

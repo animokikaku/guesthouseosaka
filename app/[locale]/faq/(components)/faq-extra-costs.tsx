@@ -1,13 +1,10 @@
 import { FAQExtraCostsCards } from '@/app/[locale]/faq/(components)/faq-extra-costs-cards'
 import { FAQExtraCostsTable } from '@/app/[locale]/faq/(components)/faq-extra-costs-table'
-import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
-
-type Houses = NonNullable<HousesBuildingQueryResult>
-type PricingCategories = NonNullable<PricingCategoriesQueryResult>
+import type { FaqHouses, PricingCategories } from '@/app/[locale]/faq/(components)/types'
 
 type FAQExtraCostsProps = {
   pricingCategories: PricingCategories
-  houses: Houses
+  houses: FaqHouses
 }
 
 export function FAQExtraCosts({ pricingCategories, houses }: FAQExtraCostsProps) {

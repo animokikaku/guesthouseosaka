@@ -1,10 +1,7 @@
 import { FAQExtraCostsCards } from '@/app/[locale]/faq/(components)/faq-extra-costs-cards'
 import messages from '@/messages/en.json'
-import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
+import type { FaqHouses, PricingCategories } from '@/app/[locale]/faq/(components)/types'
 import { NextIntlClientProvider } from 'next-intl'
-
-type Houses = NonNullable<HousesBuildingQueryResult>
-type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 
 function portableText(text: string) {
   return [
@@ -19,8 +16,8 @@ function portableText(text: string) {
 }
 
 const pricingCategories = [
-  { _id: 'deposit', title: 'Deposit', orderRank: 'a' },
-  { _id: 'internet', title: 'Internet', orderRank: 'b' }
+  { _id: 'deposit', title: 'Deposit' },
+  { _id: 'internet', title: 'Internet' }
 ] satisfies PricingCategories
 
 const houses = (
@@ -51,7 +48,7 @@ const houses = (
     { categoryId: 'deposit', value: portableText(deposit) },
     { categoryId: 'internet', value: portableText('Included') }
   ]
-})) satisfies Houses
+})) satisfies FaqHouses
 
 export function ThreeHouses() {
   return (

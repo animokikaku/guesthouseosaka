@@ -52,7 +52,7 @@ export function toAmenityCategories(
   }))
 }
 
-/** Drops the query-only fields and cleans `note`, which is compared against literals. */
+/** Cleans `note`, which is compared against literals. */
 export function toAmenityItem({
   _key,
   label,

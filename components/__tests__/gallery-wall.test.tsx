@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import { GalleryWall } from '../gallery-wall'
-import type { GalleryImage } from '@/lib/types/components'
+import type { GalleryWallImage } from '@/lib/gallery-wall'
 
-const createMockImages = (count: number): GalleryImage[] =>
+const createMockImages = (count: number): GalleryWallImage[] =>
   Array.from({ length: count }, (_, index) => ({
     _key: `image-${index + 1}`,
     src: `https://example.com/image-${index + 1}.jpg`,

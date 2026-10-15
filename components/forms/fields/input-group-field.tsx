@@ -2,28 +2,18 @@ import { fieldComponent } from '@/components/forms/field-brand'
 import {
   FieldControlHeader,
   fieldControlWidthClass,
-  useFieldControl
+  useFieldControl,
+  type FieldOrientation,
+  type FieldOwnedProps
 } from '@/components/forms/fields/field-control'
 import { Field } from '@/components/ui/field'
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group'
 import { cn } from '@/lib/utils'
 import type { FieldWithValue } from '@tanstack/react-form'
 
-type InputFormProps = Omit<
-  React.ComponentProps<typeof InputGroupInput>,
-  | 'onChange'
-  | 'onBlur'
-  | 'value'
-  | 'aria-invalid'
-  | 'aria-describedby'
-  | 'aria-errormessage'
-  | 'id'
-  | 'name'
->
+type InputFormProps = Omit<React.ComponentProps<typeof InputGroupInput>, FieldOwnedProps>
 
-type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
-
-interface InputGroupFieldProps extends InputFormProps, Orientation {
+interface InputGroupFieldProps extends InputFormProps, FieldOrientation {
   field: FieldWithValue<string>
   label?: React.ReactNode
   description?: string

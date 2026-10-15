@@ -79,12 +79,14 @@ declare const messages: {
   "HousePricing": {
     "heading": "Pricing"
   },
+  "GalleryEmptyState": {
+    "title": "No gallery images",
+    "description": "Gallery images are managed through Sanity CMS."
+  },
   "ImageBlockGallery": {
     "overflow_count": "+{count, number}",
     "view_gallery": "Show all photos",
-    "view_gallery_count": "{count, plural, one {Show all # photo} other {Show all # photos}}",
-    "empty_title": "No gallery images",
-    "empty_description": "Gallery images are managed through Sanity CMS."
+    "view_gallery_count": "{count, plural, one {Show all # photo} other {Show all # photos}}"
   },
   "StickyCategoryNav": {
     "gallery_categories_label": "Gallery categories"
@@ -103,9 +105,7 @@ declare const messages: {
     "optional_hint": "optional"
   },
   "MobileHeroImage": {
-    "view_gallery": "Show all photos",
-    "empty_title": "No gallery images",
-    "empty_description": "Gallery images are managed through Sanity CMS."
+    "view_gallery": "Show all photos"
   },
   "MobileNav": {
     "home_label": "Home",

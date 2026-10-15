@@ -3,8 +3,8 @@
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel'
 import { useCarouselIndex } from '@/hooks/use-carousel-index'
 import { cn } from '@/lib/utils'
-import { HOUSE_CARD_STYLES, type HouseCardStyles } from '@/lib/utils/theme'
-import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
+import { HOUSE_CARD_STYLES, type HouseCardStyles } from '@/lib/house-theme'
+import type { FaqHouses, PricingCategories } from '@/app/[locale]/faq/(components)/types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
@@ -24,11 +24,8 @@ const portableTextComponents: PortableTextComponents = {
   }
 }
 
-type Houses = NonNullable<HousesBuildingQueryResult>
-type PricingCategories = NonNullable<PricingCategoriesQueryResult>
-
 type FAQExtraCostsCardsProps = {
-  houses: Houses
+  houses: FaqHouses
   pricingCategories: PricingCategories
 }
 
@@ -76,7 +73,7 @@ export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsC
 interface ExtraCostsCardProps {
   styles: HouseCardStyles
   title: string | null
-  extraCosts: Houses[number]['extraCosts']
+  extraCosts: FaqHouses[number]['extraCosts']
   pricingCategories: PricingCategories
 }
 

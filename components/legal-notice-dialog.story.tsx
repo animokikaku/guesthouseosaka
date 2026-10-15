@@ -1,5 +1,5 @@
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
-import { LegalNoticeProvider } from '@/hooks/use-legal-notice'
+import { LegalNoticeProvider } from '@/components/legal-notice-context'
 import messages from '@/messages/en.json'
 import { NextIntlClientProvider } from 'next-intl'
 import { useState } from 'react'

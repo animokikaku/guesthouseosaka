@@ -8,9 +8,7 @@ vi.mock('next-intl/server', () => ({
     if (key === 'view_gallery_count') return `Show all ${values?.count} photos`
 
     const messages: Record<string, string> = {
-      view_gallery: 'View gallery',
-      empty_title: 'No gallery images',
-      empty_description: 'Gallery images are managed through Sanity CMS.'
+      view_gallery: 'View gallery'
     }
     return messages[key] ?? key
   }
@@ -204,7 +202,8 @@ describe('ImageBlockGallery', () => {
     )
 
     expect(screen.queryAllByTestId('gallery-frame')).toHaveLength(0)
-    expect(screen.getByText('No gallery images')).toBeInTheDocument()
-    expect(screen.getByText('Gallery images are managed through Sanity CMS.')).toBeInTheDocument()
+    // GalleryEmptyState reads its copy through the global next-intl mock, which echoes keys.
+    expect(screen.getByText('title')).toBeInTheDocument()
+    expect(screen.getByText('description')).toBeInTheDocument()
   })
 })

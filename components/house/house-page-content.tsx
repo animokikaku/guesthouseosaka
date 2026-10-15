@@ -13,7 +13,7 @@ import { buildGallerySlides } from '@/lib/gallery'
 import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
 import type { StegaAware } from '@/lib/types/stega'
 import { cn } from '@/lib/utils'
-import { HOUSE_COLORS } from '@/lib/utils/theme'
+import { HOUSE_COLORS } from '@/lib/house-theme'
 import type { HouseQueryResult, HousesTitlesQueryResult } from '@/sanity.types'
 import type { ComponentProps } from 'react'
 

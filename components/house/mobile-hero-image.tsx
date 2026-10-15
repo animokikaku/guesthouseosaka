@@ -1,13 +1,12 @@
 'use client'
 
+import { GalleryEmptyState } from '@/components/gallery/gallery-empty-state'
 import { SanityImage } from '@/components/sanity-image'
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { useCarouselIndex } from '@/hooks/use-carousel-index'
 import { Link } from '@/i18n/navigation'
 import type { GallerySlide } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
-import { ImageIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ComponentProps, useState } from 'react'
 
@@ -24,15 +23,7 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
   if (images.length === 0) {
     return (
       <div className="sm:hidden">
-        <Empty className="min-h-96 w-full border border-dashed">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <ImageIcon />
-            </EmptyMedia>
-            <EmptyTitle>{t('empty_title')}</EmptyTitle>
-            <EmptyDescription>{t('empty_description')}</EmptyDescription>
-          </EmptyHeader>
-        </Empty>
+        <GalleryEmptyState className="min-h-96 w-full" />
       </div>
     )
   }

@@ -1,6 +1,7 @@
 import { FAQContactTable } from '@/app/[locale]/faq/(components)/faq-contact-table'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import type { FaqPageQueryResult, HousesBuildingQueryResult } from '@/sanity.types'
+import type { FaqHouses } from '@/app/[locale]/faq/(components)/types'
+import type { FaqPageQueryResult } from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 
 const components: PortableTextComponents = {
@@ -13,7 +14,7 @@ const components: PortableTextComponents = {
 type FAQCardProps = {
   contactSection?: NonNullable<FaqPageQueryResult>['contactSection'] | null
   contactNote?: NonNullable<FaqPageQueryResult>['contactNote'] | null
-  houses: NonNullable<HousesBuildingQueryResult>
+  houses: FaqHouses
 }
 
 export default function FAQCard({ contactSection, contactNote, houses }: FAQCardProps) {

@@ -1,6 +1,7 @@
 'use client'
 
 import { FAQExtraCosts } from '@/app/[locale]/faq/(components)/faq-extra-costs'
+import type { FaqHouses, PricingCategories } from '@/app/[locale]/faq/(components)/types'
 import {
   Accordion,
   AccordionContent,
@@ -8,11 +9,7 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion'
 import type { StegaAware } from '@/lib/types/stega'
-import type {
-  FaqQuestionsQueryResult,
-  HousesBuildingQueryResult,
-  PricingCategoriesQueryResult
-} from '@/sanity.types'
+import type { FaqQuestionsQueryResult } from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
 import { useFormatter, useTranslations } from 'next-intl'
@@ -29,20 +26,18 @@ const components: PortableTextComponents = {
 }
 
 type FaqQuestions = StegaAware<NonNullable<FaqQuestionsQueryResult>[number]>[]
-type Houses = NonNullable<HousesBuildingQueryResult>
-type PricingCategories = NonNullable<PricingCategoriesQueryResult>
 
 type FAQAccordionProps = {
   faqQuestions: FaqQuestions
   pricingCategories: PricingCategories
-  housesBuilding: Houses
+  housesBuilding: FaqHouses
 }
 
 function renderSanitySpan(chunks: ReactNode, dataAttr: (path: string) => string, path: string) {
   return <span data-sanity={dataAttr(path)}>{chunks}</span>
 }
 
-function FloorsAndRoomsContent({ houses }: { houses: Houses }) {
+function FloorsAndRoomsContent({ houses }: { houses: FaqHouses }) {
   const t = useTranslations('FAQAccordion')
   const formatter = useFormatter()
 

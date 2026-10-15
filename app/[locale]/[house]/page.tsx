@@ -1,4 +1,5 @@
 import { HousePageContent } from '@/components/house/house-page-content'
+import { JsonLd } from '@/components/json-ld'
 import { PageEmptyStateSection } from '@/components/page-empty-state'
 import { assets } from '@/lib/assets'
 import { getHouseAndLocale } from '@/lib/house-params'
@@ -70,12 +71,7 @@ export default async function HousePage({ params }: PageProps<'/[locale]/[house]
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c')
-        }}
-      />
+      <JsonLd data={jsonLd} />
       <HousePageContent {...data} houses={houses} />
     </>
   )

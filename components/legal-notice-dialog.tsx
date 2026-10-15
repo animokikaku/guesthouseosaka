@@ -22,7 +22,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer'
-import { useLegalNotice } from '@/hooks/use-legal-notice'
+import { useLegalNotice } from '@/components/legal-notice-context'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { useFormatter, useTranslations } from 'next-intl'

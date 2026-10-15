@@ -49,6 +49,5 @@ export function BrandIcon({ name, ...props }: React.SVGProps<SVGSVGElement> & { 
   if (!Object.hasOwn(brandIconMap, name)) return null
 
   const Component = brandIconMap[name]
-  if (!Component) return null
   return <Component {...props} />
 }

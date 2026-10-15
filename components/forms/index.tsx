@@ -1,18 +1,15 @@
 'use client'
 
-import type { ContactFormFields } from '@/components/forms/schema'
+import type { ContactFormFields } from '@/lib/schemas/contact-form'
 import {
   userAccountDefaultValues,
   type UserAccountDraft
 } from '@/components/forms/user-account-fields'
-import type { HousesTitlesQueryResult } from '@/sanity.types'
 
 export { useAppForm } from './app-form'
 export { FieldGroupPlaces } from './places-fields'
 export { FieldGroupUserAccount, userAccountFieldBindings } from './user-account-fields'
 export { useFormSubmit } from './use-form-submit'
-
-export type HouseTitles = HousesTitlesQueryResult
 
 /**
  * Every contact form field as the user edits it.

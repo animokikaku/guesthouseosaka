@@ -7,8 +7,8 @@ import {
   TableRow
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import { HOUSE_COLORS } from '@/lib/utils/theme'
-import type { HousesBuildingQueryResult, PricingCategoriesQueryResult } from '@/sanity.types'
+import { HOUSE_COLORS } from '@/lib/house-theme'
+import type { FaqHouses, PricingCategories } from '@/app/[locale]/faq/(components)/types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from 'next-sanity'
 
@@ -26,11 +26,8 @@ const portableTextComponents: PortableTextComponents = {
   }
 }
 
-type Houses = NonNullable<HousesBuildingQueryResult>
-type PricingCategories = NonNullable<PricingCategoriesQueryResult>
-
 type FAQExtraCostsTableProps = {
-  houses: Houses
+  houses: FaqHouses
   pricingCategories: PricingCategories
 }
 

@@ -2,7 +2,8 @@ import { fieldComponent } from '@/components/forms/field-brand'
 import {
   FieldControlHeader,
   fieldControlWidthClass,
-  useFieldControl
+  useFieldControl,
+  type FieldOrientation
 } from '@/components/forms/fields/field-control'
 import { Field } from '@/components/ui/field'
 import {
@@ -17,9 +18,7 @@ import type { FieldWithValue } from '@tanstack/react-form'
 
 type SelectProps = Omit<React.ComponentProps<typeof Select>, 'name' | 'value' | 'onValueChange'>
 
-type Orientation = Pick<React.ComponentProps<typeof Field>, 'orientation'>
-
-interface SelectFieldProps extends SelectProps, Orientation {
+interface SelectFieldProps extends SelectProps, FieldOrientation {
   field: FieldWithValue<string>
   label?: string
   description?: string

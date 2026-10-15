@@ -68,6 +68,18 @@ export const GALLERY_WALL_SLOTS: readonly GalleryWallSlot[] = [
   }
 ]
 
+/** A collage tile with its CDN URL already built, so GalleryWall needs no Sanity helpers. */
+export interface GalleryWallImage {
+  _key: string
+  src: string
+  alt: string | null
+  blurDataURL: string | null
+  width: number
+  height: number
+  /** Preloaded as the likely LCP element rather than lazy-loaded. */
+  priority?: boolean
+}
+
 /** Intrinsic pixel size to crop a tile to, from its share of the design bound. */
 export function slotPixelSize(slot: GalleryWallSlot): number {
   return Math.round((slot.size / 100) * CONTENT_WIDTH)

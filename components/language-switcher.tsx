@@ -8,22 +8,15 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { localeConfig } from '@/i18n/locales'
 import { usePathname, useRouter } from '@/i18n/navigation'
 import { routing } from '@/i18n/routing'
 import { Languages } from 'lucide-react'
-import { hasLocale, Locale, useLocale, useTranslations } from 'next-intl'
+import { hasLocale, useLocale, useTranslations } from 'next-intl'
 import { useParams } from 'next/navigation'
 import { useTransition } from 'react'
 
-const langs: Record<Locale, string> = {
-  en: 'English',
-  ja: '日本語',
-  fr: 'Français',
-  'zh-CN': '简体中文',
-  'zh-TW': '繁體中文'
-}
-
-const languages = routing.locales.map((code) => ({ code, label: langs[code] }))
+const languages = routing.locales.map((code) => ({ code, label: localeConfig[code].label }))
 
 /** Shows the current language name from `md` up; an icon-only button below. */
 export function LanguageSwitcher() {
@@ -58,7 +51,7 @@ export function LanguageSwitcher() {
             variant="ghost"
             className="size-8 px-0 has-[>svg]:px-0 md:h-9 md:w-auto md:px-4 md:py-2 md:has-[>svg]:px-3"
           >
-            <span className="hidden md:inline">{langs[locale]}</span>
+            <span className="hidden md:inline">{localeConfig[locale].label}</span>
             <Languages aria-hidden="true" />
           </Button>
         }

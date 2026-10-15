@@ -76,12 +76,14 @@
   "HousePricing": {
     "heading": "價格"
   },
+  "GalleryEmptyState": {
+    "title": "尚無相簿圖片",
+    "description": "相簿圖片透過 Sanity CMS 管理。"
+  },
   "ImageBlockGallery": {
     "overflow_count": "+{count, number}",
     "view_gallery": "顯示所有照片",
-    "view_gallery_count": "{count, plural, other {顯示全部#張照片}}",
-    "empty_title": "尚無相簿圖片",
-    "empty_description": "相簿圖片透過 Sanity CMS 管理。"
+    "view_gallery_count": "{count, plural, other {顯示全部#張照片}}"
   },
   "StickyCategoryNav": {
     "gallery_categories_label": "相簿分類"
@@ -100,9 +102,7 @@
     "optional_hint": "選填"
   },
   "MobileHeroImage": {
-    "view_gallery": "顯示所有照片",
-    "empty_title": "尚無相簿圖片",
-    "empty_description": "相簿圖片透過 Sanity CMS 管理。"
+    "view_gallery": "顯示所有照片"
   },
   "MobileNav": {
     "home_label": "首頁",

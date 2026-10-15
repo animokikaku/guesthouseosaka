@@ -42,10 +42,7 @@ export function HouseBuilding({ building }: HouseBuildingProps) {
       >
         <FeatureItem
           label={t('min_rent_label')}
-          value={formatter.number(building?.startingPrice ?? 0, {
-            style: 'currency',
-            currency: 'JPY'
-          })}
+          value={formatter.number(building?.startingPrice ?? 0, 'currency')}
           data-sanity={dataAttribute('building.startingPrice')}
         />
       </Link>

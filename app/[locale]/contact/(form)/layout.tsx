@@ -1,6 +1,6 @@
 import { ContactNav } from '@/components/contact-nav'
 import { PageNav } from '@/components/page-nav'
-import { LegalNoticeProvider } from '@/hooks/use-legal-notice'
+import { LegalNoticeProvider } from '@/components/legal-notice-context'
 import { toContactNavItems } from '@/lib/transforms/nav'
 import { sanityFetch } from '@/sanity/lib/live'
 import { contactPageQuery, legalNoticeQuery } from '@/sanity/lib/queries'

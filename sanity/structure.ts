@@ -10,13 +10,11 @@ import { LockIcon } from '@sanity/icons/Lock'
 import { TagIcon } from '@sanity/icons/Tag'
 import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 import type { StructureResolver } from 'sanity/structure'
+import { singletonTypes, type DocumentTypeName } from './schemaTypes'
 
-// Document types that are singletons (should not appear in generic lists)
-const SINGLETONS = ['settings', 'homePage', 'faqPage', 'contactPage', 'legalNotice']
-
-// Document types managed in folders (should not appear in generic lists)
-const MANAGED_TYPES = [
-  ...SINGLETONS,
+// Document types placed above (should not appear in the generic list below)
+const MANAGED_TYPES: DocumentTypeName[] = [
+  ...singletonTypes,
   'house',
   'contactType',
   'galleryCategory',

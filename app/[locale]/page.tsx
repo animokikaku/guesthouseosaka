@@ -2,7 +2,12 @@ import { Collection } from '@/components/collection'
 import { FooterStyle } from '@/components/footer-style'
 import { GalleryWall } from '@/components/gallery-wall'
 import { PageEmptyState } from '@/components/page-empty-state'
-import { PageActions, PageHeader } from '@/components/page-header'
+import {
+  PageActions,
+  PageHeader,
+  PageHeaderDescription,
+  PageHeaderHeading
+} from '@/components/page-header'
 import { buttonVariants } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { getCanonicalMetadata } from '@/lib/metadata'
@@ -24,14 +29,10 @@ export async function generateMetadata(): Promise<Metadata> {
 const heroComponents: PortableTextComponents = {
   block: {
     h1: ({ children }) => (
-      <h1 className="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance md:text-left xl:text-5xl xl:tracking-tighter">
-        {children}
-      </h1>
+      <PageHeaderHeading className="md:text-left">{children}</PageHeaderHeading>
     ),
     normal: ({ children }) => (
-      <p className="text-foreground max-w-3xl text-base text-balance sm:text-lg md:text-left">
-        {children}
-      </p>
+      <PageHeaderDescription className="md:text-left">{children}</PageHeaderDescription>
     )
   }
 }

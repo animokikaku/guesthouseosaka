@@ -10,7 +10,7 @@ import {
 import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { cn } from '@/lib/utils'
-import { HOUSE_COLORS } from '@/lib/utils/theme'
+import { HOUSE_COLORS } from '@/lib/house-theme'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { stegaClean } from '@sanity/client/stega'
