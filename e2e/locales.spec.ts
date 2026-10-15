@@ -1,4 +1,4 @@
-import { expect, type Page, test } from './fixtures'
+import { expect, type Page, test } from '@playwright/test'
 import { existsSync } from 'node:fs'
 
 /**

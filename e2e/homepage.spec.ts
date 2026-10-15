@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures'
+import { expect, test } from '@playwright/test'
 
 test.describe('Homepage', () => {
   // Note: Footer visibility tests are now covered by unit tests in

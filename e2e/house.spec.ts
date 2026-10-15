@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures'
+import { expect, test } from '@playwright/test'
 
 // House slugs defined in lib/types/index.ts
 const HOUSE_SLUGS = ['orange', 'apple', 'lemon'] as const

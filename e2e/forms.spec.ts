@@ -1,4 +1,4 @@
-import { expect, testWithNextProxy as test } from './fixtures'
+import { expect, test } from 'next/experimental/testmode/playwright'
 import {
   fillAccountFields,
   getAccountFields,

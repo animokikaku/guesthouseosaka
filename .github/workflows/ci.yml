@@ -57,7 +57,6 @@ jobs:
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          flags: unit
 
   e2e:
     name: E2E Tests
@@ -114,7 +113,7 @@ jobs:
       - name: Run component and E2E tests
         run: bun run --parallel --no-exit-on-error test:components test:e2e
         env:
-          # Browser coverage for Codecov (see playwright/coverage.ts).
+          # Component coverage for Codecov (see playwright/coverage.ts).
           COVERAGE: '1'
 
       - name: Upload component coverage to Codecov
@@ -122,18 +121,8 @@ jobs:
         uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage-playwright/components/lcov.info
+          files: coverage-playwright/lcov.info
           disable_search: true
-          flags: components
-
-      - name: Upload E2E coverage to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@v7
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage-playwright/e2e/lcov.info
-          disable_search: true
-          flags: e2e
 
       - name: Save Next.js cache from main
         if: github.event_name == 'push' && steps.next-cache-main.outputs.cache-hit != 'true'

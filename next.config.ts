@@ -105,9 +105,6 @@ const nextConfig: NextConfig = {
     turbopackRustReactCompiler: true,
     useTypeScriptCli: true
   },
-  // Lets the E2E suite map browser coverage back to source; never enabled for
-  // a deployed build (see testProxy above).
-  productionBrowserSourceMaps: process.env.NEXT_TEST_PROXY === '1',
   images: {
     qualities: [75, 90],
     deviceSizes: [480, 640, 750, 828, 1080, 1200, 1600],

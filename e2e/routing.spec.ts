@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures'
+import { expect, test } from '@playwright/test'
 
 // Old URLs still carry links and search ranking, so each legacy pattern must
 // keep answering with a permanent redirect to its current page.
