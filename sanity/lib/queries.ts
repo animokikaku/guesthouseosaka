@@ -36,64 +36,27 @@ const actionsFields = /* groq */ `
   })
 `
 
+// One form field's localized label, placeholder and description
+const formFieldConfigFields = /* groq */ `{
+  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),
+  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),
+  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)
+}`
+
 // Contact form fields projection
 const contactFormFields = /* groq */ `
   "fields": {
-    "places": {
-      "label": coalesce(fields.places.label[language == $locale][0].value, fields.places.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.places.placeholder[language == $locale][0].value, fields.places.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.places.description[language == $locale][0].value, fields.places.description[language == "en"][0].value)
-    },
-    "date": {
-      "label": coalesce(fields.date.label[language == $locale][0].value, fields.date.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.date.placeholder[language == $locale][0].value, fields.date.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.date.description[language == $locale][0].value, fields.date.description[language == "en"][0].value)
-    },
-    "hour": {
-      "label": coalesce(fields.hour.label[language == $locale][0].value, fields.hour.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.hour.placeholder[language == $locale][0].value, fields.hour.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.hour.description[language == $locale][0].value, fields.hour.description[language == "en"][0].value)
-    },
-    "stayDuration": {
-      "label": coalesce(fields.stayDuration.label[language == $locale][0].value, fields.stayDuration.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.stayDuration.placeholder[language == $locale][0].value, fields.stayDuration.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.stayDuration.description[language == $locale][0].value, fields.stayDuration.description[language == "en"][0].value)
-    },
-    "gender": {
-      "label": coalesce(fields.gender.label[language == $locale][0].value, fields.gender.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.gender.placeholder[language == $locale][0].value, fields.gender.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.gender.description[language == $locale][0].value, fields.gender.description[language == "en"][0].value)
-    },
-    "age": {
-      "label": coalesce(fields.age.label[language == $locale][0].value, fields.age.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.age.placeholder[language == $locale][0].value, fields.age.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.age.description[language == $locale][0].value, fields.age.description[language == "en"][0].value)
-    },
-    "nationality": {
-      "label": coalesce(fields.nationality.label[language == $locale][0].value, fields.nationality.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.nationality.placeholder[language == $locale][0].value, fields.nationality.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.nationality.description[language == $locale][0].value, fields.nationality.description[language == "en"][0].value)
-    },
-    "phone": {
-      "label": coalesce(fields.phone.label[language == $locale][0].value, fields.phone.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.phone.placeholder[language == $locale][0].value, fields.phone.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.phone.description[language == $locale][0].value, fields.phone.description[language == "en"][0].value)
-    },
-    "name": {
-      "label": coalesce(fields.name.label[language == $locale][0].value, fields.name.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.name.placeholder[language == $locale][0].value, fields.name.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.name.description[language == $locale][0].value, fields.name.description[language == "en"][0].value)
-    },
-    "email": {
-      "label": coalesce(fields.email.label[language == $locale][0].value, fields.email.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.email.placeholder[language == $locale][0].value, fields.email.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.email.description[language == $locale][0].value, fields.email.description[language == "en"][0].value)
-    },
-    "message": {
-      "label": coalesce(fields.message.label[language == $locale][0].value, fields.message.label[language == "en"][0].value),
-      "placeholder": coalesce(fields.message.placeholder[language == $locale][0].value, fields.message.placeholder[language == "en"][0].value),
-      "description": coalesce(fields.message.description[language == $locale][0].value, fields.message.description[language == "en"][0].value)
-    }
+    "places": fields.places${formFieldConfigFields},
+    "date": fields.date${formFieldConfigFields},
+    "hour": fields.hour${formFieldConfigFields},
+    "stayDuration": fields.stayDuration${formFieldConfigFields},
+    "gender": fields.gender${formFieldConfigFields},
+    "age": fields.age${formFieldConfigFields},
+    "nationality": fields.nationality${formFieldConfigFields},
+    "phone": fields.phone${formFieldConfigFields},
+    "name": fields.name${formFieldConfigFields},
+    "email": fields.email${formFieldConfigFields},
+    "message": fields.message${formFieldConfigFields}
   }
 `
 

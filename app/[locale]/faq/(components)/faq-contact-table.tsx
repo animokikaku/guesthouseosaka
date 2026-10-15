@@ -1,5 +1,3 @@
-'use client'
-
 import type { FaqHouses } from '@/app/[locale]/faq/(components)/types'
 import { SanityImage } from '@/components/sanity-image'
 import { buttonVariants } from '@/components/ui/button'

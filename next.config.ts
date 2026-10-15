@@ -15,6 +15,11 @@ const withNextIntl = createNextIntlPlugin({
   }
 })
 
+// Route-param patterns for the redirects below: the public (lowercase) locale
+// prefixes from i18n/routing.ts and the current houses from lib/types.
+const LOCALES = 'en|ja|fr|zh-cn|zh-tw'
+const HOUSES = 'orange|apple|lemon'
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
@@ -45,48 +50,46 @@ const nextConfig: NextConfig = {
 
     // Renamed pages
     {
-      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/orange-house',
+      source: `/:locale(${LOCALES})/orange-house`,
       destination: '/:locale/orange',
       permanent: true
     },
     {
-      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/oranged',
+      source: `/:locale(${LOCALES})/oranged`,
       destination: '/:locale/orange',
       permanent: true
     },
     {
-      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/:house(orange|apple|lemon)/access',
+      source: `/:locale(${LOCALES})/:house(${HOUSES})/access`,
       destination: '/:locale/:house',
       permanent: true
     },
 
     // Removed houses
     {
-      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/:house(banana|melon)',
+      source: `/:locale(${LOCALES})/:house(banana|melon)`,
       destination: '/:locale',
       permanent: true
     },
     {
-      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/:house(banana|melon)/:path*',
+      source: `/:locale(${LOCALES})/:house(banana|melon)/:path*`,
       destination: '/:locale',
       permanent: true
     },
 
     // Removed pages
     {
-      source:
-        '/:locale(en|ja|fr|zh-cn|zh-tw)/:path(column|seo-blog|category|location|review|feed|rss|blog|news|about|gallery|rooms|price|prices|access|privacy|terms|link)',
+      source: `/:locale(${LOCALES})/:path(column|seo-blog|category|location|review|feed|rss|blog|news|about|gallery|rooms|price|prices|access|privacy|terms|link)`,
       destination: '/:locale',
       permanent: true
     },
     {
-      source:
-        '/:locale(en|ja|fr|zh-cn|zh-tw)/:path(column|seo-blog|category|2013|wp-content)/:rest*',
+      source: `/:locale(${LOCALES})/:path(column|seo-blog|category|2013|wp-content)/:rest*`,
       destination: '/:locale',
       permanent: true
     },
     {
-      source: '/:locale(en|ja|fr|zh-cn|zh-tw)/:path(reservation|booking|contact-us)',
+      source: `/:locale(${LOCALES})/:path(reservation|booking|contact-us)`,
       destination: '/:locale/contact',
       permanent: true
     }
