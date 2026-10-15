@@ -1,4 +1,4 @@
-import { devices, expect, test } from '@playwright/test'
+import { devices, expect, test } from './fixtures'
 import { gotoContactForm } from './helpers/contact-form'
 
 // Phones get their own navigation, hero and dialogs, none of which the desktop

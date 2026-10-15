@@ -20,6 +20,9 @@ export default defineConfig({
   // component tests and Playwright empties its output folder on start.
   outputDir: 'test-results/e2e',
 
+  // Browser coverage for Codecov when COVERAGE=1 (see playwright/coverage.ts).
+  globalSetup: './playwright/coverage.ts',
+
   // Run tests in files in parallel
   fullyParallel: true,
 

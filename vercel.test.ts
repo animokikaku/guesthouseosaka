@@ -130,6 +130,7 @@ describe.concurrent('Vercel ignored build command', () => {
     const paths = [
       '.claude/settings.json',
       '.coderabbit.yaml',
+      'codecov.yml',
       '.codex/config.toml',
       '.cursor/rules.json',
       '.vscode/settings.json',

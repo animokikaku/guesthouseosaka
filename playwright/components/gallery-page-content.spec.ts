@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 const story = 'components/gallery/gallery-page-content/Default'
 

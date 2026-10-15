@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 test('opens and closes the real desktop dialog with focus restoration', async ({ mount, page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })

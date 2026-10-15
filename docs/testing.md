@@ -19,6 +19,15 @@ a visitor, an editor or a crawler would.
 - A test that only restates the implementation (a hard-coded copy of a computed value, a mock that
   reimplements the code under test) is a change detector; test the rule it encodes instead.
 
+## Coverage
+
+Codecov merges three uploads per commit, each also kept as a flag: `unit` from Vitest, and
+`components` and `e2e` from the Playwright suites, which record browser coverage when run with
+`COVERAGE=1` (`playwright/coverage.ts`, reports in `coverage-playwright/`). Browser coverage
+covers client code only: server components render during the build, which doesn't report V8
+coverage, so their logic still needs unit tests or E2E assertions. Moving a test to a browser
+layer keeps its coverage; deleting one without a replacement shows up as a drop.
+
 ## Unit test environment
 
 - Translations resolve against `messages/en.json` (`vitest.setup.ts`), so tests assert real English

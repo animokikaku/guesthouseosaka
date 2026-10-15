@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 const story = 'app/[locale]/faq/(components)/faq-extra-costs-cards/ThreeHouses'
 

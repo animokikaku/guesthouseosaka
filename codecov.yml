@@ -1,0 +1,18 @@
+# Three uploads per commit, one per test layer (see .github/workflows/ci.yml):
+# unit (Vitest), components and e2e (browser coverage from Playwright). Codecov
+# merges them into the project total and keeps each available as a flag.
+codecov:
+  notify:
+    # Wait for every layer, so a partial upload never reads as a drop.
+    after_n_builds: 3
+
+comment:
+  after_n_builds: 3
+
+flags:
+  unit:
+    carryforward: true
+  components:
+    carryforward: true
+  e2e:
+    carryforward: true

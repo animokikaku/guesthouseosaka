@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures'
 
 // Locale routes themselves are covered in locales.spec.ts; this pins the
 // unprefixed entry point, which is the only path the proxy has to resolve.
