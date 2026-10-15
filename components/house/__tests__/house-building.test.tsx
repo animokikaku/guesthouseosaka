@@ -3,16 +3,6 @@ import { render, screen } from '@testing-library/react'
 import { HouseBuilding } from '../house-building'
 import { HouseProvider } from '../house-context'
 
-vi.mock('@/i18n/navigation', () => ({
-  Link: ({
-    children,
-    href
-  }: {
-    children: React.ReactNode
-    href: { params: { house: string }; hash: string }
-  }) => <a href={`/${href.params.house}${href.hash}`}>{children}</a>
-}))
-
 function renderBuilding(building: BuildingData | null) {
   return render(
     <HouseProvider id="house-123" type="house" slug="orange">
@@ -38,7 +28,7 @@ describe('HouseBuilding', () => {
   it('links the starting rent to the pricing section', () => {
     renderBuilding({ rooms: 12, floors: 3, startingPrice: 45000 })
 
-    expect(screen.getByRole('link')).toHaveAttribute('href', '/orange#pricing')
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/en/orange#pricing')
     expect(screen.getByRole('link')).toHaveTextContent(/\brent\b/i)
   })
 

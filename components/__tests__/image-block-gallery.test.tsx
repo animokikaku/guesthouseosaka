@@ -4,21 +4,6 @@ import { ImageBlockGallery } from '../image-block-gallery'
 
 vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
 
-vi.mock('@/i18n/navigation', () => ({
-  Link: ({
-    children,
-    href,
-    ...props
-  }: {
-    children?: React.ReactNode
-    href: { params: { house: string } }
-  }) => (
-    <a href={`/${href.params.house}/gallery`} {...props}>
-      {children}
-    </a>
-  )
-}))
-
 const href = { pathname: '/[house]/gallery', params: { house: 'orange' } } as const
 
 function photos(count: number) {
@@ -49,7 +34,7 @@ describe('ImageBlockGallery', () => {
     await renderGallery()
 
     expect(tiles()).toEqual(['Photo 1', 'Photo 2', 'Photo 3', 'Photo 4', 'Photo 5'])
-    expect(screen.getAllByRole('link')).toHaveLength(1)
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/en/orange/gallery')
   })
 
   // Desktop LCP candidate: loaded eagerly at high priority, the rest lazily.

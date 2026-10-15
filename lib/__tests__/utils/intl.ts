@@ -8,9 +8,16 @@ type IntlFactories = Pick<typeof NextIntl, 'createTranslator' | 'createFormatter
  * `useTranslations`, `getTranslations` and `useFormatter` bound to the English
  * catalog. Takes the real `next-intl` exports as an argument because it is
  * called from inside the `next-intl` mock, where importing the module would
- * resolve to the mock itself.
+ * resolve to the mock itself. Bound once per test file, so the `next-intl`
+ * and `next-intl/server` mocks share one translator cache.
  */
-export function bindTestIntl({ createTranslator, createFormatter }: IntlFactories) {
+export function bindTestIntl(factories: IntlFactories) {
+  return (bound ??= bind(factories))
+}
+
+let bound: ReturnType<typeof bind> | undefined
+
+function bind({ createTranslator, createFormatter }: IntlFactories) {
   // Cached per namespace: the real hook returns a stable function, and
   // components memoize on it.
   const translators = new Map<string, ReturnType<typeof createTranslator>>()

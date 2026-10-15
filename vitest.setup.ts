@@ -110,6 +110,13 @@ vi.mock('next-intl', async (importOriginal) => {
   }
 })
 
+// next-intl's navigation reads the locale from use-intl directly, so the real
+// `Link` from `@/i18n/navigation` renders localized hrefs without a provider.
+vi.mock('use-intl', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  useLocale: () => 'en'
+}))
+
 vi.mock('next-intl/server', async () => {
   const actual = await vi.importActual<typeof import('next-intl')>('next-intl')
   const { bindTestIntl } = await import('@/lib/__tests__/utils/intl')

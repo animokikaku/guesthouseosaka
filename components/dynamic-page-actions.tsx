@@ -4,12 +4,31 @@ import { PageActions } from '@/components/page-header'
 import { buttonVariants } from '@/components/ui/button'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Icon } from '@/lib/icons'
-import { resolvePageActionHref } from '@/lib/page-action-href'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { FaqPageQueryResult } from '@/sanity.types'
 import { createDataAttribute, stegaClean } from 'next-sanity'
 
 type PageAction = NonNullable<NonNullable<FaqPageQueryResult>['actions']>[number]
+
+/**
+ * Where a CMS page action points. Editors enter either an absolute URL or an
+ * internal path, optionally with a hash (`/faq#phone`, or just `#phone` for
+ * the page the action sits on).
+ */
+type PageActionHref =
+  | { external: true; href: string }
+  | { external: false; pathname: string; hash?: string }
+
+function resolvePageActionHref(href: string, currentPathname: string): PageActionHref {
+  if (href.startsWith('http://') || href.startsWith('https://')) {
+    return { external: true, href }
+  }
+
+  const [pathname, hash] = href.split('#')
+  return hash === undefined
+    ? { external: false, pathname }
+    : { external: false, pathname: pathname || currentPathname, hash: `#${hash}` }
+}
 
 interface DynamicPageActionsProps {
   documentId: string

@@ -1,20 +1,10 @@
 import { render, screen } from '@testing-library/react'
 import { DynamicPageActions } from '../dynamic-page-actions'
 
-vi.mock('@/i18n/navigation', () => ({
-  usePathname: () => '/faq',
-  Link: ({
-    children,
-    href,
-    ...props
-  }: {
-    children: React.ReactNode
-    href: string | { pathname: string; hash?: string }
-  }) => (
-    <a href={typeof href === 'string' ? href : `${href.pathname}${href.hash ?? ''}`} {...props}>
-      {children}
-    </a>
-  )
+// The action sits on the FAQ page; links render through the real localized `Link`.
+vi.mock('@/i18n/navigation', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/i18n/navigation')>()),
+  usePathname: () => '/faq'
 }))
 
 const action = (key: string, label: string, href: string) => ({
@@ -40,20 +30,28 @@ describe('DynamicPageActions', () => {
     ])
   })
 
-  it('keeps a bare anchor on the current page', () => {
-    renderActions([action('a', 'Call us', '#phone')])
+  it.each([
+    ['a site path', '/contact', '/en/contact'],
+    ['a path with a section', '/faq#phone', '/en/faq#phone'],
+    // An anchor alone targets the page the action is on.
+    ['a bare anchor', '#phone', '/en/faq#phone']
+  ])('localizes %s', (_name, href, expected) => {
+    renderActions([action('a', 'Go', href)])
 
-    expect(screen.getByRole('link', { name: 'Call us' })).toHaveAttribute('href', '/faq#phone')
+    expect(screen.getByRole('link', { name: 'Go' })).toHaveAttribute('href', expected)
   })
 
-  it('opens an external link in a new tab without handing over the page', () => {
-    renderActions([action('a', 'LINE', 'https://line.me/R/ti/p/@guesthouse')])
+  it.each(['https://line.me/R/ti/p/@guesthouse', 'http://example.com'])(
+    'opens %s in a new tab without handing over the page',
+    (href) => {
+      renderActions([action('a', 'Away', href)])
 
-    const link = screen.getByRole('link', { name: 'LINE' })
-    expect(link).toHaveAttribute('href', 'https://line.me/R/ti/p/@guesthouse')
-    expect(link).toHaveAttribute('target', '_blank')
-    expect(link).toHaveAttribute('rel', 'noopener noreferrer')
-  })
+      const link = screen.getByRole('link', { name: 'Away' })
+      expect(link).toHaveAttribute('href', href)
+      expect(link).toHaveAttribute('target', '_blank')
+      expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+    }
+  )
 
   it('tags each action for visual editing', () => {
     renderActions([action('call', 'Call us', '#phone')])

@@ -3,11 +3,6 @@ import { HouseAbout } from '../house-about'
 import { HouseProvider } from '../house-context'
 import type { HousePortableTextContent } from '@/lib/types/components'
 
-// Routing is the edge here: the building summary links to the pricing section.
-vi.mock('@/i18n/navigation', () => ({
-  Link: ({ children }: { children: React.ReactNode }) => <a href="#pricing">{children}</a>
-}))
-
 function renderAbout(props: Partial<React.ComponentProps<typeof HouseAbout>> = {}) {
   return render(
     <HouseProvider id="house-123" type="house" slug="orange">
