@@ -50,10 +50,11 @@ function MessageField({
         {label && (
           <FieldLabel htmlFor={ids.control} className="flex items-center gap-1">
             {label}
-            {/* Flex gap spaces it visually; the text space keeps the accessible name readable. */}
-            {!required && ' '}
             {!required && (
-              <span className="text-muted-foreground text-xs">({t('optional_hint')})</span>
+              <>
+                {/* Flex gap spaces it visually; the text space keeps the accessible name readable. */}{' '}
+                <span className="text-muted-foreground text-xs">({t('optional_hint')})</span>
+              </>
             )}
           </FieldLabel>
         )}

@@ -23,55 +23,36 @@ type HouseGalleryItem = NonNullable<HouseGalleryCategory['items']>[number]
 // Contact Type Fields Mock Factory
 // ============================================
 
+/** Pickers that editors leave without a placeholder; every other field has one. */
+const FIELDS_WITHOUT_PLACEHOLDER = ['places', 'date', 'hour'] as const
+
+const FIELDS_WITH_PLACEHOLDER = [
+  'stayDuration',
+  'name',
+  'age',
+  'gender',
+  'nationality',
+  'email',
+  'phone',
+  'message'
+] as const
+
 export function createContactTypeFields(
   overrides: Partial<ContactTypeFields> = {}
 ): ContactTypeFields {
+  const field = (placeholder: string | null) => ({
+    label: faker.word.noun(),
+    placeholder,
+    description: null
+  })
+
+  // The two key lists together cover every field.
+  // oxlint-disable-next-line typescript/no-unsafe-type-assertion
   return {
-    places: { label: faker.word.noun(), placeholder: null, description: null },
-    date: { label: faker.word.noun(), placeholder: null, description: null },
-    hour: { label: faker.word.noun(), placeholder: null, description: null },
-    stayDuration: {
-      label: faker.word.noun(),
-      placeholder: faker.lorem.words(2),
-      description: null
-    },
-    name: {
-      label: faker.word.noun(),
-      placeholder: faker.lorem.words(2),
-      description: null
-    },
-    age: {
-      label: faker.word.noun(),
-      placeholder: faker.lorem.words(2),
-      description: null
-    },
-    gender: {
-      label: faker.word.noun(),
-      placeholder: faker.lorem.words(2),
-      description: null
-    },
-    nationality: {
-      label: faker.word.noun(),
-      placeholder: faker.lorem.words(2),
-      description: null
-    },
-    email: {
-      label: faker.word.noun(),
-      placeholder: faker.lorem.words(2),
-      description: null
-    },
-    phone: {
-      label: faker.word.noun(),
-      placeholder: faker.lorem.words(2),
-      description: null
-    },
-    message: {
-      label: faker.word.noun(),
-      placeholder: faker.lorem.words(2),
-      description: null
-    },
+    ...Object.fromEntries(FIELDS_WITHOUT_PLACEHOLDER.map((key) => [key, field(null)])),
+    ...Object.fromEntries(FIELDS_WITH_PLACEHOLDER.map((key) => [key, field(faker.lorem.words(2))])),
     ...overrides
-  }
+  } as ContactTypeFields
 }
 
 // ============================================

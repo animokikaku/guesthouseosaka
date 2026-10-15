@@ -4,11 +4,8 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/com
 import { useCarouselIndex } from '@/hooks/use-carousel-index'
 import { cn } from '@/lib/utils'
 import { HOUSE_CARD_STYLES, type HouseCardStyles } from '@/lib/house-theme'
-import {
-  extraCostsByCategory,
-  type FaqHouses,
-  type PricingCategories
-} from '@/app/[locale]/faq/(components)/types'
+import { extraCostsByCategory } from '@/app/[locale]/faq/(components)/extra-costs'
+import type { FaqHouses, PricingCategories } from '@/app/[locale]/faq/(components)/types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
