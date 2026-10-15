@@ -7,6 +7,7 @@ import type {
 } from '@playwright/test'
 import MCR, { type CoverageReportOptions } from 'monocart-coverage-reports'
 import path from 'node:path'
+import { coverageExclude, coverageInclude } from '../coverage.config'
 
 /**
  * Browser coverage from the component suite, merged by Codecov with the unit
@@ -17,11 +18,10 @@ import path from 'node:path'
  */
 const enabled = process.env.COVERAGE === '1'
 
-/** Same scope as the unit coverage in vitest.config.mts. */
 function inScope(file: string) {
   return (
-    /^(app|components|hooks|i18n|lib)\/.+\.tsx?$/.test(file) &&
-    !/(^components\/ui\/|__tests__|\.story\.tsx$|^i18n\/navigation\.ts$)/.test(file)
+    coverageInclude.some((glob) => path.matchesGlob(file, glob)) &&
+    !coverageExclude.some((glob) => path.matchesGlob(file, glob))
   )
 }
 

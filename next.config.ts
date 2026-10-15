@@ -1,6 +1,8 @@
 import { withCn } from 'cn/next'
 import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
+import { routing } from './i18n/routing'
+import { HouseIdentifierValues } from './lib/types'
 
 const withNextIntl = createNextIntlPlugin({
   experimental: {
@@ -16,9 +18,9 @@ const withNextIntl = createNextIntlPlugin({
 })
 
 // Route-param patterns for the redirects below: the public (lowercase) locale
-// prefixes from i18n/routing.ts and the current houses from lib/types.
-const LOCALES = 'en|ja|fr|zh-cn|zh-tw'
-const HOUSES = 'orange|apple|lemon'
+// prefixes and the current houses.
+const LOCALES = routing.locales.map((locale) => locale.toLowerCase()).join('|')
+const HOUSES = HouseIdentifierValues.join('|')
 
 const nextConfig: NextConfig = {
   cacheComponents: true,

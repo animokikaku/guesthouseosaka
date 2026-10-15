@@ -131,6 +131,7 @@ describe.concurrent('Vercel ignored build command', () => {
       '.claude/settings.json',
       '.coderabbit.yaml',
       'codecov.yml',
+      'coverage.config.ts',
       '.codex/config.toml',
       '.cursor/rules.json',
       '.vscode/settings.json',
