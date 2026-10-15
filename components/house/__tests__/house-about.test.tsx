@@ -3,9 +3,9 @@ import { HouseAbout } from '../house-about'
 import { HouseProvider } from '../house-context'
 import type { HousePortableTextContent } from '@/lib/types/components'
 
-// Covered on its own in house-building.test.tsx
-vi.mock('@/components/house/house-building', () => ({
-  HouseBuilding: () => <div data-testid="house-building" />
+// Routing is the edge here: the building summary links to the pricing section.
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ children }: { children: React.ReactNode }) => <a href="#pricing">{children}</a>
 }))
 
 function renderAbout(props: Partial<React.ComponentProps<typeof HouseAbout>> = {}) {
@@ -30,8 +30,9 @@ describe('HouseAbout', () => {
   it('introduces the house by name above its building summary', () => {
     renderAbout()
 
-    expect(screen.getByRole('heading', { level: 2, name: /Test House/ })).toBeInTheDocument()
-    expect(screen.getByTestId('house-building')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: /\bTest House\b/ })).toBeInTheDocument()
+    // The building summary sits under the heading.
+    expect(screen.getByText(/\brooms\b/i)).toBeInTheDocument()
   })
 
   it('keeps the heading when the title is missing', () => {

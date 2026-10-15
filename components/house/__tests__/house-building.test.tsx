@@ -21,7 +21,7 @@ function renderBuilding(building: BuildingData | null) {
   )
 }
 
-/** The figure shown above a label, e.g. `figure(/rooms/i)`. */
+/** The figure shown above a label, e.g. `figure(/\brooms\b/i)`. */
 function figure(label: RegExp) {
   return screen.getByText(label).previousElementSibling?.textContent
 }
@@ -30,30 +30,30 @@ describe('HouseBuilding', () => {
   it('summarizes rooms, floors and the starting rent in yen', () => {
     renderBuilding({ rooms: 12, floors: 3, startingPrice: 45000 })
 
-    expect(figure(/rooms/i)).toBe('12')
-    expect(figure(/floors/i)).toBe('3')
-    expect(figure(/rent/i)).toBe('¥45,000')
+    expect(figure(/\brooms\b/i)).toBe('12')
+    expect(figure(/\bfloors\b/i)).toBe('3')
+    expect(figure(/\brent\b/i)).toBe('¥45,000')
   })
 
   it('links the starting rent to the pricing section', () => {
     renderBuilding({ rooms: 12, floors: 3, startingPrice: 45000 })
 
     expect(screen.getByRole('link')).toHaveAttribute('href', '/orange#pricing')
-    expect(screen.getByRole('link')).toHaveTextContent(/rent/i)
+    expect(screen.getByRole('link')).toHaveTextContent(/\brent\b/i)
   })
 
   it('shows zero for figures the house has not filled in', () => {
     renderBuilding({ rooms: 5 })
 
-    expect(figure(/rooms/i)).toBe('5')
-    expect(figure(/floors/i)).toBe('0')
-    expect(figure(/rent/i)).toBe('¥0')
+    expect(figure(/\brooms\b/i)).toBe('5')
+    expect(figure(/\bfloors\b/i)).toBe('0')
+    expect(figure(/\brent\b/i)).toBe('¥0')
   })
 
   it('tags each figure for visual editing', () => {
     renderBuilding(null)
 
-    expect(screen.getByText(/rooms/i).parentElement?.getAttribute('data-sanity')).toContain(
+    expect(screen.getByText(/\brooms\b/i).parentElement?.getAttribute('data-sanity')).toContain(
       'building.rooms'
     )
   })

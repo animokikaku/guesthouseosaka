@@ -51,7 +51,7 @@ export async function fillAccountFields(
   await fields.genderSelect.click()
   await page
     .getByRole('option', {
-      name: /^male$/i
+      name: /\bmale\b/i
     })
     .click()
 

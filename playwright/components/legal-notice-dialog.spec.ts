@@ -25,7 +25,7 @@ test('records agreement through the real mobile drawer callback', async ({ mount
 
   const drawer = page.locator('[data-slot="drawer-content"]')
   await expect(drawer).toBeVisible()
-  await drawer.getByRole('button', { name: /agree/i }).click()
+  await drawer.getByRole('button', { name: /\bagree\b/i }).click()
 
   await expect(component.getByTestId('agreement-count')).toHaveValue('1')
   await expect(drawer).toBeHidden()

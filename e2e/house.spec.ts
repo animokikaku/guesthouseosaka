@@ -77,7 +77,7 @@ test.describe('House Page', () => {
       await expect(page).toHaveURL(new RegExp(`/en/${testHouse}/gallery$`))
       await expect(dialog).toBeVisible()
 
-      await dialog.getByRole('button', { name: /^close/i }).click()
+      await dialog.getByRole('button', { name: /\bclose\b/i }).click()
       await expect(page).toHaveURL(new RegExp(`/en/${testHouse}$`))
       await expect(dialog).toBeHidden()
 

@@ -69,9 +69,9 @@ describe('HouseAmenities', () => {
       amenity('Kitchen', 'utensils')
     ])
 
-    expect(screen.getByText('Wifi').nextSibling).toHaveTextContent(/shared/i)
-    expect(screen.getByText('Bath').nextSibling).toHaveTextContent(/private/i)
-    expect(screen.getByText('Laundry').nextSibling).toHaveTextContent(/coin/i)
+    expect(screen.getByText('Wifi').nextSibling).toHaveTextContent(/\bshared\b/i)
+    expect(screen.getByText('Bath').nextSibling).toHaveTextContent(/\bprivate\b/i)
+    expect(screen.getByText('Laundry').nextSibling).toHaveTextContent(/\bcoin\b/i)
     expect(screen.getByText('Kitchen').nextSibling).toBeNull()
   })
 

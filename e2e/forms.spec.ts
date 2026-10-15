@@ -35,9 +35,9 @@ test.describe('General inquiry form', () => {
     await fields.checkbox.click()
     await expect(fields.checkbox).toBeChecked()
 
-    await page.getByRole('button', { name: /submit/i }).click()
+    await page.getByRole('button', { name: /\bsubmit\b/i }).click()
 
-    await expect(submissionToast(page)).toContainText(/sent successfully/i)
+    await expect(submissionToast(page)).toContainText(/\bsent successfully\b/i)
     await expect(page).toHaveURL(/\/en\/contact(?!\/other)/)
 
     expect(requests).toHaveLength(1)
@@ -67,9 +67,9 @@ test.describe('General inquiry form', () => {
     const fields = await fillAccountFields(page, form)
     await fields.checkbox.click()
 
-    await page.getByRole('button', { name: /submit/i }).click()
+    await page.getByRole('button', { name: /\bsubmit\b/i }).click()
 
-    await expect(submissionToast(page)).toContainText(/failed/i)
+    await expect(submissionToast(page)).toContainText(/\bfailed\b/i)
     await expect(page).toHaveURL(/\/en\/contact\/other/)
 
     // The action maps every failure to this one toast, so without asserting the
@@ -90,9 +90,9 @@ test.describe('Tour and move-in forms', () => {
     const fields = await fillAccountFields(page, form)
     await fields.checkbox.click()
 
-    await page.getByRole('button', { name: /submit/i }).click()
+    await page.getByRole('button', { name: /\bsubmit\b/i }).click()
 
-    await expect(submissionToast(page)).toContainText(/sent successfully/i)
+    await expect(submissionToast(page)).toContainText(/\bsent successfully\b/i)
     expect(requests).toHaveLength(1)
   })
 
@@ -107,9 +107,9 @@ test.describe('Tour and move-in forms', () => {
     const fields = await fillAccountFields(page, form)
     await fields.checkbox.click()
 
-    await page.getByRole('button', { name: /submit/i }).click()
+    await page.getByRole('button', { name: /\bsubmit\b/i }).click()
 
-    await expect(submissionToast(page)).toContainText(/sent successfully/i)
+    await expect(submissionToast(page)).toContainText(/\bsent successfully\b/i)
     expect(requests).toHaveLength(1)
   })
 })
@@ -120,7 +120,7 @@ test.describe('Validation feedback', () => {
 
     // Bypass native `required` so the library's own submit validation runs.
     await form.evaluate((element: HTMLFormElement) => element.setAttribute('novalidate', ''))
-    await page.getByRole('button', { name: /submit/i }).click()
+    await page.getByRole('button', { name: /\bsubmit\b/i }).click()
 
     await expect(form.locator('[data-slot="field-error"]').first()).toBeVisible()
     // onSubmitInvalid moves focus to the first invalid control.
@@ -131,7 +131,7 @@ test.describe('Validation feedback', () => {
     const form = await gotoContactForm(page, 'other')
 
     await form.evaluate((element: HTMLFormElement) => element.setAttribute('novalidate', ''))
-    await page.getByRole('button', { name: /submit/i }).click()
+    await page.getByRole('button', { name: /\bsubmit\b/i }).click()
 
     const email = getAccountFields(form).emailField
     await expect(email).toHaveAttribute('aria-invalid', 'true')

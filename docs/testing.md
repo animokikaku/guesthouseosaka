@@ -13,10 +13,12 @@ a visitor, an editor or a crawler would.
 
 - Assert what users see: roles, accessible names, copy, URLs, status codes. Not class names, prop
   forwarding or how often a callback ran.
-- Find elements by role, then by a loose name (`/agree/i`) only where several share a role; keep
-  exact text for formatting that is itself the behavior (plurals, prices, counters). Anchor a loose
-  name (`/^close/i`) when CMS text shares the region: a photo caption about "the closet" matches
-  `/close/i`. Use a test id only when nothing visible identifies the element.
+- Find elements by role, adding a name only where several share a role. Write names as word-bounded,
+  case-insensitive regexes (`/\bagree\b/i`): they survive rewording around the word but not
+  lookalikes, so "Disagree" or a CMS caption about "the closet" won't match `/\bclose\b/i`. Match
+  names on the element that carries them (a column header, not the table's concatenated text). Keep
+  exact text where formatting is the behavior (plurals, prices, counters); use a test id only when
+  nothing visible identifies the element.
 - Mock only at the edges: the server action, Resend, the router, `next/image`. Render our own
   components, `urlFor`, `stegaClean` and translations for real.
 - Prefer a table (`it.each`) over near-identical tests, and one test per behavior over one per prop.

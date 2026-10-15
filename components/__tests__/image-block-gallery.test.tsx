@@ -93,6 +93,6 @@ describe('ImageBlockGallery', () => {
 
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
     expect(screen.queryByRole('link')).not.toBeInTheDocument()
-    expect(screen.getByText(/no gallery images/i)).toBeInTheDocument()
+    expect(screen.getByText(/\bno gallery images\b/i)).toBeInTheDocument()
   })
 })

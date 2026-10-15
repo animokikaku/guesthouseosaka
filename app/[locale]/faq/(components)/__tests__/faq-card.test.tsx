@@ -43,7 +43,7 @@ describe('FAQCard', () => {
     render(<FAQCard contactSection={null} houses={houses} />)
 
     const table = screen.getByRole('table')
-    const orange = within(table).getByRole('row', { name: /Orange House/ })
+    const orange = within(table).getByRole('row', { name: /\bOrange House\b/ })
     expect(within(orange).getByRole('link', { name: '06-6131-6677' })).toHaveAttribute(
       'href',
       'tel:06-6131-6677'
@@ -52,8 +52,8 @@ describe('FAQCard', () => {
       'href',
       'tel:+81-6-6131-6677'
     )
-    expect(within(table).getByRole('columnheader', { name: /japan/i })).toBeInTheDocument()
-    expect(within(table).getByRole('columnheader', { name: /overseas/i })).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: /\bjapan\b/i })).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: /\boverseas\b/i })).toBeInTheDocument()
 
     const cards = screen.getAllByRole('link').filter((link) => !table.contains(link))
     expect(cards.map((card) => card.getAttribute('href'))).toEqual([

@@ -17,7 +17,7 @@ describe('LanguageSwitcher', () => {
   })
 
   async function openLanguageMenu() {
-    fireEvent.click(screen.getByRole('button', { name: /language/i }))
+    fireEvent.click(screen.getByRole('button', { name: /\blanguage\b/i }))
     return screen.findByRole('menuitemradio', { name: 'English' })
   }
 

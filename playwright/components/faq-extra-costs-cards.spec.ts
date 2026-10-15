@@ -7,10 +7,10 @@ test('navigates the real carousel with house dots', async ({ mount }) => {
   const orangeHeading = component.getByRole('heading', { name: 'Orange House' })
   const appleHeading = component.getByRole('heading', { name: 'Apple House' })
   const orangeDot = component.getByRole('button', {
-    name: /Orange House/
+    name: /\bOrange House\b/
   })
   const appleDot = component.getByRole('button', {
-    name: /Apple House/
+    name: /\bApple House\b/
   })
 
   await expect(orangeHeading).toBeInViewport()

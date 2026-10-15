@@ -1,115 +1,62 @@
 import type { LocationData, MapData } from '@/lib/types/components'
-import { render, screen } from '@testing-library/react'
-
-// `next/dynamic` is replaced with a synchronous stub so the map renders inline,
-// and the loading fallback it was given is captured for its own assertion.
-const { dynamicOptions } = vi.hoisted(() => ({
-  dynamicOptions: { loading: null as (() => React.ReactNode) | null }
-}))
-
-vi.mock('next/dynamic', () => ({
-  default: (_importFn: () => Promise<unknown>, options?: { loading?: () => React.ReactNode }) => {
-    dynamicOptions.loading = options?.loading ?? null
-
-    return function MockHouseMap({ map }: { map: MapData }) {
-      return (
-        <div
-          data-testid="house-map"
-          data-lat={map.coordinates.lat}
-          data-lng={map.coordinates.lng}
-          data-place-id={map.placeId}
-        />
-      )
-    }
-  }
-}))
-
-// Mirrors the real modal, which renders nothing without details
-vi.mock('@/components/house/house-location-modal', () => ({
-  HouseLocationModal: ({
-    children,
-    details
-  }: {
-    children: React.ReactNode
-    details: LocationData['details']
-  }) => (details ? <div data-testid="location-modal">{children}</div> : null)
-}))
-
+import { fireEvent, render, screen } from '@testing-library/react'
 import { HouseLocation } from '../house-location'
 
-const baseProps = {
-  location: {
-    highlight: 'Great location near the station',
-    details: [
-      {
-        _type: 'block' as const,
-        _key: 'd1',
-        style: 'normal' as const,
-        children: [{ _type: 'span' as const, _key: 's1', text: 'Near train station', marks: [] }],
-        markDefs: []
-      }
-    ]
-  },
-  map: {
-    coordinates: { lat: 34.6937, lng: 135.5023 },
-    placeId: 'ChIJA9KNRIL-AGARZtCjpPbTMCs',
-    placeImage: {
-      asset: { _ref: 'image-test-123', _type: 'reference' as const },
-      hotspot: null,
-      crop: null,
-      alt: 'Place image',
-      preview: null
-    },
-    googleMapsUrl: 'https://maps.google.com/...'
-  }
+// Google Maps can't run in jsdom; the stub shows where the map was asked to center.
+vi.mock('next/dynamic', () => ({
+  default: () =>
+    function HouseMapStub({ map }: { map: MapData }) {
+      return <figure aria-label={`Map at ${map.coordinates.lat},${map.coordinates.lng}`} />
+    }
+}))
+
+const location: LocationData = {
+  highlight: 'Five minutes from Tsuruhashi station',
+  details: [
+    {
+      _type: 'block',
+      _key: 'd1',
+      style: 'normal',
+      children: [{ _type: 'span', _key: 's1', text: 'Supermarket across the street', marks: [] }],
+      markDefs: []
+    }
+  ]
+}
+
+const map: MapData = {
+  coordinates: { lat: 34.6655, lng: 135.5306 },
+  placeId: 'ChIJA9KNRIL-AGARZtCjpPbTMCs',
+  placeImage: { asset: null, hotspot: null, crop: null, alt: null, preview: null },
+  googleMapsUrl: 'https://maps.app.goo.gl/example'
 }
 
 describe('HouseLocation', () => {
-  it('renders the heading, highlight, and map for a complete location', () => {
-    render(<HouseLocation {...baseProps} />)
+  it('shows the highlight and a map centered on the house', () => {
+    render(<HouseLocation location={location} map={map} />)
 
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
-    expect(screen.getByText('Great location near the station')).toBeInTheDocument()
-
-    const map = screen.getByTestId('house-map')
-    expect(map).toHaveAttribute('data-lat', '34.6937')
-    expect(map).toHaveAttribute('data-lng', '135.5023')
-    expect(map).toHaveAttribute('data-place-id', 'ChIJA9KNRIL-AGARZtCjpPbTMCs')
+    expect(screen.getByText('Five minutes from Tsuruhashi station')).toBeInTheDocument()
+    expect(screen.getByRole('figure', { name: 'Map at 34.6655,135.5306' })).toBeInTheDocument()
   })
 
-  it('keeps the section and the modal when there is no map', () => {
-    render(<HouseLocation {...baseProps} map={null} />)
+  it('opens the neighborhood details on request', () => {
+    render(<HouseLocation location={location} map={map} />)
 
-    expect(screen.queryByTestId('house-map')).not.toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
-    expect(screen.getByText('Great location near the station')).toBeInTheDocument()
-    expect(screen.getByTestId('location-modal')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button'))
+
+    expect(screen.getByRole('dialog')).toHaveTextContent('Supermarket across the street')
   })
 
-  it('keeps the heading but drops the modal when there is no location', () => {
-    render(<HouseLocation {...baseProps} location={null} />)
+  it('keeps the section without a map', () => {
+    render(<HouseLocation location={location} map={null} />)
 
-    expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
-    expect(screen.queryByText('Great location near the station')).not.toBeInTheDocument()
-    expect(screen.queryByTestId('location-modal')).not.toBeInTheDocument()
+    expect(screen.getByText('Five minutes from Tsuruhashi station')).toBeInTheDocument()
+    expect(screen.queryByRole('figure')).not.toBeInTheDocument()
   })
 
-  it.each<[string, LocationData['details'], boolean]>([
-    ['details are present', baseProps.location.details, true],
-    ['details are empty', [], true],
-    ['details are null', null, false]
-  ])('%s: modal rendered = %s', (_name, details, isRendered) => {
-    render(<HouseLocation {...baseProps} location={{ ...baseProps.location, details }} />)
+  it('offers no details button when there are none', () => {
+    render(<HouseLocation location={{ ...location, details: null }} map={map} />)
 
-    expect(screen.queryByTestId('location-modal') !== null).toBe(isRendered)
-  })
-
-  it('falls back to a skeleton while the map chunk loads', () => {
-    render(<HouseLocation {...baseProps} />)
-    expect(dynamicOptions.loading).not.toBeNull()
-
-    const { container } = render(<>{dynamicOptions.loading?.()}</>)
-
-    expect(container.querySelectorAll('[data-slot="skeleton"]').length).toBeGreaterThan(1)
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 })

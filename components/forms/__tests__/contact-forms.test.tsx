@@ -69,7 +69,7 @@ const forms = [
     Form: MoveInForm,
     fill: () => {
       setInput('Date', '2099-01-15')
-      choose('Length of stay', /^3 months/)
+      choose('Length of stay', /\b3 months\b/)
     },
     data: {
       places: ['orange'],
@@ -112,20 +112,20 @@ function choose(label: string, option: RegExp) {
 /** Everything the three forms share: a house, the account group, a message and consent. */
 function fillSharedFields() {
   fireEvent.click(screen.getByRole('button', { name: 'Orange House' }))
-  choose('Gender', /^male$/i)
+  choose('Gender', /\bmale\b/i)
   setInput('Name', account.name)
   setInput('Age', account.age)
   setInput('Nationality', account.nationality)
   setInput('Email', account.email)
   // Optional on the tour and move-in forms, which append that to its label.
-  fireEvent.change(screen.getByRole('textbox', { name: /^Message/ }), {
+  fireEvent.change(screen.getByRole('textbox', { name: /\bMessage\b/ }), {
     target: { value: 'Hello there' }
   })
   fireEvent.click(screen.getByRole('checkbox'))
 }
 
 function submit() {
-  fireEvent.click(screen.getByRole('button', { name: /submit/i }))
+  fireEvent.click(screen.getByRole('button', { name: /\bsubmit\b/i }))
 }
 
 /** Submits past the browser's own `required` checks, so the form's validation runs. */
@@ -221,7 +221,7 @@ describe('form validation and feedback', () => {
     fillSharedFields()
     submit()
 
-    const button = screen.getByRole('button', { name: /submit/i })
+    const button = screen.getByRole('button', { name: /\bsubmit\b/i })
     await waitFor(() => expect(button).toBeDisabled())
     expect(button).toHaveAttribute('aria-busy', 'true')
 

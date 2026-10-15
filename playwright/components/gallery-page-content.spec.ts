@@ -14,7 +14,7 @@ test('opens the lightbox from a grid item with the right image and caption', asy
   const dialog = page.getByRole('dialog')
   await expect(dialog).toBeVisible()
   await expect(
-    dialog.getByLabel(/full-size images/i).getByRole('img', { name: 'First room' })
+    dialog.getByLabel(/\bfull-size images\b/i).getByRole('img', { name: 'First room' })
   ).toBeVisible()
   await expect(dialog.getByText('First room', { exact: true })).toBeVisible()
 })
@@ -27,7 +27,7 @@ test('closes with the top-left back arrow', async ({ mount, page }) => {
   const dialog = page.getByRole('dialog')
   await expect(dialog).toBeVisible()
 
-  await dialog.getByRole('button', { name: /^close$/i }).click()
+  await dialog.getByRole('button', { name: /\bclose\b/i }).click()
   await expect(dialog).toBeHidden()
 })
 
@@ -37,7 +37,7 @@ test('Escape closes only the lightbox, not the route-intercept modal behind it',
 }) => {
   await mount('components/gallery/gallery-page-content/WithModal')
 
-  const routeModal = page.getByRole('dialog', { name: /gallery/i })
+  const routeModal = page.getByRole('dialog', { name: /\bgallery\b/i })
   const lightbox = page.getByRole('dialog', { name: 'Orange House' })
   await expect(routeModal).toBeVisible()
 
@@ -66,10 +66,10 @@ test('remembers the slide layout the visitor picked', async ({ mount, page }) =>
     await component.getByRole('button', { name: 'First room', exact: true }).click()
     await expect(page.getByRole('dialog')).toBeVisible()
   }
-  const snugToggle = () => page.getByRole('button', { name: /full-bleed/i })
+  const snugToggle = () => page.getByRole('button', { name: /\bfull-bleed\b/i })
 
   await openLightbox()
-  await page.getByRole('button', { name: /snug/i }).click()
+  await page.getByRole('button', { name: /\bsnug\b/i }).click()
   await expect(snugToggle()).toHaveAttribute('aria-pressed', 'true')
 
   await page.keyboard.press('Escape')

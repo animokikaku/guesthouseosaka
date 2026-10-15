@@ -16,12 +16,6 @@ vi.mock('resend', () => ({
 
 vi.mock('@/lib/env', () => ({ env }))
 
-vi.mock('@/components/email-template', () => ({
-  GeneralInquiryEmail: vi.fn(() => null),
-  MoveInRequestEmail: vi.fn(() => null),
-  TourRequestEmail: vi.fn(() => null)
-}))
-
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
 import { submitContactForm } from '../contact'
 

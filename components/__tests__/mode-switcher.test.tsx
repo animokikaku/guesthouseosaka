@@ -11,10 +11,6 @@ vi.mock('next-themes', () => ({
   })
 }))
 
-vi.mock('@/hooks/use-meta-color', () => ({
-  useSyncMetaColor: vi.fn()
-}))
-
 import { ModeSwitcher } from '../mode-switcher'
 
 describe('ModeSwitcher', () => {

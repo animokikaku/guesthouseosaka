@@ -30,7 +30,7 @@ describe('HousePricing', () => {
   it('renders each row label as a heading under the anchor section', () => {
     render(<HousePricing pricing={emptyRows} />)
 
-    expect(screen.getByRole('heading', { level: 2, name: /pricing/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: /\bpricing\b/i })).toBeInTheDocument()
     expect(document.getElementById('pricing')).toBeInTheDocument()
     expect(
       screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)

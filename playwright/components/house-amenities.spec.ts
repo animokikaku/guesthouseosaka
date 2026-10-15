@@ -11,7 +11,7 @@ test('uses responsive visibility and a real desktop dialog', async ({ mount, pag
   }
 
   const trigger = component.getByRole('button', {
-    name: /show all 4/i
+    name: /\bshow all 4\b/i
   })
   await trigger.click()
 
@@ -36,7 +36,7 @@ test('hides overflow amenities and opens a real mobile drawer', async ({ mount, 
     await expect(component.getByText(`Amenity ${index}`, { exact: true })).toBeHidden()
   }
 
-  await component.getByRole('button', { name: /show all 4/i }).click()
+  await component.getByRole('button', { name: /\bshow all 4\b/i }).click()
 
   const drawer = page.locator('[data-slot="drawer-content"]')
   await expect(drawer).toBeVisible()

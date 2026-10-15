@@ -70,7 +70,7 @@ describe('HouseGallery', () => {
   it('names a photo without alt text generically', () => {
     renderGallery(toGalleryCategories([createGalleryCategory({ items: [photo('x', null)] })]))
 
-    expect(screen.getByRole('button', { name: /open/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /\bopen\b/i })).toBeInTheDocument()
   })
 
   // Tiles are square through CSS only: the lightbox morphs from this very image,

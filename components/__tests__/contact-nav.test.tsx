@@ -6,10 +6,6 @@ const { selectedSegment } = vi.hoisted(() => ({
   selectedSegment: { current: null as string | null }
 }))
 
-vi.mock('@/hooks/use-mobile', () => ({
-  useIsMobile: () => false
-}))
-
 vi.mock('next/navigation', () => ({
   useSelectedLayoutSegment: () => selectedSegment.current
 }))

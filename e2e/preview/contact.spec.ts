@@ -47,7 +47,7 @@ test('preview deployment can send the contact form through Resend', async ({ pag
   })
   await fields.checkbox.click()
 
-  await page.getByRole('button', { name: /submit/i }).click()
+  await page.getByRole('button', { name: /\bsubmit\b/i }).click()
 
-  await expect(submissionToast(page)).toContainText(/sent successfully/i)
+  await expect(submissionToast(page)).toContainText(/\bsent successfully\b/i)
 })
