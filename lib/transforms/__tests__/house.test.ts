@@ -1,7 +1,24 @@
 // @vitest-environment node
 
+import { stegaEncodeSourceMap } from '@sanity/client/stega'
 import { toAmenityCategories, toAmenityItem, toMapData } from '../house'
 import { createAmenityCategory, createAmenityItem, createMap } from './mocks'
+
+/** A value as draft mode delivers it: invisibly tagged with its Studio source. */
+function stegaEncoded<T extends string>(value: T): T {
+  const { value: encoded } = stegaEncodeSourceMap(
+    { value },
+    {
+      documents: [{ _id: 'house-1', _type: 'house' }],
+      paths: ["$['value']"],
+      mappings: {
+        "$['value']": { type: 'value', source: { type: 'documentValue', document: 0, path: 0 } }
+      }
+    },
+    { enabled: true, studioUrl: '/studio', filter: () => true }
+  )
+  return encoded
+}
 
 describe('toMapData', () => {
   it('keeps what the map panel needs', () => {
@@ -72,5 +89,14 @@ describe('toAmenityItem', () => {
     const item = createAmenityItem({ _key: 'bed', label: 'Bed', icon: 'bed', note: null })
 
     expect(toAmenityItem(item)).toEqual({ _key: 'bed', label: 'Bed', icon: 'bed', note: null })
+  })
+
+  // HouseAmenities looks the note up in its badge labels, which a tagged
+  // value would miss in draft mode, hiding the badge.
+  it('strips draft-mode tagging from the note', () => {
+    const note = stegaEncoded('shared')
+    expect(note).not.toBe('shared')
+
+    expect(toAmenityItem(createAmenityItem({ note })).note).toBe('shared')
   })
 })
