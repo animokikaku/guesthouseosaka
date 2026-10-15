@@ -1,4 +1,3 @@
-import { message } from '@/lib/__tests__/utils/messages'
 import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 import { render, screen } from '@testing-library/react'
 import { ImageBlockGallery } from '../image-block-gallery'
@@ -50,9 +49,7 @@ describe('ImageBlockGallery', () => {
     await renderGallery()
 
     expect(tiles()).toEqual(['Photo 1', 'Photo 2', 'Photo 3', 'Photo 4', 'Photo 5'])
-    expect(
-      screen.getByRole('link', { name: message('ImageBlockGallery.view_gallery') })
-    ).toBeInTheDocument()
+    expect(screen.getAllByRole('link')).toHaveLength(1)
   })
 
   // Desktop LCP candidate: loaded eagerly at high priority, the rest lazily.
@@ -78,14 +75,8 @@ describe('ImageBlockGallery', () => {
       featuredImage: createSanityImage({ alt: 'Featured' })
     })
 
-    expect(
-      screen.getByText(message('ImageBlockGallery.overflow_count', { count: 55 }))
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('link', {
-        name: message('ImageBlockGallery.view_gallery_count', { count: 60 })
-      })
-    ).toBeInTheDocument()
+    expect(screen.getByText('+55')).toBeInTheDocument()
+    expect(screen.getByRole('link')).toHaveAccessibleName(/\b60\b/)
   })
 
   it('fills the grid past photos that have no file yet', async () => {
@@ -94,15 +85,14 @@ describe('ImageBlockGallery', () => {
     await renderGallery({ galleryPreview: [draft, ...photos(6)], galleryImageCount: 6 })
 
     expect(tiles()).toEqual(['Photo 1', 'Photo 2', 'Photo 3', 'Photo 4', 'Photo 5'])
-    expect(
-      screen.getByText(message('ImageBlockGallery.overflow_count', { count: 1 }))
-    ).toBeInTheDocument()
+    expect(screen.getByText('+1')).toBeInTheDocument()
   })
 
   it('shows the empty state when fewer than five photos can be shown', async () => {
     await renderGallery({ galleryPreview: photos(4) })
 
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
-    expect(screen.getByText(message('GalleryEmptyState.title'))).toBeInTheDocument()
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    expect(screen.getByText(/no gallery images/i)).toBeInTheDocument()
   })
 })

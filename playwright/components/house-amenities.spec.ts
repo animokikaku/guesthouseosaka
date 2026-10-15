@@ -1,5 +1,4 @@
 import { expect, test } from './fixtures'
-import { message } from '../../lib/__tests__/utils/messages'
 
 const story = 'components/house/house-amenities/Populated'
 
@@ -12,7 +11,7 @@ test('uses responsive visibility and a real desktop dialog', async ({ mount, pag
   }
 
   const trigger = component.getByRole('button', {
-    name: message('HouseAmenities.show_all', { count: '4' })
+    name: /show all 4/i
   })
   await trigger.click()
 
@@ -37,9 +36,7 @@ test('hides overflow amenities and opens a real mobile drawer', async ({ mount, 
     await expect(component.getByText(`Amenity ${index}`, { exact: true })).toBeHidden()
   }
 
-  await component
-    .getByRole('button', { name: message('HouseAmenities.show_all', { count: '4' }) })
-    .click()
+  await component.getByRole('button', { name: /show all 4/i }).click()
 
   const drawer = page.locator('[data-slot="drawer-content"]')
   await expect(drawer).toBeVisible()

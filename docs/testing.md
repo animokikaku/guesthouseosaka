@@ -13,9 +13,10 @@ a visitor, an editor or a crawler would.
 
 - Assert what users see: roles, accessible names, copy, URLs, status codes. Not class names, prop
   forwarding or how often a callback ran.
-- Look copy up by key with `message('Namespace.key', values)` (`lib/__tests__/utils/messages.ts`,
-  shared by every suite) instead of typing the English text: a renamed key is a type error and a
-  wrong one fails, while rewording a message never breaks a test. CMS fixture data stays literal.
+- Find elements by role, then by a loose name (`/agree/i`) only where several share a role; keep
+  exact text for formatting that is itself the behavior (plurals, prices, counters). Anchor a loose
+  name (`/^close/i`) when CMS text shares the region: a photo caption about "the closet" matches
+  `/close/i`. Use a test id only when nothing visible identifies the element.
 - Mock only at the edges: the server action, Resend, the router, `next/image`. Render our own
   components, `urlFor`, `stegaClean` and translations for real.
 - Prefer a table (`it.each`) over near-identical tests, and one test per behavior over one per prop.
@@ -33,7 +34,8 @@ unit test.
 ## Unit test environment
 
 - Translations resolve against `messages/en.json` (`vitest.setup.ts`), so components render real
-  English copy and a broken key or ICU message fails.
+  English copy and a broken key or ICU message fails. Schema tests pass a translator that returns the
+  key, so they assert which message a rule produces rather than its wording.
 - `urlFor` is the real builder; check URL parameters (`w`, `h`, `fit`) rather than whole strings.
   Fixture asset refs must look like real ones (`image-<id>-<width>x<height>-<format>`).
 - Environment variables are fixed in `vitest.config.mts`, and the suite runs in a time zone behind

@@ -3,7 +3,6 @@ import { MoveInForm } from '@/components/forms/move-in-form'
 import { TourForm } from '@/components/forms/tour-form'
 import { LegalNoticeProvider } from '@/components/legal-notice-context'
 import { Toaster } from '@/components/ui/toast'
-import { message } from '@/lib/__tests__/utils/messages'
 import { CONTACT_EMAIL } from '@/lib/config'
 import type { ContactFormConfig } from '@/lib/types/components'
 import type { HousesTitlesQueryResult } from '@/sanity.types'
@@ -70,7 +69,7 @@ const forms = [
     Form: MoveInForm,
     fill: () => {
       setInput('Date', '2099-01-15')
-      choose('Length of stay', message('forms.fields.stay_duration.options.three_month'))
+      choose('Length of stay', /^3 months/)
     },
     data: {
       places: ['orange'],
@@ -102,7 +101,7 @@ function setInput(label: string, value: string) {
   fireEvent.change(screen.getByLabelText(label), { target: { value } })
 }
 
-function choose(label: string, option: string) {
+function choose(label: string, option: RegExp) {
   fireEvent.click(screen.getByRole('combobox', { name: label }))
   // Base UI only selects the highlighted item, and jsdom has no pointer to hover it.
   const item = screen.getByRole('option', { name: option })
@@ -113,7 +112,7 @@ function choose(label: string, option: string) {
 /** Everything the three forms share: a house, the account group, a message and consent. */
 function fillSharedFields() {
   fireEvent.click(screen.getByRole('button', { name: 'Orange House' }))
-  choose('Gender', message('forms.fields.gender.options.male'))
+  choose('Gender', /^male$/i)
   setInput('Name', account.name)
   setInput('Age', account.age)
   setInput('Nationality', account.nationality)
@@ -126,7 +125,7 @@ function fillSharedFields() {
 }
 
 function submit() {
-  fireEvent.click(screen.getByRole('button', { name: message('SubmitButton.label') }))
+  fireEvent.click(screen.getByRole('button', { name: /submit/i }))
 }
 
 /** Submits past the browser's own `required` checks, so the form's validation runs. */
@@ -149,7 +148,7 @@ describe.each(forms)('$type form', ({ type, Form, fill, data }) => {
     submit()
 
     await waitFor(() => expect(submitContactForm).toHaveBeenCalledWith({ type, data }))
-    expect(await screen.findByText(message('forms.status.success.message'))).toBeInTheDocument()
+    expect(await screen.findByText(/sent successfully/i)).toBeInTheDocument()
     expect(router.push).toHaveBeenCalledWith('/contact')
   })
 
@@ -161,13 +160,17 @@ describe.each(forms)('$type form', ({ type, Form, fill, data }) => {
     const name = screen.getByLabelText('Name')
     await waitFor(() => expect(name).toHaveAttribute('aria-invalid', 'true'))
 
-    // Each error is announced and tied to its control.
+    // Each error is announced and tied to its control; which message a rule
+    // produces is covered by the schema tests.
     const error = document.getElementById(name.getAttribute('aria-errormessage')!)
     expect(error).toHaveAttribute('role', 'alert')
-    expect(error).toHaveTextContent(message('forms.validation.name_min'))
+    expect(error).not.toBeEmptyDOMElement()
     expect(screen.getByLabelText('Email')).toHaveAttribute('aria-invalid', 'true')
-    expect(screen.getByText(message('forms.validation.places_min'))).toBeInTheDocument()
-    expect(screen.getByText(message('forms.validation.privacy_policy'))).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Orange House' })).toHaveAttribute(
+      'aria-invalid',
+      'true'
+    )
+    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'true')
     expect(submitContactForm).not.toHaveBeenCalled()
   })
 })
@@ -189,16 +192,13 @@ describe('form validation and feedback', () => {
 
     const email = screen.getByLabelText('Email')
     await waitFor(() => expect(email).toHaveAttribute('aria-invalid', 'true'))
-    expect(email).toHaveAccessibleDescription(
-      `We reply to this address. ${message('forms.validation.email')}`
-    )
+    // The editor's description first, then the error.
+    expect(email).toHaveAccessibleDescription(/^We reply to this address\. \S/)
   })
 
   it('marks the message optional only where it is', () => {
     const { unmount } = renderForm(TourForm)
-    expect(
-      screen.getByRole('textbox', { name: `Message (${message('MessageField.optional_hint')})` })
-    ).toBeInTheDocument()
+    expect(screen.getByRole('textbox', { name: /^Message \(optional\)$/ })).toBeInTheDocument()
     unmount()
 
     renderForm(ContactForm)
@@ -210,9 +210,7 @@ describe('form validation and feedback', () => {
 
     setInput('Message', 'Hello')
 
-    expect(
-      screen.getByText(message('MessageField.character_counter', { count: '5', max: '3000' }))
-    ).toBeInTheDocument()
+    expect(screen.getByText(/^5 \/ 3000\b/)).toBeInTheDocument()
   })
 
   it('blocks a second submit while the first is in flight', async () => {
@@ -223,7 +221,7 @@ describe('form validation and feedback', () => {
     fillSharedFields()
     submit()
 
-    const button = screen.getByRole('button', { name: message('SubmitButton.label') })
+    const button = screen.getByRole('button', { name: /submit/i })
     await waitFor(() => expect(button).toBeDisabled())
     expect(button).toHaveAttribute('aria-busy', 'true')
 
@@ -238,10 +236,9 @@ describe('form validation and feedback', () => {
     fillSharedFields()
     submit()
 
-    expect(await screen.findByText(message('forms.status.error.message'))).toBeInTheDocument()
-    expect(
-      screen.getByText(message('forms.status.error.description', { email: CONTACT_EMAIL }))
-    ).toBeInTheDocument()
+    expect(await screen.findByText(/failed/i)).toBeInTheDocument()
+    // Tells the visitor where to write instead.
+    expect(screen.getByText((text) => text.includes(CONTACT_EMAIL))).toBeInTheDocument()
     expect(router.push).not.toHaveBeenCalled()
   })
 })

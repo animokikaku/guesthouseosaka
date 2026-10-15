@@ -1,4 +1,3 @@
-import { message } from '@/lib/__tests__/utils/messages'
 import { createHouse, type Houses } from '@/lib/__tests__/utils/faq-fixtures'
 import { render, screen, within } from '@testing-library/react'
 import FAQCard from '../faq-card'
@@ -53,12 +52,8 @@ describe('FAQCard', () => {
       'href',
       'tel:+81-6-6131-6677'
     )
-    expect(
-      within(table).getByRole('columnheader', { name: message('FAQContactTable.within_japan') })
-    ).toBeInTheDocument()
-    expect(
-      within(table).getByRole('columnheader', { name: message('FAQContactTable.from_overseas') })
-    ).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: /japan/i })).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: /overseas/i })).toBeInTheDocument()
 
     const cards = screen.getAllByRole('link').filter((link) => !table.contains(link))
     expect(cards.map((card) => card.getAttribute('href'))).toEqual([

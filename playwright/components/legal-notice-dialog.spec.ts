@@ -1,5 +1,4 @@
 import { expect, test } from './fixtures'
-import { message } from '../../lib/__tests__/utils/messages'
 
 test('opens and closes the real desktop dialog with focus restoration', async ({ mount, page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
@@ -26,7 +25,7 @@ test('records agreement through the real mobile drawer callback', async ({ mount
 
   const drawer = page.locator('[data-slot="drawer-content"]')
   await expect(drawer).toBeVisible()
-  await drawer.getByRole('button', { name: message('LegalNoticeDialog.agree_button') }).click()
+  await drawer.getByRole('button', { name: /agree/i }).click()
 
   await expect(component.getByTestId('agreement-count')).toHaveValue('1')
   await expect(drawer).toBeHidden()

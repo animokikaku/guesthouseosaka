@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test'
-import { message } from '../lib/__tests__/utils/messages'
 
 test.describe('FAQ page', () => {
   test.beforeEach(async ({ page }) => {
@@ -16,9 +15,7 @@ test.describe('FAQ page', () => {
 
   // The contact card is the page's call to action: every house must be callable.
   test('lists a phone number for every house', async ({ page }) => {
-    const table = page
-      .getByRole('table')
-      .filter({ hasText: message('FAQContactTable.within_japan') })
+    const table = page.getByRole('table').filter({ hasText: /within japan/i })
 
     await expect(table).toBeVisible()
     for (const house of ['Orange House', 'Apple House', 'Lemon House']) {

@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test'
-import { message } from '../lib/__tests__/utils/messages'
 
 // Old URLs still carry links and search ranking, so each legacy pattern must
 // keep answering with a permanent redirect to its current page.
@@ -36,7 +35,7 @@ test.describe('missing pages', () => {
 
       expect(response?.status()).toBe(404)
       if (path.startsWith('/en')) {
-        await expect(page.getByRole('link', { name: message('NotFound.back_home') })).toBeVisible()
+        await expect(page.getByRole('link', { name: /home/i })).toBeVisible()
       }
     })
   }

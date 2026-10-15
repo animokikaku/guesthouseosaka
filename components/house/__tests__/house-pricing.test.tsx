@@ -1,4 +1,3 @@
-import { message } from '@/lib/__tests__/utils/messages'
 import type { PricingRowData } from '@/lib/types/components'
 import { render, screen, within } from '@testing-library/react'
 import { HousePricing } from '../house-pricing'
@@ -31,9 +30,7 @@ describe('HousePricing', () => {
   it('renders each row label as a heading under the anchor section', () => {
     render(<HousePricing pricing={emptyRows} />)
 
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
-      message('HousePricing.heading')
-    )
+    expect(screen.getByRole('heading', { level: 2, name: /pricing/i })).toBeInTheDocument()
     expect(document.getElementById('pricing')).toBeInTheDocument()
     expect(
       screen.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)

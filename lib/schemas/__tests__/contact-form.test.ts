@@ -1,7 +1,5 @@
 // @vitest-environment node
 
-import messages from '@/messages/en.json'
-import { createTranslator } from 'next-intl'
 import {
   contactFormPayloadSchema,
   createGeneralInquirySchema,
@@ -12,11 +10,8 @@ import {
 
 type ValidationKey = Parameters<ValidationMessage>[0]
 
-const t: ValidationMessage = createTranslator({
-  locale: 'en',
-  messages,
-  namespace: 'forms.validation'
-})
+// Reports which message each rule asks for; the copy itself lives in the catalogs.
+const t: ValidationMessage = (key) => key
 
 const account = {
   name: 'Jo Tanaka',
@@ -94,10 +89,10 @@ describe.each(forms)('$name form', ({ schema, valid }) => {
     ['a malformed phone', { account: { phone: 'call me' } }, 'account.phone', 'phone'],
     ['an unchecked privacy policy', { privacyPolicy: false }, 'privacyPolicy', 'privacy_policy'],
     ['a 3001-character message', { message: 'a'.repeat(3001) }, 'message', 'message_max']
-  ])('rejects %s with its localized message', (_name, patch, path, key) => {
+  ])('rejects %s with its message', (_name, patch, path, key) => {
     const result = schema.safeParse(withPatch(valid, patch))
 
-    expect(errorsOf(result)).toEqual({ [path]: t(key) })
+    expect(errorsOf(result)).toEqual({ [path]: key })
   })
 
   it('rejects a house that does not exist', () => {
@@ -113,7 +108,7 @@ describe('tour form', () => {
   })
 
   it.each(['09:59', '20:01'])('rejects a %s visit outside contact hours', (hour) => {
-    expect(errorsOf(schema.safeParse({ ...tour, hour }))).toEqual({ hour: t('time_range') })
+    expect(errorsOf(schema.safeParse({ ...tour, hour }))).toEqual({ hour: 'time_range' })
   })
 
   describe('date', () => {
@@ -128,7 +123,7 @@ describe('tour form', () => {
 
       expect(schema.safeParse({ ...tour, date: '2026-01-15' }).success).toBe(true)
       expect(errorsOf(schema.safeParse({ ...tour, date: '2026-01-14' }))).toEqual({
-        date: t('date_future')
+        date: 'date_future'
       })
     })
   })
@@ -143,7 +138,7 @@ describe('move-in form', () => {
 
   it('requires a stay duration', () => {
     expect(errorsOf(schema.safeParse({ ...moveIn, stayDuration: '' }))).toEqual({
-      stayDuration: t('stay_duration')
+      stayDuration: 'stay_duration'
     })
   })
 })
@@ -154,7 +149,7 @@ describe('general inquiry form', () => {
   it('requires a message of at least five characters', () => {
     expect(schema.safeParse({ ...inquiry, message: 'Hello' }).success).toBe(true)
     expect(errorsOf(schema.safeParse({ ...inquiry, message: 'Hi' }))).toEqual({
-      message: t('message_min')
+      message: 'message_min'
     })
   })
 

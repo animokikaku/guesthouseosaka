@@ -1,5 +1,4 @@
 import { expect, test } from '@playwright/test'
-import { message } from '../lib/__tests__/utils/messages'
 
 // House slugs defined in lib/types/index.ts
 const HOUSE_SLUGS = ['orange', 'apple', 'lemon'] as const
@@ -78,7 +77,7 @@ test.describe('House Page', () => {
       await expect(page).toHaveURL(new RegExp(`/en/${testHouse}/gallery$`))
       await expect(dialog).toBeVisible()
 
-      await dialog.getByRole('button', { name: message('GalleryModal.close') }).click()
+      await dialog.getByRole('button', { name: /^close/i }).click()
       await expect(page).toHaveURL(new RegExp(`/en/${testHouse}$`))
       await expect(dialog).toBeHidden()
 
