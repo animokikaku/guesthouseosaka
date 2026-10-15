@@ -33,7 +33,7 @@ interface MessageFieldProps extends InputGroupTextareaFormProps, FieldOrientatio
 
 const MAX_LENGTH = 3000
 
-export function MessageField({
+function MessageField({
   field,
   label,
   description,
@@ -50,6 +50,8 @@ export function MessageField({
         {label && (
           <FieldLabel htmlFor={ids.control} className="flex items-center gap-1">
             {label}
+            {/* Flex gap spaces it visually; the text space keeps the accessible name readable. */}
+            {!required && ' '}
             {!required && (
               <span className="text-muted-foreground text-xs">({t('optional_hint')})</span>
             )}
