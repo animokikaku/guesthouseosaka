@@ -52,7 +52,6 @@
     "build/**",
     "next-env.d.ts",
     "components/ui/**",
-    "sanity.types.ts",
-    "app/**/opengraph-image.tsx"
+    "sanity.types.ts"
   ]
 }
