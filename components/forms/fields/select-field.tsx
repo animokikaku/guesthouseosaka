@@ -26,7 +26,7 @@ interface SelectFieldProps extends SelectProps, FieldOrientation {
   placeholder?: string
 }
 
-export function SelectField({
+function SelectField({
   field,
   label,
   description,

@@ -1,39 +1,36 @@
 // @vitest-environment node
 
-vi.mock('@sanity/client/stega', () => ({
-  stegaClean: (value: string | null | undefined) => value ?? ''
-}))
-
-vi.mock('@sanity/asset-utils', () => ({
-  getImageDimensions: () => ({ width: 1920, height: 1080 })
-}))
-
 import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 import { cleanGalleryAlt, toGalleryImageProps, toGalleryLightboxItem } from '../gallery-image'
 
-describe('cleanGalleryAlt', () => {
-  it('returns empty string for null or undefined', () => {
-    expect(cleanGalleryAlt(null)).toBe('')
-    expect(cleanGalleryAlt(undefined)).toBe('')
-  })
+/** The resize parameters a Sanity CDN URL asks for. */
+function resizeOf(url: unknown) {
+  const { searchParams } = new URL(String(url))
+  return {
+    w: searchParams.get('w'),
+    h: searchParams.get('h'),
+    fit: searchParams.get('fit')
+  }
+}
 
-  it('returns cleaned alt text', () => {
-    expect(cleanGalleryAlt('Bedroom view')).toBe('Bedroom view')
+describe('cleanGalleryAlt', () => {
+  it.each([null, undefined])('turns a missing alt (%s) into an empty one', (alt) => {
+    expect(cleanGalleryAlt(alt)).toBe('')
   })
 })
 
 describe('toGalleryImageProps', () => {
-  it('returns null when image has no asset', () => {
-    const image = createSanityImage({ asset: undefined })
-
-    expect(toGalleryImageProps(image, { width: 400, height: 400 })).toBeNull()
+  it('returns null for an image without an asset', () => {
+    expect(toGalleryImageProps(createSanityImage({ asset: null }), { width: 400 })).toBeNull()
   })
 
-  it('builds sized image props with dimensions by default', () => {
+  it('crops to the requested size and keeps the dimensions for next/image', () => {
     const image = createSanityImage({ alt: 'Kitchen' })
 
-    expect(toGalleryImageProps(image, { width: 560, height: 400 })).toEqual({
-      src: 'https://cdn.sanity.io/images/test/image.jpg?w=560&h=400&fit=crop',
+    const props = toGalleryImageProps(image, { width: 560, height: 400 })
+
+    expect(resizeOf(props?.src)).toEqual({ w: '560', h: '400', fit: 'crop' })
+    expect(props).toMatchObject({
       alt: 'Kitchen',
       width: 560,
       height: 400,
@@ -42,96 +39,70 @@ describe('toGalleryImageProps', () => {
     })
   })
 
-  it('omits dimensions when includeDimensions is false', () => {
-    const image = createSanityImage()
-
-    const result = toGalleryImageProps(image, {
-      width: 256,
-      height: 192,
+  // `fill` images size from their container, so they must not pin dimensions.
+  it('can leave the dimensions to the container', () => {
+    const props = toGalleryImageProps(createSanityImage(), {
+      width: 640,
+      height: 384,
       includeDimensions: false
     })
 
-    expect(result).toMatchObject({
-      src: 'https://cdn.sanity.io/images/test/image.jpg?w=256&h=192&fit=crop',
-      width: undefined,
-      height: undefined
-    })
+    expect(resizeOf(props?.src)).toEqual({ w: '640', h: '384', fit: 'crop' })
+    expect(props).toMatchObject({ width: undefined, height: undefined })
   })
 
-  it('builds a full-aspect URL without a baked-in crop', () => {
-    const image = createSanityImage()
+  it('keeps the full aspect ratio when asked not to crop', () => {
+    const props = toGalleryImageProps(createSanityImage(), { fit: 'max' })
 
-    const result = toGalleryImageProps(image, { fit: 'max' })
-
-    expect(result?.src).toBe('https://cdn.sanity.io/images/test/image.jpg?fit=max')
+    expect(resizeOf(props?.src)).toEqual({ w: null, h: null, fit: 'max' })
   })
 
-  it('uses custom alt when provided', () => {
-    const image = createSanityImage({ alt: 'Original alt' })
+  it('prefers an explicit alt over the image one', () => {
+    const props = toGalleryImageProps(createSanityImage({ alt: 'Original' }), { alt: 'Override' })
 
-    const result = toGalleryImageProps(image, {
-      width: 400,
-      height: 400,
-      alt: 'Category label'
-    })
-
-    expect(result?.alt).toBe('Category label')
+    expect(props?.alt).toBe('Override')
   })
 
-  it('omits blur placeholder when preview is missing', () => {
-    const image = createSanityImage({ preview: null })
+  it('skips the blur placeholder when the image has no preview', () => {
+    const props = toGalleryImageProps(createSanityImage({ preview: null }), { width: 400 })
 
-    const result = toGalleryImageProps(image, { width: 400, height: 400 })
-
-    expect(result).toMatchObject({
-      blurDataURL: undefined,
-      placeholder: undefined
-    })
+    expect(props).toMatchObject({ blurDataURL: undefined, placeholder: undefined })
   })
 })
 
 describe('toGalleryLightboxItem', () => {
-  it('returns null when image has no asset', () => {
-    const item = createGalleryItem({ image: createSanityImage({ asset: undefined }) })
+  it('returns null for an image without an asset', () => {
+    const item = createGalleryItem({ image: createSanityImage({ asset: null }) })
 
     expect(toGalleryLightboxItem(item)).toBeNull()
   })
 
-  it('builds a LightboxItem from a gallery item', () => {
+  it('shows the uncropped photo at its intrinsic size with a square thumbnail', () => {
     const item = createGalleryItem({
       _key: 'img1',
       image: createSanityImage({ alt: 'Bedroom view' })
     })
 
-    expect(toGalleryLightboxItem(item)).toEqual({
+    const lightboxItem = toGalleryLightboxItem(item)
+
+    // The asset reference encodes 1920x1080, which the morph needs to size the frame.
+    expect(lightboxItem).toMatchObject({
       id: 'img1',
-      src: 'https://cdn.sanity.io/images/test/image.jpg?fit=max',
-      thumb: 'https://cdn.sanity.io/images/test/image.jpg?w=56&h=56&fit=crop',
       alt: 'Bedroom view',
       caption: 'Bedroom view',
       width: 1920,
       height: 1080
     })
-  })
-
-  it('uses a full-aspect Sanity URL, not a cropped square', () => {
-    const lightboxItem = toGalleryLightboxItem(createGalleryItem())
-
-    expect(lightboxItem?.src).toContain('fit=max')
-    expect(lightboxItem?.src).not.toMatch(/[?&]h=/)
-    expect(lightboxItem?.src).not.toContain('fit=crop')
-    expect(lightboxItem?.src).not.toMatch(/w=\d+&h=\d+/)
+    expect(resizeOf(lightboxItem?.src)).toEqual({ w: null, h: null, fit: 'max' })
+    expect(resizeOf(lightboxItem?.thumb)).toEqual({ w: '56', h: '56', fit: 'crop' })
   })
 
   // The blur belongs on the trigger, not the lightbox image: next/image paints
   // the LQIP as an inline background that would cover ramka's thumbnail bridge.
-  it('carries no LQIP, even when the image has a preview', () => {
-    const image = createSanityImage({ alt: 'Bedroom view' })
+  it('carries no blur placeholder, even when the image has a preview', () => {
+    const image = createSanityImage()
     expect(image.preview).toBeTruthy()
 
-    const lightboxItem = toGalleryLightboxItem(createGalleryItem({ image }))
-
-    expect(lightboxItem).not.toBeNull()
-    expect(lightboxItem).not.toHaveProperty('blurDataURL')
+    expect(toGalleryLightboxItem(createGalleryItem({ image }))).not.toHaveProperty('blurDataURL')
   })
 })

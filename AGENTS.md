@@ -57,6 +57,7 @@ bun run format:check # Check formatting without modifying files
 - [Architecture & Project Structure](docs/architecture.md)
 - [Sanity Workflow](docs/sanity-workflow.md)
 - [Internationalization](docs/i18n.md)
+- [Testing](docs/testing.md)
 
 <!-- BEGIN:nextjs-agent-rules -->
 

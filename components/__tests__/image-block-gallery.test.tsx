@@ -1,209 +1,97 @@
+import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 import { render, screen } from '@testing-library/react'
 import { ImageBlockGallery } from '../image-block-gallery'
-import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 
-vi.mock('next-intl/server', () => ({
-  getTranslations: () => (key: string, values?: Record<string, number>) => {
-    if (key === 'overflow_count') return `+${values?.count}`
-    if (key === 'view_gallery_count') return `Show all ${values?.count} photos`
-
-    const messages: Record<string, string> = {
-      view_gallery: 'View gallery'
-    }
-    return messages[key] ?? key
-  }
-}))
-
-vi.mock('@/sanity/lib/image', () => ({
-  urlFor: () => {
-    const builder = {
-      width: () => builder,
-      height: () => builder,
-      dpr: () => builder,
-      fit: () => builder,
-      url: () => 'https://cdn.sanity.io/images/test/gallery.jpg'
-    }
-    return builder
-  }
-}))
-
-vi.mock('@/components/gallery/gallery-image-frame', () => ({
-  GalleryImageFrame: ({
-    imageProps,
-    sizes,
-    className,
-    children
-  }: {
-    imageProps: { alt: string; fetchPriority?: string }
-    sizes?: string
-    className?: string
-    children?: React.ReactNode
-  }) => (
-    <div
-      data-testid="gallery-frame"
-      data-alt={imageProps.alt}
-      data-fetch-priority={imageProps.fetchPriority}
-      data-sizes={sizes}
-      className={className}
-    >
-      {children}
-    </div>
-  )
-}))
+vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
 
 vi.mock('@/i18n/navigation', () => ({
-  Link: ({ children, href, ...props }: { children?: React.ReactNode; href: unknown }) => (
-    <a href={typeof href === 'string' ? href : '/gallery'} {...props}>
+  Link: ({
+    children,
+    href,
+    ...props
+  }: {
+    children?: React.ReactNode
+    href: { params: { house: string } }
+  }) => (
+    <a href={`/${href.params.house}/gallery`} {...props}>
       {children}
     </a>
   )
 }))
 
-vi.mock('@/components/ui/empty', () => ({
-  Empty: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  EmptyDescription: ({ children }: { children: React.ReactNode }) => <p>{children}</p>,
-  EmptyHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  EmptyMedia: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  EmptyTitle: ({ children }: { children: React.ReactNode }) => <h2>{children}</h2>
-}))
+const href = { pathname: '/[house]/gallery', params: { house: 'orange' } } as const
 
-vi.mock('lucide-react', () => ({
-  ImageIcon: () => <svg data-testid="image-icon" />
-}))
+function photos(count: number) {
+  return Array.from({ length: count }, (_, index) =>
+    createGalleryItem({
+      _key: `photo-${index}`,
+      image: createSanityImage({ alt: `Photo ${index + 1}` })
+    })
+  )
+}
 
-const galleryHref = {
-  pathname: '/[house]/gallery',
-  params: { house: 'orange' }
-} as const
+async function renderGallery(props: Partial<Parameters<typeof ImageBlockGallery>[0]> = {}) {
+  const galleryPreview = props.galleryPreview ?? photos(5)
+  return render(
+    await ImageBlockGallery({
+      href,
+      galleryPreview,
+      galleryImageCount: galleryPreview.length,
+      ...props
+    })
+  )
+}
+
+const tiles = () => screen.getAllByRole('img').map((image) => image.getAttribute('alt'))
 
 describe('ImageBlockGallery', () => {
-  it('renders five gallery images with the first image prioritized', async () => {
-    const galleryImages = Array.from({ length: 5 }, (_, index) =>
-      createGalleryItem({
-        _key: `image-${index}`,
-        image: createSanityImage({ alt: `Gallery image ${index + 1}` })
-      })
-    )
+  it('shows five photos behind a single gallery link', async () => {
+    await renderGallery()
 
-    render(
-      await ImageBlockGallery({
-        href: galleryHref,
-        galleryPreview: galleryImages,
-        galleryImageCount: galleryImages.length
-      })
-    )
-
-    const frames = screen.getAllByTestId('gallery-frame')
-    expect(frames).toHaveLength(5)
-    expect(frames[0]).toHaveAttribute('data-alt', 'Gallery image 1')
-    expect(frames[0]).toHaveAttribute('data-fetch-priority', 'high')
-    expect(frames[1]).not.toHaveAttribute('data-fetch-priority')
-    expect(screen.getByRole('link', { name: 'View gallery' })).toBeInTheDocument()
+    expect(tiles()).toEqual(['Photo 1', 'Photo 2', 'Photo 3', 'Photo 4', 'Photo 5'])
+    expect(screen.getByRole('link', { name: 'Show all photos' })).toBeInTheDocument()
   })
 
-  it('prepends the featured image and limits the grid to five images', async () => {
-    const galleryImages = Array.from({ length: 5 }, (_, index) =>
-      createGalleryItem({
-        _key: `image-${index}`,
-        image: createSanityImage({ alt: `Gallery image ${index + 1}` })
-      })
-    )
+  // Desktop LCP candidate: loaded eagerly at high priority, the rest lazily.
+  it('prioritizes the large leading photo', async () => {
+    await renderGallery()
 
-    render(
-      await ImageBlockGallery({
-        href: galleryHref,
-        galleryPreview: galleryImages,
-        galleryImageCount: galleryImages.length,
-        featuredImage: createSanityImage({ alt: 'Featured image' })
-      })
-    )
-
-    const frames = screen.getAllByTestId('gallery-frame')
-    expect(frames).toHaveLength(5)
-    expect(frames[0]).toHaveAttribute('data-alt', 'Featured image')
-    expect(frames[4]).toHaveAttribute('data-alt', 'Gallery image 4')
+    const [first, second] = screen.getAllByRole('img')
+    expect(first).toHaveAttribute('fetchpriority', 'high')
+    expect(first).toHaveAttribute('loading', 'eager')
+    expect(second).not.toHaveAttribute('fetchpriority')
   })
 
-  it('skips slides without an image asset when filling the grid and the overflow count', async () => {
-    const galleryImages = [
-      createGalleryItem({ _key: 'missing-asset', image: createSanityImage({ asset: null }) }),
-      ...Array.from({ length: 6 }, (_, index) =>
-        createGalleryItem({
-          _key: `image-${index}`,
-          image: createSanityImage({ alt: `Gallery image ${index + 1}` })
-        })
-      )
-    ]
+  it('leads with the featured image', async () => {
+    await renderGallery({ featuredImage: createSanityImage({ alt: 'Featured' }) })
 
-    render(
-      await ImageBlockGallery({
-        href: galleryHref,
-        // The query counts only items with an asset, so the missing-asset slide
-        // is excluded here the same way it is dropped from the grid.
-        galleryImageCount: 6,
-        galleryPreview: galleryImages
-      })
-    )
+    expect(tiles()).toEqual(['Featured', 'Photo 1', 'Photo 2', 'Photo 3', 'Photo 4'])
+  })
 
-    const frames = screen.getAllByTestId('gallery-frame')
-    expect(frames).toHaveLength(5)
-    expect(frames[0]).toHaveAttribute('data-alt', 'Gallery image 1')
+  // The badge is decorative, so the link label carries the total.
+  it('counts the photos beyond the grid on the last tile and in the link', async () => {
+    await renderGallery({
+      galleryImageCount: 59,
+      featuredImage: createSanityImage({ alt: 'Featured' })
+    })
+
+    expect(screen.getByText('+55')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Show all 60 photos' })).toBeInTheDocument()
+  })
+
+  it('fills the grid past photos that have no file yet', async () => {
+    const draft = createGalleryItem({ image: createSanityImage({ asset: null }) })
+
+    await renderGallery({ galleryPreview: [draft, ...photos(6)], galleryImageCount: 6 })
+
+    expect(tiles()).toEqual(['Photo 1', 'Photo 2', 'Photo 3', 'Photo 4', 'Photo 5'])
     expect(screen.getByText('+1')).toBeInTheDocument()
-    // The overflow badge is aria-hidden, so the link label carries the total
-    expect(screen.getByRole('link', { name: 'Show all 6 photos' })).toBeInTheDocument()
   })
 
-  // The query filters `defined(image.asset)` inside the projection, before
-  // slicing to five. If it filtered downstream of the slice, unfinished items
-  // would eat tiles and push renderable ones out — five of them and a house
-  // with a full gallery would render the empty state.
-  it('fills the grid from a preview the query has already filtered', async () => {
-    const galleryImages = Array.from({ length: 5 }, (_, index) =>
-      createGalleryItem({
-        _key: `image-${index}`,
-        image: createSanityImage({ alt: `Gallery image ${index + 1}` })
-      })
-    )
+  it('shows the empty state when fewer than five photos can be shown', async () => {
+    await renderGallery({ galleryPreview: photos(4) })
 
-    render(
-      await ImageBlockGallery({
-        href: galleryHref,
-        galleryImageCount: 59,
-        galleryPreview: galleryImages
-      })
-    )
-
-    const frames = screen.getAllByTestId('gallery-frame')
-    expect(frames).toHaveLength(5)
-    expect(frames[0]).toHaveAttribute('data-alt', 'Gallery image 1')
-    expect(screen.getByText('+54')).toBeInTheDocument()
-  })
-
-  it('renders the empty state when fewer than five images can be rendered', async () => {
-    const galleryImages = [
-      ...Array.from({ length: 4 }, (_, index) =>
-        createGalleryItem({
-          _key: `image-${index}`,
-          image: createSanityImage({ alt: `Gallery image ${index + 1}` })
-        })
-      ),
-      createGalleryItem({
-        _key: 'missing-asset',
-        image: createSanityImage({ asset: null })
-      })
-    ]
-
-    render(
-      await ImageBlockGallery({
-        href: galleryHref,
-        galleryImageCount: 4,
-        galleryPreview: galleryImages
-      })
-    )
-
-    expect(screen.queryAllByTestId('gallery-frame')).toHaveLength(0)
-    // GalleryEmptyState reads its copy through the global next-intl mock, which echoes keys.
-    expect(screen.getByText('title')).toBeInTheDocument()
-    expect(screen.getByText('description')).toBeInTheDocument()
+    expect(screen.queryByRole('img')).not.toBeInTheDocument()
+    expect(screen.getByText('No gallery images')).toBeInTheDocument()
   })
 })

@@ -1,5 +1,5 @@
-import { Lightbox } from '@/components/lightbox'
 import { HouseGallery } from '@/components/gallery/house-gallery'
+import { Lightbox } from '@/components/lightbox'
 import type { GalleryCategory } from '@/lib/gallery'
 import {
   createGalleryCategory,
@@ -7,144 +7,116 @@ import {
   createSanityImage
 } from '@/lib/transforms/__tests__/mocks'
 import { toGalleryCategories } from '@/lib/transforms/gallery'
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 
 vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
 
-function indexByKeyFor(categories: GalleryCategory[]) {
-  return new Map(
+function renderGallery(categories: GalleryCategory[], dataAttribute?: (path: string) => string) {
+  // Same lookup GalleryPageContent builds for the lightbox.
+  const indexByKey = new Map(
     categories.flatMap((category) => category.items).map((item, index) => [item._key, index])
   )
-}
 
-function renderGallery(categories: GalleryCategory[]) {
   return render(
     <Lightbox.Root>
-      <HouseGallery categories={categories} indexByKey={indexByKeyFor(categories)} />
+      <HouseGallery categories={categories} indexByKey={indexByKey} dataAttribute={dataAttribute} />
     </Lightbox.Root>
   )
 }
 
+const photo = (key: string, alt: string | null, preview: string | null = null) =>
+  createGalleryItem({ _key: key, image: createSanityImage({ alt, preview }) })
+
+const bedroom = createGalleryCategory({
+  _key: 'bedroom',
+  category: { _id: 'cat-bedroom', label: 'Bedroom', orderRank: '0|a:' },
+  items: [photo('bed', 'Bed'), photo('desk', 'Desk')]
+})
+
+const kitchen = createGalleryCategory({
+  _key: 'kitchen',
+  category: { _id: 'cat-kitchen', label: 'Kitchen', orderRank: '0|b:' },
+  items: [photo('stove', 'Stove')]
+})
+
 describe('HouseGallery', () => {
-  describe('empty gallery', () => {
-    it('renders nothing for empty galleryCategories', () => {
-      const { container } = renderGallery([])
+  it('shows each category in order with a photo count', () => {
+    renderGallery(toGalleryCategories([bedroom, kitchen]))
 
-      expect(container).toBeEmptyDOMElement()
-    })
+    const headings = screen.getAllByRole('heading', { level: 3 })
+    expect(headings.map((heading) => heading.textContent)).toEqual([
+      'Bedroom22 photos',
+      'Kitchen11 photo'
+    ])
+    // The visible number is decorative; screen readers hear the localized plural.
+    expect(within(headings[0]).getByText('2')).toHaveAttribute('aria-hidden', 'true')
+    expect(within(headings[0]).getByText('2 photos')).toHaveClass('sr-only')
   })
 
-  describe('category rendering', () => {
-    it('renders category headings', () => {
-      const galleryCategories = [
-        createGalleryCategory({
-          _key: 'cat1',
-          category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a:' },
-          items: [
-            createGalleryItem({
-              _key: 'img1',
-              image: createSanityImage({ alt: 'Image 1' })
-            }),
-            createGalleryItem({
-              _key: 'img2',
-              image: createSanityImage({ alt: 'Image 2' })
-            })
-          ]
-        })
-      ]
+  it('anchors each category for the sticky nav to jump to', () => {
+    const { container } = renderGallery(toGalleryCategories([bedroom, kitchen]))
 
-      renderGallery(toGalleryCategories(galleryCategories))
-
-      expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Bedroom')
-    })
-
-    it('renders multiple categories', () => {
-      const galleryCategories = [
-        createGalleryCategory({
-          _key: 'cat1',
-          category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a00000:' },
-          items: [createGalleryItem({ _key: 'img1' })]
-        }),
-        createGalleryCategory({
-          _key: 'cat2',
-          category: { _id: 'id2', label: 'Kitchen', orderRank: '0|b00000:' },
-          items: [createGalleryItem({ _key: 'img2' })]
-        })
-      ]
-
-      renderGallery(toGalleryCategories(galleryCategories))
-
-      const headings = screen.getAllByRole('heading', { level: 3 })
-      expect(headings).toHaveLength(2)
-    })
-
-    it('preserves category order from GROQ query', () => {
-      // Categories come pre-sorted by orderRank from GROQ
-      const galleryCategories = [
-        createGalleryCategory({
-          _key: 'cat1',
-          category: { _id: 'id1', label: 'Bedroom', orderRank: '0|a00000:' },
-          items: [createGalleryItem({ _key: 'img1' })]
-        }),
-        createGalleryCategory({
-          _key: 'cat2',
-          category: { _id: 'id2', label: 'Kitchen', orderRank: '0|b00000:' },
-          items: [createGalleryItem({ _key: 'img2' })]
-        })
-      ]
-
-      renderGallery(toGalleryCategories(galleryCategories))
-
-      const headings = screen.getAllByRole('heading', { level: 3 })
-      expect(headings[0]).toHaveTextContent('Bedroom')
-      expect(headings[1]).toHaveTextContent('Kitchen')
-    })
+    expect(container.querySelector('section#cat-kitchen')).toHaveTextContent('Kitchen')
   })
 
-  describe('gallery grid', () => {
-    it('renders a trigger for each gallery item', () => {
-      const galleryCategories = [
-        createGalleryCategory({
-          _key: 'cat1',
-          category: { _id: 'id1', label: 'Room', orderRank: '0|a:' },
-          items: [
-            createGalleryItem({
-              _key: 'img1',
-              image: createSanityImage({ alt: 'Image 1' })
-            }),
-            createGalleryItem({
-              _key: 'img2',
-              image: createSanityImage({ alt: 'Image 2' })
-            }),
-            createGalleryItem({
-              _key: 'img3',
-              image: createSanityImage({ alt: 'Image 3' })
-            })
-          ]
-        })
-      ]
+  it('opens each photo from a button named after it', () => {
+    renderGallery(toGalleryCategories([bedroom]))
 
-      renderGallery(toGalleryCategories(galleryCategories))
-
-      const triggers = screen.getAllByTestId('gallery-grid-image')
-      expect(triggers).toHaveLength(3)
-    })
+    expect(screen.getByRole('button', { name: 'Bed' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Desk' })).toBeInTheDocument()
   })
 
-  describe('category thumbnails', () => {
-    it('renders only grid item buttons (no thumbnail row)', () => {
-      const galleryCategories = [
+  it('names a photo without alt text generically', () => {
+    renderGallery(toGalleryCategories([createGalleryCategory({ items: [photo('x', null)] })]))
+
+    expect(screen.getByRole('button', { name: 'Open gallery image' })).toBeInTheDocument()
+  })
+
+  // Tiles are square through CSS only: the lightbox morphs from this very image,
+  // so it has to be the full photo, not a cropped file.
+  it('loads the uncropped photo into each tile', () => {
+    renderGallery(toGalleryCategories([bedroom]))
+
+    const { searchParams } = new URL(screen.getByAltText('Bed').getAttribute('src')!)
+    expect(searchParams.get('fit')).toBe('max')
+    expect(searchParams.has('h')).toBe(false)
+  })
+
+  it('blurs a tile in only when the photo has a preview', () => {
+    renderGallery(
+      toGalleryCategories([
         createGalleryCategory({
-          _key: 'cat1',
-          category: { _id: 'id1', label: 'Room', orderRank: '0|a:' },
-          items: [createGalleryItem({ _key: 'img1' })]
+          items: [photo('a', 'With', 'data:image/jpeg;base64,abc'), photo('b', 'Without')]
         })
-      ]
+      ])
+    )
 
-      renderGallery(toGalleryCategories(galleryCategories))
+    expect(screen.getByAltText('With')).toHaveAttribute('data-placeholder', 'blur')
+    expect(screen.getByAltText('Without')).not.toHaveAttribute('data-placeholder')
+  })
 
-      const buttons = screen.getAllByRole('button')
-      expect(buttons).toHaveLength(1)
-    })
+  it('skips items whose image is not uploaded yet', () => {
+    const draft = createGalleryItem({ _key: 'draft', image: createSanityImage({ asset: null }) })
+
+    renderGallery(
+      toGalleryCategories([createGalleryCategory({ items: [draft, photo('bed', 'Bed')] })])
+    )
+
+    expect(screen.getAllByRole('button')).toHaveLength(1)
+  })
+
+  it('tags categories and photos for visual editing', () => {
+    renderGallery(toGalleryCategories([bedroom]), (path) => `edit:${path}`)
+
+    expect(screen.getByRole('button', { name: 'Bed' })).toHaveAttribute(
+      'data-sanity',
+      'edit:galleryCategories[_key=="bedroom"].items[_key=="bed"]'
+    )
+  })
+
+  it('renders nothing for an empty gallery', () => {
+    const { container } = renderGallery([])
+
+    expect(container).toBeEmptyDOMElement()
   })
 })

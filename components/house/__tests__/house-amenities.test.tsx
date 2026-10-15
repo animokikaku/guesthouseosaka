@@ -3,10 +3,6 @@ import { HouseAmenities } from '../house-amenities'
 import { HouseProvider } from '../house-context'
 import type { AmenityCategoryData, AmenityItemData } from '@/lib/types/components'
 
-vi.mock('@/lib/icons', () => ({
-  Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />
-}))
-
 // The component takes the flattened shape the GROQ query already produces, so
 // these build it directly rather than going through a Sanity document mock.
 function amenity(label: string, icon = 'wifi', note: AmenityItemData['note'] = null) {
@@ -55,11 +51,14 @@ describe('HouseAmenities', () => {
     })
   })
 
-  it('renders the section heading and show-all button from translation keys', () => {
-    renderAmenities(numberedAmenities(10), [category('Room', numberedAmenities(25))])
+  it('offers every amenity across categories behind a show-all button', () => {
+    renderAmenities(numberedAmenities(10), [
+      category('Room', numberedAmenities(15)),
+      category('Kitchen', numberedAmenities(10))
+    ])
 
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('heading')
-    expect(screen.getByRole('button')).toHaveTextContent('show_all')
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('What this place offers')
+    expect(screen.getByRole('button')).toHaveTextContent('Show all 25 amenities')
   })
 
   it('renders a translated badge for each amenity note', () => {
@@ -70,16 +69,17 @@ describe('HouseAmenities', () => {
       amenity('Kitchen', 'utensils')
     ])
 
-    expect(screen.getByText('notes.shared')).toBeInTheDocument()
-    expect(screen.getByText('notes.private')).toBeInTheDocument()
-    expect(screen.getByText('notes.coin')).toBeInTheDocument()
+    expect(screen.getByText('Wifi').nextSibling).toHaveTextContent('Shared')
+    expect(screen.getByText('Bath').nextSibling).toHaveTextContent('Private')
+    expect(screen.getByText('Laundry').nextSibling).toHaveTextContent('Coin')
+    expect(screen.getByText('Kitchen').nextSibling).toBeNull()
   })
 
   it('renders the icon named by each amenity', () => {
-    renderAmenities([amenity('Wifi', 'wifi'), amenity('Bed', 'bed')])
+    const { container } = renderAmenities([amenity('Wifi', 'wifi'), amenity('Bed', 'bed')])
 
-    expect(screen.getByTestId('icon-wifi')).toBeInTheDocument()
-    expect(screen.getByTestId('icon-bed')).toBeInTheDocument()
+    expect(container.querySelector('svg.lucide-wifi')).toBeInTheDocument()
+    expect(container.querySelector('svg.lucide-bed')).toBeInTheDocument()
   })
 
   it('keeps the section but drops the dialog when there is nothing to show', () => {

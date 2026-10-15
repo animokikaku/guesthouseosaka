@@ -4,6 +4,7 @@ import { PageActions } from '@/components/page-header'
 import { buttonVariants } from '@/components/ui/button'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Icon } from '@/lib/icons'
+import { resolvePageActionHref } from '@/lib/page-action-href'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { FaqPageQueryResult } from '@/sanity.types'
 import { createDataAttribute, stegaClean } from 'next-sanity'
@@ -38,20 +39,13 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
         // First action is 'default' variant, others are 'ghost'
         const variant = index === 0 ? 'default' : 'ghost'
 
-        // Check if href is external or internal
-        const isExternal = href.startsWith('http://') || href.startsWith('https://')
+        const target = resolvePageActionHref(href, currentPathname)
 
-        // Parse href for internal links with hash
-        const hasHash = href.includes('#')
-        const [rawPathname, hash] = href.split('#')
-        // Handle hash-only links (e.g., "#section") by using current pathname
-        const pathname = rawPathname || currentPathname
-
-        if (isExternal) {
+        if (target.external) {
           return (
             <a
               key={_key}
-              href={href}
+              href={target.href}
               target="_blank"
               rel="noopener noreferrer"
               data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
@@ -68,7 +62,11 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
         return (
           <Link
             key={_key}
-            href={hasHash ? { pathname: pathname as '/', hash: `#${hash}` } : (href as '/')}
+            href={
+              target.hash
+                ? { pathname: target.pathname as '/', hash: target.hash }
+                : (target.pathname as '/')
+            }
             className={buttonVariants({ variant, size: 'sm' })}
             data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
           >

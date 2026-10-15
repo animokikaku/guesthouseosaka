@@ -3,10 +3,6 @@ import { HouseAbout } from '../house-about'
 import { HouseProvider } from '../house-context'
 import type { HousePortableTextContent } from '@/lib/types/components'
 
-vi.mock('next-sanity', () => ({
-  stegaClean: (value: string) => value
-}))
-
 // Covered on its own in house-building.test.tsx
 vi.mock('@/components/house/house-building', () => ({
   HouseBuilding: () => <div data-testid="house-building" />
@@ -31,21 +27,15 @@ function block(key: string, text: string, listItem?: 'bullet' | 'number') {
 }
 
 describe('HouseAbout', () => {
-  it('renders the section heading and the building summary', () => {
+  it('introduces the house by name above its building summary', () => {
     renderAbout()
 
-    // The heading text itself comes from a translation key, so this pins the
-    // level and styling rather than the copy.
-    expect(screen.getByRole('heading', { level: 2 })).toHaveClass(
-      'text-2xl',
-      'font-semibold',
-      'mb-6'
-    )
+    expect(screen.getByRole('heading', { level: 2, name: 'About Test House' })).toBeInTheDocument()
     expect(screen.getByTestId('house-building')).toBeInTheDocument()
   })
 
-  it.each([null, undefined])('still renders the heading when title is %s', (title) => {
-    renderAbout({ title: title ?? null })
+  it('keeps the heading when the title is missing', () => {
+    renderAbout({ title: null })
 
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
   })

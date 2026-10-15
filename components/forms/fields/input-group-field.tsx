@@ -20,7 +20,7 @@ interface InputGroupFieldProps extends InputFormProps, FieldOrientation {
   icon?: React.ReactNode
 }
 
-export function InputGroupField({
+function InputGroupField({
   field,
   label,
   description,

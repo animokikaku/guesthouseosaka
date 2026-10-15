@@ -9,16 +9,6 @@ vi.mock('@/i18n/navigation', () => ({
   useRouter: () => ({ replace: replaceMock })
 }))
 
-vi.mock('next/navigation', () => ({
-  useParams: () => ({})
-}))
-
-vi.mock('next-intl', () => ({
-  hasLocale: (locales: string[], locale: string) => locales.includes(locale),
-  useLocale: () => 'en',
-  useTranslations: () => (key: string) => key
-}))
-
 import { LanguageSwitcher } from '../language-switcher'
 
 describe('LanguageSwitcher', () => {
@@ -27,7 +17,7 @@ describe('LanguageSwitcher', () => {
   })
 
   async function openLanguageMenu() {
-    fireEvent.click(screen.getByRole('button', { name: 'aria_label' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Select language' }))
     return screen.findByRole('menuitemradio', { name: 'English' })
   }
 

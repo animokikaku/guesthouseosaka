@@ -108,11 +108,10 @@ jobs:
       - name: Install Playwright browsers
         run: bunx playwright install --only-shell chromium
 
-      - name: Run component tests
-        run: bun run test:components
-
-      - name: Run E2E tests
-        run: bun run test:e2e
+      # The E2E suite spends most of its time on the production build, so the
+      # component tests (their own Vite server on another port) run alongside it.
+      - name: Run component and E2E tests
+        run: bun run --parallel --no-exit-on-error test:components test:e2e
 
       - name: Save Next.js cache from main
         if: github.event_name == 'push' && steps.next-cache-main.outputs.cache-hit != 'true'

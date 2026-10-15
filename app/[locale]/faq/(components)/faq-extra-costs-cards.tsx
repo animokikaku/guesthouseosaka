@@ -4,7 +4,11 @@ import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/com
 import { useCarouselIndex } from '@/hooks/use-carousel-index'
 import { cn } from '@/lib/utils'
 import { HOUSE_CARD_STYLES, type HouseCardStyles } from '@/lib/house-theme'
-import type { FaqHouses, PricingCategories } from '@/app/[locale]/faq/(components)/types'
+import {
+  extraCostsByCategory,
+  type FaqHouses,
+  type PricingCategories
+} from '@/app/[locale]/faq/(components)/types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
@@ -45,7 +49,7 @@ export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsC
               key={house._id}
               styles={HOUSE_CARD_STYLES[house.slug]}
               title={house.title}
-              extraCosts={house.extraCosts}
+              costsByCategory={extraCostsByCategory(house)}
               pricingCategories={pricingCategories}
             />
           ))}
@@ -73,12 +77,16 @@ export function FAQExtraCostsCards({ houses, pricingCategories }: FAQExtraCostsC
 interface ExtraCostsCardProps {
   styles: HouseCardStyles
   title: string | null
-  extraCosts: FaqHouses[number]['extraCosts']
+  costsByCategory: ReturnType<typeof extraCostsByCategory>
   pricingCategories: PricingCategories
 }
 
-function ExtraCostsCard({ styles, title, extraCosts, pricingCategories }: ExtraCostsCardProps) {
-  const costsByCategory = new Map(extraCosts?.map((c) => [c.categoryId, c.value]) ?? [])
+function ExtraCostsCard({
+  styles,
+  title,
+  costsByCategory,
+  pricingCategories
+}: ExtraCostsCardProps) {
   return (
     <CarouselItem>
       <div

@@ -5,8 +5,7 @@
     "global.ts",
     "messages/*.d.json.ts",
     "sanity.types.ts",
-    "components/ui/**",
-    "lib/transforms/__tests__/mocks.ts"
+    "components/ui/**"
   ],
   "ignoreBinaries": ["crowdin"],
   "ignoreExportsUsedInFile": {

@@ -1,68 +1,70 @@
-import { render, screen } from '@testing-library/react'
-import { type Houses, createHouse } from '@/lib/__tests__/utils/faq-fixtures'
-
-// Mock FAQContactTable since it has its own complex dependencies (next-intl, next/image, sanity)
-vi.mock('@/app/[locale]/faq/(components)/faq-contact-table', () => ({
-  FAQContactTable: ({ houses }: { houses: unknown[] }) => (
-    <div data-testid="faq-contact-table">{houses.length} houses</div>
-  )
-}))
-
+import { createHouse, type Houses } from '@/lib/__tests__/utils/faq-fixtures'
+import { render, screen, within } from '@testing-library/react'
 import FAQCard from '../faq-card'
+
+vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
 
 const contactSection = [
   {
     _type: 'block' as const,
-    _key: 'block1',
-    children: [{ _type: 'span' as const, _key: 'span1', text: 'Contact Us', marks: [] }],
-    markDefs: [],
-    style: 'h2' as const
-  },
-  {
-    _type: 'block' as const,
-    _key: 'block2',
+    _key: 'heading',
     children: [
-      { _type: 'span' as const, _key: 'span2', text: 'Feel free to reach out', marks: [] }
+      { _type: 'span' as const, _key: 'heading-text', text: 'Still have questions?', marks: [] }
     ],
     markDefs: [],
-    style: 'normal' as const
+    style: 'h2' as const
+  }
+]
+
+const houses: Houses = [
+  {
+    ...createHouse('h1', 'orange'),
+    phone: { _type: 'housePhone', domestic: '06-6131-6677', international: '+81-6-6131-6677' }
+  },
+  {
+    ...createHouse('h2', 'apple'),
+    phone: { _type: 'housePhone', domestic: '06-6627-0790', international: '+81-6-6627-0790' }
   }
 ]
 
 describe('FAQCard', () => {
-  const houses: Houses = [createHouse('h1', 'orange'), createHouse('h2', 'apple')]
-
-  it('renders contact section portable text', () => {
-    render(<FAQCard contactSection={contactSection} houses={houses} />)
-
-    expect(screen.getByText('Contact Us')).toBeInTheDocument()
-    expect(screen.getByText('Feel free to reach out')).toBeInTheDocument()
-  })
-
-  it('renders the FAQContactTable', () => {
-    render(<FAQCard contactSection={contactSection} houses={houses} />)
-
-    expect(screen.getByTestId('faq-contact-table')).toBeInTheDocument()
-  })
-
-  it('renders contact note when provided', () => {
-    render(<FAQCard contactSection={contactSection} contactNote="Available 24/7" houses={houses} />)
-
-    expect(screen.getByText('Available 24/7')).toBeInTheDocument()
-  })
-
-  it('does not render footer when contactNote is null', () => {
-    const { container } = render(
-      <FAQCard contactSection={contactSection} contactNote={null} houses={houses} />
+  it('heads the card with the CMS contact section and its note', () => {
+    render(
+      <FAQCard contactSection={contactSection} contactNote="Open 10:00–20:00" houses={houses} />
     )
 
-    expect(container.querySelector('[data-slot="card-footer"]')).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Still have questions?' })).toBeInTheDocument()
+    expect(screen.getByText('Open 10:00–20:00')).toBeInTheDocument()
   })
 
-  it('does not render contact section when null', () => {
-    render(<FAQCard contactSection={null} contactNote="Note" houses={houses} />)
+  // The table (desktop) lists both numbers; the cards (mobile) dial the
+  // international one, which works from anywhere.
+  it('lets visitors call each house from Japan or from abroad', () => {
+    render(<FAQCard contactSection={null} houses={houses} />)
 
-    expect(screen.queryByText('Contact Us')).not.toBeInTheDocument()
-    expect(screen.getByText('Note')).toBeInTheDocument()
+    const table = screen.getByRole('table')
+    const orange = within(table).getByRole('row', { name: /Orange House/ })
+    expect(within(orange).getByRole('link', { name: '06-6131-6677' })).toHaveAttribute(
+      'href',
+      'tel:06-6131-6677'
+    )
+    expect(within(orange).getByRole('link', { name: '+81-6-6131-6677' })).toHaveAttribute(
+      'href',
+      'tel:+81-6-6131-6677'
+    )
+    expect(within(table).getByRole('columnheader', { name: 'Within Japan' })).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: 'From overseas' })).toBeInTheDocument()
+
+    const cards = screen.getAllByRole('link').filter((link) => !table.contains(link))
+    expect(cards.map((card) => card.getAttribute('href'))).toEqual([
+      'tel:+81-6-6131-6677',
+      'tel:+81-6-6627-0790'
+    ])
+  })
+
+  it('leaves out the footer without a note', () => {
+    render(<FAQCard contactSection={contactSection} contactNote={null} houses={houses} />)
+
+    expect(screen.queryByText('Open 10:00–20:00')).not.toBeInTheDocument()
   })
 })

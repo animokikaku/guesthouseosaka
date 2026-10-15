@@ -1,102 +1,52 @@
 // @vitest-environment node
 
-import { faker } from '@faker-js/faker'
-
-vi.mock('@/sanity/lib/image', () => ({
-  urlFor: () => ({
-    width: () => ({
-      height: () => ({
-        fit: () => ({
-          url: () => 'https://cdn.sanity.io/images/test/gallery.jpg'
-        })
-      })
-    })
-  })
-}))
-
+import { GALLERY_WALL_SLOTS, slotPixelSize } from '@/lib/gallery-wall'
+import { createSanityImage } from './mocks'
 import { toGalleryImages } from '../gallery'
 
-function createGalleryWallImage(overrides: Record<string, unknown> = {}) {
-  return {
-    _key: faker.string.nanoid(),
-    alt: faker.lorem.words(3),
-    preview: `data:image/jpeg;base64,${faker.string.alphanumeric(20)}`,
-    asset: { _ref: `image-${faker.string.nanoid()}`, _type: 'reference' as const },
-    hotspot: null,
-    crop: null,
-    ...overrides
-  }
+type WallImage = Parameters<typeof toGalleryImages>[0][number]
+
+function wallImages(count: number): WallImage[] {
+  return Array.from({ length: count }, (_, index) => {
+    const { asset, ...image } = createSanityImage({ alt: `Tile ${index}` })
+    if (!asset) throw new Error('createSanityImage always builds an asset by default')
+    return { _key: `tile-${index}`, ...image, asset }
+  })
 }
 
 describe('toGalleryImages', () => {
-  it('transforms images with layout dimensions', () => {
-    const images = Array.from({ length: 6 }, () => createGalleryWallImage())
+  it('crops each tile square at the size of the slot it fills', () => {
+    const tiles = toGalleryImages(wallImages(6))
 
-    const result = toGalleryImages(images)
+    tiles.forEach((tile, index) => {
+      const size = slotPixelSize(GALLERY_WALL_SLOTS[index])
+      const { searchParams } = new URL(tile.src)
 
-    expect(result).toHaveLength(6)
-    expect(result[0].width).toBe(142)
-    expect(result[0].height).toBe(142)
-    expect(result[1].width).toBe(272)
-    expect(result[1].height).toBe(272)
-  })
-
-  it('preserves _key from source images', () => {
-    const images = [createGalleryWallImage({ _key: 'my-key' })]
-
-    const result = toGalleryImages(images)
-
-    expect(result[0]._key).toBe('my-key')
-  })
-
-  it('preserves alt text from source images', () => {
-    const images = [createGalleryWallImage({ alt: 'Living room' })]
-
-    const result = toGalleryImages(images)
-
-    expect(result[0].alt).toBe('Living room')
-  })
-
-  it('preserves blurDataURL from preview field', () => {
-    const preview = 'data:image/jpeg;base64,abc123'
-    const images = [createGalleryWallImage({ preview })]
-
-    const result = toGalleryImages(images)
-
-    expect(result[0].blurDataURL).toBe(preview)
-  })
-
-  it('builds image URL via urlFor chain', () => {
-    const images = [createGalleryWallImage()]
-
-    const result = toGalleryImages(images)
-
-    expect(result[0].src).toBe('https://cdn.sanity.io/images/test/gallery.jpg')
-  })
-
-  it('returns empty array for empty input', () => {
-    const result = toGalleryImages([])
-
-    expect(result).toEqual([])
-  })
-
-  it('assigns correct layout for all 6 positions', () => {
-    const images = Array.from({ length: 6 }, () => createGalleryWallImage())
-
-    const result = toGalleryImages(images)
-
-    const expectedSizes = [
-      { width: 142, height: 142 },
-      { width: 272, height: 272 },
-      { width: 123, height: 123 },
-      { width: 168, height: 168 },
-      { width: 129, height: 129 },
-      { width: 194, height: 194 }
-    ]
-
-    expectedSizes.forEach((size, i) => {
-      expect(result[i].width).toBe(size.width)
-      expect(result[i].height).toBe(size.height)
+      expect(tile).toMatchObject({ width: size, height: size })
+      expect(searchParams.get('w')).toBe(String(size))
+      expect(searchParams.get('h')).toBe(String(size))
+      expect(searchParams.get('fit')).toBe('crop')
     })
+  })
+
+  it('keeps each tile’s key, alt text and blur preview', () => {
+    const [image] = wallImages(1)
+
+    expect(toGalleryImages([image])[0]).toMatchObject({
+      _key: image._key,
+      alt: image.alt,
+      blurDataURL: image.preview
+    })
+  })
+
+  it('prioritizes only the tile in the largest slot', () => {
+    const tiles = toGalleryImages(wallImages(6))
+    const largest = GALLERY_WALL_SLOTS.findIndex((slot) => slot.priority)
+
+    expect(tiles.map((tile) => tile.priority)).toEqual(tiles.map((_, index) => index === largest))
+  })
+
+  it('drops images beyond the six slots', () => {
+    expect(toGalleryImages(wallImages(8))).toHaveLength(6)
   })
 })

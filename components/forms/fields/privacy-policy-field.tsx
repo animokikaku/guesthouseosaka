@@ -17,7 +17,7 @@ interface PrivacyPolicyFieldProps {
   field: FieldWithValue<boolean>
 }
 
-export function PrivacyPolicyField({ field }: PrivacyPolicyFieldProps) {
+function PrivacyPolicyField({ field }: PrivacyPolicyFieldProps) {
   const { isInvalid, ids, controlProps } = useFieldControl('checkbox', field)
   const labelId = `${ids.control}-label`
   const t = useTranslations('forms')

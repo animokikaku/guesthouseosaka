@@ -21,7 +21,7 @@ interface ToggleGroupFieldProps extends Omit<
   description?: string | null
 }
 
-export function ToggleGroupField({
+function ToggleGroupField({
   field,
   label,
   options,

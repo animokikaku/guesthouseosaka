@@ -8,7 +8,11 @@ import {
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
-import type { FaqHouses, PricingCategories } from '@/app/[locale]/faq/(components)/types'
+import {
+  extraCostsByCategory,
+  type FaqHouses,
+  type PricingCategories
+} from '@/app/[locale]/faq/(components)/types'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from 'next-sanity'
 
@@ -35,6 +39,8 @@ export function FAQExtraCostsTable({ houses, pricingCategories }: FAQExtraCostsT
   if (houses.length === 0 || pricingCategories.length === 0) {
     return null
   }
+
+  const costsByHouse = houses.map(extraCostsByCategory)
 
   return (
     <div className="border-border overflow-hidden rounded-xs border">
@@ -66,12 +72,12 @@ export function FAQExtraCostsTable({ houses, pricingCategories }: FAQExtraCostsT
               <TableCell className="text-foreground font-medium whitespace-nowrap">
                 {category.title}
               </TableCell>
-              {houses.map((house) => {
-                const cost = house.extraCosts?.find((c) => c.categoryId === category._id)
+              {houses.map((house, index) => {
+                const cost = costsByHouse[index].get(category._id)
                 return (
                   <TableCell key={house._id} className="overflow-hidden">
-                    {cost?.value ? (
-                      <PortableText value={cost.value} components={portableTextComponents} />
+                    {cost ? (
+                      <PortableText value={cost} components={portableTextComponents} />
                     ) : (
                       <span className="leading-relaxed">–</span>
                     )}
