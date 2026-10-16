@@ -1,4 +1,4 @@
-import { HouseBuilding, type AvailabilityCounts } from '@/components/house/house-building'
+import { HouseBuilding } from '@/components/house/house-building'
 import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import type { BuildingData, HousePortableTextContent } from '@/lib/types/components'
 import type { PortableTextComponents } from '@portabletext/react'
@@ -33,10 +33,9 @@ interface HouseAboutProps {
   about: HousePortableTextContent
   title: string | null
   building: BuildingData | null
-  availability?: AvailabilityCounts | null
 }
 
-export function HouseAbout({ about, title, building, availability }: HouseAboutProps) {
+export function HouseAbout({ about, title, building }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
 
   return (
@@ -45,15 +44,7 @@ export function HouseAbout({ about, title, building, availability }: HouseAboutP
         {t('heading', { house: title ? stegaClean(title) : '' })}
       </HouseSectionHeading>
       <HouseSectionContent className="space-y-4">
-        <HouseBuilding
-          building={building}
-          availability={
-            availability && {
-              availableCount: availability.availableCount,
-              upcomingCount: availability.upcomingCount
-            }
-          }
-        />
+        <HouseBuilding building={building} />
         {about ? <PortableText value={about} components={portableTextComponents} /> : null}
       </HouseSectionContent>
     </section>

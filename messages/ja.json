@@ -78,15 +78,14 @@
     "style_japanese": "和室",
     "size": "{size, number}㎡",
     "per_month": "/月",
-    "empty": "現在満室です。今後の空室については<link>お問い合わせ</link>ください。"
+    "empty": "現在満室です。今後の空室については<link>お問い合わせ</link>ください。",
+    "badge_available": "{count}室が現在空室",
+    "badge_upcoming": "{count}室がまもなく空室"
   },
   "HouseBuilding": {
     "floors_label": "階数",
     "min_rent_label": "最低賃料",
-    "rooms_label": "部屋数",
-    "rooms_available": "{count}室が現在空室",
-    "rooms_upcoming": "{count}室がまもなく空室",
-    "rooms_full": "満室"
+    "rooms_label": "部屋数"
   },
   "HouseLocation": {
     "heading": "周辺地図",

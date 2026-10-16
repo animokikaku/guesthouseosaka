@@ -62,11 +62,11 @@ test.describe('House Page', () => {
   })
 
   test.describe('Availability', () => {
-    test('jumps from the rooms figure to the availability list', async ({ page }) => {
+    test('jumps from the gallery badge to the availability list', async ({ page }) => {
       await page.goto(`/en/${testHouse}`)
 
       const section = page.locator('section#availability')
-      await page.locator('a[href$="#availability"]').click()
+      await page.locator('a[href$="#availability"]:visible').click()
 
       await expect(page).toHaveURL(new RegExp(`/en/${testHouse}#availability$`))
       await expect(

@@ -1,6 +1,7 @@
 import { HouseAbout } from '@/components/house/house-about'
 import { HouseAmenities } from '@/components/house/house-amenities'
 import { HouseAvailability } from '@/components/house/house-availability'
+import { HouseAvailabilityBadge } from '@/components/house/house-availability-badge'
 import { HouseProvider } from '@/components/house/house-context'
 import { HouseLocation } from '@/components/house/house-location'
 import { HousePricing } from '@/components/house/house-pricing'
@@ -58,11 +59,17 @@ export function HousePageContent({
     })),
     today
   )
-  const hasRooms = Boolean(rooms?.length)
+  const availabilityBadge = rooms?.length ? (
+    <HouseAvailabilityBadge
+      slug={slug}
+      availableCount={availability.availableCount}
+      upcomingCount={availability.upcomingCount}
+    />
+  ) : null
 
   return (
     <>
-      <MobileHeroImage href={href} images={mobileHeroImages} />
+      <MobileHeroImage href={href} images={mobileHeroImages} overlay={availabilityBadge} />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading id={`${slug}-title`}>{title}</PageHeaderHeading>
@@ -84,15 +91,11 @@ export function HousePageContent({
               galleryPreview={galleryPreview}
               galleryImageCount={galleryImageCount ?? 0}
               featuredImage={featuredImage}
+              overlay={availabilityBadge}
             />
             <HouseProvider id={_id} type={_type} slug={slug}>
               <article id={slug} aria-labelledby={`${slug}-title`} className="space-y-12 pt-8">
-                <HouseAbout
-                  title={title}
-                  about={about}
-                  building={building}
-                  availability={hasRooms ? availability : null}
-                />
+                <HouseAbout title={title} about={about} building={building} />
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
                   featuredAmenities={featuredAmenities?.map(toAmenityItem) ?? []}

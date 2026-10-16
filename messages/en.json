@@ -78,15 +78,14 @@
     "style_japanese": "Japanese",
     "size": "{size, number} m²",
     "per_month": "/mo",
-    "empty": "All rooms are occupied right now. <link>Contact us</link> to hear about upcoming openings."
+    "empty": "All rooms are occupied right now. <link>Contact us</link> to hear about upcoming openings.",
+    "badge_available": "{count, plural, one {# room available now} other {# rooms available now}}",
+    "badge_upcoming": "{count, plural, one {# room opening soon} other {# rooms opening soon}}"
   },
   "HouseBuilding": {
     "floors_label": "Floors",
     "min_rent_label": "Min Rent",
-    "rooms_label": "Rooms",
-    "rooms_available": "{count, plural, one {# room available now} other {# rooms available now}}",
-    "rooms_upcoming": "{count, plural, one {# room opening soon} other {# rooms opening soon}}",
-    "rooms_full": "Fully occupied"
+    "rooms_label": "Rooms"
   },
   "HouseLocation": {
     "heading": "Where you'll be",
