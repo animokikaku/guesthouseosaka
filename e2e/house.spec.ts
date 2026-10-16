@@ -61,6 +61,20 @@ test.describe('House Page', () => {
     })
   })
 
+  test.describe('Availability', () => {
+    test('jumps from the rooms figure to the availability list', async ({ page }) => {
+      await page.goto(`/en/${testHouse}`)
+
+      const section = page.locator('section#availability')
+      await page.locator('a[href$="#availability"]').click()
+
+      await expect(page).toHaveURL(new RegExp(`/en/${testHouse}#availability$`))
+      await expect(
+        section.getByRole('heading', { level: 2, name: 'Availability' })
+      ).toBeInViewport()
+    })
+  })
+
   test.describe('Gallery Modal', () => {
     // Cache Components keeps the closed modal alive in <Activity>, so reopening
     // it must not restore its closed state.

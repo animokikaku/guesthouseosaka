@@ -10,6 +10,7 @@ import { faqQuestion } from './documents/faq-question'
 import { galleryCategory } from './documents/gallery-category'
 import { homePage } from './documents/home-page'
 import { house } from './documents/house'
+import { houseAvailability } from './documents/house-availability'
 import { legalNotice } from './documents/legal-notice'
 import { pricingCategory } from './documents/pricing-category'
 import { settings } from './documents/settings'
@@ -33,6 +34,7 @@ import { socialLink } from './objects/social-link'
 export const documentTypes = [
   homePage,
   house,
+  houseAvailability,
   settings,
   faqPage,
   contactPage,
@@ -76,7 +78,12 @@ export const singletonTypes: DocumentTypeName[] = [
 ]
 
 /** Documents the site routes on: no creating, duplicating or unpublishing. */
-export const fixedSetTypes: DocumentTypeName[] = [...singletonTypes, 'house', 'contactType']
+export const fixedSetTypes: DocumentTypeName[] = [
+  ...singletonTypes,
+  'house',
+  'houseAvailability',
+  'contactType'
+]
 
 /** Fixed documents and the taxonomies houses reference: no deleting. */
 export const protectedTypes: DocumentTypeName[] = [

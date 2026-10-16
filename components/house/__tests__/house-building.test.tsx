@@ -3,10 +3,13 @@ import { render, screen } from '@testing-library/react'
 import { HouseBuilding } from '../house-building'
 import { HouseProvider } from '../house-context'
 
-function renderBuilding(building: BuildingData | null) {
+function renderBuilding(
+  building: BuildingData | null,
+  availability?: React.ComponentProps<typeof HouseBuilding>['availability']
+) {
   return render(
     <HouseProvider id="house-123" type="house" slug="orange">
-      <HouseBuilding building={building} />
+      <HouseBuilding building={building} availability={availability} />
     </HouseProvider>
   )
 }
@@ -46,5 +49,17 @@ describe('HouseBuilding', () => {
     expect(screen.getByText(/\brooms\b/i).parentElement?.getAttribute('data-sanity')).toContain(
       'building.rooms'
     )
+  })
+
+  it.each([
+    [{ availableCount: 1, upcomingCount: 7 }, '1 room available now'],
+    [{ availableCount: 0, upcomingCount: 3 }, '3 rooms opening soon'],
+    [{ availableCount: 0, upcomingCount: 0 }, 'Fully occupied']
+  ])('links the rooms figure to availability, labelled %o', (availability, label) => {
+    renderBuilding({ rooms: 28, floors: 3, startingPrice: 41000 }, availability)
+
+    const link = screen.getByRole('link', { name: new RegExp(label) })
+    expect(link).toHaveAttribute('href', '/en/orange#availability')
+    expect(link).toHaveTextContent(/28\s*rooms/i)
   })
 })

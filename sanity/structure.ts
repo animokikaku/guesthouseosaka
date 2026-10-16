@@ -1,3 +1,4 @@
+import { CalendarIcon } from '@sanity/icons/Calendar'
 import { CheckmarkCircleIcon } from '@sanity/icons/CheckmarkCircle'
 import { CogIcon } from '@sanity/icons/Cog'
 import { ComponentIcon } from '@sanity/icons/Component'
@@ -16,6 +17,7 @@ import { singletonTypes, type DocumentTypeName } from './schemaTypes'
 const MANAGED_TYPES: DocumentTypeName[] = [
   ...singletonTypes,
   'house',
+  'houseAvailability',
   'contactType',
   'galleryCategory',
   'amenityCategory',
@@ -82,6 +84,14 @@ export const structure: StructureResolver = (S) =>
         context: S.context,
         createIntent: false
       }),
+
+      // ============================================
+      // ROOM AVAILABILITY (one document per house)
+      // ============================================
+      S.listItem()
+        .title('Room Availability')
+        .icon(CalendarIcon)
+        .child(S.documentTypeList('houseAvailability').title('Room Availability')),
 
       // ============================================
       // FAQ QUESTIONS (orderable for FAQ page)

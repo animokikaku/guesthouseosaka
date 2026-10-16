@@ -63,10 +63,30 @@
     },
     "show_all": "{count}件の設備をすべて表示"
   },
+  "HouseAvailability": {
+    "heading": "空室状況",
+    "updated": "{date}更新",
+    "column_room": "部屋",
+    "column_type": "タイプ",
+    "column_size": "広さ",
+    "column_rent": "賃料",
+    "room_number": "{number}号室",
+    "now": "空室",
+    "now_label": "現在空室",
+    "from_label": "{date}から入居可",
+    "style_western": "洋室",
+    "style_japanese": "和室",
+    "size": "{size, number}㎡",
+    "per_month": "/月",
+    "empty": "現在満室です。今後の空室については<link>お問い合わせ</link>ください。"
+  },
   "HouseBuilding": {
     "floors_label": "階数",
     "min_rent_label": "最低賃料",
-    "rooms_label": "部屋数"
+    "rooms_label": "部屋数",
+    "rooms_available": "{count}室が現在空室",
+    "rooms_upcoming": "{count}室がまもなく空室",
+    "rooms_full": "満室"
   },
   "HouseLocation": {
     "heading": "周辺地図",
