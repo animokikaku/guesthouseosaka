@@ -16,6 +16,7 @@ export const house = defineType({
   ],
   groups: [
     { name: 'overview', title: 'Overview', default: true },
+    { name: 'availability', title: 'Availability' },
     { name: 'content', title: 'Content' },
     { name: 'amenities', title: 'Amenities' },
     { name: 'location', title: 'Location' },
@@ -147,6 +148,20 @@ export const house = defineType({
       title: 'Map',
       type: 'houseMap',
       group: 'location'
+    }),
+
+    // ============================================
+    // AVAILABILITY GROUP
+    // ============================================
+    defineField({
+      name: 'rooms',
+      title: 'Rooms',
+      type: 'array',
+      group: 'availability',
+      description:
+        'Set the date a room becomes available. Leave it empty while the room is occupied.',
+      of: [defineArrayMember({ type: 'houseRoom' })],
+      options: { sortable: false }
     }),
 
     // ============================================

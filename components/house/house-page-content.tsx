@@ -37,7 +37,8 @@ export function HousePageContent({
   pricing,
   about,
   building,
-  availability,
+  _updatedAt,
+  rooms,
   houses,
   today
 }: StegaAware<NonNullable<HouseQueryResult>> & { houses: HousesTitlesQueryResult; today: string }) {
@@ -49,17 +50,15 @@ export function HousePageContent({
   const mobileHeroImages = buildGallerySlides({ featuredImage, galleryImages })
 
   // Dates and enum values are compared, so drop any visual-editing markers first
-  const availabilitySummary = summarizeAvailability(
-    availability?.rooms?.map((room) => ({
+  const availability = summarizeAvailability(
+    rooms?.map((room) => ({
       ...room,
       availableFrom: stegaClean(room.availableFrom),
       style: stegaClean(room.style)
     })),
     today
   )
-  const availabilityDocument = availability
-    ? { ...availability, _updatedAt: stegaClean(availability._updatedAt) }
-    : null
+  const hasRooms = Boolean(rooms?.length)
 
   return (
     <>
@@ -92,7 +91,7 @@ export function HousePageContent({
                   title={title}
                   about={about}
                   building={building}
-                  availability={availabilityDocument ? availabilitySummary : null}
+                  availability={hasRooms ? availability : null}
                 />
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
@@ -100,8 +99,8 @@ export function HousePageContent({
                 />
                 <HouseLocation location={location} map={toMapData(map)} />
                 <HouseAvailability
-                  document={availabilityDocument}
-                  summary={availabilitySummary}
+                  document={{ _id, _type, _updatedAt: stegaClean(_updatedAt) }}
+                  summary={availability}
                   today={today}
                 />
                 <HousePricing pricing={pricing} />

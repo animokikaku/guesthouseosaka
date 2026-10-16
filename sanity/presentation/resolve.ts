@@ -26,12 +26,6 @@ export const resolve: PresentationPluginOptions['resolve'] = {
         locations: [l.home(), l.house(doc?.slug)]
       })
     }),
-    houseAvailability: defineLocations({
-      select: { slug: 'house.slug' },
-      resolve: (doc) => ({
-        locations: [l.house(doc?.slug)]
-      })
-    }),
     faqPage: defineLocations({
       select: {},
       resolve: () => ({

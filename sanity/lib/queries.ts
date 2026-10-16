@@ -216,19 +216,15 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     address
   },
 
-  // Room availability lives in its own document, one per house
-  "availability": *[_type == "houseAvailability" && house._ref == ^._id][0]{
-    _id,
-    _type,
-    _updatedAt,
-    "rooms": rooms[]{
-      _key,
-      number,
-      availableFrom,
-      style,
-      size,
-      rent
-    }
+  // Room availability; _updatedAt dates the list on the page
+  _updatedAt,
+  "rooms": rooms[]{
+    _key,
+    number,
+    availableFrom,
+    style,
+    size,
+    rent
   },
 
   // Pricing
