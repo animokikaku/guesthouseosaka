@@ -1,5 +1,5 @@
 import type { LocationData, MapData } from '@/lib/types/components'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { HouseLocation } from '../house-location'
 
 // Google Maps can't run in jsdom; the stub shows where the map was asked to center.
@@ -10,16 +10,33 @@ vi.mock('next/dynamic', () => ({
     }
 }))
 
+function block(
+  key: string,
+  text: string,
+  style: 'normal' | 'h3' = 'normal',
+  listItem?: 'bullet' | 'number'
+): NonNullable<LocationData['details']>[number] {
+  return {
+    _type: 'block',
+    _key: key,
+    style,
+    ...(listItem && { listItem, level: 1 }),
+    children: [{ _type: 'span', _key: `${key}-text`, text, marks: [] }],
+    markDefs: []
+  }
+}
+
+// Shaped like an editor writes it: a section heading, a list of nearby places
+// and numbered directions.
 const location: LocationData = {
   highlight: 'Five minutes from Tsuruhashi station',
   details: [
-    {
-      _type: 'block',
-      _key: 'd1',
-      style: 'normal',
-      children: [{ _type: 'span', _key: 's1', text: 'Supermarket across the street', marks: [] }],
-      markDefs: []
-    }
+    block('nearby', 'Nearby', 'h3'),
+    block('shop', 'Supermarket across the street', 'normal', 'bullet'),
+    block('laundry', 'Coin laundry', 'normal', 'bullet'),
+    block('directions', 'From the station', 'h3'),
+    block('exit', 'Take exit 7', 'normal', 'number'),
+    block('turn', 'Turn left at the bakery', 'normal', 'number')
   ]
 }
 
@@ -44,7 +61,19 @@ describe('HouseLocation', () => {
 
     fireEvent.click(screen.getByRole('button'))
 
-    expect(screen.getByRole('dialog')).toHaveTextContent('Supermarket across the street')
+    const dialog = within(screen.getByRole('dialog'))
+    expect(dialog.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)).toEqual([
+      'Nearby',
+      'From the station'
+    ])
+    const [nearby, directions] = dialog.getAllByRole('list')
+    expect(
+      within(nearby)
+        .getAllByRole('listitem')
+        .map((li) => li.textContent)
+    ).toEqual(['Supermarket across the street', 'Coin laundry'])
+    expect(directions.tagName).toBe('OL')
+    expect(within(directions).getAllByRole('listitem')).toHaveLength(2)
   })
 
   it('keeps the section without a map', () => {

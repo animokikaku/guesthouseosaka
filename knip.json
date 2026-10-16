@@ -17,7 +17,7 @@
     "entry": [
       "e2e/**/*.spec.ts",
       "playwright/components/**/*.spec.ts",
-      "playwright/gallery/{main,next-image,sanity-image,i18n-navigation,vite.config}.{ts,tsx,mts}",
+      "playwright/gallery/{main,next-image,next-navigation,sanity-image,i18n-navigation,vite.config}.{ts,tsx,mts}",
       "app/**/*.story.tsx",
       "components/**/*.story.tsx"
     ]

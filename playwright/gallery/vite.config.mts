@@ -27,6 +27,10 @@ export default defineConfig({
         replacement: path.resolve(projectRoot, 'playwright/gallery/sanity-image.ts')
       },
       {
+        find: /^next\/navigation$/,
+        replacement: path.resolve(projectRoot, 'playwright/gallery/next-navigation.ts')
+      },
+      {
         find: '@/i18n/navigation',
         replacement: path.resolve(projectRoot, 'playwright/gallery/i18n-navigation.tsx')
       },

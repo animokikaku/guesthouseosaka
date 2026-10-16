@@ -1,9 +1,5 @@
 import '@testing-library/jest-dom/vitest'
-import { faker } from '@faker-js/faker'
 import * as webStreams from 'node:stream/web'
-
-// Fixtures draw from faker; a fixed seed keeps every run on the same data.
-faker.seed(20260101)
 
 // The vmThreads pool runs each file in a VM context whose globals come from jsdom,
 // which has no web streams. The Sanity client (via undici) reads them at import time.

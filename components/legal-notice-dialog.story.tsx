@@ -23,7 +23,39 @@ const legalNotice = {
       ],
       markDefs: [],
       style: 'normal' as const
-    }
+    },
+    {
+      _key: 'collected-heading',
+      _type: 'block' as const,
+      children: [
+        {
+          _key: 'collected-heading-text',
+          _type: 'span' as const,
+          marks: [],
+          text: 'What we collect'
+        }
+      ],
+      markDefs: [],
+      style: 'h3' as const
+    },
+    ...['Your name', 'Your email address'].map((text, index) => ({
+      _key: `collected-${index}`,
+      _type: 'block' as const,
+      children: [{ _key: `collected-${index}-text`, _type: 'span' as const, marks: [], text }],
+      markDefs: [],
+      style: 'normal' as const,
+      listItem: 'bullet' as const,
+      level: 1
+    })),
+    ...['Write to us', 'We delete your data within a month'].map((text, index) => ({
+      _key: `erasure-${index}`,
+      _type: 'block' as const,
+      children: [{ _key: `erasure-${index}-text`, _type: 'span' as const, marks: [], text }],
+      markDefs: [],
+      style: 'normal' as const,
+      listItem: 'number' as const,
+      level: 1
+    }))
   ]
 }
 

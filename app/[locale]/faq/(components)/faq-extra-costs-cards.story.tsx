@@ -15,6 +15,14 @@ function portableText(text: string) {
   ]
 }
 
+function bulletList(items: string[]) {
+  return items.map((text) => ({
+    ...portableText(text)[0],
+    listItem: 'bullet' as const,
+    level: 1
+  }))
+}
+
 const pricingCategories = [
   { _id: 'deposit', title: 'Deposit' },
   { _id: 'internet', title: 'Internet' }
@@ -46,7 +54,13 @@ const houses = (
   },
   extraCosts: [
     { categoryId: 'deposit', value: portableText(deposit) },
-    { categoryId: 'internet', value: portableText('Included') }
+    {
+      categoryId: 'internet',
+      value:
+        slug === 'orange'
+          ? bulletList(['Wi-Fi included', 'Wired in every room'])
+          : portableText('Included')
+    }
   ]
 })) satisfies FaqHouses
 
