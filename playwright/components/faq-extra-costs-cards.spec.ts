@@ -15,6 +15,11 @@ test('navigates the real carousel with house dots', async ({ mount }) => {
 
   await expect(orangeHeading).toBeInViewport()
   await expect(orangeDot).toHaveCSS('width', '24px')
+  // A cost the editor wrote as a list stays one.
+  await expect(component.getByRole('listitem')).toHaveText([
+    'Wi-Fi included',
+    'Wired in every room'
+  ])
 
   await appleDot.click()
 

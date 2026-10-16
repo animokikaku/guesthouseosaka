@@ -11,6 +11,15 @@ test('opens and closes the real desktop dialog with focus restoration', async ({
   await expect(dialog).toBeVisible()
   await expect(dialog.getByRole('heading', { name: 'Privacy Policy' })).toBeVisible()
   await expect(dialog.getByText('Policy content rendered in the browser.')).toBeVisible()
+  // The editor's sections and lists keep their structure.
+  await expect(dialog.getByRole('heading', { level: 3, name: 'What we collect' })).toBeVisible()
+  await expect(dialog.getByRole('list')).toHaveCount(2)
+  await expect(dialog.getByRole('listitem')).toHaveText([
+    'Your name',
+    'Your email address',
+    'Write to us',
+    'We delete your data within a month'
+  ])
 
   await page.keyboard.press('Escape')
   await expect(dialog).toBeHidden()
