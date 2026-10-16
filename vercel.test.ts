@@ -1,7 +1,7 @@
 // @vitest-environment node
 
 import { execFile } from 'node:child_process'
-import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { cp, mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { promisify } from 'node:util'
@@ -34,9 +34,16 @@ type VercelGitEnvironment = {
 }
 
 let repositoryRoot: string
+let baseRepository: string
 
 beforeAll(async () => {
   repositoryRoot = await mkdtemp(join(tmpdir(), 'guesthouseosaka-vercel-'))
+  baseRepository = join(repositoryRoot, 'base')
+
+  await mkdir(baseRepository)
+  await git(baseRepository, 'init', '--quiet')
+  await commitFiles(baseRepository, { 'scripts/vercel-ignore-build.sh': ignoreScript })
+  await commitFiles(baseRepository, { 'README.md': 'initial' })
 })
 
 afterAll(() => rm(repositoryRoot, { recursive: true, force: true }))
@@ -61,18 +68,15 @@ async function commitFiles(cwd: string, files: Record<string, string>) {
 /**
  * A throwaway repository holding the ignore script and one unrelated commit.
  *
- * Every case builds its own so the cases can run concurrently. Sharing one
+ * Every case gets its own so the cases can run concurrently. Sharing one
  * repository would make each commit visible to the cases after it, forcing them
  * into a fixed order and requiring every commit to touch a path no earlier one
- * had already left with identical content.
+ * had already left with identical content. Each is a copy of one base repository
+ * rather than built from scratch, which skips five git processes per case.
  */
 async function createRepository() {
   const cwd = await mkdtemp(join(repositoryRoot, 'case-'))
-
-  await git(cwd, 'init', '--quiet')
-  await commitFiles(cwd, { 'scripts/vercel-ignore-build.sh': ignoreScript })
-  await commitFiles(cwd, { 'README.md': 'initial' })
-
+  await cp(baseRepository, cwd, { recursive: true })
   return cwd
 }
 

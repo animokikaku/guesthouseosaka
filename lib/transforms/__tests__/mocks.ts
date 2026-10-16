@@ -5,6 +5,11 @@ import type {
 } from '@/sanity.types'
 import { faker } from '@faker-js/faker'
 
+// A fixed seed keeps every run on the same data. Seeded here, where faker is
+// used, so the files that never build fixtures don't load it. Each test file
+// evaluates this module afresh, so every one starts from the same seed.
+faker.seed(20260101)
+
 // ============================================
 // Type Aliases for Readability
 // ============================================
