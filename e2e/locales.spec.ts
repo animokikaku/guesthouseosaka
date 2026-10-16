@@ -4,15 +4,22 @@ import { existsSync } from 'node:fs'
 /**
  * Consolidated locale route tests.
  *
- * This file tests that all locale routes load successfully across all supported locales.
- * Test matrix: [en, ja, fr, zh-cn, zh-tw] x [/, /faq, /contact, /orange/gallery] = 20 tests
+ * Every page loads with a self-referencing canonical, in two locales:
+ * [en, zh-tw] x [/, /faq, /contact, /orange/gallery] = 8 tests
+ *
+ * Locales share one code path, so the other three add run time, not cases. The
+ * two kept are the ones that can break differently: the default locale, and one
+ * whose URL prefix (/zh-tw) is mapped rather than its code (zh-TW). Every
+ * catalog is checked for parity in i18n/__tests__/messages.test.ts, every
+ * locale's hreflang by the sitemap test, and ja and fr pages are rendered by
+ * the form, language switcher and not-found tests.
  *
  * This keeps locale routing as a whole-app browser boundary instead of
  * duplicating it in component-focused suites.
  */
 
-// URL prefixes (zh-CN and zh-TW are served under lowercase prefixes)
-const LOCALES = ['en', 'ja', 'fr', 'zh-cn', 'zh-tw'] as const
+// URL prefixes (zh-TW is served under a lowercase prefix)
+const LOCALES = ['en', 'zh-tw'] as const
 
 const ROUTES = [
   { path: '', name: 'homepage', selector: 'heading' },
