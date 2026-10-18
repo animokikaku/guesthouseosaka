@@ -159,7 +159,7 @@ export const house = defineType({
       type: 'array',
       group: 'availability',
       description:
-        'Set the date a room becomes available. Leave it empty while the room is occupied.',
+        "Each room becomes available on its date. Leave a room's date empty while it's occupied; don't remove the room.",
       of: [defineArrayMember({ type: 'houseRoom' })],
       options: { sortable: false }
     }),

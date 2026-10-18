@@ -85,7 +85,7 @@ export function HouseAvailability({ document, summary, today }: HouseAvailabilit
     <ResponsiveModal
       title={t('heading')}
       description={t('last_updated', {
-        date: formatter.dateTime(tokyoMidnight(document._updatedAt.slice(0, 10)), {
+        date: formatter.dateTime(new Date(document._updatedAt), {
           dateStyle: 'long'
         })
       })}

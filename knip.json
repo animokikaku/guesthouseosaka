@@ -1,5 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["migrations/*.ts"],
   "ignore": [
     ".eloqnt/config.ts",
     "global.ts",
