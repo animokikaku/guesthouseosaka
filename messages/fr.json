@@ -65,7 +65,7 @@
   },
   "HouseAvailability": {
     "heading": "Disponibilités",
-    "updated": "Mis à jour le {date}",
+    "last_updated": "Dernière mise à jour : {date}",
     "column_room": "Chambre",
     "column_type": "Type",
     "column_size": "Surface",
@@ -78,9 +78,9 @@
     "style_japanese": "Japonaise",
     "size": "{size, number} m²",
     "per_month": "/mois",
-    "empty": "Toutes les chambres sont occupées pour le moment. <link>Contactez-nous</link> pour connaître les prochaines disponibilités.",
-    "badge_available": "{count, plural, one {# chambre disponible} other {# chambres disponibles}}",
-    "badge_upcoming": "{count, plural, one {# chambre bientôt libre} other {# chambres bientôt libres}}"
+    "rooms_available": "{count, plural, one {# chambre disponible} other {# chambres disponibles}}",
+    "rooms_upcoming": "{count, plural, one {# chambre bientôt libre} other {# chambres bientôt libres}}",
+    "fully_booked": "Complet"
   },
   "HouseBuilding": {
     "floors_label": "Étages",

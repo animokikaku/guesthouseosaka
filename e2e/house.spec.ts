@@ -62,16 +62,17 @@ test.describe('House Page', () => {
   })
 
   test.describe('Availability', () => {
-    test('jumps from the gallery badge to the availability list', async ({ page }) => {
+    test('opens the room list from the about section', async ({ page }) => {
       await page.goto(`/en/${testHouse}`)
 
-      const section = page.locator('section#availability')
-      await page.locator('a[href$="#availability"]:visible').click()
+      await page
+        .locator('section#about')
+        .getByRole('button', { name: /available now|opening soon/i })
+        .click()
 
-      await expect(page).toHaveURL(new RegExp(`/en/${testHouse}#availability$`))
-      await expect(
-        section.getByRole('heading', { level: 2, name: 'Availability' })
-      ).toBeInViewport()
+      const dialog = page.getByRole('dialog', { name: 'Availability' })
+      await expect(dialog).toBeVisible()
+      await expect(dialog.getByRole('table')).toBeVisible()
     })
   })
 

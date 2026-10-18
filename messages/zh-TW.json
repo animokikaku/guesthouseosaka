@@ -65,7 +65,7 @@
   },
   "HouseAvailability": {
     "heading": "空房狀況",
-    "updated": "更新於{date}",
+    "last_updated": "最後更新：{date}",
     "column_room": "房間",
     "column_type": "類型",
     "column_size": "面積",
@@ -78,9 +78,9 @@
     "style_japanese": "日式",
     "size": "{size, number}㎡",
     "per_month": "/月",
-    "empty": "目前所有房間皆已住滿。<link>聯絡我們</link>了解即將空出的房間。",
-    "badge_available": "{count}間房現可入住",
-    "badge_upcoming": "{count}間房即將空出"
+    "rooms_available": "{count}間房現可入住",
+    "rooms_upcoming": "{count}間房即將空出",
+    "fully_booked": "已滿房"
   },
   "HouseBuilding": {
     "floors_label": "樓層",

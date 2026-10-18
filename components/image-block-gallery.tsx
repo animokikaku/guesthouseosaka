@@ -4,7 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
 import { toGalleryImageProps, type GalleryImageProps } from '@/lib/gallery-image'
 import { getTranslations } from 'next-intl/server'
-import { ComponentProps, type ReactNode } from 'react'
+import { ComponentProps } from 'react'
 
 type GalleryImages = GalleryItem[] | null
 
@@ -15,8 +15,6 @@ type ImageBlockGalleryProps = {
   /** Total images behind the five tiles, for the `+N` overflow badge. */
   galleryImageCount: number
   featuredImage?: FeaturedImage
-  /** Pinned to the top-right corner, beside (not inside) the gallery link. */
-  overlay?: ReactNode
 }
 
 function GalleryGrid({
@@ -24,8 +22,7 @@ function GalleryGrid({
   href,
   viewGalleryLabel,
   extraCount,
-  overflowLabel,
-  overlay
+  overflowLabel
 }: {
   images: GalleryImageProps[]
   href: ComponentProps<typeof Link>['href']
@@ -33,7 +30,6 @@ function GalleryGrid({
   /** Images beyond the 5 shown in the grid, surfaced as a `+N` overlay on the last tile */
   extraCount: number
   overflowLabel: string
-  overlay?: ReactNode
 }) {
   if (images.length < 5) return null
 
@@ -101,7 +97,6 @@ function GalleryGrid({
             aria-hidden="true"
             className="ring-primary/50 pointer-events-none absolute inset-0 rounded-xl ring-inset peer-focus-visible:ring-2"
           />
-          {overlay}
         </div>
       </div>
     </div>
@@ -112,8 +107,7 @@ export async function ImageBlockGallery({
   href,
   galleryPreview,
   galleryImageCount,
-  featuredImage,
-  overlay
+  featuredImage
 }: ImageBlockGalleryProps) {
   const t = await getTranslations('ImageBlockGallery')
 
@@ -154,7 +148,6 @@ export async function ImageBlockGallery({
       }
       extraCount={extraCount}
       overflowLabel={t('overflow_count', { count: extraCount })}
-      overlay={overlay}
     />
   )
 }

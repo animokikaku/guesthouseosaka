@@ -1,11 +1,11 @@
 import { summarizeAvailability, type AvailabilityRoom } from '@/lib/availability'
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { HouseAvailability } from '../house-availability'
 
 const today = '2026-10-16'
 const document = {
-  _id: 'houseAvailability-orange',
-  _type: 'houseAvailability',
+  _id: 'house-orange',
+  _type: 'house',
   _updatedAt: '2026-10-15T09:00:00Z'
 }
 
@@ -19,12 +19,23 @@ function renderAvailability(rooms: AvailabilityRoom[], doc: typeof document | nu
   )
 }
 
+/** Opens the modal from its badge, whatever it says, and returns it. */
+function openAvailability(rooms: AvailabilityRoom[]) {
+  renderAvailability(rooms)
+  fireEvent.click(screen.getByRole('button'))
+  return screen.getByRole('dialog', { name: 'Availability' })
+}
+
 describe('HouseAvailability', () => {
   it('lists free and upcoming rooms with their status, details and rent', () => {
-    renderAvailability([room('309', '2026-10-01'), room('311', '2026-10-20'), room('101', null)])
+    const dialog = openAvailability([
+      room('309', '2026-10-01'),
+      room('311', '2026-10-20'),
+      room('101', null)
+    ])
 
-    expect(screen.getByRole('heading', { level: 2, name: /availability/i })).toBeInTheDocument()
-    const rows = within(screen.getAllByRole('rowgroup')[1]).getAllByRole('row')
+    expect(dialog).toHaveAccessibleDescription('Last updated: October 15, 2026')
+    const rows = within(within(dialog).getAllByRole('rowgroup')[1]).getAllByRole('row')
     expect(rows).toHaveLength(2)
 
     expect(rows[0]).toHaveTextContent(/309/)
@@ -35,23 +46,35 @@ describe('HouseAvailability', () => {
     expect(within(rows[1]).getByText(/Available from Oct 20/)).toBeInTheDocument()
   })
 
-  it('leaves occupied rooms out of the list', () => {
-    renderAvailability([room('101', null), room('309', today)])
+  it.each([
+    ['1 room available now', [room('309', today), room('311', '2026-10-20')]],
+    ['2 rooms available now', [room('309', today), room('310', today)]],
+    ['2 rooms opening soon', [room('311', '2026-10-20'), room('312', '2026-11-01')]]
+  ])('opens from a "%s" badge', (label, rooms) => {
+    renderAvailability(rooms)
 
-    expect(screen.queryByText(/\b101\b/)).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: label }))
+
+    expect(screen.getByRole('dialog', { name: 'Availability' })).toBeInTheDocument()
+  })
+
+  it('leaves occupied rooms out of the list', () => {
+    const dialog = openAvailability([room('101', null), room('309', today)])
+
+    expect(within(dialog).queryByText(/\b101\b/)).not.toBeInTheDocument()
   })
 
   it('shows the year only for dates in another year', () => {
-    renderAvailability([room('403', '2027-05-17')])
+    const dialog = openAvailability([room('403', '2027-05-17')])
 
-    expect(screen.getByText(/Available from May 17, 2027/)).toBeInTheDocument()
+    expect(within(dialog).getByText(/Available from May 17, 2027/)).toBeInTheDocument()
   })
 
-  it('points to the contact page when every room is occupied', () => {
+  it('shows a plain "Fully booked" badge when every room is occupied', () => {
     renderAvailability([room('101', null), room('102', null)])
 
-    expect(screen.queryByRole('table')).not.toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /contact us/i })).toHaveAttribute('href', '/en/contact')
+    expect(screen.getByText('Fully booked')).toBeInTheDocument()
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
   it('renders nothing without an availability document or rooms', () => {

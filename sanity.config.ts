@@ -5,7 +5,7 @@
  */
 
 import { visionTool } from '@sanity/vision'
-import { defineConfig, defineField } from 'sanity'
+import { defineArrayMember, defineConfig, defineField } from 'sanity'
 import { internationalizedArray } from 'sanity-plugin-internationalized-array'
 import { presentationTool } from 'sanity/presentation'
 import { structureTool } from 'sanity/structure'
@@ -24,6 +24,27 @@ const languages = routing.locales.map((locale) => ({
   id: locale,
   title: localeConfig[locale].label
 }))
+
+/** Rich text shared by the internationalized portable text fields. */
+const textBlock = defineArrayMember({
+  type: 'block',
+  styles: [
+    { title: 'Normal', value: 'normal' },
+    { title: 'Heading 1', value: 'h1' },
+    { title: 'Heading 2', value: 'h2' },
+    { title: 'Heading 3', value: 'h3' }
+  ],
+  marks: {
+    decorators: [
+      { title: 'Bold', value: 'strong' },
+      { title: 'Italic', value: 'em' }
+    ]
+  },
+  lists: [
+    { title: 'Bullet', value: 'bullet' },
+    { title: 'Numbered', value: 'number' }
+  ]
+})
 
 export default defineConfig({
   basePath: '/studio',
@@ -97,27 +118,13 @@ export default defineConfig({
         defineField({
           name: 'portableText',
           type: 'array',
-          of: [
-            {
-              type: 'block',
-              styles: [
-                { title: 'Normal', value: 'normal' },
-                { title: 'Heading 1', value: 'h1' },
-                { title: 'Heading 2', value: 'h2' },
-                { title: 'Heading 3', value: 'h3' }
-              ],
-              marks: {
-                decorators: [
-                  { title: 'Bold', value: 'strong' },
-                  { title: 'Italic', value: 'em' }
-                ]
-              },
-              lists: [
-                { title: 'Bullet', value: 'bullet' },
-                { title: 'Numbered', value: 'number' }
-              ]
-            }
-          ]
+          of: [textBlock]
+        }),
+        // House About text also takes the room availability block, placed where editors want it
+        defineField({
+          name: 'housePortableText',
+          type: 'array',
+          of: [textBlock, { type: 'houseRoomAvailabilityBlock' }]
         })
       ]
     })

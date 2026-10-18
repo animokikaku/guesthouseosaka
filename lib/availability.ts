@@ -2,7 +2,7 @@ import { timeZone } from '@/i18n/formats'
 
 export type RoomStatus = 'available' | 'upcoming' | 'occupied'
 
-/** A room as stored in a `houseAvailability` document. */
+/** A room as stored in a house's `rooms` array. */
 export interface AvailabilityRoom {
   _key: string
   number: string | null

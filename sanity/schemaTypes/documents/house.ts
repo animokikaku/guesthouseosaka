@@ -96,10 +96,10 @@ export const house = defineType({
     defineField({
       name: 'about',
       title: 'About Section',
-      type: 'internationalizedArrayPortableText',
+      type: 'internationalizedArrayHousePortableText',
       group: 'content',
       description:
-        'Detailed description and highlights of the house. Use bullet points for key features.',
+        'Detailed description and highlights of the house. Use bullet points for key features, and insert "Room availability" where the availability marker should appear.',
       validation: (rule) => rule.required()
     }),
 

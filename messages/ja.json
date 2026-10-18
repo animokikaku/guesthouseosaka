@@ -65,7 +65,7 @@
   },
   "HouseAvailability": {
     "heading": "空室状況",
-    "updated": "{date}更新",
+    "last_updated": "最終更新日：{date}",
     "column_room": "部屋",
     "column_type": "タイプ",
     "column_size": "広さ",
@@ -78,9 +78,9 @@
     "style_japanese": "和室",
     "size": "{size, number}㎡",
     "per_month": "/月",
-    "empty": "現在満室です。今後の空室については<link>お問い合わせ</link>ください。",
-    "badge_available": "{count}室が現在空室",
-    "badge_upcoming": "{count}室がまもなく空室"
+    "rooms_available": "{count}室が現在空室",
+    "rooms_upcoming": "{count}室がまもなく空室",
+    "fully_booked": "満室"
   },
   "HouseBuilding": {
     "floors_label": "階数",

@@ -68,7 +68,7 @@ declare const messages: {
   },
   "HouseAvailability": {
     "heading": "Availability",
-    "updated": "Updated {date}",
+    "last_updated": "Last updated: {date}",
     "column_room": "Room",
     "column_type": "Type",
     "column_size": "Size",
@@ -81,9 +81,9 @@ declare const messages: {
     "style_japanese": "Japanese",
     "size": "{size, number} m²",
     "per_month": "/mo",
-    "empty": "All rooms are occupied right now. <link>Contact us</link> to hear about upcoming openings.",
-    "badge_available": "{count, plural, one {# room available now} other {# rooms available now}}",
-    "badge_upcoming": "{count, plural, one {# room opening soon} other {# rooms opening soon}}"
+    "rooms_available": "{count, plural, one {# room available now} other {# rooms available now}}",
+    "rooms_upcoming": "{count, plural, one {# room opening soon} other {# rooms opening soon}}",
+    "fully_booked": "Fully booked"
   },
   "HouseBuilding": {
     "floors_label": "Floors",

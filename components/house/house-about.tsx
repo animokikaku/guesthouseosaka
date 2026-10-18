@@ -5,6 +5,7 @@ import type { PortableTextComponents } from '@portabletext/react'
 import { PortableText } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
+import type { ReactNode } from 'react'
 
 const portableTextComponents: PortableTextComponents = {
   block: {
@@ -33,10 +34,21 @@ interface HouseAboutProps {
   about: HousePortableTextContent
   title: string | null
   building: BuildingData | null
+  /**
+   * The room availability marker, shown where editors placed a "Room availability" block
+   * in the text, or between the building figures and the text when they haven't.
+   */
+  availability?: ReactNode
 }
 
-export function HouseAbout({ about, title, building }: HouseAboutProps) {
+export function HouseAbout({ about, title, building, availability }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
+
+  const placed = about?.some((block) => block._type === 'houseRoomAvailabilityBlock')
+  const components: PortableTextComponents = {
+    ...portableTextComponents,
+    types: { houseRoomAvailabilityBlock: () => availability }
+  }
 
   return (
     <section id="about" aria-labelledby="about-title">
@@ -45,7 +57,8 @@ export function HouseAbout({ about, title, building }: HouseAboutProps) {
       </HouseSectionHeading>
       <HouseSectionContent className="space-y-4">
         <HouseBuilding building={building} />
-        {about ? <PortableText value={about} components={portableTextComponents} /> : null}
+        {placed ? null : availability}
+        {about ? <PortableText value={about} components={components} /> : null}
       </HouseSectionContent>
     </section>
   )
