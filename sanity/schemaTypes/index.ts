@@ -26,7 +26,6 @@ import { houseLocation } from './objects/house-location'
 import { houseMap } from './objects/house-map'
 import { housePhone } from './objects/house-phone'
 import { houseRoom } from './objects/house-room'
-import { houseRoomAvailabilityBlock } from './objects/house-room-availability-block'
 import { localizedImage } from './objects/localized-image'
 import { pageAction } from './objects/page-action'
 import { pricingRow } from './objects/pricing-row'
@@ -58,7 +57,6 @@ const objectTypes = [
   houseMap,
   housePhone,
   houseRoom,
-  houseRoomAvailabilityBlock,
   socialLink,
   pricingRow,
   address,

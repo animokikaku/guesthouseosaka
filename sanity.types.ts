@@ -69,11 +69,6 @@ export type SocialLink = {
   url: string;
 };
 
-export type HouseRoomAvailabilityBlock = {
-  _type: "houseRoomAvailabilityBlock";
-  placeholder?: boolean;
-};
-
 export type HouseRoom = {
   _type: "houseRoom";
   availableFrom?: string;
@@ -359,7 +354,7 @@ export type House = {
   caption?: InternationalizedArrayText;
   image: LocalizedImage;
   building?: HouseBuilding;
-  about: InternationalizedArrayHousePortableText;
+  about: InternationalizedArrayPortableText;
   featuredImage?: LocalizedImage;
   galleryCategories?: Array<
     {
@@ -404,12 +399,6 @@ export type InternationalizedArrayText = Array<
   } & InternationalizedArrayTextValue
 >;
 
-export type InternationalizedArrayHousePortableText = Array<
-  {
-    _key: string;
-  } & InternationalizedArrayHousePortableTextValue
->;
-
 export type SanityImageCrop = {
   _type: "sanity.imageCrop";
   top: number;
@@ -448,34 +437,6 @@ export type HomePage = {
   collection: {
     content: InternationalizedArrayPortableText;
   };
-};
-
-export type InternationalizedArrayHousePortableTextValue = {
-  _type: "internationalizedArrayHousePortableTextValue";
-  value?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?: "normal" | "h1" | "h2" | "h3";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | ({
-        _key: string;
-      } & HouseRoomAvailabilityBlock)
-  >;
-  language: string;
 };
 
 export type InternationalizedArrayPortableTextValue = {
@@ -624,7 +585,6 @@ export type AllSanitySchemaTypes =
   | Address
   | PricingRow
   | SocialLink
-  | HouseRoomAvailabilityBlock
   | HouseRoom
   | HousePhone
   | HouseMap
@@ -656,11 +616,9 @@ export type AllSanitySchemaTypes =
   | House
   | Geopoint
   | InternationalizedArrayText
-  | InternationalizedArrayHousePortableText
   | SanityImageCrop
   | SanityImageHotspot
   | HomePage
-  | InternationalizedArrayHousePortableTextValue
   | InternationalizedArrayPortableTextValue
   | InternationalizedArrayStringArrayValue
   | InternationalizedArrayTextValue
@@ -797,29 +755,24 @@ export type HouseQueryResult = {
     alt: string | null;
     preview: string | null;
   } | null;
-  about: Array<
-    | ({
-        _key: string;
-      } & HouseRoomAvailabilityBlock)
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?: "h1" | "h2" | "h3" | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-  > | null;
+  about: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "h1" | "h2" | "h3" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
   galleryImages: Array<{
     _key: string;
     image: {

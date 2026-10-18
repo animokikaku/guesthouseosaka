@@ -58,26 +58,7 @@ describe('HouseAbout', () => {
     expect(screen.getByText('Second entry.')).toBeInTheDocument()
   })
 
-  it('shows the availability where editors placed it in the text', () => {
-    renderAbout({
-      about: [
-        block('intro', 'Intro paragraph.'),
-        { _type: 'houseRoomAvailabilityBlock', _key: 'availability' },
-        block('perk', 'A perk.', 'bullet')
-      ],
-      availability: <p>1 room available now</p>
-    })
-
-    const intro = screen.getByText('Intro paragraph.')
-    const marker = screen.getByText('1 room available now')
-    expect(screen.getAllByText('1 room available now')).toHaveLength(1)
-    expect(intro.compareDocumentPosition(marker)).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
-    expect(marker.compareDocumentPosition(screen.getByText('A perk.'))).toBe(
-      Node.DOCUMENT_POSITION_FOLLOWING
-    )
-  })
-
-  it('shows the availability above the text when editors have not placed it', () => {
+  it('shows the availability above the text', () => {
     renderAbout({
       about: [block('intro', 'Intro paragraph.')],
       availability: <p>1 room available now</p>
