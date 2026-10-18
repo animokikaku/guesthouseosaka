@@ -135,6 +135,8 @@ export function HouseAvailability({ document, summary, today }: HouseAvailabilit
             <TableRow
               key={room._key}
               data-sanity={dataAttribute(`rooms[_key=="${room._key}"]`)}
+              // Rows follow availability dates, not the array order, so dragging one means nothing
+              data-sanity-drag-disable="true"
               className="grid grid-cols-[auto_auto_1fr_auto] items-center gap-x-1.5 gap-y-2 py-3 md:table-row md:p-0"
             >
               <TableCell className={cn('col-span-3 col-start-1 row-start-1', cell)}>
