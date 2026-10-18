@@ -13,6 +13,8 @@ export interface AvailabilityRoom {
 }
 
 export interface ListedRoom extends AvailabilityRoom {
+  /** Always set: a room without a date is occupied, and occupied rooms aren't listed. */
+  availableFrom: string
   status: Exclude<RoomStatus, 'occupied'>
 }
 
@@ -53,15 +55,15 @@ export function summarizeAvailability(
   let occupiedCount = 0
 
   for (const room of rooms ?? []) {
-    const status = getRoomStatus(room.availableFrom, today)
-    if (status === 'occupied') occupiedCount++
-    else (status === 'available' ? available : upcoming).push({ ...room, status })
+    const { availableFrom } = room
+    const status = getRoomStatus(availableFrom, today)
+    // `!availableFrom` repeats the occupied check so TypeScript knows the date is set below
+    if (!availableFrom || status === 'occupied') occupiedCount++
+    else (status === 'available' ? available : upcoming).push({ ...room, availableFrom, status })
   }
 
   available.sort(byNumber)
-  upcoming.sort(
-    (a, b) => (a.availableFrom ?? '').localeCompare(b.availableFrom ?? '') || byNumber(a, b)
-  )
+  upcoming.sort((a, b) => a.availableFrom.localeCompare(b.availableFrom) || byNumber(a, b))
 
   return {
     rooms: [...available, ...upcoming],

@@ -60,21 +60,24 @@ export function HouseAvailability({ document, summary, today }: HouseAvailabilit
       ...(date.slice(0, 4) !== today.slice(0, 4) && { year: 'numeric' })
     })
 
-  const statusBadge = (room: ListedRoom) =>
-    room.status === 'available' ? (
-      <Badge className="bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">
-        <span className="size-1.5 rounded-full bg-current" aria-hidden="true" />
-        <span aria-hidden="true">{t('now')}</span>
-        <span className="sr-only">{t('now_label')}</span>
-      </Badge>
-    ) : (
+  const statusBadge = (room: ListedRoom) => {
+    if (room.status === 'available') {
+      return (
+        <Badge className="bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">
+          <span className="size-1.5 rounded-full bg-current" aria-hidden="true" />
+          <span aria-hidden="true">{t('now')}</span>
+          <span className="sr-only">{t('now_label')}</span>
+        </Badge>
+      )
+    }
+    const date = formatDate(room.availableFrom)
+    return (
       <Badge variant="secondary" className="text-muted-foreground tabular-nums">
-        <span aria-hidden="true">{formatDate(room.availableFrom ?? today)}</span>
-        <span className="sr-only">
-          {t('from_label', { date: formatDate(room.availableFrom ?? today) })}
-        </span>
+        <span aria-hidden="true">{date}</span>
+        <span className="sr-only">{t('from_label', { date })}</span>
       </Badge>
     )
+  }
 
   // Plain text in the table, an outlined tag in the phone layout
   const tag = 'rounded-4xl border px-2 py-0.5 text-xs md:border-0 md:p-0 md:text-sm'
