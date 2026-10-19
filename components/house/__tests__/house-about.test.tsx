@@ -57,17 +57,4 @@ describe('HouseAbout', () => {
     expect(screen.getByText('First entry.')).toBeInTheDocument()
     expect(screen.getByText('Second entry.')).toBeInTheDocument()
   })
-
-  it('shows the availability above the text', () => {
-    renderAbout({
-      about: [block('intro', 'Intro paragraph.')],
-      availability: <p>1 room available now</p>
-    })
-
-    expect(
-      screen
-        .getByText('1 room available now')
-        .compareDocumentPosition(screen.getByText('Intro paragraph.'))
-    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
-  })
 })

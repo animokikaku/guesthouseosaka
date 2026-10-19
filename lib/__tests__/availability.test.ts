@@ -2,6 +2,9 @@
 
 import {
   getRoomStatus,
+  groupByDate,
+  groupByFloor,
+  groupByMoveIn,
   summarizeAvailability,
   tokyoToday,
   type AvailabilityRoom
@@ -74,5 +77,66 @@ describe('summarizeAvailability', () => {
       upcomingCount: 0,
       occupiedCount: 0
     })
+  })
+})
+
+describe('groupByMoveIn', () => {
+  const today = '2026-10-20'
+
+  it('puts free rooms under now, the next three months in their own groups, and the rest under later', () => {
+    const { rooms } = summarizeAvailability(
+      [
+        room('309', '2026-10-01'),
+        room('312', '2026-10-28'),
+        room('207', '2026-11-10'),
+        room('208', '2026-12-11'),
+        room('403', '2027-05-17'),
+        room('101')
+      ],
+      today
+    )
+
+    expect(groupByMoveIn(rooms, today).map((g) => [g.key, g.rooms.map((r) => r.number)])).toEqual([
+      ['now', ['309']],
+      ['2026-10', ['312']],
+      ['2026-11', ['207']],
+      ['2026-12', ['208']],
+      ['later', ['403']]
+    ])
+  })
+})
+
+describe('groupByDate', () => {
+  it('keeps free rooms first, then one group per opening date', () => {
+    const { rooms } = summarizeAvailability(
+      [room('108', '2026-11-30'), room('309', '2026-10-01'), room('201', '2026-11-30')],
+      '2026-10-20'
+    )
+
+    expect(groupByDate(rooms).map((g) => [g.key, g.rooms.map((r) => r.number)])).toEqual([
+      ['now', ['309']],
+      ['2026-11-30', ['108', '201']]
+    ])
+  })
+})
+
+describe('groupByFloor', () => {
+  it('lists every room on its floor, top floor first', () => {
+    const floors = groupByFloor(
+      [room('1002', null), room('101', '2026-10-01'), room('205'), room('102', '2026-12-01')],
+      '2026-10-20'
+    )
+
+    expect(floors.map((f) => [f.floor, f.rooms.map((r) => [r.number, r.status])])).toEqual([
+      ['10', [['1002', 'occupied']]],
+      ['2', [['205', 'occupied']]],
+      [
+        '1',
+        [
+          ['101', 'available'],
+          ['102', 'upcoming']
+        ]
+      ]
+    ])
   })
 })

@@ -72,3 +72,80 @@ export function summarizeAvailability(
     occupiedCount
   }
 }
+
+const monthIndex = (date: string) => Number(date.slice(0, 4)) * 12 + Number(date.slice(5, 7))
+
+export interface MoveInGroup {
+  /** `now`, a month as YYYY-MM, or `later` */
+  key: string
+  kind: 'now' | 'month' | 'later'
+  rooms: ListedRoom[]
+}
+
+/**
+ * Columns for the "By date" view: rooms free now, then one group per month with
+ * openings up to two months ahead, then everything further out as "later", so a
+ * far-off date never adds a column of its own.
+ */
+export function groupByMoveIn(rooms: ListedRoom[], today: string): MoveInGroup[] {
+  const now: ListedRoom[] = []
+  const months = new Map<string, ListedRoom[]>()
+  const later: ListedRoom[] = []
+
+  for (const room of rooms) {
+    if (room.status === 'available') now.push(room)
+    else if (monthIndex(room.availableFrom) - monthIndex(today) <= 2) {
+      const month = room.availableFrom.slice(0, 7)
+      months.set(month, [...(months.get(month) ?? []), room])
+    } else later.push(room)
+  }
+
+  return [
+    ...(now.length ? [{ key: 'now', kind: 'now' as const, rooms: now }] : []),
+    ...[...months].map(([key, monthRooms]) => ({ key, kind: 'month' as const, rooms: monthRooms })),
+    ...(later.length ? [{ key: 'later', kind: 'later' as const, rooms: later }] : [])
+  ]
+}
+
+export interface DateGroup {
+  /** `now`, or the opening date as YYYY-MM-DD */
+  key: string
+  rooms: ListedRoom[]
+}
+
+/** Rows for the phone timeline: rooms free now, then one row per opening date. */
+export function groupByDate(rooms: ListedRoom[]): DateGroup[] {
+  const groups: DateGroup[] = []
+  for (const room of rooms) {
+    const key = room.status === 'available' ? 'now' : room.availableFrom
+    const group = groups.find((g) => g.key === key)
+    if (group) group.rooms.push(room)
+    else groups.push({ key, rooms: [room] })
+  }
+  return groups
+}
+
+export interface FloorRoom extends AvailabilityRoom {
+  number: string
+  status: RoomStatus
+}
+
+export interface Floor {
+  floor: string
+  rooms: FloorRoom[]
+}
+
+/** Every room of the house on its floor, top floor first. The floor is the room number minus its last two digits. */
+export function groupByFloor(rooms: AvailabilityRoom[] | null | undefined, today: string): Floor[] {
+  const floors = new Map<string, FloorRoom[]>()
+  for (const room of rooms ?? []) {
+    const { number } = room
+    if (!number) continue
+    const floor = number.length > 2 ? number.slice(0, -2) : number
+    const floorRoom = { ...room, number, status: getRoomStatus(room.availableFrom, today) }
+    floors.set(floor, [...(floors.get(floor) ?? []), floorRoom])
+  }
+  return [...floors]
+    .toSorted(([a], [b]) => b.localeCompare(a, undefined, { numeric: true }))
+    .map(([floor, floorRooms]) => ({ floor, rooms: floorRooms.toSorted(byNumber) }))
+}

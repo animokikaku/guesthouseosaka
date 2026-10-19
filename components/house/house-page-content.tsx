@@ -10,7 +10,6 @@ import { ImageBlockGallery } from '@/components/image-block-gallery'
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
 import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
-import { summarizeAvailability } from '@/lib/availability'
 import { buildGallerySlides } from '@/lib/gallery'
 import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
 import type { StegaAware } from '@/lib/types/stega'
@@ -50,14 +49,11 @@ export function HousePageContent({
   const mobileHeroImages = buildGallerySlides({ featuredImage, galleryImages })
 
   // Dates and enum values are compared, so drop any visual-editing markers first
-  const availability = summarizeAvailability(
-    rooms?.map((room) => ({
-      ...room,
-      availableFrom: stegaClean(room.availableFrom),
-      style: stegaClean(room.style)
-    })),
-    today
-  )
+  const cleanRooms = rooms?.map((room) => ({
+    ...room,
+    availableFrom: stegaClean(room.availableFrom),
+    style: stegaClean(room.style)
+  }))
 
   return (
     <>
@@ -84,20 +80,16 @@ export function HousePageContent({
               galleryImageCount={galleryImageCount ?? 0}
               featuredImage={featuredImage}
             />
+            <div className="mt-3 sm:mt-4">
+              <HouseAvailability
+                document={{ _id, _type, _updatedAt: stegaClean(_updatedAt) }}
+                rooms={cleanRooms}
+                today={today}
+              />
+            </div>
             <HouseProvider id={_id} type={_type} slug={slug}>
               <article id={slug} aria-labelledby={`${slug}-title`} className="space-y-12 pt-8">
-                <HouseAbout
-                  title={title}
-                  about={about}
-                  building={building}
-                  availability={
-                    <HouseAvailability
-                      document={{ _id, _type, _updatedAt: stegaClean(_updatedAt) }}
-                      summary={availability}
-                      today={today}
-                    />
-                  }
-                />
+                <HouseAbout title={title} about={about} building={building} />
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
                   featuredAmenities={featuredAmenities?.map(toAmenityItem) ?? []}
