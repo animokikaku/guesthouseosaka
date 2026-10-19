@@ -74,6 +74,9 @@
       },
     },
   },
+  "patchedDependencies": {
+    "next@16.4.2": "patches/next@16.4.2.patch",
+  },
   "overrides": {
     "@sanity/client": "^8.9.0",
   },
