@@ -33,7 +33,7 @@ export function HouseFloorPlan({ document, rooms, today }: HouseFloorPlanProps) 
       ...(date.slice(0, 4) !== today.slice(0, 4) && { year: 'numeric' })
     })
 
-  const toView = (room: FloorRoom, floor: string) => ({
+  const toView = (room: FloorRoom) => ({
     key: room._key,
     number: room.number,
     title: t('room_number', { number: room.number }),
@@ -46,7 +46,6 @@ export function HouseFloorPlan({ document, rooms, today }: HouseFloorPlanProps) 
           : t('occupied'),
     style: room.style ? t(`style_${room.style}`) : null,
     size: room.size ? t('size', { size: room.size }) : null,
-    floor: t('floor', { floor }),
     rent: room.rent ? formatter.number(room.rent, 'currency') : null,
     dataSanity: dataAttribute(`rooms[_key=="${room._key}"]`)
   })
@@ -64,7 +63,7 @@ export function HouseFloorPlan({ document, rooms, today }: HouseFloorPlanProps) 
     floors: floors.map((floor) => ({
       key: floor.floor,
       label: t('floor', { floor: floor.floor }),
-      rooms: floor.rooms.map((room) => toView(room, floor.floor))
+      rooms: floor.rooms.map(toView)
     })),
     defaultRoom: defaultRoom?._key ?? null,
     labels: {

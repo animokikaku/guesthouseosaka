@@ -14,7 +14,6 @@ export interface FloorRoomView {
   statusLabel: string
   style: string | null
   size: string | null
-  floor: string
   rent: string | null
   dataSanity: string
 }
@@ -69,9 +68,7 @@ export function HouseFloorGrid({ view }: { view: FloorGridView }) {
                 >
                   {room.number}
                   {room.status !== 'occupied' && (
-                    <span className="hidden text-[10px] font-medium opacity-80 sm:block">
-                      {room.statusLabel}
-                    </span>
+                    <span className="text-[10px] font-medium opacity-80">{room.statusLabel}</span>
                   )}
                 </button>
               ))}
@@ -81,30 +78,20 @@ export function HouseFloorGrid({ view }: { view: FloorGridView }) {
       </div>
 
       {selected && (
-        // A status line pinned to the bottom of the modal, so it stays in view while scrolling
+        // A status line pinned to the bottom of the modal, so it stays in view while scrolling.
+        // The floor and the date are already on the grid, so only what it can't show is here.
         <p
           aria-live="polite"
-          className="bg-popover before:to-popover sticky bottom-0 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 pt-2 pb-4 text-sm before:pointer-events-none before:absolute before:inset-x-0 before:-top-4 before:h-4 before:bg-gradient-to-b before:from-transparent sm:pb-0"
+          className="bg-popover sticky bottom-0 flex items-center gap-3 border-t pt-3 pb-4 text-sm sm:pb-0"
         >
-          <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5">
-            <StatusDot status={selected.status} />
-            <span className="font-semibold">{selected.title}</span>
-            <span
-              className={cn(
-                'font-medium',
-                selected.status === 'available'
-                  ? 'text-emerald-600 dark:text-emerald-400'
-                  : 'text-muted-foreground'
-              )}
-            >
-              {selected.statusLabel}
-            </span>
-            <span className="text-muted-foreground">
-              {[selected.style, selected.size, selected.floor].filter(Boolean).join(' · ')}
-            </span>
+          <StatusDot status={selected.status} />
+          <span className="shrink-0 font-semibold">{selected.title}</span>
+          <span className="sr-only">{selected.statusLabel}</span>
+          <span className="text-muted-foreground min-w-0 truncate">
+            {[selected.style, selected.size].filter(Boolean).join(' · ')}
           </span>
           {selected.rent && (
-            <span className="ml-auto font-semibold tabular-nums">
+            <span className="ml-auto shrink-0 font-semibold whitespace-nowrap tabular-nums">
               {selected.rent}
               <span className="text-muted-foreground text-xs font-normal">
                 {view.labels.perMonth}

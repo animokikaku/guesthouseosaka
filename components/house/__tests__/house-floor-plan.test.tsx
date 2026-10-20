@@ -33,7 +33,7 @@ describe('HouseFloorPlan', () => {
   it('lays every room out on its floor, top floor first', () => {
     renderFloorPlan(rooms)
 
-    const floorLabels = screen.getAllByText(/^\dF$/).filter((el) => !el.closest('[aria-live]'))
+    const floorLabels = screen.getAllByText(/^\dF$/)
     expect(floorLabels.map((el) => el.textContent)).toEqual(['3F', '2F', '1F'])
     expect(screen.getByRole('button', { name: 'Room 101, Occupied' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Room 106, Nov 27' })).toBeInTheDocument()
@@ -51,7 +51,8 @@ describe('HouseFloorPlan', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Room 106, Nov 27' }))
 
     expect(within(details()).getByText('Room 106')).toBeInTheDocument()
-    expect(details()).toHaveTextContent('Japanese · 12 m² · 1F')
+    expect(details()).toHaveTextContent('Japanese · 12 m²')
+    expect(details()).not.toHaveTextContent('1F')
     expect(details()).toHaveTextContent('¥41,000/mo')
   })
 
