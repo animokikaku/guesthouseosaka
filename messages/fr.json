@@ -64,6 +64,7 @@
     "show_all": "Afficher les {count} équipements"
   },
   "HouseAvailability": {
+    "heading": "Disponibilités",
     "last_updated": "Dernière mise à jour : {date}",
     "room_number": "Chambre {number}",
     "now": "Libre",
@@ -74,28 +75,16 @@
     "rooms_available": "{count, plural, one {# chambre disponible} other {# chambres disponibles}}",
     "rooms_upcoming": "{count, plural, one {# chambre bientôt libre} other {# chambres bientôt libres}}",
     "fully_booked": "Complet",
-    "next_opens": "Prochaine chambre libre le {date}",
-    "from_rent": "à partir de {rent} / mois",
-    "from_rent_short": "dès {rent}/mois",
-    "next_short": "prochaine le {date}",
-    "next_openings": "Prochaines disponibilités",
-    "then": "Puis",
-    "more": "+{count, number}",
-    "later": "Plus tard",
-    "room_count": "{count, plural, one {# chambre} other {# chambres}}",
-    "floor": "Étage {floor}",
     "occupied": "Occupée",
-    "toggle": "Afficher ou masquer les chambres",
-    "by_date": "Par date",
-    "by_floor": "Par étage",
+    "floor": "Étage {floor}",
     "legend_available": "Disponible maintenant",
-    "legend_upcoming": "Bientôt libre",
-    "full_detail": "{count, plural, one {La seule chambre est occupée pour le moment} other {Les # chambres sont occupées pour le moment}}"
+    "legend_upcoming": "Bientôt libre"
   },
   "HouseBuilding": {
     "floors_label": "Étages",
     "min_rent_label": "Loyer min.",
-    "rooms_label": "Chambres"
+    "rooms_label": "Chambres",
+    "rooms_by_floor": "Chambres par étage"
   },
   "HouseLocation": {
     "heading": "Où vous vous trouverez",

@@ -62,16 +62,30 @@ test.describe('House Page', () => {
   })
 
   test.describe('Availability', () => {
-    test('opens the room list from the banner under the gallery', async ({ page }) => {
+    test('opens the room list from the about section', async ({ page }) => {
       await page.goto(`/en/${testHouse}`)
 
-      const toggle = page.getByRole('button', { name: /show or hide the rooms/i })
-      await expect(toggle).toHaveText(/available now|opens/i)
-      await toggle.click()
+      await page
+        .locator('section#about')
+        .getByRole('button', { name: /available now|opening soon/i })
+        .click()
 
-      await expect(toggle).toHaveAttribute('aria-expanded', 'true')
-      await page.getByRole('tab', { name: 'By floor' }).click()
-      await expect(page.getByRole('button', { name: /^Room \d+, /i }).first()).toBeVisible()
+      const dialog = page.getByRole('dialog', { name: 'Availability' })
+      await expect(dialog).toBeVisible()
+      await expect(dialog.getByRole('listitem').first()).toContainText(/Room \d+/)
+    })
+
+    test('opens the rooms by floor from the Rooms figure', async ({ page }) => {
+      await page.goto(`/en/${testHouse}`)
+
+      await page
+        .locator('section#about')
+        .getByRole('button', { name: /^\d+\s*rooms$/i })
+        .click()
+
+      const dialog = page.getByRole('dialog', { name: 'Rooms by floor' })
+      await expect(dialog).toBeVisible()
+      await expect(dialog.getByRole('button', { name: /^Room \d+, /i }).first()).toBeVisible()
     })
   })
 

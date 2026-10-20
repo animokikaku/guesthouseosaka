@@ -5,6 +5,7 @@ import type { PortableTextComponents } from '@portabletext/react'
 import { PortableText } from '@portabletext/react'
 import { useTranslations } from 'next-intl'
 import { stegaClean } from 'next-sanity'
+import type { ReactNode } from 'react'
 
 const portableTextComponents: PortableTextComponents = {
   block: {
@@ -33,9 +34,13 @@ interface HouseAboutProps {
   about: HousePortableTextContent
   title: string | null
   building: BuildingData | null
+  /** The room availability marker, shown between the building figures and the text. */
+  availability?: ReactNode
+  /** The rooms by floor, opened from the Rooms figure. */
+  floorPlan?: ReactNode
 }
 
-export function HouseAbout({ about, title, building }: HouseAboutProps) {
+export function HouseAbout({ about, title, building, availability, floorPlan }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
 
   return (
@@ -44,7 +49,8 @@ export function HouseAbout({ about, title, building }: HouseAboutProps) {
         {t('heading', { house: title ? stegaClean(title) : '' })}
       </HouseSectionHeading>
       <HouseSectionContent className="space-y-4">
-        <HouseBuilding building={building} />
+        <HouseBuilding building={building} floorPlan={floorPlan} />
+        {availability}
         {about ? <PortableText value={about} components={portableTextComponents} /> : null}
       </HouseSectionContent>
     </section>

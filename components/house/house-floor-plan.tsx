@@ -1,0 +1,79 @@
+import { HouseFloorGrid, type FloorGridView } from '@/components/house/house-floor-grid'
+import { groupByFloor, type AvailabilityRoom, type FloorRoom } from '@/lib/availability'
+import { useFormatter, useTranslations } from 'next-intl'
+import { createDataAttribute } from 'next-sanity'
+
+interface HouseFloorPlanProps {
+  document: { _id: string; _type: string }
+  /** Visual-editing markers already removed from dates and enum values */
+  rooms: AvailabilityRoom[] | null | undefined
+  /** Today in Osaka (YYYY-MM-DD) */
+  today: string
+}
+
+/** A Sanity `date` read as midnight in Osaka, so formatting in Tokyo time keeps the same day. */
+const tokyoMidnight = (date: string) => new Date(`${date}T00:00:00+09:00`)
+
+/**
+ * The house's rooms by floor, opened from the Rooms figure. Every label is prepared
+ * here, on the server in Tokyo time; the grid only handles which room is selected.
+ */
+export function HouseFloorPlan({ document, rooms, today }: HouseFloorPlanProps) {
+  const t = useTranslations('HouseAvailability')
+  const formatter = useFormatter()
+
+  const floors = groupByFloor(rooms, today)
+  if (floors.length === 0) return null
+
+  const dataAttribute = createDataAttribute({ id: document._id, type: document._type })
+  const formatDate = (date: string) =>
+    formatter.dateTime(tokyoMidnight(date), {
+      month: 'short',
+      day: 'numeric',
+      ...(date.slice(0, 4) !== today.slice(0, 4) && { year: 'numeric' })
+    })
+
+  const toView = (room: FloorRoom, floor: string) => ({
+    key: room._key,
+    number: room.number,
+    title: t('room_number', { number: room.number }),
+    status: room.status,
+    statusLabel:
+      room.status === 'available'
+        ? t('now')
+        : room.status === 'upcoming' && room.availableFrom
+          ? formatDate(room.availableFrom)
+          : t('occupied'),
+    style: room.style ? t(`style_${room.style}`) : null,
+    size: room.size ? t('size', { size: room.size }) : null,
+    floor: t('floor', { floor }),
+    rent: room.rent ? formatter.number(room.rent, 'currency') : null,
+    dataSanity: dataAttribute(`rooms[_key=="${room._key}"]`)
+  })
+
+  const allRooms = floors.flatMap((floor) => floor.rooms)
+  // Start on a room worth looking at: free now, else the next to open, else any
+  const defaultRoom =
+    allRooms.find((room) => room.status === 'available') ??
+    allRooms
+      .filter((room) => room.status === 'upcoming')
+      .toSorted((a, b) => (a.availableFrom ?? '').localeCompare(b.availableFrom ?? ''))[0] ??
+    allRooms[0]
+
+  const view: FloorGridView = {
+    floors: floors.map((floor) => ({
+      key: floor.floor,
+      label: t('floor', { floor: floor.floor }),
+      rooms: floor.rooms.map((room) => toView(room, floor.floor))
+    })),
+    defaultRoom: defaultRoom?._key ?? null,
+    labels: {
+      available: t('legend_available'),
+      upcoming: t('legend_upcoming'),
+      occupied: t('occupied'),
+      perMonth: t('per_month')
+    }
+  }
+
+  return <HouseFloorGrid view={view} />
+}

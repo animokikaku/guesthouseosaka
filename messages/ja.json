@@ -64,6 +64,7 @@
     "show_all": "{count}件の設備をすべて表示"
   },
   "HouseAvailability": {
+    "heading": "空室状況",
     "last_updated": "最終更新日：{date}",
     "room_number": "{number}号室",
     "now": "空室",
@@ -74,28 +75,16 @@
     "rooms_available": "{count}室が現在空室",
     "rooms_upcoming": "{count}室がまもなく空室",
     "fully_booked": "満室",
-    "next_opens": "次の空室は{date}から",
-    "from_rent": "月額{rent}から",
-    "from_rent_short": "{rent}/月〜",
-    "next_short": "次回{date}",
-    "next_openings": "今後の空室",
-    "then": "その後",
-    "more": "+{count, number}",
-    "later": "それ以降",
-    "room_count": "{count, number}室",
-    "floor": "{floor}階",
     "occupied": "入居中",
-    "toggle": "部屋一覧を表示・非表示",
-    "by_date": "日付順",
-    "by_floor": "フロア別",
+    "floor": "{floor}階",
     "legend_available": "現在空室",
-    "legend_upcoming": "まもなく空室",
-    "full_detail": "全{count, number}室が入居中です"
+    "legend_upcoming": "まもなく空室"
   },
   "HouseBuilding": {
     "floors_label": "階数",
     "min_rent_label": "最低賃料",
-    "rooms_label": "部屋数"
+    "rooms_label": "部屋数",
+    "rooms_by_floor": "フロア別の部屋"
   },
   "HouseLocation": {
     "heading": "周辺地図",

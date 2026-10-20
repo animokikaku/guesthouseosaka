@@ -1,185 +1,155 @@
-import {
-  HouseAvailabilityBanner,
-  type AvailabilityBannerView,
-  type RoomView
-} from '@/components/house/house-availability-banner'
-import {
-  groupByDate,
-  groupByFloor,
-  groupByMoveIn,
-  summarizeAvailability,
-  type AvailabilityRoom,
-  type RoomStatus
-} from '@/lib/availability'
+import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
+import { Marker, MarkerContent, MarkerIcon, markerVariants } from '@/components/ui/marker'
+import { ResponsiveModal } from '@/components/ui/responsive-modal'
+import { groupByDate, type AvailabilitySummary, type ListedRoom } from '@/lib/availability'
+import { cn } from '@/lib/utils'
+import { CalendarClockIcon, DoorClosedIcon, DoorOpenIcon } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 
 interface HouseAvailabilityProps {
-  document: { _id: string; _type: string; _updatedAt: string }
-  /** Visual-editing markers already removed from dates and enum values */
-  rooms: AvailabilityRoom[] | null | undefined
-  /** Today in Osaka (YYYY-MM-DD) */
+  document: { _id: string; _type: string; _updatedAt: string } | null
+  summary: AvailabilitySummary
+  /** Today in Osaka (YYYY-MM-DD), decides whether a year is worth showing. */
   today: string
 }
 
 /** A Sanity `date` read as midnight in Osaka, so formatting in Tokyo time keeps the same day. */
 const tokyoMidnight = (date: string) => new Date(`${date}T00:00:00+09:00`)
 
-/** How many opening dates the banner shows before folding the rest into "+N". */
-const SHOWN_DATES = 3
-
 /**
- * The availability card under the gallery. Every label and date is prepared here, on
- * the server in Tokyo time, so the client part only handles opening, tabs and selection.
+ * A marker in the About section counting the rooms free now (or opening soon when
+ * none are), opening them in a modal as a timeline: rooms free now, then one row per opening date.
+ * Occupied rooms are left out, since the status is the point of this list, so a full
+ * house gets a plain "Fully booked" marker: there is nothing to list.
  */
-export function HouseAvailability({ document, rooms, today }: HouseAvailabilityProps) {
+export function HouseAvailability({ document, summary, today }: HouseAvailabilityProps) {
   const t = useTranslations('HouseAvailability')
   const formatter = useFormatter()
 
-  const summary = summarizeAvailability(rooms, today)
   const totalRooms = summary.rooms.length + summary.occupiedCount
-  if (totalRooms === 0) return null
+  if (!document || totalRooms === 0) return null
 
-  // Nothing free or announced: a plain notice, with nothing to open
   if (summary.rooms.length === 0) {
     return (
-      <div
-        id="availability"
-        className="bg-card border-border flex items-center gap-3 rounded-xl border px-4 py-3.5 md:gap-5 md:px-5"
-      >
-        <span
-          aria-hidden="true"
-          className="bg-muted-foreground/50 size-2.5 shrink-0 rounded-full"
-        />
-        {/* Same type scale as the banner's headline and summary */}
-        <span className="min-w-0 flex-1">
-          <span className="block text-[15px] font-semibold md:text-base">{t('fully_booked')}</span>
-          <span className="text-muted-foreground block text-xs md:text-sm">
-            {t('full_detail', { count: totalRooms })}
-          </span>
-        </span>
-      </div>
+      <Marker className="w-fit">
+        <MarkerIcon>
+          <DoorClosedIcon />
+        </MarkerIcon>
+        <MarkerContent>{t('fully_booked')}</MarkerContent>
+      </Marker>
     )
   }
 
+  const dataAttribute = createDataAttribute({
+    id: document._id,
+    type: document._type
+  })
   const formatDate = (date: string) =>
     formatter.dateTime(tokyoMidnight(date), {
       month: 'short',
       day: 'numeric',
       ...(date.slice(0, 4) !== today.slice(0, 4) && { year: 'numeric' })
     })
-  const rent = (value: number | null) => (value ? formatter.number(value, 'currency') : null)
-  const dataAttribute = createDataAttribute({ id: document._id, type: document._type })
-  const floorLabel = (floor: string) => t('floor', { floor })
 
-  const statusLabel = (status: RoomStatus, availableFrom: string | null) =>
-    status === 'available'
-      ? t('now')
-      : status === 'upcoming' && availableFrom
-        ? formatDate(availableFrom)
-        : t('occupied')
-
-  const toView = (room: AvailabilityRoom & { status: RoomStatus }): RoomView => {
-    const number = room.number ?? ''
-    return {
-      key: room._key,
-      number,
-      title: t('room_number', { number }),
-      status: room.status,
-      statusLabel: statusLabel(room.status, room.availableFrom),
-      style: room.style ? t(`style_${room.style}`) : null,
-      size: room.size ? t('size', { size: room.size }) : null,
-      floor: floorLabel(number.length > 2 ? number.slice(0, -2) : number),
-      rent: rent(room.rent),
-      dataSanity: dataAttribute(`rooms[_key=="${room._key}"]`)
-    }
+  const roomCard = (room: ListedRoom) => {
+    const now = room.status === 'available'
+    return (
+      <Item
+        key={room._key}
+        variant="outline"
+        size="xs"
+        data-sanity={dataAttribute(`rooms[_key=="${room._key}"]`)}
+        // Rooms follow availability dates, not the array order, so dragging one means nothing
+        data-sanity-drag-disable="true"
+        className={cn(
+          'bg-background flex-nowrap',
+          now && 'border-emerald-500/45 bg-emerald-500/[0.07]'
+        )}
+      >
+        <ItemContent className="min-w-0 gap-0.5">
+          <ItemTitle className="font-semibold">
+            {t('room_number', { number: room.number ?? '' })}
+          </ItemTitle>
+          <ItemDescription className="line-clamp-1 text-xs">
+            {[room.style && t(`style_${room.style}`), room.size && t('size', { size: room.size })]
+              .filter(Boolean)
+              .join(' · ')}
+          </ItemDescription>
+        </ItemContent>
+        {room.rent ? (
+          <ItemActions className="text-sm tabular-nums">
+            <span>
+              {formatter.number(room.rent, 'currency')}
+              <span className="text-muted-foreground text-xs">{t('per_month')}</span>
+            </span>
+          </ItemActions>
+        ) : null}
+      </Item>
+    )
   }
 
-  const available = summary.availableCount > 0
-  const headlineRooms = available
-    ? summary.rooms.filter((room) => room.status === 'available')
-    : summary.rooms
-  const minRent = rent(
-    Math.min(...headlineRooms.map((room) => room.rent ?? Infinity).filter(Number.isFinite))
+  return (
+    <ResponsiveModal
+      title={t('heading')}
+      description={t('last_updated', {
+        date: formatter.dateTime(new Date(document._updatedAt), {
+          dateStyle: 'long'
+        })
+      })}
+      trigger={
+        // A button styled as a marker, underlined like the marker's own links
+        <button
+          type="button"
+          className={cn(
+            markerVariants({ variant: 'default' }),
+            'hover:text-foreground w-fit cursor-pointer'
+          )}
+        >
+          <MarkerIcon>
+            {summary.availableCount > 0 ? <DoorOpenIcon /> : <CalendarClockIcon />}
+          </MarkerIcon>
+          <MarkerContent className="underline underline-offset-3">
+            {summary.availableCount > 0
+              ? t('rooms_available', { count: summary.availableCount })
+              : t('rooms_upcoming', { count: summary.upcomingCount })}
+          </MarkerContent>
+        </button>
+      }
+    >
+      <ol className="grid">
+        {groupByDate(summary.rooms).map((group) => {
+          const now = group.key === 'now'
+          return (
+            <li key={group.key} className="grid grid-cols-[3.5rem_1rem_minmax(0,1fr)] gap-2">
+              <span
+                className={cn(
+                  'pt-2.5 text-right text-xs tabular-nums',
+                  now
+                    ? 'font-semibold text-emerald-600 dark:text-emerald-400'
+                    : 'text-muted-foreground'
+                )}
+              >
+                {now ? t('now') : formatDate(group.key)}
+              </span>
+              <span
+                aria-hidden="true"
+                className="before:bg-border relative flex justify-center before:absolute before:inset-y-0 before:w-px"
+              >
+                <span
+                  className={cn(
+                    'relative mt-3.5 size-2 rounded-full border-[1.5px]',
+                    now
+                      ? 'border-emerald-500 bg-emerald-500'
+                      : 'border-muted-foreground bg-background'
+                  )}
+                />
+              </span>
+              <span className="grid gap-1.5 pt-1 pb-2.5">{group.rooms.map(roomCard)}</span>
+            </li>
+          )
+        })}
+      </ol>
+    </ResponsiveModal>
   )
-  const upcoming = summary.rooms.filter((room) => room.status === 'upcoming')
-  const openingDates = [...new Set(upcoming.map((room) => room.availableFrom))]
-  // When nothing is free, the headline already names the first date
-  const listedDates = available ? openingDates : openingDates.slice(1)
-  const nextDate = openingDates[0] ? formatDate(openingDates[0]) : null
-  const fromRent = minRent ? t('from_rent', { rent: minRent }) : null
-
-  const view: AvailabilityBannerView = {
-    status: available ? 'available' : 'upcoming',
-    headline: available
-      ? t('rooms_available', { count: summary.availableCount })
-      : t('next_opens', { date: nextDate ?? '' }),
-    summary: available
-      ? (fromRent ?? '')
-      : [t('rooms_upcoming', { count: summary.upcomingCount }), fromRent]
-          .filter(Boolean)
-          .join(' · '),
-    summaryShort: available
-      ? [
-          minRent && t('from_rent_short', { rent: minRent }),
-          nextDate && t('next_short', { date: nextDate })
-        ]
-          .filter(Boolean)
-          .join(' · ')
-      : [
-          t('rooms_upcoming', { count: summary.upcomingCount }),
-          minRent && t('from_rent_short', { rent: minRent })
-        ]
-          .filter(Boolean)
-          .join(' · '),
-    datesLabel: available ? t('next_openings') : t('then'),
-    dates: listedDates.slice(0, SHOWN_DATES).map(formatDate),
-    moreDates:
-      listedDates.length > SHOWN_DATES
-        ? t('more', { count: listedDates.length - SHOWN_DATES })
-        : null,
-    // From the full timestamp: an edit before 9am in Osaka is still that day there
-    updated: t('last_updated', {
-      date: formatter.dateTime(new Date(document._updatedAt), { dateStyle: 'long' })
-    }),
-    columns: groupByMoveIn(summary.rooms, today).map((group) => ({
-      key: group.key,
-      label:
-        group.kind === 'now'
-          ? t('now')
-          : group.kind === 'later'
-            ? t('later')
-            : formatter.dateTime(tokyoMidnight(`${group.key}-01`), {
-                month: 'long',
-                ...(group.key.slice(0, 4) !== today.slice(0, 4) && { year: 'numeric' })
-              }),
-      count: t('room_count', { count: group.rooms.length }),
-      isNow: group.kind === 'now',
-      rooms: group.rooms.map(toView)
-    })),
-    timeline: groupByDate(summary.rooms).map((group) => ({
-      key: group.key,
-      label: group.key === 'now' ? t('now') : formatDate(group.key),
-      count: t('room_count', { count: group.rooms.length }),
-      isNow: group.key === 'now',
-      rooms: group.rooms.map(toView)
-    })),
-    floors: groupByFloor(rooms, today).map((floor) => ({
-      key: floor.floor,
-      label: floorLabel(floor.floor),
-      rooms: floor.rooms.map(toView)
-    })),
-    defaultRoom: summary.rooms[0]?._key ?? null,
-    labels: {
-      toggle: t('toggle'),
-      byDate: t('by_date'),
-      byFloor: t('by_floor'),
-      available: t('legend_available'),
-      upcoming: t('legend_upcoming'),
-      occupied: t('occupied'),
-      perMonth: t('per_month')
-    }
-  }
-
-  return <HouseAvailabilityBanner view={view} />
 }

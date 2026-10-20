@@ -1,6 +1,7 @@
 import { HouseAbout } from '@/components/house/house-about'
 import { HouseAmenities } from '@/components/house/house-amenities'
 import { HouseAvailability } from '@/components/house/house-availability'
+import { HouseFloorPlan } from '@/components/house/house-floor-plan'
 import { HouseProvider } from '@/components/house/house-context'
 import { HouseLocation } from '@/components/house/house-location'
 import { HousePricing } from '@/components/house/house-pricing'
@@ -10,6 +11,7 @@ import { ImageBlockGallery } from '@/components/image-block-gallery'
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
 import { PageNav } from '@/components/page-nav'
 import { Link } from '@/i18n/navigation'
+import { summarizeAvailability } from '@/lib/availability'
 import { buildGallerySlides } from '@/lib/gallery'
 import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
 import type { StegaAware } from '@/lib/types/stega'
@@ -54,6 +56,7 @@ export function HousePageContent({
     availableFrom: stegaClean(room.availableFrom),
     style: stegaClean(room.style)
   }))
+  const availability = summarizeAvailability(cleanRooms, today)
 
   return (
     <>
@@ -80,16 +83,25 @@ export function HousePageContent({
               galleryImageCount={galleryImageCount ?? 0}
               featuredImage={featuredImage}
             />
-            <div className="mt-3 sm:mt-4">
-              <HouseAvailability
-                document={{ _id, _type, _updatedAt: stegaClean(_updatedAt) }}
-                rooms={cleanRooms}
-                today={today}
-              />
-            </div>
             <HouseProvider id={_id} type={_type} slug={slug}>
               <article id={slug} aria-labelledby={`${slug}-title`} className="space-y-12 pt-8">
-                <HouseAbout title={title} about={about} building={building} />
+                <HouseAbout
+                  title={title}
+                  about={about}
+                  building={building}
+                  availability={
+                    <HouseAvailability
+                      document={{ _id, _type, _updatedAt: stegaClean(_updatedAt) }}
+                      summary={availability}
+                      today={today}
+                    />
+                  }
+                  floorPlan={
+                    rooms?.length ? (
+                      <HouseFloorPlan document={{ _id, _type }} rooms={cleanRooms} today={today} />
+                    ) : null
+                  }
+                />
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
                   featuredAmenities={featuredAmenities?.map(toAmenityItem) ?? []}

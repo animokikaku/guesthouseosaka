@@ -64,6 +64,7 @@
     "show_all": "顯示全部{count}項設施"
   },
   "HouseAvailability": {
+    "heading": "空房狀況",
     "last_updated": "最後更新：{date}",
     "room_number": "{number}號房",
     "now": "現在",
@@ -74,28 +75,16 @@
     "rooms_available": "{count}間房現可入住",
     "rooms_upcoming": "{count}間房即將空出",
     "fully_booked": "已滿房",
-    "next_opens": "下一間房{date}起可入住",
-    "from_rent": "{rent}/月起",
-    "from_rent_short": "{rent}/月起",
-    "next_short": "下次{date}",
-    "next_openings": "即將空出",
-    "then": "之後",
-    "more": "+{count, number}",
-    "later": "更晚",
-    "room_count": "{count, number}間",
-    "floor": "{floor}樓",
     "occupied": "已入住",
-    "toggle": "顯示或隱藏房間",
-    "by_date": "依日期",
-    "by_floor": "依樓層",
+    "floor": "{floor}樓",
     "legend_available": "現可入住",
-    "legend_upcoming": "即將空出",
-    "full_detail": "全部{count, number}間房皆已住滿"
+    "legend_upcoming": "即將空出"
   },
   "HouseBuilding": {
     "floors_label": "樓層",
     "min_rent_label": "最低租金",
-    "rooms_label": "房間"
+    "rooms_label": "房間",
+    "rooms_by_floor": "各樓層房間"
   },
   "HouseLocation": {
     "heading": "位置",
