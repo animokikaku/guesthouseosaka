@@ -51,7 +51,7 @@ describe('HouseFloorPlan', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Room 106, Nov 27' }))
 
     expect(within(details()).getByText('Room 106')).toBeInTheDocument()
-    expect(within(details()).getByText('1F')).toBeInTheDocument()
+    expect(details()).toHaveTextContent('Japanese · 12 m² · 1F')
     expect(details()).toHaveTextContent('¥41,000/mo')
   })
 

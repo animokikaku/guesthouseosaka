@@ -1,6 +1,5 @@
 'use client'
 
-import { Badge } from '@/components/ui/badge'
 import type { RoomStatus } from '@/lib/availability'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
@@ -82,49 +81,53 @@ export function HouseFloorGrid({ view }: { view: FloorGridView }) {
       </div>
 
       {selected && (
-        <div
+        // A status line pinned to the bottom of the modal, so it stays in view while scrolling
+        <p
           aria-live="polite"
-          className="bg-muted/40 border-border flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-lg border px-3.5 py-3"
+          className="bg-popover before:to-popover sticky bottom-0 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 pt-2 pb-4 text-sm before:pointer-events-none before:absolute before:inset-x-0 before:-top-4 before:h-4 before:bg-gradient-to-b before:from-transparent sm:pb-0"
         >
-          <div className="flex flex-wrap items-center gap-2">
+          <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5">
+            <StatusDot status={selected.status} />
             <span className="font-semibold">{selected.title}</span>
-            <StatusBadge room={selected} />
-            {[selected.style, selected.size, selected.floor].map(
-              (tag) =>
-                tag && (
-                  <Badge key={tag} variant="outline" className="text-muted-foreground">
-                    {tag}
-                  </Badge>
-                )
-            )}
-          </div>
+            <span
+              className={cn(
+                'font-medium',
+                selected.status === 'available'
+                  ? 'text-emerald-600 dark:text-emerald-400'
+                  : 'text-muted-foreground'
+              )}
+            >
+              {selected.statusLabel}
+            </span>
+            <span className="text-muted-foreground">
+              {[selected.style, selected.size, selected.floor].filter(Boolean).join(' · ')}
+            </span>
+          </span>
           {selected.rent && (
-            <span className="text-base font-semibold tabular-nums">
+            <span className="ml-auto font-semibold tabular-nums">
               {selected.rent}
               <span className="text-muted-foreground text-xs font-normal">
                 {view.labels.perMonth}
               </span>
             </span>
           )}
-        </div>
+        </p>
       )}
     </div>
   )
 }
 
-function StatusBadge({ room }: { room: FloorRoomView }) {
-  if (room.status === 'available') {
-    return (
-      <Badge className="bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-400">
-        <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
-        {room.statusLabel}
-      </Badge>
-    )
-  }
+function StatusDot({ status }: { status: RoomStatus }) {
   return (
-    <Badge variant="secondary" className="text-muted-foreground tabular-nums">
-      {room.statusLabel}
-    </Badge>
+    <span
+      aria-hidden="true"
+      className={cn(
+        'size-2 shrink-0 rounded-full',
+        status === 'available' && 'bg-emerald-500',
+        status === 'upcoming' && 'border-muted-foreground border-[1.5px]',
+        status === 'occupied' && 'bg-muted-foreground/50'
+      )}
+    />
   )
 }
 
