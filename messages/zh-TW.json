@@ -90,8 +90,7 @@
     "by_floor": "依樓層",
     "legend_available": "現可入住",
     "legend_upcoming": "即將空出",
-    "full_detail": "全部{count, number}間房皆已住滿",
-    "full_contact": "<link>聯絡我們</link>了解即將空出的房間"
+    "full_detail": "全部{count, number}間房皆已住滿"
   },
   "HouseBuilding": {
     "floors_label": "樓層",

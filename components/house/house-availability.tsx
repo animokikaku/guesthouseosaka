@@ -3,7 +3,6 @@ import {
   type AvailabilityBannerView,
   type RoomView
 } from '@/components/house/house-availability-banner'
-import { Link } from '@/i18n/navigation'
 import {
   groupByDate,
   groupByFloor,
@@ -14,7 +13,6 @@ import {
 } from '@/lib/availability'
 import { useFormatter, useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
-import type { ReactNode } from 'react'
 
 interface HouseAvailabilityProps {
   document: { _id: string; _type: string; _updatedAt: string }
@@ -26,12 +24,6 @@ interface HouseAvailabilityProps {
 
 /** A Sanity `date` read as midnight in Osaka, so formatting in Tokyo time keeps the same day. */
 const tokyoMidnight = (date: string) => new Date(`${date}T00:00:00+09:00`)
-
-const contactLink = (chunks: ReactNode) => (
-  <Link href="/contact" className="text-foreground underline underline-offset-4">
-    {chunks}
-  </Link>
-)
 
 /** How many opening dates the banner shows before folding the rest into "+N". */
 const SHOWN_DATES = 3
@@ -53,20 +45,18 @@ export function HouseAvailability({ document, rooms, today }: HouseAvailabilityP
     return (
       <div
         id="availability"
-        className="bg-card border-border flex flex-wrap items-center gap-x-5 gap-y-1 rounded-xl border px-4 py-3.5 md:px-5"
+        className="bg-card border-border flex items-center gap-3 rounded-xl border px-4 py-3.5 md:gap-5 md:px-5"
       >
         <span
           aria-hidden="true"
           className="bg-muted-foreground/50 size-2.5 shrink-0 rounded-full"
         />
+        {/* Same type scale as the banner's headline and summary */}
         <span className="min-w-0 flex-1">
-          <span className="block font-semibold">{t('fully_booked')}</span>
-          <span className="text-muted-foreground block text-sm">
+          <span className="block text-[15px] font-semibold md:text-base">{t('fully_booked')}</span>
+          <span className="text-muted-foreground block text-xs md:text-sm">
             {t('full_detail', { count: totalRooms })}
           </span>
-        </span>
-        <span className="text-muted-foreground w-full pl-5.5 text-sm md:w-auto md:pl-0">
-          {t.rich('full_contact', { link: contactLink })}
         </span>
       </div>
     )

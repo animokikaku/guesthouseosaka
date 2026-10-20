@@ -93,8 +93,7 @@ declare const messages: {
     "by_floor": "By floor",
     "legend_available": "Available now",
     "legend_upcoming": "Opening soon",
-    "full_detail": "{count, plural, one {The only room is taken right now} other {All # rooms are taken right now}}",
-    "full_contact": "<link>Contact us</link> about upcoming openings"
+    "full_detail": "{count, plural, one {The only room is taken right now} other {All # rooms are taken right now}}"
   },
   "HouseBuilding": {
     "floors_label": "Floors",

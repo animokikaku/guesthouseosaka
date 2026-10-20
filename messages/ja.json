@@ -90,8 +90,7 @@
     "by_floor": "フロア別",
     "legend_available": "現在空室",
     "legend_upcoming": "まもなく空室",
-    "full_detail": "全{count, number}室が入居中です",
-    "full_contact": "今後の空室については<link>お問い合わせ</link>ください"
+    "full_detail": "全{count, number}室が入居中です"
   },
   "HouseBuilding": {
     "floors_label": "階数",

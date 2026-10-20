@@ -90,8 +90,7 @@
     "by_floor": "Par étage",
     "legend_available": "Disponible maintenant",
     "legend_upcoming": "Bientôt libre",
-    "full_detail": "{count, plural, one {La seule chambre est occupée pour le moment} other {Les # chambres sont occupées pour le moment}}",
-    "full_contact": "<link>Contactez-nous</link> pour les prochaines disponibilités"
+    "full_detail": "{count, plural, one {La seule chambre est occupée pour le moment} other {Les # chambres sont occupées pour le moment}}"
   },
   "HouseBuilding": {
     "floors_label": "Étages",

@@ -75,13 +75,12 @@ describe('HouseAvailability', () => {
     expect(toggle).toHaveTextContent(/Then\s*Dec 15/)
   })
 
-  it('shows a plain notice with a contact link when the house is full', () => {
+  it('shows a plain notice when the house is full', () => {
     renderAvailability([room('101', null), room('102', null)])
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
     expect(screen.getByText('Fully booked')).toBeInTheDocument()
     expect(screen.getByText('All 2 rooms are taken right now')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /contact us/i })).toHaveAttribute('href', '/en/contact')
   })
 
   it('renders nothing for a house without rooms', () => {
