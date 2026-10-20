@@ -83,6 +83,16 @@ declare const messages: {
     "legend_available": "Available now",
     "legend_upcoming": "Opening soon"
   },
+  "LineBot": {
+    "change": "{house} {room}: {before} → {after}",
+    "unchanged": "{house} {room}: {status} (unchanged)",
+    "available_from": "From {date}",
+    "unknown_room": "{house} has no room {number}.",
+    "unknown_house": "There's no house called \"{house}\".",
+    "not_understood": "I couldn't find a room update in that message. Try something like \"Orange 106 free from Nov 27\" or \"Lemon 203 occupied\".",
+    "not_allowed": "This LINE account can't update rooms. Its user ID is {userId}",
+    "failed": "Something went wrong and nothing was changed. Please try again, or update the room in the Studio."
+  },
   "HouseBuilding": {
     "floors_label": "Floors",
     "min_rent_label": "Min Rent",

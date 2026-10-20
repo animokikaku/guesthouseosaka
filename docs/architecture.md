@@ -50,5 +50,5 @@ public/                # Static assets only
 ### Environment
 
 - Type-safe env via `@t3-oss/env-nextjs` in `lib/env.ts`
-- Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`
+- Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`; optional for the LINE bot: `SANITY_API_WRITE_TOKEN`, `LINE_CHANNEL_SECRET`, `LINE_CHANNEL_ACCESS_TOKEN`, `LINE_ALLOWED_USER_IDS`
 - Client: `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`, `NEXT_PUBLIC_BLOB_STORAGE_URL`
