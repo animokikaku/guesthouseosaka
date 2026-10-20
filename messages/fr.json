@@ -63,10 +63,28 @@
     },
     "show_all": "Afficher les {count} équipements"
   },
+  "HouseAvailability": {
+    "heading": "Disponibilités",
+    "last_updated": "Dernière mise à jour : {date}",
+    "room_number": "Chambre {number}",
+    "now": "Libre",
+    "style_western": "Occidentale",
+    "style_japanese": "Japonaise",
+    "size": "{size, number} m²",
+    "per_month": "/mois",
+    "rooms_available": "{count, plural, one {# chambre disponible} other {# chambres disponibles}}",
+    "rooms_upcoming": "{count, plural, one {# chambre bientôt libre} other {# chambres bientôt libres}}",
+    "fully_booked": "Complet",
+    "occupied": "Occupée",
+    "floor": "{floor}F",
+    "legend_available": "Disponible maintenant",
+    "legend_upcoming": "Bientôt libre"
+  },
   "HouseBuilding": {
     "floors_label": "Étages",
     "min_rent_label": "Loyer min.",
-    "rooms_label": "Chambres"
+    "rooms_label": "Chambres",
+    "rooms_by_floor": "Chambres par étage"
   },
   "HouseLocation": {
     "heading": "Où vous vous trouverez",

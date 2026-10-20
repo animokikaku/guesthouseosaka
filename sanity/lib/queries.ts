@@ -216,6 +216,17 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     address
   },
 
+  // Room availability; _updatedAt dates the list on the page
+  _updatedAt,
+  "rooms": rooms[]{
+    _key,
+    number,
+    availableFrom,
+    style,
+    size,
+    rent
+  },
+
   // Pricing
   "pricing": array::compact(pricing[]{
     _key,

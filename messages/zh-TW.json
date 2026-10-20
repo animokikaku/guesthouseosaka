@@ -63,10 +63,28 @@
     },
     "show_all": "顯示全部{count}項設施"
   },
+  "HouseAvailability": {
+    "heading": "空房狀況",
+    "last_updated": "最後更新：{date}",
+    "room_number": "{number}號房",
+    "now": "現在",
+    "style_western": "西式",
+    "style_japanese": "日式",
+    "size": "{size, number}㎡",
+    "per_month": "/月",
+    "rooms_available": "{count}間房現可入住",
+    "rooms_upcoming": "{count}間房即將空出",
+    "fully_booked": "已滿房",
+    "occupied": "已入住",
+    "floor": "{floor}樓",
+    "legend_available": "現可入住",
+    "legend_upcoming": "即將空出"
+  },
   "HouseBuilding": {
     "floors_label": "樓層",
     "min_rent_label": "最低租金",
-    "rooms_label": "房間"
+    "rooms_label": "房間",
+    "rooms_by_floor": "各樓層房間"
   },
   "HouseLocation": {
     "heading": "位置",

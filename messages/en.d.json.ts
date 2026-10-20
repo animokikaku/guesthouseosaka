@@ -66,10 +66,28 @@ declare const messages: {
     },
     "show_all": "Show all {count} amenities"
   },
+  "HouseAvailability": {
+    "heading": "Availability",
+    "last_updated": "Last updated: {date}",
+    "room_number": "Room {number}",
+    "now": "Now",
+    "style_western": "Western",
+    "style_japanese": "Japanese",
+    "size": "{size, number} m²",
+    "per_month": "/mo",
+    "rooms_available": "{count, plural, one {# room available now} other {# rooms available now}}",
+    "rooms_upcoming": "{count, plural, one {# room opening soon} other {# rooms opening soon}}",
+    "fully_booked": "Fully booked",
+    "occupied": "Occupied",
+    "floor": "{floor}F",
+    "legend_available": "Available now",
+    "legend_upcoming": "Opening soon"
+  },
   "HouseBuilding": {
     "floors_label": "Floors",
     "min_rent_label": "Min Rent",
-    "rooms_label": "Rooms"
+    "rooms_label": "Rooms",
+    "rooms_by_floor": "Rooms by floor"
   },
   "HouseLocation": {
     "heading": "Where you'll be",
