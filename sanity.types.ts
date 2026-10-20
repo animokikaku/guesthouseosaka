@@ -176,6 +176,28 @@ export type LocalizedImage = {
   alt: InternationalizedArrayString;
 };
 
+export type HouseReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "house";
+};
+
+export type LineManager = {
+  _id: string;
+  _type: "lineManager";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  houses: Array<
+    {
+      _key: string;
+    } & HouseReference
+  >;
+  lineUserId?: string;
+};
+
 export type FaqQuestion = {
   _id: string;
   _type: "faqQuestion";
@@ -599,6 +621,8 @@ export type AllSanitySchemaTypes =
   | HouseAmenity
   | SanityImageAssetReference
   | LocalizedImage
+  | HouseReference
+  | LineManager
   | FaqQuestion
   | InternationalizedArrayPortableText
   | InternationalizedArrayString
@@ -951,6 +975,18 @@ export type RoomUpdateHousesQueryResult = Array<{
 }>;
 
 // Source: sanity/lib/queries.ts
+// Variable: lineManagerQuery
+// Query: *[_id == $id][0]{ "houses": houses[]._ref }
+export type LineManagerQueryResult =
+  | {
+      houses: Array<string>;
+    }
+  | {
+      houses: null;
+    }
+  | null;
+
+// Source: sanity/lib/queries.ts
 // Variable: housesBuildingQuery
 // Query: *[_type == "house"] | order(orderRank){  _id,  _type,  slug,  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),  "building": building{    rooms,    floors  },  phone,  image{  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": asset->metadata.lqip},  "extraCosts": array::compact(extraCosts[]{    "categoryId": category->_id,    "value": coalesce(value[language == $locale][0].value, value[language == "en"][0].value)[]  })}
 export type HousesBuildingQueryResult = Array<{
@@ -1253,6 +1289,7 @@ declare global {
     '*[_type == "house"] | order(orderRank){\n  slug,\n  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value)\n}': HousesTitlesQueryResult;
     '*[_type == "house"] | order(orderRank){\n  slug,\n  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),\n  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),\n  "caption": coalesce(caption[language == $locale][0].value, caption[language == "en"][0].value),\n  image{\n  asset,\n  hotspot,\n  crop,\n  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),\n  "preview": asset->metadata.lqip\n}\n}': HousesNavQueryResult;
     '*[_type == "house" && !(_id in path("versions.**"))] | order(orderRank){\n  _id,\n  slug,\n  "titles": title[]{ language, value },\n  "rooms": rooms[]{ _key, number, availableFrom }\n}': RoomUpdateHousesQueryResult;
+    '*[_id == $id][0]{ "houses": houses[]._ref }': LineManagerQueryResult;
     '*[_type == "house"] | order(orderRank){\n  _id,\n  _type,\n  slug,\n  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),\n  "building": building{\n    rooms,\n    floors\n  },\n  phone,\n  image{\n  asset,\n  hotspot,\n  crop,\n  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),\n  "preview": asset->metadata.lqip\n},\n  "extraCosts": array::compact(extraCosts[]{\n    "categoryId": category->_id,\n    "value": coalesce(value[language == $locale][0].value, value[language == "en"][0].value)[]\n  })\n}': HousesBuildingQueryResult;
     '*[_type == "faqPage"][0]{\n  "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),\n  "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value)\n}': FaqPageMetaQueryResult;
     '*[_type == "faqPage"][0]{\n  _id,\n  _type,\n  "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),\n  \n  "actions": array::compact(actions[]{\n    _key,\n    icon,\n    "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),\n    href\n  })\n,\n  "contactSection": coalesce(contactSection[language == $locale][0].value, contactSection[language == "en"][0].value),\n  "contactNote": coalesce(contactNote[language == $locale][0].value, contactNote[language == "en"][0].value)\n}': FaqPageQueryResult;

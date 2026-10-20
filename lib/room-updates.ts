@@ -32,16 +32,16 @@ export function toRoomUpdateHouses(documents: RoomUpdateHousesQueryResult): Room
 }
 
 /** For Agent Actions Prompt: the $variables come from {@link roomUpdateParams}. */
-export const ROOM_UPDATE_INSTRUCTION = `You read LINE messages from the manager of share houses in Osaka, who reports when rooms become free.
+export const ROOM_UPDATE_INSTRUCTION = `You read LINE messages from a manager of share houses in Osaka, who reports when rooms become free.
 
 Today in Osaka: $today
-The houses, the names they go by and their room numbers, as JSON: $houses
+The houses this manager looks after, the names they go by and their room numbers, as JSON: $houses
 The message: $message
 
 Answer in JSON, shaped like {"language": "ja", "updates": [{"house": "orange", "room": "106", "availableFrom": "2026-11-27"}]}.
 - language: the language of the message, one of "en", "ja", "fr", "zh-CN" or "zh-TW".
 - updates: one entry per room the message gives news about. Leave it empty when the message is about something else.
-- house: the id of the house, matched from any of its names, in any language or spelling. When no house matches, the name as written in the message.
+- house: the id of the house, matched from any of its names, in any language or spelling. When no house matches, the name as written in the message. When the message names no house for the room, an empty string.
 - room: the room number. Include it even when the house has no such room, so the manager can be told.
 - availableFrom: the date the room becomes free, as YYYY-MM-DD. Use today's date for a room that is free now, and null for a room that is occupied, rented or taken. A date without a year is the next one on or after today.`
 
@@ -79,6 +79,8 @@ export interface RoomUpdates {
   changes: RoomChange[]
   unknownHouses: string[]
   unknownRooms: { house: RoomUpdateHouse; number: string }[]
+  /** Rooms given without a house, which none or several of the houses have */
+  unplacedRooms: { number: string; houses: RoomUpdateHouse[] }[]
 }
 
 /**
@@ -88,7 +90,7 @@ export interface RoomUpdates {
 export const FALLBACK_LOCALE: Locale = 'ja'
 
 /**
- * Checks the model's answer against the houses: only rooms that exist are
+ * Checks the model's answer against the manager's houses: only rooms that exist are
  * changed, and anything else is reported back instead of guessed at.
  * Returns null when the answer isn't the expected JSON.
  */
@@ -104,14 +106,26 @@ export function resolveRoomUpdates(
   const changes = new Map<string, RoomChange>()
   const unknownHouses: string[] = []
   const unknownRooms: RoomUpdates['unknownRooms'] = []
+  const unplacedRooms: RoomUpdates['unplacedRooms'] = []
 
   for (const update of updates) {
-    const house = houses.find((candidate) => candidate.slug === update.house)
+    const number = String(update.room)
+    let house: RoomUpdateHouse | undefined
+    if (update.house) {
+      house = houses.find((candidate) => candidate.slug === update.house)
+    } else {
+      // No house named: done here rather than by the model, which might pick one
+      const candidates = houses.filter(({ rooms }) => rooms.some((room) => room.number === number))
+      if (candidates.length !== 1) {
+        unplacedRooms.push({ number, houses: candidates })
+        continue
+      }
+      house = candidates[0]
+    }
     if (!house) {
       unknownHouses.push(update.house)
       continue
     }
-    const number = String(update.room)
     const room = house.rooms.find((candidate) => candidate.number === number)
     if (!room) {
       unknownRooms.push({ house, number })
@@ -130,6 +144,7 @@ export function resolveRoomUpdates(
     locale: language && hasLocale(routing.locales, language) ? language : FALLBACK_LOCALE,
     changes: [...changes.values()],
     unknownHouses,
-    unknownRooms
+    unknownRooms,
+    unplacedRooms
   }
 }

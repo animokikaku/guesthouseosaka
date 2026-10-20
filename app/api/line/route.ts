@@ -2,12 +2,13 @@
  * LINE webhook: managers update rooms' availability by messaging the LINE
  * Official Account, e.g. "Orange 106 free from Nov 27". Agent Actions Prompt
  * reads the message, the rooms are patched in Sanity, and the bot replies with
- * what changed. Setup: docs/line-bot.md.
+ * what changed. Managers are `lineManager` documents. Setup: docs/line-bot.md.
  */
 
 import { getRoomStatus, openingDateFormat, tokyoMidnight, tokyoToday } from '@/lib/availability'
 import { env } from '@/lib/env'
 import {
+  getLineDisplayName,
   isValidLineSignature,
   replyToLine,
   textMessageEvents,
@@ -24,7 +25,7 @@ import {
   type RoomUpdates
 } from '@/lib/room-updates'
 import { client } from '@/sanity/lib/client'
-import { roomUpdateHousesQuery } from '@/sanity/lib/queries'
+import { lineManagerQuery, roomUpdateHousesQuery } from '@/sanity/lib/queries'
 import type { SanityClient } from 'next-sanity'
 import { getFormatter, getTranslations } from 'next-intl/server'
 import { after } from 'next/server'
@@ -33,7 +34,6 @@ export async function POST(request: Request) {
   const {
     LINE_CHANNEL_SECRET: secret,
     LINE_CHANNEL_ACCESS_TOKEN: accessToken,
-    LINE_ALLOWED_USER_IDS: allowedUserIds = '',
     SANITY_API_WRITE_TOKEN: token
   } = env
   if (!secret || !accessToken || !token) {
@@ -46,7 +46,6 @@ export async function POST(request: Request) {
   }
 
   const events = textMessageEvents(JSON.parse(body))
-  const allowed = new Set(allowedUserIds.split(',').map((id) => id.trim()))
   const sanity = client.withConfig({ token, perspective: 'raw' })
 
   // LINE retries a webhook that's slow to answer, and reading a message takes a few seconds
@@ -54,13 +53,13 @@ export async function POST(request: Request) {
     Promise.all(
       events.map(async (event) => {
         const reply = (text: string) => replyToLine(event.replyToken, text, accessToken)
+        // LINE doesn't always say who wrote in a group chat
         const { userId } = event.source
-        if (!userId || !allowed.has(userId)) {
-          const t = await getTranslations({ locale: FALLBACK_LOCALE, namespace: 'LineBot' })
-          return reply(t('not_allowed', { userId: userId ?? '?' }))
-        }
+        if (!userId) return
         try {
-          return reply(await updateRooms(event, sanity))
+          const manager = await sanity.fetch(lineManagerQuery, { id: managerId(userId) })
+          if (!manager) return reply(await requestAccess(userId, sanity, accessToken))
+          return reply(await updateRooms(event, manager.houses ?? [], sanity))
         } catch (error) {
           console.error('LINE room update failed', error)
           const t = await getTranslations({ locale: FALLBACK_LOCALE, namespace: 'LineBot' })
@@ -73,10 +72,35 @@ export async function POST(request: Request) {
   return new Response(null, { status: 200 })
 }
 
+/** The ID the bot gives a manager's document, so it can find them again. */
+const managerId = (userId: string) => `lineManager.${userId}`
+
+/**
+ * Adds a draft manager for someone new, which an admin publishes to let them
+ * in. Later messages before that leave the draft as it is.
+ */
+async function requestAccess(userId: string, sanity: SanityClient, accessToken: string) {
+  const name = (await getLineDisplayName(userId, accessToken)) ?? userId
+  await sanity.createIfNotExists({
+    _id: `drafts.${managerId(userId)}`,
+    _type: 'lineManager',
+    name,
+    lineUserId: userId
+  })
+  const t = await getTranslations({ locale: FALLBACK_LOCALE, namespace: 'LineBot' })
+  return t('pending', { name })
+}
+
 /** Reads the message, applies the room changes it reports and returns the reply. */
-async function updateRooms({ message }: LineTextMessageEvent, sanity: SanityClient) {
+async function updateRooms(
+  { message }: LineTextMessageEvent,
+  houseIds: string[],
+  sanity: SanityClient
+) {
   const today = tokyoToday()
-  const houses = toRoomUpdateHouses(await sanity.fetch(roomUpdateHousesQuery))
+  const houses = toRoomUpdateHouses(await sanity.fetch(roomUpdateHousesQuery)).filter((house) =>
+    houseIds.includes(house._id)
+  )
   const response: unknown = await sanity.withConfig({ apiVersion: 'vX' }).agent.action.prompt({
     instruction: ROOM_UPDATE_INSTRUCTION,
     instructionParams: roomUpdateParams(message.text, houses, today),
@@ -113,7 +137,7 @@ async function saveChanges(changes: RoomChange[], sanity: SanityClient) {
 }
 
 async function formatReply(
-  { locale, changes, unknownHouses, unknownRooms }: RoomUpdates,
+  { locale, changes, unknownHouses, unknownRooms, unplacedRooms }: RoomUpdates,
   today: string
 ) {
   const [t, format] = await Promise.all([getTranslations({ locale }), getFormatter({ locale })])
@@ -152,7 +176,12 @@ async function formatReply(
     ...unknownRooms.map(({ house, number }) =>
       t('LineBot.unknown_room', { house: title(house), number })
     ),
-    ...unknownHouses.map((house) => t('LineBot.unknown_house', { house }))
+    ...unknownHouses.map((house) => t('LineBot.unknown_house', { house })),
+    ...unplacedRooms.map(({ number, houses }) =>
+      houses.length > 0
+        ? t('LineBot.ambiguous_room', { number, houses: format.list(houses.map(title)) })
+        : t('LineBot.no_such_room', { number })
+    )
   ]
 
   return lines.length > 0 ? lines.join('\n') : t('LineBot.not_understood')

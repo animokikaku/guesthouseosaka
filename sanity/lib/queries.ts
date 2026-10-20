@@ -282,6 +282,12 @@ export const roomUpdateHousesQuery =
   "rooms": rooms[]{ _key, number, availableFrom }
 }`)
 
+// The LINE bot's sender, by the ID the bot gave their document. Fetched with the
+// `raw` perspective, so the draft of someone not approved yet doesn't match.
+export const lineManagerQuery = defineQuery(
+  `*[_type == "lineManager" && _id == $id][0]{ "houses": houses[]._ref }`
+)
+
 // All houses building and contact data (for FAQ page) - ordered by global orderRank
 export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   _id,

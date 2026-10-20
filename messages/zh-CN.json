@@ -85,9 +85,11 @@
     "unchanged": "{house} {room}：{status}（未变更）",
     "available_from": "{date}起空房",
     "unknown_room": "{house}没有{number}号房。",
-    "unknown_house": "没有名为“{house}”的房子。",
+    "unknown_house": "“{house}”不是您负责的房子。",
+    "ambiguous_room": "{houses}都有{number}号房。是哪一栋？",
+    "no_such_room": "您负责的房子都没有{number}号房。",
     "not_understood": "没有在消息中找到房间更新。请这样发送：“Orange 106 11月27日起空房”或“Lemon 203 已入住”。",
-    "not_allowed": "此LINE账号无权更新房间。用户ID：{userId}",
+    "pending": "此LINE账号还不能更新房间。请让管理员在 Studio 的“LINE Managers”中批准“{name}”。",
     "failed": "出现错误，未做任何更改。请重试，或在 Studio 中更新房间。"
   },
   "HouseBuilding": {

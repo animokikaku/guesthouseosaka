@@ -120,6 +120,32 @@ describe('resolveRoomUpdates', () => {
     expect(result?.changes.map((change) => change.availableFrom)).toEqual(['2026-11-27'])
   })
 
+  it('puts a room given without a house in the only house that has it', () => {
+    const result = resolveRoomUpdates(
+      { language: 'en', updates: [update('106', today, '')] },
+      houses,
+      today
+    )
+    expect(result?.changes.map(({ house, room }) => [house.slug, room.number])).toEqual([
+      ['orange', '106']
+    ])
+    expect(result?.unplacedRooms).toEqual([])
+  })
+
+  it('asks for the house when none or several of the houses have the room', () => {
+    const apple = { ...orange, _id: 'apple-id', slug: 'apple' as const }
+    const result = resolveRoomUpdates(
+      { language: 'en', updates: [update('106', today, ''), update('999', null, '')] },
+      [orange, apple],
+      today
+    )
+    expect(result?.changes).toEqual([])
+    expect(result?.unplacedRooms).toEqual([
+      { number: '106', houses: [orange, apple] },
+      { number: '999', houses: [] }
+    ])
+  })
+
   it('replies in the fallback language when the language is missing or unsupported', () => {
     expect(resolveRoomUpdates({ updates: [] }, houses, today)?.locale).toBe(FALLBACK_LOCALE)
     expect(resolveRoomUpdates({ language: 'de', updates: [] }, houses, today)?.locale).toBe(

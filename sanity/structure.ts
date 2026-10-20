@@ -8,6 +8,7 @@ import { HomeIcon } from '@sanity/icons/Home'
 import { ImagesIcon } from '@sanity/icons/Images'
 import { LockIcon } from '@sanity/icons/Lock'
 import { TagIcon } from '@sanity/icons/Tag'
+import { UsersIcon } from '@sanity/icons/Users'
 import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 import type { StructureResolver } from 'sanity/structure'
 import { singletonTypes, type DocumentTypeName } from './schemaTypes'
@@ -21,7 +22,8 @@ const MANAGED_TYPES: DocumentTypeName[] = [
   'amenityCategory',
   'amenity',
   'pricingCategory',
-  'faqQuestion'
+  'faqQuestion',
+  'lineManager'
 ]
 
 export const structure: StructureResolver = (S) =>
@@ -112,6 +114,14 @@ export const structure: StructureResolver = (S) =>
         S,
         context: S.context
       }),
+
+      // ============================================
+      // LINE MANAGERS (added by the LINE bot)
+      // ============================================
+      S.listItem()
+        .title('LINE Managers')
+        .icon(UsersIcon)
+        .child(S.documentTypeList('lineManager').title('LINE Managers')),
 
       // ============================================
       // CATEGORIES FOLDER

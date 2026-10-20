@@ -85,9 +85,11 @@
     "unchanged": "{house} {room} : {status} (inchangé)",
     "available_from": "Libre à partir du {date}",
     "unknown_room": "{house} n'a pas de chambre {number}.",
-    "unknown_house": "Aucune maison ne s'appelle « {house} ».",
+    "unknown_house": "« {house} » ne fait pas partie de vos maisons.",
+    "ambiguous_room": "La chambre {number} existe dans {houses}. De quelle maison s'agit-il ?",
+    "no_such_room": "Aucune de vos maisons n'a de chambre {number}.",
     "not_understood": "Je n'ai trouvé aucune mise à jour de chambre dans ce message. Essayez par exemple « Orange 106 libre le 27 nov. » ou « Lemon 203 occupée ».",
-    "not_allowed": "Ce compte LINE ne peut pas modifier les chambres. Son identifiant est {userId}",
+    "pending": "Ce compte LINE ne peut pas encore modifier les chambres. Demandez à un administrateur d'approuver « {name} » dans LINE Managers, dans le Studio.",
     "failed": "Une erreur s'est produite et rien n'a été modifié. Réessayez, ou modifiez la chambre dans le Studio."
   },
   "HouseBuilding": {

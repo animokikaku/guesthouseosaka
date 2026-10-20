@@ -31,6 +31,18 @@ export function textMessageEvents(payload: unknown): LineTextMessageEvent[] {
   })
 }
 
+const profileSchema = z.object({ displayName: z.string() })
+
+/** The user's LINE display name, or undefined if LINE won't give it (e.g. they blocked the account). */
+export async function getLineDisplayName(userId: string, accessToken: string) {
+  const response = await fetch(`https://api.line.me/v2/bot/profile/${encodeURIComponent(userId)}`, {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  })
+  if (!response.ok) return undefined
+  const profile = profileSchema.safeParse(await response.json())
+  return profile.success ? profile.data.displayName : undefined
+}
+
 /**
  * Answers a message with its reply token. Replies are free on every LINE plan,
  * unlike push messages, which count against the monthly quota.
