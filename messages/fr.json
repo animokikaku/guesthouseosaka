@@ -76,7 +76,7 @@
     "rooms_upcoming": "{count, plural, one {# chambre bientôt libre} other {# chambres bientôt libres}}",
     "fully_booked": "Complet",
     "occupied": "Occupée",
-    "floor": "Étage {floor}",
+    "floor": "{floor}F",
     "legend_available": "Disponible maintenant",
     "legend_upcoming": "Bientôt libre"
   },
