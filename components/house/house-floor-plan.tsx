@@ -1,5 +1,11 @@
 import { HouseFloorGrid, type FloorGridView } from '@/components/house/house-floor-grid'
-import { groupByFloor, type AvailabilityRoom, type FloorRoom } from '@/lib/availability'
+import {
+  groupByFloor,
+  openingDateFormat,
+  tokyoMidnight,
+  type AvailabilityRoom,
+  type FloorRoom
+} from '@/lib/availability'
 import { useFormatter, useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 
@@ -10,9 +16,6 @@ interface HouseFloorPlanProps {
   /** Today in Osaka (YYYY-MM-DD) */
   today: string
 }
-
-/** A Sanity `date` read as midnight in Osaka, so formatting in Tokyo time keeps the same day. */
-const tokyoMidnight = (date: string) => new Date(`${date}T00:00:00+09:00`)
 
 /**
  * The house's rooms by floor, opened from the Rooms figure. Every label is prepared
@@ -27,11 +30,7 @@ export function HouseFloorPlan({ document, rooms, today }: HouseFloorPlanProps) 
 
   const dataAttribute = createDataAttribute({ id: document._id, type: document._type })
   const formatDate = (date: string) =>
-    formatter.dateTime(tokyoMidnight(date), {
-      month: 'short',
-      day: 'numeric',
-      ...(date.slice(0, 4) !== today.slice(0, 4) && { year: 'numeric' })
-    })
+    formatter.dateTime(tokyoMidnight(date), openingDateFormat(date, today))
 
   const toView = (room: FloorRoom) => ({
     key: room._key,

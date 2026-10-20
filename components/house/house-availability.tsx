@@ -1,21 +1,24 @@
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import { Marker, MarkerContent, MarkerIcon, markerVariants } from '@/components/ui/marker'
 import { ResponsiveModal } from '@/components/ui/responsive-modal'
-import { groupByDate, type AvailabilitySummary, type ListedRoom } from '@/lib/availability'
+import {
+  groupByDate,
+  openingDateFormat,
+  tokyoMidnight,
+  type AvailabilitySummary,
+  type ListedRoom
+} from '@/lib/availability'
 import { cn } from '@/lib/utils'
 import { CalendarClockIcon, DoorClosedIcon, DoorOpenIcon } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
 import { createDataAttribute } from 'next-sanity'
 
 interface HouseAvailabilityProps {
-  document: { _id: string; _type: string; _updatedAt: string } | null
+  document: { _id: string; _type: string; _updatedAt: string }
   summary: AvailabilitySummary
   /** Today in Osaka (YYYY-MM-DD), decides whether a year is worth showing. */
   today: string
 }
-
-/** A Sanity `date` read as midnight in Osaka, so formatting in Tokyo time keeps the same day. */
-const tokyoMidnight = (date: string) => new Date(`${date}T00:00:00+09:00`)
 
 /**
  * A marker in the About section counting the rooms free now (or opening soon when
@@ -28,7 +31,7 @@ export function HouseAvailability({ document, summary, today }: HouseAvailabilit
   const formatter = useFormatter()
 
   const totalRooms = summary.rooms.length + summary.occupiedCount
-  if (!document || totalRooms === 0) return null
+  if (totalRooms === 0) return null
 
   if (summary.rooms.length === 0) {
     return (
@@ -41,16 +44,9 @@ export function HouseAvailability({ document, summary, today }: HouseAvailabilit
     )
   }
 
-  const dataAttribute = createDataAttribute({
-    id: document._id,
-    type: document._type
-  })
+  const dataAttribute = createDataAttribute({ id: document._id, type: document._type })
   const formatDate = (date: string) =>
-    formatter.dateTime(tokyoMidnight(date), {
-      month: 'short',
-      day: 'numeric',
-      ...(date.slice(0, 4) !== today.slice(0, 4) && { year: 'numeric' })
-    })
+    formatter.dateTime(tokyoMidnight(date), openingDateFormat(date, today))
 
   const roomCard = (room: ListedRoom) => {
     const now = room.status === 'available'

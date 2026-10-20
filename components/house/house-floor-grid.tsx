@@ -2,7 +2,7 @@
 
 import type { RoomStatus } from '@/lib/availability'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 
 /** A room with every label already formatted on the server, in Tokyo time. */
 export interface FloorRoomView {
@@ -118,7 +118,7 @@ function StatusDot({ status }: { status: RoomStatus }) {
   )
 }
 
-function LegendItem({ className, children }: { className: string; children: React.ReactNode }) {
+function LegendItem({ className, children }: { className: string; children: ReactNode }) {
   return (
     <span className="inline-flex items-center gap-1.5">
       <span aria-hidden="true" className={cn('size-3 rounded-[3px]', className)} />

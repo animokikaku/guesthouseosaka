@@ -4,7 +4,7 @@ import {
   getRoomStatus,
   groupByDate,
   groupByFloor,
-  groupByMoveIn,
+  openingDateFormat,
   summarizeAvailability,
   tokyoToday,
   type AvailabilityRoom
@@ -19,6 +19,16 @@ describe('tokyoToday', () => {
     // 20:00 UTC on Oct 16 is already Oct 17 in Tokyo
     expect(tokyoToday(new Date('2026-10-16T20:00:00Z'))).toBe('2026-10-17')
     expect(tokyoToday(new Date('2026-10-16T10:00:00Z'))).toBe('2026-10-16')
+  })
+})
+
+describe('openingDateFormat', () => {
+  it('adds the year only for dates outside the current one', () => {
+    expect(openingDateFormat('2026-11-30', '2026-10-20')).toEqual({
+      month: 'short',
+      day: 'numeric'
+    })
+    expect(openingDateFormat('2027-05-17', '2026-10-20').year).toBe('numeric')
   })
 })
 
@@ -77,32 +87,6 @@ describe('summarizeAvailability', () => {
       upcomingCount: 0,
       occupiedCount: 0
     })
-  })
-})
-
-describe('groupByMoveIn', () => {
-  const today = '2026-10-20'
-
-  it('puts free rooms under now, the next three months in their own groups, and the rest under later', () => {
-    const { rooms } = summarizeAvailability(
-      [
-        room('309', '2026-10-01'),
-        room('312', '2026-10-28'),
-        room('207', '2026-11-10'),
-        room('208', '2026-12-11'),
-        room('403', '2027-05-17'),
-        room('101')
-      ],
-      today
-    )
-
-    expect(groupByMoveIn(rooms, today).map((g) => [g.key, g.rooms.map((r) => r.number)])).toEqual([
-      ['now', ['309']],
-      ['2026-10', ['312']],
-      ['2026-11', ['207']],
-      ['2026-12', ['208']],
-      ['later', ['403']]
-    ])
   })
 })
 

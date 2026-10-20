@@ -34,6 +34,15 @@ export function tokyoToday(now: Date = new Date()) {
   return tokyoDateFormat.format(now)
 }
 
+/** A Sanity `date` read as midnight in Osaka, so formatting in Tokyo time keeps the same day. */
+export const tokyoMidnight = (date: string) => new Date(`${date}T00:00:00+09:00`)
+
+/** "Nov 30", with the year only when the date isn't in the current one. */
+export function openingDateFormat(date: string, today: string) {
+  const otherYear = date.slice(0, 4) !== today.slice(0, 4)
+  return { month: 'short', day: 'numeric', year: otherYear ? 'numeric' : undefined } as const
+}
+
 /**
  * The status follows from the date alone, so there is nothing else to keep in
  * sync: no date means occupied, today or earlier means available, later means upcoming.
@@ -73,47 +82,13 @@ export function summarizeAvailability(
   }
 }
 
-const monthIndex = (date: string) => Number(date.slice(0, 4)) * 12 + Number(date.slice(5, 7))
-
-export interface MoveInGroup {
-  /** `now`, a month as YYYY-MM, or `later` */
-  key: string
-  kind: 'now' | 'month' | 'later'
-  rooms: ListedRoom[]
-}
-
-/**
- * Columns for the "By date" view: rooms free now, then one group per month with
- * openings up to two months ahead, then everything further out as "later", so a
- * far-off date never adds a column of its own.
- */
-export function groupByMoveIn(rooms: ListedRoom[], today: string): MoveInGroup[] {
-  const now: ListedRoom[] = []
-  const months = new Map<string, ListedRoom[]>()
-  const later: ListedRoom[] = []
-
-  for (const room of rooms) {
-    if (room.status === 'available') now.push(room)
-    else if (monthIndex(room.availableFrom) - monthIndex(today) <= 2) {
-      const month = room.availableFrom.slice(0, 7)
-      months.set(month, [...(months.get(month) ?? []), room])
-    } else later.push(room)
-  }
-
-  return [
-    ...(now.length ? [{ key: 'now', kind: 'now' as const, rooms: now }] : []),
-    ...[...months].map(([key, monthRooms]) => ({ key, kind: 'month' as const, rooms: monthRooms })),
-    ...(later.length ? [{ key: 'later', kind: 'later' as const, rooms: later }] : [])
-  ]
-}
-
 export interface DateGroup {
   /** `now`, or the opening date as YYYY-MM-DD */
   key: string
   rooms: ListedRoom[]
 }
 
-/** Rows for the phone timeline: rooms free now, then one row per opening date. */
+/** Rows for the availability timeline: rooms free now, then one row per opening date. */
 export function groupByDate(rooms: ListedRoom[]): DateGroup[] {
   const groups: DateGroup[] = []
   for (const room of rooms) {

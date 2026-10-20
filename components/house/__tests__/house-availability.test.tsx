@@ -13,9 +13,13 @@ function room(number: string, availableFrom: string | null, rent = 46000): Avail
   return { _key: number, number, availableFrom, style: 'japanese', size: 12, rent }
 }
 
-function renderAvailability(rooms: AvailabilityRoom[], doc: typeof document | null = document) {
+function renderAvailability(rooms: AvailabilityRoom[]) {
   return render(
-    <HouseAvailability document={doc} summary={summarizeAvailability(rooms, today)} today={today} />
+    <HouseAvailability
+      document={document}
+      summary={summarizeAvailability(rooms, today)}
+      today={today}
+    />
   )
 }
 
@@ -77,11 +81,9 @@ describe('HouseAvailability', () => {
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
-  it('renders nothing without an availability document or rooms', () => {
-    const { container: noDocument } = renderAvailability([room('309', today)], null)
-    expect(noDocument).toBeEmptyDOMElement()
+  it('renders nothing for a house without rooms', () => {
+    const { container } = renderAvailability([])
 
-    const { container: noRooms } = renderAvailability([])
-    expect(noRooms).toBeEmptyDOMElement()
+    expect(container).toBeEmptyDOMElement()
   })
 })
