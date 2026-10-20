@@ -9,6 +9,10 @@ export const env = createEnv({
   server: {
     SANITY_API_READ_TOKEN: nonEmptyString(),
     RESEND_API_KEY: nonEmptyString(),
+    // The LINE bot (app/api/line) stays off until all three are set
+    SANITY_API_WRITE_TOKEN: z.optional(nonEmptyString()),
+    LINE_CHANNEL_SECRET: z.optional(nonEmptyString()),
+    LINE_CHANNEL_ACCESS_TOKEN: z.optional(nonEmptyString()),
     NODE_ENV: z.enum(['development', 'production', 'test']),
     VERCEL_ENV: z.optional(z.enum(['development', 'preview', 'production']))
   },

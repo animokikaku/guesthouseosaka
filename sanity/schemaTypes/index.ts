@@ -11,6 +11,7 @@ import { galleryCategory } from './documents/gallery-category'
 import { homePage } from './documents/home-page'
 import { house } from './documents/house'
 import { legalNotice } from './documents/legal-notice'
+import { lineManager } from './documents/line-manager'
 import { pricingCategory } from './documents/pricing-category'
 import { settings } from './documents/settings'
 // Object types
@@ -43,7 +44,8 @@ export const documentTypes = [
   amenityCategory,
   amenity,
   pricingCategory,
-  faqQuestion
+  faqQuestion,
+  lineManager
 ] as const
 
 const objectTypes = [
@@ -79,6 +81,9 @@ export const singletonTypes: DocumentTypeName[] = [
 
 /** Documents the site routes on: no creating, duplicating or unpublishing. */
 export const fixedSetTypes: DocumentTypeName[] = [...singletonTypes, 'house', 'contactType']
+
+/** Created by the LINE bot with IDs it looks up: no creating or duplicating. */
+export const botCreatedTypes: DocumentTypeName[] = ['lineManager']
 
 /** Fixed documents and the taxonomies houses reference: no deleting. */
 export const protectedTypes: DocumentTypeName[] = [
