@@ -48,7 +48,8 @@ test.describe('General inquiry form', () => {
       ),
       reply_to: 'test@example.com',
       subject: 'お問い合わせ: Test User',
-      to: 'orange@guesthouseosaka.com'
+      // A local build never addresses a house inbox; the unit tests cover routing.
+      to: 'dev@guesthouseosaka.com'
     })
   })
 

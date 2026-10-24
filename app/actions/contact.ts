@@ -34,7 +34,9 @@ const DEFAULT_CONTACT = {
     if (env.VERCEL_ENV === 'preview') {
       return 'delivered+guesthouseosaka@resend.dev'
     }
-    if (env.NODE_ENV !== 'production') {
+    // Only a Vercel production deployment reaches the houses' inboxes. A local
+    // `next start` runs with NODE_ENV=production too, so NODE_ENV can't decide.
+    if (env.VERCEL_ENV !== 'production') {
       return `dev@${CONTACT_EMAIL_DOMAIN}`
     }
     if (places?.length === 1) {

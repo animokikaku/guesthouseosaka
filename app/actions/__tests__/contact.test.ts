@@ -84,7 +84,7 @@ describe('submitContactForm', () => {
     {
       name: 'one house in production',
       nodeEnv: 'production',
-      vercelEnv: undefined,
+      vercelEnv: 'production',
       places: ['apple'],
       to: 'apple@guesthouseosaka.com'
     },
@@ -101,6 +101,13 @@ describe('submitContactForm', () => {
       vercelEnv: 'preview',
       places: ['apple'],
       to: 'delivered+guesthouseosaka@resend.dev'
+    },
+    {
+      name: 'a local production build',
+      nodeEnv: 'production',
+      vercelEnv: undefined,
+      places: ['apple'],
+      to: 'dev@guesthouseosaka.com'
     },
     {
       name: 'local development',
