@@ -42,6 +42,8 @@ bun run format:check # Check formatting without modifying files
 - Formatting: run `bun run format:check`
 - Sanity schema or query changes: run `bun run typegen`
 - User-facing flow changes: run the relevant Playwright tests with `bun run test:e2e`
+- Run the local E2E suite only through its managed server (`bun run test:e2e`, no `BASE_URL`). Pointing `BASE_URL` at a server you started yourself skips the Resend mocks, so form tests send real emails with the key in `.env.local`
+- Stop a server you started by PID or port (`lsof -ti:<port> | xargs kill`), then check the port is free; Next renames its process to `next-server`, so `pkill -f "next start"` misses it
 - Before a pull request: run `bun run build`
 
 ## Skills
