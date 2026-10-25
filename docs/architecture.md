@@ -54,6 +54,8 @@ public/                # Static assets only
   carry `s-maxage` for browsers and any CDN in front
 - Draft mode is a signed cookie set by `/api/draft-mode/enable`; it switches queries to the
   token client with stega and loads Visual Editing on demand
+- Array fields that Presentation edits optimistically render through `OptimisticArray`, which
+  loads Visual Editing's mutator only in draft mode
 
 ### Components
 
@@ -93,8 +95,9 @@ public/                # Static assets only
 
 ### Environment
 
-- Type-safe env via `@t3-oss/env-core` in `lib/env.ts`; Vite exposes `NEXT_PUBLIC_*` to the
-  client (see `envPrefix` in `vite.config.ts`), server variables are the Worker's vars and
-  secrets, read at runtime through `process.env`
+- Public settings (`NEXT_PUBLIC_*`) are inlined by Vite at build time and read from `lib/env.ts`;
+  the build validates them against `lib/env.schema.ts`, so no validator ships to the browser
+- Server secrets come from `lib/env.server.ts` (`@t3-oss/env-core`): the Worker's vars and
+  secrets, validated at runtime through `process.env`
 - Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `DEPLOY_ENV`
 - Client: `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`, `NEXT_PUBLIC_BLOB_STORAGE_URL`

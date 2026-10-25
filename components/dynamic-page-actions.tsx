@@ -2,7 +2,7 @@ import { PageActions } from '@/components/page-header'
 import { buttonVariants } from '@/components/ui/button'
 import { localeToPrefix } from '@/i18n/routing'
 import { Icon } from '@/lib/icons'
-import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
+import { OptimisticArray } from '@/components/optimistic-array'
 import { FaqPageQueryResult } from '@/sanity.types'
 import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 import { stegaClean } from '@sanity/client/stega'
@@ -47,22 +47,25 @@ interface DynamicPageActionsProps {
 }
 
 export function DynamicPageActions(props: DynamicPageActionsProps) {
+  return (
+    <OptimisticArray
+      documentId={props.documentId}
+      value={props.actions}
+      select={(document: { actions?: PageAction[] }) => document.actions}
+    >
+      {(actions) => <PageActionLinks {...props} actions={actions ?? null} />}
+    </OptimisticArray>
+  )
+}
+
+function PageActionLinks({ actions, documentId, documentType }: DynamicPageActionsProps) {
   const currentPathname = useLocation({ select: (location) => location.pathname })
   const localePrefix = localeToPrefix(useLocale())
   const navigate = useNavigate()
 
-  const actions = useSanityOptimisticArray<
-    PageAction,
-    PageAction[] | null,
-    { actions?: PageAction[] }
-  >(props.documentId, props.actions, (document) => document.actions ?? null)
-
   if (!actions || actions.length === 0) return null
 
-  const dataAttribute = createDataAttribute({
-    id: props.documentId,
-    type: props.documentType
-  })
+  const dataAttribute = createDataAttribute({ id: documentId, type: documentType })
 
   return (
     <PageActions data-sanity={dataAttribute('actions')}>

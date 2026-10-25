@@ -1,5 +1,6 @@
 import '@/app/globals.css'
 import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url'
+import { DraftModeContext } from '@/components/draft-mode-context'
 import { GlobalError } from '@/components/global-fallbacks'
 import { jsonLdScript } from '@/components/json-ld'
 import { LocaleNotFound } from '@/components/locale-not-found'
@@ -110,32 +111,34 @@ function LocaleLayout() {
 
   return (
     <ThemeProvider>
-      <IntlProvider locale={locale} messages={messages} {...intlConfig}>
-        {/* Repeated per locale, so `head()` would dedupe them; React hoists these. */}
-        {routing.locales
-          .filter((other) => other !== locale)
-          .map((other) => (
-            <meta
-              key={other}
-              property="og:locale:alternate"
-              content={localeConfig[other].openGraph}
-            />
-          ))}
-        <div className="bg-background relative z-10 flex min-h-svh flex-col">
-          <SiteHeader houseItems={houseItems} />
-          <main className="flex flex-1 flex-col pt-(--header-height)">
-            <Outlet />
-          </main>
-          {settings && <SiteFooter settings={settings} year={year} />}
-        </div>
-        <TailwindIndicator />
-        <Toaster />
-        {isDraftMode && (
-          <Suspense>
-            <DraftMode />
-          </Suspense>
-        )}
-      </IntlProvider>
+      <DraftModeContext value={isDraftMode}>
+        <IntlProvider locale={locale} messages={messages} {...intlConfig}>
+          {/* Repeated per locale, so `head()` would dedupe them; React hoists these. */}
+          {routing.locales
+            .filter((other) => other !== locale)
+            .map((other) => (
+              <meta
+                key={other}
+                property="og:locale:alternate"
+                content={localeConfig[other].openGraph}
+              />
+            ))}
+          <div className="bg-background relative z-10 flex min-h-svh flex-col">
+            <SiteHeader houseItems={houseItems} />
+            <main className="flex flex-1 flex-col pt-(--header-height)">
+              <Outlet />
+            </main>
+            {settings && <SiteFooter settings={settings} year={year} />}
+          </div>
+          <TailwindIndicator />
+          <Toaster />
+          {isDraftMode && (
+            <Suspense>
+              <DraftMode />
+            </Suspense>
+          )}
+        </IntlProvider>
+      </DraftModeContext>
     </ThemeProvider>
   )
 }

@@ -1,5 +1,5 @@
 import { BrandIcon } from '@/lib/icons/brand'
-import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
+import { OptimisticArray } from '@/components/optimistic-array'
 import type { SettingsQueryResult } from '@/sanity.types'
 import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 import { stegaClean } from '@sanity/client/stega'
@@ -9,15 +9,9 @@ type SiteFooterProps = {
   year: number
 }
 
-type SocialLink = NonNullable<NonNullable<SettingsQueryResult>['socialLinks']>[number]
+type Settings = NonNullable<SettingsQueryResult>
 
 export function SiteFooter({ settings, year }: SiteFooterProps) {
-  const links = useSanityOptimisticArray<
-    SocialLink,
-    NonNullable<SettingsQueryResult>['socialLinks'],
-    NonNullable<SettingsQueryResult>
-  >(settings._id, settings.socialLinks, (document) => document.socialLinks ?? undefined)
-
   const dataAttribute = createDataAttribute({
     id: settings._id,
     type: settings._type
@@ -35,15 +29,23 @@ export function SiteFooter({ settings, year }: SiteFooterProps) {
             className="flex shrink-0 items-center gap-3"
             data-sanity={dataAttribute('socialLinks')}
           >
-            {links?.map((link) => (
-              <SocialLink
-                key={link._key}
-                href={link.url}
-                icon={link.icon}
-                label={link.label}
-                data-sanity={dataAttribute(`socialLinks[_key=="${link._key}"]`)}
-              />
-            ))}
+            <OptimisticArray
+              documentId={settings._id}
+              value={settings.socialLinks}
+              select={(document: Settings) => document.socialLinks}
+            >
+              {(links) =>
+                links?.map((link) => (
+                  <SocialLink
+                    key={link._key}
+                    href={link.url}
+                    icon={link.icon}
+                    label={link.label}
+                    data-sanity={dataAttribute(`socialLinks[_key=="${link._key}"]`)}
+                  />
+                ))
+              }
+            </OptimisticArray>
           </div>
         </div>
       </div>

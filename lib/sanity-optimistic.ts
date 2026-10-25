@@ -1,5 +1,3 @@
-import { useOptimistic } from '@sanity/visual-editing/react'
-
 /** A document mutation as Presentation reports it to `useOptimistic`. */
 type OptimisticAction<TDocument> = { id: string; document: TDocument }
 
@@ -26,19 +24,4 @@ export function reduceOptimisticArray<
   }
 }
 
-/** Optimistically updates a Sanity array field; see {@link reduceOptimisticArray}. */
-export function useSanityOptimisticArray<
-  TItem extends { _key: string },
-  TState extends TItem[] | null | undefined,
-  TDocument extends Record<string, unknown> = Record<string, unknown>
->(
-  documentId: string,
-  initial: TState,
-  selectIncoming: (document: TDocument) => TItem[] | null | undefined
-): TState {
-  return useOptimistic<TState, TDocument>(
-    initial,
-    reduceOptimisticArray<TItem, TState, TDocument>(documentId, selectIncoming)
-  )
-}
 // oxlint-enable typescript/no-unnecessary-type-parameters, typescript/no-unsafe-type-assertion

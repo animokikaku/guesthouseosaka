@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ResponsiveModal } from '@/components/ui/responsive-modal'
 import { Icon } from '@/lib/icons'
-import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
+import { OptimisticArray } from '@/components/optimistic-array'
 import type { AmenityCategoryData, AmenityItemData } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
 import { stegaClean } from '@sanity/client/stega'
@@ -92,18 +92,27 @@ function AmenitiesDialog({
   )
 }
 
-export function HouseAmenities({
-  amenityCategories: initialCategories,
-  featuredAmenities
-}: HouseAmenitiesProps) {
+export function HouseAmenities(props: HouseAmenitiesProps) {
+  const { id } = useHouseDocument()
+
+  return (
+    <OptimisticArray
+      documentId={id}
+      value={props.amenityCategories}
+      select={(document: { amenityCategories?: AmenityCategoryData[] }) =>
+        document.amenityCategories
+      }
+    >
+      {(amenityCategories) => (
+        <HouseAmenitiesBody {...props} amenityCategories={amenityCategories ?? []} />
+      )}
+    </OptimisticArray>
+  )
+}
+
+function HouseAmenitiesBody({ amenityCategories, featuredAmenities }: HouseAmenitiesProps) {
   const { id, type } = useHouseDocument()
   const t = useTranslations('HouseAmenities')
-
-  const amenityCategories = useSanityOptimisticArray<
-    AmenityCategoryData,
-    AmenityCategoryData[],
-    { amenityCategories?: AmenityCategoryData[] }
-  >(id, initialCategories, (document) => document.amenityCategories)
 
   const dataAttribute = createDataAttribute({ id, type })
 
