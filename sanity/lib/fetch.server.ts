@@ -1,6 +1,6 @@
 import { cacheHeaders } from '@/lib/cache-control'
 import { cached } from '@/lib/edge-cache.server'
-import { env } from '@/lib/env'
+import { serverEnv } from '@/lib/env.server'
 import type { QueryParams } from '@sanity/client'
 import { setResponseHeaders } from '@tanstack/react-start/server'
 import { client } from './client'
@@ -9,7 +9,7 @@ import { getDraftPerspective, isDraftModeEnabled } from './draft-mode.server'
 // The dataset is public: published content needs no token, so it comes from
 // the API CDN, which Sanity invalidates as soon as a document is published.
 const publishedClient = client.withConfig({ useCdn: true, perspective: 'published' })
-const draftClient = client.withConfig({ useCdn: false, token: env.SANITY_API_READ_TOKEN })
+const draftClient = client.withConfig({ useCdn: false, token: serverEnv.SANITY_API_READ_TOKEN })
 
 /**
  * Runs a GROQ query for the current request: published content normally, the

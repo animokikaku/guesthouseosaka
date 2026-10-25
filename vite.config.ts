@@ -7,6 +7,26 @@ import compileMessage from 'icu-minify/compile'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { defineConfig, type Plugin } from 'vite'
+import { publicEnvSchema } from './lib/env.schema'
+
+/**
+ * Fails the build on missing or malformed public settings, which Vite inlines
+ * as plain constants: validating here keeps zod out of the browser bundle.
+ */
+function validatePublicEnv(): Plugin {
+  return {
+    name: 'validate-public-env',
+    configResolved({ env }) {
+      const result = publicEnvSchema.safeParse(env)
+      if (!result.success) {
+        const issues = result.error.issues.map(
+          (issue) => `  ${issue.path.join('.')}: ${issue.message}`
+        )
+        throw new Error(`Invalid public environment variables:\n${issues.join('\n')}`)
+      }
+    }
+  }
+}
 
 /**
  * Precompiles `messages/*.json` to icu-minify's compact format, as next-intl's
@@ -74,6 +94,7 @@ export default defineConfig(() => {
     plugins: [
       // Builds and runs the server in workerd, configured by wrangler.jsonc.
       cloudflare({ viteEnvironment: { name: 'ssr' } }),
+      validatePublicEnv(),
       precompileMessages(),
       tailwindcss(),
       cn({ content: ['{app,components,lib}/**/*.{ts,tsx}'], out: 'generated/cn-tables.ts' }),

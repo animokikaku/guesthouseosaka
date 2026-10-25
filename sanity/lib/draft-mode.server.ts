@@ -1,4 +1,4 @@
-import { env } from '@/lib/env'
+import { serverEnv } from '@/lib/env.server'
 import { validateApiPerspective, type ClientPerspective } from '@sanity/client'
 import { perspectiveCookieName } from '@sanity/preview-url-secret/constants'
 import { deleteCookie, getCookie, setCookie } from '@tanstack/react-start/server'
@@ -10,7 +10,7 @@ import { createHash, timingSafeEqual } from 'node:crypto'
  */
 const DRAFT_MODE_COOKIE = '__sanity_draft_mode'
 const draftModeValue = createHash('sha256')
-  .update(`draft-mode:${env.SANITY_API_READ_TOKEN}`)
+  .update(`draft-mode:${serverEnv.SANITY_API_READ_TOKEN}`)
   .digest('hex')
 
 export function isDraftModeEnabled() {

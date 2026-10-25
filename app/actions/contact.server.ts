@@ -4,12 +4,12 @@ import {
   TourRequestEmail
 } from '@/components/email-template'
 import { CONTACT_EMAIL, CONTACT_EMAIL_DOMAIN } from '@/lib/config'
-import { env } from '@/lib/env'
+import { serverEnv } from '@/lib/env.server'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
 import type { HouseIdentifier } from '@/lib/types'
 import { Resend, type CreateEmailOptions } from 'resend'
 
-const { emails } = new Resend(env.RESEND_API_KEY)
+const { emails } = new Resend(serverEnv.RESEND_API_KEY)
 
 export type ContactSubmissionResult =
   | { ok: true }
@@ -29,12 +29,12 @@ async function sendEmail(payload: CreateEmailOptions): Promise<ContactSubmission
 const DEFAULT_CONTACT = {
   from: `Guest House Osaka <${CONTACT_EMAIL}>`,
   to: (places?: HouseIdentifier[]) => {
-    if (env.DEPLOY_ENV === 'preview') {
+    if (serverEnv.DEPLOY_ENV === 'preview') {
       return 'delivered+guesthouseosaka@resend.dev'
     }
     // Only the production Worker reaches the houses' inboxes. A local preview
     // is a production build too, so the build mode can't decide.
-    if (env.DEPLOY_ENV !== 'production') {
+    if (serverEnv.DEPLOY_ENV !== 'production') {
       return `dev@${CONTACT_EMAIL_DOMAIN}`
     }
     if (places?.length === 1) {
