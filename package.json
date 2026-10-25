@@ -26,7 +26,9 @@
     "test:e2e:preview": "playwright test --project=preview",
     "test:e2e:ui": "playwright test --project=local --ui",
     "deploy": "CLOUDFLARE_ENV=production vite build && wrangler deploy",
-    "deploy:preview": "CLOUDFLARE_ENV=preview vite build && wrangler versions upload"
+    "deploy:preview": "CLOUDFLARE_ENV=preview vite build && wrangler versions upload",
+    "postinstall": "bun run generate:cn",
+    "generate:cn": "cn build --content '{app,components,lib}/**/*.{ts,tsx}' --out generated/cn-tables.ts --quiet"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
