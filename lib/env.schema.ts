@@ -1,4 +1,5 @@
-import { z } from './zod'
+// Extension included: vite.config.ts loads this file outside the bundler.
+import { z } from './zod.ts'
 
 const vercelBlobHostname = /\.public\.blob\.vercel-storage\.com$/i
 

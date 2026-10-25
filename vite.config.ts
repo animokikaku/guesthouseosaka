@@ -7,7 +7,7 @@ import compileMessage from 'icu-minify/compile'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { defineConfig, type Plugin } from 'vite'
-import { publicEnvSchema } from './lib/env.schema'
+import { publicEnvSchema } from './lib/env.schema.ts'
 
 /**
  * Fails the build on missing or malformed public settings, which Vite inlines
