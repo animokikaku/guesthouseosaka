@@ -2,7 +2,7 @@ import { routing } from '@/i18n/routing'
 import { toHouseNavItems } from '@/lib/transforms/nav'
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import { z } from '@/lib/zod'
-import { createServerFn } from '@tanstack/react-start'
+import { createMiddleware, createServerFn } from '@tanstack/react-start'
 import { isDraftModeEnabled } from './draft-mode.server'
 import { sanityFetch, setCacheHeaders } from './fetch.server'
 import {
@@ -28,9 +28,16 @@ import {
 /*
  * One GET server function per route, each running a fixed set of queries: a
  * client navigation costs one request, and the CDN can cache it like a page
- * (see `setCacheHeaders`). Never accept a query from the client: the server
- * holds the read token.
+ * (see `cacheable`). Never accept a query from the client: the server holds
+ * the read token.
  */
+
+/** Lets the CDN cache the response like a page, unless it was rendered in draft mode. */
+const cacheable = createMiddleware({ type: 'function' }).server(async ({ next }) => {
+  const result = await next()
+  setCacheHeaders()
+  return result
+})
 
 const localeSchema = z.enum(routing.locales)
 const byLocale = z.object({ locale: localeSchema })
@@ -38,9 +45,9 @@ const byHouse = z.object({ locale: localeSchema, house: z.enum(HouseIdentifierVa
 const byContactType = z.object({ locale: localeSchema, slug: z.enum(ContactTypeValues) })
 
 export const getLocaleLayout = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
-    setCacheHeaders()
     const [{ data: settings }, { data: houses }] = await Promise.all([
       sanityFetch({ query: settingsQuery, params: { locale } }),
       sanityFetch({ query: housesNavQuery, params: { locale } })
@@ -55,17 +62,17 @@ export const getLocaleLayout = createServerFn({ method: 'GET' })
   })
 
 export const getHomePage = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
-    setCacheHeaders()
     const { data } = await sanityFetch({ query: homePageQuery, params: { locale } })
     return data
   })
 
 export const getFaqPage = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
-    setCacheHeaders()
     const params = { locale }
     const [meta, page, housesBuilding, pricingCategories, faqQuestions] = await Promise.all([
       sanityFetch({ query: faqPageMetaQuery, params }),
@@ -84,9 +91,9 @@ export const getFaqPage = createServerFn({ method: 'GET' })
   })
 
 export const getContactLayout = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
-    setCacheHeaders()
     const [meta, page] = await Promise.all([
       sanityFetch({ query: contactPageMetaQuery, params: { locale } }),
       sanityFetch({ query: contactPageQuery, params: { locale } })
@@ -95,25 +102,25 @@ export const getContactLayout = createServerFn({ method: 'GET' })
   })
 
 export const getContactTypes = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
-    setCacheHeaders()
     const { data } = await sanityFetch({ query: contactTypesListQuery, params: { locale } })
     return data
   })
 
 export const getLegalNotice = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
-    setCacheHeaders()
     const { data } = await sanityFetch({ query: legalNoticeQuery, params: { locale } })
     return data
   })
 
 export const getContactType = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byContactType)
   .handler(async ({ data: { locale, slug } }) => {
-    setCacheHeaders()
     const [contactType, houseTitles] = await Promise.all([
       sanityFetch({ query: contactTypeQuery, params: { locale, slug } }),
       sanityFetch({ query: housesTitlesQuery, params: { locale } })
@@ -122,17 +129,17 @@ export const getContactType = createServerFn({ method: 'GET' })
   })
 
 export const getHouseMeta = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byHouse)
   .handler(async ({ data: { locale, house } }) => {
-    setCacheHeaders()
     const { data } = await sanityFetch({ query: houseMetaQuery, params: { locale, slug: house } })
     return data
   })
 
 export const getHousePage = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byHouse)
   .handler(async ({ data: { locale, house } }) => {
-    setCacheHeaders()
     const [page, houses] = await Promise.all([
       sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
       sanityFetch({ query: housesTitlesQuery, params: { locale } })
@@ -141,9 +148,9 @@ export const getHousePage = createServerFn({ method: 'GET' })
   })
 
 export const getHouseGallery = createServerFn({ method: 'GET' })
+  .middleware([cacheable])
   .validator(byHouse)
   .handler(async ({ data: { locale, house } }) => {
-    setCacheHeaders()
     const { data } = await sanityFetch({
       query: houseGalleryQuery,
       params: { locale, slug: house }
