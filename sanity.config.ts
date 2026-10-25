@@ -1,7 +1,8 @@
 'use client'
 
 /**
- * This configuration is used to for the Sanity Studio that's mounted on the `/app/studio/[[...tool]]/page.tsx` route
+ * Sanity Studio configuration, used by the Sanity CLI (`typegen`, `dev`, `deploy`).
+ * This site no longer embeds the Studio.
  */
 
 import { visionTool } from '@sanity/vision'
@@ -72,7 +73,9 @@ export default defineConfig({
       : []),
     presentationTool({
       previewUrl: {
-        preview: '/',
+        // The site the Studio runs on, unless a Studio deployed on its own
+        // (`sanity deploy`) names the site to preview.
+        initial: process.env.SANITY_STUDIO_PREVIEW_URL || '/',
         previewMode: {
           enable: '/api/draft-mode/enable',
           disable: '/api/draft-mode/disable'
