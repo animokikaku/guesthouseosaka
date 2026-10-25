@@ -6,8 +6,27 @@ import { cn } from 'cn/vite'
 import compileMessage from 'icu-minify/compile'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
+import { unstable_readConfig } from 'wrangler'
 import { publicEnvSchema } from './lib/env.schema.ts'
+
+/**
+ * Takes the Sanity dataset from the Wrangler environment being built
+ * (`CLOUDFLARE_ENV`, as the Cloudflare plugin reads it), so production builds
+ * read `production` and local and preview builds `development`. Vite gives a
+ * `VITE_*` in `process.env` precedence over `.env` files, and loads them after
+ * the `config` hooks.
+ */
+function sanityDatasetFromWrangler(): Plugin {
+  return {
+    name: 'sanity-dataset-from-wrangler',
+    config(_, { mode }) {
+      const { CLOUDFLARE_ENV } = loadEnv(mode, process.cwd(), 'CLOUDFLARE_')
+      const { vars } = unstable_readConfig({ env: CLOUDFLARE_ENV }, { hideWarnings: true })
+      process.env.VITE_SANITY_DATASET = String(vars.SANITY_DATASET)
+    }
+  }
+}
 
 /**
  * Fails the build on missing or malformed public settings, which Vite inlines
@@ -119,6 +138,7 @@ export default defineConfig(() => {
     plugins: [
       // Builds and runs the server in workerd, configured by wrangler.jsonc.
       cloudflare({ viteEnvironment: { name: 'ssr' } }),
+      sanityDatasetFromWrangler(),
       validatePublicEnv(),
       precompileMessages(),
       tailwindcss(),

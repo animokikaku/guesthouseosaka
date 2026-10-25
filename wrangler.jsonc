@@ -19,18 +19,20 @@
   // Locally they come from `.env.local`.
   "vars": {
     // Only the production environment emails the houses (see contact.server.ts).
-    "DEPLOY_ENV": "development"
+    "DEPLOY_ENV": "development",
+    // Inlined into the build by vite.config.ts; production alone reads live content.
+    "SANITY_DATASET": "development"
   },
   "env": {
     // Select at build time with CLOUDFLARE_ENV (see the `deploy` scripts).
     "preview": {
-      "vars": { "DEPLOY_ENV": "preview" }
+      "vars": { "DEPLOY_ENV": "preview", "SANITY_DATASET": "development" }
     },
     "production": {
       // Without a name, Wrangler would deploy `guesthouseosaka-production`, a
       // separate Worker without the secrets or the custom domain.
       "name": "guesthouseosaka",
-      "vars": { "DEPLOY_ENV": "production" }
+      "vars": { "DEPLOY_ENV": "production", "SANITY_DATASET": "production" }
     }
   }
 }
