@@ -8,12 +8,7 @@ type House = NonNullable<HouseQueryResult>
 type Settings = SettingsQueryResult
 
 /** The CMS address under schema.org's property names. */
-function toPostalAddress({
-  streetAddress,
-  locality,
-  postalCode,
-  country
-}: Address): PostalAddress {
+function toPostalAddress({ streetAddress, locality, postalCode, country }: Address): PostalAddress {
   return {
     '@type': 'PostalAddress',
     streetAddress,

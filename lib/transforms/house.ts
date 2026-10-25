@@ -7,9 +7,7 @@ type HouseMap = NonNullable<HouseQueryResult>['map']
 type HouseAmenityCategories =
   | NonNullable<NonNullable<HouseQueryResult>['amenityCategories']>[number][]
   | null
-type HouseFeaturedAmenity = 
-  NonNullable<NonNullable<HouseQueryResult>['featuredAmenities']>[number]
-
+type HouseFeaturedAmenity = NonNullable<NonNullable<HouseQueryResult>['featuredAmenities']>[number]
 
 /** Returns null when the map has no coordinates, and drops an unsafe Google Maps URL. */
 export function toMapData(map: HouseMap): MapData | null {
