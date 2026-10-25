@@ -78,6 +78,33 @@ function precompileMessages(): Plugin {
 export default defineConfig(() => {
   return {
     server: { port: 3000 },
+    environments: {
+      client: {
+        build: {
+          rolldownOptions: {
+            output: {
+              // Route-level splitting left ~55 files per page, most under 2 KB,
+              // which cost a round trip each before hydration. One group
+              // merges modules shared by several chunks; `entriesAware` keeps
+              // a module with the routes that load it, so draft-mode-only code
+              // stays out of what visitors load. Merging leftovers up to 50 KB
+              // cut pages to ~20 files; at 100 KB the merged chunks import each
+              // other in a cycle and the page fails to start.
+              codeSplitting: {
+                groups: [
+                  {
+                    name: 'shared',
+                    minShareCount: 2,
+                    entriesAware: true,
+                    entriesAwareMergeThreshold: 50_000
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     // Keep the existing variable names, so `.env` files and CI secrets need no changes.
     envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
     define: {
