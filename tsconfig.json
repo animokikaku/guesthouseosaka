@@ -20,5 +20,5 @@
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.mts"],
-  "exclude": ["node_modules", "e2e", "dist", ".tanstack", ".wrangler"]
+  "exclude": ["node_modules", "e2e", "dist", ".tanstack", ".wrangler", ".sanity"]
 }

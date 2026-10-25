@@ -35,6 +35,7 @@
     "components/ui/**",
     "sanity.types.ts",
     ".wrangler/**",
-    "dist/**"
+    "dist/**",
+    ".sanity/**"
   ]
 }

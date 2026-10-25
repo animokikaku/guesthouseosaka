@@ -49,7 +49,8 @@ yarn-error.log*
 # keep locally-stored public assets out of source control
 /public/images
 
-# sanity
+# sanity (`.sanity` is the CLI's generated runtime for `sanity dev` and `build`)
+.sanity/
 schema.json
 *.tar.gz
 dist/
