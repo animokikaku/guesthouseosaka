@@ -74,7 +74,8 @@ public/                # Static assets only
 
 - Cloudflare Workers, through `@cloudflare/vite-plugin` and `wrangler.jsonc`: `bun dev` and
   `bun run start` (a preview of the build) both run the server in workerd
-- `bun run deploy` builds for the `production` environment and deploys; `bun run deploy:preview`
+- `bun run deploy` builds for the `production` environment and deploys the `guesthouseosaka`
+  Worker (named explicitly in `wrangler.jsonc`); `bun run deploy:preview`
   uploads a preview version. Only `production` sets `DEPLOY_ENV=production`, which lets the
   contact form email the houses' inboxes
 - Secrets are set with `wrangler secret put`; locally they come from `.env.local`

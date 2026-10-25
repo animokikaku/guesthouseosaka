@@ -26,6 +26,9 @@
       "vars": { "DEPLOY_ENV": "preview" }
     },
     "production": {
+      // Without a name, Wrangler would deploy `guesthouseosaka-production`, a
+      // separate Worker without the secrets or the custom domain.
+      "name": "guesthouseosaka",
       "vars": { "DEPLOY_ENV": "production" }
     }
   }
