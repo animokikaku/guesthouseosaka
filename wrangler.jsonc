@@ -6,6 +6,10 @@
   // `node:async_hooks`, `node:crypto` and a populated `process.env`, which
   // `lib/env.ts` validates.
   "compatibility_flags": ["nodejs_compat"],
+  // Workers Cache: Cloudflare serves responses from its cache in front of the
+  // Worker, following their Cache-Control (see lib/cache-control.ts), so a
+  // cached page never starts the Worker. Each deployed version starts empty.
+  "cache": { "enabled": true },
   "observability": {
     "enabled": true,
     "traces": { "enabled": true }

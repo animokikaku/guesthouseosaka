@@ -79,6 +79,9 @@ public/                # Static assets only
   uploads a preview version. Only `production` sets `DEPLOY_ENV=production`, which lets the
   contact form email the houses' inboxes
 - Secrets are set with `wrangler secret put`; locally they come from `.env.local`
+- Workers Cache (`cache.enabled` in `wrangler.jsonc`) serves pages and server-function GETs
+  from Cloudflare's cache by their `Cache-Control`, without running the Worker; check
+  `Cf-Cache-Status`. Responses carry `Vary: Cookie` for draft mode (see `lib/cache-control.ts`)
 - Hashed build assets are served as immutable (`public/_headers`)
 - Deployments are manual for now: check a preview with
   `BASE_URL=<preview URL> bun run test:e2e:preview`, which sends one real contact email to

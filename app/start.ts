@@ -40,7 +40,14 @@ const routingMiddleware = createMiddleware().server(({ request, next }) => {
   }
 
   const locale = negotiateLocale(request.headers.get('accept-language'), getCookie(LOCALE_COOKIE))
-  return redirectTo(url, `/${localeToPrefix(locale)}${pathname === '/' ? '' : pathname}`, 307)
+  const negotiated = redirectTo(
+    url,
+    `/${localeToPrefix(locale)}${pathname === '/' ? '' : pathname}`,
+    307
+  )
+  // Depends on headers the cache key leaves out, so it must never be shared.
+  negotiated.headers.set('Cache-Control', 'no-store')
+  return negotiated
 })
 
 const testProxyMiddleware = createMiddleware().server(async ({ request, next }) => {
