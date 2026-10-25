@@ -142,6 +142,9 @@ function MobileLink({
         className
       )}
       {...props}
+      // The menu closes as the page changes, and Safari's view transition
+      // snapshots it mid-animation, so these links navigate without one.
+      viewTransition={false}
     >
       {children}
     </Link>

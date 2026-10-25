@@ -154,7 +154,9 @@ function NavigationMenuGroupItem({
                   <li key={item.key}>
                     <NavigationMenuLink
                       data-active={house === item.key}
-                      render={<Link {...item.link} />}
+                      // The dropdown closes as the page changes, which Safari's
+                      // view transition snapshots mid-animation.
+                      render={<Link {...item.link} viewTransition={false} />}
                       onFocus={() => setHoverItem(item)}
                       onMouseEnter={() => setHoverItem(item)}
                       className="flex flex-col items-start gap-1 rounded-md text-left"
