@@ -11,7 +11,6 @@ import { PageNav } from '@/components/page-nav'
 import { galleryLink } from '@/components/house/gallery-link'
 import { buildGallerySlides } from '@/lib/gallery'
 import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
-import type { StegaAware } from '@/lib/types/stega'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
 import type { HouseQueryResult, HousesTitlesQueryResult } from '@/sanity.types'
@@ -35,7 +34,7 @@ export function HousePageContent({
   about,
   building,
   houses
-}: StegaAware<NonNullable<HouseQueryResult>> & { houses: HousesTitlesQueryResult }) {
+}: NonNullable<HouseQueryResult> & { houses: HousesTitlesQueryResult }) {
   const href = galleryLink(useLocale(), slug)
 
   const mobileHeroImages = buildGallerySlides({ featuredImage, galleryImages })

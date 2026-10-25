@@ -21,12 +21,11 @@ function RootDocument({ children }: { children: ReactNode }) {
   const { locale = routing.defaultLocale, house } = useParams({ strict: false })
 
   return (
-    <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body
-        suppressHydrationWarning
         className={cn(
           'text-foreground group/body font-sans antialiased [--footer-height:--spacing(14)] [--header-height:--spacing(14)] xl:[--footer-height:--spacing(24)]',
           // Rendered with the page rather than applied by a script, so the

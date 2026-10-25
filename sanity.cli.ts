@@ -15,7 +15,9 @@ export default defineCliConfig({
     path: [
       './**/*.{ts,tsx,js,jsx}',
       '!node_modules',
-      '!.next',
+      '!.sanity',
+      '!.tanstack',
+      '!.wrangler',
       '!dist',
       '!**/__tests__/**',
       '!**/*.test.{ts,tsx,js,jsx}',

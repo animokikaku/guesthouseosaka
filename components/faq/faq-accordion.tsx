@@ -6,7 +6,6 @@ import {
   AccordionItem,
   AccordionTrigger
 } from '@/components/ui/accordion'
-import type { StegaAware } from '@/lib/types/stega'
 import type { FaqQuestionsQueryResult } from '@/sanity.types'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
@@ -23,7 +22,7 @@ const components: PortableTextComponents = {
   }
 }
 
-type FaqQuestions = StegaAware<NonNullable<FaqQuestionsQueryResult>[number]>[]
+type FaqQuestions = NonNullable<FaqQuestionsQueryResult>[number][]
 
 type FAQAccordionProps = {
   faqQuestions: FaqQuestions
