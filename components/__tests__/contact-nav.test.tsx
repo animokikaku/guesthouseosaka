@@ -1,16 +1,7 @@
+import { routerState } from '@/lib/__tests__/utils/router'
 import { render, screen } from '@testing-library/react'
 import type { ContactNavItem } from '@/lib/types/components'
 import { ContactNav } from '../contact-nav'
-
-const { selectedSegment } = vi.hoisted(() => ({
-  selectedSegment: { current: null as string | null }
-}))
-
-vi.mock('next/navigation', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('next/navigation')>()),
-  usePathname: () => '/',
-  useSelectedLayoutSegment: () => selectedSegment.current
-}))
 
 const items: ContactNavItem[] = [
   { id: 'tour-1', slug: 'tour', title: 'Book a Tour' },
@@ -19,10 +10,6 @@ const items: ContactNavItem[] = [
 ]
 
 describe('ContactNav', () => {
-  beforeEach(() => {
-    selectedSegment.current = null
-  })
-
   it('renders one link per item, pointing at the contact tab', () => {
     render(<ContactNav items={items} />)
 
@@ -48,7 +35,7 @@ describe('ContactNav', () => {
   })
 
   it('marks only the link matching the current segment as active', () => {
-    selectedSegment.current = 'tour'
+    routerState.params = { slug: 'tour' }
 
     render(<ContactNav items={items} />)
 

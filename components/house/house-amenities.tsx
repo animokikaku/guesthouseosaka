@@ -1,5 +1,3 @@
-'use client'
-
 import { useHouseDocument } from '@/components/house/house-context'
 import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import { Badge } from '@/components/ui/badge'
@@ -10,8 +8,8 @@ import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import type { AmenityCategoryData, AmenityItemData } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
 import { stegaClean } from '@sanity/client/stega'
-import { useTranslations } from 'next-intl'
-import { createDataAttribute } from 'next-sanity'
+import { useTranslations } from 'use-intl'
+import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 import type { DataAttributeFn } from '@/lib/types/stega'
 
 interface HouseAmenitiesProps {

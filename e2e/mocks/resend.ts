@@ -1,4 +1,4 @@
-import type { NextFixture } from 'next/experimental/testmode/playwright'
+import type { ServerFetch } from '../fixtures/server-fetch'
 
 /**
  * Base URL handed to the Resend SDK through `RESEND_BASE_URL` during E2E runs.
@@ -20,18 +20,18 @@ type MockResendAPIOptions = {
 /**
  * Mock the Resend send-email endpoint for E2E tests.
  *
- * Runs through Next's test proxy (`experimental.testProxy`), so each test gets
- * its own interception scope and outgoing submissions never reach the real API.
+ * Runs through the server-fetch fixture, so each test gets its own
+ * interception scope and outgoing submissions never reach the real API.
  *
  * Requests to other hosts return `undefined` so later-registered handlers still
  * see them; only the fallback in the spec decides whether they pass through.
  *
  * @see https://resend.com/docs/api-reference/emails/send-email
  */
-export function mockResendAPI(next: NextFixture, options: MockResendAPIOptions = {}) {
+export function mockResendAPI(serverFetch: ServerFetch, options: MockResendAPIOptions = {}) {
   const requests: Record<string, unknown>[] = []
 
-  next.onFetch(async (request) => {
+  serverFetch.onFetch(async (request) => {
     const url = new URL(request.url)
 
     // Not Resend — fall through to the next handler

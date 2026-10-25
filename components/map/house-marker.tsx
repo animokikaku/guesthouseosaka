@@ -1,5 +1,3 @@
-'use client'
-
 import { cn } from '@/lib/utils'
 import { AdvancedMarker, AdvancedMarkerProps } from '@vis.gl/react-google-maps'
 

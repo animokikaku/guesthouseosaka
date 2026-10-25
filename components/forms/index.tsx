@@ -1,5 +1,3 @@
-'use client'
-
 import type { ContactFormFields } from '@/lib/schemas/contact-form'
 import {
   userAccountDefaultValues,

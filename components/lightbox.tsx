@@ -1,5 +1,3 @@
-'use client'
-
 /**
  * Ramka lightbox primitives with this site's Tailwind skin, plus the composed
  * `Lightbox.Gallery` (bleed or snug slides, glass controls, desktop thumbnail
@@ -26,8 +24,8 @@ import {
   ZoomInIcon,
   ZoomOutIcon
 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Image from 'next/image'
+import { useTranslations } from 'use-intl'
+import { Image } from '@/components/image'
 import * as React from 'react'
 
 import { LIGHTBOX_THUMBNAIL_SIZE } from '@/lib/gallery-image'

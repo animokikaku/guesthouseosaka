@@ -1,11 +1,9 @@
-'use client'
-
 import { PageNavTabs, pageNavTabClass } from '@/components/page-nav'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Link } from '@/i18n/navigation'
 import type { ContactNavItem } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
-import { useSelectedLayoutSegment } from 'next/navigation'
+import { Link, useParams } from '@tanstack/react-router'
+import { useLocale } from 'use-intl'
 
 type ContactNavProps = React.ComponentProps<'div'> & {
   items: ContactNavItem[]
@@ -13,7 +11,8 @@ type ContactNavProps = React.ComponentProps<'div'> & {
 
 export function ContactNav({ items, ...props }: ContactNavProps) {
   const isMobile = useIsMobile()
-  const segment = useSelectedLayoutSegment()
+  const locale = useLocale()
+  const { slug: segment } = useParams({ strict: false })
 
   if (items.length === 0) return null
 
@@ -21,17 +20,16 @@ export function ContactNav({ items, ...props }: ContactNavProps) {
     <PageNavTabs {...props}>
       {items.map(({ id, slug, title }) => (
         <Link
-          prefetch
           key={id}
-          href={{
-            pathname: '/contact/[slug]',
-            params: { slug },
-            hash: '#tabs'
-          }}
+          to="/$locale/contact/$slug"
+          params={{ locale, slug }}
+          hash="tabs"
           aria-current={segment === slug ? 'page' : undefined}
           data-active={segment === slug}
           className={cn(pageNavTabClass, 'data-[active=true]:text-primary')}
-          scroll={!isMobile}
+          // On phones the tabs stay put; on larger screens jump to them.
+          resetScroll={!isMobile}
+          hashScrollIntoView={!isMobile}
         >
           {title}
         </Link>

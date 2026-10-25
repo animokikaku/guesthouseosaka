@@ -1,12 +1,10 @@
-'use client'
-
 import { useHouseDocument } from '@/components/house/house-context'
-import { Link } from '@/i18n/navigation'
+import { Link } from '@tanstack/react-router'
 import type { BuildingData } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
 import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
-import { useFormatter, useTranslations } from 'next-intl'
-import { createDataAttribute } from 'next-sanity'
+import { useFormatter, useLocale, useTranslations } from 'use-intl'
+import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 
 interface HouseBuildingProps {
   building: BuildingData | null
@@ -16,6 +14,7 @@ export function HouseBuilding({ building }: HouseBuildingProps) {
   const { id, type, slug } = useHouseDocument()
   const t = useTranslations('HouseBuilding')
   const formatter = useFormatter()
+  const locale = useLocale()
 
   const dataAttribute = createDataAttribute({ id, type })
 
@@ -33,13 +32,7 @@ export function HouseBuilding({ building }: HouseBuildingProps) {
         Icon={LayersIcon}
         data-sanity={dataAttribute('building.floors')}
       />
-      <Link
-        href={{
-          pathname: '/[house]',
-          params: { house: slug },
-          hash: '#pricing'
-        }}
-      >
+      <Link to="/$locale/$house" params={{ locale, house: slug }} hash="pricing">
         <FeatureItem
           label={t('min_rent_label')}
           value={formatter.number(building?.startingPrice ?? 0, 'currency')}

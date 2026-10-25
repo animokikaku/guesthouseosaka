@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Next.js guesthouse website with Sanity CMS, internationalization (en/ja/fr/zh-CN/zh-TW), and embedded Studio.
+TanStack Start guesthouse website with Sanity CMS, internationalization (en/ja/fr/zh-CN/zh-TW), and embedded Studio.
 
 ## Package Manager
 
@@ -12,16 +12,18 @@ Use `bun` exclusively. The version is pinned in `package.json`, and the lockfile
 bun install          # Install dependencies
 bun dev              # Dev server at localhost:3000
 bun run build        # Production build (run before PRs)
+bun run start        # Preview the build in workerd at localhost:3000
+bun run deploy       # Build and deploy the production Worker (Cloudflare)
 bun run typegen      # Regenerate Sanity types after schema changes
 bun run test --run   # Run tests once without watch mode
 bun run knip         # Detect unused deps/exports
-bun run check        # Generate Next.js types, lint, and run TypeScript checks
+bun run check        # TypeScript checks and lint
 bun run format:check # Check formatting without modifying files
 ```
 
 ## Key Rules
 
-- Use the `vercel-react-best-practices` skill when writing, reviewing, or refactoring React or Next.js code
+- Use the `vercel-react-best-practices` skill when writing, reviewing, or refactoring React code (skip its Next.js-only rules)
 - Use the `web-design-guidelines` skill when auditing UI, UX, or accessibility
 - React Compiler is enabled: skip manual-memoization advice (`useMemo`, `useCallback`, `memo`) from skills unless profiling shows a need
 - Treat skill rules that introduce `swr`, `lru-cache`, or `better-all` as production dependency additions and ask first
@@ -43,7 +45,7 @@ bun run format:check # Check formatting without modifying files
 - Sanity schema or query changes: run `bun run typegen`
 - User-facing flow changes: run the relevant Playwright tests with `bun run test:e2e`
 - Run the local E2E suite only through its managed server (`bun run test:e2e`, no `BASE_URL`). Pointing `BASE_URL` at a server you started yourself skips the Resend mocks, so form tests send real emails with the key in `.env.local`
-- Stop a server you started by PID or port (`lsof -ti:<port> | xargs kill`), then check the port is free; Next renames its process to `next-server`, so `pkill -f "next start"` misses it
+- Stop a server you started by PID or port (`lsof -ti:<port> | xargs kill`), then check the port is free
 - Before a pull request: run `bun run build`
 
 ## Skills
@@ -51,7 +53,7 @@ bun run format:check # Check formatting without modifying files
 - The Playwright skills in `.claude/skills/playwright-*` are vendored from `node_modules/playwright-core/lib/tools/skills/`; after upgrading Playwright, re-sync them instead of editing them
 - `.cursor/skills/vercel-react-best-practices` and `.codex/skills/vercel-react-best-practices` are symlinks to `.claude/skills/vercel-react-best-practices`
 - Where skills use `npx playwright …` or `npm`, use `bunx playwright …` and `bun`
-- Component tests (overrides the generic setup in `playwright-component-testing`): run with `bun run test:components`; config is `playwright.components.config.ts`, the gallery is a standalone Vite server in `playwright/gallery/` on port 3100, specs live in `playwright/components/`, and stories are `*.story.tsx` files next to components in `app/` or `components/`
+- Component tests (overrides the generic setup in `playwright-component-testing`): run with `bun run test:components`; config is `playwright.components.config.ts`, the gallery is a standalone Vite server in `playwright/gallery/` on port 3100, specs live in `playwright/components/`, and stories are `*.story.tsx` files next to components in `components/`
 - Story ids are the full path from the repo root without `.story.tsx`, plus the export name (`components/gallery/gallery-page-content/WithModal`); unique suffixes are not resolved
 
 ## Documentation
@@ -60,13 +62,3 @@ bun run format:check # Check formatting without modifying files
 - [Sanity Workflow](docs/sanity-workflow.md)
 - [Internationalization](docs/i18n.md)
 - [Testing](docs/testing.md)
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-## This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->

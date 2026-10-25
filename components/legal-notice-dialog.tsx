@@ -1,5 +1,3 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -25,7 +23,7 @@ import {
 import { useLegalNotice } from '@/components/legal-notice-context'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
-import { useFormatter, useTranslations } from 'next-intl'
+import { useFormatter, useTranslations } from 'use-intl'
 
 const legalContentComponents: PortableTextComponents = {
   block: {

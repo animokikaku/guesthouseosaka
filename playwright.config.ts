@@ -43,14 +43,14 @@ export default defineConfig({
     timeout: 10 * 1000
   },
 
-  // Run E2E tests against a production build with Next's test proxy enabled, so
-  // outgoing Resend calls are mocked in-process. `RESEND_BASE_URL` points the
+  // Run E2E tests against a production build with the test proxy enabled (see
+  // e2e/fixtures/server-fetch.ts), so outgoing Resend calls are mocked per test. `RESEND_BASE_URL` points the
   // SDK at an unresolvable host as a second line of defence: a call the mock
   // misses fails instead of reaching the real API. Skip the managed server when
   // testing an external deployment via BASE_URL.
   //
   // Never reuse an existing server: a `bun run dev` already on this port has
-  // neither variable, so the fixture's headers are ignored and a submission
+  // neither variable, so the fixture's header is ignored and a submission
   // reaches the real Resend API with the key from `.env.local`. The build is
   // the cost of both defences actually being in place.
   webServer: process.env.BASE_URL
@@ -60,7 +60,13 @@ export default defineConfig({
         url: baseURL,
         timeout: 5 * 60 * 1000,
         reuseExistingServer: false,
-        env: { NEXT_TEST_PROXY: '1', RESEND_BASE_URL: RESEND_MOCK_BASE_URL }
+        env: {
+          E2E_TEST_PROXY: '1',
+          RESEND_BASE_URL: RESEND_MOCK_BASE_URL,
+          // The server runs in workerd, which only sees the shell's variables
+          // (these, and CI's secrets) when asked to.
+          CLOUDFLARE_INCLUDE_PROCESS_ENV: 'true'
+        }
       },
 
   // Shared settings for all the projects below

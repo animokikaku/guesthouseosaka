@@ -1,5 +1,3 @@
-'use client'
-
 import { defineAppFieldGroup } from '@/components/forms/app-form'
 import { HouseIcon } from '@/components/house-icon'
 import type { HouseIdentifier } from '@/lib/types'

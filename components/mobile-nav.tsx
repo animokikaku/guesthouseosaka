@@ -1,19 +1,18 @@
-'use client'
-
-import { Link } from '@/i18n/navigation'
 import { Popover as PopoverPrimitive } from '@base-ui/react/popover'
 
 import { PageEmptyState } from '@/components/page-empty-state'
 import { Button } from '@/components/ui/button'
 import { NavItem, NavItems, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
-import { useState, type ComponentProps, type ReactNode } from 'react'
+import { Link, type LinkComponentProps } from '@tanstack/react-router'
+import { useLocale, useTranslations } from 'use-intl'
+import { useState, type ReactNode } from 'react'
 
 export function MobileNav({ items, className }: { items: NavItems; className?: string }) {
   const [open, setOpen] = useState(false)
   const t = useTranslations('MobileNav')
-  const mobileItems = items.filter((item): item is NavItem => 'href' in item)
+  const locale = useLocale()
+  const mobileItems = items.filter((item): item is NavItem => 'link' in item)
   const mobileListItems = items.filter((item): item is NavListItem => 'items' in item)
 
   return (
@@ -67,11 +66,11 @@ export function MobileNav({ items, className }: { items: NavItems; className?: s
               <div className="flex flex-col gap-4">
                 <div className="text-muted-foreground text-sm font-medium">{t('menu_label')}</div>
                 <div className="flex flex-col gap-3">
-                  <MobileLink href="/" onOpenChange={setOpen}>
+                  <MobileLink to="/$locale" params={{ locale }} onOpenChange={setOpen}>
                     {t('home_label')}
                   </MobileLink>
                   {mobileItems.map((item) => (
-                    <MobileLink key={item.key} href={item.href} onOpenChange={setOpen}>
+                    <MobileLink key={item.key} {...item.link} onOpenChange={setOpen}>
                       {item.label}
                     </MobileLink>
                   ))}
@@ -113,7 +112,7 @@ function MobileListSection({
       ) : (
         <div className="flex flex-col gap-3">
           {items.map((item) => (
-            <MobileLink prefetch key={item.key} href={item.href} onOpenChange={onOpenChange}>
+            <MobileLink key={item.key} {...item.link} onOpenChange={onOpenChange}>
               {item.label}
             </MobileLink>
           ))}
@@ -124,19 +123,17 @@ function MobileListSection({
 }
 
 function MobileLink({
-  href,
   onOpenChange,
   className,
   children,
   ...props
-}: ComponentProps<typeof Link> & {
+}: LinkComponentProps & {
   onOpenChange?: (open: boolean) => void
   children: ReactNode
   className?: string
 }) {
   return (
     <Link
-      href={href}
       onClick={() => {
         onOpenChange?.(false)
       }}

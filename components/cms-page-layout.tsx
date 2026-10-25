@@ -1,12 +1,10 @@
 import { DynamicPageActions } from '@/components/dynamic-page-actions'
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
-import { getOpenGraphMetadata } from '@/lib/metadata'
-import { sanityFetch } from '@/sanity/lib/live'
-import { settingsQuery } from '@/sanity/lib/queries'
+import { getLocaleHeadData, getMetadataTranslator } from '@/lib/locale-head'
+import { openGraphMeta, pageMeta } from '@/lib/metadata'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
-import type { Metadata } from 'next'
-import type { Locale } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
+import { stegaClean } from '@sanity/client/stega'
+import type { Locale } from 'use-intl'
 import type { ComponentProps, ReactNode } from 'react'
 
 const headerComponents: PortableTextComponents = {
@@ -51,35 +49,28 @@ export function CmsPageLayout({ page, children }: { page: CmsPage | null; childr
 
 type CmsPageMeta = { metaTitle: string | null; metaDescription: string | null } | null
 
-/** Title, description and social cards for a {@link CmsPageLayout} section. */
-export async function getCmsPageMetadata({
+/** Title, description and social cards for a {@link CmsPageLayout} section's `head()`. */
+export function cmsPageHead({
   locale,
   meta,
   image,
-  fallbackTitle
+  fallbackTitle,
+  matches
 }: {
   locale: Locale
-  /** The page's own meta fields, fetched with `stega: false`. */
-  meta: Promise<CmsPageMeta>
+  /** The page's own meta fields. */
+  meta: CmsPageMeta | undefined
   image: string
   fallbackTitle: 'contact_title' | 'faq_title'
-}): Promise<Metadata> {
-  const [page, { data: settings }, t] = await Promise.all([
-    meta,
-    sanityFetch({ query: settingsQuery, params: { locale }, stega: false }),
-    getTranslations('Metadata')
-  ])
+  matches: ReadonlyArray<{ routeId: string }>
+}) {
+  const { siteName, messages } = getLocaleHeadData(matches)
+  const page = stegaClean(meta)
+  const title =
+    page?.metaTitle ?? (messages && getMetadataTranslator(locale, messages)(fallbackTitle))
 
-  const { openGraph, twitter } = getOpenGraphMetadata({
-    locale,
-    image,
-    siteName: settings?.siteName
-  })
-
-  return {
-    title: page?.metaTitle ?? t(fallbackTitle),
-    description: page?.metaDescription ?? undefined,
-    openGraph,
-    twitter
-  }
+  return [
+    ...openGraphMeta({ locale, image, siteName }),
+    ...pageMeta({ title, description: page?.metaDescription, siteName })
+  ]
 }

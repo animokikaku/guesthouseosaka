@@ -1,9 +1,8 @@
-'use client'
-
 import { BrandIcon } from '@/lib/icons/brand'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import type { SettingsQueryResult } from '@/sanity.types'
-import { createDataAttribute, stegaClean } from 'next-sanity'
+import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
+import { stegaClean } from '@sanity/client/stega'
 
 type SiteFooterProps = {
   settings: NonNullable<SettingsQueryResult>

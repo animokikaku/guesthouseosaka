@@ -1,10 +1,11 @@
+import { galleryLink } from '@/components/house/gallery-link'
 import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 import { render, screen } from '@testing-library/react'
 import { ImageBlockGallery } from '../image-block-gallery'
 
-vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
+vi.mock('@/components/image', () => import('@/components/__tests__/mocks/image'))
 
-const href = { pathname: '/[house]/gallery', params: { house: 'orange' } } as const
+const href = galleryLink('en', 'orange')
 
 function photos(count: number) {
   return Array.from({ length: count }, (_, index) =>
@@ -15,15 +16,15 @@ function photos(count: number) {
   )
 }
 
-async function renderGallery(props: Partial<Parameters<typeof ImageBlockGallery>[0]> = {}) {
+function renderGallery(props: Partial<Parameters<typeof ImageBlockGallery>[0]> = {}) {
   const galleryPreview = props.galleryPreview ?? photos(5)
   return render(
-    await ImageBlockGallery({
-      href,
-      galleryPreview,
-      galleryImageCount: galleryPreview.length,
-      ...props
-    })
+    <ImageBlockGallery
+      href={href}
+      galleryPreview={galleryPreview}
+      galleryImageCount={galleryPreview.length}
+      {...props}
+    />
   )
 }
 
@@ -31,7 +32,7 @@ const tiles = () => screen.getAllByRole('img').map((image) => image.getAttribute
 
 describe('ImageBlockGallery', () => {
   it('shows five photos behind a single gallery link', async () => {
-    await renderGallery()
+    renderGallery()
 
     expect(tiles()).toEqual(['Photo 1', 'Photo 2', 'Photo 3', 'Photo 4', 'Photo 5'])
     expect(screen.getByRole('link')).toHaveAttribute('href', '/en/orange/gallery')
@@ -39,7 +40,7 @@ describe('ImageBlockGallery', () => {
 
   // Desktop LCP candidate: loaded eagerly at high priority, the rest lazily.
   it('prioritizes the large leading photo', async () => {
-    await renderGallery()
+    renderGallery()
 
     const [first, second] = screen.getAllByRole('img')
     expect(first).toHaveAttribute('fetchpriority', 'high')
@@ -48,14 +49,14 @@ describe('ImageBlockGallery', () => {
   })
 
   it('leads with the featured image', async () => {
-    await renderGallery({ featuredImage: createSanityImage({ alt: 'Featured' }) })
+    renderGallery({ featuredImage: createSanityImage({ alt: 'Featured' }) })
 
     expect(tiles()).toEqual(['Featured', 'Photo 1', 'Photo 2', 'Photo 3', 'Photo 4'])
   })
 
   // The badge is decorative, so the link label carries the total.
   it('counts the photos beyond the grid on the last tile and in the link', async () => {
-    await renderGallery({
+    renderGallery({
       galleryImageCount: 59,
       featuredImage: createSanityImage({ alt: 'Featured' })
     })
@@ -67,14 +68,14 @@ describe('ImageBlockGallery', () => {
   it('fills the grid past photos that have no file yet', async () => {
     const draft = createGalleryItem({ image: createSanityImage({ asset: null }) })
 
-    await renderGallery({ galleryPreview: [draft, ...photos(6)], galleryImageCount: 6 })
+    renderGallery({ galleryPreview: [draft, ...photos(6)], galleryImageCount: 6 })
 
     expect(tiles()).toEqual(['Photo 1', 'Photo 2', 'Photo 3', 'Photo 4', 'Photo 5'])
     expect(screen.getByText('+1')).toBeInTheDocument()
   })
 
   it('shows the empty state when fewer than five photos can be shown', async () => {
-    await renderGallery({ galleryPreview: photos(4) })
+    renderGallery({ galleryPreview: photos(4) })
 
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
     expect(screen.queryByRole('link')).not.toBeInTheDocument()

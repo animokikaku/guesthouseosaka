@@ -1,5 +1,3 @@
-'use client'
-
 import type { LegalNoticeQueryResult } from '@/sanity.types'
 import { createContext, use, type ReactNode } from 'react'
 

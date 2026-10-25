@@ -1,21 +1,8 @@
+import { routerState } from '@/lib/__tests__/utils/router'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-
-const { replaceMock } = vi.hoisted(() => ({
-  replaceMock: vi.fn()
-}))
-
-vi.mock('@/i18n/navigation', () => ({
-  usePathname: () => '/faq',
-  useRouter: () => ({ replace: replaceMock })
-}))
-
 import { LanguageSwitcher } from '../language-switcher'
 
 describe('LanguageSwitcher', () => {
-  beforeEach(() => {
-    replaceMock.mockClear()
-  })
-
   async function openLanguageMenu() {
     fireEvent.click(screen.getByRole('button', { name: /\blanguage\b/i }))
     return screen.findByRole('menuitemradio', { name: 'English' })
@@ -28,11 +15,13 @@ describe('LanguageSwitcher', () => {
     fireEvent.click(screen.getByRole('menuitemradio', { name: '日本語' }))
 
     await waitFor(() => {
-      expect(replaceMock).toHaveBeenCalledWith(
-        { pathname: '/faq', params: {} },
-        { locale: 'ja', scroll: false }
+      expect(routerState.navigate).toHaveBeenCalledWith(
+        expect.objectContaining({ to: '.', replace: true, resetScroll: false })
       )
     })
+    // The current page's params, with the locale swapped.
+    const [{ params }] = routerState.navigate.mock.calls[0]
+    expect(params({ locale: 'en', house: 'orange' })).toEqual({ locale: 'ja', house: 'orange' })
   })
 
   it('closes without navigating when the active language is selected', async () => {
@@ -44,6 +33,6 @@ describe('LanguageSwitcher', () => {
     await waitFor(() => {
       expect(screen.queryByRole('menuitemradio', { name: 'English' })).not.toBeInTheDocument()
     })
-    expect(replaceMock).not.toHaveBeenCalled()
+    expect(routerState.navigate).not.toHaveBeenCalled()
   })
 })

@@ -1,10 +1,8 @@
-'use client'
-
 import { GalleryDialogClose } from '@/components/gallery/gallery-dialog'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ArrowLeftIcon } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 
 export function GalleryModalCloseButton({ className }: { className?: string }) {
   const t = useTranslations('GalleryModal')

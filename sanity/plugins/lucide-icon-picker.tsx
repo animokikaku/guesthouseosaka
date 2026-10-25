@@ -1,5 +1,3 @@
-'use client'
-
 import { EllipsisHorizontalIcon } from '@sanity/icons/EllipsisHorizontal'
 import { SyncIcon } from '@sanity/icons/Sync'
 import { TrashIcon } from '@sanity/icons/Trash'

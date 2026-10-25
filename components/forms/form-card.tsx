@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Card,
   CardContent,
@@ -13,7 +11,7 @@ import { Field, FieldGroup } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
 import { useSelector, type AnyReactFormApi } from '@tanstack/react-form'
 import { Loader2Icon } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 
 interface FormCardProps {
   title?: string | null

@@ -1,4 +1,4 @@
-import type { Locale } from 'next-intl'
+import type { Locale } from 'use-intl'
 
 /** Per-locale display and metadata values; `routing.locales` stays the list of supported locales. */
 export const localeConfig: Record<Locale, { label: string; openGraph: string }> = {

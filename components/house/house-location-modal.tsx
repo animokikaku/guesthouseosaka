@@ -1,5 +1,3 @@
-'use client'
-
 import { ResponsiveModal } from '@/components/ui/responsive-modal'
 import type { LocationData } from '@/lib/types/components'
 import type { PortableTextComponents } from '@portabletext/react'

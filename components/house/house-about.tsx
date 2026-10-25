@@ -3,8 +3,8 @@ import { HouseSectionContent, HouseSectionHeading } from '@/components/house/hou
 import type { BuildingData, HousePortableTextContent } from '@/lib/types/components'
 import type { PortableTextComponents } from '@portabletext/react'
 import { PortableText } from '@portabletext/react'
-import { useTranslations } from 'next-intl'
-import { stegaClean } from 'next-sanity'
+import { useTranslations } from 'use-intl'
+import { stegaClean } from '@sanity/client/stega'
 
 const portableTextComponents: PortableTextComponents = {
   block: {

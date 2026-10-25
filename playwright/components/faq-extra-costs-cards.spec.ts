@@ -1,6 +1,6 @@
 import { expect, test } from './fixtures'
 
-const story = 'app/[locale]/faq/(components)/faq-extra-costs-cards/ThreeHouses'
+const story = 'components/faq/faq-extra-costs-cards/ThreeHouses'
 
 test('navigates the real carousel with house dots', async ({ mount }) => {
   const component = await mount(story)

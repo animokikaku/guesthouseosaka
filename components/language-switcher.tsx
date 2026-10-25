@@ -1,5 +1,3 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -9,11 +7,10 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { localeConfig } from '@/i18n/locales'
-import { usePathname, useRouter } from '@/i18n/navigation'
-import { routing } from '@/i18n/routing'
+import { LOCALE_COOKIE, routing } from '@/i18n/routing'
+import { useNavigate } from '@tanstack/react-router'
 import { Languages } from 'lucide-react'
-import { hasLocale, useLocale, useTranslations } from 'next-intl'
-import { useParams } from 'next/navigation'
+import { hasLocale, useLocale, useTranslations } from 'use-intl'
 import { useTransition } from 'react'
 
 const languages = routing.locales.map((code) => ({ code, label: localeConfig[code].label }))
@@ -22,22 +19,24 @@ const languages = routing.locales.map((code) => ({ code, label: localeConfig[cod
 export function LanguageSwitcher() {
   const locale = useLocale()
   const t = useTranslations('LanguageSwitcher')
-  const router = useRouter()
+  const navigate = useNavigate()
   const [isPending, startTransition] = useTransition()
-  const pathname = usePathname()
-  const params = useParams()
 
   const handleValueChange = (lang: string) => {
     if (!hasLocale(routing.locales, lang) || lang === locale) return
 
-    startTransition(() => {
-      router.replace(
-        // @ts-expect-error -- TypeScript will validate that only known `params`
-        // are used in combination with a given `pathname`. Since the two will
-        // always match for the current route, we can skip runtime checks.
-        { pathname, params },
-        { locale: lang, scroll: false }
-      )
+    // Remembered for visits to `/`, which the server redirects by it. Set here
+    // rather than on every response, so pages stay cacheable.
+    document.cookie = `${LOCALE_COOKIE}=${lang}; path=/; max-age=31536000; samesite=lax`
+
+    startTransition(async () => {
+      // The same page, in the chosen language.
+      await navigate({
+        to: '.',
+        params: (current) => ({ ...current, locale: lang }),
+        replace: true,
+        resetScroll: false
+      })
     })
   }
 

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { gotoHydrated } from './helpers/navigation'
 
 // House slugs defined in lib/types/index.ts
 const HOUSE_SLUGS = ['orange', 'apple', 'lemon'] as const
@@ -37,7 +38,7 @@ test.describe('House Page', () => {
   })
 
   test('applies the house theme before hydration on direct visits', async ({ page }) => {
-    await page.route('**/_next/static/chunks/*.js', (route) => route.abort())
+    await page.route('**/assets/*.js', (route) => route.abort())
 
     await page.goto(`/en/${testHouse}`, { waitUntil: 'domcontentloaded' })
 
@@ -46,7 +47,7 @@ test.describe('House Page', () => {
 
   test.describe('Navigation', () => {
     test('can navigate to other houses from tabs', async ({ page }) => {
-      await page.goto(`/en/${testHouse}`)
+      await gotoHydrated(page, `/en/${testHouse}`)
 
       // Find another house link in the navigation and click it
       const tabsNav = page.locator('#tabs')
@@ -62,10 +63,10 @@ test.describe('House Page', () => {
   })
 
   test.describe('Gallery Modal', () => {
-    // Cache Components keeps the closed modal alive in <Activity>, so reopening
-    // it must not restore its closed state.
+    // The dialog animates closed before leaving the route, so reopening it must
+    // not restore its closed state.
     test('reopens after being closed', async ({ page }) => {
-      await page.goto(`/en/${testHouse}`)
+      await gotoHydrated(page, `/en/${testHouse}`)
 
       const galleryLink = page
         .locator(`a[href="/en/${testHouse}/gallery"]`)
@@ -87,7 +88,7 @@ test.describe('House Page', () => {
     })
 
     test('reopens after browser back navigation', async ({ page }) => {
-      await page.goto(`/en/${testHouse}`)
+      await gotoHydrated(page, `/en/${testHouse}`)
 
       const galleryLink = page
         .locator(`a[href="/en/${testHouse}/gallery"]`)

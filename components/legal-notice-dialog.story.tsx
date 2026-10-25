@@ -1,7 +1,7 @@
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import { LegalNoticeProvider } from '@/components/legal-notice-context'
 import messages from '@/messages/en.json'
-import { NextIntlClientProvider } from 'next-intl'
+import { IntlProvider } from 'use-intl'
 import { useState } from 'react'
 
 const legalNotice = {
@@ -61,9 +61,9 @@ const legalNotice = {
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <NextIntlClientProvider locale="en" messages={messages} timeZone="Asia/Tokyo">
+    <IntlProvider locale="en" messages={messages} timeZone="Asia/Tokyo">
       <LegalNoticeProvider data={legalNotice}>{children}</LegalNoticeProvider>
-    </NextIntlClientProvider>
+    </IntlProvider>
   )
 }
 

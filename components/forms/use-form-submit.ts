@@ -1,10 +1,8 @@
-'use client'
-
-import { submitContactForm } from '@/app/actions/contact'
-import { useRouter } from '@/i18n/navigation'
+import { submitContactForm } from '@/app/actions/contact.functions'
 import { CONTACT_EMAIL } from '@/lib/config'
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
-import { useTranslations } from 'next-intl'
+import { useNavigate } from '@tanstack/react-router'
+import { useLocale, useTranslations } from 'use-intl'
 import { toast } from '@/components/ui/toast'
 
 /**
@@ -35,7 +33,8 @@ type FormTypeDataMap = {
  */
 export function useFormSubmit() {
   const t = useTranslations('forms')
-  const router = useRouter()
+  const navigate = useNavigate()
+  const locale = useLocale()
 
   const onSubmitInvalid = () => {
     const firstErrorInput = document.querySelector<HTMLElement>('[aria-invalid="true"]')
@@ -57,7 +56,7 @@ export function useFormSubmit() {
       // TypeScript cannot correlate a generic key with its mapped discriminated-union value.
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const payload = { type: formType, data: value } as ContactFormPayload
-      const promise = submitContactForm(payload).then((result) => {
+      const promise = submitContactForm({ data: payload }).then((result) => {
         if (!result.ok) {
           throw new Error(result.code)
         }
@@ -66,7 +65,7 @@ export function useFormSubmit() {
       return await toast.promise(promise, {
         loading: { title: t('status.sending') },
         success: () => {
-          router.push('/contact')
+          void navigate({ to: '/$locale/contact', params: { locale } })
           return {
             title: t('status.success.message'),
             description: t('status.success.description', {

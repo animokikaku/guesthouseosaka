@@ -1,14 +1,11 @@
-'use client'
-
 import { HouseLocationModal } from '@/components/house/house-location-modal'
 import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { LocationData, MapData } from '@/lib/types/components'
-import { useTranslations } from 'next-intl'
-import dynamic from 'next/dynamic'
-import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'use-intl'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 
 function MapSkeleton() {
   const t = useTranslations('HouseLocation')
@@ -45,10 +42,11 @@ function MapSkeleton() {
   )
 }
 
-const HouseMap = dynamic(() => import('@/components/house/house-map').then((mod) => mod.HouseMap), {
-  ssr: false,
-  loading: () => <MapSkeleton />
-})
+// Only requested once the map nears the viewport (see `LazyHouseMap`), so it
+// never renders on the server.
+const HouseMap = lazy(() =>
+  import('@/components/house/house-map').then((mod) => ({ default: mod.HouseMap }))
+)
 
 function LazyHouseMap({ map }: { map: MapData }) {
   const [isVisible, setIsVisible] = useState(false)
@@ -75,7 +73,17 @@ function LazyHouseMap({ map }: { map: MapData }) {
     return () => observer.disconnect()
   }, [])
 
-  return <div ref={containerRef}>{isVisible ? <HouseMap map={map} /> : <MapSkeleton />}</div>
+  return (
+    <div ref={containerRef}>
+      {isVisible ? (
+        <Suspense fallback={<MapSkeleton />}>
+          <HouseMap map={map} />
+        </Suspense>
+      ) : (
+        <MapSkeleton />
+      )}
+    </div>
+  )
 }
 
 interface HouseLocationProps {

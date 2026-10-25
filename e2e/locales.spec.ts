@@ -30,7 +30,7 @@ const ROUTES = [
 
 type Route = (typeof ROUTES)[number]
 
-// Origin the app was built with: CI sets it in the environment (which wins, as in Next),
+// Origin the app was built with: CI sets it in the environment (which wins),
 // local builds read it from .env.local.
 if (existsSync('.env.local')) process.loadEnvFile('.env.local')
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL

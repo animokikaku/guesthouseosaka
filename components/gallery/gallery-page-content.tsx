@@ -1,5 +1,3 @@
-'use client'
-
 import { Lightbox, type LightboxItem } from '@/components/lightbox'
 import { HouseGallery } from '@/components/gallery/house-gallery'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
@@ -12,8 +10,8 @@ import {
 import { toGalleryLightboxItem } from '@/lib/gallery-image'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { toGalleryCategories } from '@/lib/transforms/gallery'
-import { useTranslations } from 'next-intl'
-import { createDataAttribute } from 'next-sanity'
+import { useTranslations } from 'use-intl'
+import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 import { useRef, type ComponentProps, type ReactNode } from 'react'
 
 /**

@@ -2,14 +2,15 @@
 
 [![codecov](https://codecov.io/gh/animokikaku/guesthouseosaka/graph/badge.svg?token=JT5SUWPQK3)](https://codecov.io/gh/animokikaku/guesthouseosaka)
 
-A multilingual website for a guest house in Osaka, built with Next.js and Sanity CMS.
+A multilingual website for a guest house in Osaka, built with TanStack Start and Sanity CMS.
 
 ## Tech Stack
 
-- **Framework**: Next.js 16 (App Router)
+- **Framework**: TanStack Start (Vite) with TanStack Router
+- **Hosting**: Cloudflare Workers
 - **CMS**: Sanity v6 with embedded Studio at `/studio`
 - **Styling**: Tailwind CSS v4
-- **i18n**: next-intl (English, Japanese, French, Simplified Chinese, Traditional Chinese)
+- **i18n**: use-intl (English, Japanese, French, Simplified Chinese, Traditional Chinese)
 - **Forms**: TanStack React Form + Zod validation
 - **UI Components**: Base UI primitives (shadcn/ui)
 - **Email**: Resend + React Email
@@ -28,7 +29,7 @@ bun dev        # Start dev server at http://localhost:3000
 | ------------------ | --------------------------------------------------------------------------------------------------------------------- |
 | `bun dev`          | Start development server                                                                                              |
 | `bun run build`    | Production build                                                                                                      |
-| `bun run check`    | Generate Next.js types, type check, and run Oxlint                                                                    |
+| `bun run check`    | Type check and run Oxlint                                                                                             |
 | `bun run typegen`  | Regenerate Sanity TypeScript types                                                                                    |
 | `bun run test`     | Run unit tests (Vitest)                                                                                               |
 | `bun run test:e2e` | Run E2E tests against a production build (Playwright builds and starts the server; reuses an existing server locally) |

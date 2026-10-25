@@ -1,4 +1,5 @@
 import { devices, expect, test } from '@playwright/test'
+import { gotoHydrated } from './helpers/navigation'
 import { gotoContactForm } from './helpers/contact-form'
 
 // Phones get their own navigation, hero and dialogs, none of which the desktop
@@ -7,7 +8,7 @@ const { defaultBrowserType: _browser, ...pixel } = devices['Pixel 7']
 test.use(pixel)
 
 test('reaches a house from the menu and opens its gallery from the hero', async ({ page }) => {
-  await page.goto('/en')
+  await gotoHydrated(page, '/en')
 
   await page.getByRole('button', { name: /\bmenu\b/i }).click()
   await page

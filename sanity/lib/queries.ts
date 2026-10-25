@@ -1,4 +1,4 @@
-import { defineQuery } from 'next-sanity'
+import { defineQuery } from 'groq'
 
 // =============================================================================
 // GROQ FRAGMENTS (static only - no dynamic functions for typegen compatibility)

@@ -1,6 +1,4 @@
-'use client'
-
-import { useOptimistic } from 'next-sanity/hooks'
+import { useOptimistic } from '@sanity/visual-editing/react'
 
 /** A document mutation as Presentation reports it to `useOptimistic`. */
 type OptimisticAction<TDocument> = { id: string; document: TDocument }

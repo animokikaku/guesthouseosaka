@@ -1,33 +1,43 @@
-'use client'
-
 import { PageActions } from '@/components/page-header'
 import { buttonVariants } from '@/components/ui/button'
-import { Link, usePathname } from '@/i18n/navigation'
+import { localeToPrefix } from '@/i18n/routing'
 import { Icon } from '@/lib/icons'
 import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
 import { FaqPageQueryResult } from '@/sanity.types'
-import { createDataAttribute, stegaClean } from 'next-sanity'
+import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
+import { stegaClean } from '@sanity/client/stega'
+import { useLocation, useNavigate } from '@tanstack/react-router'
+import type { MouseEvent } from 'react'
+import { useLocale } from 'use-intl'
 
 type PageAction = NonNullable<NonNullable<FaqPageQueryResult>['actions']>[number]
 
 /**
  * Where a CMS page action points. Editors enter either an absolute URL or an
- * internal path, optionally with a hash (`/faq#phone`, or just `#phone` for
- * the page the action sits on).
+ * unlocalized internal path, optionally with a hash (`/faq#phone`, or just
+ * `#phone` for the page the action sits on).
  */
-type PageActionHref =
-  | { external: true; href: string }
-  | { external: false; pathname: string; hash?: string }
+type PageActionHref = { external: boolean; href: string }
 
-function resolvePageActionHref(href: string, currentPathname: string): PageActionHref {
+function resolvePageActionHref(
+  href: string,
+  currentPathname: string,
+  localePrefix: string
+): PageActionHref {
   if (href.startsWith('http://') || href.startsWith('https://')) {
     return { external: true, href }
   }
 
   const [pathname, hash] = href.split('#')
-  return hash === undefined
-    ? { external: false, pathname }
-    : { external: false, pathname: pathname || currentPathname, hash: `#${hash}` }
+  const localized = pathname
+    ? `/${localePrefix}${pathname === '/' ? '' : pathname}`
+    : currentPathname
+  return { external: false, href: hash === undefined ? localized : `${localized}#${hash}` }
+}
+
+/** Whether a click should be left to the browser (new tab, download, …). */
+function isModifiedClick(event: MouseEvent) {
+  return event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
 }
 
 interface DynamicPageActionsProps {
@@ -37,7 +47,9 @@ interface DynamicPageActionsProps {
 }
 
 export function DynamicPageActions(props: DynamicPageActionsProps) {
-  const currentPathname = usePathname()
+  const currentPathname = useLocation({ select: (location) => location.pathname })
+  const localePrefix = localeToPrefix(useLocale())
+  const navigate = useNavigate()
 
   const actions = useSanityOptimisticArray<
     PageAction,
@@ -58,7 +70,7 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
         // First action is 'default' variant, others are 'ghost'
         const variant = index === 0 ? 'default' : 'ghost'
 
-        const target = resolvePageActionHref(href, currentPathname)
+        const target = resolvePageActionHref(href, currentPathname, localePrefix)
 
         if (target.external) {
           return (
@@ -76,24 +88,24 @@ export function DynamicPageActions(props: DynamicPageActionsProps) {
           )
         }
 
-        // next-intl cannot infer typed routes from CMS-provided paths after runtime parsing.
-        // oxlint-disable typescript/no-unsafe-type-assertion
+        // CMS paths are only known at runtime, so they can't be typed `Link`
+        // targets; navigate client-side by `href` instead.
         return (
-          <Link
+          <a
             key={_key}
-            href={
-              target.hash
-                ? { pathname: target.pathname as '/', hash: target.hash }
-                : (target.pathname as '/')
-            }
+            href={target.href}
+            onClick={(event) => {
+              if (event.defaultPrevented || isModifiedClick(event)) return
+              event.preventDefault()
+              void navigate({ href: target.href })
+            }}
             className={buttonVariants({ variant, size: 'sm' })}
             data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
           >
             <Icon name={icon} aria-hidden="true" />
             {stegaClean(label)}
-          </Link>
+          </a>
         )
-        // oxlint-enable typescript/no-unsafe-type-assertion
       })}
     </PageActions>
   )

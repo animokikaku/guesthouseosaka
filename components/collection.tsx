@@ -7,14 +7,15 @@ import {
   ItemHeader,
   ItemTitle
 } from '@/components/ui/item'
-import { Link } from '@/i18n/navigation'
 import { assets } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import { stegaClean } from '@sanity/client/stega'
-import Image from 'next/image'
+import { Link } from '@tanstack/react-router'
+import { useLocale } from 'use-intl'
+import { Image } from '@/components/image'
 
 type House = NonNullable<HomePageQueryResult['houses']>[number]
 
@@ -24,6 +25,8 @@ type CollectionProps = {
 }
 
 export function Collection({ houses, className }: CollectionProps) {
+  const locale = useLocale()
+
   return (
     <ItemGroup className={cn('grid gap-8 md:grid-cols-3', className)}>
       {houses.map((house) => (
@@ -35,12 +38,9 @@ export function Collection({ houses, className }: CollectionProps) {
           className="h-full flex-col items-start p-0"
         >
           <Link
-            prefetch
             aria-label={house.title ? stegaClean(house.title) : house.slug}
-            href={{
-              pathname: '/[house]' as const,
-              params: { house: house.slug }
-            }}
+            to="/$locale/$house"
+            params={{ locale, house: house.slug }}
             className="group ring-offset-background focus-visible:ring-ring/50 block w-full rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           >
             <ItemHeader className="relative overflow-hidden rounded-sm">
@@ -54,7 +54,7 @@ export function Collection({ houses, className }: CollectionProps) {
                 {/* Lazy, not eager: the overlay is opacity-0 until hover, and
                     the collection sits a full viewport below the hero — so
                     eager loading cost three requests during the initial load
-                    for art nobody had asked to see. next/image starts these as
+                    for art nobody had asked to see. the browser starts these as
                     the section scrolls into view, well ahead of any hover. */}
                 <Image
                   {...assets[house.slug].icon}

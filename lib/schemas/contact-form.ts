@@ -1,6 +1,6 @@
 import { HouseIdentifierValues } from '@/lib/types'
 import { z } from '@/lib/zod'
-import type { Messages } from 'next-intl'
+import type { Messages } from 'use-intl'
 import { isMobilePhone } from 'validator'
 
 type ValidationMessageKey = keyof Messages['forms']['validation']

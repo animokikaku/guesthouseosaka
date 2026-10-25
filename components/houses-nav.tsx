@@ -1,13 +1,11 @@
-'use client'
-
 import { PageNavTabs, pageNavTabClass } from '@/components/page-nav'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
 import type { HousesTitlesQueryResult } from '@/sanity.types'
-import { stegaClean } from 'next-sanity'
-import { useParams } from 'next/navigation'
+import { stegaClean } from '@sanity/client/stega'
+import { Link, useParams } from '@tanstack/react-router'
+import { useLocale } from 'use-intl'
 
 export function HousesNav({
   houses,
@@ -16,7 +14,8 @@ export function HousesNav({
   houses: HousesTitlesQueryResult
 }) {
   const isMobile = useIsMobile()
-  const params = useParams()
+  const locale = useLocale()
+  const params = useParams({ strict: false })
 
   return (
     <PageNavTabs {...props}>
@@ -24,13 +23,13 @@ export function HousesNav({
         if (!title) return null
         return (
           <Link
-            prefetch
             key={`house-nav-${slug}`}
-            href={{ pathname: '/[house]', params: { house: slug } }}
+            to="/$locale/$house"
+            params={{ locale, house: slug }}
             aria-current={slug === params.house ? 'page' : undefined}
             data-active={slug === params.house}
             className={cn(pageNavTabClass, HOUSE_COLORS[slug].activeText)}
-            scroll={!isMobile}
+            resetScroll={!isMobile}
           >
             {stegaClean(title)}
           </Link>

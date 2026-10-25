@@ -19,7 +19,7 @@ a visitor, an editor or a crawler would.
   names on the element that carries them (a column header, not the table's concatenated text). Keep
   exact text where formatting is the behavior (plurals, prices, counters); use a test id only when
   nothing visible identifies the element.
-- Mock only at the edges: the server action, Resend, the router, `next/image`. Render our own
+- Mock only at the edges: the server function, Resend, the router, `Image`. Render our own
   components, `urlFor`, `stegaClean` and translations for real.
 - Prefer a table (`it.each`) over near-identical tests, and one test per behavior over one per prop.
 - A test that only restates the implementation (a hard-coded copy of a computed value, a mock that

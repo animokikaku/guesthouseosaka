@@ -1,12 +1,10 @@
-'use client'
-
 import { LegalNoticeDialog } from '@/components/legal-notice-dialog'
 import { fieldComponent } from '@/components/forms/field-brand'
 import { useFieldControl } from '@/components/forms/fields/field-control'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from '@/components/ui/field'
 import type { FieldWithValue } from '@tanstack/react-form'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 import type { ReactNode } from 'react'
 
 function renderPrivacyPolicyLink(chunks: ReactNode, onAgree: () => void) {

@@ -1,5 +1,3 @@
-'use client'
-
 import { PageEmptyState } from '@/components/page-empty-state'
 import { SanityImage } from '@/components/sanity-image'
 import {
@@ -10,13 +8,12 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu'
-import { Link } from '@/i18n/navigation'
 import { HouseIdentifier, NavGroupItem, NavItem, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { NavigationMenu as NavigationMenuPrimitive } from '@base-ui/react/navigation-menu'
-import { stegaClean } from 'next-sanity'
-import Image from 'next/image'
-import { useParams, useSelectedLayoutSegment } from 'next/navigation'
+import { stegaClean } from '@sanity/client/stega'
+import { Image } from '@/components/image'
+import { Link, useMatchRoute, useParams } from '@tanstack/react-router'
 import { useState } from 'react'
 
 interface PreviewImageItemProps {
@@ -76,9 +73,8 @@ export function MainNav({
   Pick<NavigationMenuPrimitive.Positioner.Props, 'align'> & {
     items: Array<NavItem | NavListItem>
   }) {
-  const selectedLayoutSegment = useSelectedLayoutSegment()
-  const pathname = selectedLayoutSegment ? `/${selectedLayoutSegment}` : '/'
-  const { house } = useParams<{ house?: HouseIdentifier }>()
+  const matchRoute = useMatchRoute()
+  const { house } = useParams({ strict: false })
 
   return (
     <NavigationMenuPrimitive.Root
@@ -104,8 +100,9 @@ export function MainNav({
           return (
             <NavigationMenuItem key={`nav-item-${entry.key}`}>
               <NavigationMenuLink
-                render={<Link href={entry.href} />}
-                data-active={pathname === entry.href}
+                render={<Link {...entry.link} />}
+                // Fuzzy, so a section stays active on its subpages.
+                data-active={Boolean(matchRoute({ ...entry.link, fuzzy: true }))}
                 className={cn(navigationMenuTriggerStyle(), 'bg-transparent')}
               >
                 {entry.label}
@@ -157,7 +154,7 @@ function NavigationMenuGroupItem({
                   <li key={item.key}>
                     <NavigationMenuLink
                       data-active={house === item.key}
-                      render={<Link prefetch href={item.href} />}
+                      render={<Link {...item.link} />}
                       onFocus={() => setHoverItem(item)}
                       onMouseEnter={() => setHoverItem(item)}
                       className="flex flex-col items-start gap-1 rounded-md text-left"

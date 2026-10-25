@@ -3,6 +3,7 @@ import { isHouseIdentifier, type NavGroupItem } from '@/lib/types'
 import type { ContactNavItem } from '@/lib/types/components'
 import type { ContactPageQueryResult, HousesNavQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
+import type { Locale } from 'use-intl'
 
 type ContactTypes = NonNullable<ContactPageQueryResult>['contactTypes']
 
@@ -18,7 +19,7 @@ export function toContactNavItems(contactTypes: ContactTypes): ContactNavItem[] 
 }
 
 /** Drops (and warns about) houses whose slug isn't a known house identifier. */
-export function toHouseNavItems(houses: HousesNavQueryResult): NavGroupItem[] {
+export function toHouseNavItems(houses: HousesNavQueryResult, locale: Locale): NavGroupItem[] {
   return (houses ?? [])
     .filter((house) => {
       const isValidSlug = isHouseIdentifier(house.slug)
@@ -33,7 +34,7 @@ export function toHouseNavItems(houses: HousesNavQueryResult): NavGroupItem[] {
 
       return {
         key: slug,
-        href: { pathname: '/[house]', params: { house: slug } } as const,
+        link: { to: '/$locale/$house', params: { locale, house: slug } },
         label: title ?? slug,
         description: description ?? undefined,
         caption: caption ?? undefined,

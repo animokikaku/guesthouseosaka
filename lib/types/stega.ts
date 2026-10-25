@@ -1,4 +1,4 @@
-import type { StegaBranded, StegaCleaned } from 'next-sanity'
+import type { StegaBranded, StegaCleaned } from '@sanity/client/stega'
 
 /**
  * Accepts both the clean TypeGen shape and the stega-branded shape that

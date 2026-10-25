@@ -1,5 +1,3 @@
-'use client'
-
 import { fieldComponent } from '@/components/forms/field-brand'
 import {
   FieldControlHeader,

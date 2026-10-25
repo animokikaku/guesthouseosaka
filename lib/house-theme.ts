@@ -15,7 +15,7 @@ export interface HouseCardStyles {
   border: string
 }
 
-export const HOUSE_THEMES: Record<HouseIdentifier, string> = {
+const HOUSE_THEMES: Record<HouseIdentifier, string> = {
   orange: 'orange',
   apple: 'red',
   lemon: 'yellow'
@@ -23,13 +23,6 @@ export const HOUSE_THEMES: Record<HouseIdentifier, string> = {
 
 export function getHouseTheme(house: string | undefined) {
   return isHouseIdentifier(house) ? HOUSE_THEMES[house] : 'default'
-}
-
-export function applyActiveTheme(theme: string) {
-  Array.from(document.body.classList)
-    .filter((className) => className.startsWith('theme-'))
-    .forEach((className) => document.body.classList.remove(className))
-  document.body.classList.add(`theme-${theme}`)
 }
 
 export const HOUSE_COLORS: Record<HouseIdentifier, HouseColorVariants> = {

@@ -3,7 +3,7 @@ import {
   createMoveInFormSchema,
   createTourFormSchema
 } from '@/lib/schemas/contact-form'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 
 export function useTourFormSchema() {
   return createTourFormSchema(useTranslations('forms.validation'))

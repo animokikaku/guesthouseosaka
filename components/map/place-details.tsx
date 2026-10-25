@@ -1,10 +1,8 @@
-'use client'
-
 import { SanityImage } from '@/components/sanity-image'
 import type { MapData } from '@/lib/types/components'
 import { urlFor } from '@/sanity/lib/image'
 import { ColorScheme, useMapsLibrary } from '@vis.gl/react-google-maps'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 import { useTheme } from 'next-themes'
 
 interface PlaceDetailsProps {
