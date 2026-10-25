@@ -7,7 +7,6 @@ app/                   # TanStack Start source directory
 ├── routes/            # File routes (routeTree.gen.ts is generated from them)
 │   ├── __root.tsx     # Document shell
 │   ├── $locale/       # Locale-prefixed pages (en, ja, fr, zh-cn, zh-tw)
-│   ├── studio/        # Embedded Sanity Studio at /studio (client-only)
 │   └── api/           # Draft mode endpoints
 ├── router.tsx         # Router options (preloading, stale times)
 ├── start.ts           # Request middleware: redirects, locale detection, CSRF

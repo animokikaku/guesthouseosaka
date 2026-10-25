@@ -3,7 +3,7 @@ import { env } from '@/lib/env'
 export default function robots() {
   const url = env.NEXT_PUBLIC_APP_URL
   return {
-    rules: { userAgent: '*', allow: '/', disallow: '/studio' },
+    rules: { userAgent: '*', allow: '/' },
     sitemap: `${url}/sitemap.xml`
   }
 }
@@ -13,7 +13,6 @@ export function toRobotsTxt({ rules, sitemap }: ReturnType<typeof robots>) {
   return [
     `User-Agent: ${rules.userAgent}`,
     `Allow: ${rules.allow}`,
-    `Disallow: ${rules.disallow}`,
     '',
     `Sitemap: ${sitemap}`,
     ''

@@ -8,9 +8,9 @@ function redirectTo(url: URL, pathname: string, status: 307 | 308) {
   return new Response(null, { status, headers: { Location: pathname + url.search } })
 }
 
-/** Paths the locale prefix never applies to: endpoints, the Studio and files. */
+/** Paths the locale prefix never applies to: endpoints and files. */
 function isUnlocalized(pathname: string) {
-  return /^\/(?:api|studio|_|@)/.test(pathname) || pathname.split('/').at(-1)?.includes('.')
+  return /^\/(?:api|_|@)/.test(pathname) || pathname.split('/').at(-1)?.includes('.')
 }
 
 /**

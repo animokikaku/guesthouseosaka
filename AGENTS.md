@@ -1,6 +1,6 @@
 # AGENTS.md
 
-TanStack Start guesthouse website with Sanity CMS, internationalization (en/ja/fr/zh-CN/zh-TW), and embedded Studio.
+TanStack Start guesthouse website with Sanity CMS and internationalization (en/ja/fr/zh-CN/zh-TW).
 
 ## Package Manager
 

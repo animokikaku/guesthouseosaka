@@ -17,7 +17,6 @@ import { Route as LocaleIndexRouteImport } from './routes/$locale/index'
 import { Route as LocaleHouseRouteRouteImport } from './routes/$locale/$house/route'
 import { Route as LocaleContactRouteRouteImport } from './routes/$locale/contact/route'
 import { Route as LocaleFaqRouteImport } from './routes/$locale/faq'
-import { Route as StudioSplatRouteImport } from './routes/studio/$'
 import { Route as LocaleHouseHouseRouteRouteImport } from './routes/$locale/$house/_house/route'
 import { Route as LocaleHouseGalleryRouteImport } from './routes/$locale/$house/gallery'
 import { Route as LocaleContactIndexRouteImport } from './routes/$locale/contact/index'
@@ -67,11 +66,6 @@ const LocaleFaqRoute = LocaleFaqRouteImport.update({
   id: '/faq',
   path: '/faq',
   getParentRoute: () => LocaleRouteRoute,
-} as any)
-const StudioSplatRoute = StudioSplatRouteImport.update({
-  id: '/studio/$',
-  path: '/studio/$',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const LocaleHouseHouseRouteRoute = LocaleHouseHouseRouteRouteImport.update({
   id: '/_house',
@@ -125,7 +119,6 @@ export interface FileRoutesByFullPath {
   '/$locale/$house': typeof LocaleHouseRouteRouteWithChildren
   '/$locale/contact': typeof LocaleContactRouteRouteWithChildren
   '/$locale/faq': typeof LocaleFaqRoute
-  '/studio/$': typeof StudioSplatRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/$house/gallery': typeof LocaleHouseGalleryRoute
   '/api/draft-mode/disable': typeof ApiDraftModeDisableRoute
@@ -141,7 +134,6 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/$locale/$house': typeof LocaleHouseHouseIndexRoute
   '/$locale/faq': typeof LocaleFaqRoute
-  '/studio/$': typeof StudioSplatRoute
   '/$locale': typeof LocaleIndexRoute
   '/$locale/contact': typeof LocaleContactIndexRoute
   '/$locale/$house/gallery': typeof LocaleHouseGalleryRoute
@@ -159,7 +151,6 @@ export interface FileRoutesById {
   '/$locale/$house': typeof LocaleHouseRouteRouteWithChildren
   '/$locale/contact': typeof LocaleContactRouteRouteWithChildren
   '/$locale/faq': typeof LocaleFaqRoute
-  '/studio/$': typeof StudioSplatRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/$house/_house': typeof LocaleHouseHouseRouteRouteWithChildren
   '/$locale/contact/_form': typeof LocaleContactFormRouteRouteWithChildren
@@ -181,7 +172,6 @@ export interface FileRouteTypes {
     | '/$locale/$house'
     | '/$locale/contact'
     | '/$locale/faq'
-    | '/studio/$'
     | '/$locale/'
     | '/$locale/$house/gallery'
     | '/api/draft-mode/disable'
@@ -197,7 +187,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/$locale/$house'
     | '/$locale/faq'
-    | '/studio/$'
     | '/$locale'
     | '/$locale/contact'
     | '/$locale/$house/gallery'
@@ -214,7 +203,6 @@ export interface FileRouteTypes {
     | '/$locale/$house'
     | '/$locale/contact'
     | '/$locale/faq'
-    | '/studio/$'
     | '/$locale/'
     | '/$locale/$house/_house'
     | '/$locale/contact/_form'
@@ -232,7 +220,6 @@ export interface RootRouteChildren {
   ManifestDotwebmanifestRoute: typeof ManifestDotwebmanifestRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  StudioSplatRoute: typeof StudioSplatRoute
   ApiDraftModeDisableRoute: typeof ApiDraftModeDisableRoute
   ApiDraftModeEnableRoute: typeof ApiDraftModeEnableRoute
 }
@@ -294,13 +281,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/$locale/faq'
       preLoaderRoute: typeof LocaleFaqRouteImport
       parentRoute: typeof LocaleRouteRoute
-    }
-    '/studio/$': {
-      id: '/studio/$'
-      path: '/studio/$'
-      fullPath: '/studio/$'
-      preLoaderRoute: typeof StudioSplatRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/$locale/$house/_house': {
       id: '/$locale/$house/_house'
@@ -446,7 +426,6 @@ const rootRouteChildren: RootRouteChildren = {
   ManifestDotwebmanifestRoute: ManifestDotwebmanifestRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  StudioSplatRoute: StudioSplatRoute,
   ApiDraftModeDisableRoute: ApiDraftModeDisableRoute,
   ApiDraftModeEnableRoute: ApiDraftModeEnableRoute,
 }

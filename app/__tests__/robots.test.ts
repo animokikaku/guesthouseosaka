@@ -3,9 +3,9 @@
 import robots from '../robots'
 
 describe('robots.txt', () => {
-  it('keeps crawlers out of the Studio and points them at the sitemap', () => {
+  it('lets crawlers in and points them at the sitemap', () => {
     expect(robots()).toEqual({
-      rules: { userAgent: '*', allow: '/', disallow: '/studio' },
+      rules: { userAgent: '*', allow: '/' },
       sitemap: 'https://guesthouseosaka.test/sitemap.xml'
     })
   })

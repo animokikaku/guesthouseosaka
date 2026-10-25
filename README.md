@@ -8,7 +8,7 @@ A multilingual website for a guest house in Osaka, built with TanStack Start and
 
 - **Framework**: TanStack Start (Vite) with TanStack Router
 - **Hosting**: Cloudflare Workers
-- **CMS**: Sanity v6 with embedded Studio at `/studio`
+- **CMS**: Sanity v6 (the Studio is hosted separately; `sanity.config.ts` here serves the CLI and type generation)
 - **Styling**: Tailwind CSS v4
 - **i18n**: use-intl (English, Japanese, French, Simplified Chinese, Traditional Chinese)
 - **Forms**: TanStack React Form + Zod validation
@@ -43,7 +43,6 @@ app/
     [house]/          # Dynamic house pages with gallery
     contact/          # Contact forms
     faq/              # FAQ page
-  studio/             # Embedded Sanity Studio
   api/                # API routes
 
 components/
@@ -72,4 +71,4 @@ cp .env.example .env.local
 
 1. Edit schemas in `sanity/schemaTypes/`
 2. Regenerate types: `bun run typegen`
-3. Access Studio at `/studio`
+3. Deploy the schema to the hosted Studio from the main repository
