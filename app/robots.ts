@@ -1,7 +1,7 @@
 import { env } from '@/lib/env'
 
 export default function robots() {
-  const url = env.NEXT_PUBLIC_APP_URL
+  const url = env.VITE_APP_URL
   return {
     rules: { userAgent: '*', allow: '/' },
     sitemap: `${url}/sitemap.xml`

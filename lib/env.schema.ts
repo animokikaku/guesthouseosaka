@@ -10,14 +10,14 @@ export const nonEmptyString = () => z.string().check(z.minLength(1))
  * them against this schema before building, so the browser ships no validator.
  */
 export const publicEnvSchema = z.object({
-  NEXT_PUBLIC_APP_URL: z.optional(z.url()),
-  NEXT_PUBLIC_BLOB_STORAGE_URL: z.url().check(
+  VITE_APP_URL: z.optional(z.url()),
+  VITE_BLOB_STORAGE_URL: z.url().check(
     z.refine((value) => vercelBlobHostname.test(new URL(value).hostname), {
       message: 'Must be a Vercel Blob Storage public URL'
     })
   ),
-  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: nonEmptyString(),
-  NEXT_PUBLIC_SANITY_API_VERSION: nonEmptyString(),
-  NEXT_PUBLIC_SANITY_DATASET: z.enum(['production', 'development']),
-  NEXT_PUBLIC_SANITY_PROJECT_ID: nonEmptyString()
+  VITE_GOOGLE_MAPS_API_KEY: nonEmptyString(),
+  VITE_SANITY_API_VERSION: nonEmptyString(),
+  VITE_SANITY_DATASET: z.enum(['production', 'development']),
+  VITE_SANITY_PROJECT_ID: nonEmptyString()
 })

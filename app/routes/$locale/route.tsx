@@ -91,7 +91,7 @@ export const Route = createFileRoute('/$locale')({
         { rel: 'manifest', href: '/manifest.webmanifest' }
       ],
       scripts: [
-        ...(settings ? [jsonLdScript(organizationJsonLd(settings, env.NEXT_PUBLIC_APP_URL))] : []),
+        ...(settings ? [jsonLdScript(organizationJsonLd(settings, env.VITE_APP_URL))] : []),
         {
           // Matches the browser chrome to a dark theme before first paint.
           children: `try{if(localStorage.theme==='dark'||((!('theme' in localStorage)||localStorage.theme==='system')&&matchMedia('(prefers-color-scheme: dark)').matches)){document.querySelector('meta[name="theme-color"]').setAttribute('content','${META_THEME_COLORS.dark}')}}catch(_){}`

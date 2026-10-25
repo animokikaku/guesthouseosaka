@@ -5,12 +5,13 @@
 import { defineCliConfig } from 'sanity/cli'
 import { mergeConfig } from 'vite'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '515wijoz'
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'development'
+const projectId = process.env.VITE_SANITY_PROJECT_ID || '515wijoz'
+const dataset = process.env.VITE_SANITY_DATASET || 'development'
 
 export default defineCliConfig({
   api: { projectId, dataset },
-  vite: (config) => mergeConfig(config, { envPrefix: ['NEXT_PUBLIC_'] }),
+  // The Studio exposes `SANITY_STUDIO_*` by default; `lib/env.ts` reads `VITE_*`.
+  vite: (config) => mergeConfig(config, { envPrefix: ['VITE_'] }),
   typegen: {
     path: [
       './**/*.{ts,tsx,js,jsx}',

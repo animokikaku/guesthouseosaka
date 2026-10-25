@@ -24,12 +24,12 @@ export default defineConfig({
     // Fixed values instead of whatever the shell or CI exports, so URLs built from
     // them (Sanity CDN, canonical links, assets) are the same on every machine.
     env: {
-      NEXT_PUBLIC_APP_URL: 'https://guesthouseosaka.test',
-      NEXT_PUBLIC_BLOB_STORAGE_URL: 'https://test.public.blob.vercel-storage.com',
-      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: 'test-maps-key',
-      NEXT_PUBLIC_SANITY_API_VERSION: '2025-01-01',
-      NEXT_PUBLIC_SANITY_DATASET: 'production',
-      NEXT_PUBLIC_SANITY_PROJECT_ID: 'test',
+      VITE_APP_URL: 'https://guesthouseosaka.test',
+      VITE_BLOB_STORAGE_URL: 'https://test.public.blob.vercel-storage.com',
+      VITE_GOOGLE_MAPS_API_KEY: 'test-maps-key',
+      VITE_SANITY_API_VERSION: '2025-01-01',
+      VITE_SANITY_DATASET: 'production',
+      VITE_SANITY_PROJECT_ID: 'test',
       RESEND_API_KEY: 're_test',
       SANITY_API_READ_TOKEN: 'test-token'
     },

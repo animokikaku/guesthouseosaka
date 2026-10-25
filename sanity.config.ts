@@ -28,8 +28,8 @@ const languages = routing.locales.map((locale) => ({
 
 export default defineConfig({
   basePath: '/studio',
-  projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: env.NEXT_PUBLIC_SANITY_DATASET,
+  projectId: env.VITE_SANITY_PROJECT_ID,
+  dataset: env.VITE_SANITY_DATASET,
   tasks: {
     enabled: false
   },
@@ -69,7 +69,7 @@ export default defineConfig({
     lucideIconPicker({ icons: iconMap }),
     structureTool({ structure }),
     ...(process.env.NODE_ENV === 'development'
-      ? [visionTool({ defaultApiVersion: env.NEXT_PUBLIC_SANITY_API_VERSION })]
+      ? [visionTool({ defaultApiVersion: env.VITE_SANITY_API_VERSION })]
       : []),
     presentationTool({
       previewUrl: {

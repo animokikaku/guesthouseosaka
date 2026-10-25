@@ -42,11 +42,7 @@ export function MapProvider({ children }: { children: React.ReactNode }) {
   const locale = useLocale()
 
   return (
-    <APIProvider
-      apiKey={env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-      language={locale}
-      libraries={['marker']}
-    >
+    <APIProvider apiKey={env.VITE_GOOGLE_MAPS_API_KEY} language={locale} libraries={['marker']}>
       {children}
     </APIProvider>
   )

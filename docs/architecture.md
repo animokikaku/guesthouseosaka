@@ -95,9 +95,9 @@ public/                # Static assets only
 
 ### Environment
 
-- Public settings (`NEXT_PUBLIC_*`) are inlined by Vite at build time and read from `lib/env.ts`;
+- Public settings (`VITE_*`) are inlined by Vite at build time and read from `lib/env.ts`;
   the build validates them against `lib/env.schema.ts`, so no validator ships to the browser
 - Server secrets come from `lib/env.server.ts` (`@t3-oss/env-core`): the Worker's vars and
   secrets, validated at runtime through `process.env`
 - Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `DEPLOY_ENV`
-- Client: `NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`, `NEXT_PUBLIC_BLOB_STORAGE_URL`
+- Client: `VITE_SANITY_PROJECT_ID`, `VITE_SANITY_DATASET`, `VITE_GOOGLE_MAPS_API_KEY`, `VITE_BLOB_STORAGE_URL`

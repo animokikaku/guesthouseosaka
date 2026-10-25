@@ -23,7 +23,7 @@ function getPathname(href: Href, locale: Locale) {
 
 /** Absolute URL on the production origin, using the public locale prefix (e.g. /zh-cn). */
 export function getCanonicalUrl(href: Href, locale: Locale) {
-  return new URL(getPathname(href, locale), env.NEXT_PUBLIC_APP_URL).toString()
+  return new URL(getPathname(href, locale), env.VITE_APP_URL).toString()
 }
 
 /** Self-referencing canonical on the production origin, so copies served elsewhere defer to it. */
