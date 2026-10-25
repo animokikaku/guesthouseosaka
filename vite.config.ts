@@ -58,7 +58,7 @@ function precompileMessages(): Plugin {
 export default defineConfig(() => {
   return {
     server: { port: 3000 },
-    // Keep the existing variable names, so Vercel and CI need no changes.
+    // Keep the existing variable names, so `.env` files and CI secrets need no changes.
     envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
     define: {
       // Only for the Playwright suite, which mocks outbound Resend calls through

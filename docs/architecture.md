@@ -80,6 +80,13 @@ public/                # Static assets only
   contact form email the houses' inboxes
 - Secrets are set with `wrangler secret put`; locally they come from `.env.local`
 - Hashed build assets are served as immutable (`public/_headers`)
+- Deployments are manual for now: check a preview with
+  `BASE_URL=<preview URL> bun run test:e2e:preview`, which sends one real contact email to
+  Resend's test inbox
+- The repository is still connected to Vercel for the Next.js site on `main`; `vercel.json`
+  here skips every Vercel build of this branch
+- `generated/cn-tables.ts` (class-merge tables) is written on `bun install` and kept current by
+  the Vite plugin
 
 ### Environment
 
