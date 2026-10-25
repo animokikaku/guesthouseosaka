@@ -16,6 +16,7 @@ import { cacheHeaders } from '@/lib/cache-control'
 import { META_THEME_COLORS } from '@/lib/config'
 import { env } from '@/lib/env'
 import { openGraphMeta, pageMeta } from '@/lib/metadata'
+import { getRequestOrigin } from '@/lib/request-origin'
 import { organizationJsonLd } from '@/lib/structured-data'
 import { getLocaleLayout } from '@/sanity/lib/loaders.functions'
 import { stegaClean } from '@sanity/client/stega'
@@ -75,7 +76,7 @@ export const Route = createFileRoute('/$locale')({
         ...openGraphMeta({
           locale,
           siteName: settings?.siteName,
-          image: new URL(`/opengraph-image.jpg`, env.NEXT_PUBLIC_APP_URL).toString()
+          image: new URL(`/opengraph-image.jpg`, getRequestOrigin()).toString()
         }),
         { property: 'og:image:alt', content: 'Guest House Osaka' }
       ],
