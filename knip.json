@@ -8,6 +8,7 @@
     "components/ui/**"
   ],
   "ignoreBinaries": ["crowdin", "fmt"],
+  "ignoreDependencies": ["oxfmt"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true
