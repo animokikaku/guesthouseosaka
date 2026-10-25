@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "guesthouseosaka",
+  "account_id": "5f8fd45c341a983aff5d6b8b01f88ee1",
   "main": "@tanstack/react-start/server-entry",
   "compatibility_date": "2026-10-25",
   // `node:async_hooks`, `node:crypto` and a populated `process.env`, which
