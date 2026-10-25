@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "check": "next typegen && bun check && oxlint",
-    "format": "oxfmt --write .",
-    "format:check": "oxfmt --check .",
+    "format": "bun fmt",
+    "format:check": "bun fmt --check",
     "knip": "knip",
     "crowdin:pull": "crowdin download translations",
     "crowdin:push": "crowdin upload sources",
@@ -83,7 +83,6 @@
     "jsdom": "^30.1.2",
     "knip": "^6.41.0",
     "monocart-coverage-reports": "^3.0.0",
-    "oxfmt": "^0.73.0",
     "oxlint": "^1.88.0",
     "oxlint-tsgolint": "7.0.2004",
     "shadcn": "^4.21.5",
@@ -96,7 +95,7 @@
   "overrides": {
     "@sanity/client": "$@sanity/client"
   },
-  "packageManager": "bun@1.4.3",
+  "packageManager": "bun@1.4.4",
   "patchedDependencies": {
     "next@16.4.2": "patches/next@16.4.2.patch"
   }

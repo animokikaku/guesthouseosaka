@@ -7,7 +7,7 @@
     "sanity.types.ts",
     "components/ui/**"
   ],
-  "ignoreBinaries": ["crowdin"],
+  "ignoreBinaries": ["crowdin", "fmt"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true
