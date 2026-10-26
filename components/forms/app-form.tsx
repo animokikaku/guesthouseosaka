@@ -1,5 +1,3 @@
-'use client'
-
 import { default as InputField } from '@/components/forms/fields/input-field'
 import { default as InputGroupField } from '@/components/forms/fields/input-group-field'
 import { default as MessageField } from '@/components/forms/fields/message-field'

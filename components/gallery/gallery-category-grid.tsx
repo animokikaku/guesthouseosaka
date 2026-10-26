@@ -1,7 +1,7 @@
 import { GalleryGridItem } from '@/components/gallery/gallery-grid-item'
 import { Badge } from '@/components/ui/badge'
 import type { GalleryCategory } from '@/lib/gallery'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 import type { DataAttributeFn } from '@/lib/types/stega'
 
 type CategoryGridProps = {

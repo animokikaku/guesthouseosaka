@@ -1,16 +1,13 @@
 import type { AmenityCategoryData, AmenityItemData, MapData } from '@/lib/types/components'
 import { getGoogleMapsUrl } from '@/lib/google-maps-url'
-import type { StegaAware } from '@/lib/types/stega'
 import type { HouseQueryResult } from '@/sanity.types'
-import { stegaClean } from 'next-sanity'
+import { stegaClean } from '@sanity/client/stega'
 
 type HouseMap = NonNullable<HouseQueryResult>['map']
 type HouseAmenityCategories =
-  | StegaAware<NonNullable<NonNullable<HouseQueryResult>['amenityCategories']>[number]>[]
+  | NonNullable<NonNullable<HouseQueryResult>['amenityCategories']>[number][]
   | null
-type HouseFeaturedAmenity = StegaAware<
-  NonNullable<NonNullable<HouseQueryResult>['featuredAmenities']>[number]
->
+type HouseFeaturedAmenity = NonNullable<NonNullable<HouseQueryResult>['featuredAmenities']>[number]
 
 /** Returns null when the map has no coordinates, and drops an unsafe Google Maps URL. */
 export function toMapData(map: HouseMap): MapData | null {

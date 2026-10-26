@@ -2,7 +2,7 @@ import { HouseAmenities } from '@/components/house/house-amenities'
 import { HouseProvider } from '@/components/house/house-context'
 import type { AmenityCategoryData, AmenityItemData } from '@/lib/types/components'
 import messages from '@/messages/en.json'
-import { NextIntlClientProvider } from 'next-intl'
+import { IntlProvider } from 'use-intl'
 
 const featuredAmenities = Array.from({ length: 10 }, (_, index) => ({
   _key: `featured-${index}`,
@@ -46,7 +46,7 @@ const amenityCategories = [
 
 export function Populated() {
   return (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <IntlProvider locale="en" messages={messages}>
       <HouseProvider id="house-story" type="house" slug="orange">
         <main className="mx-auto max-w-3xl p-6">
           <HouseAmenities
@@ -55,6 +55,6 @@ export function Populated() {
           />
         </main>
       </HouseProvider>
-    </NextIntlClientProvider>
+    </IntlProvider>
   )
 }

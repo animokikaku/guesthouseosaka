@@ -1,11 +1,11 @@
+import { routerState } from '@/lib/__tests__/utils/router'
 import { render, screen } from '@testing-library/react'
 import { DynamicPageActions } from '../dynamic-page-actions'
 
-// The action sits on the FAQ page; links render through the real localized `Link`.
-vi.mock('@/i18n/navigation', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@/i18n/navigation')>()),
-  usePathname: () => '/faq'
-}))
+// The action sits on the FAQ page.
+beforeEach(() => {
+  routerState.pathname = '/en/faq'
+})
 
 const action = (key: string, label: string, href: string) => ({
   _key: key,

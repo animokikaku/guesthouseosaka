@@ -1,9 +1,7 @@
-'use client'
-
-import { useRouter } from '@/i18n/navigation'
-import { useVisualEditingEnvironment } from 'next-sanity/hooks'
+import { useRouter } from '@tanstack/react-router'
+import { useVisualEditingEnvironment } from '@sanity/visual-editing/react'
 import { LoaderCircle, X } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 import { useTransition } from 'react'
 
 import { Button } from '@/components/ui/button'
@@ -28,7 +26,7 @@ export function DraftModeIndicator() {
   const handleDisable = () => {
     startTransition(async () => {
       await disableDraftMode()
-      router.refresh()
+      await router.invalidate()
     })
   }
 

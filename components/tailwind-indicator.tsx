@@ -1,7 +1,5 @@
-import { env } from '@/lib/env'
-
 export function TailwindIndicator() {
-  if (env.NODE_ENV === 'production') {
+  if (import.meta.env.PROD) {
     return null
   }
 

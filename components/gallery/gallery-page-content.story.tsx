@@ -3,7 +3,7 @@ import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import type { GalleryCategories } from '@/lib/gallery'
 import messages from '@/messages/en.json'
-import { NextIntlClientProvider } from 'next-intl'
+import { IntlProvider } from 'use-intl'
 
 const galleryCategories = [
   {
@@ -59,7 +59,7 @@ const galleryCategories = [
 
 export function Default() {
   return (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <IntlProvider locale="en" messages={messages}>
       <div className="h-screen w-screen">
         <GalleryPageContent
           documentId="house-1"
@@ -69,7 +69,7 @@ export function Default() {
           backButton={<span>Back</span>}
         />
       </div>
-    </NextIntlClientProvider>
+    </IntlProvider>
   )
 }
 
@@ -78,7 +78,7 @@ export function Default() {
 // be exercised the way it actually renders in production.
 export function WithModal() {
   return (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <IntlProvider locale="en" messages={messages}>
       <GalleryModalWrapper house="orange" title="Orange House">
         <GalleryPageContent
           documentId="house-1"
@@ -88,6 +88,6 @@ export function WithModal() {
           backButton={<GalleryModalCloseButton />}
         />
       </GalleryModalWrapper>
-    </NextIntlClientProvider>
+    </IntlProvider>
   )
 }

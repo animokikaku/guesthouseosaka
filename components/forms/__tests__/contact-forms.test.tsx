@@ -1,6 +1,7 @@
 import { ContactForm } from '@/components/forms/contact-form'
 import { MoveInForm } from '@/components/forms/move-in-form'
 import { TourForm } from '@/components/forms/tour-form'
+import { routerState } from '@/lib/__tests__/utils/router'
 import { screen, waitFor } from '@testing-library/react'
 import {
   account,
@@ -12,14 +13,10 @@ import {
   submitIncomplete
 } from './utils/contact-form'
 
-// The server action and the router are the forms' only way out of the browser.
-const { submitContactForm, router } = vi.hoisted(() => ({
-  submitContactForm: vi.fn(),
-  router: { push: vi.fn() }
-}))
+// The server function and the router are the forms' only way out of the browser.
+const { submitContactForm } = vi.hoisted(() => ({ submitContactForm: vi.fn() }))
 
-vi.mock('@/app/actions/contact', () => ({ submitContactForm }))
-vi.mock('@/i18n/navigation', () => ({ useRouter: () => router }))
+vi.mock('@/app/actions/contact.functions', () => ({ submitContactForm }))
 
 const forms = [
   {
@@ -64,7 +61,6 @@ const forms = [
 
 beforeEach(() => {
   submitContactForm.mockReset().mockResolvedValue({ ok: true })
-  router.push.mockReset()
 })
 
 describe.each(forms)('$type form', ({ type, Form, fill, data }) => {
@@ -75,9 +71,12 @@ describe.each(forms)('$type form', ({ type, Form, fill, data }) => {
     fill()
     submit()
 
-    await waitFor(() => expect(submitContactForm).toHaveBeenCalledWith({ type, data }))
+    await waitFor(() => expect(submitContactForm).toHaveBeenCalledWith({ data: { type, data } }))
     expect(await screen.findByText(/sent successfully/i)).toBeInTheDocument()
-    expect(router.push).toHaveBeenCalledWith('/contact')
+    expect(routerState.navigate).toHaveBeenCalledWith({
+      to: '/$locale/contact',
+      params: { locale: 'en' }
+    })
   })
 
   it('flags every missing answer without sending anything', async () => {

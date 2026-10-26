@@ -1,22 +1,23 @@
-import { defineRouting } from 'next-intl/routing'
-
-export const routing = defineRouting({
+export const routing = {
   locales: ['en', 'ja', 'fr', 'zh-CN', 'zh-TW'],
-  defaultLocale: 'en',
-  // Keep canonical BCP 47 codes internally (Sanity, hreflang, Intl) but lowercase URLs
-  localePrefix: {
-    mode: 'always',
-    prefixes: {
-      'zh-CN': '/zh-cn',
-      'zh-TW': '/zh-tw'
-    }
-  },
-  pathnames: {
-    '/': '/',
-    '/[house]': '/[house]',
-    '/[house]/gallery': '/[house]/gallery',
-    '/contact': '/contact',
-    '/contact/[slug]': '/contact/[slug]',
-    '/faq': '/faq'
-  }
-})
+  defaultLocale: 'en'
+} as const
+
+type Locale = (typeof routing.locales)[number]
+
+/**
+ * Keep canonical BCP 47 codes internally (Sanity, hreflang, Intl) but lowercase
+ * URLs: the `$locale` route parses a prefix into its locale and stringifies it
+ * back, so code only ever handles `zh-CN` while links point at `/zh-cn`.
+ */
+export function localeToPrefix(locale: Locale): string {
+  return locale.toLowerCase()
+}
+
+/** The locale a URL prefix stands for, or `undefined` for an unsupported one. */
+export function prefixToLocale(prefix: string): Locale | undefined {
+  return routing.locales.find((locale) => localeToPrefix(locale) === prefix)
+}
+
+/** Remembers the visitor's last language, so `/` sends them back to it. */
+export const LOCALE_COOKIE = 'NEXT_LOCALE'

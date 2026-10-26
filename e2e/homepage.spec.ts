@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test'
+import { gotoHydrated } from './helpers/navigation'
 
 test.describe('Homepage', () => {
   // Note: Footer visibility tests are now covered by unit tests in
@@ -6,7 +7,7 @@ test.describe('Homepage', () => {
 
   test.describe('Navigation', () => {
     test('Contact link navigates to contact page', async ({ page }) => {
-      await page.goto('/en')
+      await gotoHydrated(page, '/en')
 
       const nav = page.getByRole('navigation')
       const contactLink = nav.getByRole('link', { name: /\bcontact\b/i })
@@ -16,7 +17,7 @@ test.describe('Homepage', () => {
     })
 
     test('house card link navigates to house page', async ({ page }) => {
-      await page.goto('/en')
+      await gotoHydrated(page, '/en')
 
       const housePageUrl = /\/en\/(orange|apple|lemon)\/?$/
       const houseLink = page
@@ -40,7 +41,7 @@ test.describe('Homepage', () => {
 
   test.describe('Language Switcher', () => {
     test('preserves current page when switching language', async ({ page }) => {
-      await page.goto('/en/faq')
+      await gotoHydrated(page, '/en/faq')
 
       // Open language switcher
       const languageSwitcher = page.getByRole('button', {

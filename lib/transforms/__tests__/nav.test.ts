@@ -36,12 +36,12 @@ describe('toHouseNavItems', () => {
   it('links each house to its page with its icon and a cropped preview', () => {
     const image = createSanityImage({ alt: 'Apple House front' })
 
-    const [item] = toHouseNavItems([house({ image })])
+    const [item] = toHouseNavItems([house({ image })], 'en')
     const { searchParams } = new URL(item.background.src)
 
     expect(item).toMatchObject({
       key: 'apple',
-      href: { pathname: '/[house]', params: { house: 'apple' } },
+      link: { to: '/$locale/$house', params: { locale: 'en', house: 'apple' } },
       label: 'Apple House',
       description: 'Near the station',
       caption: 'Quiet street',
@@ -56,15 +56,18 @@ describe('toHouseNavItems', () => {
   })
 
   it('falls back to the slug, and leaves out missing copy', () => {
-    const [item] = toHouseNavItems([
-      house({
-        slug: 'orange',
-        title: null,
-        description: null,
-        caption: null,
-        image: createSanityImage({ alt: null })
-      })
-    ])
+    const [item] = toHouseNavItems(
+      [
+        house({
+          slug: 'orange',
+          title: null,
+          description: null,
+          caption: null,
+          image: createSanityImage({ alt: null })
+        })
+      ],
+      'en'
+    )
 
     expect(item).toMatchObject({ label: 'orange', background: { alt: 'orange' } })
     expect(item.description).toBeUndefined()
@@ -74,7 +77,7 @@ describe('toHouseNavItems', () => {
   it('drops, and reports, a house whose slug the site does not know', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
-    const items = toHouseNavItems([house(), house({ slug: 'banana' as 'apple' })])
+    const items = toHouseNavItems([house(), house({ slug: 'banana' as 'apple' })], 'en')
 
     expect(items.map((item) => item.key)).toEqual(['apple'])
     expect(warn).toHaveBeenCalledWith('Unknown house slug: banana')

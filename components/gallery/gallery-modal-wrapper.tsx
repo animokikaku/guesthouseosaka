@@ -1,5 +1,3 @@
-'use client'
-
 import {
   GalleryDialog,
   GalleryDialogContent,
@@ -7,10 +5,10 @@ import {
   GalleryDialogTitle
 } from '@/components/gallery/gallery-dialog'
 import { GalleryShell } from '@/components/gallery/gallery-shell'
-import { useRouter } from '@/i18n/navigation'
+import { useNavigate } from '@tanstack/react-router'
 import type { HouseIdentifier } from '@/lib/types'
-import { useTranslations } from 'next-intl'
-import { ReactNode, useLayoutEffect, useState } from 'react'
+import { ReactNode, useState } from 'react'
+import { useLocale, useTranslations } from 'use-intl'
 
 type GalleryModalWrapperProps = {
   house: HouseIdentifier
@@ -19,14 +17,11 @@ type GalleryModalWrapperProps = {
 }
 
 export function GalleryModalWrapper({ house, title, children }: GalleryModalWrapperProps) {
-  const router = useRouter()
+  const navigate = useNavigate()
+  const locale = useLocale()
   const t = useTranslations('GalleryModal')
+  // Closes with the exit animation, then leaves the route.
   const [isOpen, setIsOpen] = useState(true)
-
-  // Cache Components hides this route in <Activity> instead of unmounting it,
-  // so reopen the dialog once it is hidden or returning to the gallery would
-  // restore it closed.
-  useLayoutEffect(() => () => setIsOpen(true), [])
 
   return (
     <GalleryDialog
@@ -35,7 +30,14 @@ export function GalleryModalWrapper({ house, title, children }: GalleryModalWrap
         if (!open) setIsOpen(false)
       }}
       onOpenChangeComplete={(open) =>
-        !open && router.push({ pathname: '/[house]', params: { house } })
+        !open &&
+        void navigate({
+          to: '/$locale/$house',
+          params: { locale, house },
+          resetScroll: false,
+          // The dialog has already animated out.
+          viewTransition: false
+        })
       }
     >
       <GalleryDialogContent

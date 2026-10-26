@@ -1,4 +1,4 @@
-import type { Formats } from 'next-intl'
+import type { Formats } from 'use-intl'
 
 /** Named formats shared by the request config and the unit tests' translator. */
 export const formats = {

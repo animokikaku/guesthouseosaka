@@ -1,0 +1,46 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "guesthouseosaka",
+  "account_id": "5f8fd45c341a983aff5d6b8b01f88ee1",
+  "main": "@tanstack/react-start/server-entry",
+  "compatibility_date": "2026-10-25",
+  // `node:async_hooks`, `node:crypto` and a populated `process.env`, which
+  // `lib/env.ts` validates.
+  "compatibility_flags": ["nodejs_compat"],
+  // Workers Cache: Cloudflare serves responses from its cache in front of the
+  // Worker, following their Cache-Control (see lib/cache-control.ts), so a
+  // cached page never starts the Worker. Each deployed version starts empty.
+  "cache": { "enabled": true },
+  "observability": {
+    "enabled": true,
+    "traces": { "enabled": true }
+  },
+  // Secrets (`wrangler secret put`): SANITY_API_READ_TOKEN, RESEND_API_KEY.
+  // Locally they come from `.env.local`.
+  "vars": {
+    // Only the production environment emails the houses (see contact.server.ts).
+    "DEPLOY_ENV": "development",
+    // Inlined into the build by vite.config.ts; production alone reads live content.
+    "SANITY_DATASET": "development"
+  },
+  // Worker Previews (`wrangler preview`) don't inherit the Worker's vars or
+  // secrets: these mirror `env.preview`, which the build reads, and their
+  // secrets are set with `wrangler preview base-config secret put`.
+  "previews": {
+    "vars": { "DEPLOY_ENV": "preview", "SANITY_DATASET": "development" }
+  },
+  "env": {
+    // Select at build time with CLOUDFLARE_ENV (see the `deploy` scripts).
+    "preview": {
+      // Previews live under the production Worker (see `deploy:preview`).
+      "name": "guesthouseosaka",
+      "vars": { "DEPLOY_ENV": "preview", "SANITY_DATASET": "development" }
+    },
+    "production": {
+      // Without a name, Wrangler would deploy `guesthouseosaka-production`, a
+      // separate Worker without the secrets or the custom domain.
+      "name": "guesthouseosaka",
+      "vars": { "DEPLOY_ENV": "production", "SANITY_DATASET": "production" }
+    }
+  }
+}

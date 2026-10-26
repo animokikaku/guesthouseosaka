@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { cn } from 'cn/vite'
 import path from 'node:path'
@@ -10,6 +11,7 @@ export default defineConfig({
   root: projectRoot,
   cacheDir: 'node_modules/.vite-playwright-components',
   plugins: [
+    tailwindcss(),
     react(),
     cn({ content: ['{app,components,lib}/**/*.{ts,tsx}'], out: 'generated/cn-tables.ts' })
   ],
@@ -19,20 +21,12 @@ export default defineConfig({
   resolve: {
     alias: [
       {
-        find: 'next/image',
-        replacement: path.resolve(projectRoot, 'playwright/gallery/next-image.tsx')
-      },
-      {
         find: '@/sanity/lib/image',
         replacement: path.resolve(projectRoot, 'playwright/gallery/sanity-image.ts')
       },
       {
-        find: /^next\/navigation$/,
-        replacement: path.resolve(projectRoot, 'playwright/gallery/next-navigation.ts')
-      },
-      {
-        find: '@/i18n/navigation',
-        replacement: path.resolve(projectRoot, 'playwright/gallery/i18n-navigation.tsx')
+        find: /^@tanstack\/react-router$/,
+        replacement: path.resolve(projectRoot, 'playwright/gallery/router.tsx')
       },
       {
         find: '@',

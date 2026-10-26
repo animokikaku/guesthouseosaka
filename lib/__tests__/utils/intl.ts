@@ -1,15 +1,14 @@
 import { formats, timeZone } from '@/i18n/formats'
 import messages from '@/messages/en.json'
-import type * as NextIntl from 'next-intl'
+import type * as NextIntl from 'use-intl'
 
 type IntlFactories = Pick<typeof NextIntl, 'createTranslator' | 'createFormatter'>
 
 /**
- * `useTranslations`, `getTranslations` and `useFormatter` bound to the English
- * catalog. Takes the real `next-intl` exports as an argument because it is
- * called from inside the `next-intl` mock, where importing the module would
- * resolve to the mock itself. Bound once per test file, so the `next-intl`
- * and `next-intl/server` mocks share one translator cache.
+ * `useTranslations` and `useFormatter` bound to the English catalog. Takes the
+ * real `use-intl` exports as an argument because it is called from inside the
+ * `use-intl` mock, where importing the module would resolve to the mock
+ * itself. Bound once per test file, so every component shares one cache.
  */
 export function bindTestIntl(factories: IntlFactories) {
   return (bound ??= bind(factories))

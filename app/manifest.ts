@@ -1,17 +1,20 @@
 import { routing } from '@/i18n/routing'
-import { sanityFetch } from '@/sanity/lib/live'
+import { intlConfig, loadMessages } from '@/i18n/messages'
+import { sanityFetch } from '@/sanity/lib/fetch.server'
 import { settingsQuery } from '@/sanity/lib/queries'
-import { MetadataRoute } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { stegaClean } from '@sanity/client/stega'
+import { createTranslator } from 'use-intl'
 
-export default async function manifest(): Promise<MetadataRoute.Manifest> {
+export default async function manifest() {
   const locale = routing.defaultLocale
-  const settingsPromise = sanityFetch({ query: settingsQuery, params: { locale }, stega: false })
-  const t = await getTranslations({ locale, namespace: 'Metadata' })
-  const { data: settings } = await settingsPromise
+  const [{ data: settings }, messages] = await Promise.all([
+    sanityFetch({ query: settingsQuery, params: { locale } }),
+    loadMessages(locale)
+  ])
+  const t = createTranslator({ locale, messages, namespace: 'Metadata', ...intlConfig })
 
   return {
-    name: settings?.siteName ?? t('manifest_name'),
+    name: stegaClean(settings?.siteName) ?? t('manifest_name'),
     short_name: 'SHO',
     start_url: '/',
     theme_color: '#101E33',

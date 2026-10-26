@@ -1,7 +1,8 @@
 'use client'
 
 /**
- * This configuration is used to for the Sanity Studio that's mounted on the `/app/studio/[[...tool]]/page.tsx` route
+ * Sanity Studio configuration, used by the Sanity CLI (`typegen`, `dev`, `deploy`).
+ * This site no longer embeds the Studio.
  */
 
 import { visionTool } from '@sanity/vision'
@@ -13,6 +14,7 @@ import { structureTool } from 'sanity/structure'
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { localeConfig } from '@/i18n/locales'
 import { routing } from '@/i18n/routing'
+import { SITE_URL } from '@/lib/config'
 import { env } from '@/lib/env'
 import { iconMap } from '@/lib/icons'
 import { lucideIconPicker } from '@/sanity/plugins/lucide-icon-picker'
@@ -26,9 +28,8 @@ const languages = routing.locales.map((locale) => ({
 }))
 
 export default defineConfig({
-  basePath: '/studio',
-  projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: env.NEXT_PUBLIC_SANITY_DATASET,
+  projectId: env.VITE_SANITY_PROJECT_ID,
+  dataset: env.VITE_SANITY_DATASET,
   tasks: {
     enabled: false
   },
@@ -68,11 +69,26 @@ export default defineConfig({
     lucideIconPicker({ icons: iconMap }),
     structureTool({ structure }),
     ...(process.env.NODE_ENV === 'development'
-      ? [visionTool({ defaultApiVersion: env.NEXT_PUBLIC_SANITY_API_VERSION })]
+      ? [visionTool({ defaultApiVersion: env.VITE_SANITY_API_VERSION })]
       : []),
     presentationTool({
+      // The development Studio also previews the dev server on any port and
+      // every Worker Preview (`<branch>-guesthouseosaka.animokikaku.workers.dev`),
+      // picked by the `preview` search param the site's `/studio` adds.
+      ...(env.VITE_SANITY_DATASET === 'production'
+        ? {}
+        : {
+            allowOrigins: [
+              'http://localhost:*',
+              'https://*-guesthouseosaka.animokikaku.workers.dev'
+            ]
+          }),
       previewUrl: {
-        preview: '/',
+        // The site showing this Studio's dataset: production, or the dev server
+        // for the development Studio. `SANITY_STUDIO_PREVIEW_URL` overrides it.
+        initial:
+          process.env.SANITY_STUDIO_PREVIEW_URL ||
+          (env.VITE_SANITY_DATASET === 'production' ? SITE_URL : 'http://localhost:3000'),
         previewMode: {
           enable: '/api/draft-mode/enable',
           disable: '/api/draft-mode/disable'

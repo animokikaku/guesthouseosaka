@@ -9,7 +9,7 @@ import {
 import { toGalleryCategories } from '@/lib/transforms/gallery'
 import { render, screen, within } from '@testing-library/react'
 
-vi.mock('next/image', () => import('@/components/__tests__/mocks/next-image'))
+vi.mock('@/components/image', () => import('@/components/__tests__/mocks/image'))
 
 function renderGallery(categories: GalleryCategory[], dataAttribute?: (path: string) => string) {
   // Same lookup GalleryPageContent builds for the lightbox.

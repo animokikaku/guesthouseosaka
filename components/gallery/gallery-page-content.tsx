@@ -1,5 +1,3 @@
-'use client'
-
 import { Lightbox, type LightboxItem } from '@/components/lightbox'
 import { HouseGallery } from '@/components/gallery/house-gallery'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
@@ -10,10 +8,10 @@ import {
   type GalleryCategoryData
 } from '@/lib/gallery'
 import { toGalleryLightboxItem } from '@/lib/gallery-image'
-import { useSanityOptimisticArray } from '@/lib/sanity-optimistic'
+import { OptimisticArray } from '@/components/optimistic-array'
 import { toGalleryCategories } from '@/lib/transforms/gallery'
-import { useTranslations } from 'next-intl'
-import { createDataAttribute } from 'next-sanity'
+import { useTranslations } from 'use-intl'
+import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 import { useRef, type ComponentProps, type ReactNode } from 'react'
 
 /**
@@ -35,20 +33,30 @@ type GalleryPageContentProps = {
   backButton: ReactNode
 }
 
-export function GalleryPageContent({
+export function GalleryPageContent(props: GalleryPageContentProps) {
+  return (
+    <OptimisticArray
+      documentId={props.documentId}
+      value={props.galleryCategories}
+      select={(document: { galleryCategories?: GalleryCategoryData[] }) =>
+        document.galleryCategories
+      }
+    >
+      {(galleryCategories) => (
+        <GalleryPageBody {...props} galleryCategories={galleryCategories ?? []} />
+      )}
+    </OptimisticArray>
+  )
+}
+
+function GalleryPageBody({
   documentId,
   documentType,
-  galleryCategories: initialGalleryCategories,
+  galleryCategories,
   title,
   backButton
 }: GalleryPageContentProps) {
   const t = useTranslations('GalleryPageContent')
-
-  const galleryCategories = useSanityOptimisticArray<
-    GalleryCategoryData,
-    GalleryCategories,
-    { galleryCategories?: GalleryCategoryData[] }
-  >(documentId, initialGalleryCategories, (document) => document.galleryCategories)
 
   const dataAttribute = createDataAttribute({
     id: documentId,

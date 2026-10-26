@@ -17,10 +17,12 @@
     "entry": [
       "e2e/**/*.spec.ts",
       "playwright/components/**/*.spec.ts",
-      "playwright/gallery/{main,next-image,next-navigation,sanity-image,i18n-navigation,vite.config}.{ts,tsx,mts}",
+      "playwright/gallery/{main,router,sanity-image,vite.config}.{ts,tsx,mts}",
       "app/**/*.story.tsx",
       "components/**/*.story.tsx"
     ]
   },
-  "tags": ["-lintignore"]
+  "tags": ["-lintignore"],
+  "entry": ["app/routes/**/*.{ts,tsx}", "app/router.tsx", "app/start.ts"],
+  "ignoreDependencies": ["cloudflare"]
 }

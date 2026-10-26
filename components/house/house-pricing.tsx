@@ -2,7 +2,7 @@ import { HouseSectionContent, HouseSectionHeading } from '@/components/house/hou
 import type { PricingRowData } from '@/lib/types/components'
 import type { PortableTextComponents } from '@portabletext/react'
 import { PortableText } from '@portabletext/react'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 
 const portableTextComponents: PortableTextComponents = {
   block: {

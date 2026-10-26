@@ -1,15 +1,15 @@
 import { GalleryEmptyState } from '@/components/gallery/gallery-empty-state'
 import { GalleryImageFrame } from '@/components/gallery/gallery-image-frame'
-import { Link } from '@/i18n/navigation'
+import type { GalleryLink } from '@/components/house/gallery-link'
 import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
 import { toGalleryImageProps, type GalleryImageProps } from '@/lib/gallery-image'
-import { getTranslations } from 'next-intl/server'
-import { ComponentProps } from 'react'
+import { Link } from '@tanstack/react-router'
+import { useTranslations } from 'use-intl'
 
 type GalleryImages = GalleryItem[] | null
 
 type ImageBlockGalleryProps = {
-  href: ComponentProps<typeof Link>['href']
+  href: GalleryLink
   /** The five LQIP-bearing tiles from `houseQuery` — not the full gallery. */
   galleryPreview: GalleryImages
   /** Total images behind the five tiles, for the `+N` overflow badge. */
@@ -25,7 +25,7 @@ function GalleryGrid({
   overflowLabel
 }: {
   images: GalleryImageProps[]
-  href: ComponentProps<typeof Link>['href']
+  href: GalleryLink
   viewGalleryLabel: string
   /** Images beyond the 5 shown in the grid, surfaced as a `+N` overlay on the last tile */
   extraCount: number
@@ -43,8 +43,7 @@ function GalleryGrid({
               a ring on the link itself would paint *behind* the tiles filling it edge-to-edge
               (a box's own box-shadow paints before its children). */}
           <Link
-            prefetch
-            href={href}
+            {...href}
             aria-label={viewGalleryLabel}
             className="group/gallery peer block h-full w-full outline-none"
           >
@@ -103,13 +102,13 @@ function GalleryGrid({
   )
 }
 
-export async function ImageBlockGallery({
+export function ImageBlockGallery({
   href,
   galleryPreview,
   galleryImageCount,
   featuredImage
 }: ImageBlockGalleryProps) {
-  const t = await getTranslations('ImageBlockGallery')
+  const t = useTranslations('ImageBlockGallery')
 
   const slides = buildGallerySlides({
     featuredImage,

@@ -1,4 +1,4 @@
-import type { ImageLoader } from 'next/image'
+import type { ImageLoader } from '@/components/image'
 
 /**
  * Lets `next/image` build a responsive `srcset` while images keep coming

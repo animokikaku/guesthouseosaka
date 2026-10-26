@@ -4,18 +4,31 @@
  **/
 import { defineCliConfig } from 'sanity/cli'
 import { mergeConfig } from 'vite'
+import { SANITY_PROJECT_ID, SANITY_STUDIO_HOSTS } from './lib/config'
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '515wijoz'
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'development'
+const projectId = process.env.VITE_SANITY_PROJECT_ID || SANITY_PROJECT_ID
+const dataset = process.env.VITE_SANITY_DATASET === 'production' ? 'production' : 'development'
+
+/** The Sanity application of each hosted Studio, so `sanity deploy` never asks for one. */
+const studioAppIds = {
+  production: 'gntlcvsmiwihcdn4q5lc2iei',
+  development: 'il6rzjk5xwzp7wp01q1gg784'
+}
 
 export default defineCliConfig({
   api: { projectId, dataset },
-  vite: (config) => mergeConfig(config, { envPrefix: ['NEXT_PUBLIC_'] }),
+  // `sanity deploy` publishes to the Studio of the dataset it builds for.
+  studioHost: SANITY_STUDIO_HOSTS[dataset],
+  deployment: { appId: studioAppIds[dataset] },
+  // The Studio exposes `SANITY_STUDIO_*` by default; `lib/env.ts` reads `VITE_*`.
+  vite: (config) => mergeConfig(config, { envPrefix: ['VITE_'] }),
   typegen: {
     path: [
       './**/*.{ts,tsx,js,jsx}',
       '!node_modules',
-      '!.next',
+      '!.sanity',
+      '!.tanstack',
+      '!.wrangler',
       '!dist',
       '!**/__tests__/**',
       '!**/*.test.{ts,tsx,js,jsx}',

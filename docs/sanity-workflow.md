@@ -17,7 +17,8 @@ bunx sanity typegen generate  # Generate TypeScript types
 # Development
 bunx sanity dev               # Start Studio dev server
 bunx sanity build             # Build Studio for production
-bunx sanity deploy            # Deploy Studio to Sanity hosting
+bun run studio:deploy         # Deploy the development Studio
+bun run studio:deploy:production  # Deploy the production Studio
 
 # MCP Setup
 bunx sanity@latest mcp configure  # Configure MCP for AI editor
@@ -52,3 +53,14 @@ Use MCP tools instead of ad-hoc scripts:
 - **Always**: Run `typegen` after schema/query changes
 - **Ask first**: Before modifying `sanity.config.ts` or deleting schema files
 - **Never**: Hardcode API tokens (use `process.env`)
+
+## Hosted Studios
+
+Each dataset has its own Studio on Sanity hosting (`SANITY_STUDIO_HOSTS` in `lib/config.ts`):
+`guesthouseosaka.sanity.studio` edits `production`, `guesthouseosaka-dev.sanity.studio` edits
+`development`. The site's `/studio` redirects to the Studio for the dataset it shows, and
+`robots.txt` keeps crawlers out of it.
+
+`.github/workflows/studio.yml` deploys them when a file the Studio is built from changes:
+pushes to `main` deploy both, other branches only the development Studio. It authenticates
+with the `SANITY_DEPLOY_TOKEN` secret, a Sanity token with the Deploy Studio role.

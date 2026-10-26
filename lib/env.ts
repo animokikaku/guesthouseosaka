@@ -1,39 +1,17 @@
-import { createEnv } from '@t3-oss/env-nextjs'
-import { z } from './zod'
+import { BLOB_STORAGE_URL, SANITY_API_VERSION, SANITY_PROJECT_ID, SITE_URL } from './config'
 
-const vercelBlobHostname = /\.public\.blob\.vercel-storage\.com$/i
-
-const nonEmptyString = () => z.string().check(z.minLength(1))
-
-export const env = createEnv({
-  server: {
-    SANITY_API_READ_TOKEN: nonEmptyString(),
-    RESEND_API_KEY: nonEmptyString(),
-    NODE_ENV: z.enum(['development', 'production', 'test']),
-    VERCEL_ENV: z.optional(z.enum(['development', 'preview', 'production']))
-  },
-  client: {
-    NEXT_PUBLIC_APP_URL: z._default(
-      z.url(),
-      `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    ),
-    NEXT_PUBLIC_BLOB_STORAGE_URL: z.url().check(
-      z.refine((value) => vercelBlobHostname.test(new URL(value).hostname), {
-        message: 'Must be a Vercel Blob Storage public URL'
-      })
-    ),
-    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: nonEmptyString(),
-    NEXT_PUBLIC_SANITY_API_VERSION: nonEmptyString(),
-    NEXT_PUBLIC_SANITY_DATASET: z.enum(['production', 'development']),
-    NEXT_PUBLIC_SANITY_PROJECT_ID: nonEmptyString()
-  },
-  experimental__runtimeEnv: {
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_BLOB_STORAGE_URL: process.env.NEXT_PUBLIC_BLOB_STORAGE_URL,
-    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-    NEXT_PUBLIC_SANITY_API_VERSION: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
-    NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
-    NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-  },
-  emptyStringAsUndefined: true
-})
+/**
+ * Public settings, inlined by Vite at build time (see `envPrefix` in
+ * vite.config.ts, which validates them against `env.schema.ts` first). Server
+ * secrets live in `env.server.ts`.
+ */
+export const env = {
+  VITE_APP_URL: import.meta.env.VITE_APP_URL || SITE_URL,
+  VITE_BLOB_STORAGE_URL: import.meta.env.VITE_BLOB_STORAGE_URL || BLOB_STORAGE_URL,
+  VITE_GOOGLE_MAPS_API_KEY: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  VITE_SANITY_API_VERSION: import.meta.env.VITE_SANITY_API_VERSION || SANITY_API_VERSION,
+  // Set from wrangler.jsonc by vite.config.ts; the Studio and the component
+  // gallery build without it.
+  VITE_SANITY_DATASET: import.meta.env.VITE_SANITY_DATASET ?? 'development',
+  VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID || SANITY_PROJECT_ID
+}

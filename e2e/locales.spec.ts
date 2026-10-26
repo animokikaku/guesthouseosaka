@@ -30,11 +30,11 @@ const ROUTES = [
 
 type Route = (typeof ROUTES)[number]
 
-// Origin the app was built with: CI sets it in the environment (which wins, as in Next),
+// Origin the app was built with: CI sets it in the environment (which wins),
 // local builds read it from .env.local.
 if (existsSync('.env.local')) process.loadEnvFile('.env.local')
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL
-if (!APP_URL) throw new Error('NEXT_PUBLIC_APP_URL is required to check canonical links')
+const APP_URL = process.env.VITE_APP_URL
+if (!APP_URL) throw new Error('VITE_APP_URL is required to check canonical links')
 
 test.describe('Locale Routes', () => {
   test.describe.parallel('All locale and route combinations', () => {

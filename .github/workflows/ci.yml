@@ -19,12 +19,8 @@ jobs:
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10
     env: &test-env
-      NEXT_PUBLIC_APP_URL: http://localhost:3000
-      NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
-      NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET }}
-      NEXT_PUBLIC_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION }}
-      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
-      NEXT_PUBLIC_BLOB_STORAGE_URL: ${{ secrets.NEXT_PUBLIC_BLOB_STORAGE_URL }}
+      VITE_APP_URL: http://localhost:3000
+      VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
       SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
       RESEND_API_KEY: re_dummy_test_key
     steps:
@@ -82,22 +78,6 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Restore Next.js cache on pull requests
-        if: github.event_name == 'pull_request'
-        uses: actions/cache/restore@v6
-        with:
-          path: ${{ github.workspace }}/.next/cache
-          key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
-          restore-keys: nextjs-v3-${{ runner.os }}-
-
-      - name: Restore exact Next.js cache on main
-        if: github.event_name == 'push'
-        id: next-cache-main
-        uses: actions/cache/restore@v6
-        with:
-          path: ${{ github.workspace }}/.next/cache
-          key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
-
       - name: Mount Playwright browser binaries
         uses: useblacksmith/stickydisk@v1
         with:
@@ -122,13 +102,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage-playwright/lcov.info
           disable_search: true
-
-      - name: Save Next.js cache from main
-        if: github.event_name == 'push' && steps.next-cache-main.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v6
-        with:
-          path: ${{ github.workspace }}/.next/cache
-          key: nextjs-v3-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
 
       - name: Upload Playwright artifacts
         if: failure()

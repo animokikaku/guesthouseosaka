@@ -8,14 +8,13 @@ import { HousesNav } from '@/components/houses-nav'
 import { ImageBlockGallery } from '@/components/image-block-gallery'
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
 import { PageNav } from '@/components/page-nav'
-import { Link } from '@/i18n/navigation'
+import { galleryLink } from '@/components/house/gallery-link'
 import { buildGallerySlides } from '@/lib/gallery'
 import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
-import type { StegaAware } from '@/lib/types/stega'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
 import type { HouseQueryResult, HousesTitlesQueryResult } from '@/sanity.types'
-import type { ComponentProps } from 'react'
+import { useLocale } from 'use-intl'
 
 export function HousePageContent({
   _id,
@@ -35,11 +34,8 @@ export function HousePageContent({
   about,
   building,
   houses
-}: StegaAware<NonNullable<HouseQueryResult>> & { houses: HousesTitlesQueryResult }) {
-  const href: ComponentProps<typeof Link>['href'] = {
-    pathname: '/[house]/gallery',
-    params: { house: slug }
-  }
+}: NonNullable<HouseQueryResult> & { houses: HousesTitlesQueryResult }) {
+  const href = galleryLink(useLocale(), slug)
 
   const mobileHeroImages = buildGallerySlides({ featuredImage, galleryImages })
 

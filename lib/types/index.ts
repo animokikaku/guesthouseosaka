@@ -1,6 +1,5 @@
-import type { Link } from '@/i18n/navigation'
 import type { assets } from '@/lib/assets'
-import type { ComponentProps } from 'react'
+import type { Locale } from 'use-intl'
 
 export const HouseIdentifierValues = ['orange', 'apple', 'lemon'] as const
 export type HouseIdentifier = (typeof HouseIdentifierValues)[number]
@@ -16,9 +15,18 @@ export function isContactType(value: unknown): value is ContactType {
   return typeof value === 'string' && ContactTypeValues.some((type) => type === value)
 }
 
+/**
+ * A navigation target, spread into `Link`. Spelled out rather than typed with
+ * the router's `LinkOptions`: layout loaders return these, and route types
+ * can't depend on themselves.
+ */
+export type NavLink =
+  | { to: '/$locale' | '/$locale/faq' | '/$locale/contact'; params: { locale: Locale } }
+  | { to: '/$locale/$house'; params: { locale: Locale; house: HouseIdentifier } }
+
 export type NavItem = {
   key: string
-  href: ComponentProps<typeof Link>['href']
+  link: NavLink
   label: string
 }
 

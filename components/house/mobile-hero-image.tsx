@@ -1,17 +1,16 @@
-'use client'
-
 import { GalleryEmptyState } from '@/components/gallery/gallery-empty-state'
 import { SanityImage } from '@/components/sanity-image'
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { useCarouselIndex } from '@/hooks/use-carousel-index'
-import { Link } from '@/i18n/navigation'
+import type { GalleryLink } from '@/components/house/gallery-link'
+import { Link } from '@tanstack/react-router'
 import type { GallerySlide } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
-import { useTranslations } from 'next-intl'
-import { ComponentProps, useState } from 'react'
+import { useTranslations } from 'use-intl'
+import { useState } from 'react'
 
 type MobileHeroImageProps = {
-  href: ComponentProps<typeof Link>['href']
+  href: GalleryLink
   images: GallerySlide[]
 }
 
@@ -29,7 +28,7 @@ export function MobileHeroImage({ href, images }: MobileHeroImageProps) {
   }
 
   return (
-    <Link prefetch href={href} aria-label={t('view_gallery')} className="select-none sm:hidden">
+    <Link {...href} aria-label={t('view_gallery')} className="select-none sm:hidden">
       <Carousel className="max-h-96 w-full cursor-pointer select-none" setApi={setApi}>
         <CarouselContent>
           {images.map(({ _key, image }, index) => {

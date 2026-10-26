@@ -12,6 +12,9 @@
     ".codex/**",
     ".cursor/**",
     "sanity.types.ts",
-    "schema.json"
+    "schema.json",
+    "app/routeTree.gen.ts",
+    ".wrangler/**",
+    ".sanity/**"
   ]
 }

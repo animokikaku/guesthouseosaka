@@ -1,5 +1,3 @@
-'use client'
-
 type FooterStyleProps = {
   /** Make the footer a scroll-snap target from the `md` breakpoint. */
   snap?: boolean

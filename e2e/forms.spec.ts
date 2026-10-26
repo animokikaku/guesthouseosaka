@@ -1,34 +1,28 @@
-import { expect, test } from 'next/experimental/testmode/playwright'
+import { expect, test } from './fixtures/server-fetch'
 import {
   fillAccountFields,
   getAccountFields,
   gotoContactForm,
   submissionToast
 } from './helpers/contact-form'
+import { gotoHydrated } from './helpers/navigation'
 import { mockResendAPI } from './mocks/resend'
 
 const tomorrow = () => new Date(Date.now() + 864e5).toISOString().slice(0, 10)
 
-// Next throws "Proxy request aborted" for any server-side fetch a test leaves
-// unhandled, so every test needs a fallback. Handlers run last registered
-// first, which keeps this one behind the per-test Resend mocks. Resend itself
-// can never reach here: `mockResendAPI` answers everything on its origin, and
-// `RESEND_BASE_URL` does not resolve even if it somehow did.
-test.beforeEach(async ({ next, page }) => {
-  next.onFetch(() => 'continue')
-
-  // Router prefetches carry the fixture's test headers too, so each one round
-  // trips through the Playwright worker and renders a page nothing asserts on.
-  // Left alone they stall real navigations into their timeouts.
-  await page.route('**', (route) =>
-    route.request().headers()['next-router-prefetch'] ? route.abort() : route.fallback()
-  )
+// The proxy aborts any server-side fetch a test leaves unhandled, so every test
+// needs a fallback. Handlers run last registered first, which keeps this one
+// behind the per-test Resend mocks. Resend itself can never reach here:
+// `mockResendAPI` answers everything on its origin, and `RESEND_BASE_URL` does
+// not resolve even if it somehow did.
+test.beforeEach(({ serverFetch }) => {
+  serverFetch.onFetch(() => 'continue')
 })
 
 test.describe('General inquiry form', () => {
-  test('valid form can be submitted', async ({ next, page }) => {
+  test('valid form can be submitted', async ({ serverFetch, page }) => {
     // Mock the Resend API to prevent actual email sending
-    const requests = mockResendAPI(next)
+    const requests = mockResendAPI(serverFetch)
     const form = await gotoContactForm(page, 'other')
 
     const fields = await fillAccountFields(page, form)
@@ -53,8 +47,11 @@ test.describe('General inquiry form', () => {
     })
   })
 
-  test('failed email delivery shows an error without leaving the form', async ({ next, page }) => {
-    const requests = mockResendAPI(next, {
+  test('failed email delivery shows an error without leaving the form', async ({
+    serverFetch,
+    page
+  }) => {
+    const requests = mockResendAPI(serverFetch, {
       status: 422,
       body: {
         message: 'The email could not be delivered.',
@@ -82,8 +79,8 @@ test.describe('General inquiry form', () => {
 // These forms reuse the same account field group as the general inquiry form
 // but bind it alongside their own date, hour, and stay-duration fields.
 test.describe('Tour and move-in forms', () => {
-  test('tour form submits successfully', async ({ next, page }) => {
-    const requests = mockResendAPI(next)
+  test('tour form submits successfully', async ({ serverFetch, page }) => {
+    const requests = mockResendAPI(serverFetch)
     const form = await gotoContactForm(page, 'tour')
 
     await form.locator('input[type="date"]').fill(tomorrow())
@@ -97,8 +94,8 @@ test.describe('Tour and move-in forms', () => {
     expect(requests).toHaveLength(1)
   })
 
-  test('move-in form submits successfully', async ({ next, page }) => {
-    const requests = mockResendAPI(next)
+  test('move-in form submits successfully', async ({ serverFetch, page }) => {
+    const requests = mockResendAPI(serverFetch)
     const form = await gotoContactForm(page, 'move-in')
 
     await form.locator('input[type="date"]').fill(tomorrow())
@@ -145,10 +142,9 @@ test.describe('Validation feedback', () => {
   })
 
   test('validation messages follow the active locale', async ({ page }) => {
-    await page.goto('/ja/contact/other')
+    await gotoHydrated(page, '/ja/contact/other')
 
     const form = page.locator('form#other-form')
-    await expect(form).toBeVisible()
 
     await form.evaluate((element: HTMLFormElement) => element.setAttribute('novalidate', ''))
     await page.locator('button[type="submit"]').click()

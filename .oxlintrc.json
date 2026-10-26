@@ -3,7 +3,7 @@
   "options": {
     "typeAware": true
   },
-  "plugins": ["react", "typescript", "import", "jsx-a11y", "nextjs", "unicorn", "oxc"],
+  "plugins": ["react", "typescript", "import", "jsx-a11y", "unicorn", "oxc"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
@@ -14,29 +14,12 @@
     "import/no-unassigned-import": "off",
     "unicorn/consistent-function-scoping": "off",
     "jsx-a11y/heading-has-content": "off",
-    "nextjs/no-duplicate-head": "off",
     "no-underscore-dangle": "off",
     "typescript/consistent-return": "off",
     "typescript/no-unsafe-type-assertion": "error",
     "typescript/no-unnecessary-boolean-literal-compare": "error",
     "typescript/no-unnecessary-type-assertion": "error",
-    "typescript/no-unnecessary-type-parameters": "error",
-    "no-restricted-imports": [
-      "error",
-      {
-        "paths": [
-          {
-            "name": "next/link",
-            "message": "Please import from `@/i18n/navigation` instead."
-          },
-          {
-            "name": "next/navigation",
-            "importNames": ["redirect", "permanentRedirect", "useRouter", "usePathname"],
-            "message": "Please import from `@/i18n/navigation` instead."
-          }
-        ]
-      }
-    ]
+    "typescript/no-unnecessary-type-parameters": "error"
   },
   "overrides": [
     {
@@ -47,11 +30,12 @@
     }
   ],
   "ignorePatterns": [
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
+    ".tanstack/**",
+    "app/routeTree.gen.ts",
     "components/ui/**",
-    "sanity.types.ts"
+    "sanity.types.ts",
+    ".wrangler/**",
+    "dist/**",
+    ".sanity/**"
   ]
 }

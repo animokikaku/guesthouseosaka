@@ -1,20 +1,14 @@
 import { assets } from '@/lib/assets'
 import type { HouseIdentifier } from '@/lib/types'
-import type { StegaAware } from '@/lib/types/stega'
 import type { Address, HouseQueryResult, SettingsQueryResult } from '@/sanity.types'
 import { urlFor } from '@/sanity/lib/image'
 import type { Accommodation, Organization, PostalAddress, WithContext } from 'schema-dts'
 
-type House = StegaAware<NonNullable<HouseQueryResult>>
-type Settings = StegaAware<SettingsQueryResult>
+type House = NonNullable<HouseQueryResult>
+type Settings = SettingsQueryResult
 
 /** The CMS address under schema.org's property names. */
-function toPostalAddress({
-  streetAddress,
-  locality,
-  postalCode,
-  country
-}: StegaAware<Address>): PostalAddress {
+function toPostalAddress({ streetAddress, locality, postalCode, country }: Address): PostalAddress {
   return {
     '@type': 'PostalAddress',
     streetAddress,

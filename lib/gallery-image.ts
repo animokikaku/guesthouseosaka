@@ -3,7 +3,7 @@ import type { FeaturedImage, GalleryItem } from '@/lib/gallery'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions } from '@sanity/asset-utils'
 import { stegaClean } from '@sanity/client/stega'
-import type { ImageProps } from 'next/image'
+import type { ImageProps } from '@/components/image'
 
 /**
  * Lightbox strip tabs are `--lb-thumb-size` (3.5rem/56px) with `object-fit:

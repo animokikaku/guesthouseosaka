@@ -1,10 +1,8 @@
-'use client'
-
 import { Lightbox } from '@/components/lightbox'
 import { SanityImage } from '@/components/sanity-image'
 import type { GalleryItem } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 import type { DataAttributeFn } from '@/lib/types/stega'
 
 type GalleryGridItemProps = {

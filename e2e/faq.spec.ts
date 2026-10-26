@@ -1,8 +1,9 @@
 import { expect, test } from '@playwright/test'
+import { gotoHydrated } from './helpers/navigation'
 
 test.describe('FAQ page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/en/faq')
+    await gotoHydrated(page, '/en/faq')
   })
 
   test('opens an answer when its question is selected', async ({ page }) => {

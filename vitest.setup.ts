@@ -92,9 +92,9 @@ vi.stubGlobal('IntersectionObserver', IntersectionObserverMock)
 
 // Translations resolve against the real English catalog, so assertions read
 // as the copy users see and a broken key or ICU message fails the test. Bound
-// here rather than through a provider so server and client components share it.
-vi.mock('next-intl', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('next-intl')>()
+// here rather than through a provider so components render without one.
+vi.mock('use-intl', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('use-intl')>()
   const { bindTestIntl } = await import('@/lib/__tests__/utils/intl')
   const { getTranslator, getFormatter } = bindTestIntl(actual)
 
@@ -106,29 +106,15 @@ vi.mock('next-intl', async (importOriginal) => {
   }
 })
 
-// next-intl's navigation reads the locale from use-intl directly, so the real
-// `Link` from `@/i18n/navigation` renders localized hrefs without a provider.
-vi.mock('use-intl', async (importOriginal) => ({
-  ...(await importOriginal<object>()),
-  useLocale: () => 'en'
-}))
-
-vi.mock('next-intl/server', async () => {
-  const actual = await vi.importActual<typeof import('next-intl')>('next-intl')
-  const { bindTestIntl } = await import('@/lib/__tests__/utils/intl')
-  const { getTranslator } = bindTestIntl(actual)
-
-  return {
-    getTranslations: async (options?: string | { namespace?: string }) =>
-      getTranslator(typeof options === 'string' ? options : options?.namespace),
-    getLocale: async () => 'en'
-  }
+// Components render without a router; see the double for what it provides.
+vi.mock('@tanstack/react-router', async () => {
+  const { routerMock } = await import('@/lib/__tests__/utils/router')
+  return routerMock
 })
 
-// Client hooks need an app router that tests don't mount; the rest of the module is real.
-vi.mock('next/navigation', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('next/navigation')>()),
-  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn(), refresh: vi.fn() }),
-  usePathname: () => '/',
-  useParams: () => ({})
-}))
+beforeEach(async () => {
+  const { routerState } = await import('@/lib/__tests__/utils/router')
+  Object.assign(routerState, { params: {}, pathname: '/en' })
+  routerState.navigate.mockReset()
+  routerState.invalidate.mockReset()
+})

@@ -1,5 +1,3 @@
-'use client'
-
 import {
   contactFormDefaultValues,
   FieldGroupPlaces,
@@ -14,7 +12,7 @@ import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormFields } from '@/lib/schemas/contact-form'
 import type { ContactFormConfig } from '@/lib/types/components'
 import type { HousesTitlesQueryResult } from '@/sanity.types'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 
 interface MoveInFormProps extends ContactFormConfig {
   houseTitles: HousesTitlesQueryResult

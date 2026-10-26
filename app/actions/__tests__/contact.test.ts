@@ -1,8 +1,7 @@
 // @vitest-environment node
 
 const { sendMock, env } = vi.hoisted(() => {
-  const mutableEnv: { NODE_ENV: string; RESEND_API_KEY: string; VERCEL_ENV?: string } = {
-    NODE_ENV: 'test',
+  const mutableEnv: { RESEND_API_KEY: string; DEPLOY_ENV?: string } = {
     RESEND_API_KEY: 're_test'
   }
   return { sendMock: vi.fn(), env: mutableEnv }
@@ -14,10 +13,10 @@ vi.mock('resend', () => ({
   }
 }))
 
-vi.mock('@/lib/env', () => ({ env }))
+vi.mock('@/lib/env.server', () => ({ serverEnv: env }))
 
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
-import { submitContactForm } from '../contact'
+import { submitContactForm } from '../contact.server'
 
 const payload: ContactFormPayload = {
   type: 'other',
@@ -71,7 +70,7 @@ const successfulSubmissionCases = [
 describe('submitContactForm', () => {
   beforeEach(() => {
     sendMock.mockReset().mockResolvedValue({ data: { id: 'email-id' }, error: null, headers: {} })
-    Object.assign(env, { NODE_ENV: 'test', VERCEL_ENV: undefined })
+    Object.assign(env, { DEPLOY_ENV: undefined })
   })
 
   afterEach(() => {
@@ -83,41 +82,36 @@ describe('submitContactForm', () => {
   it.each([
     {
       name: 'one house in production',
-      nodeEnv: 'production',
-      vercelEnv: 'production',
+      deployEnv: 'production',
       places: ['apple'],
       to: 'apple@guesthouseosaka.com'
     },
     {
       name: 'several houses in production',
-      nodeEnv: 'production',
-      vercelEnv: 'production',
+      deployEnv: 'production',
       places: ['apple', 'lemon'],
       to: 'info@guesthouseosaka.com'
     },
     {
       name: 'a preview deployment',
-      nodeEnv: 'production',
-      vercelEnv: 'preview',
+      deployEnv: 'preview',
       places: ['apple'],
       to: 'delivered+guesthouseosaka@resend.dev'
     },
     {
-      name: 'a local production build',
-      nodeEnv: 'production',
-      vercelEnv: undefined,
+      name: 'a local build',
+      deployEnv: 'development',
       places: ['apple'],
       to: 'dev@guesthouseosaka.com'
     },
     {
-      name: 'local development',
-      nodeEnv: 'development',
-      vercelEnv: undefined,
+      name: 'a Worker without a deploy environment',
+      deployEnv: undefined,
       places: ['apple'],
       to: 'dev@guesthouseosaka.com'
     }
-  ] as const)('sends $name to $to', async ({ nodeEnv, vercelEnv, places, to }) => {
-    Object.assign(env, { NODE_ENV: nodeEnv, VERCEL_ENV: vercelEnv })
+  ] as const)('sends $name to $to', async ({ deployEnv, places, to }) => {
+    Object.assign(env, { DEPLOY_ENV: deployEnv })
 
     await submitContactForm({ ...payload, data: { ...payload.data, places: [...places] } })
 

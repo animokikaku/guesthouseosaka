@@ -1,6 +1,7 @@
 import { ContactForm } from '@/components/forms/contact-form'
 import { TourForm } from '@/components/forms/tour-form'
 import { CONTACT_EMAIL } from '@/lib/config'
+import { routerState } from '@/lib/__tests__/utils/router'
 import { screen, waitFor } from '@testing-library/react'
 import {
   fillSharedFields,
@@ -10,18 +11,13 @@ import {
   submitIncomplete
 } from './utils/contact-form'
 
-// The server action and the router are the forms' only way out of the browser.
-const { submitContactForm, router } = vi.hoisted(() => ({
-  submitContactForm: vi.fn(),
-  router: { push: vi.fn() }
-}))
+// The server function and the router are the forms' only way out of the browser.
+const { submitContactForm } = vi.hoisted(() => ({ submitContactForm: vi.fn() }))
 
-vi.mock('@/app/actions/contact', () => ({ submitContactForm }))
-vi.mock('@/i18n/navigation', () => ({ useRouter: () => router }))
+vi.mock('@/app/actions/contact.functions', () => ({ submitContactForm }))
 
 beforeEach(() => {
   submitContactForm.mockReset().mockResolvedValue({ ok: true })
-  router.push.mockReset()
 })
 
 describe('form validation and feedback', () => {
@@ -88,6 +84,6 @@ describe('form validation and feedback', () => {
     expect(await screen.findByText(/failed/i)).toBeInTheDocument()
     // Tells the visitor where to write instead.
     expect(screen.getByText((text) => text.includes(CONTACT_EMAIL))).toBeInTheDocument()
-    expect(router.push).not.toHaveBeenCalled()
+    expect(routerState.navigate).not.toHaveBeenCalled()
   })
 })

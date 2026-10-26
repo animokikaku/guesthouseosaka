@@ -1,11 +1,9 @@
-'use client'
-
 import { useTheme } from 'next-themes'
 import { useEffect, useEffectEvent } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { useSyncMetaColor } from '@/hooks/use-meta-color'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 
 function isEditableTarget(target: EventTarget | null) {
   if (!(target instanceof HTMLElement)) return false

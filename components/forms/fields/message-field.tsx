@@ -18,7 +18,7 @@ import {
   InputGroupTextarea
 } from '@/components/ui/input-group'
 import type { FieldWithValue } from '@tanstack/react-form'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 
 type InputGroupTextareaFormProps = Omit<
   React.ComponentProps<typeof InputGroupTextarea>,

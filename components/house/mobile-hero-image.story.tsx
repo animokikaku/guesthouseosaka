@@ -1,7 +1,8 @@
+import { galleryLink } from '@/components/house/gallery-link'
 import { MobileHeroImage } from '@/components/house/mobile-hero-image'
 import type { GallerySlide } from '@/lib/gallery'
 import messages from '@/messages/en.json'
-import { NextIntlClientProvider } from 'next-intl'
+import { IntlProvider } from 'use-intl'
 
 const images = ['Living room', 'Kitchen', 'Rooftop'].map((alt, index): GallerySlide => ({
   _key: `slide-${index}`,
@@ -14,13 +15,13 @@ const images = ['Living room', 'Kitchen', 'Rooftop'].map((alt, index): GallerySl
   }
 }))
 
-const href = { pathname: '/[house]/gallery', params: { house: 'orange' } } as const
+const href = galleryLink('en', 'orange')
 
 function Page({ children }: { children: React.ReactNode }) {
   return (
-    <NextIntlClientProvider locale="en" messages={messages}>
+    <IntlProvider locale="en" messages={messages}>
       <main>{children}</main>
-    </NextIntlClientProvider>
+    </IntlProvider>
   )
 }
 

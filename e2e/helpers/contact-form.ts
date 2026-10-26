@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test'
+import { isHydrated } from './navigation'
 
 /**
  * Locators for the shared user-account field group. Every contact form binds the
@@ -76,13 +77,7 @@ export async function gotoContactForm(page: Page, slug: 'tour' | 'move-in' | 'ot
   // that window stays in the DOM, but the form state is still empty, so the
   // field's next render (a later fill or submit) wipes it. React attaches its
   // fiber to the element once it is hydrated.
-  await expect
-    .poll(() =>
-      form.evaluate((element) =>
-        Object.keys(element).some((key) => key.startsWith('__reactFiber$'))
-      )
-    )
-    .toBe(true)
+  await expect.poll(() => form.evaluate(isHydrated)).toBe(true)
 
   return form
 }

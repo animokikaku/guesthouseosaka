@@ -11,7 +11,7 @@ const icon = (color: string) =>
 const houses: NavGroupItem[] = [
   {
     key: 'orange',
-    href: { pathname: '/[house]', params: { house: 'orange' } },
+    link: { to: '/$locale/$house', params: { locale: 'en', house: 'orange' } },
     label: 'Orange House',
     description: 'Lively house near Tsuruhashi',
     caption: 'Rooftop terrace',
@@ -20,7 +20,7 @@ const houses: NavGroupItem[] = [
   },
   {
     key: 'apple',
-    href: { pathname: '/[house]', params: { house: 'apple' } },
+    link: { to: '/$locale/$house', params: { locale: 'en', house: 'apple' } },
     label: 'Apple House',
     description: 'Quiet rooms by the park',
     icon: { src: icon('ef4444'), width: 66, height: 83, alt: 'Apple house icon' },
@@ -28,7 +28,7 @@ const houses: NavGroupItem[] = [
   },
   {
     key: 'lemon',
-    href: { pathname: '/[house]', params: { house: 'lemon' } },
+    link: { to: '/$locale/$house', params: { locale: 'en', house: 'lemon' } },
     label: 'Lemon House',
     icon: { src: icon('eab308'), width: 71, height: 69, alt: 'Lemon house icon' },
     background: { src: photo('fde047'), alt: 'Lemon House kitchen' }
@@ -38,7 +38,11 @@ const houses: NavGroupItem[] = [
 export function navItems(houseItems: NavGroupItem[] = houses): NavItems {
   return [
     { key: 'share-houses', items: houseItems, label: 'Share Houses' },
-    { key: 'faq', href: '/faq', label: 'FAQ' },
-    { key: 'contact', href: '/contact', label: 'Contact' }
+    { key: 'faq', link: { to: '/$locale/faq', params: { locale: 'en' } }, label: 'FAQ' },
+    {
+      key: 'contact',
+      link: { to: '/$locale/contact', params: { locale: 'en' } },
+      label: 'Contact'
+    }
   ]
 }

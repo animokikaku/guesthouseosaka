@@ -1,5 +1,3 @@
-'use client'
-
 import {
   BOUNDS,
   DEFAULT_CENTER,
@@ -8,7 +6,7 @@ import {
 } from '@/components/map/location-map-constants'
 import { env } from '@/lib/env'
 import { APIProvider, Map, MapProps } from '@vis.gl/react-google-maps'
-import { useLocale } from 'next-intl'
+import { useLocale } from 'use-intl'
 import { useTheme } from 'next-themes'
 
 import React from 'react'
@@ -44,11 +42,7 @@ export function MapProvider({ children }: { children: React.ReactNode }) {
   const locale = useLocale()
 
   return (
-    <APIProvider
-      apiKey={env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}
-      language={locale}
-      libraries={['marker']}
-    >
+    <APIProvider apiKey={env.VITE_GOOGLE_MAPS_API_KEY} language={locale} libraries={['marker']}>
       {children}
     </APIProvider>
   )

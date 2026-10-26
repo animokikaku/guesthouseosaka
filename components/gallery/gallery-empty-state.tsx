@@ -1,7 +1,7 @@
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { cn } from '@/lib/utils'
 import { ImageIcon } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 
 /** Shown in place of the house page's gallery when it has too few images. */
 export function GalleryEmptyState({ className }: { className?: string }) {

@@ -3,11 +3,10 @@ import { fireEvent, render, screen, within } from '@testing-library/react'
 import { HouseLocation } from '../house-location'
 
 // Google Maps can't run in jsdom; the stub shows where the map was asked to center.
-vi.mock('next/dynamic', () => ({
-  default: () =>
-    function HouseMapStub({ map }: { map: MapData }) {
-      return <figure aria-label={`Map at ${map.coordinates.lat},${map.coordinates.lng}`} />
-    }
+vi.mock('@/components/house/house-map', () => ({
+  HouseMap: function HouseMapStub({ map }: { map: MapData }) {
+    return <figure aria-label={`Map at ${map.coordinates.lat},${map.coordinates.lng}`} />
+  }
 }))
 
 function block(
@@ -48,12 +47,15 @@ const map: MapData = {
 }
 
 describe('HouseLocation', () => {
-  it('shows the highlight and a map centered on the house', () => {
+  it('shows the highlight and a map centered on the house', async () => {
     render(<HouseLocation location={location} map={map} />)
 
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument()
     expect(screen.getByText('Five minutes from Tsuruhashi station')).toBeInTheDocument()
-    expect(screen.getByRole('figure', { name: 'Map at 34.6655,135.5306' })).toBeInTheDocument()
+    // The map is code-split, so it appears once its chunk loads.
+    expect(
+      await screen.findByRole('figure', { name: 'Map at 34.6655,135.5306' })
+    ).toBeInTheDocument()
   })
 
   it('opens the neighborhood details on request', () => {

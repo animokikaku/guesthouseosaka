@@ -4,6 +4,7 @@ import { RESEND_MOCK_BASE_URL } from './e2e/mocks/resend'
 // Use process.env.PORT by default and fallback to port 3000
 const PORT = process.env.PORT || 3000
 const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`
+const realEmail = process.env.E2E_REAL_EMAIL === '1'
 
 /**
  * Playwright configuration for E2E testing.
@@ -43,25 +44,43 @@ export default defineConfig({
     timeout: 10 * 1000
   },
 
-  // Run E2E tests against a production build with Next's test proxy enabled, so
-  // outgoing Resend calls are mocked in-process. `RESEND_BASE_URL` points the
+  // Run E2E tests against a production build with the test proxy enabled (see
+  // e2e/fixtures/server-fetch.ts), so outgoing Resend calls are mocked per test. `RESEND_BASE_URL` points the
   // SDK at an unresolvable host as a second line of defence: a call the mock
   // misses fails instead of reaching the real API. Skip the managed server when
   // testing an external deployment via BASE_URL.
   //
   // Never reuse an existing server: a `bun run dev` already on this port has
-  // neither variable, so the fixture's headers are ignored and a submission
+  // neither variable, so the fixture's header is ignored and a submission
   // reaches the real Resend API with the key from `.env.local`. The build is
   // the cost of both defences actually being in place.
+  //
+  // `bun run test:e2e:preview` (E2E_REAL_EMAIL) builds the preview environment
+  // instead, without either defence: workerd runs the same bundle `wrangler
+  // deploy` uploads, and `DEPLOY_ENV=preview` sends its one email to Resend's
+  // test inbox with the key from `.env.local`.
   webServer: process.env.BASE_URL
     ? undefined
-    : {
-        command: 'bun run build && bun run start',
-        url: baseURL,
-        timeout: 5 * 60 * 1000,
-        reuseExistingServer: false,
-        env: { NEXT_TEST_PROXY: '1', RESEND_BASE_URL: RESEND_MOCK_BASE_URL }
-      },
+    : realEmail
+      ? {
+          command: 'CLOUDFLARE_ENV=preview bun run build && bun run start',
+          url: baseURL,
+          timeout: 5 * 60 * 1000,
+          reuseExistingServer: false
+        }
+      : {
+          command: 'bun run build && bun run start',
+          url: baseURL,
+          timeout: 5 * 60 * 1000,
+          reuseExistingServer: false,
+          env: {
+            E2E_TEST_PROXY: '1',
+            RESEND_BASE_URL: RESEND_MOCK_BASE_URL,
+            // The server runs in workerd, which only sees the shell's variables
+            // (these, and CI's secrets) when asked to.
+            CLOUDFLARE_INCLUDE_PROCESS_ENV: 'true'
+          }
+        },
 
   // Shared settings for all the projects below
   use: {
@@ -78,7 +97,8 @@ export default defineConfig({
     screenshot: 'only-on-failure'
   },
 
-  // Configure projects for major browsers
+  // Configure projects for major browsers. A real-email server only runs the
+  // preview project, so the form tests can't reach Resend unmocked.
   projects: [
     {
       name: 'local',
@@ -90,5 +110,5 @@ export default defineConfig({
       testMatch: '**/preview/**/*.spec.ts',
       use: { ...devices['Desktop Chrome'] }
     }
-  ]
+  ].filter((project) => !realEmail || project.name === 'preview')
 })

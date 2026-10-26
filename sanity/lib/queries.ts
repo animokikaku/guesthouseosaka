@@ -1,4 +1,4 @@
-import { defineQuery } from 'next-sanity'
+import { defineQuery } from 'groq'
 
 // =============================================================================
 // GROQ FRAGMENTS (static only - no dynamic functions for typegen compatibility)
@@ -11,7 +11,7 @@ const imageBaseFields = /* groq */ `
   crop,
   "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value)`
 
-// Image fields with asset reference (for Next.js Image component optimization)
+// Image fields with asset reference, plus the LQIP that blurs in the image while it loads
 const imageRefFields = /* groq */ `${imageBaseFields},
   "preview": asset->metadata.lqip
 `

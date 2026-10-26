@@ -1,9 +1,7 @@
-'use client'
-
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import type { GalleryCategory } from '@/lib/gallery'
 import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'use-intl'
 import * as React from 'react'
 
 type StickyCategoryNavProps = {

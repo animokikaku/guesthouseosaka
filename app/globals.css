@@ -2,14 +2,16 @@
 @import 'tw-animate-css';
 @import './themes.css';
 @import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist/wght.css';
+@import '@fontsource/geist-mono/latin-400.css';
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --breakpoint-3xl: 1600px;
   --breakpoint-4xl: 2000px;
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -233,5 +235,14 @@
 @utility extend-touch-target {
   @media (pointer: coarse) {
     @apply relative touch-manipulation after:absolute after:-inset-2;
+  }
+}
+
+/* Router navigations crossfade (`defaultViewTransition` in app/router.tsx). */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
