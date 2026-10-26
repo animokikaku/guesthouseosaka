@@ -22,14 +22,11 @@ export default defineConfig({
     // bundler resolves, so Vite processes it instead of Node.
     server: { deps: { inline: ['next-intl'] } },
     // Fixed values instead of whatever the shell or CI exports, so URLs built from
-    // them (Sanity CDN, canonical links, assets) are the same on every machine.
+    // them (canonical links, Sanity CDN) are the same on every machine.
     env: {
       VITE_APP_URL: 'https://guesthouseosaka.test',
-      VITE_ASSETS_URL: 'https://assets.guesthouseosaka.test',
       VITE_GOOGLE_MAPS_API_KEY: 'test-maps-key',
-      VITE_SANITY_API_VERSION: '2025-01-01',
       VITE_SANITY_DATASET: 'production',
-      VITE_SANITY_PROJECT_ID: 'test',
       RESEND_API_KEY: 're_test',
       SANITY_API_READ_TOKEN: 'test-token'
     },

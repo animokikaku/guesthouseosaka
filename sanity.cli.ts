@@ -6,7 +6,6 @@ import { defineCliConfig } from 'sanity/cli'
 import { mergeConfig } from 'vite'
 import { SANITY_PROJECT_ID, SANITY_STUDIO_HOSTS } from './lib/config'
 
-const projectId = process.env.VITE_SANITY_PROJECT_ID || SANITY_PROJECT_ID
 const dataset = process.env.VITE_SANITY_DATASET === 'production' ? 'production' : 'development'
 
 /** The Sanity application of each hosted Studio, so `sanity deploy` never asks for one. */
@@ -16,7 +15,7 @@ const studioAppIds = {
 }
 
 export default defineCliConfig({
-  api: { projectId, dataset },
+  api: { projectId: SANITY_PROJECT_ID, dataset },
   // `sanity deploy` publishes to the Studio of the dataset it builds for.
   studioHost: SANITY_STUDIO_HOSTS[dataset],
   // Auto-updates load the `sanity` package from Sanity's CDN, so a version bump needs no deploy.

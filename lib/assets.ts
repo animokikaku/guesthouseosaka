@@ -1,8 +1,8 @@
-import { env } from '@/lib/env'
+import { ASSETS_URL } from '@/lib/config'
 
 /** Absolute URL of a file in the R2 assets bucket. */
 function url(path: string): string {
-  return new URL(path, env.VITE_ASSETS_URL).toString()
+  return new URL(path, ASSETS_URL).toString()
 }
 
 export const assets = {

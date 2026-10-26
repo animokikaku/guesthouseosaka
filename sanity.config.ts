@@ -14,7 +14,7 @@ import { structureTool } from 'sanity/structure'
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { localeConfig } from '@/i18n/locales'
 import { routing } from '@/i18n/routing'
-import { SITE_URL } from '@/lib/config'
+import { SANITY_API_VERSION, SANITY_PROJECT_ID, SITE_URL } from '@/lib/config'
 import { env } from '@/lib/env'
 import { iconMap } from '@/lib/icons'
 import { lucideIconPicker } from '@/sanity/plugins/lucide-icon-picker'
@@ -28,7 +28,7 @@ const languages = routing.locales.map((locale) => ({
 }))
 
 export default defineConfig({
-  projectId: env.VITE_SANITY_PROJECT_ID,
+  projectId: SANITY_PROJECT_ID,
   dataset: env.VITE_SANITY_DATASET,
   tasks: {
     enabled: false
@@ -69,7 +69,7 @@ export default defineConfig({
     lucideIconPicker({ icons: iconMap }),
     structureTool({ structure }),
     ...(process.env.NODE_ENV === 'development'
-      ? [visionTool({ defaultApiVersion: env.VITE_SANITY_API_VERSION })]
+      ? [visionTool({ defaultApiVersion: SANITY_API_VERSION })]
       : []),
     presentationTool({
       // The development Studio also previews the dev server on any port and
