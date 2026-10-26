@@ -40,6 +40,9 @@
       // Without a name, Wrangler would deploy `guesthouseosaka-production`, a
       // separate Worker without the secrets or the custom domain.
       "name": "guesthouseosaka",
+      // Deploying from CI replaces any DNS record already on the hostname.
+      // `www` redirects here through a Cloudflare Redirect Rule.
+      "routes": [{ "pattern": "guesthouseosaka.com", "custom_domain": true }],
       "vars": { "DEPLOY_ENV": "production", "SANITY_DATASET": "production" }
     }
   }
