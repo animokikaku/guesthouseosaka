@@ -17,6 +17,7 @@ import { Route as LocaleIndexRouteImport } from './routes/$locale/index'
 import { Route as LocaleHouseRouteRouteImport } from './routes/$locale/$house/route'
 import { Route as LocaleContactRouteRouteImport } from './routes/$locale/contact/route'
 import { Route as LocaleFaqRouteImport } from './routes/$locale/faq'
+import { Route as ApiLineRouteImport } from './routes/api/line'
 import { Route as ApiRevalidateRouteImport } from './routes/api/revalidate'
 import { Route as LocaleHouseHouseRouteRouteImport } from './routes/$locale/$house/_house/route'
 import { Route as LocaleHouseGalleryRouteImport } from './routes/$locale/$house/gallery'
@@ -67,6 +68,11 @@ const LocaleFaqRoute = LocaleFaqRouteImport.update({
   id: '/faq',
   path: '/faq',
   getParentRoute: () => LocaleRouteRoute,
+} as any)
+const ApiLineRoute = ApiLineRouteImport.update({
+  id: '/api/line',
+  path: '/api/line',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiRevalidateRoute = ApiRevalidateRouteImport.update({
   id: '/api/revalidate',
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/$locale/$house': typeof LocaleHouseRouteRouteWithChildren
   '/$locale/contact': typeof LocaleContactRouteRouteWithChildren
   '/$locale/faq': typeof LocaleFaqRoute
+  '/api/line': typeof ApiLineRoute
   '/api/revalidate': typeof ApiRevalidateRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/$house/gallery': typeof LocaleHouseGalleryRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/$locale/$house': typeof LocaleHouseHouseIndexRoute
   '/$locale/faq': typeof LocaleFaqRoute
+  '/api/line': typeof ApiLineRoute
   '/api/revalidate': typeof ApiRevalidateRoute
   '/$locale': typeof LocaleIndexRoute
   '/$locale/contact': typeof LocaleContactIndexRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/$locale/$house': typeof LocaleHouseRouteRouteWithChildren
   '/$locale/contact': typeof LocaleContactRouteRouteWithChildren
   '/$locale/faq': typeof LocaleFaqRoute
+  '/api/line': typeof ApiLineRoute
   '/api/revalidate': typeof ApiRevalidateRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/$house/_house': typeof LocaleHouseHouseRouteRouteWithChildren
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '/$locale/$house'
     | '/$locale/contact'
     | '/$locale/faq'
+    | '/api/line'
     | '/api/revalidate'
     | '/$locale/'
     | '/$locale/$house/gallery'
@@ -197,6 +207,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/$locale/$house'
     | '/$locale/faq'
+    | '/api/line'
     | '/api/revalidate'
     | '/$locale'
     | '/$locale/contact'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/$locale/$house'
     | '/$locale/contact'
     | '/$locale/faq'
+    | '/api/line'
     | '/api/revalidate'
     | '/$locale/'
     | '/$locale/$house/_house'
@@ -232,6 +244,7 @@ export interface RootRouteChildren {
   ManifestDotwebmanifestRoute: typeof ManifestDotwebmanifestRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiLineRoute: typeof ApiLineRoute
   ApiRevalidateRoute: typeof ApiRevalidateRoute
   ApiDraftModeDisableRoute: typeof ApiDraftModeDisableRoute
   ApiDraftModeEnableRoute: typeof ApiDraftModeEnableRoute
@@ -294,6 +307,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/$locale/faq'
       preLoaderRoute: typeof LocaleFaqRouteImport
       parentRoute: typeof LocaleRouteRoute
+    }
+    '/api/line': {
+      id: '/api/line'
+      path: '/api/line'
+      fullPath: '/api/line'
+      preLoaderRoute: typeof ApiLineRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/revalidate': {
       id: '/api/revalidate'
@@ -446,6 +466,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManifestDotwebmanifestRoute: ManifestDotwebmanifestRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiLineRoute: ApiLineRoute,
   ApiRevalidateRoute: ApiRevalidateRoute,
   ApiDraftModeDisableRoute: ApiDraftModeDisableRoute,
   ApiDraftModeEnableRoute: ApiDraftModeEnableRoute,

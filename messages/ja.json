@@ -80,6 +80,18 @@
     "legend_available": "現在空室",
     "legend_upcoming": "まもなく空室"
   },
+  "LineBot": {
+    "change": "{house} {room}：{before} → {after}",
+    "unchanged": "{house} {room}：{status}（変更なし）",
+    "available_from": "{date}から空室",
+    "unknown_room": "{house}に{number}号室はありません。",
+    "unknown_house": "「{house}」は担当のハウスではありません。",
+    "ambiguous_room": "{number}号室は{houses}にあります。どのハウスですか？",
+    "no_such_room": "担当のハウスに{number}号室はありません。",
+    "not_understood": "部屋の更新が見つかりませんでした。「オレンジ 106 11月27日から空室」や「レモン 203 入居済み」のように送ってください。",
+    "pending": "このLINEアカウントはまだ部屋を更新できません。Studioの「LINE Managers」で「{name}」を承認するよう管理者に依頼してください。",
+    "failed": "エラーが発生したため、何も変更されていません。もう一度送るか、Studioで部屋を更新してください。"
+  },
   "HouseBuilding": {
     "floors_label": "階数",
     "min_rent_label": "最低賃料",

@@ -7,7 +7,7 @@ app/                   # TanStack Start source directory
 ├── routes/            # File routes (routeTree.gen.ts is generated from them)
 │   ├── __root.tsx     # Document shell
 │   ├── $locale/       # Locale-prefixed pages (en, ja, fr, zh-cn, zh-tw)
-│   └── api/           # Draft mode endpoints
+│   └── api/           # Draft mode endpoints and the LINE webhook
 ├── router.tsx         # Router options (preloading, stale times)
 ├── start.ts           # Request middleware: redirects, locale detection, CSRF
 └── actions/           # Contact form server function
@@ -110,7 +110,11 @@ public/                # Static assets only
   the build validates them against `lib/env.schema.ts`, so no validator ships to the browser
 - Server secrets come from `lib/env.server.ts` (`@t3-oss/env-core`): the Worker's vars and
   secrets, validated at runtime through `process.env`
-- Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `DEPLOY_ENV`, `TURNSTILE_SECRET_KEY`
+- Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `DEPLOY_ENV`, `TURNSTILE_SECRET_KEY`;
+  optional: `SANITY_WEBHOOK_SECRET` (the publish webhook, see
+  [docs/sanity-workflow.md](sanity-workflow.md#publishing)) and, for the LINE bot
+  ([docs/line-bot.md](line-bot.md)), `SANITY_API_WRITE_TOKEN`, `LINE_CHANNEL_SECRET`,
+  `LINE_CHANNEL_ACCESS_TOKEN`
 - Client: `VITE_GOOGLE_MAPS_API_KEY`, `VITE_TURNSTILE_SITE_KEY`, and optionally `VITE_APP_URL`,
   which defaults to `SITE_URL`. The Sanity project, API version and assets host are constants in
   `lib/config.ts`

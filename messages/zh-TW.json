@@ -80,6 +80,18 @@
     "legend_available": "現可入住",
     "legend_upcoming": "即將空出"
   },
+  "LineBot": {
+    "change": "{house} {room}：{before} → {after}",
+    "unchanged": "{house} {room}：{status}（未變更）",
+    "available_from": "{date}起空房",
+    "unknown_room": "{house}沒有{number}號房。",
+    "unknown_house": "「{house}」不是您負責的房子。",
+    "ambiguous_room": "{houses}都有{number}號房。是哪一棟？",
+    "no_such_room": "您負責的房子都沒有{number}號房。",
+    "not_understood": "沒有在訊息中找到房間更新。請這樣傳送：「Orange 106 11月27日起空房」或「Lemon 203 已入住」。",
+    "pending": "此LINE帳號還不能更新房間。請管理員在 Studio 的「LINE Managers」中核准「{name}」。",
+    "failed": "發生錯誤，未做任何變更。請重試，或在 Studio 中更新房間。"
+  },
   "HouseBuilding": {
     "floors_label": "樓層",
     "min_rent_label": "最低租金",

@@ -62,3 +62,4 @@ bun run format:check # Check formatting without modifying files
 - [Sanity Workflow](docs/sanity-workflow.md)
 - [Internationalization](docs/i18n.md)
 - [Testing](docs/testing.md)
+- [LINE Bot for Room Availability](docs/line-bot.md)

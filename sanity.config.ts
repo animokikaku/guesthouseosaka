@@ -17,7 +17,13 @@ import { env } from '@/lib/env'
 import { iconMap } from '@/lib/icons'
 import { lucideIconPicker } from '@/sanity/plugins/lucide-icon-picker'
 import { resolve } from '@/sanity/presentation/resolve'
-import { documentTypes, fixedSetTypes, protectedTypes, schema } from '@/sanity/schemaTypes'
+import {
+  botCreatedTypes,
+  documentTypes,
+  fixedSetTypes,
+  protectedTypes,
+  schema
+} from '@/sanity/schemaTypes'
 import { structure } from '@/sanity/structure'
 
 const languages = routing.locales.map((locale) => ({
@@ -56,11 +62,19 @@ export default defineConfig({
         actions = actions.filter(({ action }) => action !== 'duplicate' && action !== 'unpublish')
       }
 
+      // A copy would get a new ID, which the LINE bot wouldn't find
+      if (botCreatedTypes.some((type) => type === context.schemaType)) {
+        actions = actions.filter(({ action }) => action !== 'duplicate')
+      }
+
       return actions
     },
     // Hide certain types from the "Create new document" menu
     newDocumentOptions: (prev) => {
-      return prev.filter(({ templateId }) => !fixedSetTypes.some((type) => type === templateId))
+      return prev.filter(
+        ({ templateId }) =>
+          ![...fixedSetTypes, ...botCreatedTypes].some((type) => type === templateId)
+      )
     }
   },
   plugins: [
