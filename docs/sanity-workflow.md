@@ -61,6 +61,12 @@ Each dataset has its own Studio on Sanity hosting (`SANITY_STUDIO_HOSTS` in `lib
 `development`. The site's `/studio` redirects to the Studio for the dataset it shows, and
 `robots.txt` keeps crawlers out of it.
 
-`.github/workflows/studio.yml` deploys them when a file the Studio is built from changes:
-pushes to `main` deploy both, other branches only the development Studio. It authenticates
-with the `SANITY_DEPLOY_TOKEN` secret, a Sanity token with the Deploy Studio role.
+`.github/workflows/studio.yml` deploys both when a file the Studio is built from changes on
+`main`. It authenticates with the `SANITY_DEPLOY_TOKEN` secret, a Sanity token with the Deploy
+Studio role.
+
+Branches don't deploy a Studio: there is one development Studio, so two branches would replace
+each other's schema. Try a schema change locally instead: `bun dev` and `bunx sanity dev`
+open a Studio at `localhost:3333` that edits `development` and previews `localhost:3000`. Its
+content is shared, so a field a branch adds shows as unknown in the hosted development Studio
+until the branch is merged.

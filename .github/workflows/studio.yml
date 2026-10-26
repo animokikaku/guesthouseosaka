@@ -1,10 +1,12 @@
 name: Studio
 
-# Deploys the hosted Studios (see `SANITY_STUDIO_HOSTS` in lib/config.ts) when a
-# file the Studio is built from changes: `main` deploys both, any other branch
-# only the development one, so a schema can be tried there before production.
+# Deploys both hosted Studios (see `SANITY_STUDIO_HOSTS` in lib/config.ts) when
+# a file the Studio is built from changes on `main`. Branches don't deploy: they
+# would replace each other's schema in the shared development Studio. A schema
+# is tried locally with `bunx sanity dev` (see docs/sanity-workflow.md).
 on:
   push:
+    branches: [main]
     paths:
       - 'sanity/**'
       - 'sanity.config.ts'
@@ -29,11 +31,13 @@ permissions:
 jobs:
   deploy:
     name: Deploy ${{ matrix.dataset }} Studio
+    # A manual run on another branch would deploy it to production too.
+    if: github.ref == 'refs/heads/main'
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 10
     strategy:
       matrix:
-        dataset: ${{ github.ref == 'refs/heads/main' && fromJSON('["production", "development"]') || fromJSON('["development"]') }}
+        dataset: [production, development]
     # A newer push replaces a deploy still running for the same Studio.
     concurrency:
       group: studio-${{ matrix.dataset }}

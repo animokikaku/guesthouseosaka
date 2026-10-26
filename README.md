@@ -42,7 +42,7 @@ bun dev                      # http://localhost:3000
 ## Deployment
 
 Workers Builds deploys `main` to guesthouseosaka.com and every other branch to a Worker Preview
-on the `development` dataset. The Studios deploy from GitHub Actions when their files change.
+on the `development` dataset. The Studios deploy from GitHub Actions when their files change on `main`.
 
 ## Project Structure
 
