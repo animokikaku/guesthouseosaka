@@ -12,19 +12,20 @@ function redirectTo(url: URL, pathname: string, status: 307 | 308) {
 
 /**
  * Sends `/studio` to the hosted Studio editing this build's dataset. The
- * Studio keeps the `/studio` base path the embedded one had, so deep links
- * carry over. Robots are kept out (see `app/robots.ts`).
+ * Studio is served from its host's root, so the embedded Studio's deep links
+ * (`/studio/structure/faq`) carry over without the prefix. Robots are kept out
+ * (see `app/robots.ts`).
  */
 function redirectToStudio(url: URL) {
   const dataset = env.VITE_SANITY_DATASET
   const studio = new URL(
-    url.pathname + url.search,
+    url.pathname.replace(/^\/studio/, '') + url.search,
     `https://${SANITY_STUDIO_HOSTS[dataset]}.sanity.studio`
   )
   // The development Studio opens on the build that sent the editor there, a
   // Worker Preview or the dev server, rather than its default preview.
   if (dataset === 'development' && url.pathname === '/studio') {
-    studio.pathname = '/studio/presentation'
+    studio.pathname = '/presentation'
     studio.searchParams.set('preview', `${url.origin}/`)
   }
   return new Response(null, {

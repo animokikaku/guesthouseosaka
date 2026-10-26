@@ -28,7 +28,6 @@ const languages = routing.locales.map((locale) => ({
 }))
 
 export default defineConfig({
-  basePath: '/studio',
   projectId: env.VITE_SANITY_PROJECT_ID,
   dataset: env.VITE_SANITY_DATASET,
   tasks: {

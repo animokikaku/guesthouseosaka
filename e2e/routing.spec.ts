@@ -40,17 +40,18 @@ test.describe('studio', () => {
 
     expect(response.status()).toBe(307)
     const location = new URL(response.headers().location)
-    expect(location.origin + location.pathname).toBe(`${studio}/studio/presentation`)
+    expect(location.origin + location.pathname).toBe(`${studio}/presentation`)
     expect(location.searchParams.get('preview')).toBe(`${new URL(baseURL!).origin}/`)
     expect(response.headers()['x-robots-tag']).toBe('noindex, nofollow')
   })
 
   test('/studio deep links keep their path in the Studio', async ({ request }) => {
-    const path = '/studio/structure/faq?perspective=drafts'
-    const response = await request.get(path, { maxRedirects: 0 })
+    const response = await request.get('/studio/structure/faq?perspective=drafts', {
+      maxRedirects: 0
+    })
 
     expect(response.status()).toBe(307)
-    expect(response.headers().location).toBe(`${studio}${path}`)
+    expect(response.headers().location).toBe(`${studio}/structure/faq?perspective=drafts`)
     expect(response.headers()['x-robots-tag']).toBe('noindex, nofollow')
   })
 })
