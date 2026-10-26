@@ -17,12 +17,6 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "js/ts.preferences.autoImportSpecifierExcludeRegexes": [
-    // useRouter should be imported from `next/navigation` instead of `next/router`
-    "next/router",
-    // give priority for Link to next/link instead of lucide-react
-    // "lucide-react",
-    "react-day-picker"
-  ],
+  "js/ts.preferences.autoImportSpecifierExcludeRegexes": ["react-day-picker"],
   "js/ts.tsdk.path": "node_modules/typescript/lib"
 }

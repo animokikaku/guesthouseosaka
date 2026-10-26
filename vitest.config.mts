@@ -18,9 +18,6 @@ export default defineConfig({
     // roughly halving the run. See vitest.setup.ts for the globals the VM lacks.
     pool: 'vmThreads',
     setupFiles: ['./vitest.setup.ts'],
-    // next-intl imports `next/navigation` without an extension, which only a
-    // bundler resolves, so Vite processes it instead of Node.
-    server: { deps: { inline: ['next-intl'] } },
     // Fixed values instead of whatever the shell or CI exports, so URLs built from
     // them (canonical links, Sanity CDN) are the same on every machine.
     env: {
