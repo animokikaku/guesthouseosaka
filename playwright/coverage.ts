@@ -5,7 +5,7 @@ import type {
   PlaywrightWorkerArgs,
   PlaywrightWorkerOptions
 } from '@playwright/test'
-import MCR, { type CoverageReportOptions } from 'monocart-coverage-reports'
+import { MCR, type CoverageReportOptions } from 'monocart-coverage-reports'
 import path from 'node:path'
 import { coverageExclude, coverageInclude } from '../coverage.config'
 

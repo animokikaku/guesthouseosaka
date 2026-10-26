@@ -49,7 +49,7 @@ export function useFormSubmit() {
      * accepts. `onSubmit` only runs once validation succeeds, so the form's
      * single schema validator has always produced its output by this point.
      */
-    return async ({ schemaOutputs: [value] }: { schemaOutputs: FormTypeDataMap[T][] }) => {
+    return async ({ validatorOutputs: [value] }: { validatorOutputs: FormTypeDataMap[T][] }) => {
       if (!value) {
         throw new Error(`Missing validated schema output for the "${formType}" form.`)
       }
