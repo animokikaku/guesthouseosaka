@@ -9,7 +9,7 @@ export const SITE_URL = 'https://guesthouseosaka.com'
 /** The public R2 bucket holding the logos and Open Graph images (see `lib/assets.ts`). */
 export const ASSETS_URL = 'https://assets.guesthouseosaka.com'
 
-/** The Sanity project, for every environment; only the dataset differs (see wrangler.jsonc). */
+/** The Sanity project, for every environment; only the dataset differs (see vite.config.ts). */
 export const SANITY_PROJECT_ID = '515wijoz'
 
 /** The GROQ API version the queries and generated types are written against. */

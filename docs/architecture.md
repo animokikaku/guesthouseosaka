@@ -110,6 +110,6 @@ public/                # Static assets only
 - Client: `VITE_GOOGLE_MAPS_API_KEY`, and optionally `VITE_APP_URL`, `VITE_ASSETS_URL`,
   `VITE_SANITY_PROJECT_ID` and `VITE_SANITY_API_VERSION`, which default to the constants in
   `lib/config.ts`
-- `VITE_SANITY_DATASET` isn't set in `.env` files: `vite.config.ts` takes it from the `SANITY_DATASET`
-  var of the Wrangler environment being built, so `bun run deploy` reads `production` and local
+- `VITE_SANITY_DATASET` isn't set in `.env` files: `vite.config.ts` derives it from the Wrangler
+  environment being built (`CLOUDFLARE_ENV`), so `bun run deploy` reads `production` and local
   and preview builds read `development`

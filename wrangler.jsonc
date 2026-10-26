@@ -21,24 +21,22 @@
   },
   // Secrets (`wrangler secret put`): SANITY_API_READ_TOKEN, RESEND_API_KEY.
   // Locally they come from `.env.local`.
-  "vars": {
-    // Only the production environment emails the houses (see contact.server.ts).
-    "DEPLOY_ENV": "development",
-    // Inlined into the build by vite.config.ts; production alone reads live content.
-    "SANITY_DATASET": "development"
-  },
+  // Only the production environment emails the houses (see contact.server.ts).
+  "vars": { "DEPLOY_ENV": "development" },
   // Worker Previews (`wrangler preview`) don't inherit the Worker's vars or
   // secrets: these mirror `env.preview`, which the build reads, and their
   // secrets are set with `wrangler preview base-config secret put`.
   "previews": {
-    "vars": { "DEPLOY_ENV": "preview", "SANITY_DATASET": "development" }
+    "vars": { "DEPLOY_ENV": "preview" }
   },
   "env": {
-    // Select at build time with CLOUDFLARE_ENV (see the `deploy` scripts).
+    // Select at build time with CLOUDFLARE_ENV (see the `deploy` scripts), which
+    // also picks the Sanity dataset: `production` reads live content, the others
+    // `development` (see vite.config.ts).
     "preview": {
       // Previews live under the production Worker (see `deploy:preview`).
       "name": "guesthouseosaka",
-      "vars": { "DEPLOY_ENV": "preview", "SANITY_DATASET": "development" }
+      "vars": { "DEPLOY_ENV": "preview" }
     },
     "production": {
       // Without a name, Wrangler would deploy `guesthouseosaka-production`, a
@@ -47,7 +45,7 @@
       // Attaching it fails while another DNS record uses the hostname.
       // `www` redirects here through a Cloudflare Redirect Rule.
       "routes": [{ "pattern": "guesthouseosaka.com", "custom_domain": true }],
-      "vars": { "DEPLOY_ENV": "production", "SANITY_DATASET": "production" }
+      "vars": { "DEPLOY_ENV": "production" }
     }
   }
 }

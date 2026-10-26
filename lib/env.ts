@@ -10,7 +10,7 @@ export const env = {
   VITE_ASSETS_URL: import.meta.env.VITE_ASSETS_URL || ASSETS_URL,
   VITE_GOOGLE_MAPS_API_KEY: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   VITE_SANITY_API_VERSION: import.meta.env.VITE_SANITY_API_VERSION || SANITY_API_VERSION,
-  // Set from wrangler.jsonc by vite.config.ts; the Studio and the component
+  // Set from `CLOUDFLARE_ENV` by vite.config.ts; the Studio and the component
   // gallery build without it.
   VITE_SANITY_DATASET: import.meta.env.VITE_SANITY_DATASET ?? 'development',
   VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID || SANITY_PROJECT_ID
