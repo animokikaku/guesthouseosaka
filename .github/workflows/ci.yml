@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 10
     env: &test-env
       VITE_APP_URL: http://localhost:3000
-      VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
+      VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
       SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
       RESEND_API_KEY: re_dummy_test_key
     steps:

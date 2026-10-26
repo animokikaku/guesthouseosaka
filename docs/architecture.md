@@ -93,8 +93,8 @@ public/                # Static assets only
   contact email to Resend's test inbox: workerd runs the bundle `wrangler deploy` uploads, so
   this checks the Resend key and sending domain without deploying. Add
   `BASE_URL=<preview URL>` to run it against a deployed version instead
-- The repository is still connected to Vercel for the Next.js site on `main`; `vercel.json`
-  here skips every Vercel build of this branch
+- Logos and Open Graph images are served from a public Vercel Blob store (`BLOB_STORAGE_URL`
+  in `lib/config.ts`), the only Vercel service the site still uses
 - `generated/cn-tables.ts` (class-merge tables) is written on `bun install` and kept current by
   the Vite plugin
 
