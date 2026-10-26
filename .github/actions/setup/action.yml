@@ -7,7 +7,8 @@ runs:
     - name: Setup Node.js
       uses: actions/setup-node@v7
       with:
-        node-version: '26.11.1'
+        # Also read by Workers Builds and version managers; Renovate updates it.
+        node-version-file: .node-version
 
     - name: Setup Bun
       uses: oven-sh/setup-bun@v2
