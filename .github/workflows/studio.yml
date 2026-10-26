@@ -1,9 +1,12 @@
 name: Studio
 
-# Deploys both hosted Studios (see `SANITY_STUDIO_HOSTS` in lib/config.ts) when
-# a file the Studio is built from changes on `main`. Branches don't deploy: they
-# would replace each other's schema in the shared development Studio. A schema
-# is tried locally with `bunx sanity dev` (see docs/sanity-workflow.md).
+# Deploys the production Studio (see `SANITY_STUDIO_HOSTS` in lib/config.ts) when
+# a file the Studio is built from changes on `main`. The development Studio is
+# deployed by hand from the branch whose schema it should show, with
+# `bun run studio:deploy` (see docs/sanity-workflow.md).
+#
+# Both Studios auto-update the `sanity` package (`autoUpdates` in sanity.cli.ts),
+# so dependency bumps don't deploy; a plugin update goes out with the next deploy.
 on:
   push:
     branches: [main]
@@ -20,8 +23,6 @@ on:
       - 'lib/google-maps-url.ts'
       - 'lib/icons/**'
       - 'lib/types/**'
-      - 'package.json'
-      - 'bun.lock'
       - '.github/workflows/studio.yml'
   workflow_dispatch:
 
@@ -30,21 +31,18 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy ${{ matrix.dataset }} Studio
-    # A manual run on another branch would deploy it to production too.
+    name: Deploy production Studio
+    # A manual run on another branch would deploy its schema to production.
     if: github.ref == 'refs/heads/main'
     runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 10
-    strategy:
-      matrix:
-        dataset: [production, development]
-    # A newer push replaces a deploy still running for the same Studio.
+    # A newer push replaces a deploy still running.
     concurrency:
-      group: studio-${{ matrix.dataset }}
+      group: studio-production
       cancel-in-progress: true
     env:
       SANITY_AUTH_TOKEN: ${{ secrets.SANITY_DEPLOY_TOKEN }}
-      VITE_SANITY_DATASET: ${{ matrix.dataset }}
+      VITE_SANITY_DATASET: production
     steps:
       - name: Checkout
         uses: actions/checkout@v7

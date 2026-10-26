@@ -61,12 +61,18 @@ Each dataset has its own Studio on Sanity hosting (`SANITY_STUDIO_HOSTS` in `lib
 `development`. The site's `/studio` redirects to the Studio for the dataset it shows, and
 `robots.txt` keeps crawlers out of it.
 
-`.github/workflows/studio.yml` deploys both when a file the Studio is built from changes on
-`main`. It authenticates with the `SANITY_DEPLOY_TOKEN` secret, a Sanity token with the Deploy
-Studio role.
+`.github/workflows/studio.yml` deploys the production Studio when a file the Studio is built
+from changes on `main`. It authenticates with the `SANITY_DEPLOY_TOKEN` secret, a Sanity token
+with the Deploy Studio role.
 
-Branches don't deploy a Studio: there is one development Studio, so two branches would replace
-each other's schema. Try a schema change locally instead: `bun dev` and `bunx sanity dev`
-open a Studio at `localhost:3333` that edits `development` and previews `localhost:3000`. Its
-content is shared, so a field a branch adds shows as unknown in the hosted development Studio
-until the branch is merged.
+The development Studio is deployed by hand: run `bun run studio:deploy` from the branch whose
+schema it should show, such as a feature branch that adds types. There is one development
+Studio, so the last deploy wins. A field a branch adds shows as unknown in it until someone
+deploys that branch or a `main` that includes it. To try a schema change without deploying,
+`bun dev` and `bunx sanity dev` open a Studio at `localhost:3333` that edits `development` and
+previews `localhost:3000`.
+
+Both Studios have auto-updates on (`deployment.autoUpdates` in `sanity.cli.ts`): they load the
+`sanity` package from Sanity's CDN, so upgrading it needs no deploy. Each Studio's channel
+(`latest`, `stable`, `next` or a pinned version) is set in sanity.io/manage → Studios. Plugins
+are bundled, so their updates go out with the next deploy.

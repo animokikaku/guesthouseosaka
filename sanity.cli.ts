@@ -19,7 +19,9 @@ export default defineCliConfig({
   api: { projectId, dataset },
   // `sanity deploy` publishes to the Studio of the dataset it builds for.
   studioHost: SANITY_STUDIO_HOSTS[dataset],
-  deployment: { appId: studioAppIds[dataset] },
+  // Auto-updates load the `sanity` package from Sanity's CDN, so a version bump needs no deploy.
+  // Each Studio's update channel is set in sanity.io/manage → Studios.
+  deployment: { appId: studioAppIds[dataset], autoUpdates: true },
   // The Studio exposes `SANITY_STUDIO_*` by default; `lib/env.ts` reads `VITE_*`.
   vite: (config) => mergeConfig(config, { envPrefix: ['VITE_'] }),
   typegen: {
