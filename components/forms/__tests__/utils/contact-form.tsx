@@ -44,20 +44,7 @@ export const account = {
 
 type Form = typeof ContactForm | typeof MoveInForm | typeof TourForm
 
-export const TURNSTILE_TOKEN = 'turnstile-token'
-
-/** Stands in for Cloudflare's script, which jsdom never loads: every challenge passes at once. */
-function installTurnstile() {
-  window.turnstile = {
-    render: () => 'widget',
-    getResponse: () => TURNSTILE_TOKEN,
-    reset: () => {},
-    remove: () => {}
-  }
-}
-
 export function renderForm(Form: Form) {
-  installTurnstile()
   return render(
     <LegalNoticeProvider data={null}>
       <Form title="Contact us" description={null} fields={fields} houseTitles={houseTitles} />

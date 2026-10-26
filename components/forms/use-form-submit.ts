@@ -1,9 +1,11 @@
 import { submitContactForm } from '@/app/actions/contact.functions'
 import { CONTACT_EMAIL } from '@/lib/config'
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
+import type { TurnstileInstance } from '@marsidev/react-turnstile'
 import { useNavigate } from '@tanstack/react-router'
+import { useRef } from 'react'
 import { useLocale, useTranslations } from 'use-intl'
-import { useTurnstile } from '@/components/forms/turnstile'
+import { takeTurnstileToken } from '@/components/forms/turnstile'
 import { toast } from '@/components/ui/toast'
 
 /**
@@ -38,7 +40,7 @@ export function useFormSubmit() {
   const t = useTranslations('forms')
   const navigate = useNavigate()
   const locale = useLocale()
-  const turnstile = useTurnstile()
+  const turnstile = useRef<TurnstileInstance>(null)
 
   const onSubmitInvalid = () => {
     const firstErrorInput = document.querySelector<HTMLElement>('[aria-invalid="true"]')
@@ -60,7 +62,7 @@ export function useFormSubmit() {
       // TypeScript cannot correlate a generic key with its mapped discriminated-union value.
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const payload = { type: formType, data: value } as ContactFormPayload
-      const turnstileToken = turnstile.takeToken()
+      const turnstileToken = takeTurnstileToken(turnstile)
       const promise = submitContactForm({ data: { payload, turnstileToken } }).then((result) => {
         if (!result.ok) {
           throw new Error(result.code)

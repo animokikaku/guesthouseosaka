@@ -8,14 +8,15 @@ import {
   renderForm,
   setInput,
   submit,
-  submitIncomplete,
-  TURNSTILE_TOKEN
+  submitIncomplete
 } from './utils/contact-form'
+import { TURNSTILE_TOKEN } from './utils/turnstile'
 
 // The server function and the router are the forms' only way out of the browser.
 const { submitContactForm } = vi.hoisted(() => ({ submitContactForm: vi.fn() }))
 
 vi.mock('@/app/actions/contact.functions', () => ({ submitContactForm }))
+vi.mock('@marsidev/react-turnstile', () => import('./utils/turnstile'))
 
 beforeEach(() => {
   submitContactForm.mockReset().mockResolvedValue({ ok: true })
