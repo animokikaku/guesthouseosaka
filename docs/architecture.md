@@ -119,11 +119,12 @@ public/                # Static assets only
 The contact forms carry Cloudflare Turnstile's bot check (`components/forms/turnstile.tsx`), which
 `app/actions/turnstile.server.ts` verifies before an email goes out.
 
-- Only production uses the real widget: its build reads `VITE_TURNSTILE_SITE_KEY` from the Workers
-  Builds variables of the `main` trigger (or `.env.local` for a `bun run deploy` by hand), and the
-  Worker reads the `TURNSTILE_SECRET_KEY` secret. A production build without the sitekey fails.
-  Every other build gets Cloudflare's always-passing test sitekey, matched by the test secret in
-  `wrangler.jsonc`
+- Deployed builds use the real widget, for `guesthouseosaka.com` and `animokikaku.workers.dev`:
+  Workers Builds passes `VITE_TURNSTILE_SITE_KEY` to production and preview builds as a build
+  variable, and the Worker and its Previews read the `TURNSTILE_SECRET_KEY` secret. A Preview runs
+  the real check while emailing only Resend's test inbox
+- Local and CI builds use Cloudflare's always-passing test keys, from `.env.local` (see
+  `.env.example`) and `ci.yml`
 - A submission without a token Cloudflare vouches for is rejected, and the Worker logs Cloudflare's
   error codes (`Turnstile rejected…`). Turnstile's dashboard analytics show how many visitors
   pass the challenge

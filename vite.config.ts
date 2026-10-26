@@ -7,28 +7,22 @@ import compileMessage from 'icu-minify/compile'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { defineConfig, loadEnv, type Plugin } from 'vite'
-import { TURNSTILE_TEST_SITE_KEY } from './lib/config.ts'
 import { publicEnvSchema } from './lib/env.schema.ts'
 
 /**
- * Picks the Sanity dataset and the Turnstile sitekey from the Wrangler
- * environment being built (`CLOUDFLARE_ENV`, as the Cloudflare plugin reads
- * it): production builds read the `production` dataset and keep the real
- * sitekey from `.env.local`; local and preview builds read `development` and
- * get Cloudflare's test sitekey, which matches their test secret. Vite gives a
- * `VITE_*` in `process.env` precedence over `.env` files, and loads them after
- * the `config` hooks.
+ * Picks the Sanity dataset from the Wrangler environment being built
+ * (`CLOUDFLARE_ENV`, as the Cloudflare plugin reads it): production builds read
+ * `production`, local and preview builds `development`. Vite gives a `VITE_*`
+ * in `process.env` precedence over `.env` files, and loads them after the
+ * `config` hooks.
  */
-function settingsFromCloudflareEnv(): Plugin {
+function sanityDatasetFromCloudflareEnv(): Plugin {
   return {
-    name: 'settings-from-cloudflare-env',
+    name: 'sanity-dataset-from-cloudflare-env',
     config(_, { mode }) {
       const { CLOUDFLARE_ENV } = loadEnv(mode, process.cwd(), 'CLOUDFLARE_')
-      const production = CLOUDFLARE_ENV === 'production'
-      process.env.VITE_SANITY_DATASET = production ? 'production' : 'development'
-      if (!production) {
-        process.env.VITE_TURNSTILE_SITE_KEY = TURNSTILE_TEST_SITE_KEY
-      }
+      process.env.VITE_SANITY_DATASET =
+        CLOUDFLARE_ENV === 'production' ? 'production' : 'development'
     }
   }
 }
@@ -148,7 +142,7 @@ export default defineConfig(() => {
     plugins: [
       // Builds and runs the server in workerd, configured by wrangler.jsonc.
       cloudflare({ viteEnvironment: { name: 'ssr' } }),
-      settingsFromCloudflareEnv(),
+      sanityDatasetFromCloudflareEnv(),
       validatePublicEnv(),
       precompileMessages(),
       tailwindcss(),
