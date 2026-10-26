@@ -18,15 +18,18 @@ import {
     DrawerTrigger
 } from '@/components/ui/drawer';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 import * as React from 'react';
 
 interface ResponsiveModalProps {
   children: React.ReactNode
   trigger: React.ReactElement
   title: string
+  /** Shown under the title; without one, the title doubles as a screen-reader description. */
+  description?: string
 }
 
-export function ResponsiveModal({ children, trigger, title }: ResponsiveModalProps) {
+export function ResponsiveModal({ children, trigger, title, description }: ResponsiveModalProps) {
   const isMobile = useIsMobile()
 
   if (isMobile) {
@@ -36,7 +39,9 @@ export function ResponsiveModal({ children, trigger, title }: ResponsiveModalPro
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
-            <DrawerDescription className="sr-only">{title}</DrawerDescription>
+            <DrawerDescription className={cn(!description && 'sr-only')}>
+              {description ?? title}
+            </DrawerDescription>
           </DrawerHeader>
           <DrawerBody>{children}</DrawerBody>
         </DrawerContent>
@@ -50,7 +55,9 @@ export function ResponsiveModal({ children, trigger, title }: ResponsiveModalPro
       <DialogContent className="theme-container md:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="sr-only">{title}</DialogDescription>
+          <DialogDescription className={cn(!description && 'sr-only')}>
+            {description ?? title}
+          </DialogDescription>
         </DialogHeader>
         <div className="max-h-[65vh] overflow-y-auto">{children}</div>
       </DialogContent>

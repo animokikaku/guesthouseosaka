@@ -5,6 +5,7 @@ import type { PortableTextComponents } from '@portabletext/react'
 import { PortableText } from '@portabletext/react'
 import { useTranslations } from 'use-intl'
 import { stegaClean } from '@sanity/client/stega'
+import type { ReactNode } from 'react'
 
 const portableTextComponents: PortableTextComponents = {
   block: {
@@ -34,9 +35,20 @@ interface HouseAboutProps {
   title: string | null
   building: BuildingData | null
   hasPricing: boolean
+  /** The room availability marker, shown between the building figures and the text. */
+  availability?: ReactNode
+  /** The rooms by floor, opened from the Rooms figure. */
+  floorPlan?: ReactNode
 }
 
-export function HouseAbout({ about, title, building, hasPricing }: HouseAboutProps) {
+export function HouseAbout({
+  about,
+  title,
+  building,
+  hasPricing,
+  availability,
+  floorPlan
+}: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
 
   return (
@@ -45,7 +57,8 @@ export function HouseAbout({ about, title, building, hasPricing }: HouseAboutPro
         {t('heading', { house: title ? stegaClean(title) : '' })}
       </HouseSectionHeading>
       <HouseSectionContent className="space-y-4">
-        <HouseBuilding building={building} hasPricing={hasPricing} />
+        <HouseBuilding building={building} hasPricing={hasPricing} floorPlan={floorPlan} />
+        {availability}
         {about ? <PortableText value={about} components={portableTextComponents} /> : null}
       </HouseSectionContent>
     </section>

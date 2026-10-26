@@ -27,11 +27,15 @@ export const Route = createFileRoute('/$locale/$house/_house')({
 })
 
 function HouseLayout() {
-  const { house, houses } = Route.useLoaderData()
+  const { house, houses, today } = Route.useLoaderData()
 
   return (
     <>
-      {house ? <HousePageContent {...house} houses={houses} /> : <PageEmptyStateSection />}
+      {house ? (
+        <HousePageContent {...house} houses={houses} today={today} />
+      ) : (
+        <PageEmptyStateSection />
+      )}
       <Outlet />
     </>
   )

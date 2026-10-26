@@ -1,4 +1,5 @@
 import { routing } from '@/i18n/routing'
+import { tokyoToday } from '@/lib/availability'
 import { toHouseNavItems } from '@/lib/transforms/nav'
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import { z } from '@/lib/zod'
@@ -119,7 +120,10 @@ export const getHousePage = createServerFn({ method: 'GET' })
       sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
       sanityFetch({ query: housesTitlesQuery, params: { locale } })
     ])
-    return { house: page.data, houses: houses.data }
+    // Computed per request rather than cached with the queries: rooms' statuses roll
+    // over at midnight in Osaka without anyone editing them. Returned with the data so
+    // the client hydrates with the same day.
+    return { house: page.data, houses: houses.data, today: tokyoToday() }
   })
 
 export const getHouseGallery = createServerFn({ method: 'GET' })

@@ -1,5 +1,5 @@
 import type { BuildingData } from '@/lib/types/components'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import { HouseBuilding } from '../house-building'
 import { HouseProvider } from '../house-context'
 
@@ -53,5 +53,37 @@ describe('HouseBuilding', () => {
     expect(screen.getByText(/\brooms\b/i).parentElement?.getAttribute('data-sanity')).toContain(
       'building.rooms'
     )
+  })
+})
+
+describe('HouseBuilding floor plan', () => {
+  it('opens the rooms by floor from the Rooms figure', () => {
+    render(
+      <HouseProvider id="house-123" type="house" slug="orange">
+        <HouseBuilding
+          building={{ rooms: 28, floors: 3, startingPrice: 41000 }}
+          hasPricing
+          floorPlan={<p>Floor grid</p>}
+        />
+      </HouseProvider>
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: /28\s*rooms/i }))
+
+    const dialog = screen.getByRole('dialog', { name: 'Rooms by floor' })
+    expect(within(dialog).getByText('Floor grid')).toBeInTheDocument()
+  })
+
+  it('keeps the Rooms figure plain without a floor plan', () => {
+    render(
+      <HouseProvider id="house-123" type="house" slug="orange">
+        <HouseBuilding
+          building={{ rooms: 28, floors: 3, startingPrice: 41000 }}
+          hasPricing={false}
+        />
+      </HouseProvider>
+    )
+
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 })

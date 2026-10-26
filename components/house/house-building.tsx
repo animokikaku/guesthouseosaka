@@ -1,24 +1,36 @@
 import { useHouseDocument } from '@/components/house/house-context'
+import { ResponsiveModal } from '@/components/ui/responsive-modal'
 import { Link } from '@tanstack/react-router'
 import type { BuildingData } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
 import { BedDoubleIcon, LayersIcon, type LucideIcon } from 'lucide-react'
 import { useFormatter, useLocale, useTranslations } from 'use-intl'
 import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
+import type { ReactNode } from 'react'
 
 interface HouseBuildingProps {
   building: BuildingData | null
   /** Whether the page has a pricing section for the starting rent to link to. */
   hasPricing: boolean
+  /** The rooms by floor; when set, the Rooms figure opens it, as Min Rent opens pricing. */
+  floorPlan?: ReactNode
 }
 
-export function HouseBuilding({ building, hasPricing }: HouseBuildingProps) {
+export function HouseBuilding({ building, hasPricing, floorPlan }: HouseBuildingProps) {
   const { id, type, slug } = useHouseDocument()
   const t = useTranslations('HouseBuilding')
   const formatter = useFormatter()
   const locale = useLocale()
 
   const dataAttribute = createDataAttribute({ id, type })
+  const roomsItem = (
+    <FeatureItem
+      label={t('rooms_label')}
+      value={formatter.number(building?.rooms ?? 0)}
+      Icon={BedDoubleIcon}
+      data-sanity={dataAttribute('building.rooms')}
+    />
+  )
 
   const startingRent = (
     <FeatureItem
@@ -30,12 +42,20 @@ export function HouseBuilding({ building, hasPricing }: HouseBuildingProps) {
 
   return (
     <div className="text-muted-foreground grid grid-cols-3 gap-2 text-center text-xs">
-      <FeatureItem
-        label={t('rooms_label')}
-        value={formatter.number(building?.rooms ?? 0)}
-        Icon={BedDoubleIcon}
-        data-sanity={dataAttribute('building.rooms')}
-      />
+      {floorPlan ? (
+        <ResponsiveModal
+          title={t('rooms_by_floor')}
+          trigger={
+            <button type="button" className="cursor-pointer">
+              {roomsItem}
+            </button>
+          }
+        >
+          {floorPlan}
+        </ResponsiveModal>
+      ) : (
+        roomsItem
+      )}
       <FeatureItem
         label={t('floors_label')}
         value={formatter.number(building?.floors ?? 0)}

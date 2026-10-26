@@ -1,5 +1,7 @@
 import { HouseAbout } from '@/components/house/house-about'
 import { HouseAmenities } from '@/components/house/house-amenities'
+import { HouseAvailability } from '@/components/house/house-availability'
+import { HouseFloorPlan } from '@/components/house/house-floor-plan'
 import { HouseProvider } from '@/components/house/house-context'
 import { HouseLocation } from '@/components/house/house-location'
 import { HousePricing } from '@/components/house/house-pricing'
@@ -9,11 +11,13 @@ import { ImageBlockGallery } from '@/components/image-block-gallery'
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
 import { PageNav } from '@/components/page-nav'
 import { galleryLink } from '@/components/house/gallery-link'
+import { summarizeAvailability } from '@/lib/availability'
 import { buildGallerySlides } from '@/lib/gallery'
 import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
 import type { HouseQueryResult, HousesTitlesQueryResult } from '@/sanity.types'
+import { stegaClean } from '@sanity/client/stega'
 import { useLocale } from 'use-intl'
 
 export function HousePageContent({
@@ -33,11 +37,24 @@ export function HousePageContent({
   pricing,
   about,
   building,
-  houses
-}: NonNullable<HouseQueryResult> & { houses: HousesTitlesQueryResult }) {
+  _updatedAt,
+  rooms,
+  houses,
+  today
+}: NonNullable<HouseQueryResult> & { houses: HousesTitlesQueryResult; today: string }) {
   const href = galleryLink(useLocale(), slug)
 
   const mobileHeroImages = buildGallerySlides({ featuredImage, galleryImages })
+
+  // Numbers, dates and enum values are compared or sliced, so drop any visual-editing
+  // markers first; the room cards and buttons carry their own `data-sanity` attributes
+  const cleanRooms = rooms?.map((room) => ({
+    ...room,
+    number: stegaClean(room.number),
+    availableFrom: stegaClean(room.availableFrom),
+    style: stegaClean(room.style)
+  }))
+  const availability = summarizeAvailability(cleanRooms, today)
 
   return (
     <>
@@ -72,6 +89,18 @@ export function HousePageContent({
                   building={building}
                   // `HousePricing` renders nothing without rows.
                   hasPricing={Boolean(pricing?.length)}
+                  availability={
+                    <HouseAvailability
+                      document={{ _id, _type, _updatedAt: stegaClean(_updatedAt) }}
+                      summary={availability}
+                      today={today}
+                    />
+                  }
+                  floorPlan={
+                    rooms?.length ? (
+                      <HouseFloorPlan document={{ _id, _type }} rooms={cleanRooms} today={today} />
+                    ) : null
+                  }
                 />
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
