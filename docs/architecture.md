@@ -91,8 +91,9 @@ public/                # Static assets only
 - Hashed build assets are served as immutable (`public/_headers`)
 - `bun run test:e2e:preview` builds the `preview` environment locally and sends one real
   contact email to Resend's test inbox: workerd runs the bundle `wrangler deploy` uploads, so
-  this checks the Resend key and sending domain without deploying. Add
-  `BASE_URL=<preview URL>` to run it against a deployed version instead
+  this checks the Resend key and sending domain without deploying. It runs locally with
+  Turnstile's test keys; a deployed Preview runs the real challenge, which stops the automated
+  browser, so check one by submitting its contact form by hand
 - Logos and Open Graph images are served from the public R2 bucket `guesthouseosaka-assets`
   through its custom domain (`ASSETS_URL` in `lib/config.ts`). Uploads set
   `Cache-Control: public, max-age=31536000`, so replace a file under a new name rather than
