@@ -1,9 +1,12 @@
 import { expect, test } from '@playwright/test'
 import { fillAccountFields, submissionToast } from '../helpers/contact-form'
 
-test.skip(!process.env.BASE_URL, 'Preview tests require a deployed preview URL.')
+test.skip(
+  !process.env.BASE_URL && process.env.E2E_REAL_EMAIL !== '1',
+  'Sends a real email: run with `bun run test:e2e:preview`.'
+)
 
-test('preview deployment can send the contact form through Resend', async ({ page }) => {
+test('the preview build can send the contact form through Resend', async ({ page }) => {
   await page.goto('/en/contact/other')
 
   const form = page.locator('form#other-form')

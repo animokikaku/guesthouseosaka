@@ -23,10 +23,10 @@
     "test:components": "playwright test --config=playwright.components.config.ts",
     "test:components:ui": "playwright test --config=playwright.components.config.ts --ui",
     "test:e2e": "playwright test --project=local",
-    "test:e2e:preview": "playwright test --project=preview",
+    "test:e2e:preview": "E2E_REAL_EMAIL=1 playwright test --project=preview",
     "test:e2e:ui": "playwright test --project=local --ui",
     "deploy": "CLOUDFLARE_ENV=production vite build && wrangler deploy",
-    "deploy:preview": "CLOUDFLARE_ENV=preview vite build && wrangler versions upload",
+    "deploy:preview": "CLOUDFLARE_ENV=preview vite build && wrangler preview",
     "postinstall": "bun run generate:cn",
     "generate:cn": "cn build --content '{app,components,lib}/**/*.{ts,tsx}' --out generated/cn-tables.ts --quiet"
   },

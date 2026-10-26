@@ -77,17 +77,19 @@ public/                # Static assets only
 - Cloudflare Workers, through `@cloudflare/vite-plugin` and `wrangler.jsonc`: `bun dev` and
   `bun run start` (a preview of the build) both run the server in workerd
 - `bun run deploy` builds for the `production` environment and deploys the `guesthouseosaka`
-  Worker (named explicitly in `wrangler.jsonc`); `bun run deploy:preview`
-  uploads a preview version. Only `production` sets `DEPLOY_ENV=production`, which lets the
-  contact form email the houses' inboxes
+  Worker (named explicitly in `wrangler.jsonc`) on the animokikaku account; `bun run
+  deploy:preview` creates a Worker Preview, which Workers Builds runs for every other branch.
+  Only `production` sets `DEPLOY_ENV=production`, which lets the contact form email the houses'
+  inboxes; the `preview` environment sends to Resend's test inbox
 - Secrets are set with `wrangler secret put`; locally they come from `.env.local`
 - Workers Cache (`cache.enabled` in `wrangler.jsonc`) serves pages and server-function GETs
   from Cloudflare's cache by their `Cache-Control`, without running the Worker; check
   `Cf-Cache-Status`. Responses carry `Vary: Cookie` for draft mode (see `lib/cache-control.ts`)
 - Hashed build assets are served as immutable (`public/_headers`)
-- Deployments are manual for now: check a preview with
-  `BASE_URL=<preview URL> bun run test:e2e:preview`, which sends one real contact email to
-  Resend's test inbox
+- `bun run test:e2e:preview` builds the `preview` environment locally and sends one real
+  contact email to Resend's test inbox: workerd runs the bundle `wrangler deploy` uploads, so
+  this checks the Resend key and sending domain without deploying. Add
+  `BASE_URL=<preview URL>` to run it against a deployed version instead
 - The repository is still connected to Vercel for the Next.js site on `main`; `vercel.json`
   here skips every Vercel build of this branch
 - `generated/cn-tables.ts` (class-merge tables) is written on `bun install` and kept current by
