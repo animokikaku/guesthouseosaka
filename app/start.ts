@@ -16,10 +16,17 @@ function redirectTo(url: URL, pathname: string, status: 307 | 308) {
  * carry over. Robots are kept out (see `app/robots.ts`).
  */
 function redirectToStudio(url: URL) {
+  const dataset = env.VITE_SANITY_DATASET
   const studio = new URL(
     url.pathname + url.search,
-    `https://${SANITY_STUDIO_HOSTS[env.VITE_SANITY_DATASET]}.sanity.studio`
+    `https://${SANITY_STUDIO_HOSTS[dataset]}.sanity.studio`
   )
+  // The development Studio opens on the build that sent the editor there, a
+  // Worker Preview or the dev server, rather than its default preview.
+  if (dataset === 'development' && url.pathname === '/studio') {
+    studio.pathname = '/studio/presentation'
+    studio.searchParams.set('preview', `${url.origin}/`)
+  }
   return new Response(null, {
     status: 307,
     headers: { Location: studio.toString(), 'X-Robots-Tag': 'noindex, nofollow' }

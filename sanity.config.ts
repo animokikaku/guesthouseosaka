@@ -73,6 +73,17 @@ export default defineConfig({
       ? [visionTool({ defaultApiVersion: env.VITE_SANITY_API_VERSION })]
       : []),
     presentationTool({
+      // The development Studio also previews the dev server on any port and
+      // every Worker Preview (`<branch>-guesthouseosaka.animokikaku.workers.dev`),
+      // picked by the `preview` search param the site's `/studio` adds.
+      ...(env.VITE_SANITY_DATASET === 'production'
+        ? {}
+        : {
+            allowOrigins: [
+              'http://localhost:*',
+              'https://*-guesthouseosaka.animokikaku.workers.dev'
+            ]
+          }),
       previewUrl: {
         // The site showing this Studio's dataset: production, or the dev server
         // for the development Studio. `SANITY_STUDIO_PREVIEW_URL` overrides it.

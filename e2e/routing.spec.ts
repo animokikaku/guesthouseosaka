@@ -30,15 +30,29 @@ test.describe('legacy URLs', () => {
 
 // Local builds read the development dataset, so they send editors to its Studio.
 test.describe('studio', () => {
-  for (const path of ['/studio', '/studio/structure/faq?perspective=drafts']) {
-    test(`${path} redirects to the hosted Studio, out of search engines`, async ({ request }) => {
-      const response = await request.get(path, { maxRedirects: 0 })
+  const studio = 'https://guesthouseosaka-dev.sanity.studio'
 
-      expect(response.status()).toBe(307)
-      expect(response.headers().location).toBe(`https://guesthouseosaka-dev.sanity.studio${path}`)
-      expect(response.headers()['x-robots-tag']).toBe('noindex, nofollow')
-    })
-  }
+  test('/studio opens the Studio previewing this build, out of search engines', async ({
+    request,
+    baseURL
+  }) => {
+    const response = await request.get('/studio', { maxRedirects: 0 })
+
+    expect(response.status()).toBe(307)
+    const location = new URL(response.headers().location)
+    expect(location.origin + location.pathname).toBe(`${studio}/studio/presentation`)
+    expect(location.searchParams.get('preview')).toBe(`${new URL(baseURL!).origin}/`)
+    expect(response.headers()['x-robots-tag']).toBe('noindex, nofollow')
+  })
+
+  test('/studio deep links keep their path in the Studio', async ({ request }) => {
+    const path = '/studio/structure/faq?perspective=drafts'
+    const response = await request.get(path, { maxRedirects: 0 })
+
+    expect(response.status()).toBe(307)
+    expect(response.headers().location).toBe(`${studio}${path}`)
+    expect(response.headers()['x-robots-tag']).toBe('noindex, nofollow')
+  })
 })
 
 test.describe('missing pages', () => {
