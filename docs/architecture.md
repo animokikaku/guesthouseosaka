@@ -82,7 +82,8 @@ public/                # Static assets only
   Only `production` sets `DEPLOY_ENV=production`, which lets the contact form email the houses'
   inboxes; the `preview` environment sends to Resend's test inbox
 - Only the `production` environment routes `guesthouseosaka.com` to the Worker (a custom
-  domain); deploying it replaces any other DNS record on that hostname
+  domain). Cloudflare attaches it only while no other DNS record uses the hostname; production
+  has no workers.dev address, Worker Previews keep theirs
 - Secrets are set with `wrangler secret put`; locally they come from `.env.local`
 - Workers Cache (`cache.enabled` in `wrangler.jsonc`) serves pages and server-function GETs
   from Cloudflare's cache by their `Cache-Control`, without running the Worker; check
