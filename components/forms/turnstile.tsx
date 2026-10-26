@@ -6,13 +6,22 @@ import { useLocale } from 'use-intl'
 export type TurnstileRef = RefObject<TurnstileInstance | null>
 
 /**
- * The widget's token, if it has passed its challenge. Tokens are single-use,
- * so this also starts a fresh challenge for a retry.
+ * How long a submission waits for a challenge still in progress, including one
+ * that asks the visitor to tick a box.
  */
-export function takeTurnstileToken(ref: TurnstileRef): string | undefined {
-  const token = ref.current?.getResponse()
-  ref.current?.reset()
-  return token || undefined
+const TOKEN_WAIT_MS = 15_000
+
+/**
+ * The widget's token, once it has passed its challenge, or `undefined` if none
+ * comes in time. Tokens are single-use, so this also starts a fresh challenge
+ * for a retry.
+ */
+export async function takeTurnstileToken(ref: TurnstileRef): Promise<string | undefined> {
+  const widget = ref.current
+  if (!widget) return undefined
+  const token = await widget.getResponsePromise(TOKEN_WAIT_MS).catch(() => undefined)
+  widget.reset()
+  return token
 }
 
 /**

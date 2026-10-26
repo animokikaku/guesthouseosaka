@@ -28,7 +28,9 @@ export async function verifyTurnstileToken(token: unknown, remoteIp?: string): P
       secret: serverEnv.TURNSTILE_SECRET_KEY,
       response: token,
       remoteip: remoteIp
-    })
+    }),
+    // A stalled request fails the submission instead of leaving it pending.
+    signal: AbortSignal.timeout(10_000)
   })
   const result = siteverifyResponseSchema.parse(await response.json())
   if (!result.success) {

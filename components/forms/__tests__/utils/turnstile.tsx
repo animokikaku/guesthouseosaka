@@ -10,8 +10,11 @@ export const TURNSTILE_TOKEN = 'turnstile-token'
 export function Turnstile({
   ref
 }: {
-  ref?: Ref<Pick<TurnstileInstance, 'getResponse' | 'reset'>>
+  ref?: Ref<Pick<TurnstileInstance, 'getResponsePromise' | 'reset'>>
 }) {
-  useImperativeHandle(ref, () => ({ getResponse: () => TURNSTILE_TOKEN, reset: () => {} }))
+  useImperativeHandle(ref, () => ({
+    getResponsePromise: async () => TURNSTILE_TOKEN,
+    reset: () => {}
+  }))
   return null
 }

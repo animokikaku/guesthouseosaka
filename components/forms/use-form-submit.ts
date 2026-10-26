@@ -62,12 +62,14 @@ export function useFormSubmit() {
       // TypeScript cannot correlate a generic key with its mapped discriminated-union value.
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const payload = { type: formType, data: value } as ContactFormPayload
-      const turnstileToken = takeTurnstileToken(turnstile)
-      const promise = submitContactForm({ data: { payload, turnstileToken } }).then((result) => {
-        if (!result.ok) {
-          throw new Error(result.code)
-        }
-      })
+      // Inside the toast's promise, so "Sending" shows while a challenge finishes.
+      const promise = takeTurnstileToken(turnstile)
+        .then((turnstileToken) => submitContactForm({ data: { payload, turnstileToken } }))
+        .then((result) => {
+          if (!result.ok) {
+            throw new Error(result.code)
+          }
+        })
 
       return await toast.promise(promise, {
         loading: { title: t('status.sending') },

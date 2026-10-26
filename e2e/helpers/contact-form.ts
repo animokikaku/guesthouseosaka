@@ -79,10 +79,6 @@ export async function gotoContactForm(page: Page, slug: 'tour' | 'move-in' | 'ot
   // fiber to the element once it is hydrated.
   await expect.poll(() => form.evaluate(isHydrated)).toBe(true)
 
-  // Turnstile's invisible challenge takes about a second, which a person spends
-  // filling in the form; a test that submits sooner sends no token.
-  await page.waitForFunction(() => Boolean(window.turnstile?.getResponse()))
-
   return form
 }
 
