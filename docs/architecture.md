@@ -102,7 +102,9 @@ public/                # Static assets only
 - Server secrets come from `lib/env.server.ts` (`@t3-oss/env-core`): the Worker's vars and
   secrets, validated at runtime through `process.env`
 - Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `DEPLOY_ENV`
-- Client: `VITE_SANITY_PROJECT_ID`, `VITE_SANITY_DATASET`, `VITE_GOOGLE_MAPS_API_KEY`, `VITE_BLOB_STORAGE_URL`
+- Client: `VITE_GOOGLE_MAPS_API_KEY`, `VITE_BLOB_STORAGE_URL`, and optionally `VITE_APP_URL`,
+  `VITE_SANITY_PROJECT_ID` and `VITE_SANITY_API_VERSION`, which default to the constants in
+  `lib/config.ts`
 - `VITE_SANITY_DATASET` isn't set in `.env` files: `vite.config.ts` takes it from the `SANITY_DATASET`
   var of the Wrangler environment being built, so `bun run deploy` reads `production` and local
   and preview builds read `development`

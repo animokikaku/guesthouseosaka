@@ -4,8 +4,9 @@
  **/
 import { defineCliConfig } from 'sanity/cli'
 import { mergeConfig } from 'vite'
+import { SANITY_PROJECT_ID } from './lib/config'
 
-const projectId = process.env.VITE_SANITY_PROJECT_ID || '515wijoz'
+const projectId = process.env.VITE_SANITY_PROJECT_ID || SANITY_PROJECT_ID
 const dataset = process.env.VITE_SANITY_DATASET || 'development'
 
 export default defineCliConfig({

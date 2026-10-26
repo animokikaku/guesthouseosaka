@@ -17,7 +17,7 @@ export const publicEnvSchema = z.object({
     })
   ),
   VITE_GOOGLE_MAPS_API_KEY: nonEmptyString(),
-  VITE_SANITY_API_VERSION: nonEmptyString(),
+  VITE_SANITY_API_VERSION: z.optional(nonEmptyString()),
   VITE_SANITY_DATASET: z.enum(['production', 'development']),
-  VITE_SANITY_PROJECT_ID: nonEmptyString()
+  VITE_SANITY_PROJECT_ID: z.optional(nonEmptyString())
 })

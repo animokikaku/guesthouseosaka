@@ -20,8 +20,6 @@ jobs:
     timeout-minutes: 10
     env: &test-env
       VITE_APP_URL: http://localhost:3000
-      VITE_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
-      VITE_SANITY_API_VERSION: ${{ secrets.NEXT_PUBLIC_SANITY_API_VERSION }}
       VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
       VITE_BLOB_STORAGE_URL: ${{ secrets.NEXT_PUBLIC_BLOB_STORAGE_URL }}
       SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
