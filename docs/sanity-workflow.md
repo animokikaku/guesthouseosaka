@@ -1,78 +1,58 @@
 # Sanity Workflow
 
-## Schema Changes
+One Sanity project (`SANITY_PROJECT_ID` in `lib/config.ts`) with two datasets: `production`,
+which guesthouseosaka.com reads, and `development`, which local builds and Worker Previews read.
+Each dataset has its own hosted Studio (`SANITY_STUDIO_HOSTS` in `lib/config.ts`):
 
-1. Edit schemas in `sanity/schemaTypes/`
-2. Run `bun run typegen` to regenerate TypeScript types
-3. Use MCP tools for content operations
+| Studio                              | Edits         | Deployed                                          |
+| ----------------------------------- | ------------- | ------------------------------------------------- |
+| `guesthouseosaka.sanity.studio`     | `production`  | By GitHub Actions when its files change on `main` |
+| `guesthouseosaka-dev.sanity.studio` | `development` | By hand, with `bun run studio:deploy`             |
 
-## CLI Commands
+The site's `/studio` redirects to the Studio for the dataset it shows, and `robots.txt` keeps
+crawlers out of it.
 
-```bash
-# Schema & Types
-bunx sanity schema deploy     # Deploy schema to Content Lake
-bunx sanity schema extract    # Extract schema for TypeGen
-bunx sanity typegen generate  # Generate TypeScript types
+## Changing the schema
 
-# Development
-bunx sanity dev               # Start Studio dev server
-bunx sanity build             # Build Studio for production
-bun run studio:deploy         # Deploy the development Studio
-bun run studio:deploy:production  # Deploy the production Studio
+1. Edit the types in `sanity/schemaTypes/`
+2. Run `bun run typegen` to regenerate `sanity.types.ts`
+3. Try it locally: `bun dev` and `bunx sanity dev` open a Studio at `localhost:3333` that edits
+   `development` and previews `localhost:3000`
+4. To show it in the hosted development Studio, run `bun run studio:deploy` from the branch.
+   There is one development Studio, so the last deploy wins: a field another branch adds shows
+   as unknown until someone deploys that branch, or a `main` that includes it
+5. Merge to `main`: `.github/workflows/studio.yml` deploys the production Studio. It runs only
+   from `main`; run it again with `gh workflow run studio.yml`
 
-# MCP Setup
-bunx sanity@latest mcp configure  # Configure MCP for AI editor
+`sanity deploy` also deploys the schema to the dataset, so a separate `sanity schema deploy` isn't
+needed. The workflow authenticates with the `SANITY_DEPLOY_TOKEN` secret, a Sanity token with the
+Deploy Studio role.
 
-# Help
-bunx sanity docs search "query"   # Search documentation
-```
+## Upgrading Sanity
 
-## MCP Tools (Preferred)
+Both Studios have auto-updates on (`deployment.autoUpdates` in `sanity.cli.ts`): they load the
+`sanity` package from Sanity's CDN, so upgrading it needs no deploy. Each Studio's channel is set
+in sanity.io/manage → Studios: `stable` for production, `latest` for development. A deployed
+Studio never runs a version older than the one it was built with. Plugins are bundled, so their
+updates go out with the next deploy.
 
-Use MCP tools instead of ad-hoc scripts:
+## GROQ queries
 
-| Tool                                     | Use For             |
-| ---------------------------------------- | ------------------- |
-| `query_documents`                        | Run GROQ queries    |
-| `create_document_from_markdown`          | Create content      |
-| `patch_document`                         | Modify documents    |
-| `deploy_schema`                          | Deploy schema       |
-| `get_schema`                             | Inspect schema      |
-| `list_sanity_rules` / `get_sanity_rules` | Load best practices |
-
-## GROQ Queries
-
-- Use `defineQuery()` in `sanity/lib/queries.ts` for type safety
+- Use `defineQuery()` in `sanity/lib/queries.ts` for type safety, then run `bun run typegen`
 - Localized content pattern:
   ```groq
   coalesce(field[language == $locale][0].value, field[language == "en"][0].value)
   ```
 
+## Content
+
+Use the Sanity MCP tools rather than ad-hoc scripts: `query_documents` to read,
+`create_documents`, `patch_documents` and `publish_documents` to write, and `get_schema` to
+inspect the deployed schema. Load `list_sanity_rules` / `get_sanity_rules` before writing schema
+or GROQ. Set up the MCP server with `bunx sanity@latest mcp configure`.
+
 ## Rules
 
-- **Always**: Run `typegen` after schema/query changes
+- **Always**: Run `typegen` after schema or query changes
 - **Ask first**: Before modifying `sanity.config.ts` or deleting schema files
 - **Never**: Hardcode API tokens (use `process.env`)
-
-## Hosted Studios
-
-Each dataset has its own Studio on Sanity hosting (`SANITY_STUDIO_HOSTS` in `lib/config.ts`):
-`guesthouseosaka.sanity.studio` edits `production`, `guesthouseosaka-dev.sanity.studio` edits
-`development`. The site's `/studio` redirects to the Studio for the dataset it shows, and
-`robots.txt` keeps crawlers out of it.
-
-`.github/workflows/studio.yml` deploys the production Studio when a file the Studio is built
-from changes on `main`. It authenticates with the `SANITY_DEPLOY_TOKEN` secret, a Sanity token
-with the Deploy Studio role.
-
-The development Studio is deployed by hand: run `bun run studio:deploy` from the branch whose
-schema it should show, such as a feature branch that adds types. There is one development
-Studio, so the last deploy wins. A field a branch adds shows as unknown in it until someone
-deploys that branch or a `main` that includes it. To try a schema change without deploying,
-`bun dev` and `bunx sanity dev` open a Studio at `localhost:3333` that edits `development` and
-previews `localhost:3000`.
-
-Both Studios have auto-updates on (`deployment.autoUpdates` in `sanity.cli.ts`): they load the
-`sanity` package from Sanity's CDN, so upgrading it needs no deploy. Each Studio's channel
-(`latest`, `stable`, `next` or a pinned version) is set in sanity.io/manage → Studios. Plugins
-are bundled, so their updates go out with the next deploy.
