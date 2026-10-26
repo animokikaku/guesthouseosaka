@@ -1,8 +1,8 @@
 import { env } from '@/lib/env'
 
-/** Absolute URL of a file in the Vercel Blob store. */
+/** Absolute URL of a file in the R2 assets bucket. */
 function url(path: string): string {
-  return new URL(path, env.VITE_BLOB_STORAGE_URL).toString()
+  return new URL(path, env.VITE_ASSETS_URL).toString()
 }
 
 export const assets = {

@@ -1,4 +1,4 @@
-import { BLOB_STORAGE_URL, SANITY_API_VERSION, SANITY_PROJECT_ID, SITE_URL } from './config'
+import { ASSETS_URL, SANITY_API_VERSION, SANITY_PROJECT_ID, SITE_URL } from './config'
 
 /**
  * Public settings, inlined by Vite at build time (see `envPrefix` in
@@ -7,7 +7,7 @@ import { BLOB_STORAGE_URL, SANITY_API_VERSION, SANITY_PROJECT_ID, SITE_URL } fro
  */
 export const env = {
   VITE_APP_URL: import.meta.env.VITE_APP_URL || SITE_URL,
-  VITE_BLOB_STORAGE_URL: import.meta.env.VITE_BLOB_STORAGE_URL || BLOB_STORAGE_URL,
+  VITE_ASSETS_URL: import.meta.env.VITE_ASSETS_URL || ASSETS_URL,
   VITE_GOOGLE_MAPS_API_KEY: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   VITE_SANITY_API_VERSION: import.meta.env.VITE_SANITY_API_VERSION || SANITY_API_VERSION,
   // Set from wrangler.jsonc by vite.config.ts; the Studio and the component

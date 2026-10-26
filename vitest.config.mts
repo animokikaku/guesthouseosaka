@@ -25,7 +25,7 @@ export default defineConfig({
     // them (Sanity CDN, canonical links, assets) are the same on every machine.
     env: {
       VITE_APP_URL: 'https://guesthouseosaka.test',
-      VITE_BLOB_STORAGE_URL: 'https://test.public.blob.vercel-storage.com',
+      VITE_ASSETS_URL: 'https://assets.guesthouseosaka.test',
       VITE_GOOGLE_MAPS_API_KEY: 'test-maps-key',
       VITE_SANITY_API_VERSION: '2025-01-01',
       VITE_SANITY_DATASET: 'production',

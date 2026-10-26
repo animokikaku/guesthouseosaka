@@ -93,8 +93,10 @@ public/                # Static assets only
   contact email to Resend's test inbox: workerd runs the bundle `wrangler deploy` uploads, so
   this checks the Resend key and sending domain without deploying. Add
   `BASE_URL=<preview URL>` to run it against a deployed version instead
-- Logos and Open Graph images are served from a public Vercel Blob store (`BLOB_STORAGE_URL`
-  in `lib/config.ts`), the only Vercel service the site still uses
+- Logos and Open Graph images are served from the public R2 bucket `guesthouseosaka-assets`
+  through its custom domain (`ASSETS_URL` in `lib/config.ts`). Uploads set
+  `Cache-Control: public, max-age=31536000`, so replace a file under a new name rather than
+  overwriting it
 - `generated/cn-tables.ts` (class-merge tables) is written on `bun install` and kept current by
   the Vite plugin
 
@@ -105,7 +107,7 @@ public/                # Static assets only
 - Server secrets come from `lib/env.server.ts` (`@t3-oss/env-core`): the Worker's vars and
   secrets, validated at runtime through `process.env`
 - Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `DEPLOY_ENV`
-- Client: `VITE_GOOGLE_MAPS_API_KEY`, and optionally `VITE_APP_URL`, `VITE_BLOB_STORAGE_URL`,
+- Client: `VITE_GOOGLE_MAPS_API_KEY`, and optionally `VITE_APP_URL`, `VITE_ASSETS_URL`,
   `VITE_SANITY_PROJECT_ID` and `VITE_SANITY_API_VERSION`, which default to the constants in
   `lib/config.ts`
 - `VITE_SANITY_DATASET` isn't set in `.env` files: `vite.config.ts` takes it from the `SANITY_DATASET`
