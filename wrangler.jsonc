@@ -23,9 +23,17 @@
     // Inlined into the build by vite.config.ts; production alone reads live content.
     "SANITY_DATASET": "development"
   },
+  // Worker Previews (`wrangler preview`) don't inherit the Worker's vars or
+  // secrets: these mirror `env.preview`, which the build reads, and their
+  // secrets are set with `wrangler preview base-config secret put`.
+  "previews": {
+    "vars": { "DEPLOY_ENV": "preview", "SANITY_DATASET": "development" }
+  },
   "env": {
     // Select at build time with CLOUDFLARE_ENV (see the `deploy` scripts).
     "preview": {
+      // Previews live under the production Worker (see `deploy:preview`).
+      "name": "guesthouseosaka",
       "vars": { "DEPLOY_ENV": "preview", "SANITY_DATASET": "development" }
     },
     "production": {
