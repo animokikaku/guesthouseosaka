@@ -7,8 +7,8 @@ A multilingual website for a guest house in Osaka, built with TanStack Start and
 ## Tech Stack
 
 - **Framework**: TanStack Start (Vite) with TanStack Router
-- **Hosting**: Cloudflare Workers
-- **CMS**: Sanity v6 (the Studio is hosted separately; `sanity.config.ts` here serves the CLI and type generation)
+- **Hosting**: Cloudflare Workers, with Workers Cache and a Worker Preview for every branch
+- **CMS**: Sanity, with one hosted Studio per dataset (`production`, `development`)
 - **Styling**: Tailwind CSS v4
 - **i18n**: use-intl (English, Japanese, French, Simplified Chinese, Traditional Chinese)
 - **Forms**: TanStack React Form + Zod validation
@@ -19,56 +19,50 @@ A multilingual website for a guest house in Osaka, built with TanStack Start and
 ## Getting Started
 
 ```bash
-bun install    # Install dependencies
-bun dev        # Start dev server at http://localhost:3000
+cp .env.example .env.local   # Fill in the keys
+bun install
+bun dev                      # http://localhost:3000
 ```
 
 ## Scripts
 
-| Command            | Description                                                                                                           |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| `bun dev`          | Start development server                                                                                              |
-| `bun run build`    | Production build                                                                                                      |
-| `bun run check`    | Type check and run Oxlint                                                                                             |
-| `bun run typegen`  | Regenerate Sanity TypeScript types                                                                                    |
-| `bun run test`     | Run unit tests (Vitest)                                                                                               |
-| `bun run test:e2e` | Run E2E tests against a production build (Playwright builds and starts the server; reuses an existing server locally) |
-| `bun run knip`     | Detect unused code/dependencies                                                                                       |
+| Command                   | Description                                  |
+| ------------------------- | -------------------------------------------- |
+| `bun dev`                 | Start the dev server                         |
+| `bun run build`           | Production build                             |
+| `bun run start`           | Serve the build in workerd at localhost:3000 |
+| `bun run check`           | Type check and lint                          |
+| `bun run typegen`         | Regenerate Sanity types                      |
+| `bun run test`            | Unit tests (Vitest)                          |
+| `bun run test:e2e`        | E2E tests against a local build (Playwright) |
+| `bun run test:components` | Component tests (Playwright)                 |
+| `bun run knip`            | Detect unused code and dependencies          |
+| `bun run studio:deploy`   | Deploy the development Studio                |
+
+## Deployment
+
+Workers Builds deploys `main` to guesthouseosaka.com and every other branch to a Worker Preview
+on the `development` dataset. The Studios deploy from GitHub Actions when their files change.
 
 ## Project Structure
 
 ```
 app/
-  [locale]/           # Locale-based routing (en, ja, fr, zh-cn, zh-tw)
-    [house]/          # Dynamic house pages with gallery
-    contact/          # Contact forms
-    faq/              # FAQ page
-  api/                # API routes
+  routes/
+    $locale/          # Locale-based routing (en, ja, fr, zh-cn, zh-tw)
+      $house/         # House pages and galleries
+      contact/        # Contact forms
+      faq.tsx         # FAQ page
+    api/              # Draft mode
+  actions/            # Server functions (contact form)
+  start.ts            # Request middleware (redirects, /studio)
 
-components/
-  forms/              # Form components
-  gallery/            # Gallery components
-  house/              # House-specific components
-  map/                # Google Maps integration
-  ui/                 # Base UI primitives
-
+components/           # UI, forms, gallery, house and map components
+lib/                  # Config, environment, metadata and helpers
 sanity/
-  schemaTypes/        # Sanity document and object schemas
+  schemaTypes/        # Document and object schemas
   lib/                # GROQ queries and utilities
-
-messages/             # Translation files (en, ja, fr, zh-CN, zh-TW)
+messages/             # Translations (en, ja, fr, zh-CN, zh-TW)
 ```
 
-## Environment Variables
-
-Copy the environment template, then fill in the values needed for your environment:
-
-```bash
-cp .env.example .env.local
-```
-
-## Sanity Workflow
-
-1. Edit schemas in `sanity/schemaTypes/`
-2. Regenerate types: `bun run typegen`
-3. Deploy the schema to the hosted Studio from the main repository
+See [docs/](docs/) for architecture, the Sanity workflow, i18n and testing.
