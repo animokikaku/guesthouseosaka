@@ -36,7 +36,7 @@ export function TurnstileWidget({ ref }: { ref: TurnstileRef }) {
         responseField: false
       }}
       onBeforeInteractive={() => setInteractive(true)}
-      // The form's field gap, which a widget inside the field group would add even while hidden.
+      // The field group's gap. The widget sits outside the group so it adds none while hidden.
       className={interactive ? 'mt-7' : undefined}
     />
   )

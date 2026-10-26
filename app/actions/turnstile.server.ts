@@ -3,6 +3,9 @@ import { z } from '@/lib/zod'
 
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
 
+/** The longest token Turnstile issues; anything longer is forged. */
+const MAX_TOKEN_LENGTH = 2048
+
 const siteverifyResponseSchema = z.object({
   success: z.boolean(),
   'error-codes': z.optional(z.array(z.string()))
@@ -14,7 +17,7 @@ const siteverifyResponseSchema = z.object({
  * @see https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
  */
 export async function verifyTurnstileToken(token: unknown, remoteIp?: string): Promise<boolean> {
-  if (typeof token !== 'string' || token.length === 0 || token.length > 2048) {
+  if (typeof token !== 'string' || token.length === 0 || token.length > MAX_TOKEN_LENGTH) {
     return false
   }
 
