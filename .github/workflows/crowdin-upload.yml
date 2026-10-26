@@ -5,6 +5,9 @@ on:
     paths: ['messages/**']
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   crowdin-upload:
     runs-on: blacksmith-4vcpu-ubuntu-2404

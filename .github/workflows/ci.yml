@@ -18,29 +18,14 @@ jobs:
     name: Unit Test
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 10
-    env: &test-env
-      VITE_APP_URL: http://localhost:3000
-      VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
-      SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
-      RESEND_API_KEY: re_dummy_test_key
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           persist-credentials: false
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: '26.11.1'
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: package.json
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Setup
+        uses: ./.github/actions/setup
 
       # Output is prefixed per script; --no-exit-on-error reports every failure.
       - name: Run code checks, formatting, and unused code checks
@@ -58,25 +43,21 @@ jobs:
     name: E2E Tests
     runs-on: blacksmith-4vcpu-ubuntu-2404
     timeout-minutes: 15
-    env: *test-env
+    # The production build and the E2E suite read real Sanity content; Resend
+    # calls are mocked. Unit tests fix their own values in vitest.config.mts.
+    env:
+      VITE_APP_URL: http://localhost:3000
+      VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+      SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
+      RESEND_API_KEY: re_dummy_test_key
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           persist-credentials: false
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: '26.11.1'
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: package.json
-
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Mount Playwright browser binaries
         uses: useblacksmith/stickydisk@v1
