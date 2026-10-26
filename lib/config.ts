@@ -6,6 +6,9 @@ export const META_THEME_COLORS = {
 /** The production origin, for canonical links when `VITE_APP_URL` isn't set. */
 export const SITE_URL = 'https://guesthouseosaka.com'
 
+/** The public Vercel Blob store holding the logos and Open Graph images (see `lib/assets.ts`). */
+export const BLOB_STORAGE_URL = 'https://mnaukbn4lqwsvyid.public.blob.vercel-storage.com'
+
 /** The Sanity project, for every environment; only the dataset differs (see wrangler.jsonc). */
 export const SANITY_PROJECT_ID = '515wijoz'
 
