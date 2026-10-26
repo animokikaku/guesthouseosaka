@@ -143,8 +143,7 @@ declare const messages: {
     "manifest_name": "Share House Osaka"
   },
   "SubmitButton": {
-    "label": "Submit",
-    "verifying": "Verifying…"
+    "label": "Submit"
   },
   "forms": {
     "fields": {

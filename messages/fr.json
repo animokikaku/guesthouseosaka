@@ -140,8 +140,7 @@
     "manifest_name": "Share House Osaka"
   },
   "SubmitButton": {
-    "label": "Envoyer",
-    "verifying": "Vérification…"
+    "label": "Envoyer"
   },
   "forms": {
     "fields": {

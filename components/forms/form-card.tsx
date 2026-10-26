@@ -36,9 +36,6 @@ export function FormCard({
 }: FormCardProps) {
   const t = useTranslations('SubmitButton')
   const isSubmitting = useSelector(form.atom, (state) => state.isSubmitting)
-  // Without a token the server would reject the submission, so wait for Turnstile.
-  const verifying = !isSubmitting && !turnstile.token
-  const busy = isSubmitting || verifying
 
   return (
     <Card className={cn('mx-auto w-full sm:max-w-2xl', className)}>
@@ -62,14 +59,20 @@ export function FormCard({
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          {/* Outside the <form>, so it submits through the native `form=` association. */}
-          <Button type="submit" form={formId} disabled={busy} aria-busy={busy}>
-            {busy ? (
+          {/* Outside the <form>, so it submits through the native `form=` association. It waits for
+              Turnstile's token, without which the server would reject the submission. */}
+          <Button
+            type="submit"
+            form={formId}
+            disabled={isSubmitting || !turnstile.token}
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
               <span aria-hidden="true" className="inline-flex animate-spin">
                 <Loader2Icon />
               </span>
             ) : null}
-            {verifying ? t('verifying') : t('label')}
+            {t('label')}
           </Button>
         </Field>
       </CardFooter>

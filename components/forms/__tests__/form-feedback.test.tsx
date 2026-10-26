@@ -81,10 +81,11 @@ describe('form validation and feedback', () => {
     const pass = holdTurnstile()
     renderForm(ContactForm)
 
-    expect(screen.getByRole('button', { name: /\bverifying\b/i })).toBeDisabled()
+    const button = screen.getByRole('button', { name: /\bsubmit\b/i })
+    expect(button).toBeDisabled()
 
     act(() => pass())
-    expect(await screen.findByRole('button', { name: /\bsubmit\b/i })).toBeEnabled()
+    await waitFor(() => expect(button).toBeEnabled())
   })
 
   it('keeps the visitor on the form when delivery fails', async () => {
