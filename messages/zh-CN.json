@@ -140,7 +140,8 @@
     "manifest_name": "大阪合租公寓"
   },
   "SubmitButton": {
-    "label": "提交"
+    "label": "提交",
+    "verifying": "验证中…"
   },
   "forms": {
     "fields": {

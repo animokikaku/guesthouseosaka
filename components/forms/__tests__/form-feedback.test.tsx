@@ -2,7 +2,7 @@ import { ContactForm } from '@/components/forms/contact-form'
 import { TourForm } from '@/components/forms/tour-form'
 import { CONTACT_EMAIL } from '@/lib/config'
 import { routerState } from '@/lib/__tests__/utils/router'
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import {
   fillSharedFields,
   renderForm,
@@ -10,7 +10,7 @@ import {
   submit,
   submitIncomplete
 } from './utils/contact-form'
-import { TURNSTILE_TOKEN } from './utils/turnstile'
+import { holdTurnstile, TURNSTILE_TOKEN } from './utils/turnstile'
 
 // The server function, the router and Turnstile's widget are the forms' only way out of the
 // browser.
@@ -75,6 +75,16 @@ describe('form validation and feedback', () => {
 
     settle({ ok: true })
     await waitFor(() => expect(button).toBeEnabled())
+  })
+
+  it('keeps submit disabled until the bot check passes', async () => {
+    const pass = holdTurnstile()
+    renderForm(ContactForm)
+
+    expect(screen.getByRole('button', { name: /\bverifying\b/i })).toBeDisabled()
+
+    act(() => pass())
+    expect(await screen.findByRole('button', { name: /\bsubmit\b/i })).toBeEnabled()
   })
 
   it('keeps the visitor on the form when delivery fails', async () => {

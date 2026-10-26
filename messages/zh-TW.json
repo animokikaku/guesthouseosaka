@@ -140,7 +140,8 @@
     "manifest_name": "大阪共享住宅"
   },
   "SubmitButton": {
-    "label": "送出"
+    "label": "送出",
+    "verifying": "驗證中…"
   },
   "forms": {
     "fields": {

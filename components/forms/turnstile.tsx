@@ -1,49 +1,58 @@
 import { env } from '@/lib/env'
-import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
-import { useState, type RefObject } from 'react'
+import { Turnstile } from '@marsidev/react-turnstile'
+import { useRef, useState } from 'react'
 import { useLocale } from 'use-intl'
 
-export type TurnstileRef = RefObject<TurnstileInstance | null>
+/** The widget's current token, which the submit button waits for and a submission spends. */
+export function useTurnstileToken() {
+  const [token, setTokenState] = useState<string>()
+  const [widgetKey, setWidgetKey] = useState(0)
+  // The submit handler may come from an earlier render, so it reads the token from here.
+  const latestToken = useRef<string>(undefined)
 
-/**
- * How long a submission waits for a challenge still in progress, including one
- * that asks the visitor to tick a box.
- */
-const TOKEN_WAIT_MS = 15_000
+  const setToken = (value: string | undefined) => {
+    latestToken.current = value
+    setTokenState(value)
+  }
 
-/**
- * The widget's token, once it has passed its challenge, or `undefined` if none
- * comes in time. Tokens are single-use, so this also starts a fresh challenge
- * for a retry.
- */
-export async function takeTurnstileToken(ref: TurnstileRef): Promise<string | undefined> {
-  const widget = ref.current
-  if (!widget) return undefined
-  const token = await widget.getResponsePromise(TOKEN_WAIT_MS).catch(() => undefined)
-  widget.reset()
-  return token
+  return {
+    token,
+    widgetKey,
+    setToken,
+    /** Spends the token. Tokens are single-use, so this remounts the widget for a fresh challenge. */
+    take: () => {
+      const value = latestToken.current
+      setToken(undefined)
+      setWidgetKey((key) => key + 1)
+      return value
+    }
+  }
 }
+
+export type TurnstileToken = ReturnType<typeof useTurnstileToken>
 
 /**
  * Cloudflare Turnstile's bot check. It stays invisible unless Cloudflare wants
  * the visitor to tick a box, and then shows in the page's language.
  */
-export function TurnstileWidget({ ref }: { ref: TurnstileRef }) {
+export function TurnstileWidget({ onToken }: { onToken: (token: string | undefined) => void }) {
   const locale = useLocale()
   // Takes space only once Cloudflare shows the checkbox; otherwise it's 0px tall.
   const [interactive, setInteractive] = useState(false)
 
   return (
     <Turnstile
-      ref={ref}
       siteKey={env.VITE_TURNSTILE_SITE_KEY}
       options={{
         // Turnstile's codes are lowercase (`zh-cn`, `zh-tw`).
         language: locale.toLowerCase(),
         appearance: 'interaction-only',
-        // The token goes through `takeTurnstileToken`, not a hidden form input.
+        // The token goes through `onToken`, not a hidden form input.
         responseField: false
       }}
+      onSuccess={onToken}
+      onExpire={() => onToken(undefined)}
+      onError={() => onToken(undefined)}
       onBeforeInteractive={() => setInteractive(true)}
       // The field group's gap. The widget sits outside the group so it adds none while hidden.
       className={interactive ? 'mt-7' : undefined}

@@ -1,11 +1,9 @@
 import { submitContactForm } from '@/app/actions/contact.functions'
 import { CONTACT_EMAIL } from '@/lib/config'
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
-import type { TurnstileInstance } from '@marsidev/react-turnstile'
 import { useNavigate } from '@tanstack/react-router'
-import { useRef } from 'react'
 import { useLocale, useTranslations } from 'use-intl'
-import { takeTurnstileToken } from '@/components/forms/turnstile'
+import { useTurnstileToken } from '@/components/forms/turnstile'
 import { toast } from '@/components/ui/toast'
 
 /**
@@ -40,7 +38,7 @@ export function useFormSubmit() {
   const t = useTranslations('forms')
   const navigate = useNavigate()
   const locale = useLocale()
-  const turnstile = useRef<TurnstileInstance>(null)
+  const turnstile = useTurnstileToken()
 
   const onSubmitInvalid = () => {
     const firstErrorInput = document.querySelector<HTMLElement>('[aria-invalid="true"]')
@@ -62,14 +60,12 @@ export function useFormSubmit() {
       // TypeScript cannot correlate a generic key with its mapped discriminated-union value.
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const payload = { type: formType, data: value } as ContactFormPayload
-      // Inside the toast's promise, so "Sending" shows while a challenge finishes.
-      const promise = takeTurnstileToken(turnstile)
-        .then((turnstileToken) => submitContactForm({ data: { payload, turnstileToken } }))
-        .then((result) => {
-          if (!result.ok) {
-            throw new Error(result.code)
-          }
-        })
+      const turnstileToken = turnstile.take()
+      const promise = submitContactForm({ data: { payload, turnstileToken } }).then((result) => {
+        if (!result.ok) {
+          throw new Error(result.code)
+        }
+      })
 
       return await toast.promise(promise, {
         loading: { title: t('status.sending') },

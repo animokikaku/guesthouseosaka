@@ -140,7 +140,8 @@
     "manifest_name": "シェアハウス大阪"
   },
   "SubmitButton": {
-    "label": "送信"
+    "label": "送信",
+    "verifying": "確認中…"
   },
   "forms": {
     "fields": {

@@ -7,7 +7,7 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { TurnstileWidget, type TurnstileRef } from '@/components/forms/turnstile'
+import { TurnstileWidget, type TurnstileToken } from '@/components/forms/turnstile'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
 import { useSelector, type AnyReactFormApi } from '@tanstack/react-form'
@@ -19,8 +19,8 @@ interface FormCardProps {
   description?: string | null
   formId: string
   form: AnyReactFormApi
-  /** From `useFormSubmit`, whose submit handler reads the widget's token. */
-  turnstile: TurnstileRef
+  /** From `useFormSubmit`, whose submit handler spends the widget's token. */
+  turnstile: TurnstileToken
   children: React.ReactNode
   className?: string
 }
@@ -36,6 +36,9 @@ export function FormCard({
 }: FormCardProps) {
   const t = useTranslations('SubmitButton')
   const isSubmitting = useSelector(form.atom, (state) => state.isSubmitting)
+  // Without a token the server would reject the submission, so wait for Turnstile.
+  const verifying = !isSubmitting && !turnstile.token
+  const busy = isSubmitting || verifying
 
   return (
     <Card className={cn('mx-auto w-full sm:max-w-2xl', className)}>
@@ -54,19 +57,19 @@ export function FormCard({
           }}
         >
           <FieldGroup>{children}</FieldGroup>
-          <TurnstileWidget ref={turnstile} />
+          <TurnstileWidget key={turnstile.widgetKey} onToken={turnstile.setToken} />
         </form>
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
           {/* Outside the <form>, so it submits through the native `form=` association. */}
-          <Button type="submit" form={formId} disabled={isSubmitting} aria-busy={isSubmitting}>
-            {isSubmitting ? (
+          <Button type="submit" form={formId} disabled={busy} aria-busy={busy}>
+            {busy ? (
               <span aria-hidden="true" className="inline-flex animate-spin">
                 <Loader2Icon />
               </span>
             ) : null}
-            {t('label')}
+            {verifying ? t('verifying') : t('label')}
           </Button>
         </Field>
       </CardFooter>
