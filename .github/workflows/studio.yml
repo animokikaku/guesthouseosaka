@@ -1,0 +1,64 @@
+name: Studio
+
+# Deploys the hosted Studios (see `SANITY_STUDIO_HOSTS` in lib/config.ts) when a
+# file the Studio is built from changes: `main` deploys both, any other branch
+# only the development one, so a schema can be tried there before production.
+on:
+  push:
+    paths:
+      - 'sanity/**'
+      - 'sanity.config.ts'
+      - 'sanity.cli.ts'
+      # What sanity.config.ts imports outside sanity/.
+      - 'i18n/locales.ts'
+      - 'i18n/routing.ts'
+      - 'lib/assets.ts'
+      - 'lib/config.ts'
+      - 'lib/env.ts'
+      - 'lib/google-maps-url.ts'
+      - 'lib/icons/**'
+      - 'lib/types/**'
+      - 'package.json'
+      - 'bun.lock'
+      - '.github/workflows/studio.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy ${{ matrix.dataset }} Studio
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        dataset: ${{ github.ref == 'refs/heads/main' && fromJSON('["production", "development"]') || fromJSON('["development"]') }}
+    # A newer push replaces a deploy still running for the same Studio.
+    concurrency:
+      group: studio-${{ matrix.dataset }}
+      cancel-in-progress: true
+    env:
+      SANITY_AUTH_TOKEN: ${{ secrets.SANITY_DEPLOY_TOKEN }}
+      VITE_SANITY_DATASET: ${{ matrix.dataset }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '26.11.1'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Deploy
+        run: bunx sanity deploy --yes

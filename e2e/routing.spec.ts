@@ -28,6 +28,19 @@ test.describe('legacy URLs', () => {
   }
 })
 
+// Local builds read the development dataset, so they send editors to its Studio.
+test.describe('studio', () => {
+  for (const path of ['/studio', '/studio/structure/faq?perspective=drafts']) {
+    test(`${path} redirects to the hosted Studio, out of search engines`, async ({ request }) => {
+      const response = await request.get(path, { maxRedirects: 0 })
+
+      expect(response.status()).toBe(307)
+      expect(response.headers().location).toBe(`https://guesthouseosaka-dev.sanity.studio${path}`)
+      expect(response.headers()['x-robots-tag']).toBe('noindex, nofollow')
+    })
+  }
+})
+
 test.describe('missing pages', () => {
   for (const path of ['/en/pear', '/en/pear/gallery', '/en/contact/visit', '/fr/no-such-page']) {
     test(`${path} answers 404 with the localized not-found page`, async ({ page }) => {

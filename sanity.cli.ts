@@ -4,13 +4,22 @@
  **/
 import { defineCliConfig } from 'sanity/cli'
 import { mergeConfig } from 'vite'
-import { SANITY_PROJECT_ID } from './lib/config'
+import { SANITY_PROJECT_ID, SANITY_STUDIO_HOSTS } from './lib/config'
 
 const projectId = process.env.VITE_SANITY_PROJECT_ID || SANITY_PROJECT_ID
-const dataset = process.env.VITE_SANITY_DATASET || 'development'
+const dataset = process.env.VITE_SANITY_DATASET === 'production' ? 'production' : 'development'
+
+/** The Sanity application of each hosted Studio, so `sanity deploy` never asks for one. */
+const studioAppIds = {
+  production: 'gntlcvsmiwihcdn4q5lc2iei',
+  development: 'il6rzjk5xwzp7wp01q1gg784'
+}
 
 export default defineCliConfig({
   api: { projectId, dataset },
+  // `sanity deploy` publishes to the Studio of the dataset it builds for.
+  studioHost: SANITY_STUDIO_HOSTS[dataset],
+  deployment: { appId: studioAppIds[dataset] },
   // The Studio exposes `SANITY_STUDIO_*` by default; `lib/env.ts` reads `VITE_*`.
   vite: (config) => mergeConfig(config, { envPrefix: ['VITE_'] }),
   typegen: {

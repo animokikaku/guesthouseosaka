@@ -16,6 +16,8 @@
     "eloqnt:lint": "eloqnt lint",
     "eloqnt:review": "eloqnt review",
     "eloqnt:translate": "eloqnt translate",
+    "studio:deploy": "sanity deploy --yes",
+    "studio:deploy:production": "VITE_SANITY_DATASET=production sanity deploy --yes",
     "typegen": "sanity schema extract --enforce-required-fields --force && sanity typegen generate",
     "test": "vitest",
     "test:ui": "vitest --ui",

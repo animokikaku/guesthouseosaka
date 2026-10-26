@@ -15,5 +15,14 @@ export const SANITY_PROJECT_ID = '515wijoz'
 /** The GROQ API version the queries and generated types are written against. */
 export const SANITY_API_VERSION = '2026-03-14'
 
+/**
+ * The hosted Studio (`<host>.sanity.studio`) editing each dataset, which
+ * `/studio` redirects to and `.github/workflows/studio.yml` deploys.
+ */
+export const SANITY_STUDIO_HOSTS = {
+  production: 'guesthouseosaka',
+  development: 'guesthouseosaka-dev'
+} as const
+
 export const CONTACT_EMAIL_DOMAIN = 'guesthouseosaka.com'
 export const CONTACT_EMAIL = `info@${CONTACT_EMAIL_DOMAIN}`

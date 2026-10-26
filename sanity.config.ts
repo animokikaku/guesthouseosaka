@@ -14,6 +14,7 @@ import { structureTool } from 'sanity/structure'
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 import { localeConfig } from '@/i18n/locales'
 import { routing } from '@/i18n/routing'
+import { SITE_URL } from '@/lib/config'
 import { env } from '@/lib/env'
 import { iconMap } from '@/lib/icons'
 import { lucideIconPicker } from '@/sanity/plugins/lucide-icon-picker'
@@ -73,9 +74,11 @@ export default defineConfig({
       : []),
     presentationTool({
       previewUrl: {
-        // The site the Studio runs on, unless a Studio deployed on its own
-        // (`sanity deploy`) names the site to preview.
-        initial: process.env.SANITY_STUDIO_PREVIEW_URL || '/',
+        // The site showing this Studio's dataset: production, or the dev server
+        // for the development Studio. `SANITY_STUDIO_PREVIEW_URL` overrides it.
+        initial:
+          process.env.SANITY_STUDIO_PREVIEW_URL ||
+          (env.VITE_SANITY_DATASET === 'production' ? SITE_URL : 'http://localhost:3000'),
         previewMode: {
           enable: '/api/draft-mode/enable',
           disable: '/api/draft-mode/disable'

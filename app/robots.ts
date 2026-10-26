@@ -3,7 +3,7 @@ import { env } from '@/lib/env'
 export default function robots() {
   const url = env.VITE_APP_URL
   return {
-    rules: { userAgent: '*', allow: '/' },
+    rules: { userAgent: '*', allow: '/', disallow: '/studio' },
     sitemap: `${url}/sitemap.xml`
   }
 }
@@ -13,6 +13,7 @@ export function toRobotsTxt({ rules, sitemap }: ReturnType<typeof robots>) {
   return [
     `User-Agent: ${rules.userAgent}`,
     `Allow: ${rules.allow}`,
+    `Disallow: ${rules.disallow}`,
     '',
     `Sitemap: ${sitemap}`,
     ''

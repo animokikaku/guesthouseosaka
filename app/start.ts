@@ -1,4 +1,6 @@
 import { LOCALE_COOKIE, localeToPrefix, prefixToLocale } from '@/i18n/routing'
+import { SANITY_STUDIO_HOSTS } from '@/lib/config'
+import { env } from '@/lib/env'
 import { negotiateLocale, resolveLegacyRedirect } from '@/lib/redirects'
 import { createCsrfMiddleware, createMiddleware, createStart } from '@tanstack/react-start'
 import { getCookie } from '@tanstack/react-start/server'
@@ -6,6 +8,22 @@ import { getCookie } from '@tanstack/react-start/server'
 /** A redirect with a relative `Location`, as Next sent them. */
 function redirectTo(url: URL, pathname: string, status: 307 | 308) {
   return new Response(null, { status, headers: { Location: pathname + url.search } })
+}
+
+/**
+ * Sends `/studio` to the hosted Studio editing this build's dataset. The
+ * Studio keeps the `/studio` base path the embedded one had, so deep links
+ * carry over. Robots are kept out (see `app/robots.ts`).
+ */
+function redirectToStudio(url: URL) {
+  const studio = new URL(
+    url.pathname + url.search,
+    `https://${SANITY_STUDIO_HOSTS[env.VITE_SANITY_DATASET]}.sanity.studio`
+  )
+  return new Response(null, {
+    status: 307,
+    headers: { Location: studio.toString(), 'X-Robots-Tag': 'noindex, nofollow' }
+  })
 }
 
 /** Paths the locale prefix never applies to: endpoints and files. */
@@ -27,6 +45,8 @@ const routingMiddleware = createMiddleware().server(({ request, next }) => {
 
   const legacy = resolveLegacyRedirect(pathname)
   if (legacy) return redirectTo(url, legacy, 308)
+
+  if (pathname === '/studio' || pathname.startsWith('/studio/')) return redirectToStudio(url)
 
   if (isUnlocalized(pathname)) return next()
 
