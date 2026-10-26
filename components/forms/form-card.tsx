@@ -7,6 +7,7 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { TurnstileWidget, type TurnstileController } from '@/components/forms/turnstile'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
 import { useSelector, type AnyReactFormApi } from '@tanstack/react-form'
@@ -18,11 +19,21 @@ interface FormCardProps {
   description?: string | null
   formId: string
   form: AnyReactFormApi
+  /** From `useFormSubmit`, whose submit handler reads the widget's token. */
+  turnstile: TurnstileController
   children: React.ReactNode
   className?: string
 }
 
-export function FormCard({ title, description, formId, form, children, className }: FormCardProps) {
+export function FormCard({
+  title,
+  description,
+  formId,
+  form,
+  turnstile,
+  children,
+  className
+}: FormCardProps) {
   const t = useTranslations('SubmitButton')
   const isSubmitting = useSelector(form.atom, (state) => state.isSubmitting)
 
@@ -43,6 +54,7 @@ export function FormCard({ title, description, formId, form, children, className
           }}
         >
           <FieldGroup>{children}</FieldGroup>
+          <TurnstileWidget controller={turnstile} />
         </form>
       </CardContent>
       <CardFooter>

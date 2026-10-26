@@ -8,7 +8,8 @@ import {
   renderForm,
   setInput,
   submit,
-  submitIncomplete
+  submitIncomplete,
+  TURNSTILE_TOKEN
 } from './utils/contact-form'
 
 // The server function and the router are the forms' only way out of the browser.
@@ -84,6 +85,23 @@ describe('form validation and feedback', () => {
     expect(await screen.findByText(/failed/i)).toBeInTheDocument()
     // Tells the visitor where to write instead.
     expect(screen.getByText((text) => text.includes(CONTACT_EMAIL))).toBeInTheDocument()
+    expect(routerState.navigate).not.toHaveBeenCalled()
+  })
+
+  it('asks the visitor to retry when the bot check rejects them', async () => {
+    submitContactForm.mockResolvedValueOnce({ ok: false, code: 'verification_failed' })
+    renderForm(ContactForm)
+
+    fillSharedFields()
+    submit()
+
+    expect(
+      await screen.findByText(/couldn’t confirm this was sent by a person/i)
+    ).toBeInTheDocument()
+    expect(screen.getByText((text) => text.includes(CONTACT_EMAIL))).toBeInTheDocument()
+    expect(submitContactForm).toHaveBeenCalledWith({
+      data: expect.objectContaining({ turnstileToken: TURNSTILE_TOKEN })
+    })
     expect(routerState.navigate).not.toHaveBeenCalled()
   })
 })

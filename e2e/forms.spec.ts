@@ -7,6 +7,7 @@ import {
 } from './helpers/contact-form'
 import { gotoHydrated } from './helpers/navigation'
 import { mockResendAPI } from './mocks/resend'
+import { mockSiteverify } from './mocks/turnstile'
 
 const tomorrow = () => new Date(Date.now() + 864e5).toISOString().slice(0, 10)
 
@@ -45,6 +46,21 @@ test.describe('General inquiry form', () => {
       // A local build never addresses a house inbox; the unit tests cover routing.
       to: 'dev@guesthouseosaka.com'
     })
+  })
+
+  test('a submission Turnstile rejects is not sent', async ({ serverFetch, page }) => {
+    const requests = mockResendAPI(serverFetch)
+    mockSiteverify(serverFetch, { success: false, 'error-codes': ['invalid-input-response'] })
+    const form = await gotoContactForm(page, 'other')
+
+    const fields = await fillAccountFields(page, form)
+    await fields.checkbox.click()
+
+    await page.getByRole('button', { name: /\bsubmit\b/i }).click()
+
+    await expect(submissionToast(page)).toContainText(/\bconfirm this was sent by a person\b/i)
+    await expect(page).toHaveURL(/\/en\/contact\/other/)
+    expect(requests).toHaveLength(0)
   })
 
   test('failed email delivery shows an error without leaving the form', async ({

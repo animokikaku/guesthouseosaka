@@ -8,12 +8,19 @@ import { serverEnv } from '@/lib/env.server'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
 import type { HouseIdentifier } from '@/lib/types'
 import { Resend, type CreateEmailOptions } from 'resend'
+import { verifyTurnstileToken } from './turnstile.server'
 
 const { emails } = new Resend(serverEnv.RESEND_API_KEY)
 
 export type ContactSubmissionResult =
   | { ok: true }
-  | { ok: false; code: 'delivery_failed' | 'invalid_submission' }
+  | { ok: false; code: 'delivery_failed' | 'invalid_submission' | 'verification_failed' }
+
+/** What the browser and the request say about who sent the submission. */
+export interface SubmissionOrigin {
+  turnstileToken?: unknown
+  remoteIp?: string
+}
 
 async function sendEmail(payload: CreateEmailOptions): Promise<ContactSubmissionResult> {
   const { error } = await emails.send(payload)
@@ -45,11 +52,16 @@ const DEFAULT_CONTACT = {
 }
 
 export async function submitContactForm(
-  payload: ContactFormPayload
+  payload: ContactFormPayload,
+  { turnstileToken, remoteIp }: SubmissionOrigin = {}
 ): Promise<ContactSubmissionResult> {
   const parsedPayload = contactFormPayloadSchema.safeParse(payload)
   if (!parsedPayload.success) {
     return { ok: false, code: 'invalid_submission' }
+  }
+
+  if (!(await verifyTurnstileToken(turnstileToken, remoteIp))) {
+    return { ok: false, code: 'verification_failed' }
   }
 
   const { data } = parsedPayload.data

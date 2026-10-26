@@ -10,7 +10,8 @@ import {
   renderForm,
   setInput,
   submit,
-  submitIncomplete
+  submitIncomplete,
+  TURNSTILE_TOKEN
 } from './utils/contact-form'
 
 // The server function and the router are the forms' only way out of the browser.
@@ -71,7 +72,11 @@ describe.each(forms)('$type form', ({ type, Form, fill, data }) => {
     fill()
     submit()
 
-    await waitFor(() => expect(submitContactForm).toHaveBeenCalledWith({ data: { type, data } }))
+    await waitFor(() =>
+      expect(submitContactForm).toHaveBeenCalledWith({
+        data: { payload: { type, data }, turnstileToken: TURNSTILE_TOKEN }
+      })
+    )
     expect(await screen.findByText(/sent successfully/i)).toBeInTheDocument()
     expect(routerState.navigate).toHaveBeenCalledWith({
       to: '/$locale/contact',

@@ -165,7 +165,8 @@
     "status": {
       "error": {
         "description": "请稍后重试，或直接发送邮件至 {email} 与我们联系。",
-        "message": "消息发送失败。"
+        "message": "消息发送失败。",
+        "verification": "无法确认此消息由真人发送。请刷新页面后重试，或直接发送邮件至 {email} 与我们联系。"
       },
       "sending": "正在发送消息…",
       "success": {

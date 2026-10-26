@@ -165,7 +165,8 @@
     "status": {
       "error": {
         "description": "Please try again later or contact us directly at {email}.",
-        "message": "Failed to send message."
+        "message": "Failed to send message.",
+        "verification": "We couldn’t confirm this was sent by a person. Reload the page and try again, or email us at {email}."
       },
       "sending": "Sending message…",
       "success": {

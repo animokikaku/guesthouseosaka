@@ -18,7 +18,7 @@ interface TourFormProps extends ContactFormConfig {
 
 export function TourForm({ title, description, fields, houseTitles }: TourFormProps) {
   const schema = useTourFormSchema()
-  const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
+  const { onSubmitInvalid, createOnSubmit, turnstile } = useFormSubmit()
   const { places, account, message, date, hour, privacyPolicy } = contactFormDefaultValues
 
   const form = useAppForm({
@@ -29,7 +29,13 @@ export function TourForm({ title, description, fields, houseTitles }: TourFormPr
   })
 
   return (
-    <FormCard title={title} description={description} formId="tour-form" form={form}>
+    <FormCard
+      title={title}
+      description={description}
+      formId="tour-form"
+      form={form}
+      turnstile={turnstile}
+    >
       <FieldGroupPlaces
         fields={{ places: 'places' }}
         form={form}

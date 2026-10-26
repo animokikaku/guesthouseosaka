@@ -165,7 +165,8 @@
     "status": {
       "error": {
         "description": "請稍後再試，或直接寄信至 {email} 與我們聯絡。",
-        "message": "訊息傳送失敗。"
+        "message": "訊息傳送失敗。",
+        "verification": "無法確認此訊息由真人送出。請重新整理頁面後再試一次，或直接寄信至 {email} 與我們聯絡。"
       },
       "sending": "正在傳送訊息…",
       "success": {
