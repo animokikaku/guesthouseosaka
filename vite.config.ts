@@ -106,8 +106,7 @@ export default defineConfig(() => {
               // merges modules shared by several chunks; `entriesAware` keeps
               // a module with the routes that load it, so draft-mode-only code
               // stays out of what visitors load. Merging leftovers up to 50 KB
-              // cut pages to ~20 files; at 100 KB the merged chunks import each
-              // other in a cycle and the page fails to start.
+              // cut pages to ~20 files.
               codeSplitting: {
                 groups: [
                   {
@@ -117,7 +116,13 @@ export default defineConfig(() => {
                     entriesAwareMergeThreshold: 50_000
                   }
                 ]
-              }
+              },
+              // Merged chunks can import each other, and then one may call
+              // into the other before it has run: any import change can move
+              // modules into such a cycle and stop every page hydrating. This
+              // runs each module's body in source order whatever its chunk,
+              // for ~5% more JS.
+              strictExecutionOrder: true
             }
           }
         }
