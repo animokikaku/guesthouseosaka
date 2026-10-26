@@ -119,9 +119,11 @@ public/                # Static assets only
 The contact forms carry Cloudflare Turnstile's bot check (`components/forms/turnstile.tsx`), which
 `app/actions/turnstile.server.ts` verifies before an email goes out.
 
-- Only production uses the real widget: `bun run deploy` builds in `VITE_TURNSTILE_SITE_KEY` from
-  `.env.local`, and the Worker reads the `TURNSTILE_SECRET_KEY` secret. Every other build gets
-  Cloudflare's always-passing test sitekey, matched by the test secret in `wrangler.jsonc`
+- Only production uses the real widget: its build reads `VITE_TURNSTILE_SITE_KEY` from the Workers
+  Builds variables of the `main` trigger (or `.env.local` for a `bun run deploy` by hand), and the
+  Worker reads the `TURNSTILE_SECRET_KEY` secret. A production build without the sitekey fails.
+  Every other build gets Cloudflare's always-passing test sitekey, matched by the test secret in
+  `wrangler.jsonc`
 - A submission without a token Cloudflare vouches for is rejected, and the Worker logs Cloudflare's
   error codes (`Turnstile rejected…`). Turnstile's dashboard analytics show how many visitors
   pass the challenge
