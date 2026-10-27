@@ -15,7 +15,7 @@ export function HouseProvider({
   slug,
   children
 }: HouseDocumentContext & { children: React.ReactNode }) {
-  return <HouseContext.Provider value={{ id, type, slug }}>{children}</HouseContext.Provider>
+  return <HouseContext value={{ id, type, slug }}>{children}</HouseContext>
 }
 
 export function useHouseDocument() {

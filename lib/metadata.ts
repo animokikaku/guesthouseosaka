@@ -1,5 +1,5 @@
 import { localeConfig } from '@/i18n/locales'
-import { localeToPrefix, routing } from '@/i18n/routing'
+import { localeToPrefix } from '@/i18n/routing'
 import { env } from '@/lib/env'
 import type { HouseIdentifier, ContactType } from '@/lib/types'
 import type { Locale } from 'use-intl'
@@ -26,17 +26,21 @@ export function getCanonicalUrl(href: Href, locale: Locale) {
   return new URL(getPathname(href, locale), env.VITE_APP_URL).toString()
 }
 
-/** Self-referencing canonical on the production origin, so copies served elsewhere defer to it. */
-export function getCanonicalMetadata(href: Href, locale: Locale) {
-  return { canonical: getCanonicalUrl(href, locale) }
-}
-
-/** {@link getCanonicalMetadata} as a `head()` link. */
+/**
+ * Self-referencing canonical on the production origin, so copies served
+ * elsewhere defer to it, as a `head()` link.
+ */
 export function canonicalLink(href: Href, locale: Locale) {
   return { rel: 'canonical', href: getCanonicalUrl(href, locale) }
 }
 
-export function getOpenGraphMetadata({
+/**
+ * Open Graph and Twitter card `head()` meta tags. Nested routes override
+ * these by property, so a page only needs to pass what differs (its image).
+ * `og:locale:alternate` repeats, which `head()` would dedupe to one tag, so
+ * the locale layout renders those itself.
+ */
+export function openGraphMeta({
   image,
   locale,
   siteName
@@ -45,44 +49,18 @@ export function getOpenGraphMetadata({
   siteName?: string | null
   locale: Locale
 }) {
-  const openGraph = {
-    type: 'website',
-    images: image,
-    siteName: siteName ?? undefined,
-    locale: localeConfig[locale].openGraph,
-    alternateLocale: routing.locales
-      .filter((currentLocale) => currentLocale !== locale)
-      .map((otherLocale) => localeConfig[otherLocale].openGraph)
-  }
-
-  const twitter = {
-    card: 'summary_large_image',
-    creator: '@melkir_thib'
-  } as const
-
-  return { openGraph, twitter }
-}
-
-/**
- * {@link getOpenGraphMetadata} as `head()` meta tags. Nested routes override
- * these by property, so a page only needs to pass what differs (its image).
- * `og:locale:alternate` repeats, which `head()` would dedupe to one tag, so
- * the locale layout renders those itself.
- */
-export function openGraphMeta(options: Parameters<typeof getOpenGraphMetadata>[0]) {
-  const { openGraph, twitter } = getOpenGraphMetadata(options)
   return [
-    { property: 'og:type', content: openGraph.type },
-    { property: 'og:locale', content: openGraph.locale },
-    ...(openGraph.siteName ? [{ property: 'og:site_name', content: openGraph.siteName }] : []),
-    ...(openGraph.images
+    { property: 'og:type', content: 'website' },
+    { property: 'og:locale', content: localeConfig[locale].openGraph },
+    ...(siteName ? [{ property: 'og:site_name', content: siteName }] : []),
+    ...(image
       ? [
-          { property: 'og:image', content: openGraph.images },
-          { name: 'twitter:image', content: openGraph.images }
+          { property: 'og:image', content: image },
+          { name: 'twitter:image', content: image }
         ]
       : []),
-    { name: 'twitter:card', content: twitter.card },
-    { name: 'twitter:creator', content: twitter.creator }
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:creator', content: '@melkir_thib' }
   ]
 }
 

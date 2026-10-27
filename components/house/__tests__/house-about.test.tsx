@@ -6,7 +6,7 @@ import type { HousePortableTextContent } from '@/lib/types/components'
 function renderAbout(props: Partial<React.ComponentProps<typeof HouseAbout>> = {}) {
   return render(
     <HouseProvider id="house-123" type="house" slug="orange">
-      <HouseAbout title="Test House" building={null} about={null} {...props} />
+      <HouseAbout title="Test House" building={null} about={null} hasPricing {...props} />
     </HouseProvider>
   )
 }

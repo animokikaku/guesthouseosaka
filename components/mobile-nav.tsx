@@ -2,7 +2,7 @@ import { Popover as PopoverPrimitive } from '@base-ui/react/popover'
 
 import { PageEmptyState } from '@/components/page-empty-state'
 import { Button } from '@/components/ui/button'
-import { NavItem, NavItems, NavListItem } from '@/lib/types'
+import type { NavItem, NavItems, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { Link, type LinkComponentProps } from '@tanstack/react-router'
 import { useLocale, useTranslations } from 'use-intl'

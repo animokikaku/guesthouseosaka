@@ -312,8 +312,8 @@ export const faqQuestionsQuery = defineQuery(`
 // CONTACT PAGE
 // =============================================================================
 
-// Separate query for metadata to avoid stega deduplication issues
-// (generateMetadata runs before draft mode context is established)
+// Keep metadata separate from the render query so draft-mode stega data
+// is resolved independently for the layout and page.
 export const contactPageMetaQuery = defineQuery(`
   *[_type == "contactPage"][0]{
     "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),

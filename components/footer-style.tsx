@@ -8,11 +8,10 @@ type FooterStyleProps = {
 /**
  * Page-level overrides for the site footer.
  *
- * Cache Components keeps visited pages in the DOM inside a hidden <Activity>,
- * where a stylesheet (or a `body:has(...)` match) would keep applying. The
- * stylesheet starts disabled, because React can also render a page straight
- * into a hidden <Activity> without attaching refs, and the ref enables it only
- * while its page is visible. The cleanup runs in the same commit as the
+ * A page React keeps rendered but hidden (inside an <Activity>) would leave a
+ * plain stylesheet (or a `body:has(...)` match) applying. The stylesheet starts
+ * disabled, because React can render a page straight into a hidden <Activity>
+ * without attaching refs, and the ref enables it only while its page is visible. The cleanup runs in the same commit as the
  * navigation, before the browser re-snaps to a footer that is still a snap
  * target and leaves the next page scrolled to the bottom.
  */

@@ -38,7 +38,7 @@ export type NavListItem = {
 
 export type NavGroupItem = NavItem & {
   key: HouseIdentifier
-  background: {
+  background?: {
     src: string
     alt: string
     blurDataURL?: string

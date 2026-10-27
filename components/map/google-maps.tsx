@@ -5,7 +5,7 @@ import {
   MIN_ZOOM
 } from '@/components/map/location-map-constants'
 import { env } from '@/lib/env'
-import { APIProvider, Map, MapProps } from '@vis.gl/react-google-maps'
+import { APIProvider, Map, type MapProps } from '@vis.gl/react-google-maps'
 import { useLocale } from 'use-intl'
 import { useTheme } from 'next-themes'
 

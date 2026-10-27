@@ -1,3 +1,4 @@
+import { timeZone } from '@/i18n/formats'
 import { HouseIdentifierValues } from '@/lib/types'
 import { z } from '@/lib/zod'
 import type { Messages } from 'use-intl'
@@ -19,7 +20,7 @@ function isPositiveNumberString(value: string) {
 }
 
 // `en-CA` formats dates as YYYY-MM-DD, matching the date input's value.
-const tokyoDateFormat = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' })
+const tokyoDateFormat = new Intl.DateTimeFormat('en-CA', { timeZone })
 
 /**
  * Compares against today's date in Osaka, where the tour or move-in happens,
@@ -36,6 +37,9 @@ function isContactHour(value: string) {
   const totalMinutes = hour * 60 + minute
   return totalMinutes >= 10 * 60 && totalMinutes <= 20 * 60
 }
+
+/** The longest message the forms accept, which the message field counts down from. */
+export const MESSAGE_MAX_LENGTH = 3000
 
 export function createContactFormSchema(message?: ValidationMessage) {
   const m = (key: ValidationMessageKey) => message?.(key)
@@ -56,7 +60,7 @@ export function createContactFormSchema(message?: ValidationMessage) {
         .string()
         .check(z.refine((value) => (value ? isMobilePhone(value, 'any') : true), error(m('phone'))))
     }),
-    message: z.string().check(z.maxLength(3000, m('message_max'))),
+    message: z.string().check(z.maxLength(MESSAGE_MAX_LENGTH, m('message_max'))),
     date: z.iso.date().check(z.refine(isTodayOrLater, error(m('date_future')))),
     privacyPolicy: z.literal(true, error(m('privacy_policy'))),
     stayDuration: z.enum(['1-month', '3-months', 'long-term'], error(m('stay_duration'))),
@@ -90,9 +94,7 @@ export function createGeneralInquirySchema(message?: ValidationMessage) {
   const schema = createContactFormSchema(message)
   const baseSchema = z.pick(schema, { places: true, account: true, privacyPolicy: true })
   return z.extend(baseSchema, {
-    message: schema.shape.message.check(
-      z.refine((value) => value.length >= 5, { message: message?.('message_min') })
-    )
+    message: schema.shape.message.check(z.minLength(5, message?.('message_min')))
   })
 }
 

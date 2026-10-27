@@ -1,5 +1,5 @@
 import {
-  Field,
+  type Field,
   FieldContent,
   FieldDescription,
   FieldError,

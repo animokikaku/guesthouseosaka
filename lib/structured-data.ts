@@ -51,7 +51,7 @@ export function houseJsonLd(
     url,
     name: title ?? undefined,
     description: description ?? undefined,
-    image: urlFor(image).width(1200).height(630).fit('crop').url(),
+    image: image.asset ? urlFor(image).width(1200).height(630).fit('crop').url() : undefined,
     ...(map?.coordinates && {
       geo: {
         '@type': 'GeoCoordinates',

@@ -1,4 +1,4 @@
-import { HouseIdentifier } from '@/lib/types'
+import type { HouseIdentifier } from '@/lib/types'
 import { fruit } from '@lucide/lab'
 import { Apple, Citrus, Icon } from 'lucide-react'
 

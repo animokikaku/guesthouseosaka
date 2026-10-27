@@ -19,7 +19,11 @@
     "typescript/no-unsafe-type-assertion": "error",
     "typescript/no-unnecessary-boolean-literal-compare": "error",
     "typescript/no-unnecessary-type-assertion": "error",
-    "typescript/no-unnecessary-type-parameters": "error"
+    "typescript/no-unnecessary-type-parameters": "error",
+    "typescript/consistent-type-imports": [
+      "error",
+      { "fixStyle": "inline-type-imports", "disallowTypeAnnotations": false }
+    ]
   },
   "overrides": [
     {

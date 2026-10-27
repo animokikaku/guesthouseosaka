@@ -37,7 +37,7 @@ export function LocaleNotFound() {
       <FooterStyle plain />
       <EmptyHeader>
         <EmptyMedia>
-          <Image preload {...assets.notFound} alt={assets.notFound.alt} />
+          <Image preload {...assets.notFound} />
         </EmptyMedia>
         <EmptyTitle className="text-2xl font-bold tracking-tight sm:text-4xl">
           {t('title')}

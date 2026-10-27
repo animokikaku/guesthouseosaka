@@ -13,7 +13,7 @@ export function LegalNoticeProvider({
   children: ReactNode
   data: LegalNoticeData | null
 }) {
-  return <LegalNoticeContext.Provider value={data}>{children}</LegalNoticeContext.Provider>
+  return <LegalNoticeContext value={data}>{children}</LegalNoticeContext>
 }
 
 export function useLegalNotice(): LegalNoticeData | null {

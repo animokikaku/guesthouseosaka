@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { AdvancedMarker, AdvancedMarkerProps } from '@vis.gl/react-google-maps'
+import { AdvancedMarker, type AdvancedMarkerProps } from '@vis.gl/react-google-maps'
 
 interface HouseMarkerProps extends Omit<AdvancedMarkerProps, 'position' | 'onClick'> {
   center?: { lat: number; lng: number }

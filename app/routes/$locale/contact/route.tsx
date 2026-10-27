@@ -21,7 +21,7 @@ function ContactLayout() {
   const { page } = Route.useLoaderData()
 
   return (
-    <CmsPageLayout page={page ?? null}>
+    <CmsPageLayout page={page}>
       <Outlet />
     </CmsPageLayout>
   )

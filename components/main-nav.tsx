@@ -8,7 +8,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu'
-import { HouseIdentifier, NavGroupItem, NavItem, NavListItem } from '@/lib/types'
+import type { HouseIdentifier, NavGroupItem, NavItem, NavListItem } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { NavigationMenu as NavigationMenuPrimitive } from '@base-ui/react/navigation-menu'
 import { stegaClean } from '@sanity/client/stega'
@@ -31,16 +31,18 @@ function PreviewImageItem({ item: it, isActive }: PreviewImageItemProps) {
         isActive ? 'opacity-100' : 'pointer-events-none opacity-0'
       )}
     >
-      <SanityImage
-        src={it.background.src}
-        alt={it.background.alt}
-        placeholder={it.background.blurDataURL ? 'blur' : undefined}
-        blurDataURL={it.background.blurDataURL}
-        loading={isActive ? 'eager' : 'lazy'}
-        fill
-        sizes="250px"
-        className="h-full w-full object-cover opacity-90"
-      />
+      {it.background ? (
+        <SanityImage
+          src={it.background.src}
+          alt={it.background.alt}
+          placeholder={it.background.blurDataURL ? 'blur' : undefined}
+          blurDataURL={it.background.blurDataURL}
+          loading={isActive ? 'eager' : 'lazy'}
+          fill
+          sizes="250px"
+          className="h-full w-full object-cover opacity-90"
+        />
+      ) : null}
 
       <div className="absolute inset-0 flex items-center justify-center">
         <Image

@@ -49,9 +49,7 @@ const collectionComponents: PortableTextComponents = {
 
 function HomePage() {
   const { locale } = Route.useParams()
-  const data = Route.useLoaderData()
-
-  const { page, houses } = data ?? {}
+  const { page, houses } = Route.useLoaderData()
 
   // Check for actual content, not just existence of the document
   const hasContent = houses && houses.length > 0

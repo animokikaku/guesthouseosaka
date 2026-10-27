@@ -7,7 +7,7 @@ import {
 import { GalleryShell } from '@/components/gallery/gallery-shell'
 import { useNavigate } from '@tanstack/react-router'
 import type { HouseIdentifier } from '@/lib/types'
-import { ReactNode, useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { useLocale, useTranslations } from 'use-intl'
 
 type GalleryModalWrapperProps = {
