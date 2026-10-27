@@ -38,8 +38,8 @@ updates go out with the next deploy.
 
 ## Publishing
 
-Pages are cached by Workers Cache for five minutes. A GROQ-powered webhook on the `production`
-dataset purges them on every publish, so changes show within seconds. It is set up in
+Pages are cached by Workers Cache for a day. A GROQ-powered webhook on the `production` dataset
+purges them on every publish, so changes show within seconds. It is set up in
 sanity.io/manage → API → Webhooks:
 
 | Field           | Value                                                        |
@@ -55,8 +55,8 @@ sanity.io/manage → API → Webhooks:
 
 The endpoint checks the signature against `SANITY_WEBHOOK_SECRET`, answers `401` without it,
 and `503` (which Sanity retries) when the purge fails. The webhook's attempts log in
-sanity.io/manage shows each delivery. Without the webhook, published changes still show once
-the cache expires.
+sanity.io/manage shows each delivery. If a delivery fails for good, the change shows once the
+cache expires, within a day, or after the next deploy; publishing again retries the purge.
 
 `development` needs no webhook: nothing caches it. Local builds have no Workers Cache, and
 Worker Preview URLs don't go through it (no `Cf-Cache-Status`, and `Cache-Tag` reaches the
