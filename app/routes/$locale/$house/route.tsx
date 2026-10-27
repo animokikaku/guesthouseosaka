@@ -1,12 +1,11 @@
 import { LocaleNotFound } from '@/components/locale-not-found'
-import { assets } from '@/lib/assets'
-import { getLocaleHeadData } from '@/lib/locale-head'
-import { openGraphMeta, pageMeta } from '@/lib/metadata'
 import { isHouseIdentifier } from '@/lib/types'
-import { getHouseMeta } from '@/sanity/lib/loaders.functions'
-import { stegaClean } from '@sanity/client/stega'
 import { createFileRoute, notFound } from '@tanstack/react-router'
 
+/**
+ * A house's section. It loads nothing itself: the house page and the gallery
+ * set their own title and description, from the house their loaders fetch.
+ */
 export const Route = createFileRoute('/$locale/$house')({
   params: {
     parse: ({ house }) => (isHouseIdentifier(house) ? { house } : false),
@@ -18,18 +17,5 @@ export const Route = createFileRoute('/$locale/$house')({
   beforeLoad: ({ params }) => {
     if (!isHouseIdentifier(params.house)) throw notFound()
   },
-  notFoundComponent: LocaleNotFound,
-  loader: ({ params: { locale, house } }) => getHouseMeta({ data: { locale, house } }),
-  head: ({ loaderData, matches, params: { locale, house } }) => {
-    const { siteName } = getLocaleHeadData(matches)
-    const meta = stegaClean(loaderData)
-    return {
-      meta: meta
-        ? [
-            ...openGraphMeta({ locale, image: assets.openGraph[house].src, siteName }),
-            ...pageMeta({ title: meta.title, description: meta.description, siteName })
-          ]
-        : []
-    }
-  }
+  notFoundComponent: LocaleNotFound
 })

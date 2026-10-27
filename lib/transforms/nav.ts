@@ -5,7 +5,9 @@ import type { ContactPageQueryResult, HousesNavQueryResult } from '@/sanity.type
 import { urlFor } from '@/sanity/lib/image'
 import type { Locale } from 'use-intl'
 
-type ContactTypes = NonNullable<ContactPageQueryResult>['contactTypes']
+type ContactTypes = Array<
+  Pick<NonNullable<ContactPageQueryResult>['contactTypes'][number], '_id' | 'slug' | 'title'>
+>
 
 /** Drops contact types without a title, which would render an empty tab. */
 export function toContactNavItems(contactTypes: ContactTypes): ContactNavItem[] {

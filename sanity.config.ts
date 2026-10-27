@@ -1,5 +1,3 @@
-'use client'
-
 /**
  * Sanity Studio configuration, used by the Sanity CLI (`typegen`, `dev`, `deploy`).
  * This site no longer embeds the Studio.

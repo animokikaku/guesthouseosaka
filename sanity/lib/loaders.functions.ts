@@ -6,16 +6,12 @@ import { createMiddleware, createServerFn } from '@tanstack/react-start'
 import { isDraftModeEnabled } from './draft-mode.server'
 import { sanityFetch, setCacheHeaders } from './fetch.server'
 import {
-  contactPageMetaQuery,
   contactPageQuery,
   contactTypeQuery,
-  contactTypesListQuery,
-  faqPageMetaQuery,
   faqPageQuery,
   faqQuestionsQuery,
   homePageQuery,
   houseGalleryQuery,
-  houseMetaQuery,
   housesBuildingQuery,
   housesNavQuery,
   housesTitlesQuery,
@@ -74,15 +70,13 @@ export const getFaqPage = createServerFn({ method: 'GET' })
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
     const params = { locale }
-    const [meta, page, housesBuilding, pricingCategories, faqQuestions] = await Promise.all([
-      sanityFetch({ query: faqPageMetaQuery, params }),
+    const [page, housesBuilding, pricingCategories, faqQuestions] = await Promise.all([
       sanityFetch({ query: faqPageQuery, params }),
       sanityFetch({ query: housesBuildingQuery, params }),
       sanityFetch({ query: pricingCategoriesQuery, params }),
       sanityFetch({ query: faqQuestionsQuery, params })
     ])
     return {
-      meta: meta.data,
       page: page.data,
       housesBuilding: housesBuilding.data,
       pricingCategories: pricingCategories.data,
@@ -94,18 +88,7 @@ export const getContactLayout = createServerFn({ method: 'GET' })
   .middleware([cacheable])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
-    const [meta, page] = await Promise.all([
-      sanityFetch({ query: contactPageMetaQuery, params: { locale } }),
-      sanityFetch({ query: contactPageQuery, params: { locale } })
-    ])
-    return { meta: meta.data, ...page.data }
-  })
-
-export const getContactTypes = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
-  .validator(byLocale)
-  .handler(async ({ data: { locale } }) => {
-    const { data } = await sanityFetch({ query: contactTypesListQuery, params: { locale } })
+    const { data } = await sanityFetch({ query: contactPageQuery, params: { locale } })
     return data
   })
 
@@ -126,14 +109,6 @@ export const getContactType = createServerFn({ method: 'GET' })
       sanityFetch({ query: housesTitlesQuery, params: { locale } })
     ])
     return { contactType: contactType.data, houseTitles: houseTitles.data }
-  })
-
-export const getHouseMeta = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
-  .validator(byHouse)
-  .handler(async ({ data: { locale, house } }) => {
-    const { data } = await sanityFetch({ query: houseMetaQuery, params: { locale, slug: house } })
-    return data
   })
 
 export const getHousePage = createServerFn({ method: 'GET' })

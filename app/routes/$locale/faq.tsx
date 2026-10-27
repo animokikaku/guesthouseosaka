@@ -12,7 +12,7 @@ export const Route = createFileRoute('/$locale/faq')({
   head: ({ loaderData, matches, params: { locale } }) => ({
     meta: cmsPageHead({
       locale,
-      meta: loaderData?.meta,
+      meta: loaderData?.page,
       image: assets.openGraph.faq.src,
       fallbackTitle: 'faq_title',
       matches

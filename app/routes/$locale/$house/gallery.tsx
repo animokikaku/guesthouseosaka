@@ -2,6 +2,7 @@ import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { GalleryShell } from '@/components/gallery/gallery-shell'
 import { PageEmptyStateSection } from '@/components/page-empty-state'
 import { buttonVariants } from '@/components/ui/button'
+import { houseHeadMeta } from '@/lib/house-head'
 import { canonicalLink } from '@/lib/metadata'
 import { getHouseGallery } from '@/sanity/lib/loaders.functions'
 import { createFileRoute, Link } from '@tanstack/react-router'
@@ -11,7 +12,8 @@ import { useTranslations } from 'use-intl'
 /** The gallery as its own page, for direct visits; the house page opens it as a modal. */
 export const Route = createFileRoute('/$locale/$house/gallery')({
   loader: ({ params: { locale, house } }) => getHouseGallery({ data: { locale, house } }),
-  head: ({ params: { locale, house } }) => ({
+  head: ({ loaderData, matches, params: { locale, house } }) => ({
+    meta: houseHeadMeta({ locale, house, data: loaderData, matches }),
     links: [canonicalLink({ pathname: '/[house]/gallery', params: { house } }, locale)]
   }),
   component: GalleryPage
