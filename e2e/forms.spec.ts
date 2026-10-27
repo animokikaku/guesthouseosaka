@@ -63,6 +63,17 @@ test.describe('General inquiry form', () => {
     expect(requests).toHaveLength(0)
   })
 
+  test('a blocked Turnstile script leaves submit disabled and says how to reach us', async ({
+    page
+  }) => {
+    await page.route('https://challenges.cloudflare.com/**', (route) => route.abort())
+    await gotoContactForm(page, 'other')
+
+    await expect(page.getByRole('alert')).toContainText(/\bcouldn’t load the verification\b/i)
+    await expect(page.getByRole('alert')).toContainText('info@guesthouseosaka.com')
+    await expect(page.getByRole('button', { name: /\bsubmit\b/i })).toBeDisabled()
+  })
+
   test('failed email delivery shows an error without leaving the form', async ({
     serverFetch,
     page

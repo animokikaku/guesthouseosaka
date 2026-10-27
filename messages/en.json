@@ -191,6 +191,9 @@
       "privacy_policy": "You must agree to the privacy policy.",
       "stay_duration": "Please select your desired minimum stay.",
       "time_range": "Time must be between 10:00 and 20:00."
+    },
+    "verification": {
+      "unavailable": "We couldn’t load the verification needed to send this form. Reload the page, or email us at {email}."
     }
   }
 }

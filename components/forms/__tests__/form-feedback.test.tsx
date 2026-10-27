@@ -10,7 +10,7 @@ import {
   submit,
   submitIncomplete
 } from './utils/contact-form'
-import { holdTurnstile, TURNSTILE_TOKEN } from './utils/turnstile'
+import { failTurnstile, holdTurnstile, TURNSTILE_TOKEN } from './utils/turnstile'
 
 // The server function, the router and Turnstile's widget are the forms' only way out of the
 // browser.
@@ -86,6 +86,16 @@ describe('form validation and feedback', () => {
 
     act(() => pass())
     await waitFor(() => expect(button).toBeEnabled())
+  })
+
+  it('says how else to reach us when the bot check cannot run', async () => {
+    failTurnstile()
+    renderForm(ContactForm)
+
+    const fallback = await screen.findByRole('alert')
+    expect(fallback).toHaveTextContent(/\bcouldn’t load the verification\b/i)
+    expect(fallback).toHaveTextContent(CONTACT_EMAIL)
+    expect(screen.getByRole('button', { name: /\bsubmit\b/i })).toBeDisabled()
   })
 
   it('keeps the visitor on the form when delivery fails', async () => {

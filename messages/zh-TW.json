@@ -191,6 +191,9 @@
       "privacy_policy": "您必須同意隱私權政策。",
       "stay_duration": "請選擇您希望的最短入住期間。",
       "time_range": "時間必須在10:00至20:00之間。"
+    },
+    "verification": {
+      "unavailable": "無法載入送出此表單所需的驗證。請重新整理頁面，或寄信至 {email} 與我們聯絡。"
     }
   }
 }

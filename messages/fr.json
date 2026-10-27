@@ -191,6 +191,9 @@
       "privacy_policy": "Vous devez accepter la politique de confidentialité.",
       "stay_duration": "Veuillez sélectionner votre durée de séjour minimale souhaitée.",
       "time_range": "L'heure doit être comprise entre 10:00 et 20:00."
+    },
+    "verification": {
+      "unavailable": "La vérification nécessaire à l’envoi de ce formulaire n’a pas pu se charger. Rechargez la page ou écrivez-nous à {email}."
     }
   }
 }
