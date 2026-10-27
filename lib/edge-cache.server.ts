@@ -49,7 +49,10 @@ export async function cached<T>(key: string, load: () => Promise<T>): Promise<T>
     if (age > FRESH_SECONDS && !refreshing.has(request.url)) {
       refreshing.add(request.url)
       waitUntil(
-        load()
+        // Started inside the chain, so even a `load` that throws synchronously
+        // ends in the `finally` instead of failing this stale hit.
+        Promise.resolve()
+          .then(load)
           .then((value) => store(request, value))
           .finally(() => refreshing.delete(request.url))
       )
