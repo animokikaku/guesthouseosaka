@@ -6,14 +6,10 @@ type FooterStyleProps = {
 }
 
 /**
- * Page-level overrides for the site footer.
- *
- * A page React keeps rendered but hidden (inside an <Activity>) would leave a
- * plain stylesheet (or a `body:has(...)` match) applying. The stylesheet starts
- * disabled, because React can render a page straight into a hidden <Activity>
- * without attaching refs, and the ref enables it only while its page is visible. The cleanup runs in the same commit as the
- * navigation, before the browser re-snaps to a footer that is still a snap
- * target and leaves the next page scrolled to the bottom.
+ * Page-level overrides for the site footer, as a `<style>` the page renders.
+ * Leaving the page unmounts it in the navigation's commit, so a snap target
+ * never outlives its page: the site snaps mandatorily, and a leftover one
+ * would open the next page scrolled to the bottom.
  */
 export function FooterStyle({ snap = false, plain = false }: FooterStyleProps) {
   const rules = [
@@ -23,18 +19,5 @@ export function FooterStyle({ snap = false, plain = false }: FooterStyleProps) {
 
   if (rules.length === 0) return null
 
-  return (
-    <style
-      media="not all"
-      ref={(style) => {
-        if (!style) return
-        style.media = 'all'
-        return () => {
-          style.media = 'not all'
-        }
-      }}
-    >
-      {rules.join('\n')}
-    </style>
-  )
+  return <style>{rules.join('\n')}</style>
 }
