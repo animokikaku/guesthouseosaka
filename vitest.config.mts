@@ -23,6 +23,7 @@ export default defineConfig({
     env: {
       VITE_APP_URL: 'https://guesthouseosaka.test',
       VITE_GOOGLE_MAPS_API_KEY: 'test-maps-key',
+      VITE_TURNSTILE_SITE_KEY: '1x00000000000000000000AA',
       VITE_SANITY_DATASET: 'production',
       RESEND_API_KEY: 're_test',
       SANITY_API_READ_TOKEN: 'test-token'

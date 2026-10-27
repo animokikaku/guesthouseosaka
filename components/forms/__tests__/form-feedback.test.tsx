@@ -2,7 +2,7 @@ import { ContactForm } from '@/components/forms/contact-form'
 import { TourForm } from '@/components/forms/tour-form'
 import { CONTACT_EMAIL } from '@/lib/config'
 import { routerState } from '@/lib/__tests__/utils/router'
-import { screen, waitFor } from '@testing-library/react'
+import { act, screen, waitFor } from '@testing-library/react'
 import {
   fillSharedFields,
   renderForm,
@@ -10,8 +10,10 @@ import {
   submit,
   submitIncomplete
 } from './utils/contact-form'
+import { failTurnstile, holdTurnstile, TURNSTILE_TOKEN } from './utils/turnstile'
 
-// The server function and the router are the forms' only way out of the browser.
+// The server function and the router are the forms' only way out of the browser. Turnstile's
+// widget is mocked for every test in vitest.setup.ts.
 const { submitContactForm } = vi.hoisted(() => ({ submitContactForm: vi.fn() }))
 
 vi.mock('@/app/actions/contact.functions', () => ({ submitContactForm }))
@@ -74,6 +76,27 @@ describe('form validation and feedback', () => {
     await waitFor(() => expect(button).toBeEnabled())
   })
 
+  it('keeps submit disabled until the bot check passes', async () => {
+    const pass = holdTurnstile()
+    renderForm(ContactForm)
+
+    const button = screen.getByRole('button', { name: /\bsubmit\b/i })
+    expect(button).toBeDisabled()
+
+    act(() => pass())
+    await waitFor(() => expect(button).toBeEnabled())
+  })
+
+  it('says how else to reach us when the bot check cannot run', async () => {
+    failTurnstile()
+    renderForm(ContactForm)
+
+    const fallback = await screen.findByRole('alert')
+    expect(fallback).toHaveTextContent(/\bcouldn’t load the verification\b/i)
+    expect(fallback).toHaveTextContent(CONTACT_EMAIL)
+    expect(screen.getByRole('button', { name: /\bsubmit\b/i })).toBeDisabled()
+  })
+
   it('keeps the visitor on the form when delivery fails', async () => {
     submitContactForm.mockResolvedValueOnce({ ok: false, code: 'delivery_failed' })
     renderForm(ContactForm)
@@ -84,6 +107,23 @@ describe('form validation and feedback', () => {
     expect(await screen.findByText(/failed/i)).toBeInTheDocument()
     // Tells the visitor where to write instead.
     expect(screen.getByText((text) => text.includes(CONTACT_EMAIL))).toBeInTheDocument()
+    expect(routerState.navigate).not.toHaveBeenCalled()
+  })
+
+  it('asks the visitor to retry when the bot check rejects them', async () => {
+    submitContactForm.mockResolvedValueOnce({ ok: false, code: 'verification_failed' })
+    renderForm(ContactForm)
+
+    fillSharedFields()
+    submit()
+
+    expect(
+      await screen.findByText(/couldn’t confirm this was sent by a person/i)
+    ).toBeInTheDocument()
+    expect(screen.getByText((text) => text.includes(CONTACT_EMAIL))).toBeInTheDocument()
+    expect(submitContactForm).toHaveBeenCalledWith({
+      data: expect.objectContaining({ turnstileToken: TURNSTILE_TOKEN })
+    })
     expect(routerState.navigate).not.toHaveBeenCalled()
   })
 })

@@ -168,7 +168,8 @@ declare const messages: {
     "status": {
       "error": {
         "description": "Please try again later or contact us directly at {email}.",
-        "message": "Failed to send message."
+        "message": "Failed to send message.",
+        "verification": "We couldn’t confirm this was sent by a person. Reload the page and try again, or email us at {email}."
       },
       "sending": "Sending message…",
       "success": {
@@ -193,6 +194,9 @@ declare const messages: {
       "privacy_policy": "You must agree to the privacy policy.",
       "stay_duration": "Please select your desired minimum stay.",
       "time_range": "Time must be between 10:00 and 20:00."
+    },
+    "verification": {
+      "unavailable": "We couldn’t load the verification needed to send this form. Reload the page, or email us at {email}."
     }
   }
 };

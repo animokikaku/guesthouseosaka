@@ -3,6 +3,7 @@ import { CONTACT_EMAIL } from '@/lib/config'
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
 import { useNavigate } from '@tanstack/react-router'
 import { useLocale, useTranslations } from 'use-intl'
+import { useTurnstileToken } from '@/components/forms/turnstile'
 import { toast } from '@/components/ui/toast'
 
 /**
@@ -21,7 +22,7 @@ type FormTypeDataMap = {
  *
  * @example
  * ```tsx
- * const { onSubmitInvalid, createOnSubmit } = useFormSubmit()
+ * const { onSubmitInvalid, createOnSubmit, turnstile } = useFormSubmit()
  *
  * const form = useAppForm({
  *   defaultValues: {...},
@@ -29,12 +30,15 @@ type FormTypeDataMap = {
  *   onSubmitInvalid,
  *   onSubmit: createOnSubmit('tour')
  * })
+ *
+ * <FormCard form={form} turnstile={turnstile} ...>
  * ```
  */
 export function useFormSubmit() {
   const t = useTranslations('forms')
   const navigate = useNavigate()
   const locale = useLocale()
+  const turnstile = useTurnstileToken()
 
   const onSubmitInvalid = () => {
     const firstErrorInput = document.querySelector<HTMLElement>('[aria-invalid="true"]')
@@ -56,7 +60,8 @@ export function useFormSubmit() {
       // TypeScript cannot correlate a generic key with its mapped discriminated-union value.
       // oxlint-disable-next-line typescript/no-unsafe-type-assertion
       const payload = { type: formType, data: value } as ContactFormPayload
-      const promise = submitContactForm({ data: payload }).then((result) => {
+      const turnstileToken = turnstile.take()
+      const promise = submitContactForm({ data: { payload, turnstileToken } }).then((result) => {
         if (!result.ok) {
           throw new Error(result.code)
         }
@@ -73,12 +78,13 @@ export function useFormSubmit() {
             })
           }
         },
-        error: () => {
+        error: (error: unknown) => {
+          const unverified = error instanceof Error && error.message === 'verification_failed'
           return {
             title: t('status.error.message'),
-            description: t('status.error.description', {
-              email: CONTACT_EMAIL
-            })
+            description: unverified
+              ? t('status.error.verification', { email: CONTACT_EMAIL })
+              : t('status.error.description', { email: CONTACT_EMAIL })
           }
         }
       })
@@ -87,6 +93,7 @@ export function useFormSubmit() {
 
   return {
     onSubmitInvalid,
-    createOnSubmit
+    createOnSubmit,
+    turnstile
   }
 }

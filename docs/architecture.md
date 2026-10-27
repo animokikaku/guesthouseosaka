@@ -91,8 +91,9 @@ public/                # Static assets only
 - Hashed build assets are served as immutable (`public/_headers`)
 - `bun run test:e2e:preview` builds the `preview` environment locally and sends one real
   contact email to Resend's test inbox: workerd runs the bundle `wrangler deploy` uploads, so
-  this checks the Resend key and sending domain without deploying. Add
-  `BASE_URL=<preview URL>` to run it against a deployed version instead
+  this checks the Resend key and sending domain without deploying. It runs locally with
+  Turnstile's test keys; a deployed Preview runs the real challenge, which stops the automated
+  browser, so check one by submitting its contact form by hand
 - Logos and Open Graph images are served from the public R2 bucket `guesthouseosaka-assets`
   through its custom domain (`ASSETS_URL` in `lib/config.ts`). Uploads set
   `Cache-Control: public, max-age=31536000`, so replace a file under a new name rather than
@@ -106,9 +107,25 @@ public/                # Static assets only
   the build validates them against `lib/env.schema.ts`, so no validator ships to the browser
 - Server secrets come from `lib/env.server.ts` (`@t3-oss/env-core`): the Worker's vars and
   secrets, validated at runtime through `process.env`
-- Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `DEPLOY_ENV`
-- Client: `VITE_GOOGLE_MAPS_API_KEY`, and optionally `VITE_APP_URL`, which defaults to
-  `SITE_URL`. The Sanity project, API version and assets host are constants in `lib/config.ts`
+- Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `DEPLOY_ENV`, `TURNSTILE_SECRET_KEY`
+- Client: `VITE_GOOGLE_MAPS_API_KEY`, `VITE_TURNSTILE_SITE_KEY`, and optionally `VITE_APP_URL`,
+  which defaults to `SITE_URL`. The Sanity project, API version and assets host are constants in
+  `lib/config.ts`
 - `VITE_SANITY_DATASET` isn't set in `.env` files: `vite.config.ts` derives it from the Wrangler
   environment being built (`CLOUDFLARE_ENV`), so `bun run deploy` reads `production` and local
   and preview builds read `development`
+
+### Turnstile
+
+The contact forms carry Cloudflare Turnstile's bot check (`components/forms/turnstile.tsx`), which
+`app/actions/turnstile.server.ts` verifies before an email goes out.
+
+- Deployed builds use the real widget, for `guesthouseosaka.com` and `animokikaku.workers.dev`:
+  Workers Builds passes `VITE_TURNSTILE_SITE_KEY` to production and preview builds as a build
+  variable, and the Worker and its Previews read the `TURNSTILE_SECRET_KEY` secret. A Preview runs
+  the real check while emailing only Resend's test inbox
+- Local and CI builds use Cloudflare's always-passing test keys, from `.env.local` (see
+  `.env.example`) and `ci.yml`
+- A submission without a token Cloudflare vouches for is rejected, and the Worker logs Cloudflare's
+  error codes (`Turnstile rejected…`). Turnstile's dashboard analytics show how many visitors
+  pass the challenge

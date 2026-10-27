@@ -1,8 +1,13 @@
 // @vitest-environment node
 
 const { sendMock, env } = vi.hoisted(() => {
-  const mutableEnv: { RESEND_API_KEY: string; DEPLOY_ENV?: string } = {
-    RESEND_API_KEY: 're_test'
+  const mutableEnv: {
+    RESEND_API_KEY: string
+    DEPLOY_ENV?: string
+    TURNSTILE_SECRET_KEY: string
+  } = {
+    RESEND_API_KEY: 're_test',
+    TURNSTILE_SECRET_KEY: 'turnstile-secret'
   }
   return { sendMock: vi.fn(), env: mutableEnv }
 })
@@ -16,7 +21,19 @@ vi.mock('resend', () => ({
 vi.mock('@/lib/env.server', () => ({ serverEnv: env }))
 
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
-import { submitContactForm } from '../contact.server'
+import { submitContactForm as submitWithOrigin, type SubmissionOrigin } from '../contact.server'
+
+const siteverifyMock = vi.fn<typeof fetch>()
+
+/** Answers Siteverify with this body, as Cloudflare does for a checked token. */
+const siteverifyReplies = (body: Record<string, unknown>) =>
+  siteverifyMock.mockImplementation(async () => Response.json(body))
+
+/** A submission from a visitor whose browser passed the Turnstile challenge. */
+const submitContactForm = (
+  submission: ContactFormPayload,
+  origin: SubmissionOrigin = { turnstileToken: 'turnstile-token' }
+) => submitWithOrigin(submission, origin)
 
 const payload: ContactFormPayload = {
   type: 'other',
@@ -71,9 +88,12 @@ describe('submitContactForm', () => {
   beforeEach(() => {
     sendMock.mockReset().mockResolvedValue({ data: { id: 'email-id' }, error: null, headers: {} })
     Object.assign(env, { DEPLOY_ENV: undefined })
+    vi.stubGlobal('fetch', siteverifyMock.mockReset())
+    siteverifyReplies({ success: true })
   })
 
   afterEach(() => {
+    vi.unstubAllGlobals()
     vi.restoreAllMocks()
   })
 
@@ -183,5 +203,61 @@ describe('submitContactForm', () => {
       code: 'invalid_submission'
     })
     expect(sendMock).not.toHaveBeenCalled()
+  })
+
+  describe('Turnstile', () => {
+    it('checks the token with Cloudflare before sending', async () => {
+      await expect(
+        submitWithOrigin(payload, { turnstileToken: 'turnstile-token', remoteIp: '203.0.113.7' })
+      ).resolves.toEqual({ ok: true })
+
+      const [url, init] = siteverifyMock.mock.calls[0]
+      expect(url).toBe('https://challenges.cloudflare.com/turnstile/v0/siteverify')
+      expect(init?.body).toBe(
+        JSON.stringify({
+          secret: 'turnstile-secret',
+          response: 'turnstile-token',
+          remoteip: '203.0.113.7'
+        })
+      )
+    })
+
+    it.each(['invalid-input-response', 'timeout-or-duplicate', 'bad-request'])(
+      'rejects a token Cloudflare fails with %s',
+      async (errorCode) => {
+        const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+        siteverifyReplies({ success: false, 'error-codes': [errorCode] })
+
+        await expect(submitContactForm(payload)).resolves.toEqual({
+          ok: false,
+          code: 'verification_failed'
+        })
+        expect(sendMock).not.toHaveBeenCalled()
+        expect(warn).toHaveBeenCalledWith('Turnstile rejected a contact form submission', [
+          errorCode
+        ])
+      }
+    )
+
+    it.each([
+      { name: 'no token', turnstileToken: undefined },
+      { name: 'an empty token', turnstileToken: '' },
+      { name: 'a token that is not a string', turnstileToken: { forged: true } },
+      { name: 'a token longer than Cloudflare issues', turnstileToken: 'x'.repeat(2049) }
+    ])('rejects $name without asking Cloudflare', async ({ turnstileToken }) => {
+      await expect(submitWithOrigin(payload, { turnstileToken })).resolves.toEqual({
+        ok: false,
+        code: 'verification_failed'
+      })
+      expect(siteverifyMock).not.toHaveBeenCalled()
+      expect(sendMock).not.toHaveBeenCalled()
+    })
+
+    it('fails the submission when Cloudflare cannot be reached', async () => {
+      siteverifyMock.mockRejectedValue(new Error('Network unavailable'))
+
+      await expect(submitContactForm(payload)).rejects.toThrow('Network unavailable')
+      expect(sendMock).not.toHaveBeenCalled()
+    })
   })
 })

@@ -26,3 +26,11 @@ export const SANITY_STUDIO_HOSTS = {
 
 export const CONTACT_EMAIL_DOMAIN = 'guesthouseosaka.com'
 export const CONTACT_EMAIL = `info@${CONTACT_EMAIL_DOMAIN}`
+
+/**
+ * Cloudflare's always-passing Turnstile sitekey, which works on any hostname.
+ * Local and CI builds set it with the matching test secret (`.env.example`,
+ * `ci.yml`); builds without a sitekey, like the component gallery, fall back to it.
+ * @see https://developers.cloudflare.com/turnstile/troubleshooting/testing/
+ */
+export const TURNSTILE_TEST_SITE_KEY = '1x00000000000000000000AA'

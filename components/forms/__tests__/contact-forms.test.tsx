@@ -12,8 +12,10 @@ import {
   submit,
   submitIncomplete
 } from './utils/contact-form'
+import { TURNSTILE_TOKEN } from './utils/turnstile'
 
-// The server function and the router are the forms' only way out of the browser.
+// The server function and the router are the forms' only way out of the browser. Turnstile's
+// widget is mocked for every test in vitest.setup.ts.
 const { submitContactForm } = vi.hoisted(() => ({ submitContactForm: vi.fn() }))
 
 vi.mock('@/app/actions/contact.functions', () => ({ submitContactForm }))
@@ -71,7 +73,11 @@ describe.each(forms)('$type form', ({ type, Form, fill, data }) => {
     fill()
     submit()
 
-    await waitFor(() => expect(submitContactForm).toHaveBeenCalledWith({ data: { type, data } }))
+    await waitFor(() =>
+      expect(submitContactForm).toHaveBeenCalledWith({
+        data: { payload: { type, data }, turnstileToken: TURNSTILE_TOKEN }
+      })
+    )
     expect(await screen.findByText(/sent successfully/i)).toBeInTheDocument()
     expect(routerState.navigate).toHaveBeenCalledWith({
       to: '/$locale/contact',

@@ -165,7 +165,8 @@
     "status": {
       "error": {
         "description": "Veuillez réessayer plus tard ou contactez-nous directement à {email}.",
-        "message": "Échec de l'envoi du message."
+        "message": "Échec de l'envoi du message.",
+        "verification": "Nous n’avons pas pu confirmer que ce message vient d’une personne. Rechargez la page et réessayez, ou écrivez-nous à {email}."
       },
       "sending": "Envoi du message…",
       "success": {
@@ -190,6 +191,9 @@
       "privacy_policy": "Vous devez accepter la politique de confidentialité.",
       "stay_duration": "Veuillez sélectionner votre durée de séjour minimale souhaitée.",
       "time_range": "L'heure doit être comprise entre 10:00 et 20:00."
+    },
+    "verification": {
+      "unavailable": "La vérification nécessaire à l’envoi de ce formulaire n’a pas pu se charger. Rechargez la page ou écrivez-nous à {email}."
     }
   }
 }

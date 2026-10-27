@@ -8,7 +8,8 @@ export const serverEnv = createEnv({
     SANITY_API_READ_TOKEN: nonEmptyString(),
     RESEND_API_KEY: nonEmptyString(),
     // Which Cloudflare environment this Worker is (see wrangler.jsonc).
-    DEPLOY_ENV: z.optional(z.enum(['development', 'preview', 'production']))
+    DEPLOY_ENV: z.optional(z.enum(['development', 'preview', 'production'])),
+    TURNSTILE_SECRET_KEY: nonEmptyString()
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true

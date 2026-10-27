@@ -7,6 +7,7 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { TurnstileWidget, type TurnstileToken } from '@/components/forms/turnstile'
 import { Field, FieldGroup } from '@/components/ui/field'
 import { cn } from '@/lib/utils'
 import { useSelector, type AnyReactFormApi } from '@tanstack/react-form'
@@ -18,11 +19,21 @@ interface FormCardProps {
   description?: string | null
   formId: string
   form: AnyReactFormApi
+  /** From `useFormSubmit`, whose submit handler spends the widget's token. */
+  turnstile: TurnstileToken
   children: React.ReactNode
   className?: string
 }
 
-export function FormCard({ title, description, formId, form, children, className }: FormCardProps) {
+export function FormCard({
+  title,
+  description,
+  formId,
+  form,
+  turnstile,
+  children,
+  className
+}: FormCardProps) {
   const t = useTranslations('SubmitButton')
   const isSubmitting = useSelector(form.atom, (state) => state.isSubmitting)
 
@@ -43,12 +54,19 @@ export function FormCard({ title, description, formId, form, children, className
           }}
         >
           <FieldGroup>{children}</FieldGroup>
+          <TurnstileWidget key={turnstile.widgetKey} onToken={turnstile.setToken} />
         </form>
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          {/* Outside the <form>, so it submits through the native `form=` association. */}
-          <Button type="submit" form={formId} disabled={isSubmitting} aria-busy={isSubmitting}>
+          {/* Outside the <form>, so it submits through the native `form=` association. It waits for
+              Turnstile's token, without which the server would reject the submission. */}
+          <Button
+            type="submit"
+            form={formId}
+            disabled={isSubmitting || !turnstile.token}
+            aria-busy={isSubmitting}
+          >
             {isSubmitting ? (
               <span aria-hidden="true" className="inline-flex animate-spin">
                 <Loader2Icon />
