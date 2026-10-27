@@ -1,6 +1,7 @@
 import { cloudflare } from '@cloudflare/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import { redact } from '@tanstack/redact/vite'
 import viteReact from '@vitejs/plugin-react'
 import { cn } from 'cn/vite'
 import compileMessage from 'icu-minify/compile'
@@ -142,6 +143,7 @@ export default defineConfig(() => {
         { find: /^use-intl\/format-message$/, replacement: 'use-intl/format-message/format-only' }
       ]
     },
+    ssr: { noExternal: true },
     plugins: [
       // Builds and runs the server in workerd, configured by wrangler.jsonc.
       cloudflare({ viteEnvironment: { name: 'ssr' } }),
@@ -152,7 +154,8 @@ export default defineConfig(() => {
       cn({ content: ['{app,components,lib}/**/*.{ts,tsx}'], out: 'generated/cn-tables.ts' }),
       tanstackStart({ srcDirectory: 'app' }),
       // React's plugin must come after Start's.
-      viteReact({ compiler: true })
+      viteReact({ compiler: true }),
+      redact()
     ]
   }
 })
