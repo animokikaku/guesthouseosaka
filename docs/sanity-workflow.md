@@ -36,6 +36,33 @@ in sanity.io/manage → Studios: `stable` for production, `latest` for developme
 Studio never runs a version older than the one it was built with. Plugins are bundled, so their
 updates go out with the next deploy.
 
+## Publishing
+
+Pages are cached by Workers Cache for five minutes. A GROQ-powered webhook on the `production`
+dataset purges them on every publish, so changes show within seconds. It is set up in
+sanity.io/manage → API → Webhooks:
+
+| Field           | Value                                                        |
+| --------------- | ------------------------------------------------------------ |
+| URL             | `https://guesthouseosaka.com/api/revalidate`                 |
+| Dataset         | `production`                                                 |
+| Trigger on      | Create, Update, Delete                                       |
+| Filter          | Empty (any document)                                         |
+| Projection      | `{_id, _type}`                                               |
+| HTTP method     | `POST`                                                       |
+| Drafts/Versions | Off                                                          |
+| Secret          | The Worker's `SANITY_WEBHOOK_SECRET` (`wrangler secret put`) |
+
+The endpoint checks the signature against `SANITY_WEBHOOK_SECRET`, answers `401` without it,
+and `503` (which Sanity retries) when the purge fails. The webhook's attempts log in
+sanity.io/manage shows each delivery. Without the webhook, published changes still show once
+the cache expires.
+
+`development` needs no webhook: nothing caches it. Local builds have no Workers Cache, and
+Worker Preview URLs don't go through it (no `Cf-Cache-Status`, and `Cache-Tag` reaches the
+browser), so previews always show the latest `development` content. Production starts from an
+empty cache on every deploy, since the cache key includes the Worker version.
+
 ## GROQ queries
 
 - Use `defineQuery()` in `sanity/lib/queries.ts` for type safety, then run `bun run typegen`
