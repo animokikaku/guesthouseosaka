@@ -12,12 +12,11 @@ import {
 } from './utils/contact-form'
 import { failTurnstile, holdTurnstile, TURNSTILE_TOKEN } from './utils/turnstile'
 
-// The server function, the router and Turnstile's widget are the forms' only way out of the
-// browser.
+// The server function and the router are the forms' only way out of the browser. Turnstile's
+// widget is mocked for every test in vitest.setup.ts.
 const { submitContactForm } = vi.hoisted(() => ({ submitContactForm: vi.fn() }))
 
 vi.mock('@/app/actions/contact.functions', () => ({ submitContactForm }))
-vi.mock('@marsidev/react-turnstile', () => import('./utils/turnstile'))
 
 beforeEach(() => {
   submitContactForm.mockReset().mockResolvedValue({ ok: true })

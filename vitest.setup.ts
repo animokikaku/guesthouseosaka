@@ -112,6 +112,10 @@ vi.mock('@tanstack/react-router', async () => {
   return routerMock
 })
 
+// jsdom never loads Cloudflare's script, so a form's submit button would never enable.
+// The stand-in passes the challenge at once; see it for the controls tests can use.
+vi.mock('@marsidev/react-turnstile', () => import('@/components/forms/__tests__/utils/turnstile'))
+
 beforeEach(async () => {
   const { routerState } = await import('@/lib/__tests__/utils/router')
   Object.assign(routerState, { params: {}, pathname: '/en' })
