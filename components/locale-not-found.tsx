@@ -1,4 +1,3 @@
-import { FooterStyle } from '@/components/footer-style'
 import { Image } from '@/components/image'
 import { buttonVariants } from '@/components/ui/button'
 import {
@@ -33,8 +32,7 @@ export function LocaleNotFound() {
   const locale = useLocale()
 
   return (
-    <Empty>
-      <FooterStyle plain />
+    <Empty className="footer-plain">
       <EmptyHeader>
         <EmptyMedia>
           <Image preload {...assets.notFound} />
