@@ -94,7 +94,58 @@ function precompileMessages(): Plugin {
   }
 }
 
+type ModuleGraphNode = {
+  isEntry: boolean
+  importers: readonly string[]
+  dynamicImporters: readonly string[]
+  importedIds: readonly string[]
+  dynamicallyImportedIds: readonly string[]
+}
+
+/** The lazily loaded modules only draft mode renders. */
+const draftModeEntries = new Set(
+  ['components/draft-mode.tsx', 'components/optimistic-array.live.tsx'].map((file) =>
+    path.resolve(file)
+  )
+)
+
+/**
+ * Tells whether a module of the client graph is loaded only behind a draft
+ * mode entry, so chunk groups can leave it out: merged with code visitors
+ * load, it pulls Visual Editing into their pages. Walks up to the graph's
+ * entries on the first call, then forward from them without entering draft
+ * mode entries.
+ */
+function createDraftModeOnlyCheck() {
+  let visitorModules: Set<string> | undefined
+
+  return (id: string, graph: { getModuleInfo(id: string): ModuleGraphNode | null }) => {
+    if (!visitorModules) {
+      const entries = new Set<string>()
+      const seen = new Set([id])
+      for (const current of seen) {
+        const info = graph.getModuleInfo(current)
+        if (!info) continue
+        if (info.isEntry) entries.add(current)
+        for (const importer of [...info.importers, ...info.dynamicImporters]) seen.add(importer)
+      }
+
+      visitorModules = new Set(entries)
+      for (const current of visitorModules) {
+        const info = graph.getModuleInfo(current)
+        if (!info) continue
+        for (const imported of [...info.importedIds, ...info.dynamicallyImportedIds]) {
+          if (!draftModeEntries.has(imported.split('?')[0])) visitorModules.add(imported)
+        }
+      }
+    }
+    return !visitorModules.has(id)
+  }
+}
+
 export default defineConfig(() => {
+  const isDraftModeOnly = createDraftModeOnlyCheck()
+
   return {
     server: { port: 3000 },
     environments: {
@@ -108,13 +159,13 @@ export default defineConfig(() => {
               // Route-level splitting left ~55 files per page, most under 2 KB,
               // which cost a round trip each before hydration. One group
               // merges modules shared by several chunks; `entriesAware` keeps
-              // a module with the routes that load it, so draft-mode-only code
-              // stays out of what visitors load. Merging leftovers up to 50 KB
-              // cut pages to ~20 files.
+              // a module with the routes that load it. Merging leftovers up to
+              // 50 KB cut pages to ~20 files, but can merge visitors' code with
+              // draft-mode-only code, so that code stays out of the group.
               codeSplitting: {
                 groups: [
                   {
-                    name: 'shared',
+                    name: (id, context) => (isDraftModeOnly(id, context) ? null : 'shared'),
                     minShareCount: 2,
                     entriesAware: true,
                     entriesAwareMergeThreshold: 50_000
