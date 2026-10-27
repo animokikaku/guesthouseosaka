@@ -73,10 +73,9 @@ export async function gotoContactForm(page: Page, slug: 'tour' | 'move-in' | 'ot
   const form = page.locator(`form#${slug}-form`)
   await expect(form).toBeVisible()
 
-  // The prerendered form is visible before React hydrates it. A value filled in
-  // that window stays in the DOM, but the form state is still empty, so the
-  // field's next render (a later fill or submit) wipes it. React attaches its
-  // fiber to the element once it is hydrated.
+  // The prerendered form is visible before it hydrates. A value filled in that
+  // window stays in the DOM, but the form state is still empty, so the field's
+  // next render (a later fill or submit) wipes it.
   await expect.poll(() => form.evaluate(isHydrated)).toBe(true)
 
   return form
