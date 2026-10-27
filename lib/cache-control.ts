@@ -5,9 +5,10 @@ export const STATIC_FILE_CACHE_CONTROL = 'public, max-age=0, s-maxage=86400'
 export const SANITY_CACHE_TAG = 'sanity'
 
 /**
- * Lets Workers Cache serve published responses for five minutes; after that
- * the next request renders them again. Publishing in Sanity purges them sooner,
- * through `/api/revalidate`. Draft responses are never shared.
+ * Lets Workers Cache serve published responses for a day; after that the next
+ * request renders them again. Publishing in Sanity purges them right away,
+ * through `/api/revalidate`, and every deploy starts an empty cache, so the day
+ * only bounds how long a missed purge lasts. Draft responses are never shared.
  *
  * No `stale-while-revalidate`. Workers Cache ignores it whenever `s-maxage` is
  * present, and `s-maxage` is what keeps this lifetime away from browsers, which
@@ -23,7 +24,7 @@ export function cacheHeaders(isDraftMode: boolean): Record<string, string> {
   if (isDraftMode) return { 'Cache-Control': 'private, no-store', Vary: 'Cookie' }
 
   return {
-    'Cache-Control': 'public, max-age=0, s-maxage=300',
+    'Cache-Control': 'public, max-age=0, s-maxage=86400',
     // Cloudflare strips it before the response reaches the browser.
     'Cache-Tag': SANITY_CACHE_TAG,
     Vary: 'Cookie'
