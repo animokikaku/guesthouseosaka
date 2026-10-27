@@ -9,9 +9,10 @@ export const SANITY_CACHE_TAG = 'sanity'
  * the next request renders them again. Publishing in Sanity purges them sooner,
  * through `/api/revalidate`. Draft responses are never shared.
  *
- * No `stale-while-revalidate`: Workers Cache answers an expired entry by
- * rendering it again anyway (`Cf-Cache-Status: EXPIRED`), while browsers honor
- * it and would show a copy a purge can't reach.
+ * No `stale-while-revalidate`. Workers Cache ignores it whenever `s-maxage` is
+ * present, and `s-maxage` is what keeps this lifetime away from browsers, which
+ * would honor it and show a copy a purge can't reach.
+ * @see https://developers.cloudflare.com/workers/cache/debugging/
  *
  * Cookies aren't part of the cache key, so `Vary: Cookie` keeps a cached
  * published copy from reaching a draft-mode visitor. The cost: a request with
