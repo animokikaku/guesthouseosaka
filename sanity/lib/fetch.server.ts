@@ -41,8 +41,9 @@ export function setCacheHeaders() {
 
 /**
  * Drops every page and server-function response Workers Cache holds from
- * published content, everywhere, so the next request renders fresh.
+ * published content, everywhere, so the next request renders fresh. Async so
+ * that a runtime without Workers Cache rejects rather than throwing.
  */
-export function purgePublishedResponses() {
+export async function purgePublishedResponses() {
   return cache.purge({ tags: [SANITY_CACHE_TAG] })
 }

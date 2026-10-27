@@ -5,10 +5,7 @@
  */
 import { serverEnv } from '@/lib/env.server'
 import { purgePublishedResponses } from '@/sanity/lib/fetch.server'
-import {
-  isValidSanitySignature,
-  SANITY_SIGNATURE_HEADER
-} from '@/sanity/lib/webhook-signature.server'
+import { isValidSignature, SIGNATURE_HEADER_NAME } from '@sanity/webhook'
 import { createFileRoute } from '@tanstack/react-router'
 
 const NO_STORE = { 'Cache-Control': 'no-store' }
@@ -18,11 +15,10 @@ export const Route = createFileRoute('/api/revalidate')({
     handlers: {
       POST: async ({ request }) => {
         const secret = serverEnv.SANITY_WEBHOOK_SECRET
+        // Verified as received: re-encoded JSON may not match what Sanity signed.
         const body = await request.text()
-        if (
-          !secret ||
-          !isValidSanitySignature(body, request.headers.get(SANITY_SIGNATURE_HEADER), secret)
-        ) {
+        const signature = request.headers.get(SIGNATURE_HEADER_NAME) ?? ''
+        if (!secret || !(await isValidSignature(body, signature, secret))) {
           return new Response('Invalid signature', { status: 401, headers: NO_STORE })
         }
 

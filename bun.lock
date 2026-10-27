@@ -20,6 +20,7 @@
         "@sanity/preview-url-secret": "^4.1.5",
         "@sanity/ui": "^4.4.10",
         "@sanity/visual-editing": "^6.2.0",
+        "@sanity/webhook": "^4.0.4",
         "@t3-oss/env-core": "^0.13.11",
         "@tanstack/react-form": "^2.0.0-alpha.3",
         "@tanstack/react-router": "^1.170.46",
@@ -1095,6 +1096,8 @@
     "@sanity/visual-editing-csm": ["@sanity/visual-editing-csm@3.0.19", "", { "dependencies": { "@sanity/visual-editing-types": "^2.1.1", "valibot": "^1.5.0" }, "peerDependencies": { "@sanity/client": "^7.26.2 || ^8.0.0" } }, "sha512-QfJhKpmjH1Ja8fLEN0OlBjwtGOpy5f4xMj5N0uClGT9xW+7SevIewFt55wPp9JpbAFH3GqmZHQ6vMEFfcnzbdQ=="],
 
     "@sanity/visual-editing-types": ["@sanity/visual-editing-types@2.1.1", "", { "peerDependencies": { "@sanity/client": "^7.26.2 || ^8.0.0", "@sanity/types": "*" }, "optionalPeers": ["@sanity/types"] }, "sha512-t/Aa2HclwUHzNY/CGeQMEVDb4Dc5izI7SwdqwTeSSMc+f0hRgAa2PG3PuBOmpyCta0GGMm7febk4FMWqF+iwaA=="],
+
+    "@sanity/webhook": ["@sanity/webhook@4.0.4", "", {}, "sha512-c8LmzR5Wx93zJ10ohhp0XlmPrTNSFyvPcLbNY/sN45Wj5VOngz4FbBMbX9j64sSQLt+676U6OhiVfjs1yw3YCw=="],
 
     "@sanity/workbench-cli": ["@sanity/workbench-cli@2.14.0", "", { "dependencies": { "@module-federation/runtime": "2.9.2", "@module-federation/vite": "1.23.5", "@sanity/cli-core": "^3.12.0", "@sanity/sdk": "^3.8.0", "@sanity/types": "^6.17.0", "@vitejs/plugin-react": "^6.1.2", "form-data": "^4.0.5", "rxjs": "^7.8.2", "semver": "^7.8.1", "tar": "^7.5.18", "vite": "^8.3.3", "zod": "^4.5.2" } }, "sha512-tC62QXKlXOTU6CYmZxD4OC+E8WPirQu27yIp9mExXEqdOJuIvlsXtvLNugp0VFQrs/f6NKMjsIOrV3Wv9Lgd+A=="],
 

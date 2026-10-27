@@ -56,8 +56,12 @@ sanity.io/manage → API → Webhooks:
 The endpoint checks the signature against `SANITY_WEBHOOK_SECRET`, answers `401` without it,
 and `503` (which Sanity retries) when the purge fails. The webhook's attempts log in
 sanity.io/manage shows each delivery. Without the webhook, published changes still show once
-the cache expires. `development` has no webhook: local builds have no Workers Cache, and each
-Worker Preview has its own URL.
+the cache expires.
+
+`development` has no webhook. Local builds have no Workers Cache, and each Worker Preview has its
+own URL and its own cache (the cache key includes the Worker version), which a purge from
+another deployment doesn't reach; a webhook has one URL, so it could clear only one preview.
+Every deploy starts from an empty cache for the same reason.
 
 ## GROQ queries
 
