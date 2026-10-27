@@ -35,7 +35,6 @@ bun run format:check # Check formatting without modifying files
 
 - Keep changes narrowly scoped to the user's request
 - Preserve unrelated working-tree changes
-- Ask before adding a production dependency
 - Do not commit, push, deploy, or open a pull request unless the user explicitly requests it
 
 ## Validation
