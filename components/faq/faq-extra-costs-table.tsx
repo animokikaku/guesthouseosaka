@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
 import { extraCostsByCategory } from '@/components/faq/extra-costs'
 import type { FaqHouses, PricingCategories } from '@/components/faq/types'
-import { PortableText, PortableTextComponents } from '@portabletext/react'
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import { stegaClean } from '@sanity/client/stega'
 
 const portableTextComponents: PortableTextComponents = {

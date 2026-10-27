@@ -3,7 +3,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { localeToPrefix } from '@/i18n/routing'
 import { Icon } from '@/lib/icons'
 import { OptimisticArray } from '@/components/optimistic-array'
-import { FaqPageQueryResult } from '@/sanity.types'
+import type { FaqPageQueryResult } from '@/sanity.types'
 import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 import { stegaClean } from '@sanity/client/stega'
 import { useLocation, useNavigate } from '@tanstack/react-router'
@@ -74,34 +74,23 @@ function PageActionLinks({ actions, documentId, documentType }: DynamicPageActio
         const variant = index === 0 ? 'default' : 'ghost'
 
         const target = resolvePageActionHref(href, currentPathname, localePrefix)
-
-        if (target.external) {
-          return (
-            <a
-              key={_key}
-              href={target.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
-              className={buttonVariants({ variant, size: 'sm' })}
-            >
-              <Icon name={icon} aria-hidden="true" />
-              {stegaClean(label)}
-            </a>
-          )
-        }
-
         // CMS paths are only known at runtime, so they can't be typed `Link`
-        // targets; navigate client-side by `href` instead.
+        // targets; internal ones navigate client-side by `href` instead.
+        const linkProps = target.external
+          ? { target: '_blank', rel: 'noopener noreferrer' }
+          : {
+              onClick: (event: MouseEvent) => {
+                if (event.defaultPrevented || isModifiedClick(event)) return
+                event.preventDefault()
+                void navigate({ href: target.href })
+              }
+            }
+
         return (
           <a
             key={_key}
             href={target.href}
-            onClick={(event) => {
-              if (event.defaultPrevented || isModifiedClick(event)) return
-              event.preventDefault()
-              void navigate({ href: target.href })
-            }}
+            {...linkProps}
             className={buttonVariants({ variant, size: 'sm' })}
             data-sanity={dataAttribute(`actions[_key=="${_key}"]`)}
           >

@@ -1,9 +1,8 @@
 // @vitest-environment node
 
-import { renderToStaticMarkup } from 'react-dom/server'
-import { JsonLd } from '../json-ld'
+import { jsonLdScript } from '../json-ld'
 
-describe('JsonLd', () => {
+describe('jsonLdScript', () => {
   // Structured data carries CMS text, which must not be able to end the script.
   it('cannot be closed early by the content it carries', () => {
     const data = {
@@ -12,10 +11,10 @@ describe('JsonLd', () => {
       name: 'Osaka</script><script>alert(1)</script>'
     } as const
 
-    const html = renderToStaticMarkup(<JsonLd data={data} />)
-    const body = html.slice(html.indexOf('>') + 1, html.lastIndexOf('</script>'))
+    const { type, children } = jsonLdScript(data)
 
-    expect(html.match(/<\/script>/g)).toHaveLength(1)
-    expect(JSON.parse(body)).toEqual(data)
+    expect(type).toBe('application/ld+json')
+    expect(children).not.toContain('</script>')
+    expect(JSON.parse(children)).toEqual(data)
   })
 })

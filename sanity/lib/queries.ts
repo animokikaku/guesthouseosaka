@@ -113,13 +113,6 @@ export const homePageQuery = defineQuery(`{
 // HOUSE PAGE
 // =============================================================================
 
-// Keep metadata separate from the render query so draft-mode stega data
-// is resolved independently for pages and galleries.
-export const houseMetaQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
-  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
-  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)
-}`)
-
 export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   _id,
   _type,
@@ -226,11 +219,13 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
 
 // Gallery grouped by category, for the gallery page and its intercepting modal.
 // Kept out of houseQuery: the two sets are the same images, and no route needs
-// both. Sorted by category orderRank, with empty categories filtered out.
+// both. Sorted by category orderRank, with empty categories filtered out. The
+// description is for the gallery page's head().
 export const houseGalleryQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   _id,
   _type,
   "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
+  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
   "galleryCategories": array::compact(galleryCategories[]{
     _key,
     "category": category->{
@@ -282,16 +277,11 @@ export const housesBuildingQuery = defineQuery(`*[_type == "house"] | order(orde
 // FAQ PAGE
 // =============================================================================
 
-// Keep metadata separate from the render query so draft-mode stega data
-// is resolved independently for the layout and page.
-export const faqPageMetaQuery = defineQuery(`*[_type == "faqPage"][0]{
-  "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),
-  "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value)
-}`)
-
 export const faqPageQuery = defineQuery(`*[_type == "faqPage"][0]{
   _id,
   _type,
+  "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),
+  "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value),
   "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),
   ${actionsFields},
   "contactSection": coalesce(contactSection[language == $locale][0].value, contactSection[language == "en"][0].value),
@@ -312,42 +302,25 @@ export const faqQuestionsQuery = defineQuery(`
 // CONTACT PAGE
 // =============================================================================
 
-// Separate query for metadata to avoid stega deduplication issues
-// (generateMetadata runs before draft mode context is established)
-export const contactPageMetaQuery = defineQuery(`
-  *[_type == "contactPage"][0]{
-    "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),
-    "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value)
-  }
-`)
-
 export const contactPageQuery = defineQuery(`{
   "page": *[_type == "contactPage"][0]{
     _id,
     _type,
+    "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),
+    "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value),
     "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),
     ${actionsFields}
   },
-  // No form field config here: the only consumer is toContactNavItems, which
-  // reads _id/slug/title. contactTypeQuery carries the fields for the one
+  // Read by the form tabs (toContactNavItems) and the contact index's list. No
+  // form field config here: contactTypeQuery carries the fields for the one
   // contact type actually being rendered as a form.
   "contactTypes": *[_type == "contactType"] | order(orderRank){
     _id,
     slug,
-    "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value)
-  }
-}`)
-
-// Separate query for listing contact types (avoids stega deduplication with layout)
-export const contactTypesListQuery = defineQuery(`
-  *[_type == "contactType"] | order(orderRank){
-    _id,
-    _type,
-    slug,
     "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
     "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)
   }
-`)
+}`)
 
 export const contactTypeQuery = defineQuery(`*[_type == "contactType" && slug == $slug][0]{
   _id,

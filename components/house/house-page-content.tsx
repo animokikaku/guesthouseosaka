@@ -66,7 +66,13 @@ export function HousePageContent({
             />
             <HouseProvider id={_id} type={_type} slug={slug}>
               <article id={slug} aria-labelledby={`${slug}-title`} className="space-y-12 pt-8">
-                <HouseAbout title={title} about={about} building={building} />
+                <HouseAbout
+                  title={title}
+                  about={about}
+                  building={building}
+                  // `HousePricing` renders nothing without rows.
+                  hasPricing={Boolean(pricing?.length)}
+                />
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
                   featuredAmenities={featuredAmenities?.map(toAmenityItem) ?? []}

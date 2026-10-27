@@ -37,7 +37,7 @@ describe('toHouseNavItems', () => {
     const image = createSanityImage({ alt: 'Apple House front' })
 
     const [item] = toHouseNavItems([house({ image })], 'en')
-    const { searchParams } = new URL(item.background.src)
+    const { searchParams } = new URL(item.background?.src ?? '')
 
     expect(item).toMatchObject({
       key: 'apple',
@@ -72,6 +72,15 @@ describe('toHouseNavItems', () => {
     expect(item).toMatchObject({ label: 'orange', background: { alt: 'orange' } })
     expect(item.description).toBeUndefined()
     expect(item.caption).toBeUndefined()
+  })
+
+  // A new draft opened in Presentation can lack its image while every page
+  // still renders this nav.
+  it('leaves out the preview of a house whose image has no asset yet', () => {
+    const [item] = toHouseNavItems([house({ image: createSanityImage({ asset: null }) })], 'en')
+
+    expect(item).toMatchObject({ key: 'apple', label: 'Apple House' })
+    expect(item.background).toBeUndefined()
   })
 
   it('drops, and reports, a house whose slug the site does not know', () => {

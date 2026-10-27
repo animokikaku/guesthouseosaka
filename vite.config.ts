@@ -99,6 +99,9 @@ export default defineConfig(() => {
     environments: {
       client: {
         build: {
+          // The one chunk past Vite's 500 kB default is Visual Editing's, which
+          // only draft mode loads; visitors' chunks stay well under this.
+          chunkSizeWarningLimit: 650,
           rolldownOptions: {
             output: {
               // Route-level splitting left ~55 files per page, most under 2 KB,

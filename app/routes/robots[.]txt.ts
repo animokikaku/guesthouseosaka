@@ -1,4 +1,5 @@
 import robots, { toRobotsTxt } from '@/app/robots'
+import { STATIC_FILE_CACHE_CONTROL } from '@/lib/cache-control'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/robots.txt')({
@@ -8,7 +9,7 @@ export const Route = createFileRoute('/robots.txt')({
         new Response(toRobotsTxt(robots()), {
           headers: {
             'Content-Type': 'text/plain',
-            'Cache-Control': 'public, max-age=0, s-maxage=86400'
+            'Cache-Control': STATIC_FILE_CACHE_CONTROL
           }
         })
     }

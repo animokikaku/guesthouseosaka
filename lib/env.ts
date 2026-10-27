@@ -1,9 +1,9 @@
 import { SITE_URL, TURNSTILE_TEST_SITE_KEY } from './config'
 
 /**
- * Public settings, inlined by Vite at build time (see `envPrefix` in
- * vite.config.ts, which validates them against `env.schema.ts` first). Server
- * secrets live in `env.server.ts`.
+ * Public settings, inlined by Vite at build time once `validatePublicEnv` in
+ * vite.config.ts has checked them against `env.schema.ts`. Server secrets live
+ * in `env.server.ts`.
  */
 export const env = {
   VITE_APP_URL: import.meta.env.VITE_APP_URL || SITE_URL,

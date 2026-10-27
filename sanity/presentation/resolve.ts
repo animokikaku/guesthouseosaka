@@ -1,5 +1,5 @@
 import { isContactType, type ContactType, type HouseIdentifier } from '@/lib/types'
-import { defineLocations, PresentationPluginOptions } from 'sanity/presentation'
+import { defineLocations, type PresentationPluginOptions } from 'sanity/presentation'
 
 const l = {
   home: () => ({ title: 'Home', href: '/' }),

@@ -8,7 +8,7 @@ export const Route = createFileRoute('/$locale/contact')({
   head: ({ loaderData, matches, params: { locale } }) => ({
     meta: cmsPageHead({
       locale,
-      meta: loaderData?.meta,
+      meta: loaderData?.page,
       image: assets.openGraph.contact.src,
       fallbackTitle: 'contact_title',
       matches
@@ -21,7 +21,7 @@ function ContactLayout() {
   const { page } = Route.useLoaderData()
 
   return (
-    <CmsPageLayout page={page ?? null}>
+    <CmsPageLayout page={page}>
       <Outlet />
     </CmsPageLayout>
   )

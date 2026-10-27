@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
-import { coverageExclude, coverageInclude } from './coverage.config'
+import { coverageExclude, coverageInclude } from './coverage.config.ts'
 
 // Workers read the time zone once at startup, so a test can't change it. Run
 // the suite behind UTC, where a calendar date parsed as UTC midnight shows up

@@ -73,7 +73,7 @@ export function Default() {
   )
 }
 
-// Mirrors app/[locale]/[house]/@modal/(.)gallery/page.tsx: the lightbox nested
+// Mirrors app/routes/$locale/$house/_house/photos.tsx: the lightbox nested
 // inside the route-intercept modal, so Escape-key handling between the two can
 // be exercised the way it actually renders in production.
 export function WithModal() {

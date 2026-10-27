@@ -18,7 +18,13 @@ export function SiteFooter({ settings, year }: SiteFooterProps) {
   })
 
   return (
-    <footer data-slot="site-footer" className="bg-surface/40 dark:bg-transparent">
+    <footer
+      data-slot="site-footer"
+      // Pages opt into overrides with a marker class: `footer-snap` makes the
+      // footer a scroll-snap target, `footer-plain` drops its tint. The page
+      // leaves the DOM on navigation, so neither outlives it.
+      className="bg-surface/40 group-has-[.footer-plain]/body:bg-transparent md:group-has-[.footer-snap]/body:snap-end dark:bg-transparent"
+    >
       <div className="container-wrapper px-4 xl:px-6">
         <div className="flex min-h-(--footer-height) flex-wrap items-center justify-between gap-x-4 gap-y-2 sm:flex-nowrap">
           <div className="text-muted-foreground flex-1 px-1 text-left text-xs leading-loose sm:text-sm">

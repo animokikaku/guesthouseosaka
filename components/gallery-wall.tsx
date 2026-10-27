@@ -38,10 +38,9 @@ export function GalleryWall({
                 blurDataURL={image.blurDataURL || undefined}
                 placeholder={image.blurDataURL ? 'blur' : undefined}
                 // The collage sits in the hero, so its largest tile is the
-                // likely LCP element; the rest stay lazy. Next 16 deprecated
-                // `priority` in favour of `preload`, but the docs say not to
-                // combine `preload` with `fetchPriority` — and for an image
-                // this early in the body the preload scanner finds it anyway.
+                // likely LCP element; the rest stay lazy. Eager + high
+                // priority rather than `preload`: for an image this early in
+                // the body the preload scanner finds it anyway.
                 loading={image.priority ? 'eager' : 'lazy'}
                 fetchPriority={image.priority ? 'high' : undefined}
                 className="ease-out-ui h-full w-full object-cover transition-transform duration-300 pointer-fine:group-hover:scale-[1.03]"

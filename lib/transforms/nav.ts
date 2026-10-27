@@ -5,7 +5,9 @@ import type { ContactPageQueryResult, HousesNavQueryResult } from '@/sanity.type
 import { urlFor } from '@/sanity/lib/image'
 import type { Locale } from 'use-intl'
 
-type ContactTypes = NonNullable<ContactPageQueryResult>['contactTypes']
+type ContactTypes = Array<
+  Pick<NonNullable<ContactPageQueryResult>['contactTypes'][number], '_id' | 'slug' | 'title'>
+>
 
 /** Drops contact types without a title, which would render an empty tab. */
 export function toContactNavItems(contactTypes: ContactTypes): ContactNavItem[] {
@@ -18,7 +20,10 @@ export function toContactNavItems(contactTypes: ContactTypes): ContactNavItem[] 
     }))
 }
 
-/** Drops (and warns about) houses whose slug isn't a known house identifier. */
+/**
+ * Drops (and warns about) houses whose slug isn't a known house identifier.
+ * A house without an image asset yet, like a new draft, gets no background.
+ */
 export function toHouseNavItems(houses: HousesNavQueryResult, locale: Locale): NavGroupItem[] {
   return (houses ?? [])
     .filter((house) => {
@@ -28,22 +33,19 @@ export function toHouseNavItems(houses: HousesNavQueryResult, locale: Locale): N
       }
       return isValidSlug
     })
-    .map(({ slug, title, description, caption, image }) => {
-      const asset = assets[slug]
-      const src = urlFor(image).width(250).height(150).fit('crop').url()
-
-      return {
-        key: slug,
-        link: { to: '/$locale/$house', params: { locale, house: slug } },
-        label: title ?? slug,
-        description: description ?? undefined,
-        caption: caption ?? undefined,
-        icon: asset.icon,
-        background: {
-          src,
-          alt: image?.alt ?? title ?? slug,
-          blurDataURL: image?.preview ?? undefined
-        }
-      }
-    })
+    .map(({ slug, title, description, caption, image }) => ({
+      key: slug,
+      link: { to: '/$locale/$house', params: { locale, house: slug } },
+      label: title ?? slug,
+      description: description ?? undefined,
+      caption: caption ?? undefined,
+      icon: assets[slug].icon,
+      background: image.asset
+        ? {
+            src: urlFor(image).width(250).height(150).fit('crop').url(),
+            alt: image.alt ?? title ?? slug,
+            blurDataURL: image.preview ?? undefined
+          }
+        : undefined
+    }))
 }

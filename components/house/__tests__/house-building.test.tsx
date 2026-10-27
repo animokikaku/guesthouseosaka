@@ -3,10 +3,10 @@ import { render, screen } from '@testing-library/react'
 import { HouseBuilding } from '../house-building'
 import { HouseProvider } from '../house-context'
 
-function renderBuilding(building: BuildingData | null) {
+function renderBuilding(building: BuildingData | null, hasPricing = true) {
   return render(
     <HouseProvider id="house-123" type="house" slug="orange">
-      <HouseBuilding building={building} />
+      <HouseBuilding building={building} hasPricing={hasPricing} />
     </HouseProvider>
   )
 }
@@ -30,6 +30,13 @@ describe('HouseBuilding', () => {
 
     expect(screen.getByRole('link')).toHaveAttribute('href', '/en/orange#pricing')
     expect(screen.getByRole('link')).toHaveTextContent(/\brent\b/i)
+  })
+
+  it('does not link to a pricing section the page leaves out', () => {
+    renderBuilding({ rooms: 12, floors: 3, startingPrice: 45000 }, false)
+
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+    expect(figure(/\brent\b/i)).toBe('¥45,000')
   })
 
   it('shows zero for figures the house has not filled in', () => {

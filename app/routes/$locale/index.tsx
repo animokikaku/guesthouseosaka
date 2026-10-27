@@ -1,5 +1,4 @@
 import { Collection } from '@/components/collection'
-import { FooterStyle } from '@/components/footer-style'
 import { GalleryWall } from '@/components/gallery-wall'
 import { PageEmptyState } from '@/components/page-empty-state'
 import {
@@ -49,9 +48,7 @@ const collectionComponents: PortableTextComponents = {
 
 function HomePage() {
   const { locale } = Route.useParams()
-  const data = Route.useLoaderData()
-
-  const { page, houses } = data ?? {}
+  const { page, houses } = Route.useLoaderData()
 
   // Check for actual content, not just existence of the document
   const hasContent = houses && houses.length > 0
@@ -69,8 +66,7 @@ function HomePage() {
   const { hero, collection, galleryWall } = page
 
   return (
-    <div className="section-soft flex flex-col">
-      <FooterStyle snap />
+    <div className="section-soft footer-snap flex flex-col">
       <section className="container-wrapper relative flex min-h-[calc(100dvh-var(--header-height))] max-w-7xl snap-none items-center justify-center py-8 md:snap-end md:py-0">
         <div className="container flex flex-col items-center gap-12 md:flex-row md:gap-8">
           {/* Text content - expands to fill available space */}

@@ -17,6 +17,7 @@ import {
   InputGroupText,
   InputGroupTextarea
 } from '@/components/ui/input-group'
+import { MESSAGE_MAX_LENGTH } from '@/lib/schemas/contact-form'
 import type { FieldWithValue } from '@tanstack/react-form'
 import { useTranslations } from 'use-intl'
 
@@ -30,8 +31,6 @@ interface MessageFieldProps extends InputGroupTextareaFormProps, FieldOrientatio
   label?: React.ReactNode
   description?: string | null
 }
-
-const MAX_LENGTH = 3000
 
 function MessageField({
   field,
@@ -61,7 +60,7 @@ function MessageField({
       </FieldContent>
       <InputGroup>
         <InputGroupTextarea
-          maxLength={MAX_LENGTH}
+          maxLength={MESSAGE_MAX_LENGTH}
           {...props}
           {...controlProps}
           name={field.name}
@@ -73,7 +72,7 @@ function MessageField({
           <InputGroupText className="tabular-nums" aria-live="polite">
             {t('character_counter', {
               count: `${field.value.length}`,
-              max: `${MAX_LENGTH}`
+              max: `${MESSAGE_MAX_LENGTH}`
             })}
           </InputGroupText>
         </InputGroupAddon>

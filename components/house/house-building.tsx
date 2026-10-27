@@ -2,21 +2,31 @@ import { useHouseDocument } from '@/components/house/house-context'
 import { Link } from '@tanstack/react-router'
 import type { BuildingData } from '@/lib/types/components'
 import { cn } from '@/lib/utils'
-import { BedDoubleIcon, LayersIcon, LucideIcon } from 'lucide-react'
+import { BedDoubleIcon, LayersIcon, type LucideIcon } from 'lucide-react'
 import { useFormatter, useLocale, useTranslations } from 'use-intl'
 import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 
 interface HouseBuildingProps {
   building: BuildingData | null
+  /** Whether the page has a pricing section for the starting rent to link to. */
+  hasPricing: boolean
 }
 
-export function HouseBuilding({ building }: HouseBuildingProps) {
+export function HouseBuilding({ building, hasPricing }: HouseBuildingProps) {
   const { id, type, slug } = useHouseDocument()
   const t = useTranslations('HouseBuilding')
   const formatter = useFormatter()
   const locale = useLocale()
 
   const dataAttribute = createDataAttribute({ id, type })
+
+  const startingRent = (
+    <FeatureItem
+      label={t('min_rent_label')}
+      value={formatter.number(building?.startingPrice ?? 0, 'currency')}
+      data-sanity={dataAttribute('building.startingPrice')}
+    />
+  )
 
   return (
     <div className="text-muted-foreground grid grid-cols-3 gap-2 text-center text-xs">
@@ -32,13 +42,13 @@ export function HouseBuilding({ building }: HouseBuildingProps) {
         Icon={LayersIcon}
         data-sanity={dataAttribute('building.floors')}
       />
-      <Link to="/$locale/$house" params={{ locale, house: slug }} hash="pricing">
-        <FeatureItem
-          label={t('min_rent_label')}
-          value={formatter.number(building?.startingPrice ?? 0, 'currency')}
-          data-sanity={dataAttribute('building.startingPrice')}
-        />
-      </Link>
+      {hasPricing ? (
+        <Link to="/$locale/$house" params={{ locale, house: slug }} hash="pricing">
+          {startingRent}
+        </Link>
+      ) : (
+        startingRent
+      )}
     </div>
   )
 }

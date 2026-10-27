@@ -1,6 +1,6 @@
 import { GalleryEmptyState } from '@/components/gallery/gallery-empty-state'
 import { SanityImage } from '@/components/sanity-image'
-import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import { Carousel, type CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { useCarouselIndex } from '@/hooks/use-carousel-index'
 import type { GalleryLink } from '@/components/house/gallery-link'
 import { Link } from '@tanstack/react-router'

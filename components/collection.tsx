@@ -10,8 +10,8 @@ import {
 import { assets } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
+import { toGalleryImageProps } from '@/lib/gallery-image'
 import type { HomePageQueryResult } from '@/sanity.types'
-import { urlFor } from '@/sanity/lib/image'
 import { stegaClean } from '@sanity/client/stega'
 import { Link } from '@tanstack/react-router'
 import { useLocale } from 'use-intl'
@@ -58,7 +58,6 @@ export function Collection({ houses, className }: CollectionProps) {
                     the section scrolls into view, well ahead of any hover. */}
                 <Image
                   {...assets[house.slug].icon}
-                  alt={assets[house.slug].icon.alt}
                   className="size-12 object-contain opacity-90 drop-shadow-lg"
                 />
               </div>
@@ -79,35 +78,23 @@ type CollectionImageProps = {
 }
 
 function CollectionImage({ image }: CollectionImageProps) {
-  if (!image.asset) return null
-
-  const alt = image.alt || ''
-  const blurDataURL = image.preview || undefined
-  const placeholder = image.preview ? 'blur' : undefined
+  const wide = toGalleryImageProps(image, { width: 800, height: 400 })
+  const square = toGalleryImageProps(image, { width: 800, height: 800 })
+  if (!wide || !square) return null
 
   // Card widths in the home page's collection grid: the nested
   // container-wrapper/container padding (32px a side, 48px from lg) and the
   // md:grid-cols-3 gap-8 columns, capped by max-w-7xl. Keep in sync with
-  // app/[locale]/page.tsx and PageHeader.
+  // app/routes/$locale/index.tsx and PageHeader.
   return (
     <>
       <SanityImage
-        src={urlFor(image).fit('crop').width(800).height(400).url()}
-        alt={alt}
-        width={800}
-        height={400}
-        blurDataURL={blurDataURL}
-        placeholder={placeholder}
+        {...wide}
         sizes="calc(100vw - 64px)"
         className="block aspect-2/1 w-full object-cover md:hidden"
       />
       <SanityImage
-        src={urlFor(image).fit('crop').width(800).height(800).url()}
-        alt={alt}
-        width={800}
-        height={800}
-        blurDataURL={blurDataURL}
-        placeholder={placeholder}
+        {...square}
         sizes="(min-width: 1280px) 373px, (min-width: 1024px) calc(33.33vw - 53px), calc(33.33vw - 43px)"
         className="hidden aspect-square w-full object-cover transition-transform duration-300 group-focus-visible:scale-[1.02] md:block pointer-fine:group-hover:scale-[1.02]"
       />

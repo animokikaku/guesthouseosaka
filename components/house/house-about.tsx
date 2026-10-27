@@ -33,9 +33,10 @@ interface HouseAboutProps {
   about: HousePortableTextContent
   title: string | null
   building: BuildingData | null
+  hasPricing: boolean
 }
 
-export function HouseAbout({ about, title, building }: HouseAboutProps) {
+export function HouseAbout({ about, title, building, hasPricing }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
 
   return (
@@ -44,7 +45,7 @@ export function HouseAbout({ about, title, building }: HouseAboutProps) {
         {t('heading', { house: title ? stegaClean(title) : '' })}
       </HouseSectionHeading>
       <HouseSectionContent className="space-y-4">
-        <HouseBuilding building={building} />
+        <HouseBuilding building={building} hasPricing={hasPricing} />
         {about ? <PortableText value={about} components={portableTextComponents} /> : null}
       </HouseSectionContent>
     </section>

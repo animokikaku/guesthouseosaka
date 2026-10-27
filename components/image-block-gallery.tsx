@@ -31,8 +31,6 @@ function GalleryGrid({
   extraCount: number
   overflowLabel: string
 }) {
-  if (images.length < 5) return null
-
   return (
     <div className="hidden justify-center sm:flex">
       <div className="w-full">

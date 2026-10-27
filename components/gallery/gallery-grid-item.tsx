@@ -1,3 +1,4 @@
+import { GalleryImageCaption } from '@/components/gallery/gallery-image-frame'
 import { Lightbox } from '@/components/lightbox'
 import { SanityImage } from '@/components/sanity-image'
 import type { GalleryItem } from '@/lib/gallery'
@@ -53,15 +54,7 @@ export function GalleryGridItem({ item, categoryKey, dataAttribute, index }: Gal
             className="object-cover transition-opacity duration-300 group-focus-visible:opacity-90 pointer-fine:group-hover:opacity-90"
             {...restImageProps}
           />
-          {alt && (
-            <div
-              data-slot="gallery-image-caption"
-              className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-end bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-[opacity,transform] duration-300 ease-out group-focus-visible:translate-y-0 group-focus-visible:opacity-100 pointer-fine:group-hover:translate-y-0 pointer-fine:group-hover:opacity-100"
-              aria-hidden="true"
-            >
-              <span className="text-sm font-medium text-white">{alt}</span>
-            </div>
-          )}
+          <GalleryImageCaption alt={alt} />
           {/*
             `Lightbox.Trigger`'s own focus ring is a box-shadow on the button
             itself, which paints *behind* this full-bleed `<Image>` (a box's

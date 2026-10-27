@@ -8,6 +8,9 @@
  * any cookie (a language choice, Cloudflare's `cf_clearance` after a bot
  * challenge) gets its own copy, which per-visitor cookies make a miss.
  */
+/** For generated files (robots.txt, the sitemap): shared for a day, never by browsers. */
+export const STATIC_FILE_CACHE_CONTROL = 'public, max-age=0, s-maxage=86400'
+
 export function cacheHeaders(isDraftMode: boolean) {
   return {
     'Cache-Control': isDraftMode

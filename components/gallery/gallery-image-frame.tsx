@@ -1,7 +1,7 @@
 import type { GalleryImageProps } from '@/lib/gallery-image'
 import { SanityImage } from '@/components/sanity-image'
 import { cn } from '@/lib/utils'
-import { ComponentPropsWithoutRef } from 'react'
+import type { ComponentPropsWithoutRef } from 'react'
 
 type GalleryImageFrameProps = ComponentPropsWithoutRef<'div'> & {
   sizes?: string
@@ -35,17 +35,27 @@ export function GalleryImageFrame({
           sizes={sizes}
           {...restImageProps}
         />
-        {alt && (
-          <div
-            data-slot="gallery-image-caption"
-            className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-end bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-[opacity,transform] duration-300 ease-out pointer-fine:group-hover:translate-y-0 pointer-fine:group-hover:opacity-100"
-            aria-hidden="true"
-          >
-            <span className="text-sm font-medium text-white">{alt}</span>
-          </div>
-        )}
+        <GalleryImageCaption alt={alt} />
       </div>
       {children}
+    </div>
+  )
+}
+
+/**
+ * The alt text slid up over an image while its `group` is hovered or, for a
+ * focusable group, focused. Hidden from assistive tech, which reads the alt.
+ */
+export function GalleryImageCaption({ alt }: { alt: string }) {
+  if (!alt) return null
+
+  return (
+    <div
+      data-slot="gallery-image-caption"
+      className="pointer-events-none absolute inset-x-0 bottom-0 flex translate-y-full items-end bg-linear-to-t from-black/70 to-transparent p-3 opacity-0 transition-[opacity,transform] duration-300 ease-out group-focus-visible:translate-y-0 group-focus-visible:opacity-100 pointer-fine:group-hover:translate-y-0 pointer-fine:group-hover:opacity-100"
+      aria-hidden="true"
+    >
+      <span className="text-sm font-medium text-white">{alt}</span>
     </div>
   )
 }

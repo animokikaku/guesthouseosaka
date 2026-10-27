@@ -1,21 +1,22 @@
 import { PageEmptyState } from '@/components/page-empty-state'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import { canonicalLink } from '@/lib/metadata'
-import { getContactTypes } from '@/sanity/lib/loaders.functions'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, getRouteApi, Link } from '@tanstack/react-router'
 import { ChevronRightIcon } from 'lucide-react'
 
+const contactLayout = getRouteApi('/$locale/contact')
+
 export const Route = createFileRoute('/$locale/contact/')({
-  loader: ({ params: { locale } }) => getContactTypes({ data: { locale } }),
   head: ({ params: { locale } }) => ({ links: [canonicalLink('/contact', locale)] }),
   component: ContactPage
 })
 
 function ContactPage() {
   const { locale } = Route.useParams()
-  const contactTypes = Route.useLoaderData()
+  // Lists the contact types the section layout already loaded.
+  const contactTypes = contactLayout.useLoaderData({ select: (data) => data.contactTypes })
 
-  if (!contactTypes || contactTypes.length === 0) {
+  if (contactTypes.length === 0) {
     return <PageEmptyState />
   }
 

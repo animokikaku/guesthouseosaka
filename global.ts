@@ -1,6 +1,6 @@
-import { formats } from '@/i18n/formats'
-import { routing } from '@/i18n/routing'
-import messages from './messages/en.json'
+import type { formats } from '@/i18n/formats'
+import type { routing } from '@/i18n/routing'
+import type messages from './messages/en.json'
 
 declare module 'use-intl' {
   interface AppConfig {

@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { urlFor } from '@/sanity/lib/image'
+import { toGalleryImageProps } from '@/lib/gallery-image'
 import { Phone } from 'lucide-react'
 import { useTranslations } from 'use-intl'
 import { stegaClean } from '@sanity/client/stega'
@@ -52,7 +52,7 @@ function MobilePhoneCards({ houses }: FAQContactTableProps) {
             render={
               <a href={`tel:${phone.international}`}>
                 <ItemMedia variant="image" className="size-12 rounded-sm">
-                  <HouseImage image={image} alt={image.alt ? stegaClean(image.alt) : ''} />
+                  <HouseImage image={image} />
                 </ItemMedia>
                 <ItemContent>
                   <ItemTitle>{stegaClean(title)}</ItemTitle>
@@ -131,23 +131,12 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
 /** Rendered in a `size-12` (48px) slot; the loader adds the 2x candidate. */
 const HOUSE_IMAGE_SIZE = 48
 
-type HouseImageProps = {
-  image: NonNullable<House['image']>
-  alt: string
-}
+function HouseImage({ image }: { image: NonNullable<House['image']> }) {
+  const imageProps = toGalleryImageProps(image, {
+    width: HOUSE_IMAGE_SIZE,
+    height: HOUSE_IMAGE_SIZE
+  })
+  if (!imageProps) return null
 
-function HouseImage({ image, alt }: HouseImageProps) {
-  if (!image.asset) return null
-
-  return (
-    <SanityImage
-      src={urlFor(image).fit('crop').width(HOUSE_IMAGE_SIZE).height(HOUSE_IMAGE_SIZE).url()}
-      alt={alt}
-      placeholder={image.preview ? 'blur' : undefined}
-      blurDataURL={image.preview ?? undefined}
-      width={HOUSE_IMAGE_SIZE}
-      height={HOUSE_IMAGE_SIZE}
-      className="size-full object-cover"
-    />
-  )
+  return <SanityImage {...imageProps} className="size-full object-cover" />
 }

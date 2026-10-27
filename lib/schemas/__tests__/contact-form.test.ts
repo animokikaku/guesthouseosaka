@@ -5,13 +5,13 @@ import {
   createGeneralInquirySchema,
   createMoveInFormSchema,
   createTourFormSchema,
-  type ValidationMessage
+  type ValidationMessages
 } from '../contact-form'
 
-type ValidationKey = Parameters<ValidationMessage>[0]
+type ValidationKey = keyof ValidationMessages
 
 // Reports which message each rule asks for; the copy itself lives in the catalogs.
-const t: ValidationMessage = (key) => key
+const t = new Proxy({}, { get: (_, key) => key }) as ValidationMessages
 
 const account = {
   name: 'Jo Tanaka',

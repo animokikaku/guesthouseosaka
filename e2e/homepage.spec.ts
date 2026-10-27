@@ -39,6 +39,41 @@ test.describe('Homepage', () => {
     })
   })
 
+  // Pages opt into footer overrides with marker classes (see SiteFooter).
+  test.describe('Footer overrides', () => {
+    // The site snaps mandatorily, so a snap target left over from the home
+    // page would open the next page scrolled to its footer.
+    test('the footer stops being a snap target once the home page is left', async ({ page }) => {
+      await gotoHydrated(page, '/en')
+      const footer = page.locator('[data-slot="site-footer"]')
+      await expect(footer).toHaveCSS('scroll-snap-align', 'end')
+
+      await page.mouse.wheel(0, 5000)
+      await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(0)
+
+      await page.locator('[data-slot="item-group"] a[href="/en/orange"]').click()
+      await page.waitForURL(/\/en\/orange$/)
+
+      await expect(footer).toHaveCSS('scroll-snap-align', 'none')
+      expect(await page.evaluate(() => scrollY)).toBe(0)
+    })
+
+    test('the 404 page drops the footer tint, which comes back after it', async ({ page }) => {
+      await gotoHydrated(page, '/en/does-not-exist')
+      const footer = page.locator('[data-slot="site-footer"]')
+      await expect(footer).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
+
+      await page
+        .getByRole('navigation')
+        .getByRole('link', { name: /\bfaq\b/i })
+        .first()
+        .click()
+      await page.waitForURL(/\/en\/faq$/)
+
+      await expect(footer).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
+    })
+  })
+
   test.describe('Language Switcher', () => {
     test('preserves current page when switching language', async ({ page }) => {
       await gotoHydrated(page, '/en/faq')

@@ -87,7 +87,7 @@ export function slotPixelSize(slot: GalleryWallSlot): number {
 
 /**
  * Rendered collage width per breakpoint, mirroring the home hero layout in
- * `app/[locale]/page.tsx`: `container-wrapper` (px-2, max-w-7xl) around
+ * `app/routes/$locale/index.tsx`: `container-wrapper` (px-2, max-w-7xl) around
  * `container` (px-4, lg:px-8), with the collage full width below md and
  * `md:w-3/5` beside the header above it. Keep in sync with those classes.
  *
