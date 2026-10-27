@@ -9,7 +9,11 @@ export const serverEnv = createEnv({
     RESEND_API_KEY: nonEmptyString(),
     // Which Cloudflare environment this Worker is (see wrangler.jsonc).
     DEPLOY_ENV: z.optional(z.enum(['development', 'preview', 'production'])),
-    TURNSTILE_SECRET_KEY: nonEmptyString()
+    TURNSTILE_SECRET_KEY: nonEmptyString(),
+    // Signs Sanity's publish webhook (see `app/routes/api/revalidate.ts`).
+    // Without it the webhook is refused, and published changes wait for the
+    // cache to expire.
+    SANITY_WEBHOOK_SECRET: z.optional(nonEmptyString())
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true

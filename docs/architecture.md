@@ -49,9 +49,8 @@ public/                # Static assets only
 
 - Each route's `loader` calls one GET server function in `sanity/lib/loaders.functions.ts`,
   which runs a fixed set of queries server-side; never accept a GROQ query from the client
-- Published content comes from Sanity's API CDN and is kept in the Worker's Cache API for a
-  minute, then served stale while it refreshes (`lib/edge-cache.server.ts`); responses also
-  carry `s-maxage` for browsers and any CDN in front
+- Published content comes from Sanity's live API rather than its API CDN, so a render right
+  after a publish reads the new content; Workers Cache (below) keeps those renders rare
 - Draft mode is a signed cookie set by `/api/draft-mode/enable`; it switches queries to the
   token client with stega and loads Visual Editing on demand
 - Array fields that Presentation edits optimistically render through `OptimisticArray`, which
@@ -88,6 +87,10 @@ public/                # Static assets only
 - Workers Cache (`cache.enabled` in `wrangler.jsonc`) serves pages and server-function GETs
   from Cloudflare's cache by their `Cache-Control`, without running the Worker; check
   `Cf-Cache-Status`. Responses carry `Vary: Cookie` for draft mode (see `lib/cache-control.ts`)
+- Responses built from published content carry `Cache-Tag: sanity`, which Sanity's publish
+  webhook purges through `/api/revalidate` (see [Sanity Workflow](sanity-workflow.md#publishing)).
+  Only the Worker can purge Workers Cache: zone-level purges don't reach it, and local dev and
+  preview have no Workers Cache at all
 - Hashed build assets are served as immutable (`public/_headers`)
 - `bun run test:e2e:preview` builds the `preview` environment locally and sends one real
   contact email to Resend's test inbox: workerd runs the bundle `wrangler deploy` uploads, so
