@@ -1,8 +1,11 @@
 import { expect, type Page } from '@playwright/test'
 
-/** Whether React has hydrated `element`: it attaches its fiber to the DOM node. */
+/**
+ * Whether the app has hydrated `element`: redact, which stands in for React,
+ * stores the event handlers it attaches on their DOM node as `__h`.
+ */
 export function isHydrated(element: Element) {
-  return Object.keys(element).some((key) => key.startsWith('__reactFiber$'))
+  return [element, ...element.querySelectorAll('*')].some((node) => '__h' in node)
 }
 
 /**
