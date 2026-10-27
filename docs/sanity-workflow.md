@@ -58,10 +58,10 @@ and `503` (which Sanity retries) when the purge fails. The webhook's attempts lo
 sanity.io/manage shows each delivery. Without the webhook, published changes still show once
 the cache expires.
 
-`development` has no webhook. Local builds have no Workers Cache, and each Worker Preview has its
-own URL and its own cache (the cache key includes the Worker version), which a purge from
-another deployment doesn't reach; a webhook has one URL, so it could clear only one preview.
-Every deploy starts from an empty cache for the same reason.
+`development` needs no webhook: nothing caches it. Local builds have no Workers Cache, and
+Worker Preview URLs don't go through it (no `Cf-Cache-Status`, and `Cache-Tag` reaches the
+browser), so previews always show the latest `development` content. Production starts from an
+empty cache on every deploy, since the cache key includes the Worker version.
 
 ## GROQ queries
 
