@@ -16,7 +16,7 @@ The bot answers with what changed (`オレンジハウス 106号室：入居中 
 2. Looks up the sender's `lineManager` document, `lineManager.<LINE user ID>`. Someone without a published one gets a draft with their LINE display name, and a reply asking them to get it approved
 3. Sends the message, today's date in Osaka and the names and room numbers of the manager's houses to [Agent Actions Prompt](https://www.sanity.io/docs/agent-actions/prompt-quickstart), which returns `{ language, updates: [{ house, room, availableFrom }] }`
 4. Checks the answer against the manager's houses (`lib/room-updates.ts`): rooms that don't exist are reported back, never created. A room given without a house goes to the only one of their houses that has it; when several do, the bot asks which
-5. Sets or unsets `availableFrom` on the published house in one transaction, and on its draft too if it has one, so publishing the draft later doesn't undo the update. The house page shows it once its cached copy refreshes, within about five minutes (see Hosting in [Architecture](architecture.md))
+5. Sets or unsets `availableFrom` on the published house in one transaction, and on its draft too if it has one, so publishing the draft later doesn't undo the update. Like any change to a published document, the write fires the publish webhook, which purges the cached pages, so the house page shows it within seconds (see Publishing in [Sanity Workflow](sanity-workflow.md#publishing))
 6. Replies with a reply token, which is free on every LINE plan
 
 Each message from a manager costs 1 Sanity AI credit. The Free plan includes 1,000 a month. Messages from people who aren't approved yet don't use any.

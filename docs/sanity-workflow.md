@@ -38,8 +38,9 @@ updates go out with the next deploy.
 
 ## Publishing
 
-Pages are cached by Workers Cache for a day. A GROQ-powered webhook on the `production` dataset
-purges them on every publish, so changes show within seconds. It is set up in
+Pages are cached by Workers Cache until the next midnight in Osaka, when what depends on the
+date (rooms available today) changes. A GROQ-powered webhook on the `production` dataset purges
+them on every publish, so changes show within seconds. It is set up in
 sanity.io/manage → API → Webhooks:
 
 | Field           | Value                                                        |
