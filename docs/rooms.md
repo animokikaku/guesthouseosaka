@@ -32,22 +32,26 @@ Missing or unreadable values are `null`. Some listings give sizes in tatami
 mats (畳), stored in `area_tatami` rather than converted, because the English
 pages don't convert them consistently.
 
-## Setup
+## Deploying
 
-The database exists (`guesthouseosaka-rooms`, ID in both `wrangler.jsonc`
-files). Both Workers need a shared purge secret, and the rooms Worker its sync
-token:
+Workers Builds deploys the rooms Worker with `bun run rooms:deploy` (pending D1
+migrations, then the Worker) when a push to `main` touches `workers/rooms/`. It
+has its own build trigger, next to the site's; there are no preview builds for
+it, since a preview never runs the cron. To deploy by hand, run the same
+command.
 
-```bash
-SECRET=$(openssl rand -hex 32)
-echo "$SECRET" | bunx wrangler secret put ROOMS_REVALIDATE_SECRET -c workers/rooms/wrangler.jsonc
-echo "$SECRET" | bunx wrangler secret put ROOMS_REVALIDATE_SECRET --env production
-bunx wrangler secret put SYNC_TOKEN -c workers/rooms/wrangler.jsonc
-bun run rooms:deploy   # Applies pending migrations remotely, then deploys the Worker
-```
+Secrets, already set (values in `.env.local`):
+
+| Secret                    | Set on                       | Used for                                 |
+| ------------------------- | ---------------------------- | ---------------------------------------- |
+| `SYNC_TOKEN`              | `guesthouseosaka-rooms`      | Bearer token for `POST /sync`            |
+| `ROOMS_REVALIDATE_SECRET` | both Workers, the same value | Bearer token for `/api/revalidate-rooms` |
+
+To rotate one: `bunx wrangler secret put <NAME> -c workers/rooms/wrangler.jsonc`,
+and for the site `bunx wrangler secret put ROOMS_REVALIDATE_SECRET --env production`.
 
 To add a listing, append its Japanese URL (`https://shares.house/a_detail/q_<id>/`)
-to `LISTING_URLS` and deploy again.
+to `LISTING_URLS`, and its house's ID to `PROPERTY_IDS` in `lib/rooms.server.ts`.
 
 ## Running it
 
@@ -57,7 +61,7 @@ bun run rooms:dev      # Worker at localhost:8787
 curl "localhost:8787/__scheduled?cron=7+*/6+*+*+*"   # Run the cron once
 
 # Deployed, on demand:
-curl -X POST -H "Authorization: Bearer $SYNC_TOKEN" https://guesthouseosaka-rooms.<subdomain>.workers.dev/sync
+curl -X POST -H "Authorization: Bearer $SYNC_TOKEN" https://guesthouseosaka-rooms.animokikaku.workers.dev/sync
 ```
 
 `/sync` answers with each listing's result and whether the purge landed, and
