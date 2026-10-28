@@ -15,6 +15,7 @@
     "schema.json",
     "app/routeTree.gen.ts",
     ".wrangler/**",
-    ".sanity/**"
+    ".sanity/**",
+    "workers/rooms/src/__tests__/fixtures/**"
   ]
 }

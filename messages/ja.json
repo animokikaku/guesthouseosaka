@@ -63,6 +63,11 @@
     },
     "show_all": "{count}件の設備をすべて表示"
   },
+  "HouseAvailability": {
+    "rooms_available": "{count}室が現在空室",
+    "rooms_upcoming": "{count}室がまもなく空室",
+    "fully_booked": "満室"
+  },
   "HouseBuilding": {
     "floors_label": "階数",
     "min_rent_label": "最低賃料",

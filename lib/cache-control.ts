@@ -4,6 +4,14 @@ export const STATIC_FILE_CACHE_CONTROL = 'public, max-age=0, s-maxage=86400'
 /** Tags every published response built from Sanity content, which `/api/revalidate` purges. */
 export const SANITY_CACHE_TAG = 'sanity'
 
+/** Tags the responses that show room availability, which a room sync purges (see docs/rooms.md). */
+export const ROOMS_CACHE_TAG = 'rooms'
+
+/** The `Cache-Tag` value for a published response: {@link SANITY_CACHE_TAG} and `extraTags`. */
+export function cacheTags(extraTags: string[] = []) {
+  return [SANITY_CACHE_TAG, ...extraTags].join(',')
+}
+
 /**
  * Lets Workers Cache serve published responses for a day; after that the next
  * request renders them again. Publishing in Sanity purges them right away,
@@ -20,13 +28,16 @@ export const SANITY_CACHE_TAG = 'sanity'
  * any cookie (a language choice, Cloudflare's `cf_clearance` after a bot
  * challenge) gets its own copy, which per-visitor cookies make a miss.
  */
-export function cacheHeaders(isDraftMode: boolean): Record<string, string> {
+export function cacheHeaders(
+  isDraftMode: boolean,
+  extraTags: string[] = []
+): Record<string, string> {
   if (isDraftMode) return { 'Cache-Control': 'private, no-store', Vary: 'Cookie' }
 
   return {
     'Cache-Control': 'public, max-age=0, s-maxage=86400',
     // Cloudflare strips it before the response reaches the browser.
-    'Cache-Tag': SANITY_CACHE_TAG,
+    'Cache-Tag': cacheTags(extraTags),
     Vary: 'Cookie'
   }
 }

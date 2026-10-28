@@ -35,8 +35,8 @@ export async function sanityFetch<const QueryString extends string>({
 }
 
 /** Sets {@link cacheHeaders} on a server function's response. */
-export function setCacheHeaders() {
-  setResponseHeaders(new Headers(cacheHeaders(isDraftModeEnabled())))
+export function setCacheHeaders(extraTags?: string[]) {
+  setResponseHeaders(new Headers(cacheHeaders(isDraftModeEnabled(), extraTags)))
 }
 
 /**

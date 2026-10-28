@@ -13,7 +13,11 @@ export const serverEnv = createEnv({
     // Signs Sanity's publish webhook (see `app/routes/api/revalidate.ts`).
     // Without it the webhook is refused, and published changes wait for the
     // cache to expire.
-    SANITY_WEBHOOK_SECRET: z.optional(nonEmptyString())
+    SANITY_WEBHOOK_SECRET: z.optional(nonEmptyString()),
+    // Shared with the rooms Worker (see `app/routes/api/revalidate-rooms.ts`).
+    // Without it the purge is refused, and availability waits for the cache to
+    // expire.
+    ROOMS_REVALIDATE_SECRET: z.optional(nonEmptyString())
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true

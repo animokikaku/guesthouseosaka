@@ -63,6 +63,11 @@
     },
     "show_all": "显示全部{count}项设施"
   },
+  "HouseAvailability": {
+    "rooms_available": "{count}间房现可入住",
+    "rooms_upcoming": "{count}间房即将空出",
+    "fully_booked": "已满房"
+  },
   "HouseBuilding": {
     "floors_label": "楼层",
     "min_rent_label": "最低租金",

@@ -23,6 +23,11 @@
     ]
   },
   "tags": ["-lintignore"],
-  "entry": ["app/routes/**/*.{ts,tsx}", "app/router.tsx", "app/start.ts"],
+  "entry": [
+    "app/routes/**/*.{ts,tsx}",
+    "app/router.tsx",
+    "app/start.ts",
+    "workers/rooms/src/index.ts"
+  ],
   "ignoreDependencies": ["cloudflare"]
 }

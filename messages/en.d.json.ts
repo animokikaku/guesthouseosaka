@@ -66,6 +66,11 @@ declare const messages: {
     },
     "show_all": "Show all {count} amenities"
   },
+  "HouseAvailability": {
+    "rooms_available": "{count, plural, one {# room available now} other {# rooms available now}}",
+    "rooms_upcoming": "{count, plural, one {# room opening soon} other {# rooms opening soon}}",
+    "fully_booked": "Fully booked"
+  },
   "HouseBuilding": {
     "floors_label": "Floors",
     "min_rent_label": "Min Rent",
