@@ -1,4 +1,6 @@
 import { routing } from '@/i18n/routing'
+import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
+import { getRoomCounts } from '@/lib/rooms.server'
 import { toHouseNavItems } from '@/lib/transforms/nav'
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import { z } from '@/lib/zod'
@@ -28,12 +30,16 @@ import {
  * the read token.
  */
 
-/** Lets the CDN cache the response like a page, unless it was rendered in draft mode. */
-const cacheable = createMiddleware({ type: 'function' }).server(async ({ next }) => {
-  const result = await next()
-  setCacheHeaders()
-  return result
-})
+/**
+ * Lets the CDN cache the response like a page, unless it was rendered in draft
+ * mode, tagged with `extraTags` as well for purges beyond Sanity's.
+ */
+const cacheable = (extraTags?: string[]) =>
+  createMiddleware({ type: 'function' }).server(async ({ next }) => {
+    const result = await next()
+    setCacheHeaders(extraTags)
+    return result
+  })
 
 const localeSchema = z.enum(routing.locales)
 const byLocale = z.object({ locale: localeSchema })
@@ -41,7 +47,7 @@ const byHouse = z.object({ locale: localeSchema, house: z.enum(HouseIdentifierVa
 const byContactType = z.object({ locale: localeSchema, slug: z.enum(ContactTypeValues) })
 
 export const getLocaleLayout = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
+  .middleware([cacheable()])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
     const [{ data: settings }, { data: houses }] = await Promise.all([
@@ -58,7 +64,7 @@ export const getLocaleLayout = createServerFn({ method: 'GET' })
   })
 
 export const getHomePage = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
+  .middleware([cacheable()])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
     const { data } = await sanityFetch({ query: homePageQuery, params: { locale } })
@@ -66,7 +72,7 @@ export const getHomePage = createServerFn({ method: 'GET' })
   })
 
 export const getFaqPage = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
+  .middleware([cacheable()])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
     const params = { locale }
@@ -85,7 +91,7 @@ export const getFaqPage = createServerFn({ method: 'GET' })
   })
 
 export const getContactLayout = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
+  .middleware([cacheable()])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
     const { data } = await sanityFetch({ query: contactPageQuery, params: { locale } })
@@ -93,7 +99,7 @@ export const getContactLayout = createServerFn({ method: 'GET' })
   })
 
 export const getLegalNotice = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
+  .middleware([cacheable()])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
     const { data } = await sanityFetch({ query: legalNoticeQuery, params: { locale } })
@@ -101,7 +107,7 @@ export const getLegalNotice = createServerFn({ method: 'GET' })
   })
 
 export const getContactType = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
+  .middleware([cacheable()])
   .validator(byContactType)
   .handler(async ({ data: { locale, slug } }) => {
     const [contactType, houseTitles] = await Promise.all([
@@ -112,18 +118,19 @@ export const getContactType = createServerFn({ method: 'GET' })
   })
 
 export const getHousePage = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
+  .middleware([cacheable([ROOMS_CACHE_TAG])])
   .validator(byHouse)
   .handler(async ({ data: { locale, house } }) => {
-    const [page, houses] = await Promise.all([
+    const [page, houses, roomCounts] = await Promise.all([
       sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
-      sanityFetch({ query: housesTitlesQuery, params: { locale } })
+      sanityFetch({ query: housesTitlesQuery, params: { locale } }),
+      getRoomCounts(house)
     ])
-    return { house: page.data, houses: houses.data }
+    return { house: page.data, houses: houses.data, roomCounts }
   })
 
 export const getHouseGallery = createServerFn({ method: 'GET' })
-  .middleware([cacheable])
+  .middleware([cacheable()])
   .validator(byHouse)
   .handler(async ({ data: { locale, house } }) => {
     const { data } = await sanityFetch({

@@ -2,6 +2,9 @@
 // (`wrangler types`) redeclare `Request`, `caches` and other globals the
 // browser code shares, so they can't sit in this single tsconfig.
 declare module 'cloudflare:workers' {
+  /** The Worker's bindings (see wrangler.jsonc). */
+  export const env: { ROOMS_DB: import('../workers/rooms/src/d1').D1Database }
+
   /** Keeps the Worker alive until `promise` settles, after the response is sent. */
   export function waitUntil(promise: Promise<unknown>): void
 

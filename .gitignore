@@ -20,8 +20,8 @@
 
 # tanstack start build output and cloudflare (wrangler) state
 /.tanstack/
-/.wrangler/
-/.dev.vars*
+.wrangler/
+.dev.vars*
 
 # production
 /build

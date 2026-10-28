@@ -20,14 +20,33 @@
     "traces": { "enabled": true }
   },
   // Secrets (`wrangler secret put`): SANITY_API_READ_TOKEN, RESEND_API_KEY,
-  // TURNSTILE_SECRET_KEY. Locally they come from `.env.local`.
+  // TURNSTILE_SECRET_KEY, ROOMS_REVALIDATE_SECRET. Locally they come from
+  // `.env.local`.
   // Only the production environment emails the houses (see contact.server.ts).
   "vars": { "DEPLOY_ENV": "development" },
+  // Rooms the `guesthouseosaka-rooms` Worker syncs from shares.house, read-only
+  // here (see docs/rooms.md and lib/rooms.server.ts). Bindings aren't inherited,
+  // so the environments and previews below repeat it.
+  "d1_databases": [
+    {
+      "binding": "ROOMS_DB",
+      "database_name": "guesthouseosaka-rooms",
+      // Must match workers/rooms/wrangler.jsonc.
+      "database_id": "0924c651-cb96-42e8-9789-692c06b7baef"
+    }
+  ],
   // Worker Previews (`wrangler preview`) don't inherit the Worker's vars or
   // secrets: these mirror `env.preview`, which the build reads, and their
   // secrets are set with `wrangler preview base-config secret put`.
   "previews": {
-    "vars": { "DEPLOY_ENV": "preview" }
+    "vars": { "DEPLOY_ENV": "preview" },
+    "d1_databases": [
+      {
+        "binding": "ROOMS_DB",
+        "database_name": "guesthouseosaka-rooms",
+        "database_id": "0924c651-cb96-42e8-9789-692c06b7baef"
+      }
+    ]
   },
   "env": {
     // Select at build time with CLOUDFLARE_ENV (see the `deploy` scripts), which
@@ -36,7 +55,14 @@
     "preview": {
       // Previews live under the production Worker (see `deploy:preview`).
       "name": "guesthouseosaka",
-      "vars": { "DEPLOY_ENV": "preview" }
+      "vars": { "DEPLOY_ENV": "preview" },
+      "d1_databases": [
+        {
+          "binding": "ROOMS_DB",
+          "database_name": "guesthouseosaka-rooms",
+          "database_id": "0924c651-cb96-42e8-9789-692c06b7baef"
+        }
+      ]
     },
     "production": {
       // Without a name, Wrangler would deploy `guesthouseosaka-production`, a
@@ -45,7 +71,14 @@
       // Attaching it fails while another DNS record uses the hostname.
       // `www` redirects here through a Cloudflare Redirect Rule.
       "routes": [{ "pattern": "guesthouseosaka.com", "custom_domain": true }],
-      "vars": { "DEPLOY_ENV": "production" }
+      "vars": { "DEPLOY_ENV": "production" },
+      "d1_databases": [
+        {
+          "binding": "ROOMS_DB",
+          "database_name": "guesthouseosaka-rooms",
+          "database_id": "0924c651-cb96-42e8-9789-692c06b7baef"
+        }
+      ]
     }
   }
 }

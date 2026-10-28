@@ -18,6 +18,7 @@ import { Route as LocaleHouseRouteRouteImport } from './routes/$locale/$house/ro
 import { Route as LocaleContactRouteRouteImport } from './routes/$locale/contact/route'
 import { Route as LocaleFaqRouteImport } from './routes/$locale/faq'
 import { Route as ApiRevalidateRouteImport } from './routes/api/revalidate'
+import { Route as ApiRevalidateRoomsRouteImport } from './routes/api/revalidate-rooms'
 import { Route as LocaleHouseHouseRouteRouteImport } from './routes/$locale/$house/_house/route'
 import { Route as LocaleHouseGalleryRouteImport } from './routes/$locale/$house/gallery'
 import { Route as LocaleContactIndexRouteImport } from './routes/$locale/contact/index'
@@ -73,6 +74,11 @@ const ApiRevalidateRoute = ApiRevalidateRouteImport.update({
   path: '/api/revalidate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRevalidateRoomsRoute = ApiRevalidateRoomsRouteImport.update({
+  id: '/api/revalidate-rooms',
+  path: '/api/revalidate-rooms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LocaleHouseHouseRouteRoute = LocaleHouseHouseRouteRouteImport.update({
   id: '/_house',
   getParentRoute: () => LocaleHouseRouteRoute,
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/$locale/contact': typeof LocaleContactRouteRouteWithChildren
   '/$locale/faq': typeof LocaleFaqRoute
   '/api/revalidate': typeof ApiRevalidateRoute
+  '/api/revalidate-rooms': typeof ApiRevalidateRoomsRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/$house/gallery': typeof LocaleHouseGalleryRoute
   '/api/draft-mode/disable': typeof ApiDraftModeDisableRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/$locale/$house': typeof LocaleHouseHouseIndexRoute
   '/$locale/faq': typeof LocaleFaqRoute
   '/api/revalidate': typeof ApiRevalidateRoute
+  '/api/revalidate-rooms': typeof ApiRevalidateRoomsRoute
   '/$locale': typeof LocaleIndexRoute
   '/$locale/contact': typeof LocaleContactIndexRoute
   '/$locale/$house/gallery': typeof LocaleHouseGalleryRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/$locale/contact': typeof LocaleContactRouteRouteWithChildren
   '/$locale/faq': typeof LocaleFaqRoute
   '/api/revalidate': typeof ApiRevalidateRoute
+  '/api/revalidate-rooms': typeof ApiRevalidateRoomsRoute
   '/$locale/': typeof LocaleIndexRoute
   '/$locale/$house/_house': typeof LocaleHouseHouseRouteRouteWithChildren
   '/$locale/contact/_form': typeof LocaleContactFormRouteRouteWithChildren
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/$locale/contact'
     | '/$locale/faq'
     | '/api/revalidate'
+    | '/api/revalidate-rooms'
     | '/$locale/'
     | '/$locale/$house/gallery'
     | '/api/draft-mode/disable'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/$locale/$house'
     | '/$locale/faq'
     | '/api/revalidate'
+    | '/api/revalidate-rooms'
     | '/$locale'
     | '/$locale/contact'
     | '/$locale/$house/gallery'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/$locale/contact'
     | '/$locale/faq'
     | '/api/revalidate'
+    | '/api/revalidate-rooms'
     | '/$locale/'
     | '/$locale/$house/_house'
     | '/$locale/contact/_form'
@@ -233,6 +245,7 @@ export interface RootRouteChildren {
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiRevalidateRoute: typeof ApiRevalidateRoute
+  ApiRevalidateRoomsRoute: typeof ApiRevalidateRoomsRoute
   ApiDraftModeDisableRoute: typeof ApiDraftModeDisableRoute
   ApiDraftModeEnableRoute: typeof ApiDraftModeEnableRoute
 }
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/api/revalidate'
       fullPath: '/api/revalidate'
       preLoaderRoute: typeof ApiRevalidateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/revalidate-rooms': {
+      id: '/api/revalidate-rooms'
+      path: '/api/revalidate-rooms'
+      fullPath: '/api/revalidate-rooms'
+      preLoaderRoute: typeof ApiRevalidateRoomsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$locale/$house/_house': {
@@ -447,6 +467,7 @@ const rootRouteChildren: RootRouteChildren = {
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiRevalidateRoute: ApiRevalidateRoute,
+  ApiRevalidateRoomsRoute: ApiRevalidateRoomsRoute,
   ApiDraftModeDisableRoute: ApiDraftModeDisableRoute,
   ApiDraftModeEnableRoute: ApiDraftModeEnableRoute,
 }
