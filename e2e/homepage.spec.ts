@@ -39,7 +39,7 @@ test.describe('Homepage', () => {
     })
   })
 
-  // Pages opt into footer overrides with marker classes (see SiteFooter).
+  // Pages opt into footer overrides with a marker class (see SiteFooter).
   test.describe('Footer overrides', () => {
     // The site snaps mandatorily, so a snap target left over from the home
     // page would open the next page scrolled to its footer.
@@ -56,21 +56,6 @@ test.describe('Homepage', () => {
 
       await expect(footer).toHaveCSS('scroll-snap-align', 'none')
       expect(await page.evaluate(() => scrollY)).toBe(0)
-    })
-
-    test('the 404 page drops the footer tint, which comes back after it', async ({ page }) => {
-      await gotoHydrated(page, '/en/does-not-exist')
-      const footer = page.locator('[data-slot="site-footer"]')
-      await expect(footer).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
-
-      await page
-        .getByRole('navigation')
-        .getByRole('link', { name: /\bfaq\b/i })
-        .first()
-        .click()
-      await page.waitForURL(/\/en\/faq$/)
-
-      await expect(footer).not.toHaveCSS('background-color', 'rgba(0, 0, 0, 0)')
     })
   })
 

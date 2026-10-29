@@ -8,6 +8,7 @@
   "ignorePatterns": [
     "components/ui/**",
     "messages/en.d.json.ts",
+    ".agents/**",
     ".claude/**",
     ".codex/**",
     ".cursor/**",
