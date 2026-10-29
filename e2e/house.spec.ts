@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test } from './fixtures/test'
 import { gotoHydrated } from './helpers/navigation'
 
 // House slugs defined in lib/types/index.ts
