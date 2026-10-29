@@ -32,12 +32,12 @@ export function LocaleNotFound() {
   const locale = useLocale()
 
   return (
-    <Empty className="footer-plain">
+    <Empty>
       <EmptyHeader>
         <EmptyMedia>
           <Image preload {...assets.notFound} />
         </EmptyMedia>
-        <EmptyTitle className="text-2xl font-bold tracking-tight sm:text-4xl">
+        <EmptyTitle className="text-2xl font-semibold tracking-tight sm:text-4xl">
           {t('title')}
         </EmptyTitle>
         <EmptyDescription className="text-base">{t('description')}</EmptyDescription>

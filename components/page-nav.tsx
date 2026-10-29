@@ -23,4 +23,4 @@ export function PageNavTabs({ className, ...props }: React.ComponentProps<'div'>
 
 /** Base style for a {@link PageNavTabs} link; callers add the `data-active` color. */
 export const pageNavTabClass =
-  'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center rounded-md px-4 text-center text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset'
+  'text-muted-foreground hover:text-primary flex h-7 shrink-0 items-center justify-center rounded-md px-4 text-center text-base font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset'

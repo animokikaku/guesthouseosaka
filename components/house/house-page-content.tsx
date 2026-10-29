@@ -59,7 +59,7 @@ export function HousePageContent({
           />
         </PageHeader>
       </div>
-      <div className="container-wrapper section-soft flex-1 pb-12">
+      <div className="container-wrapper flex-1 pb-12">
         <div className="container max-w-6xl">
           <PageNav id="tabs">
             <HousesNav houses={houses} />

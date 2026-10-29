@@ -73,7 +73,7 @@ declare const messages: {
   },
   "HouseBuilding": {
     "floors_label": "Floors",
-    "min_rent_label": "Min Rent",
+    "min_rent_label": "Min rent",
     "rooms_label": "Rooms"
   },
   "HouseLocation": {

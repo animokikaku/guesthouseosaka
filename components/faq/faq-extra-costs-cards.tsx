@@ -84,12 +84,7 @@ function ExtraCostsCard({
 }: ExtraCostsCardProps) {
   return (
     <CarouselItem>
-      <div
-        className={cn(
-          'overflow-hidden rounded-xl border shadow-sm transition-shadow',
-          styles.border
-        )}
-      >
+      <div className={cn('overflow-hidden rounded-xl border', styles.border)}>
         <div className={cn('px-4 py-3', styles.headerBg)}>
           <h4 className={cn('text-base font-semibold tracking-tight', styles.text)}>
             {stegaClean(title)}

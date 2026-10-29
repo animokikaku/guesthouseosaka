@@ -80,7 +80,7 @@ function GalleryGrid({
                     className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/50"
                     aria-hidden="true"
                   >
-                    <span className="group-focus-visible/gallery:text-primary text-2xl font-bold text-white transition-colors">
+                    <span className="group-focus-visible/gallery:text-primary text-2xl font-semibold text-white">
                       {overflowLabel}
                     </span>
                   </span>
