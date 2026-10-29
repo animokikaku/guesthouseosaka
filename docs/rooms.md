@@ -45,17 +45,21 @@ pages don't convert them consistently.
 ## Deploying
 
 Workers Builds deploys the rooms Worker with `bun run rooms:deploy` (pending D1
-migrations, the rooms Worker, then the cron Worker) when a push to `main`
-touches `workers/rooms/`. It
-has its own build trigger, next to the site's; there are no preview builds for
-it, since a preview never runs the cron. To deploy by hand, run the same
-command.
+migrations, then the Worker) when a push to `main` touches `workers/rooms/`, and
+the cron Worker with `bun run rooms:cron:deploy` when it touches
+`workers/rooms/cron/`. Each Worker needs its own build trigger: a build deploys
+every `wrangler deploy` in it under the trigger's Worker name, whatever the
+config says, so one script deploying both would put the cron Worker's code over
+the rooms Worker. Both triggers sit next to the site's; there are no preview
+builds for them, since a preview never runs the cron. To deploy by hand, run the
+same commands.
 
-Its root directory is the repository's, so the dashboard warns that the root
-`wrangler.jsonc` is named `guesthouseosaka`, the site, rather than
-`guesthouseosaka-rooms`. The deploy reads `workers/rooms/wrangler.jsonc`, so
-ignore the warning, and close any pull request Workers Builds opens to rename
-the root config: merging it would deploy the site over the rooms Worker.
+Their root directory is the repository's, so the dashboard warns that the root
+`wrangler.jsonc` is named `guesthouseosaka`, the site, rather than the Worker's
+name. The deploys read `workers/rooms/wrangler.jsonc` and
+`workers/rooms/cron/wrangler.jsonc`, so ignore the warning, and close any pull
+request Workers Builds opens to rename a config: merging it would deploy one
+Worker over another.
 
 Secrets, already set (values in `.env.local`):
 
