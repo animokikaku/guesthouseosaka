@@ -31,6 +31,29 @@
       "rules": {
         "typescript/no-unsafe-type-assertion": "off"
       }
+    },
+    {
+      "files": ["e2e/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "@playwright/test",
+                "importNames": ["test"],
+                "message": "Import `test` from e2e/fixtures/test.ts, which blocks Google Maps to spare the API key's daily quota."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["e2e/fixtures/test.ts"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
     }
   ],
   "ignorePatterns": [
