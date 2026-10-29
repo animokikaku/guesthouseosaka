@@ -10,8 +10,10 @@ rooms.
 shares.house answers 403 to requests from outside Japan, so the sync only runs
 in the `fetch` handler, which `placement` keeps near Tokyo (`aws:ap-northeast-1`).
 A cron runs in whatever data center has capacity, and placement doesn't apply to
-it, so the `scheduled` handler only calls `POST /sync` through the `SELF`
-service binding, with `SYNC_TOKEN`.
+it, nor to a Worker calling itself through a service binding. So the cron lives
+in a second Worker, `guesthouseosaka-rooms-cron` (`workers/rooms/cron/`), whose
+`scheduled` handler only calls `POST /sync` through its `ROOMS` service binding,
+with `SYNC_TOKEN`. A request from another Worker is placed like any other.
 
 Every six hours (and on `POST /sync`), for each URL in `LISTING_URLS`:
 
@@ -29,8 +31,10 @@ Every six hours (and on `POST /sync`), for each URL in `LISTING_URLS`:
    is refused as incomplete.
 
 A failure at any step leaves that listing's rows as they were and moves on to the
-next. It's logged as `listing_sync_failed`, and a failed cron run shows as an
-error in the Worker's dashboard.
+next. It's logged as `listing_sync_failed` by the rooms Worker, and a failed
+cron run shows as an error in the cron Worker's dashboard. An error status
+carries shares.house's `cf-ray`, which ends with the data center that answered
+(`HTTP 403 (cf-ray …-NRT)`): a 403 from outside Japan means the sync wasn't placed.
 
 Statuses are normalized from either language into `available` (空室),
 `upcoming` (空室予定, with `available_from`) and `occupied` (入居中, "N/A").
@@ -41,7 +45,8 @@ pages don't convert them consistently.
 ## Deploying
 
 Workers Builds deploys the rooms Worker with `bun run rooms:deploy` (pending D1
-migrations, then the Worker) when a push to `main` touches `workers/rooms/`. It
+migrations, the rooms Worker, then the cron Worker) when a push to `main`
+touches `workers/rooms/`. It
 has its own build trigger, next to the site's; there are no preview builds for
 it, since a preview never runs the cron. To deploy by hand, run the same
 command.
@@ -56,10 +61,11 @@ Secrets, already set (values in `.env.local`):
 
 | Secret                    | Set on                       | Used for                                 |
 | ------------------------- | ---------------------------- | ---------------------------------------- |
-| `SYNC_TOKEN`              | `guesthouseosaka-rooms`      | Bearer token for `POST /sync`            |
+| `SYNC_TOKEN`              | both rooms Workers, the same | Bearer token for `POST /sync`            |
 | `ROOMS_REVALIDATE_SECRET` | both Workers, the same value | Bearer token for `/api/revalidate-rooms` |
 
 To rotate one: `bunx wrangler secret put <NAME> -c workers/rooms/wrangler.jsonc`,
+for the cron Worker `bunx wrangler secret put SYNC_TOKEN -c workers/rooms/cron/wrangler.jsonc`,
 and for the site `bunx wrangler secret put ROOMS_REVALIDATE_SECRET --env production`.
 
 To add a listing, append its Japanese URL (`https://shares.house/a_detail/q_<id>/`)
@@ -69,8 +75,10 @@ to `LISTING_URLS`, and its house's ID to `PROPERTY_IDS` in `lib/rooms.server.ts`
 
 ```bash
 bun run rooms:migrate  # Apply migrations to the local database the site's dev server also uses
-bun run rooms:dev      # Worker at localhost:8787
-curl "localhost:8787/__scheduled?cron=7+*/6+*+*+*"   # Run the cron once
+bun run rooms:dev      # Both Workers; the rooms Worker at localhost:8787
+# Run the cron once (the cron Worker reads SYNC_TOKEN from workers/rooms/cron/.dev.vars):
+curl -X POST "localhost:8787/cdn-cgi/local/explorer/api/local/scheduled?worker=guesthouseosaka-rooms-cron" \
+  -H 'Content-Type: application/json' -d '{"cron":"7 */6 * * *"}'
 
 # Deployed, on demand:
 curl -X POST -H "Authorization: Bearer $SYNC_TOKEN" https://guesthouseosaka-rooms.animokikaku.workers.dev/sync

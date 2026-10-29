@@ -29,7 +29,10 @@ export async function fetchListing(url: string): Promise<string> {
         signal: AbortSignal.timeout(TIMEOUT_MS)
       })
       if (response.ok) return await response.text()
-      lastError = new Error(`HTTP ${response.status}`)
+      // shares.house is behind Cloudflare: the ray ID ends with the data center
+      // that answered, which tells a refusal by location from one by the site.
+      const ray = response.headers.get('cf-ray')
+      lastError = new Error(`HTTP ${response.status}${ray ? ` (cf-ray ${ray})` : ''}`)
       if (!RETRYABLE_STATUSES.has(response.status)) break
     } catch (error) {
       lastError = error

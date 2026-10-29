@@ -1,8 +1,9 @@
 /**
  * Keeps the `rooms` table in step with the shares.house listings in
- * `LISTING_URLS`, on the cron in wrangler.jsonc or on `POST /sync` with
- * `Authorization: Bearer <SYNC_TOKEN>`, then purges the site's cached pages
- * that show availability. See docs/rooms.md.
+ * `LISTING_URLS`, on `POST /sync` with `Authorization: Bearer <SYNC_TOKEN>`,
+ * then purges the site's cached pages that show availability. The
+ * `guesthouseosaka-rooms-cron` Worker (cron/) calls it on a schedule. See
+ * docs/rooms.md.
  */
 import { hasBearerToken } from './auth'
 import type { D1Database } from './d1'
@@ -13,8 +14,6 @@ interface Env {
   LISTING_URLS: string[]
   /** The site's Worker, through a service binding. */
   SITE?: { fetch(input: string, init?: RequestInit): Promise<Response> }
-  /** This Worker, through a service binding: its fetch handler runs where `placement` says. */
-  SELF?: { fetch(input: string, init?: RequestInit): Promise<Response> }
   /** Secret (`wrangler secret put SYNC_TOKEN`). Without it, `POST /sync` is refused. */
   SYNC_TOKEN?: string
   /** Secret shared with the site, which refuses a purge without it. */
@@ -104,23 +103,6 @@ async function run(env: Env, { force = false } = {}) {
 }
 
 export default {
-  async scheduled(_controller: unknown, env: Env) {
-    // shares.house refuses requests from outside Japan, and a cron runs in any
-    // data center, so the sync goes through the fetch handler, placed near Tokyo.
-    const { SELF, SYNC_TOKEN } = env
-    if (!SELF || !SYNC_TOKEN) throw new Error('SELF or SYNC_TOKEN is missing')
-    // The service binding ignores the host.
-    const response = await SELF.fetch('https://rooms/sync', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${SYNC_TOKEN}` }
-    })
-    // Marks the cron run as failed in the dashboard.
-    if (!response.ok)
-      throw new Error(
-        `Room sync failed (HTTP ${response.status}); see the listing_sync_failed and site_purge_failed logs`
-      )
-  },
-
   async fetch(request: Request, env: Env) {
     if (new URL(request.url).pathname !== '/sync') return new Response('Not found', { status: 404 })
     if (request.method !== 'POST')

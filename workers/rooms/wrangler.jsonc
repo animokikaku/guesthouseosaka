@@ -6,13 +6,15 @@
   "account_id": "5f8fd45c341a983aff5d6b8b01f88ee1",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-25",
-  // Serves `POST /sync`, the manual run, which needs the SYNC_TOKEN secret.
+  // Serves `POST /sync`, which needs the SYNC_TOKEN secret: the manual run.
+  // The scheduled run comes from `guesthouseosaka-rooms-cron` (cron/).
   "workers_dev": true,
   "preview_urls": false,
-  // Every six hours (UTC).
-  "triggers": { "crons": ["7 */6 * * *"] },
-  // shares.house answers 403 outside Japan. Runs the fetch handler near Tokyo;
-  // a cron runs wherever there's capacity, so it syncs through SELF instead.
+  // No cron here: a cron runs wherever there's capacity, and placement doesn't
+  // apply to it or to a Worker calling itself.
+  "triggers": { "crons": [] },
+  // shares.house answers 403 outside Japan. Runs the fetch handler near Tokyo,
+  // including when the cron Worker calls it through its service binding.
   "placement": { "region": "aws:ap-northeast-1" },
   "observability": { "enabled": true },
   "vars": {
@@ -26,11 +28,7 @@
   // Secrets: SYNC_TOKEN, and ROOMS_REVALIDATE_SECRET, shared with the site.
   // After a sync that changed rooms, purges the site's cached pages through
   // its `/api/revalidate-rooms`.
-  // SELF: this Worker, so the cron's sync runs in the placed fetch handler.
-  "services": [
-    { "binding": "SITE", "service": "guesthouseosaka" },
-    { "binding": "SELF", "service": "guesthouseosaka-rooms" }
-  ],
+  "services": [{ "binding": "SITE", "service": "guesthouseosaka" }],
   "d1_databases": [
     {
       "binding": "ROOMS_DB",

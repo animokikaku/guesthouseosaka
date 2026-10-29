@@ -27,7 +27,8 @@
     "app/routes/**/*.{ts,tsx}",
     "app/router.tsx",
     "app/start.ts",
-    "workers/rooms/src/index.ts"
+    "workers/rooms/src/index.ts",
+    "workers/rooms/cron/src/index.ts"
   ],
   "ignoreDependencies": ["cloudflare"]
 }

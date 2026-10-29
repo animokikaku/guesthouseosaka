@@ -253,4 +253,17 @@ describe('fetchListing', () => {
     await expect(fetchListing(URL_1)).rejects.toThrow(SyncError)
     expect(fetch).toHaveBeenCalledTimes(1)
   })
+
+  it('reports the ray ID of a refused request', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        async () => new Response('', { status: 403, headers: { 'cf-ray': 'a5222c983e3100a3-KIX' } })
+      )
+    )
+
+    await expect(fetchListing(URL_1)).rejects.toMatchObject({
+      cause: { message: 'HTTP 403 (cf-ray a5222c983e3100a3-KIX)' }
+    })
+  })
 })

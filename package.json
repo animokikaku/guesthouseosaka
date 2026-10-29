@@ -28,9 +28,9 @@
     "test:e2e:ui": "playwright test --project=local --ui",
     "deploy": "CLOUDFLARE_ENV=production vite build && wrangler deploy",
     "deploy:preview": "CLOUDFLARE_ENV=preview vite build && wrangler preview",
-    "rooms:dev": "wrangler dev -c workers/rooms/wrangler.jsonc --test-scheduled --persist-to .wrangler/state --port 8787",
+    "rooms:dev": "wrangler dev -c workers/rooms/wrangler.jsonc -c workers/rooms/cron/wrangler.jsonc --persist-to .wrangler/state --port 8787",
     "rooms:migrate": "wrangler d1 migrations apply ROOMS_DB -c workers/rooms/wrangler.jsonc --local --persist-to .wrangler/state",
-    "rooms:deploy": "wrangler d1 migrations apply ROOMS_DB -c workers/rooms/wrangler.jsonc --remote && wrangler deploy -c workers/rooms/wrangler.jsonc",
+    "rooms:deploy": "wrangler d1 migrations apply ROOMS_DB -c workers/rooms/wrangler.jsonc --remote && wrangler deploy -c workers/rooms/wrangler.jsonc && wrangler deploy -c workers/rooms/cron/wrangler.jsonc",
     "postinstall": "bun run generate:cn",
     "generate:cn": "cn build --content '{app,components,lib}/**/*.{ts,tsx}' --out generated/cn-tables.ts --quiet"
   },
