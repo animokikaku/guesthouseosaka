@@ -72,6 +72,11 @@ jobs:
       - name: Install Playwright browsers
         run: bunx playwright install --only-shell chromium
 
+      # The site reads room counts from the local D1 in .wrangler/state; without
+      # its tables every page logs a D1 error.
+      - name: Apply local D1 migrations
+        run: bun run rooms:migrate
+
       # The E2E suite spends most of its time on the production build, so the
       # component tests (their own Vite server on another port) run alongside it.
       - name: Run component and E2E tests

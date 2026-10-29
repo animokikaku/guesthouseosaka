@@ -7,15 +7,19 @@ import { useTranslations } from 'use-intl'
 const portableTextComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
-      <p className="text-muted-foreground max-w-prose text-sm whitespace-pre-line">{children}</p>
+      <p className="text-foreground/70 max-w-prose text-sm whitespace-pre-line">{children}</p>
     )
   },
   list: {
     bullet: ({ children }) => (
-      <ul className="text-muted-foreground list-disc space-y-1 pl-3 text-sm">{children}</ul>
+      <ul className="text-foreground/70 marker:text-muted-foreground list-disc space-y-1 pl-3 text-sm">
+        {children}
+      </ul>
     ),
     number: ({ children }) => (
-      <ol className="text-muted-foreground list-decimal space-y-1 pl-3 text-sm">{children}</ol>
+      <ol className="text-foreground/70 marker:text-muted-foreground list-decimal space-y-1 pl-3 text-sm">
+        {children}
+      </ol>
     )
   },
   listItem: {

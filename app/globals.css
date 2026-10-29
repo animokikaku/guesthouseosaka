@@ -73,24 +73,28 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  /* Fills sit as far below the canvas as they did below white, so hover and
+     active states keep their contrast */
+  --secondary: oklch(0.9575 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
+  --muted: oklch(0.9575 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: oklch(0.9575 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0.9875 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent: oklch(0.9575 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* Background layers follow Kumo's light theme (kumo-ui.com): canvas behind,
+     white base for cards and popovers */
   --surface: oklch(0.98 0 0);
   --surface-foreground: var(--foreground);
   --code: var(--surface);
@@ -99,7 +103,7 @@
   --code-number: oklch(0.56 0 0);
   --selection: oklch(0.145 0 0);
   --selection-foreground: oklch(1 0 0);
-  --background: oklch(1 0 0);
+  --background: oklch(0.9875 0 0); /* #fbfbfb */
   --foreground: oklch(0.145 0 0);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
@@ -209,10 +213,6 @@
   @variant dark {
     @apply border-border;
   }
-}
-
-@utility section-soft {
-  @apply from-background to-surface/40 dark:bg-background bg-linear-to-b;
 }
 
 @utility container-wrapper {

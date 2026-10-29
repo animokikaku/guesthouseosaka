@@ -7,14 +7,14 @@ import * as React from 'react'
 const portableTextComponents: PortableTextComponents = {
   block: {
     h3: ({ children }) => (
-      <h3 className="text-foreground mb-4 text-lg font-semibold">{children}</h3>
+      <h3 className="text-foreground mt-6 mb-3 text-lg font-semibold first:mt-0">{children}</h3>
     ),
-    normal: ({ children }) => <p className="text-foreground">{children}</p>
+    normal: ({ children }) => <p className="text-foreground mb-3 last:mb-0">{children}</p>
   },
   list: {
-    bullet: ({ children }) => <ul className="mb-6 space-y-2">{children}</ul>,
+    bullet: ({ children }) => <ul className="space-y-2">{children}</ul>,
     number: ({ children }) => (
-      <ol className="text-foreground mb-6 list-decimal space-y-2 pl-5">{children}</ol>
+      <ol className="text-foreground list-decimal space-y-2 pl-5">{children}</ol>
     )
   },
   listItem: {
@@ -41,7 +41,9 @@ export function HouseLocationModal({ children, details, title }: HouseLocationMo
 
   return (
     <ResponsiveModal trigger={children} title={title}>
-      <div className="space-y-2">
+      {/* Plain block flow so a heading's top margin collapses with the
+          paragraph above it, keeping sections apart and headings near their content */}
+      <div>
         <PortableText value={details} components={portableTextComponents} />
       </div>
     </ResponsiveModal>

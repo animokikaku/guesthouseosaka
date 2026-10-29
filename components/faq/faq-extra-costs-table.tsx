@@ -72,7 +72,7 @@ export function FAQExtraCostsTable({ houses, pricingCategories }: FAQExtraCostsT
               {columns.map(({ house, costs }) => {
                 const cost = costs.get(category._id)
                 return (
-                  <TableCell key={house._id} className="overflow-hidden">
+                  <TableCell key={house._id} className="text-foreground/70 overflow-hidden">
                     {cost ? (
                       <PortableText value={cost} components={portableTextComponents} />
                     ) : (

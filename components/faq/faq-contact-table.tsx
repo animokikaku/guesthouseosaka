@@ -104,17 +104,14 @@ function DesktopPhoneTable({ houses }: FAQContactTableProps) {
                   {stegaClean(title)}
                 </TableCell>
                 <TableCell className="text-center">
-                  <a
-                    href={`tel:${phone.domestic}`}
-                    className="text-foreground hover:text-primary transition-colors"
-                  >
+                  <a href={`tel:${phone.domestic}`} className="text-foreground hover:text-primary">
                     {phone.domestic}
                   </a>
                 </TableCell>
                 <TableCell className="text-center">
                   <a
                     href={`tel:${phone.international}`}
-                    className="text-foreground hover:text-primary transition-colors"
+                    className="text-foreground hover:text-primary"
                   >
                     {phone.international}
                   </a>

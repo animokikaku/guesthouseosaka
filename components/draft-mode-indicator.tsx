@@ -52,7 +52,7 @@ export function DraftModeIndicator() {
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-rose-400 opacity-75" />
             <span className="relative inline-flex size-2 rounded-full bg-rose-500" />
           </span>
-          <span className="font-mono text-xs font-medium tracking-widest text-zinc-300 uppercase">
+          <span className="font-mono text-xs font-medium tracking-widest text-zinc-300">
             {t('preview')}
           </span>
         </ButtonGroupText>
