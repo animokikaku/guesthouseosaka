@@ -11,6 +11,9 @@
   "preview_urls": false,
   // Every six hours (UTC).
   "triggers": { "crons": ["7 */6 * * *"] },
+  // shares.house answers 403 outside Japan. Runs the fetch handler near Tokyo;
+  // a cron runs wherever there's capacity, so it syncs through SELF instead.
+  "placement": { "region": "aws:ap-northeast-1" },
   "observability": { "enabled": true },
   "vars": {
     // Listing pages (Japanese), synced in this order. Add one to sync it.
@@ -23,7 +26,11 @@
   // Secrets: SYNC_TOKEN, and ROOMS_REVALIDATE_SECRET, shared with the site.
   // After a sync that changed rooms, purges the site's cached pages through
   // its `/api/revalidate-rooms`.
-  "services": [{ "binding": "SITE", "service": "guesthouseosaka" }],
+  // SELF: this Worker, so the cron's sync runs in the placed fetch handler.
+  "services": [
+    { "binding": "SITE", "service": "guesthouseosaka" },
+    { "binding": "SELF", "service": "guesthouseosaka-rooms" }
+  ],
   "d1_databases": [
     {
       "binding": "ROOMS_DB",

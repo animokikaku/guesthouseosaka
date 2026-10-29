@@ -7,6 +7,12 @@ rooms.
 
 ## How a sync works
 
+shares.house answers 403 to requests from outside Japan, so the sync only runs
+in the `fetch` handler, which `placement` keeps near Tokyo (`aws:ap-northeast-1`).
+A cron runs in whatever data center has capacity, and placement doesn't apply to
+it, so the `scheduled` handler only calls `POST /sync` through the `SELF`
+service binding, with `SYNC_TOKEN`.
+
 Every six hours (and on `POST /sync`), for each URL in `LISTING_URLS`:
 
 1. Fetch the Japanese page: a 15 s timeout and three attempts, retrying network
@@ -39,6 +45,12 @@ migrations, then the Worker) when a push to `main` touches `workers/rooms/`. It
 has its own build trigger, next to the site's; there are no preview builds for
 it, since a preview never runs the cron. To deploy by hand, run the same
 command.
+
+Its root directory is the repository's, so the dashboard warns that the root
+`wrangler.jsonc` is named `guesthouseosaka`, the site, rather than
+`guesthouseosaka-rooms`. The deploy reads `workers/rooms/wrangler.jsonc`, so
+ignore the warning, and close any pull request Workers Builds opens to rename
+the root config: merging it would deploy the site over the rooms Worker.
 
 Secrets, already set (values in `.env.local`):
 
