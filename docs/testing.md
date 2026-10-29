@@ -21,6 +21,9 @@ a visitor, an editor or a crawler would.
   nothing visible identifies the element.
 - Mock only at the edges: the server function, Resend, Turnstile (its widget and Siteverify), the
   router, `Image`. Render our own components, `urlFor`, `stegaClean` and translations for real.
+- E2E specs import `test` from `e2e/fixtures/test.ts` (or `server-fetch.ts`, which extends it),
+  not `@playwright/test`: it blocks Google Maps, whose map loads and Places UI Kit requests count
+  against the key's daily quota.
 - Prefer a table (`it.each`) over near-identical tests, and one test per behavior over one per prop.
 - A test that only restates the implementation (a hard-coded copy of a computed value, a mock that
   reimplements the code under test) is a change detector; test the rule it encodes instead.

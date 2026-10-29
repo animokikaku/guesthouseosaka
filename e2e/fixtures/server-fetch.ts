@@ -1,4 +1,4 @@
-import { test as base } from '@playwright/test'
+import { test as base } from './test'
 import { createServer, type IncomingMessage } from 'node:http'
 import type { AddressInfo } from 'node:net'
 import { TEST_PROXY_HEADER, type TestProxyReply } from '../../lib/test-proxy.server'
@@ -101,4 +101,4 @@ export const test = base.extend<{ serverFetch: ServerFetch }, { testProxy: TestP
   }
 })
 
-export { expect } from '@playwright/test'
+export { expect } from './test'
