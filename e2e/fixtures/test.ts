@@ -16,4 +16,4 @@ export const test = base.extend<{ blockGoogleMaps: void }>({
   ]
 })
 
-export { devices, expect, type Page } from '@playwright/test'
+export { devices, expect, type Page, type TestInfo } from '@playwright/test'

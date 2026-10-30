@@ -109,9 +109,11 @@ public/                # Static assets only
   tag through `/api/revalidate` (see [Sanity Workflow](sanity-workflow.md#publishing)). Only the
   Worker can purge Workers Cache: zone-level purges don't reach it, and local dev and preview
   have no Workers Cache at all
-- Every Worker response gets `X-Content-Type-Options: nosniff` and a `frame-ancestors` policy
-  that lets only the site and the Studios' Presentation tool frame it (`app/start.ts`). HSTS
-  comes from the zone
+- The app's responses (pages, server functions, API routes, redirects) get
+  `X-Content-Type-Options: nosniff` and a `frame-ancestors` policy that lets only the site and
+  the Studios' Presentation tool frame them (`lib/security-headers.ts`, applied in `app/start.ts`).
+  An error that escapes a server route gets Start's own response without them. HSTS comes from
+  the zone
 - Hashed build assets are served as immutable (`public/_headers`)
 - `bun run test:e2e:preview` builds the `preview` environment locally and sends one real
   contact email to Resend's test inbox: workerd runs the bundle `void deploy` uploads, so
