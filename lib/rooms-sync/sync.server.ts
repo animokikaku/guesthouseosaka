@@ -1,4 +1,3 @@
-import type { D1Database } from './d1'
 import { parseListing, validateRooms } from './parse'
 import type { Room } from './room'
 

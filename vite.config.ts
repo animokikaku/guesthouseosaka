@@ -159,7 +159,7 @@ function createDraftModeOnlyCheck() {
   }
 }
 
-export default defineConfig(({ command, isPreview }) => {
+export default defineConfig(() => {
   const deployEnv = readDeployEnv()
   const isDraftModeOnly = createDraftModeOnlyCheck()
 
@@ -221,19 +221,9 @@ export default defineConfig(({ command, isPreview }) => {
     ssr: { noExternal: true },
     plugins: [
       // Builds and runs the server in workerd, configured by void.config.ts; it
-      // must come before Start's. The dev server also runs the rooms Workers,
-      // which deploy on their own (see docs/rooms.md) and write the rooms to the
-      // local D1 the site reads.
+      // must come before Start's.
       rejectLocalPublicEnv(deployEnv),
-      voidPlugin({
-        auxiliaryWorkers:
-          command === 'serve' && !isPreview
-            ? [
-                { configPath: 'workers/rooms/wrangler.jsonc' },
-                { configPath: 'workers/rooms/cron/wrangler.jsonc' }
-              ]
-            : []
-      }),
+      voidPlugin(),
       precompileMessages(),
       tailwindcss(),
       cn({ content: ['{app,components,lib}/**/*.{ts,tsx}'], out: 'generated/cn-tables.ts' }),

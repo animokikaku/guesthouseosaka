@@ -20,10 +20,10 @@ export const env = defineEnv({
   // Without it the webhook is refused, and published changes wait for the
   // cache to expire.
   SANITY_WEBHOOK_SECRET: string().optional(),
-  // Shared with the rooms Worker (see `app/routes/api/revalidate-rooms.ts`).
-  // Without it the purge is refused, and availability waits for the cache to
-  // expire.
-  ROOMS_REVALIDATE_SECRET: string().optional(),
+  // Authorizes the room sync (see `app/routes/api/sync-rooms.ts`), shared with
+  // its EventBridge schedule. Without it the sync is refused, and the
+  // availability badges disappear once the last sync is two days old.
+  SYNC_TOKEN: string().optional(),
 
   VITE_APP_URL: url().optional(),
   VITE_GOOGLE_MAPS_API_KEY: string(),

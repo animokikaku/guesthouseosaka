@@ -3,8 +3,8 @@ import type { HouseIdentifier } from '@/lib/types'
 import { and, db, eq, sql } from 'void/db'
 
 /**
- * Each house's shares.house property ID, which the `guesthouseosaka-rooms`
- * Worker syncs from `LISTING_URLS` (see docs/rooms.md); a test keeps the two in step.
+ * Each house's shares.house property ID, whose listing the room sync reads
+ * (see docs/rooms.md). Add a house here to sync it.
  */
 export const PROPERTY_IDS: Record<HouseIdentifier, string> = {
   orange: '10336',

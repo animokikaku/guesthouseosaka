@@ -1,11 +1,9 @@
 import { defineConfig } from 'void/config'
 
-// Rooms the `guesthouseosaka-rooms` Worker syncs from shares.house, read-only
-// here (see docs/rooms.md and lib/rooms.server.ts).
+// Rooms synced from shares.house (see docs/rooms.md and lib/rooms.server.ts).
 const roomsDb = {
   binding: 'ROOMS_DB',
   database_name: 'guesthouseosaka-rooms',
-  // Must match workers/rooms/wrangler.jsonc.
   database_id: '0924c651-cb96-42e8-9789-692c06b7baef'
 }
 

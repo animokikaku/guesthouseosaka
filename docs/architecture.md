@@ -121,7 +121,7 @@ public/                # Static assets only
   `import.meta.env`, so the Studio and the component gallery, which build without Void, share them
   and no validator ships to the browser
 - Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, and optionally
-  `SANITY_WEBHOOK_SECRET` and `ROOMS_REVALIDATE_SECRET`
+  `SANITY_WEBHOOK_SECRET` and `SYNC_TOKEN`
 - Client: `VITE_GOOGLE_MAPS_API_KEY`, `VITE_TURNSTILE_SITE_KEY`, and optionally `VITE_APP_URL`,
   which defaults to `SITE_URL`. The Sanity project, API version and assets host are constants in
   `lib/config.ts`

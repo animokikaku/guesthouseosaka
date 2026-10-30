@@ -1,6 +1,5 @@
-// The rooms the `guesthouseosaka-rooms` Worker syncs from shares.house (see
-// docs/rooms.md). The site reads them through `db` from `void/db`; the Worker
-// writes them with raw D1 statements. Must match db/migrations, which create
+// The rooms synced from shares.house (see docs/rooms.md). The site reads them
+// through `db` from `void/db`; the sync writes them with raw D1 statements. Must match db/migrations, which create
 // both tables `STRICT` (Drizzle can't express it).
 import { sql } from 'void/db'
 import { check, integer, primaryKey, real, sqliteTable, text } from 'void/schema-d1'

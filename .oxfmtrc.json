@@ -17,6 +17,6 @@
     "app/routeTree.gen.ts",
     ".wrangler/**",
     ".sanity/**",
-    "workers/rooms/src/__tests__/fixtures/**"
+    "lib/rooms-sync/__tests__/fixtures/**"
   ]
 }

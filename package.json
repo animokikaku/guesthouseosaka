@@ -23,8 +23,6 @@
     "test:e2e:preview": "E2E_REAL_EMAIL=1 playwright test --project=preview",
     "deploy": "DEPLOY_ENV=production void deploy --platform cloudflare",
     "deploy:preview": "DEPLOY_ENV=preview vite build && wrangler preview -c dist/server/wrangler.json",
-    "rooms:deploy": "wrangler deploy -c workers/rooms/wrangler.jsonc",
-    "rooms:cron:deploy": "wrangler deploy -c workers/rooms/cron/wrangler.jsonc",
     "postinstall": "cn build --content '{app,components,lib}/**/*.{ts,tsx}' --out generated/cn-tables.ts --quiet"
   },
   "dependencies": {

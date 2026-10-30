@@ -3,47 +3,43 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { DatabaseSync, type SQLInputValue } from 'node:sqlite'
-import type { D1Database, D1PreparedStatement, D1Result } from '../d1'
 import type { Room } from '../room'
-import { fetchListing, propertyIdOf, SyncError, syncListing, writeRooms } from '../sync'
+import { fetchListing, propertyIdOf, SyncError, syncListing, writeRooms } from '../sync.server'
 
 const URL_10333 = 'https://shares.house/a_detail/q_10333/'
 
-/** D1's binding over an in-memory SQLite database with the real migrations. */
+/** A prepared statement of the fake below, with only what the sync uses. */
+interface Statement {
+  bind(...values: unknown[]): Statement
+  first(): Promise<unknown>
+  run(): { meta: { changes: number } }
+}
+
+/** The parts of D1's binding the sync uses, over an in-memory SQLite database with the real migrations. */
 function createDatabase() {
   const sqlite = new DatabaseSync(':memory:')
-  sqlite.exec(
-    readFileSync(join(__dirname, '../../../../db/migrations/0001_create_rooms.sql'), 'utf8')
-  )
+  sqlite.exec(readFileSync(join(__dirname, '../../../db/migrations/0001_create_rooms.sql'), 'utf8'))
 
-  function statement(
-    query: string,
-    values: SQLInputValue[] = []
-  ): D1PreparedStatement & { run(): D1Result } {
+  function statement(query: string, values: SQLInputValue[] = []): Statement {
     return {
       bind: (...next) =>
         statement(
           query,
           next.map((value) => (value === undefined ? null : (value as SQLInputValue)))
         ),
-      all: async () => ({
-        results: sqlite.prepare(query).all(...values) as never[],
-        meta: { changes: 0 }
-      }),
-      first: async () => (sqlite.prepare(query).get(...values) ?? null) as never,
+      first: async () => sqlite.prepare(query).get(...values) ?? null,
       run: () => ({
-        results: [],
         meta: { changes: Number(sqlite.prepare(query).run(...values).changes) }
       })
     }
   }
 
-  const db: D1Database = {
-    prepare: (query) => statement(query),
-    async batch(statements) {
+  const db = {
+    prepare: (query: string) => statement(query),
+    async batch(statements: Statement[]) {
       sqlite.exec('BEGIN')
       try {
-        const results = statements.map((s) => (s as ReturnType<typeof statement>).run())
+        const results = statements.map((s) => s.run())
         sqlite.exec('COMMIT')
         return results
       } catch (error) {
@@ -51,7 +47,7 @@ function createDatabase() {
         throw error
       }
     }
-  }
+  } as unknown as D1Database
   const rows = () => sqlite.prepare('SELECT * FROM rooms ORDER BY room_number').all()
   return { db, rows }
 }
