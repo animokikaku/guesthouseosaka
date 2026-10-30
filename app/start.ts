@@ -2,6 +2,7 @@ import { LOCALE_COOKIE, localeToPrefix, prefixToLocale } from '@/i18n/routing'
 import { SANITY_STUDIO_HOSTS } from '@/lib/config'
 import { env } from '@/lib/env'
 import { negotiateLocale, resolveLegacyRedirect } from '@/lib/redirects'
+import { withSecurityHeaders } from '@/lib/security-headers'
 import { createCsrfMiddleware, createMiddleware, createStart } from '@tanstack/react-start'
 import { getCookie } from '@tanstack/react-start/server'
 
@@ -81,29 +82,9 @@ const routingMiddleware = createMiddleware().server(({ request, next }) => {
   return negotiated
 })
 
-/**
- * What the zone's HSTS leaves out: no MIME sniffing, and only the site itself
- * and the Studios' Presentation tool (hosted, in the Sanity dashboard, or
- * `sanity dev`) may frame its pages. Browsers already default to the
- * `strict-origin-when-cross-origin` referrer policy.
- */
-const SECURITY_HEADERS = {
-  'X-Content-Type-Options': 'nosniff',
-  'Content-Security-Policy': `frame-ancestors ${[
-    "'self'",
-    ...Object.values(SANITY_STUDIO_HOSTS).map((host) => `https://${host}.sanity.studio`),
-    'https://www.sanity.io',
-    'http://localhost:3333'
-  ].join(' ')}`
-}
-
-const securityHeadersMiddleware = createMiddleware().server(async ({ next }) => {
-  const { response } = await next()
-  // A copy, since a response passed through from `fetch` has immutable headers.
-  const secured = new Response(response.body, response)
-  for (const [name, value] of Object.entries(SECURITY_HEADERS)) secured.headers.set(name, value)
-  return secured
-})
+const securityHeadersMiddleware = createMiddleware().server(async ({ next }) =>
+  withSecurityHeaders((await next()).response)
+)
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [
