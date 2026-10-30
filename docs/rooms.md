@@ -9,7 +9,7 @@ house pages. Nothing else stores rooms.
 `POST /api/sync-rooms` (`app/routes/api/sync-rooms.ts`), with
 `Authorization: Bearer <SYNC_TOKEN>`, syncs every house in `PROPERTY_IDS`
 (`lib/rooms.server.ts`), then purges the cached pages. An EventBridge rule in
-AWS Tokyo calls it every six hours (see [Schedule](#schedule)).
+AWS Tokyo calls it every hour (see [Schedule](#schedule)).
 
 shares.house answers 403 to requests from outside Japan, and what counts is
 where the request that started the run came from, not the data center the
@@ -51,35 +51,36 @@ To add a house's listing, add its property ID to `PROPERTY_IDS`.
 
 ## Schedule
 
-EventBridge in `ap-northeast-1` (AWS account `902236706846`), all named
+`aws/rooms-sync.yaml`, a CloudFormation stack in `ap-northeast-1` (Tokyo),
+holds the whole schedule. Its resources are named after the stack,
 `guesthouseosaka-rooms-sync`:
 
-- Rule `cron(7 */6 * * ? *)` (UTC), targeting the API destination with up to
-  two retries within an hour. EventBridge retries a 5xx, so a failed run is
-  tried again.
-- API destination: `POST https://guesthouseosaka.com/api/sync-rooms`.
-- Connection: sends `Authorization: Bearer <SYNC_TOKEN>`.
-- IAM role `guesthouseosaka-rooms-sync-scheduler`, which lets the rule invoke
-  the API destination.
+- A rule, `cron(7 * * * ? *)`: every hour at :07 (UTC).
+- An API destination that sends `POST https://guesthouseosaka.com/api/sync-rooms`.
+- A connection that adds `Authorization: Bearer <SYNC_TOKEN>`.
+- A role that lets the rule call the API destination.
 
-EventBridge waits 5 s for a response, then retries. A run usually takes 1–2 s,
-and a slower one still finishes (`waitUntil`). A retry only syncs again, which
-changes nothing.
-
-It costs $0.20 per million calls, about 120 a month, so it's billed $0.00;
-the connection's secret is included. A failed run shows in the Worker's logs
-(`listing_sync_failed`) and in the rule's `FailedInvocations` metric in
-CloudWatch.
-
-`SYNC_TOKEN` is a site secret (`bunx void secret put SYNC_TOKEN`; the value is
-in `.env`). Worker Previews don't have it, so they refuse to sync. After
-rotating it, update the connection too:
+To create it, in any AWS account (signed in with `aws login`), or to apply a
+change to the template or to `SYNC_TOKEN` in `.env`:
 
 ```bash
-aws events update-connection --region ap-northeast-1 --name guesthouseosaka-rooms-sync \
-  --authorization-type API_KEY \
-  --auth-parameters "ApiKeyAuthParameters={ApiKeyName=Authorization,ApiKeyValue=Bearer $SYNC_TOKEN}"
+bun run rooms:schedule:deploy
 ```
+
+It deploys from `.env`'s `SYNC_TOKEN`, which must match the site's secret
+(`bunx void secret put SYNC_TOKEN`). Worker Previews don't have that secret, so
+they refuse to sync. To remove the schedule:
+`aws cloudformation delete-stack --region ap-northeast-1 --stack-name guesthouseosaka-rooms-sync`.
+
+EventBridge waits 5 s for a response. A run usually takes 1–2 s, and a slower
+one still finishes (`waitUntil`). EventBridge retries a timeout or a 5xx (the
+route answers 502 when a listing failed) up to twice within half an hour. A
+retry only syncs again, which changes nothing.
+
+The API destination costs $0.20 per million calls. At about 750 a month, that's
+billed $0.00, and the connection's secret is included. A failed run shows in
+the site's logs (`listing_sync_failed`) and in the rule's `FailedInvocations`
+metric in CloudWatch.
 
 ## Schema
 
@@ -116,7 +117,7 @@ fails.
 House pages and their data responses are cached for a day (see
 `lib/cache-control.ts`) and tagged `rooms` as well as `sanity`. At the end of
 every run, the sync purges the `rooms` tag. Purging on every run rather than
-only on changes re-renders a few pages every six hours, and in return a missed
+only on changes re-renders a few pages every hour, and in return a missed
 purge, a page rendered while D1 failed, or counts that have since aged out
 never last longer than one run. A failed purge fails the run.
 

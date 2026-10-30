@@ -12,7 +12,7 @@ export const PROPERTY_IDS: Record<HouseIdentifier, string> = {
   lemon: '10333'
 }
 
-// The sync runs every six hours; past this, its counts are too old to show.
+// The sync runs every hour; past this, its counts are too old to show.
 const MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000
 
 function todayInJapan() {

@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: '2010-09-09'
+# Deployed with `bun run rooms:schedule:deploy`, in Tokyo: shares.house refuses
+# a sync that wasn't started from Japan. See docs/rooms.md.
+Description: Calls the guesthouseosaka room sync on a schedule from AWS Tokyo.
+
+Parameters:
+  SyncToken:
+    Type: String
+    NoEcho: true
+    MinLength: 1
+    Description: The site's SYNC_TOKEN secret.
+  Endpoint:
+    Type: String
+    Default: https://guesthouseosaka.com/api/sync-rooms
+  Schedule:
+    Type: String
+    # Every hour, at :07 (UTC).
+    Default: cron(7 * * * ? *)
+
+Resources:
+  # Holds the token, in a Secrets Manager secret the API destination's price includes.
+  Connection:
+    Type: AWS::Events::Connection
+    Properties:
+      Name: !Ref AWS::StackName
+      AuthorizationType: API_KEY
+      AuthParameters:
+        ApiKeyAuthParameters:
+          ApiKeyName: Authorization
+          ApiKeyValue: !Sub Bearer ${SyncToken}
+
+  Destination:
+    Type: AWS::Events::ApiDestination
+    Properties:
+      Name: !Ref AWS::StackName
+      ConnectionArn: !GetAtt Connection.Arn
+      HttpMethod: POST
+      InvocationEndpoint: !Ref Endpoint
+      InvocationRateLimitPerSecond: 1
+
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: Lets the room sync rule call its API destination.
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Service: events.amazonaws.com }
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals: { aws:SourceAccount: !Ref AWS::AccountId }
+      Policies:
+        - PolicyName: invoke-api-destination
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: events:InvokeApiDestination
+                Resource: !GetAtt Destination.Arn
+
+  Rule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Ref AWS::StackName
+      Description: Syncs room availability from shares.house.
+      ScheduleExpression: !Ref Schedule
+      State: ENABLED
+      Targets:
+        - Id: sync
+          Arn: !GetAtt Destination.Arn
+          RoleArn: !GetAtt Role.Arn
+          # The route answers 502 when a listing failed, which EventBridge
+          # retries; give up before the next run.
+          RetryPolicy:
+            MaximumRetryAttempts: 2
+            MaximumEventAgeInSeconds: 1800

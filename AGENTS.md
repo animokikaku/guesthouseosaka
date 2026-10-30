@@ -14,6 +14,7 @@ bun dev              # Dev server at localhost:3000
 bun run build        # Production build (run before PRs)
 bun run start        # Preview the build in workerd at localhost:3000
 bun run deploy       # Build and deploy the production Worker (Cloudflare)
+bun run rooms:schedule:deploy # Create or update the hourly room sync schedule (AWS EventBridge, Tokyo)
 bun run typegen      # Regenerate Sanity types after schema changes
 bun run test --run   # Run tests once without watch mode
 bun run knip         # Detect unused deps/exports
