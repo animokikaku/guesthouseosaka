@@ -34,8 +34,7 @@ describe('toGalleryImageProps', () => {
       alt: 'Kitchen',
       width: 560,
       height: 400,
-      blurDataURL: image.preview,
-      placeholder: 'blur'
+      blurHash: image.blurHash
     })
   })
 
@@ -63,10 +62,10 @@ describe('toGalleryImageProps', () => {
     expect(props?.alt).toBe('Override')
   })
 
-  it('skips the blur placeholder when the image has no preview', () => {
-    const props = toGalleryImageProps(createSanityImage({ preview: null }), { width: 400 })
+  it('skips the placeholder when the image has no blurhash', () => {
+    const props = toGalleryImageProps(createSanityImage({ blurHash: null }), { width: 400 })
 
-    expect(props).toMatchObject({ blurDataURL: undefined, placeholder: undefined })
+    expect(props?.blurHash).toBeUndefined()
   })
 })
 
@@ -98,11 +97,11 @@ describe('toGalleryLightboxItem', () => {
   })
 
   // The blur belongs on the trigger, not the lightbox image: `Image` paints
-  // the LQIP as an inline background that would cover ramka's thumbnail bridge.
-  it('carries no blur placeholder, even when the image has a preview', () => {
+  // the blurhash as an inline background that would cover ramka's thumbnail bridge.
+  it('carries no placeholder, even when the image has a blurhash', () => {
     const image = createSanityImage()
-    expect(image.preview).toBeTruthy()
+    expect(image.blurHash).toBeTruthy()
 
-    expect(toGalleryLightboxItem(createGalleryItem({ image }))).not.toHaveProperty('blurDataURL')
+    expect(toGalleryLightboxItem(createGalleryItem({ image }))).not.toHaveProperty('blurHash')
   })
 })

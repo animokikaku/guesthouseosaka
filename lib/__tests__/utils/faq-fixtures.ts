@@ -25,7 +25,7 @@ export const createHouse = (
     hotspot: null,
     crop: null,
     alt: null,
-    preview: null
+    blurHash: null
   },
   extraCosts
 })

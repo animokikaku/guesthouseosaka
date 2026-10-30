@@ -44,7 +44,7 @@ export type NavGroupItem = NavItem & {
   background?: {
     src: string
     alt: string
-    blurDataURL?: string
+    blurHash?: string
   }
   icon: (typeof assets)[HouseIdentifier]['icon']
   caption?: string

@@ -24,7 +24,7 @@ const galleryCategories = [
           hotspot: null,
           crop: null,
           alt: 'First room',
-          preview: null
+          blurHash: null
         }
       },
       {
@@ -37,7 +37,7 @@ const galleryCategories = [
           hotspot: null,
           crop: null,
           alt: 'Second room',
-          preview: null
+          blurHash: null
         }
       },
       {
@@ -50,7 +50,7 @@ const galleryCategories = [
           hotspot: null,
           crop: null,
           alt: 'Third room',
-          preview: null
+          blurHash: null
         }
       }
     ]

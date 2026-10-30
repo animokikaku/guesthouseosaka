@@ -11,7 +11,7 @@ const images = ['Living room', 'Kitchen', 'Rooftop'].map((alt, index): GallerySl
     hotspot: null,
     crop: null,
     alt,
-    preview: null
+    blurHash: null
   }
 }))
 

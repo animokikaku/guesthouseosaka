@@ -73,7 +73,7 @@ export interface GalleryWallImage {
   _key: string
   src: string
   alt: string | null
-  blurDataURL: string | null
+  blurHash: string | null
   width: number
   height: number
   /** Preloaded as the likely LCP element rather than lazy-loaded. */

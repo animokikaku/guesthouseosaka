@@ -10,7 +10,7 @@ type GalleryImages = GalleryItem[] | null
 
 type ImageBlockGalleryProps = {
   href: GalleryLink
-  /** The five LQIP-bearing tiles from `houseQuery` — not the full gallery. */
+  /** The five tiles from `houseQuery` — not the full gallery. */
   galleryPreview: GalleryImages
   /** Total images behind the five tiles, for the `+N` overflow badge. */
   galleryImageCount: number

@@ -26,8 +26,7 @@ export function PlaceDetails({ placeId, placeImage, className }: PlaceDetailsPro
           alt={placeImage.alt ?? t('fallback_alt')}
           width={600}
           height={400}
-          placeholder={placeImage.preview ? 'blur' : 'empty'}
-          blurDataURL={placeImage.preview ?? undefined}
+          blurHash={placeImage.blurHash}
           className="h-auto w-full object-cover"
           // The HouseMap panel: full width below md, then md:w-1/3 of the
           // house page's `container max-w-6xl`, less its borders. Keep in

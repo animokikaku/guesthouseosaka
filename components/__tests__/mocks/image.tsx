@@ -9,8 +9,7 @@
 export function Image({
   src,
   alt,
-  blurDataURL,
-  placeholder,
+  blurHash,
   sizes,
   fill: _fill,
   loader: _loader,
@@ -21,8 +20,7 @@ export function Image({
 }: {
   src: string
   alt: string
-  blurDataURL?: string
-  placeholder?: string
+  blurHash?: string | null
   sizes?: string
   fill?: boolean
   loader?: unknown
@@ -36,8 +34,7 @@ export function Image({
       src={src}
       alt={alt}
       data-testid="image"
-      data-blur-url={blurDataURL}
-      data-placeholder={placeholder}
+      data-blur-hash={blurHash ?? undefined}
       data-sizes={sizes}
     />
   )
