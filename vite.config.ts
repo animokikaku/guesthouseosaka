@@ -4,8 +4,10 @@ import { redact } from '@tanstack/redact/vite'
 import viteReact from '@vitejs/plugin-react'
 import { cn } from 'cn/vite'
 import compileMessage from 'icu-minify/compile'
+import { existsSync, readFileSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { parseEnv } from 'node:util'
 import { defineConfig, type Plugin } from 'vite'
 import { voidPlugin } from 'void'
 
@@ -27,6 +29,38 @@ function readDeployEnv(): DeployEnv {
   }
   process.env.VITE_SANITY_DATASET = deployEnv === 'production' ? 'production' : 'development'
   return deployEnv
+}
+
+/**
+ * The environment the build was started with, kept from this config's first
+ * evaluation: TanStack Start copies every `.env` value into `process.env` while
+ * building, and Vite evaluates this config again afterwards.
+ */
+declare global {
+  var __buildShellEnv: NodeJS.ProcessEnv | undefined
+}
+const shellEnv = (globalThis.__buildShellEnv ??= { ...process.env })
+
+/**
+ * Fails a production build that takes a public setting from `.env` rather than
+ * the build's environment (Workers Builds' build variables): a laptop's local
+ * keys, like Turnstile's test sitekey, would break the live contact form.
+ */
+function rejectLocalPublicEnv(deployEnv: DeployEnv): Plugin {
+  return {
+    name: 'reject-local-public-env',
+    configResolved() {
+      if (deployEnv !== 'production' || !existsSync('.env')) return
+      const fromDotenv = Object.keys(parseEnv(readFileSync('.env', 'utf8'))).filter(
+        (key) => key.startsWith('VITE_') && shellEnv[key] === undefined
+      )
+      if (fromDotenv.length > 0) {
+        throw new Error(
+          `A production build took ${fromDotenv.join(', ')} from .env. Set the production values in the shell.`
+        )
+      }
+    }
+  }
 }
 
 /**
@@ -190,6 +224,7 @@ export default defineConfig(({ command, isPreview }) => {
       // must come before Start's. The dev server also runs the rooms Workers,
       // which deploy on their own (see docs/rooms.md) and write the rooms to the
       // local D1 the site reads.
+      rejectLocalPublicEnv(deployEnv),
       voidPlugin({
         auxiliaryWorkers:
           command === 'serve' && !isPreview
