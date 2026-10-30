@@ -49,15 +49,18 @@ describe('negotiateLocale', () => {
   it.each([
     ['fr-FR,fr;q=0.9,en;q=0.8', 'fr'],
     ['zh-TW,zh;q=0.9', 'zh-TW'],
-    // A region without its own locale falls back to the language's first locale.
-    ['zh-HK', 'zh-CN'],
+    // A region without its own locale goes to the closest one: Hong Kong writes Traditional Chinese.
+    ['zh-HK', 'zh-TW'],
+    ['zh-Hant', 'zh-TW'],
+    ['zh-SG', 'zh-CN'],
+    ['fr-CA,en', 'fr'],
     ['de,ja;q=0.5', 'ja'],
     ['en;q=0.2,ja;q=0.8', 'ja']
   ] as const)('matches %s to %s', (header, expected) => {
     expect(negotiateLocale(header, undefined)).toBe(expected)
   })
 
-  it.each([null, '', 'de-DE,ko', '*'])('falls back to English for %j', (header) => {
+  it.each([null, '', 'de-DE,ko', '*', 'not a tag!'])('falls back to English for %j', (header) => {
     expect(negotiateLocale(header, undefined)).toBe('en')
   })
 })
