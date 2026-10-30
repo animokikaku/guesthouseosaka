@@ -1,4 +1,5 @@
 import { CogIcon } from '@sanity/icons/Cog'
+import { RoomSyncInput } from '@/sanity/components/room-sync-input'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
 export const settings = defineType({
@@ -35,6 +36,15 @@ export const settings = defineType({
       description: 'Social media links shown in the footer. Drag to reorder.',
       group: 'site',
       of: [defineArrayMember({ type: 'socialLink' })]
+    }),
+    // A button, not content: its input never sets a value.
+    defineField({
+      name: 'roomSync',
+      title: 'Room Availability',
+      type: 'string',
+      description: 'The house pages show room availability from shares.house, synced every hour.',
+      group: 'site',
+      components: { input: RoomSyncInput }
     }),
 
     // Organization group (JSON-LD schema)

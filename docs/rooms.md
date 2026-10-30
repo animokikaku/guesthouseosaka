@@ -91,6 +91,22 @@ production and `bun dev` to the local database. Production records them in
 
 ## Running it
 
+In the Studio, **Site Settings** has a **Sync now** button under the social
+links (`sanity/components/room-sync-input.tsx`), for showing a change before
+the next hourly run. It's the input of a `roomSync` field that never stores a
+value. The
+Studio can't hold `SYNC_TOKEN`, so the button works like Presentation: the
+signed-in user creates a preview secret in the dataset (valid for an hour),
+and sends it as the request's text body. The route checks it with
+`validatePreviewUrl` and the read token. A text body with no custom header
+needs no CORS preflight, and the route lets the hosted Studios and
+`sanity dev` read its answer. The button calls the site that shows the
+Studio's dataset: production, or `localhost:3000` for the development Studio.
+The request starts in the editor's browser, so like any sync it only gets
+through from Japan.
+
+From a terminal:
+
 ```bash
 bun dev  # Then, with SYNC_TOKEN from .env (writes the local database in .void/):
 curl -X POST -H "Authorization: Bearer $SYNC_TOKEN" localhost:3000/api/sync-rooms

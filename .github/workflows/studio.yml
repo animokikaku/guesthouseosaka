@@ -23,6 +23,7 @@ on:
       - 'lib/google-maps-url.ts'
       - 'lib/icons/**'
       - 'lib/types/**'
+      - 'lib/zod.ts'
       - '.github/workflows/studio.yml'
   workflow_dispatch:
 
