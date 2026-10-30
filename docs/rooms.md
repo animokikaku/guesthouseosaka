@@ -90,7 +90,7 @@ the local database. Production records them in `d1_migrations`.
 ## Running it
 
 In the Studio, **Site Settings** has a **Sync now** button under the social
-links (`sanity/components/room-sync-input.tsx`), for showing a change before
+links (`studio/components/room-sync-input.tsx`), for showing a change before
 the next hourly run. It's the input of a `roomSync` field that never stores a
 value. The Studio can't hold `SYNC_TOKEN`, so the button works like
 Presentation: the signed-in user creates a preview secret in the dataset

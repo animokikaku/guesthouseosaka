@@ -20,9 +20,12 @@ components/
 ├── forms/             # Forms with @tanstack/react-form + Zod
 └── map/               # Map components
 
-sanity/
+sanity/lib/            # GROQ queries (defineQuery()), loaders, draft mode
+
+studio/                # The Studio, a Bun workspace with its own dependencies
 ├── schemaTypes/       # Document and block type definitions
-└── lib/               # GROQ queries (defineQuery()), loaders, draft mode
+├── sanity.config.ts   # Structure, Presentation, plugins
+└── sanity.cli.ts      # `dev`, `deploy` and `typegen` (types the site's queries)
 
 db/                    # Rooms database schema (Drizzle) and D1 migrations
 aws/                   # The room sync's hourly schedule (CloudFormation)

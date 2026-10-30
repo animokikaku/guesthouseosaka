@@ -1,5 +1,5 @@
 import { z } from '@/lib/zod'
-import type { DocumentTypeName } from '@/sanity/schemaTypes'
+import type { DocumentTypeName } from '@/studio/schemaTypes'
 
 /**
  * The document types each loader in `loaders.functions.ts` reads, references

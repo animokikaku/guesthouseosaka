@@ -1,5 +1,5 @@
 import { CogIcon } from '@sanity/icons/Cog'
-import { RoomSyncInput } from '@/sanity/components/room-sync-input'
+import { RoomSyncInput } from '@/studio/components/room-sync-input'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
 export const settings = defineType({

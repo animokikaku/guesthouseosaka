@@ -5,7 +5,7 @@
  * creates, as Presentation does, so the Studio holds no token.
  */
 import { z } from '@/lib/zod'
-import { siteUrl } from '@/sanity/site-url'
+import { siteUrl } from '@/studio/site-url'
 import { SyncIcon } from '@sanity/icons/Sync'
 import { createPreviewSecret } from '@sanity/preview-url-secret/create-secret'
 import { Badge, Box, Button, Card, Flex, Stack, Text } from '@sanity/ui'
