@@ -28,15 +28,13 @@ const LEGACY_REDIRECTS: Array<[source: RegExp, destination: string]> = [
   // Removed houses
   [new RegExp(`^/(?<locale>${LOCALES})/(?:banana|melon)(?:/.*)?$`), '/$<locale>'],
 
-  // Removed pages
+  // Removed pages. The old WordPress blog (column, seo-blog, category, date
+  // archives, wp-content) is blocked by a Cloudflare WAF rule instead, so
+  // crawlers see it gone rather than redirected.
   [
     new RegExp(
-      `^/(?<locale>${LOCALES})/(?:column|seo-blog|category|location|review|feed|rss|blog|news|about|gallery|rooms|price|prices|access|privacy|terms|link)$`
+      `^/(?<locale>${LOCALES})/(?:location|review|feed|rss|blog|news|about|gallery|rooms|price|prices|access|privacy|terms|link)$`
     ),
-    '/$<locale>'
-  ],
-  [
-    new RegExp(`^/(?<locale>${LOCALES})/(?:column|seo-blog|category|2013|wp-content)/.*$`),
     '/$<locale>'
   ],
   [new RegExp(`^/(?<locale>${LOCALES})/(?:reservation|booking|contact-us)$`), '/$<locale>/contact']
