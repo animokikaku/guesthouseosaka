@@ -125,7 +125,7 @@ describe('parseListing', () => {
       <tr><th>空室<br>情報<th>部屋番号<th><th><th>広さ<th><th><th>賃料<th>共益費</tr>
       <tr><td><p data-note="a > b">空室予定</p>2026/12/01<td>101<td><td><td>12&#13217;
           <td><td><td>&yen;48,000<br>[30,000]<td>&#xFFE5;10,000</tr>
-    </table></div>`
+    </table></div><div id="room_vacancy2"></div>`
 
     expect(parseListing(html, '1')).toEqual([
       expect.objectContaining({
@@ -138,6 +138,17 @@ describe('parseListing', () => {
         commonFee: 10_000
       })
     ])
+  })
+
+  it('throws when the page is cut off after the room table starts', () => {
+    const html = fixture('10336')
+    const tableEnd = html.indexOf('</table>', html.indexOf('id="room_vacancy1"'))
+
+    // Mid-table: however the parser recovers the unclosed table, the page is rejected.
+    expect(() => parseListing(html.slice(0, tableEnd), '10336')).toThrow(ParseError)
+    // Right before the second panel's tag.
+    const secondPanel = html.lastIndexOf('<div', html.indexOf('id="room_vacancy2"'))
+    expect(() => parseListing(html.slice(0, secondPanel), '10336')).toThrow(/Room table incomplete/)
   })
 
   it('throws when the room table is missing', () => {

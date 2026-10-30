@@ -92,8 +92,13 @@ function parseArea(text: string, unit: RegExp): number | null {
 /** Every room in the listing's "all rooms" (全て) table, in page order. */
 export function parseListing(html: string, propertyId: string): ParsedRoom[] {
   // The page repeats the vacant rooms in a second panel; only the first has them all.
-  const table = parse(html).querySelector('#room_vacancy1 table')
+  const page = parse(html)
+  const table = page.querySelector('#room_vacancy1 table')
   if (!table) throw new ParseError('Room table not found')
+  // A cut-off page must not read as a short table, which would unlist the rooms
+  // past the cut. The second panel follows the first, so its presence proves
+  // the table ended, whatever the parser makes of unclosed tags.
+  if (!page.querySelector('#room_vacancy2')) throw new ParseError('Room table incomplete')
   // Parsing adds no <tbody>, but a page that writes one keeps its rows there.
   const rows = [table, ...childrenNamed(table, 'TBODY')].flatMap((parent) =>
     childrenNamed(parent, 'TR')
