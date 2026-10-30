@@ -58,27 +58,32 @@ function cookieOptions(request: Request) {
   } as const
 }
 
-function setDraftModeCookie(request: Request) {
+/**
+ * Sets the draft mode cookie, and the perspective one alongside with the same
+ * lifetime, so a selected release outlives a browser restart as long as draft
+ * mode does.
+ */
+function setDraftModeCookies(request: Request, perspective: string | undefined) {
   const expiresAt = Date.now() + DRAFT_MODE_TTL_MS
-  setCookie(DRAFT_MODE_COOKIE, `${expiresAt}.${sign(expiresAt)}`, {
-    ...cookieOptions(request),
-    maxAge: DRAFT_MODE_TTL_MS / 1000
-  })
+  const options = { ...cookieOptions(request), maxAge: DRAFT_MODE_TTL_MS / 1000 }
+  setCookie(DRAFT_MODE_COOKIE, `${expiresAt}.${sign(expiresAt)}`, options)
+  if (perspective) setCookie(perspectiveCookieName, perspective, options)
 }
 
 /**
- * Renews the cookie on a page load only: `cookieOptions` can tell whether
- * Presentation's iframe needs it partitioned from a navigation's headers, not
+ * Renews the cookies on a page load only: `cookieOptions` can tell whether
+ * Presentation's iframe needs them partitioned from a navigation's headers, not
  * from a server function's `fetch`.
  */
 function renewDraftMode(request: Request) {
   const destination = request.headers.get('sec-fetch-dest')
-  if (destination === 'document' || destination === 'iframe') setDraftModeCookie(request)
+  if (destination === 'document' || destination === 'iframe') {
+    setDraftModeCookies(request, getCookie(perspectiveCookieName))
+  }
 }
 
 export function enableDraftMode(request: Request, perspective: string | undefined) {
-  setDraftModeCookie(request)
-  if (perspective) setCookie(perspectiveCookieName, perspective, cookieOptions(request))
+  setDraftModeCookies(request, perspective)
 }
 
 export function disableDraftMode(request: Request) {

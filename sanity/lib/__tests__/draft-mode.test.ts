@@ -45,7 +45,9 @@ describe('draft mode', () => {
 
   it.each([
     ['no cookie', ''],
-    ['a forged signature', `${Date.now() + HOUR}.forged`],
+    // Built once the fake clock runs, so only the signature is wrong, and as
+    // long as a real one, so the comparison runs.
+    ['a forged signature', () => `${Date.now() + HOUR}.${'A'.repeat(43)}`],
     [
       'an expiry pushed back',
       () => cookies.get('__sanity_draft_mode')!.replace(/^\d+/, '9'.repeat(15))
@@ -71,6 +73,26 @@ describe('draft mode', () => {
 
     vi.advanceTimersByTime(23 * HOUR)
     expect(isDraftModeEnabled()).toBe(true)
+  })
+
+  // Presentation's selected perspective: drafts, or a stack of releases.
+  it('keeps the selected perspective as long as draft mode, renewing both together', () => {
+    const maxAge = 24 * 60 * 60
+    enableDraftMode(pageLoad, 'rRelease1,drafts')
+    expect(setCookie).toHaveBeenCalledWith(
+      'sanity-preview-perspective',
+      'rRelease1,drafts',
+      expect.objectContaining({ maxAge })
+    )
+    setCookie.mockClear()
+
+    vi.advanceTimersByTime(13 * HOUR)
+    isDraftModeEnabled()
+    expect(setCookie).toHaveBeenCalledWith(
+      'sanity-preview-perspective',
+      'rRelease1,drafts',
+      expect.objectContaining({ maxAge })
+    )
   })
 
   it('leaves renewing to page loads, which tell whether the cookie needs partitioning', () => {

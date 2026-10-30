@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures/test'
+import { expect, test, type TestInfo } from './fixtures/test'
 import { fillAccountFields, gotoContactForm, submissionToast } from './helpers/contact-form'
 import { gotoHydrated } from './helpers/navigation'
 import { sentEmails } from './mocks/resend'
@@ -10,12 +10,20 @@ import { sentEmails } from './mocks/resend'
 
 const tomorrow = () => new Date(Date.now() + 864e5).toISOString().slice(0, 10)
 
-/** A reply address only this test uses, to find its email among the parallel tests'. */
-const replyAddress = (testId: string) => `e2e+${testId}@example.com`
+/**
+ * A reply address only this attempt uses, to find its email among the parallel
+ * tests' and a failed earlier attempt's: the stand-in keeps every email of the run.
+ */
+const replyAddress = ({ testId, retry }: TestInfo) => `e2e+${testId}-${retry}@example.com`
+
+/** Against a deployment (`BASE_URL`) there is no stand-in, and the email would really go out. */
+const skipWithoutStandIn = () =>
+  test.skip(!!process.env.BASE_URL, 'Needs the local Resend stand-in')
 
 test.describe('Contact forms', () => {
   test('a general inquiry is emailed', async ({ page }, testInfo) => {
-    const email = replyAddress(testInfo.testId)
+    skipWithoutStandIn()
+    const email = replyAddress(testInfo)
     const form = await gotoContactForm(page, 'other')
 
     const fields = await fillAccountFields(page, form, { email })
@@ -43,7 +51,8 @@ test.describe('Contact forms', () => {
   // These forms reuse the same account field group as the general inquiry form
   // but bind it alongside their own date, hour, and stay-duration fields.
   test('a tour request is emailed', async ({ page }, testInfo) => {
-    const email = replyAddress(testInfo.testId)
+    skipWithoutStandIn()
+    const email = replyAddress(testInfo)
     const form = await gotoContactForm(page, 'tour')
 
     await form.locator('input[type="date"]').fill(tomorrow())
@@ -60,7 +69,8 @@ test.describe('Contact forms', () => {
   })
 
   test('a move-in request is emailed', async ({ page }, testInfo) => {
-    const email = replyAddress(testInfo.testId)
+    skipWithoutStandIn()
+    const email = replyAddress(testInfo)
     const form = await gotoContactForm(page, 'move-in')
 
     await form.locator('input[type="date"]').fill(tomorrow())
