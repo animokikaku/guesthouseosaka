@@ -65,6 +65,12 @@ export const test = base.extend<{ serverFetch: ServerFetch }, { testProxy: TestP
     async ({}, use) => {
       const handlers = new Map<string, FetchHandler[]>()
       const server = createServer(async (incoming, outgoing) => {
+        // The proxied fetches are POSTs; the local runtime also probes the
+        // proxy's origin with a bare GET, which isn't one.
+        if (incoming.method !== 'POST') {
+          outgoing.writeHead(404).end()
+          return
+        }
         const testId = decodeURIComponent(incoming.url?.slice(1) ?? '')
         const { url, method, headers, body } = await readJson(incoming)
         const toRequest = () =>

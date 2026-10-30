@@ -171,7 +171,12 @@ export default defineConfig(({ command, isPreview }) => {
       __DEPLOY_ENV__: JSON.stringify(deployEnv),
       // Only for the Playwright suite, which mocks outbound Resend calls through
       // `lib/test-proxy.server.ts`; a production build compiles it away.
-      __E2E_TEST_PROXY__: JSON.stringify(process.env.E2E_TEST_PROXY === '1')
+      __E2E_TEST_PROXY__: JSON.stringify(process.env.E2E_TEST_PROXY === '1'),
+      // The Playwright suite's unresolvable Resend host (see playwright.config.ts),
+      // built in: the Worker only gets the secrets env.ts requires.
+      ...(process.env.RESEND_BASE_URL && {
+        'process.env.RESEND_BASE_URL': JSON.stringify(process.env.RESEND_BASE_URL)
+      })
     },
     resolve: {
       tsconfigPaths: true,
