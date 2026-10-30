@@ -1,15 +1,11 @@
 // @vitest-environment node
 
 const { sendMock, env } = vi.hoisted(() => {
-  const mutableEnv: {
-    RESEND_API_KEY: string
-    DEPLOY_ENV?: string
-    TURNSTILE_SECRET_KEY: string
-  } = {
+  const serverEnv = {
     RESEND_API_KEY: 're_test',
     TURNSTILE_SECRET_KEY: 'turnstile-secret'
   }
-  return { sendMock: vi.fn(), env: mutableEnv }
+  return { sendMock: vi.fn(), env: serverEnv }
 })
 
 vi.mock('resend', () => ({
@@ -18,7 +14,7 @@ vi.mock('resend', () => ({
   }
 }))
 
-vi.mock('@/lib/env.server', () => ({ serverEnv: env }))
+vi.mock('@/env', () => ({ env }))
 
 import type { ContactFormPayload } from '@/lib/schemas/contact-form'
 import { submitContactForm as submitWithOrigin, type SubmissionOrigin } from '../contact.server'
@@ -87,7 +83,7 @@ const successfulSubmissionCases = [
 describe('submitContactForm', () => {
   beforeEach(() => {
     sendMock.mockReset().mockResolvedValue({ data: { id: 'email-id' }, error: null, headers: {} })
-    Object.assign(env, { DEPLOY_ENV: undefined })
+    vi.stubGlobal('__DEPLOY_ENV__', 'development')
     vi.stubGlobal('fetch', siteverifyMock.mockReset())
     siteverifyReplies({ success: true })
   })
@@ -123,15 +119,9 @@ describe('submitContactForm', () => {
       deployEnv: 'development',
       places: ['apple'],
       to: 'dev@guesthouseosaka.com'
-    },
-    {
-      name: 'a Worker without a deploy environment',
-      deployEnv: undefined,
-      places: ['apple'],
-      to: 'dev@guesthouseosaka.com'
     }
   ] as const)('sends $name to $to', async ({ deployEnv, places, to }) => {
-    Object.assign(env, { DEPLOY_ENV: deployEnv })
+    vi.stubGlobal('__DEPLOY_ENV__', deployEnv)
 
     await submitContactForm({ ...payload, data: { ...payload.data, places: [...places] } })
 

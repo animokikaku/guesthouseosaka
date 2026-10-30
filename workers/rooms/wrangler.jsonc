@@ -33,9 +33,9 @@
     {
       "binding": "ROOMS_DB",
       "database_name": "guesthouseosaka-rooms",
-      // The site's wrangler.jsonc repeats it.
-      "database_id": "0924c651-cb96-42e8-9789-692c06b7baef",
-      "migrations_dir": "migrations"
+      // The site's void.config.ts repeats it, and its `void deploy` applies the
+      // schema (db/).
+      "database_id": "0924c651-cb96-42e8-9789-692c06b7baef"
     }
   ]
 }

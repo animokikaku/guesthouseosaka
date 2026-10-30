@@ -1,47 +1,63 @@
-import { cloudflare } from '@cloudflare/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import { redact } from '@tanstack/redact/vite'
 import viteReact from '@vitejs/plugin-react'
 import { cn } from 'cn/vite'
 import compileMessage from 'icu-minify/compile'
+import { existsSync, readFileSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import { defineConfig, loadEnv, type Plugin } from 'vite'
-import { publicEnvSchema } from './lib/env.schema.ts'
+import { parseEnv } from 'node:util'
+import { defineConfig, type Plugin } from 'vite'
+import { voidPlugin } from 'void'
+
+const deployEnvs = ['development', 'preview', 'production'] as const
+type DeployEnv = (typeof deployEnvs)[number]
 
 /**
- * Picks the Sanity dataset from the Wrangler environment being built
- * (`CLOUDFLARE_ENV`, as the Cloudflare plugin reads it): production builds read
- * `production`, local and preview builds `development`. Vite gives a `VITE_*`
- * in `process.env` precedence over `.env` files, and loads them after the
- * `config` hooks.
+ * Which deployment this build is, from the shell (see the `deploy` scripts);
+ * unset is `development`. Void deploys a single Cloudflare config, without
+ * Wrangler's named environments, so the build carries it: as `__DEPLOY_ENV__`,
+ * and as the Sanity dataset, `production` only for production builds. Set in
+ * `process.env` before Vite loads `.env`, where a `VITE_*` there would lose.
  */
-function sanityDatasetFromCloudflareEnv(): Plugin {
-  return {
-    name: 'sanity-dataset-from-cloudflare-env',
-    config(_, { mode }) {
-      const { CLOUDFLARE_ENV } = loadEnv(mode, process.cwd(), 'CLOUDFLARE_')
-      process.env.VITE_SANITY_DATASET =
-        CLOUDFLARE_ENV === 'production' ? 'production' : 'development'
-    }
+function readDeployEnv(): DeployEnv {
+  const value = process.env.DEPLOY_ENV || 'development'
+  const deployEnv = deployEnvs.find((name) => name === value)
+  if (!deployEnv) {
+    throw new Error(`DEPLOY_ENV must be one of ${deployEnvs.join(', ')}, got "${value}"`)
   }
+  process.env.VITE_SANITY_DATASET = deployEnv === 'production' ? 'production' : 'development'
+  return deployEnv
 }
 
 /**
- * Fails the build on missing or malformed public settings, which Vite inlines
- * as plain constants: validating here keeps zod out of the browser bundle.
+ * The environment the build was started with, kept from this config's first
+ * evaluation: TanStack Start copies every `.env` value into `process.env` while
+ * building, and Vite evaluates this config again afterwards.
  */
-function validatePublicEnv(): Plugin {
+declare global {
+  var __buildShellEnv: NodeJS.ProcessEnv | undefined
+}
+const shellEnv = (globalThis.__buildShellEnv ??= { ...process.env })
+
+/**
+ * Fails a production build that takes a public setting from `.env` rather than
+ * the build's environment (Workers Builds' build variables): a laptop's local
+ * keys, like Turnstile's test sitekey, would break the live contact form.
+ */
+function rejectLocalPublicEnv(deployEnv: DeployEnv): Plugin {
   return {
-    name: 'validate-public-env',
-    configResolved({ env }) {
-      const result = publicEnvSchema.safeParse(env)
-      if (!result.success) {
-        const issues = result.error.issues.map(
-          (issue) => `  ${issue.path.join('.')}: ${issue.message}`
+    name: 'reject-local-public-env',
+    configResolved() {
+      if (deployEnv !== 'production' || !existsSync('.env')) return
+      const fromDotenv = Object.keys(parseEnv(readFileSync('.env', 'utf8'))).filter(
+        (key) => key.startsWith('VITE_') && shellEnv[key] === undefined
+      )
+      if (fromDotenv.length > 0) {
+        throw new Error(
+          `A production build took ${fromDotenv.join(', ')} from .env. Set the production values in the shell.`
         )
-        throw new Error(`Invalid public environment variables:\n${issues.join('\n')}`)
       }
     }
   }
@@ -143,7 +159,8 @@ function createDraftModeOnlyCheck() {
   }
 }
 
-export default defineConfig(() => {
+export default defineConfig(({ command, isPreview }) => {
+  const deployEnv = readDeployEnv()
   const isDraftModeOnly = createDraftModeOnlyCheck()
 
   return {
@@ -184,9 +201,16 @@ export default defineConfig(() => {
       }
     },
     define: {
+      // Only production emails the houses (see `app/actions/contact.server.ts`).
+      __DEPLOY_ENV__: JSON.stringify(deployEnv),
       // Only for the Playwright suite, which mocks outbound Resend calls through
       // `lib/test-proxy.server.ts`; a production build compiles it away.
-      __E2E_TEST_PROXY__: JSON.stringify(process.env.E2E_TEST_PROXY === '1')
+      __E2E_TEST_PROXY__: JSON.stringify(process.env.E2E_TEST_PROXY === '1'),
+      // The Playwright suite's unresolvable Resend host (see playwright.config.ts),
+      // built in: the Worker only gets the secrets env.ts requires.
+      ...(process.env.RESEND_BASE_URL && {
+        'process.env.RESEND_BASE_URL': JSON.stringify(process.env.RESEND_BASE_URL)
+      })
     },
     resolve: {
       tsconfigPaths: true,
@@ -196,10 +220,20 @@ export default defineConfig(() => {
     },
     ssr: { noExternal: true },
     plugins: [
-      // Builds and runs the server in workerd, configured by wrangler.jsonc.
-      cloudflare({ viteEnvironment: { name: 'ssr' } }),
-      sanityDatasetFromCloudflareEnv(),
-      validatePublicEnv(),
+      // Builds and runs the server in workerd, configured by void.config.ts; it
+      // must come before Start's. The dev server also runs the rooms Workers,
+      // which deploy on their own (see docs/rooms.md) and write the rooms to the
+      // local D1 the site reads.
+      rejectLocalPublicEnv(deployEnv),
+      voidPlugin({
+        auxiliaryWorkers:
+          command === 'serve' && !isPreview
+            ? [
+                { configPath: 'workers/rooms/wrangler.jsonc' },
+                { configPath: 'workers/rooms/cron/wrangler.jsonc' }
+              ]
+            : []
+      }),
       precompileMessages(),
       tailwindcss(),
       cn({ content: ['{app,components,lib}/**/*.{ts,tsx}'], out: 'generated/cn-tables.ts' }),

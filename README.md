@@ -19,7 +19,7 @@ A multilingual website for a guest house in Osaka, built with TanStack Start and
 ## Getting Started
 
 ```bash
-cp .env.example .env.local   # Fill in the keys
+cp env.example .env          # Fill in the keys
 bun install
 bun dev                      # http://localhost:3000
 ```

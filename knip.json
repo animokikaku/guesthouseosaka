@@ -7,7 +7,6 @@
     "sanity.types.ts",
     "components/ui/**"
   ],
-  "ignoreBinaries": ["crowdin"],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true
@@ -28,7 +27,8 @@
     "app/router.tsx",
     "app/start.ts",
     "workers/rooms/src/index.ts",
-    "workers/rooms/cron/src/index.ts"
+    "workers/rooms/cron/src/index.ts",
+    "void.config.ts"
   ],
   "ignoreDependencies": ["cloudflare"]
 }

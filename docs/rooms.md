@@ -33,8 +33,10 @@ Every six hours (and on `POST /sync`), for each URL in `LISTING_URLS`:
 A failure at any step leaves that listing's rows as they were and moves on to the
 next. It's logged as `listing_sync_failed` by the rooms Worker, and a failed
 cron run shows as an error in the cron Worker's dashboard. An error status
-carries shares.house's `cf-ray`, which ends with the data center that answered
-(`HTTP 403 (cf-ray …-NRT)`): a 403 from outside Japan means the sync wasn't placed.
+carries shares.house's `cf-ray`, which ends with the data center that answered,
+and its `cf-mitigated` header when set (`HTTP 403 (cf-ray …-NRT, cf-mitigated challenge)`).
+`cf-mitigated challenge` means Cloudflare served its bot challenge, which a
+Worker can't pass, even from Tokyo.
 
 Statuses are normalized from either language into `available` (空室),
 `upcoming` (空室予定, with `available_from`) and `occupied` (入居中, "N/A").
@@ -44,8 +46,14 @@ pages don't convert them consistently.
 
 ## Deploying
 
-Workers Builds deploys the rooms Worker with `bun run rooms:deploy` (pending D1
-migrations, then the Worker) when a push to `main` touches `workers/rooms/`, and
+The site owns the database's schema: `db/schema.ts` (Drizzle, read through
+`void/db`) and the SQL in `db/migrations/`, which `void deploy` applies to
+production and `bun dev` to the local database. Production records them in
+`d1_migrations`, as Wrangler did. A change the rooms Worker relies on must ship
+with the site first.
+
+Workers Builds deploys the rooms Worker with `bun run rooms:deploy` when a push
+to `main` touches `workers/rooms/`, and
 the cron Worker with `bun run rooms:cron:deploy` when it touches
 `workers/rooms/cron/`. Each Worker needs its own build trigger: a build deploys
 every `wrangler deploy` in it under the trigger's Worker name, whatever the
@@ -54,14 +62,13 @@ the rooms Worker. Both triggers sit next to the site's; there are no preview
 builds for them, since a preview never runs the cron. To deploy by hand, run the
 same commands.
 
-Their root directory is the repository's, so the dashboard warns that the root
-`wrangler.jsonc` is named `guesthouseosaka`, the site, rather than the Worker's
-name. The deploys read `workers/rooms/wrangler.jsonc` and
+Their root directory is the repository's, so the dashboard may warn that the
+config doesn't match the Worker's name. The deploys read `workers/rooms/wrangler.jsonc` and
 `workers/rooms/cron/wrangler.jsonc`, so ignore the warning, and close any pull
 request Workers Builds opens to rename a config: merging it would deploy one
 Worker over another.
 
-Secrets, already set (values in `.env.local`):
+Secrets, already set (values in `.env`):
 
 | Secret                    | Set on                       | Used for                                 |
 | ------------------------- | ---------------------------- | ---------------------------------------- |
@@ -70,7 +77,7 @@ Secrets, already set (values in `.env.local`):
 
 To rotate one: `bunx wrangler secret put <NAME> -c workers/rooms/wrangler.jsonc`,
 for the cron Worker `bunx wrangler secret put SYNC_TOKEN -c workers/rooms/cron/wrangler.jsonc`,
-and for the site `bunx wrangler secret put ROOMS_REVALIDATE_SECRET --env production`.
+and for the site `bunx void secret put ROOMS_REVALIDATE_SECRET`.
 
 To add a listing, append its Japanese URL (`https://shares.house/a_detail/q_<id>/`)
 to `LISTING_URLS`, and its house's ID to `PROPERTY_IDS` in `lib/rooms.server.ts`.
@@ -78,10 +85,10 @@ to `LISTING_URLS`, and its house's ID to `PROPERTY_IDS` in `lib/rooms.server.ts`
 ## Running it
 
 ```bash
-bun run rooms:migrate  # Apply migrations to the local database the site's dev server also uses
-bun run rooms:dev      # Both Workers; the rooms Worker at localhost:8787
-# Run the cron once (the cron Worker reads SYNC_TOKEN from workers/rooms/cron/.dev.vars):
-curl -X POST "localhost:8787/cdn-cgi/local/explorer/api/local/scheduled?worker=guesthouseosaka-rooms-cron" \
+bun dev  # The site and both rooms Workers, sharing a local database it migrates
+# Run the cron once (both rooms Workers read SYNC_TOKEN from their .dev.vars, and the
+# rooms Worker ROOMS_REVALIDATE_SECRET, the same value as in .env):
+curl -X POST "localhost:3000/cdn-cgi/local/explorer/api/local/scheduled?worker=guesthouseosaka-rooms-cron" \
   -H 'Content-Type: application/json' -d '{"cron":"7 */6 * * *"}'
 
 # Deployed, on demand:
@@ -100,8 +107,10 @@ house to its property ID and counts its available and upcoming rooms, which the
 house page shows as a badge (`components/house/house-availability.tsx`). It
 counts an upcoming room whose date has come (in Japan) as available, and
 returns null, hiding the badge, when the listing has never synced, last synced
-over two days ago, or D1 fails. There's no API in between. Locally, both Workers persist to `.wrangler/state`,
-so `bun dev` reads what `bun run rooms:dev` synced.
+over two days ago, or D1 fails. There's no API in between. Locally, `bun dev` runs the rooms Workers next to
+the site (`auxiliaryWorkers` in `vite.config.ts`, dev server only), all
+sharing one local database (in `.void/`), so the site reads what a local sync
+wrote.
 
 ## Cache
 
@@ -114,5 +123,5 @@ changes re-renders a few pages every six hours, and in return a missed purge,
 a page rendered while D1 failed, or counts that have since aged out never last
 longer than one run. Each purge is tried three times; a failure fails the run.
 
-Locally the purge reaches the site's preview server, whose host check answers
-403; the deployed binding calls the Worker directly.
+Locally the purge reaches the site's dev server, which has no Workers Cache,
+so it answers without purging anything.

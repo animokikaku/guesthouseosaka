@@ -1,5 +1,5 @@
 import { cacheHeaders, SANITY_CACHE_TAG } from '@/lib/cache-control'
-import { serverEnv } from '@/lib/env.server'
+import { env as serverEnv } from '@/env'
 import type { QueryParams } from '@sanity/client'
 import { setResponseHeaders } from '@tanstack/react-start/server'
 import { cache } from 'cloudflare:workers'
@@ -11,7 +11,9 @@ import { getDraftPerspective, isDraftModeEnabled } from './draft-mode.server'
 // rare, and a render that `/api/revalidate` triggers must read what was just
 // published, which the API CDN may not have caught up with yet.
 const publishedClient = client.withConfig({ useCdn: false, perspective: 'published' })
-const draftClient = client.withConfig({ useCdn: false, token: serverEnv.SANITY_API_READ_TOKEN })
+// Configured on use: `env` can only be read while handling a request.
+const draftClient = () =>
+  client.withConfig({ useCdn: false, token: serverEnv.SANITY_API_READ_TOKEN })
 
 /**
  * Runs a GROQ query for the current request: published content normally, the
@@ -26,7 +28,7 @@ export async function sanityFetch<const QueryString extends string>({
   params?: QueryParams
 }) {
   const data = isDraftModeEnabled()
-    ? await draftClient.fetch(query, params, {
+    ? await draftClient().fetch(query, params, {
         perspective: getDraftPerspective(),
         stega: { enabled: true, studioUrl: '/studio' }
       })

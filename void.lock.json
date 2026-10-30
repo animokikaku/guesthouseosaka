@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "source": {
+    "name": "guesthouseosaka",
+    "account_id": "5f8fd45c341a983aff5d6b8b01f88ee1",
+    "routes": [
+      {
+        "pattern": "guesthouseosaka.com",
+        "custom_domain": true
+      }
+    ],
+    "workers_dev": false,
+    "preview_urls": true,
+    "cache": {
+      "enabled": true
+    },
+    "observability": {
+      "enabled": true,
+      "traces": {
+        "enabled": true
+      }
+    },
+    "d1_databases": [
+      {
+        "binding": "ROOMS_DB",
+        "database_name": "guesthouseosaka-rooms",
+        "database_id": "0924c651-cb96-42e8-9789-692c06b7baef"
+      }
+    ]
+  },
+  "resolved": {
+    "name": "guesthouseosaka",
+    "account_id": "5f8fd45c341a983aff5d6b8b01f88ee1",
+    "routes": [
+      {
+        "pattern": "guesthouseosaka.com",
+        "custom_domain": true
+      }
+    ],
+    "workers_dev": false,
+    "preview_urls": true,
+    "cache": {
+      "enabled": true
+    },
+    "observability": {
+      "enabled": true,
+      "traces": {
+        "enabled": true
+      }
+    },
+    "d1_databases": [
+      {
+        "binding": "ROOMS_DB",
+        "database_name": "guesthouseosaka-rooms",
+        "database_id": "0924c651-cb96-42e8-9789-692c06b7baef",
+        "migrations_dir": "./db/migrations"
+      }
+    ]
+  },
+  "text": "{\n  \"name\": \"guesthouseosaka\",\n  \"account_id\": \"5f8fd45c341a983aff5d6b8b01f88ee1\",\n  \"routes\": [\n    {\n      \"pattern\": \"guesthouseosaka.com\",\n      \"custom_domain\": true\n    }\n  ],\n  \"workers_dev\": false,\n  \"preview_urls\": true,\n  \"cache\": {\n    \"enabled\": true\n  },\n  \"observability\": {\n    \"enabled\": true,\n    \"traces\": {\n      \"enabled\": true\n    }\n  },\n  \"d1_databases\": [\n    {\n      \"binding\": \"ROOMS_DB\",\n      \"database_name\": \"guesthouseosaka-rooms\",\n      \"database_id\": \"0924c651-cb96-42e8-9789-692c06b7baef\",\n      \"migrations_dir\": \"./db/migrations\"\n    }\n  ]\n}\n"
+}

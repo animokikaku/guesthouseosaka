@@ -1,4 +1,4 @@
-import { serverEnv } from '@/lib/env.server'
+import { env as serverEnv } from '@/env'
 import { createServerFn } from '@tanstack/react-start'
 import { setResponseHeader } from '@tanstack/react-start/server'
 import { isDraftModeEnabled } from './draft-mode.server'

@@ -35,9 +35,10 @@ async function readJson(request: IncomingMessage) {
   }
 }
 
-async function reply(handlers: FetchHandler[], request: Request): Promise<TestProxyReply> {
+/** Asks each handler in turn, giving each its own copy of the request from `toRequest`. */
+async function reply(handlers: FetchHandler[], toRequest: () => Request): Promise<TestProxyReply> {
   for (const handler of handlers.toReversed()) {
-    const result = await handler(request.clone())
+    const result = await handler(toRequest())
     if (result === undefined) continue
     if (result === 'continue' || result === 'abort') return { action: result }
     const body = await result.arrayBuffer()
@@ -64,15 +65,22 @@ export const test = base.extend<{ serverFetch: ServerFetch }, { testProxy: TestP
     async ({}, use) => {
       const handlers = new Map<string, FetchHandler[]>()
       const server = createServer(async (incoming, outgoing) => {
+        // The proxied fetches are POSTs; the local runtime also probes the
+        // proxy's origin with a bare GET, which isn't one.
+        if (incoming.method !== 'POST') {
+          outgoing.writeHead(404).end()
+          return
+        }
         const testId = decodeURIComponent(incoming.url?.slice(1) ?? '')
         const { url, method, headers, body } = await readJson(incoming)
-        const request = new Request(url, {
-          method,
-          headers: headers.filter(([name]) => !['content-length', 'host'].includes(name)),
-          body: body === null ? undefined : Buffer.from(body, 'base64')
-        })
+        const toRequest = () =>
+          new Request(url, {
+            method,
+            headers: headers.filter(([name]) => !['content-length', 'host'].includes(name)),
+            body: body === null ? undefined : Buffer.from(body, 'base64')
+          })
         outgoing.setHeader('content-type', 'application/json')
-        outgoing.end(JSON.stringify(await reply(handlers.get(testId) ?? [], request)))
+        outgoing.end(JSON.stringify(await reply(handlers.get(testId) ?? [], toRequest)))
       })
       await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve))
       const { port } = server.address() as AddressInfo

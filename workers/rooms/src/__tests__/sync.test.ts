@@ -12,7 +12,9 @@ const URL_10333 = 'https://shares.house/a_detail/q_10333/'
 /** D1's binding over an in-memory SQLite database with the real migrations. */
 function createDatabase() {
   const sqlite = new DatabaseSync(':memory:')
-  sqlite.exec(readFileSync(join(__dirname, '../../migrations/0001_create_rooms.sql'), 'utf8'))
+  sqlite.exec(
+    readFileSync(join(__dirname, '../../../../db/migrations/0001_create_rooms.sql'), 'utf8')
+  )
 
   function statement(
     query: string,
@@ -264,6 +266,18 @@ describe('fetchListing', () => {
 
     await expect(fetchListing(URL_1)).rejects.toMatchObject({
       cause: { message: 'HTTP 403 (cf-ray a5222c983e3100a3-KIX)' }
+    })
+  })
+
+  it('reports a Cloudflare challenge', async () => {
+    const headers = { 'cf-ray': 'a5241e5a9c47d4a2-NRT', 'cf-mitigated': 'challenge' }
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response('', { status: 403, headers }))
+    )
+
+    await expect(fetchListing(URL_1)).rejects.toMatchObject({
+      cause: { message: 'HTTP 403 (cf-ray a5241e5a9c47d4a2-NRT, cf-mitigated challenge)' }
     })
   })
 })

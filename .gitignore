@@ -36,9 +36,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (Void reads only .env; env.example is the committed template)
 .env*
-!.env.example
  
 # typescript
 *.tsbuildinfo
@@ -58,3 +57,7 @@ backup/
 
 # vitest artifacts (reports, blob reports, attachments)
 /.vitest/
+
+# void: generated state and Cloudflare config (void.lock.json is committed)
+/.void/
+.void-wrangler.jsonc

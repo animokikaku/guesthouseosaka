@@ -4,13 +4,11 @@ import {
   TourRequestEmail
 } from '@/components/email-template'
 import { CONTACT_EMAIL, CONTACT_EMAIL_DOMAIN } from '@/lib/config'
-import { serverEnv } from '@/lib/env.server'
+import { env as serverEnv } from '@/env'
 import { contactFormPayloadSchema, type ContactFormPayload } from '@/lib/schemas/contact-form'
 import type { HouseIdentifier } from '@/lib/types'
 import { Resend, type CreateEmailOptions } from 'resend'
 import { verifyTurnstileToken } from './turnstile.server'
-
-const { emails } = new Resend(serverEnv.RESEND_API_KEY)
 
 export type ContactSubmissionResult =
   | { ok: true }
@@ -23,7 +21,8 @@ export interface SubmissionOrigin {
 }
 
 async function sendEmail(payload: CreateEmailOptions): Promise<ContactSubmissionResult> {
-  const { error } = await emails.send(payload)
+  // Created per call: `env` can only be read while handling a request.
+  const { error } = await new Resend(serverEnv.RESEND_API_KEY).emails.send(payload)
 
   if (error) {
     console.error('Failed to send contact form email', error)
@@ -36,12 +35,12 @@ async function sendEmail(payload: CreateEmailOptions): Promise<ContactSubmission
 const DEFAULT_CONTACT = {
   from: `Guest House Osaka <${CONTACT_EMAIL}>`,
   to: (places?: HouseIdentifier[]) => {
-    if (serverEnv.DEPLOY_ENV === 'preview') {
+    if (__DEPLOY_ENV__ === 'preview') {
       return 'delivered+guesthouseosaka@resend.dev'
     }
     // Only the production Worker reaches the houses' inboxes. A local preview
     // is a production build too, so the build mode can't decide.
-    if (serverEnv.DEPLOY_ENV !== 'production') {
+    if (__DEPLOY_ENV__ !== 'production') {
       return `dev@${CONTACT_EMAIL_DOMAIN}`
     }
     if (places?.length === 1) {
