@@ -114,7 +114,10 @@ public/                # Static assets only
   the Studios' Presentation tool frame them (`lib/security-headers.ts`, applied in `app/start.ts`).
   An error that escapes a server route gets Start's own response without them. HSTS comes from
   the zone
-- Hashed build assets are served as immutable (`public/_headers`)
+- Static assets are served without the Worker, so their headers come from a Response Header
+  Transform Rule on the zone: `Cache-Control: public, max-age=31536000, immutable` for a 200 under
+  `/assets/` (file names carry a content hash) and `nosniff` on every response. A `_headers` file
+  would do nothing: Void's Cloudflare deploy doesn't upload one written by hand
 - `bun run test:e2e:preview` builds the `preview` environment locally and sends one real
   contact email to Resend's test inbox: workerd runs the bundle `void deploy` uploads, so
   this checks the Resend key and sending domain without deploying. It runs locally with

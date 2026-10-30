@@ -5,7 +5,7 @@ import { SANITY_STUDIO_HOSTS } from '@/lib/config'
  * and the Studios' Presentation tool (hosted, in the Sanity dashboard, or
  * `sanity dev`) may frame its pages. Browsers already default to the
  * `strict-origin-when-cross-origin` referrer policy. Static assets get
- * `nosniff` from `public/_headers`.
+ * `nosniff` from a zone Transform Rule (see docs/architecture.md).
  */
 const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',

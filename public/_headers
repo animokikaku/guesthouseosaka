@@ -1,8 +1,0 @@
-# Workers Static Assets, served before the Worker's middleware (which sets the
-# same header on its own responses, see app/start.ts).
-/*
-  X-Content-Type-Options: nosniff
-
-# Build assets carry a content hash, so they never change.
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
