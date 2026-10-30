@@ -2,8 +2,7 @@ import type { ReactNode } from 'react'
 
 /**
  * Pages for failures outside the locale layout, where there are no
- * translations or site styles, so they mirror Next's built-in pages with
- * inline styles.
+ * translations or site styles: plain English with inline styles.
  */
 function GlobalMessage({ title, children }: { title: string; children: ReactNode }) {
   return (

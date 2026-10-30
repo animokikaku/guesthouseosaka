@@ -240,13 +240,7 @@ export const houseGalleryQuery = defineQuery(`*[_type == "house" && slug == $slu
   })[count(items) > 0] | order(category.orderRank)
 }`)
 
-// House titles for the contact forms and the house page's HousesNav (ordered by global orderRank)
-export const housesTitlesQuery = defineQuery(`*[_type == "house"] | order(orderRank){
-  slug,
-  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value)
-}`)
-
-// Houses for navigation (header) - ordered by global orderRank
+// Houses for navigation (the header, the house pages' tabs and the contact forms) - ordered by global orderRank
 export const housesNavQuery = defineQuery(`*[_type == "house"] | order(orderRank){
   slug,
   "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),

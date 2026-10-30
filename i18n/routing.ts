@@ -19,5 +19,8 @@ export function prefixToLocale(prefix: string): Locale | undefined {
   return routing.locales.find((locale) => localeToPrefix(locale) === prefix)
 }
 
-/** Remembers the visitor's last language, so `/` sends them back to it. */
+/**
+ * Remembers the visitor's last language, so `/` sends them back to it. Named by
+ * next-intl, which the site used before; kept so saved choices still work.
+ */
 export const LOCALE_COOKIE = 'NEXT_LOCALE'

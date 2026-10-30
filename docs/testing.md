@@ -21,9 +21,15 @@ a visitor, an editor or a crawler would.
   nothing visible identifies the element.
 - Mock only at the edges: the server function, Resend, Turnstile (its widget and Siteverify), the
   router, `Image`. Render our own components, `urlFor`, `stegaClean` and translations for real.
-- E2E specs import `test` from `e2e/fixtures/test.ts` (or `server-fetch.ts`, which extends it),
-  not `@playwright/test`: it blocks Google Maps, whose map loads and Places UI Kit requests count
-  against the key's daily quota. oxlint enforces it.
+- Failure paths (Turnstile rejecting a submission, Resend refusing an email) are unit tests:
+  `contact.test.ts` for what the server does, `form-feedback.test.tsx` for what the form says.
+  E2E covers the journeys that succeed.
+- E2E specs import `test` from `e2e/fixtures/test.ts`, not `@playwright/test`: it blocks Google
+  Maps, whose map loads and Places UI Kit requests count against the key's daily quota. oxlint
+  enforces it.
+- The E2E build sends its emails to a local Resend stand-in (`e2e/mocks/resend-server.ts`, one
+  of the suite's web servers) and verifies Turnstile's test tokens with Cloudflare. A test finds
+  its own email with `sentEmails(replyTo)`, so give each submission a reply address of its own.
 - Prefer a table (`it.each`) over near-identical tests, and one test per behavior over one per prop.
 - A test that only restates the implementation (a hard-coded copy of a computed value, a mock that
   reimplements the code under test) is a change detector; test the rule it encodes instead.

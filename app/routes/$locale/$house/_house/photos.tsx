@@ -6,10 +6,9 @@ import { getHouseGallery } from '@/sanity/lib/loaders.functions'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 /**
- * The gallery as a modal over the house page, as Next's intercepted
- * `(.)gallery` route showed it. Links open it masked as `/gallery` (see
- * `galleryLink`), and a reload or a shared link unmasks to the full page, so
- * this path is never visited on its own.
+ * The gallery as a modal over the house page. Links open it masked as
+ * `/gallery` (see `galleryLink`), and a reload or a shared link unmasks to the
+ * full page, so this path is never visited on its own.
  */
 export const Route = createFileRoute('/$locale/$house/_house/photos')({
   beforeLoad: ({ location, params }) => {

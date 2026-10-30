@@ -39,8 +39,8 @@ updates go out with the next deploy.
 ## Publishing
 
 Pages are cached by Workers Cache for a day. A GROQ-powered webhook on the `production` dataset
-purges them on every publish, so changes show within seconds. It is set up in
-sanity.io/manage → API → Webhooks:
+purges the ones that read the published document's type, so changes show within seconds and the
+rest of the site stays cached. It is set up in sanity.io/manage → API → Webhooks:
 
 | Field           | Value                                                    |
 | --------------- | -------------------------------------------------------- |
@@ -48,13 +48,16 @@ sanity.io/manage → API → Webhooks:
 | Dataset         | `production`                                             |
 | Trigger on      | Create, Update, Delete                                   |
 | Filter          | Empty (any document)                                     |
-| Projection      | `{_id, _type}`                                           |
+| Projection      | `{_id, _type}` (the purge reads `_type`)                 |
 | HTTP method     | `POST`                                                   |
 | Drafts/Versions | Off                                                      |
 | Secret          | The Worker's `SANITY_WEBHOOK_SECRET` (`void secret put`) |
 
 The endpoint checks the signature against `SANITY_WEBHOOK_SECRET`, answers `401` without it,
-and `503` (which Sanity retries) when the purge fails. The webhook's attempts log in
+and `503` (which Sanity retries) when the purge fails. It purges the `sanity-<type>` tag, which
+every response reading that type carries (see `sanity/lib/content-types.ts`); Sanity's own
+documents, like image assets, purge nothing; any other type, or a body without one, purges every
+published response. The webhook's attempts log in
 sanity.io/manage shows each delivery. If a delivery fails for good, the change shows once the
 cache expires, within a day, or after the next deploy; publishing again retries the purge.
 
@@ -81,5 +84,8 @@ or GROQ. Set up the MCP server with `bunx sanity@latest mcp configure`.
 ## Rules
 
 - **Always**: Run `typegen` after schema or query changes
+- **Always**: When a query starts reading another document type (directly or through `->`), add
+  it to the loader's list in `sanity/lib/content-types.ts`, or publishes of that type won't
+  refresh the page
 - **Ask first**: Before modifying `sanity.config.ts` or deleting schema files
-- **Never**: Hardcode API tokens (use `process.env`)
+- **Never**: Hardcode API tokens (read them from `env` in `@/env`)

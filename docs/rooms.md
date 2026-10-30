@@ -11,11 +11,9 @@ house pages. Nothing else stores rooms.
 (`lib/rooms.server.ts`), then purges the cached pages. An EventBridge rule in
 AWS Tokyo calls it every hour (see [Schedule](#schedule)).
 
-shares.house answers 403 to requests from outside Japan, and what counts is
-where the request that started the run came from, not the data center the
-Worker runs in: a Cloudflare cron got 403 on every run, even when it reached
-shares.house through Tokyo (`cf-ray …-NRT`), while the same sync started from
-Japan succeeded. So there's no Cloudflare cron.
+The schedule lives in AWS rather than a Cloudflare cron because shares.house
+answers 403 unless the run was started from Japan, wherever the Worker runs: a
+cron trigger is refused even when it reaches shares.house through Tokyo.
 
 For each house, `lib/rooms-sync/` does the following:
 
@@ -28,10 +26,10 @@ For each house, `lib/rooms-sync/` does the following:
    column.
 3. Validate every row: a known status, a plausible room number, no duplicates,
    amounts and areas in range. One bad row rejects the whole listing.
-4. In one D1 batch (a transaction): upsert each room, rewriting it only when a
-   field changed; mark rooms the page no longer shows `listed = 0`; record the
-   listing's `checked_at`. A page with fewer than half the rooms already listed
-   is refused as incomplete.
+4. In one D1 batch (a transaction, through Drizzle): upsert each room,
+   rewriting it only when a field changed; mark rooms the page no longer shows
+   `listed = 0`; record the listing's `checked_at`. A page with fewer than half
+   the rooms already listed is refused as incomplete.
 
 A failure at any step leaves that listing's rows as they were and moves on to the
 next. It's logged as `listing_sync_failed`, and the route answers 502. An error
@@ -84,26 +82,25 @@ metric in CloudWatch.
 
 ## Schema
 
-The site owns the database's schema: `db/schema.ts` (Drizzle, read through
-`void/db`) and the SQL in `db/migrations/`, which `void deploy` applies to
-production and `bun dev` to the local database. Production records them in
-`d1_migrations`, as Wrangler did.
+The site owns the database's schema: `db/schema.ts` (Drizzle; the site reads
+and the sync writes through `db` from `void/db`) and the SQL in
+`db/migrations/`, which `void deploy` applies to production and `bun dev` to
+the local database. Production records them in `d1_migrations`.
 
 ## Running it
 
 In the Studio, **Site Settings** has a **Sync now** button under the social
 links (`sanity/components/room-sync-input.tsx`), for showing a change before
 the next hourly run. It's the input of a `roomSync` field that never stores a
-value. The
-Studio can't hold `SYNC_TOKEN`, so the button works like Presentation: the
-signed-in user creates a preview secret in the dataset (valid for an hour),
-and sends it as the request's text body. The route checks it with
-`validatePreviewUrl` and the read token. A text body with no custom header
-needs no CORS preflight, and the route lets the hosted Studios and
-`sanity dev` read its answer. The button calls the site that shows the
-Studio's dataset: production, or `localhost:3000` for the development Studio.
-The request starts in the editor's browser, so like any sync it only gets
-through from Japan.
+value. The Studio can't hold `SYNC_TOKEN`, so the button works like
+Presentation: the signed-in user creates a preview secret in the dataset
+(valid for an hour), and sends it as the request's text body. The route checks
+the body's length and shape first, then the secret with `validatePreviewUrl`
+and the read token. A text body with no custom header needs no CORS preflight,
+and the route lets the hosted Studios and `sanity dev` read its answer. The
+button calls the site that shows the Studio's dataset: production, or
+`localhost:3000` for the development Studio. The request starts in the
+editor's browser, so like any sync it only gets through from Japan.
 
 From a terminal:
 
@@ -131,7 +128,7 @@ fails.
 ## Cache
 
 House pages and their data responses are cached for a day (see
-`lib/cache-control.ts`) and tagged `rooms` as well as `sanity`. After syncing,
+`lib/cache-control.ts`) and tagged `rooms` as well as with their Sanity types. After syncing,
 a run purges the `rooms` tag only when the cached pages may be out of date
 (`needsPurge` in `lib/rooms-sync/sync.server.ts`):
 

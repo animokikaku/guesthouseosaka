@@ -26,8 +26,9 @@ reviews:
       timeout_ms: 90000
     languagetool:
       enabled: true
+    # Linting is oxlint's (`oxc` below), with the project's rules.
     biome:
-      enabled: true
+      enabled: false
     hadolint:
       enabled: true
     swiftlint:
@@ -45,7 +46,7 @@ reviews:
     detekt:
       enabled: false
     eslint:
-      enabled: true
+      enabled: false
     rubocop:
       enabled: false
     buf:
@@ -67,7 +68,7 @@ reviews:
     sqlfluff:
       enabled: false
     prisma_schema_validation:
-      enabled: true
+      enabled: false
     oxc:
       enabled: true
     docstring_coverage:
@@ -94,10 +95,11 @@ reviews:
         - Appropriate use of localization patterns
     - path: 'app/**/*'
       instructions: |
-        Review Next.js App Router code for:
-        - Proper use of server vs client components
-        - Correct metadata and SEO setup
-        - Proper error handling and loading states
+        Review TanStack Start routes and server code (Cloudflare Workers) for:
+        - Loaders calling one GET server function each, never taking a GROQ query from the client
+        - Cache headers: published responses tagged with the Sanity types they read, draft ones private
+        - Server-only code (`*.server.ts`, `env` from `@/env`) kept out of client bundles
+        - Correct `head()` metadata, canonical links and status codes
 
 chat:
   auto_reply: true

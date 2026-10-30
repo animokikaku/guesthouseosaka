@@ -5,7 +5,8 @@ import { settingsQuery } from '@/sanity/lib/queries'
 import { stegaClean } from '@sanity/client/stega'
 import { createTranslator } from 'use-intl'
 
-export default async function manifest() {
+/** The web app manifest, named after the site in the default locale. */
+export async function webManifest() {
   const locale = routing.defaultLocale
   const [{ data: settings }, messages] = await Promise.all([
     sanityFetch({ query: settingsQuery, params: { locale } }),

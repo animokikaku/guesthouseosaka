@@ -69,7 +69,7 @@ export function toGalleryImageProps(
  * URL (same `sanityImageLoader` pipeline as the trigger's `SanityImage`).
  *
  * No LQIP here on purpose: the lightbox image must not carry a `blur`
- * placeholder, because next/image paints it as an inline background that covers
+ * placeholder, because `Image` paints it as an inline background that covers
  * ramka's trigger-thumbnail bridge. The blur belongs on the trigger — see
  * `toGalleryImageProps`, which the grid tiles use.
  */

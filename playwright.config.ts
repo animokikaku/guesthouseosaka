@@ -44,21 +44,19 @@ export default defineConfig({
     timeout: 10 * 1000
   },
 
-  // Run E2E tests against a production build with the test proxy enabled (see
-  // e2e/fixtures/server-fetch.ts), so outgoing Resend calls are mocked per test. `RESEND_BASE_URL` points the
-  // SDK at an unresolvable host as a second line of defence: a call the mock
-  // misses fails instead of reaching the real API. Skip the managed server when
-  // testing an external deployment via BASE_URL.
+  // Run E2E tests against a production build whose emails go to a local
+  // Resend stand-in (e2e/mocks/resend.ts): `RESEND_BASE_URL` is built in, so a
+  // submission can't reach the real API with the key from `.env`. Skip the
+  // managed servers when testing an external deployment via BASE_URL.
   //
-  // Never reuse an existing server: a `bun run dev` already on this port has
-  // neither variable, so the fixture's header is ignored and a submission
-  // reaches the real Resend API with the key from `.env`. The build is
-  // the cost of both defences actually being in place.
+  // Never reuse an existing server: a `bun dev` already on this port wasn't
+  // built with the stand-in's URL, so its submissions reach the real Resend
+  // API. The build is the cost of that defence actually being in place.
   //
   // `bun run test:e2e:preview` (E2E_REAL_EMAIL) builds the preview environment
-  // instead, without either defence: workerd runs the same bundle `void
-  // deploy` uploads, and `DEPLOY_ENV=preview` sends its one email to Resend's
-  // test inbox with the key from `.env`.
+  // instead, without the stand-in: workerd runs the same bundle `void deploy`
+  // uploads, and `DEPLOY_ENV=preview` sends its one email to Resend's test
+  // inbox with the key from `.env`.
   webServer: process.env.BASE_URL
     ? undefined
     : realEmail
@@ -68,19 +66,25 @@ export default defineConfig({
           timeout: 5 * 60 * 1000,
           reuseExistingServer: false
         }
-      : {
-          command: 'bun run build && bun run start',
-          url: baseURL,
-          timeout: 5 * 60 * 1000,
-          reuseExistingServer: false,
-          env: {
-            E2E_TEST_PROXY: '1',
-            RESEND_BASE_URL: RESEND_MOCK_BASE_URL,
-            // The server runs in workerd, which only sees the shell's variables
-            // (these, and CI's secrets) when asked to.
-            CLOUDFLARE_INCLUDE_PROCESS_ENV: 'true'
+      : [
+          {
+            command: 'bun e2e/mocks/resend-server.ts',
+            url: `${RESEND_MOCK_BASE_URL}/emails`,
+            reuseExistingServer: false
+          },
+          {
+            command: 'bun run build && bun run start',
+            url: baseURL,
+            timeout: 5 * 60 * 1000,
+            reuseExistingServer: false,
+            env: {
+              RESEND_BASE_URL: RESEND_MOCK_BASE_URL,
+              // The server runs in workerd, which only sees the shell's
+              // variables (CI's secrets) when asked to.
+              CLOUDFLARE_INCLUDE_PROCESS_ENV: 'true'
+            }
           }
-        },
+        ],
 
   // Shared settings for all the projects below
   use: {

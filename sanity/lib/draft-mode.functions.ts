@@ -5,8 +5,8 @@ import { isDraftModeEnabled } from './draft-mode.server'
 
 /**
  * The read token, for the draft-mode browser to listen for draft changes with
- * the Live Content API, as next-sanity's `browserToken` did. Fetched after
- * hydration rather than embedded in the page, and only in draft mode.
+ * the Live Content API. Fetched after hydration rather than embedded in the
+ * page, and only in draft mode.
  */
 export const getLiveToken = createServerFn({ method: 'GET' }).handler(() => {
   setResponseHeader('Cache-Control', 'private, no-store')

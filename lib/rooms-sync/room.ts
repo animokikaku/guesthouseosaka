@@ -17,3 +17,9 @@ export interface Room {
   deposit: number | null
   commonFee: number | null
 }
+
+/** The date in Japan (`YYYY-MM-DD`) at a time, now by default: when a room's `availableFrom` comes. */
+export function dateInJapan(time: string | number = Date.now()) {
+  const ms = typeof time === 'string' ? Date.parse(time) : time
+  return new Date(ms + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
+}

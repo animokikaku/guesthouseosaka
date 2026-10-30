@@ -4,21 +4,19 @@ import { env } from '@/lib/env'
 import type { HouseIdentifier, ContactType } from '@/lib/types'
 import type { Locale } from 'use-intl'
 
-/** A public page, independent of the locale it is served in. */
+/**
+ * A public page, as a `Link` targets it but without the locale, which the
+ * canonical URL and each sitemap alternate fill in.
+ */
 export type Href =
-  | '/'
-  | '/faq'
-  | '/contact'
-  | { pathname: '/' | '/faq' | '/contact'; params?: undefined }
-  | { pathname: '/contact/[slug]'; params: { slug: ContactType } }
-  | { pathname: '/[house]' | '/[house]/gallery'; params: { house: HouseIdentifier } }
+  | { to: '/$locale' | '/$locale/faq' | '/$locale/contact'; params?: undefined }
+  | { to: '/$locale/contact/$slug'; params: { slug: ContactType } }
+  | { to: '/$locale/$house' | '/$locale/$house/gallery'; params: { house: HouseIdentifier } }
 
 /** The path of a page in a locale, under its public prefix (e.g. /zh-cn). */
-function getPathname(href: Href, locale: Locale) {
-  const { pathname, params } = typeof href === 'string' ? { pathname: href, params: {} } : href
-  const values: Record<string, string> = { ...params }
-  const path = pathname.replace(/\[(\w+)\]/g, (_, name: string) => values[name] ?? '')
-  return `/${localeToPrefix(locale)}${path === '/' ? '' : path}`
+function getPathname({ to, params }: Href, locale: Locale) {
+  const values: Record<string, string> = { ...params, locale: localeToPrefix(locale) }
+  return to.replace(/\$(\w+)/g, (_, name: string) => values[name] ?? '')
 }
 
 /** Absolute URL on the production origin, using the public locale prefix (e.g. /zh-cn). */
@@ -65,8 +63,8 @@ export function openGraphMeta({
 }
 
 /**
- * Title, description and their social-card copies. The title follows the
- * site-wide `%s - Site name` template the root layout set under Next.
+ * Title, description and their social-card copies. A page's title reads
+ * `Title - Site name`.
  */
 export function pageMeta({
   title,

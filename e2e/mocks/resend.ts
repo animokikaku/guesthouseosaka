@@ -1,62 +1,21 @@
-import type { ServerFetch } from '../fixtures/server-fetch'
-
 /**
- * Base URL handed to the Resend SDK through `RESEND_BASE_URL` during E2E runs.
+ * A stand-in for Resend's API, which the E2E build sends its emails to
+ * (`RESEND_BASE_URL`, see playwright.config.ts): it accepts every email and
+ * keeps it for the tests to read back, so a submission never reaches Resend and
+ * the key in `.env` is never sent anywhere.
  *
- * `.invalid` is reserved by RFC 2606 and never resolves, so a submission this
- * mock fails to match cannot reach the real API with a live key — it fails the
- * test instead. `https` so that a resolver which hijacks NXDOMAIN still cannot
- * see the key: the handshake fails before the `Authorization` header is sent.
- */
-export const RESEND_MOCK_BASE_URL = 'https://resend.invalid'
-
-const RESEND_MOCK_ORIGIN = new URL(RESEND_MOCK_BASE_URL).origin
-
-type MockResendAPIOptions = {
-  body?: Record<string, unknown>
-  status?: number
-}
-
-/**
- * Mock the Resend send-email endpoint for E2E tests.
- *
- * Runs through the server-fetch fixture, so each test gets its own
- * interception scope and outgoing submissions never reach the real API.
- *
- * Requests to other hosts return `undefined` so later-registered handlers still
- * see them; only the fallback in the spec decides whether they pass through.
- *
+ * Served by `resend-server.ts`, one of the suite's web servers.
  * @see https://resend.com/docs/api-reference/emails/send-email
  */
-export function mockResendAPI(serverFetch: ServerFetch, options: MockResendAPIOptions = {}) {
-  const requests: Record<string, unknown>[] = []
+export const RESEND_MOCK_PORT = 3101
+export const RESEND_MOCK_BASE_URL = `http://127.0.0.1:${RESEND_MOCK_PORT}`
 
-  serverFetch.onFetch(async (request) => {
-    const url = new URL(request.url)
+/** An email as the server sent it to Resend. */
+export type SentEmail = Record<string, unknown> & { reply_to?: string | string[] }
 
-    // Not Resend — fall through to the next handler
-    if (url.origin !== RESEND_MOCK_ORIGIN) {
-      return undefined
-    }
-
-    // Any other Resend endpoint (batch send, retrieval, …) is unmocked. Answer
-    // it here rather than passing it through, so the call cannot escape.
-    if (url.pathname !== '/emails') {
-      return Response.json(
-        {
-          message: `Unmocked Resend endpoint: ${request.method} ${url.pathname}`,
-          name: 'not_found',
-          statusCode: 404
-        },
-        { status: 404 }
-      )
-    }
-
-    requests.push((await request.json()) as Record<string, unknown>)
-    return Response.json(options.body ?? { id: 'e2e-mock-email-id', object: 'email' }, {
-      status: options.status ?? 200
-    })
-  })
-
-  return requests
+/** The emails the server sent with `replyTo` set to `email`, which each test makes its own. */
+export async function sentEmails(email: string): Promise<SentEmail[]> {
+  const response = await fetch(`${RESEND_MOCK_BASE_URL}/emails`)
+  const emails = (await response.json()) as SentEmail[]
+  return emails.filter(({ reply_to }) => [reply_to].flat().includes(email))
 }

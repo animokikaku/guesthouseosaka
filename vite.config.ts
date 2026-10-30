@@ -64,10 +64,9 @@ function rejectLocalPublicEnv(deployEnv: DeployEnv): Plugin {
 }
 
 /**
- * Precompiles `messages/*.json` to icu-minify's compact format, as next-intl's
- * `precompile` option did, so the client ships `use-intl`'s format-only
- * formatter instead of the ICU parser. Also writes `messages/en.d.json.ts`,
- * which types each message's ICU arguments, as `createMessagesDeclaration` did.
+ * Precompiles `messages/*.json` to icu-minify's compact format, so the client
+ * ships `use-intl`'s format-only formatter instead of the ICU parser. Also
+ * writes `messages/en.d.json.ts`, which types each message's ICU arguments.
  */
 function precompileMessages(): Plugin {
   const messagesDir = path.resolve('messages')
@@ -203,11 +202,8 @@ export default defineConfig(() => {
     define: {
       // Only production emails the houses (see `app/actions/contact.server.ts`).
       __DEPLOY_ENV__: JSON.stringify(deployEnv),
-      // Only for the Playwright suite, which mocks outbound Resend calls through
-      // `lib/test-proxy.server.ts`; a production build compiles it away.
-      __E2E_TEST_PROXY__: JSON.stringify(process.env.E2E_TEST_PROXY === '1'),
-      // The Playwright suite's unresolvable Resend host (see playwright.config.ts),
-      // built in: the Worker only gets the secrets env.ts requires.
+      // The Playwright suite's Resend stand-in (see playwright.config.ts), built
+      // in: the Worker only gets the secrets env.ts requires.
       ...(process.env.RESEND_BASE_URL && {
         'process.env.RESEND_BASE_URL': JSON.stringify(process.env.RESEND_BASE_URL)
       })

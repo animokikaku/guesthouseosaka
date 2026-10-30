@@ -17,7 +17,7 @@ export const Route = createFileRoute('/$locale/faq')({
       fallbackTitle: 'faq_title',
       matches
     }),
-    links: [canonicalLink('/faq', locale)]
+    links: [canonicalLink({ to: '/$locale/faq' }, locale)]
   }),
   component: FAQPage
 })

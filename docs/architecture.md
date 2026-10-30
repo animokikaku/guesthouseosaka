@@ -7,9 +7,10 @@ app/                   # TanStack Start source directory
 ├── routes/            # File routes (routeTree.gen.ts is generated from them)
 │   ├── __root.tsx     # Document shell
 │   ├── $locale/       # Locale-prefixed pages (en, ja, fr, zh-cn, zh-tw)
-│   └── api/           # Draft mode endpoints
+│   ├── api/           # Draft mode, Sanity's publish webhook, the room sync
+│   └── *[.]*.ts       # robots.txt, sitemap.xml, the web app manifest
 ├── router.tsx         # Router options (preloading, stale times)
-├── start.ts           # Request middleware: redirects, locale detection, CSRF
+├── start.ts           # Request middleware: security headers, CSRF, redirects, locale detection
 └── actions/           # Contact form server function
 
 components/
@@ -21,10 +22,12 @@ components/
 
 sanity/
 ├── schemaTypes/       # Document and block type definitions
-└── lib/queries.ts     # GROQ queries using defineQuery()
+└── lib/               # GROQ queries (defineQuery()), loaders, draft mode
 
+db/                    # Rooms database schema (Drizzle) and D1 migrations
+aws/                   # The room sync's hourly schedule (CloudFormation)
 messages/              # Translation JSON files (en, ja, fr, zh-CN, zh-TW)
-lib/                   # Shared utilities and config
+lib/                   # Shared utilities and config; rooms-sync/ reads shares.house
 hooks/                 # Custom React hooks
 public/                # Static assets only
 ```
@@ -48,11 +51,15 @@ public/                # Static assets only
 ### Data
 
 - Each route's `loader` calls one GET server function in `sanity/lib/loaders.functions.ts`,
-  which runs a fixed set of queries server-side; never accept a GROQ query from the client
+  which runs a fixed set of queries server-side; never accept a GROQ query from the client.
+  Data the locale layout already loads (the houses' titles) is read from its loader data,
+  not fetched again
 - Published content comes from Sanity's live API rather than its API CDN, so a render right
   after a publish reads the new content; Workers Cache (below) keeps those renders rare
 - Draft mode is a signed cookie set by `/api/draft-mode/enable`; it switches queries to the
-  token client with stega and loads Visual Editing on demand
+  token client with stega and loads Visual Editing on demand. The cookie expires after a day:
+  Presentation sets a new one whenever it opens the site, and a page load renews one past half
+  its lifetime
 - Array fields that Presentation edits optimistically render through `OptimisticArray`, which
   loads Visual Editing's mutator only in draft mode
 
@@ -93,10 +100,15 @@ public/                # Static assets only
 - Workers Cache (`cache.enabled` in `void.config.ts`) serves pages and server-function GETs
   from Cloudflare's cache by their `Cache-Control`, without running the Worker; check
   `Cf-Cache-Status`. Responses carry `Vary: Cookie` for draft mode (see `lib/cache-control.ts`)
-- Responses built from published content carry `Cache-Tag: sanity`, which Sanity's publish
-  webhook purges through `/api/revalidate` (see [Sanity Workflow](sanity-workflow.md#publishing)).
-  Only the Worker can purge Workers Cache: zone-level purges don't reach it, and local dev and
-  preview have no Workers Cache at all
+- Responses built from published content are tagged with the Sanity document types they read
+  (`sanity-<type>`, listed per loader in `sanity/lib/content-types.ts`), plus `sanity` on all of
+  them. A page adds up its loaders' tags. Sanity's publish webhook purges the published type's
+  tag through `/api/revalidate` (see [Sanity Workflow](sanity-workflow.md#publishing)). Only the
+  Worker can purge Workers Cache: zone-level purges don't reach it, and local dev and preview
+  have no Workers Cache at all
+- Every Worker response gets `X-Content-Type-Options: nosniff` and a `frame-ancestors` policy
+  that lets only the site and the Studios' Presentation tool frame it (`app/start.ts`). HSTS
+  comes from the zone
 - Hashed build assets are served as immutable (`public/_headers`)
 - `bun run test:e2e:preview` builds the `preview` environment locally and sends one real
   contact email to Resend's test inbox: workerd runs the bundle `void deploy` uploads, so

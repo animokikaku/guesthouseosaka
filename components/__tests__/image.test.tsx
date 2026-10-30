@@ -58,7 +58,7 @@ describe('Image', () => {
     )
     const img = screen.getByAltText('A')
 
-    // The LQIP sits in an SVG blur filter, sized to the image, as `next/image` draws it.
+    // The LQIP sits in an SVG blur filter, sized to the image.
     expect(img.style.backgroundImage).toContain('feGaussianBlur')
     expect(img.style.backgroundImage).toContain("viewBox='0 0 400 300'")
     expect(img.style.backgroundImage).toContain(lqip)

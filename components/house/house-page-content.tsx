@@ -15,7 +15,8 @@ import { HOUSE_COLORS } from '@/lib/house-theme'
 import type { RoomCounts } from '@/lib/rooms.server'
 import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
 import { cn } from '@/lib/utils'
-import type { HouseQueryResult, HousesTitlesQueryResult } from '@/sanity.types'
+import type { HouseTitles } from '@/lib/types'
+import type { HouseQueryResult } from '@/sanity.types'
 import { useLocale } from 'use-intl'
 
 export function HousePageContent({
@@ -38,7 +39,7 @@ export function HousePageContent({
   houses,
   roomCounts
 }: NonNullable<HouseQueryResult> & {
-  houses: HousesTitlesQueryResult
+  houses: HouseTitles
   roomCounts: RoomCounts | null
 }) {
   const href = galleryLink(useLocale(), slug)

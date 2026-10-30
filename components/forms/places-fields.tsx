@@ -3,7 +3,7 @@ import { HouseIcon } from '@/components/house-icon'
 import type { HouseIdentifier } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
-import type { HousesTitlesQueryResult } from '@/sanity.types'
+import type { HouseTitles } from '@/lib/types'
 
 const placesFieldGroup = defineAppFieldGroup(({ strict }) => ({
   places: strict<HouseIdentifier[]>()
@@ -13,7 +13,7 @@ interface PlacesFieldsProps {
   fields: typeof placesFieldGroup.fields
   label: string
   description?: string
-  houseTitles: HousesTitlesQueryResult
+  houseTitles: HouseTitles
 }
 
 function PlacesFields({ fields, description, label, houseTitles }: PlacesFieldsProps) {

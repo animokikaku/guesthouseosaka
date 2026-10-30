@@ -5,23 +5,23 @@ import { canonicalLink, getCanonicalUrl, openGraphMeta, pageMeta } from '../meta
 describe('getCanonicalUrl', () => {
   // Locales keep their BCP 47 codes internally but are served under lowercase prefixes.
   it.each([
-    ['en', '/', 'https://guesthouseosaka.test/en'],
-    ['ja', '/faq', 'https://guesthouseosaka.test/ja/faq'],
-    ['zh-CN', '/contact', 'https://guesthouseosaka.test/zh-cn/contact']
-  ] as const)('points %s %s at its public URL', (locale, pathname, expected) => {
-    expect(getCanonicalUrl(pathname, locale)).toBe(expected)
+    ['en', '/$locale', 'https://guesthouseosaka.test/en'],
+    ['ja', '/$locale/faq', 'https://guesthouseosaka.test/ja/faq'],
+    ['zh-CN', '/$locale/contact', 'https://guesthouseosaka.test/zh-cn/contact']
+  ] as const)('points %s %s at its public URL', (locale, to, expected) => {
+    expect(getCanonicalUrl({ to }, locale)).toBe(expected)
   })
 
   it('fills in dynamic segments', () => {
     expect(
-      getCanonicalUrl({ pathname: '/[house]/gallery', params: { house: 'lemon' } }, 'zh-TW')
+      getCanonicalUrl({ to: '/$locale/$house/gallery', params: { house: 'lemon' } }, 'zh-TW')
     ).toBe('https://guesthouseosaka.test/zh-tw/lemon/gallery')
   })
 })
 
 describe('canonicalLink', () => {
   it('renders the canonical URL as a head link', () => {
-    expect(canonicalLink({ pathname: '/[house]', params: { house: 'orange' } }, 'zh-CN')).toEqual({
+    expect(canonicalLink({ to: '/$locale/$house', params: { house: 'orange' } }, 'zh-CN')).toEqual({
       rel: 'canonical',
       href: 'https://guesthouseosaka.test/zh-cn/orange'
     })

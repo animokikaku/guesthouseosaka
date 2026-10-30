@@ -10,10 +10,10 @@ import { FormCard } from '@/components/forms/form-card'
 import { useGeneralInquirySchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormConfig } from '@/lib/types/components'
-import type { HousesTitlesQueryResult } from '@/sanity.types'
+import type { HouseTitles } from '@/lib/types'
 
 interface ContactFormProps extends ContactFormConfig {
-  houseTitles: HousesTitlesQueryResult
+  houseTitles: HouseTitles
 }
 
 export function ContactForm({ title, description, fields, houseTitles }: ContactFormProps) {

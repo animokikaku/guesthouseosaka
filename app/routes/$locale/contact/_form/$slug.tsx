@@ -6,7 +6,7 @@ import { canonicalLink } from '@/lib/metadata'
 import { toContactFormConfig } from '@/lib/transforms/form'
 import { isContactType, type ContactType } from '@/lib/types'
 import { getContactType } from '@/sanity/lib/loaders.functions'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, getRouteApi } from '@tanstack/react-router'
 
 const FORM_BY_SLUG = {
   tour: TourForm,
@@ -22,16 +22,19 @@ export const Route = createFileRoute('/$locale/contact/_form/$slug')({
   },
   loader: ({ params: { locale, slug } }) => getContactType({ data: { locale, slug } }),
   head: ({ params: { locale, slug } }) => ({
-    links: [canonicalLink({ pathname: '/contact/[slug]', params: { slug } }, locale)]
+    links: [canonicalLink({ to: '/$locale/contact/$slug', params: { slug } }, locale)]
   }),
   component: ContactTypePage
 })
 
+const localeRoute = getRouteApi('/$locale')
+
 function ContactTypePage() {
   const { slug } = Route.useParams()
-  const { contactType, houseTitles } = Route.useLoaderData()
+  const contactType = Route.useLoaderData()
+  const { houseTitles } = localeRoute.useLoaderData()
 
-  if (!contactType || !houseTitles || houseTitles.length === 0) {
+  if (!contactType || houseTitles.length === 0) {
     return <PageEmptyState />
   }
 
