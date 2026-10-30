@@ -18,7 +18,7 @@ cron trigger is refused even when it reaches shares.house through Tokyo.
 For each house, `lib/rooms-sync/` does the following:
 
 1. Fetch the listing's Japanese page (`https://shares.house/a_detail/q_<id>/`):
-   a 15 s timeout and three attempts, retrying network errors, 408, 425, 429 and
+   a 15 s timeout and three attempts (through `ky`), retrying timeouts, network errors, 408, 425, 429 and
    5xx. Its dates are numeric; the English page's are typed by hand in any
    format.
 2. Parse the "all rooms" (全て) table (`parse.ts`). The column headers are

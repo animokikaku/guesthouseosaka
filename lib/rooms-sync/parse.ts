@@ -3,6 +3,7 @@
  * page has the same table, but its dates are typed by hand in any format
  * (`Nov 11th 2026`, `2027may17`), where the Japanese ones are numeric.
  */
+import { parse, type HTMLElement } from 'node-html-parser'
 import type { Room, RoomStatus } from './room'
 
 /** The page doesn't have the layout this parser expects; nothing in it can be trusted. */
@@ -39,33 +40,18 @@ const HEADERS: [column: number, word: string][] = [
   [COLUMNS.fees, '共益費']
 ]
 
-const ENTITIES: Record<string, string> = {
-  amp: '&',
-  lt: '<',
-  gt: '>',
-  quot: '"',
-  apos: "'",
-  nbsp: ' ',
-  yen: '¥'
-}
-
-/** Cell HTML as plain lines: tags dropped, entities decoded, full-width characters folded (`１９㎡` → `19m2`). */
-function cellLines(html: string): string[] {
-  return html
-    .replace(/<(?:br|hr)\b[^>]*>|<\/p>/gi, '\n')
-    .replace(/<[^>]*>/g, '')
-    .replace(/&(#x[\da-f]+|#\d+|[a-z]+);/gi, (entity, name: string) => {
-      if (name.startsWith('#')) {
-        const code =
-          name[1]?.toLowerCase() === 'x' ? parseInt(name.slice(2), 16) : Number(name.slice(1))
-        return String.fromCodePoint(code)
-      }
-      return ENTITIES[name.toLowerCase()] ?? entity
-    })
+/** A cell as plain lines, split where the page breaks them and with full-width characters folded (`１９㎡` → `19m2`). */
+function cellLines(cell: HTMLElement): string[] {
+  return cell.structuredText
     .normalize('NFKC')
     .split('\n')
     .map((line) => line.replace(/\s+/g, ' ').trim())
     .filter(Boolean)
+}
+
+/** The element's children with the given tag; nested tables keep their own rows and cells. */
+function childrenNamed(element: HTMLElement, tagName: string): HTMLElement[] {
+  return element.children.filter((child) => child.tagName === tagName)
 }
 
 /** Maps a Japanese or English status label to the shared enum, or null for one it doesn't know. */
@@ -106,14 +92,16 @@ function parseArea(text: string, unit: RegExp): number | null {
 /** Every room in the listing's "all rooms" (全て) table, in page order. */
 export function parseListing(html: string, propertyId: string): ParsedRoom[] {
   // The page repeats the vacant rooms in a second panel; only the first has them all.
-  const start = html.indexOf('id="room_vacancy1"')
-  const end = html.indexOf('id="room_vacancy2"', start)
-  if (start === -1 || end === -1) throw new ParseError('Room table not found')
-  const table = html.slice(start, end)
-
-  const headers = [...table.matchAll(/<th\b[^>]*>([\s\S]*?)<\/th>/gi)].map((match) =>
-    cellLines(match[1]).join('').replace(/\s/g, '')
+  const table = parse(html).querySelector('#room_vacancy1 table')
+  if (!table) throw new ParseError('Room table not found')
+  // Parsing adds no <tbody>, but a page that writes one keeps its rows there.
+  const rows = [table, ...childrenNamed(table, 'TBODY')].flatMap((parent) =>
+    childrenNamed(parent, 'TR')
   )
+
+  const headers = rows
+    .flatMap((row) => childrenNamed(row, 'TH'))
+    .map((cell) => cellLines(cell).join('').replace(/\s/g, ''))
   for (const [column, word] of HEADERS) {
     if (!headers[column]?.includes(word)) {
       throw new ParseError(`Column ${column} is "${headers[column]}", expected one with "${word}"`)
@@ -121,10 +109,10 @@ export function parseListing(html: string, propertyId: string): ParsedRoom[] {
   }
 
   const rooms: ParsedRoom[] = []
-  for (const [, row] of table.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
-    if (/<th\b/i.test(row)) continue
+  for (const row of rows) {
+    if (childrenNamed(row, 'TH').length > 0) continue
 
-    const cells = [...row.matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)].map((match) => match[1])
+    const cells = childrenNamed(row, 'TD')
     if (cells.length <= COLUMNS.fees) {
       throw new ParseError(`Row has ${cells.length} cells, expected at least ${COLUMNS.fees + 1}`)
     }

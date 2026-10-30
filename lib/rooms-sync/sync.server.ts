@@ -1,12 +1,24 @@
 import { properties, rooms as roomsTable, syncState } from '@/db/schema'
+import ky, { HTTPError } from 'ky'
 import { and, count, eq, sql, type DrizzleD1Database } from 'void/db'
 import { parseListing, validateRooms } from './parse'
 import { dateInJapan, type Room } from './room'
 
-const TIMEOUT_MS = 15_000
-const ATTEMPTS = 3
-// Worth another try: the server or the network may recover within seconds.
-const RETRYABLE_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504])
+/**
+ * Retries timeouts, network errors and the statuses the server or the network
+ * may recover from within seconds, after 1 s and then 2 s. The timeout applies
+ * to each attempt, and again to reading the body.
+ */
+const listingClient = ky.create({
+  headers: { 'Accept-Language': 'ja', 'User-Agent': 'guesthouseosaka.com room sync' },
+  timeout: 15_000,
+  retry: {
+    limit: 2,
+    statusCodes: [408, 425, 429, 500, 502, 503, 504],
+    retryOnTimeout: true,
+    delay: (attempt) => 1000 * 2 ** (attempt - 1)
+  }
+})
 
 /** A listing whose rooms couldn't be trusted; nothing was written for it. */
 export class SyncError extends Error {
@@ -18,34 +30,29 @@ export function propertyIdOf(url: string): string | null {
   return /\/a_detail\/q_(\d+)\//.exec(new URL(url).pathname)?.[1] ?? null
 }
 
-/** The listing's HTML, retried with backoff on timeouts, network errors and retryable statuses. */
+/** The listing's HTML, retried with backoff by `listingClient`. */
 export async function fetchListing(url: string): Promise<string> {
-  let lastError: unknown
-  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
-    if (attempt > 1) await new Promise((resolve) => setTimeout(resolve, 1000 * 2 ** (attempt - 2)))
-    try {
-      // The timeout also covers reading the body.
-      const response = await fetch(url, {
-        headers: { 'Accept-Language': 'ja', 'User-Agent': 'guesthouseosaka.com room sync' },
-        signal: AbortSignal.timeout(TIMEOUT_MS)
-      })
-      if (response.ok) return await response.text()
-      // shares.house is behind Cloudflare: the ray ID ends with the data center
-      // that answered, and `cf-mitigated: challenge` marks its bot challenge,
-      // which a Worker can't pass, from any other refusal.
-      const details = ['cf-ray', 'cf-mitigated'].flatMap((name) => {
-        const value = response.headers.get(name)
-        return value ? [`${name} ${value}`] : []
-      })
-      lastError = new Error(
-        `HTTP ${response.status}${details.length ? ` (${details.join(', ')})` : ''}`
-      )
-      if (!RETRYABLE_STATUSES.has(response.status)) break
-    } catch (error) {
-      lastError = error
-    }
+  try {
+    return await listingClient.get(url).text()
+  } catch (error) {
+    throw new SyncError(`Failed to fetch ${url}`, { cause: describeHttpError(error) })
   }
-  throw new SyncError(`Failed to fetch ${url}`, { cause: lastError })
+}
+
+/**
+ * shares.house is behind Cloudflare: the ray ID ends with the data center that
+ * answered, and `cf-mitigated: challenge` marks its bot challenge, which a
+ * Worker can't pass, from any other refusal.
+ */
+function describeHttpError(error: unknown) {
+  if (!(error instanceof HTTPError)) return error
+  const details = ['cf-ray', 'cf-mitigated'].flatMap((name) => {
+    const value = error.response.headers.get(name)
+    return value ? [`${name} ${value}`] : []
+  })
+  return new Error(
+    `HTTP ${error.response.status}${details.length ? ` (${details.join(', ')})` : ''}`
+  )
 }
 
 /** The fields of a room the listing gives; a change to any of them moves its `updatedAt`. */
