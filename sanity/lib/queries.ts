@@ -128,8 +128,9 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[language == $locale][0].value, about[language == "en"][0].value),
 
-  // Every gallery image, flattened from the sorted categories, so the mobile
-  // hero carousel can swipe the whole set.
+  // Every gallery image, flattened from the sorted categories: the mobile hero
+  // carousel swipes the whole set, and ImageBlockGallery shows the first five
+  // and counts the rest.
   //
   // The asset filter runs inside the projection, not after it: the consumers
   // drop items that don't resolve to an image, and filtering downstream of a
@@ -138,17 +139,6 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
     _key,
     "image": image{${imageRefFields}}
   }),
-
-  // The five tiles ImageBlockGallery paints above the fold.
-  // Five covers the grid whether or not a featured image is prepended to it.
-  "galleryPreview": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{
-    _key,
-    "image": image{${imageRefFields}}
-  })[0...5],
-
-  // Total behind the five-tile grid, for its "+N" overflow badge. Counts only
-  // items that resolve to a renderable image, matching what the grid drops.
-  "galleryImageCount": count(galleryCategories[].items[defined(image.asset)]),
 
   // Amenities grouped by category (enables per-category drag-and-drop reordering)
   // Filter out empty categories at query level
