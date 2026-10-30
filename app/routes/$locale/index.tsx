@@ -16,7 +16,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/$locale/')({
   loader: ({ params: { locale } }) => getHomePage({ data: { locale } }),
-  head: ({ params: { locale } }) => ({ links: [canonicalLink('/', locale)] }),
+  head: ({ params: { locale } }) => ({ links: [canonicalLink({ to: '/$locale' }, locale)] }),
   component: HomePage
 })
 

@@ -7,7 +7,9 @@ import { ChevronRightIcon } from 'lucide-react'
 const contactLayout = getRouteApi('/$locale/contact')
 
 export const Route = createFileRoute('/$locale/contact/')({
-  head: ({ params: { locale } }) => ({ links: [canonicalLink('/contact', locale)] }),
+  head: ({ params: { locale } }) => ({
+    links: [canonicalLink({ to: '/$locale/contact' }, locale)]
+  }),
   component: ContactPage
 })
 

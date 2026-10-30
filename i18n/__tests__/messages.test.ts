@@ -39,8 +39,9 @@ function placeholders(elements: MessageFormatElement[], found = new Set<string>(
 const source = flatten(load(routing.defaultLocale))
 const translations = routing.locales.filter((locale) => locale !== routing.defaultLocale)
 
-// Translations arrive from Crowdin, so these guard what the code relies on:
-// that every key exists and every message fills in the same values.
+// Translations are written apart from the code (by hand or `eloqnt translate`),
+// so these guard what the code relies on: that every key exists and every
+// message fills in the same values.
 describe.each(translations)('%s messages', (locale) => {
   const messages = flatten(load(locale))
 

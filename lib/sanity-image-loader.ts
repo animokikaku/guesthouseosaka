@@ -1,10 +1,10 @@
 import type { ImageLoader } from '@/components/image'
 
 /**
- * Lets `next/image` build a responsive `srcset` while images keep coming
- * straight from Sanity's CDN instead of the Next optimizer.
+ * Lets `Image` (`components/image.tsx`) build a responsive `srcset` from
+ * Sanity's CDN, which resizes each candidate.
  *
- * Next calls this once per candidate width, so the `w`/`h` already on the
+ * `Image` calls this once per candidate width, so the `w`/`h` already on the
  * source URL only serve to pin the crop aspect ratio — both are recomputed
  * here. `dpr` is dropped on purpose: the candidate widths already encode
  * device pixel ratio, and keeping it would double every request.

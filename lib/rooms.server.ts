@@ -1,4 +1,5 @@
 import { properties, rooms } from '@/db/schema'
+import { dateInJapan } from '@/lib/rooms-sync/room'
 import type { HouseIdentifier } from '@/lib/types'
 import { and, db, eq, sql } from 'void/db'
 
@@ -15,10 +16,6 @@ export const PROPERTY_IDS: Record<HouseIdentifier, string> = {
 // The sync runs every hour; past this, its counts are too old to show.
 const MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000
 
-function todayInJapan() {
-  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
-}
-
 export interface RoomCounts {
   available: number
   upcoming: number
@@ -32,7 +29,7 @@ export interface RoomCounts {
 export async function getRoomCounts(house: HouseIdentifier): Promise<RoomCounts | null> {
   try {
     // An upcoming room whose date has come counts as available, by Japan's date.
-    const today = todayInJapan()
+    const today = dateInJapan()
     const [row] = await db
       .select({
         checkedAt: properties.checkedAt,

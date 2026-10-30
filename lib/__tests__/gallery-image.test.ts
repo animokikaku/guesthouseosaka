@@ -24,7 +24,7 @@ describe('toGalleryImageProps', () => {
     expect(toGalleryImageProps(createSanityImage({ asset: null }), { width: 400 })).toBeNull()
   })
 
-  it('crops to the requested size and keeps the dimensions for next/image', () => {
+  it('crops to the requested size and keeps the dimensions for Image', () => {
     const image = createSanityImage({ alt: 'Kitchen' })
 
     const props = toGalleryImageProps(image, { width: 560, height: 400 })
@@ -97,7 +97,7 @@ describe('toGalleryLightboxItem', () => {
     expect(resizeOf(lightboxItem?.thumb)).toEqual({ w: '56', h: '56', fit: 'crop' })
   })
 
-  // The blur belongs on the trigger, not the lightbox image: next/image paints
+  // The blur belongs on the trigger, not the lightbox image: `Image` paints
   // the LQIP as an inline background that would cover ramka's thumbnail bridge.
   it('carries no blur placeholder, even when the image has a preview', () => {
     const image = createSanityImage()

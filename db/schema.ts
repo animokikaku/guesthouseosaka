@@ -1,5 +1,5 @@
-// The rooms synced from shares.house (see docs/rooms.md). The site reads them
-// through `db` from `void/db`; the sync writes them with raw D1 statements.
+// The rooms synced from shares.house (see docs/rooms.md), read and written
+// through `db` from `void/db`.
 // Must match db/migrations, which create every table `STRICT` (Drizzle can't
 // express it).
 import { sql } from 'void/db'

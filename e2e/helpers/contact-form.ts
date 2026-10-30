@@ -8,7 +8,7 @@ import { isHydrated } from './navigation'
  * Inputs are addressed by type and autocomplete attribute rather than by their
  * label, which keeps them stable as the copy changes.
  */
-export function getAccountFields(form: Locator) {
+function getAccountFields(form: Locator) {
   return {
     ageField: form.locator('input[type="number"]'),
     checkbox: form.getByRole('checkbox'),

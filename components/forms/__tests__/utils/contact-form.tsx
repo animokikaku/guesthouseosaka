@@ -4,7 +4,7 @@ import type { TourForm } from '@/components/forms/tour-form'
 import { LegalNoticeProvider } from '@/components/legal-notice-context'
 import { Toaster } from '@/components/ui/toast'
 import type { ContactFormConfig } from '@/lib/types/components'
-import type { HousesTitlesQueryResult } from '@/sanity.types'
+import type { HouseTitles } from '@/lib/types'
 import { fireEvent, render, screen } from '@testing-library/react'
 
 /**
@@ -12,7 +12,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
  * rendering the real forms is the slowest thing the unit suite does.
  */
 
-const houseTitles: HousesTitlesQueryResult = [
+const houseTitles: HouseTitles = [
   { slug: 'orange', title: 'Orange House' },
   { slug: 'apple', title: 'Apple House' },
   { slug: 'lemon', title: 'Lemon House' }

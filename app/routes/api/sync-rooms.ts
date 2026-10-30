@@ -15,7 +15,8 @@ import { HouseIdentifierValues, type HouseIdentifier } from '@/lib/types'
 import { client } from '@/sanity/lib/client'
 import { urlSearchParamPreviewSecret, validatePreviewUrl } from '@sanity/preview-url-secret'
 import { createFileRoute } from '@tanstack/react-router'
-import { cache, env, waitUntil } from 'cloudflare:workers'
+import { cache, waitUntil } from 'cloudflare:workers'
+import { db } from 'void/db'
 
 const NO_STORE = { 'Cache-Control': 'no-store' }
 
@@ -24,6 +25,10 @@ const STUDIO_ORIGINS = new Set([
   ...Object.values(SANITY_STUDIO_HOSTS).map((host) => `https://${host}.sanity.studio`),
   'http://localhost:3333'
 ])
+
+// Preview secrets are base64url, 43 characters today; the bound leaves room.
+const MAX_SECRET_LENGTH = 128
+const PREVIEW_SECRET = /^[\w-]+$/
 
 type Result =
   | {
@@ -55,7 +60,7 @@ async function syncAll(force: boolean): Promise<Result[]> {
     const url = `https://shares.house/a_detail/q_${id}/`
     const startedAt = Date.now()
     try {
-      const result = await syncListing(env.ROOMS_DB, url, { force })
+      const result = await syncListing(db, url, { force })
       log('info', 'listing_synced', { url, ...result, durationMs: Date.now() - startedAt })
       results.push({ house, url, ok: true, ...result })
     } catch (error) {
@@ -78,7 +83,7 @@ async function syncAll(force: boolean): Promise<Result[]> {
 async function purgeIfNeeded(): Promise<'purged' | 'skipped' | 'failed'> {
   const now = new Date().toISOString()
   // Purges when it can't tell.
-  const needed = await needsPurge(env.ROOMS_DB, now).catch((error: unknown) => {
+  const needed = await needsPurge(db, now).catch((error: unknown) => {
     log('error', 'purge_check_failed', { error: describe(error) })
     return true
   })
@@ -95,7 +100,7 @@ async function purgeIfNeeded(): Promise<'purged' | 'skipped' | 'failed'> {
     }
   }
   // Unrecorded, the purge is only tried again.
-  await recordPurge(env.ROOMS_DB, now).catch((error: unknown) =>
+  await recordPurge(db, now).catch((error: unknown) =>
     log('error', 'purge_record_failed', { error: describe(error) })
   )
   log('info', 'site_purged', {})
@@ -116,8 +121,12 @@ async function run(force: boolean) {
  */
 async function isAuthorized(request: Request) {
   if (await hasBearerToken(request, serverEnv.SYNC_TOKEN)) return true
+  // Checked before reading the body or asking Sanity, so a stranger's request
+  // costs neither. A browser always sends a string body's length.
+  const length = Number(request.headers.get('Content-Length'))
+  if (!(length > 0 && length <= MAX_SECRET_LENGTH)) return false
   const secret = (await request.text()).trim()
-  if (!secret || secret.length > 256) return false
+  if (!PREVIEW_SECRET.test(secret)) return false
   const url = new URL(request.url)
   url.searchParams.set(urlSearchParamPreviewSecret, secret)
   const { isValid } = await validatePreviewUrl(

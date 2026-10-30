@@ -4,9 +4,9 @@ import { preload as preloadResource } from 'react-dom'
 /** Builds the URL of one `srcset` candidate. */
 export type ImageLoader = (options: { src: string; width: number; quality?: number }) => string
 
-// The widths `next.config.ts` configured: layout widths for `sizes`-driven
-// images, plus small fixed sizes. 16 and 32 went unused (the smallest images are
-// 40–56px icons); 192 fills the 128→256 gap small gallery-wall tiles fell into at 1x.
+// Layout widths for `sizes`-driven images, plus small fixed sizes. The smallest
+// images are 40–56px icons; 192 fills the 128→256 gap small gallery-wall tiles
+// fell into at 1x.
 const DEVICE_SIZES = [480, 640, 750, 828, 1080, 1200, 1600]
 const ALL_SIZES = [64, 128, 192, 256, 384, ...DEVICE_SIZES]
 
@@ -27,8 +27,8 @@ export type ImageProps = Omit<ComponentProps<'img'>, 'src' | 'width' | 'height' 
 }
 
 /**
- * Responsive candidates as `next/image` chose them: every configured width when
- * `sizes` describes a layout, else the 1x and 2x of a fixed width.
+ * Responsive candidates: every configured width when `sizes` describes a
+ * layout, else the 1x and 2x of a fixed width.
  */
 function candidateWidths(width: number | undefined, sizes: string | undefined) {
   if (sizes) {
@@ -46,9 +46,9 @@ function candidateWidths(width: number | undefined, sizes: string | undefined) {
 }
 
 /**
- * The LQIP blurred as `next/image` paints it: an SVG Gaussian blur whose alpha
- * is then made opaque, so the edges don't fade to transparent. With intrinsic
- * dimensions the SVG stretches to them; for `fill`, it follows `object-fit`.
+ * The LQIP, blurred: an SVG Gaussian blur whose alpha is then made opaque, so
+ * the edges don't fade to transparent. With intrinsic dimensions the SVG
+ * stretches to them; for `fill`, it follows `object-fit`.
  */
 function blurPlaceholder(
   blurDataURL: string,
@@ -68,7 +68,7 @@ function blurPlaceholder(
   return `url("data:image/svg+xml;charset=utf-8,${svg}")`
 }
 
-/** `object-fit` as a background size; `fill` and unset values cover, as in `next/image`. */
+/** `object-fit` as a background size; `fill` and unset values cover. */
 function backgroundSize(objectFit: CSSProperties['objectFit']) {
   if (objectFit === 'fill') return '100% 100%'
   return objectFit && !['-moz-initial', 'none', 'scale-down'].includes(objectFit)
@@ -77,10 +77,10 @@ function backgroundSize(objectFit: CSSProperties['objectFit']) {
 }
 
 /**
- * `<img>` with the parts of `next/image` this site relies on: a `srcset` built
- * by a `loader` (images then come straight from their CDN, resized there),
- * `fill`, a blurred placeholder until load, and lazy loading by default.
- * Without a loader, or for an inline source, the source is used as-is.
+ * `<img>` with what this site needs on top: a `srcset` built by a `loader`
+ * (images then come straight from their CDN, resized there), `fill`, a blurred
+ * placeholder until load, and lazy loading by default. Without a loader, or for
+ * an inline source, the source is used as-is.
  */
 export function Image({
   src,
@@ -105,7 +105,7 @@ export function Image({
 
   let srcSet: string | undefined
   let resolvedSrc = src
-  // Inline sources have nothing to resize, as `next/image` treated them.
+  // Inline sources have nothing to resize.
   if (loader && !/^(?:data|blob):/.test(src)) {
     const { widths, descriptor } = candidateWidths(width, sizes)
     srcSet = widths
@@ -128,7 +128,7 @@ export function Image({
   }
 
   const showBlur = placeholder === 'blur' && blurDataURL && !loaded
-  // Keeps the placeholder until the image can paint, as `next/image` does.
+  // Keeps the placeholder until the image can paint.
   const removeBlurOnceDecoded = (img: HTMLImageElement) => {
     img.decode().then(
       () => setLoaded(true),

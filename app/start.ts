@@ -5,7 +5,7 @@ import { negotiateLocale, resolveLegacyRedirect } from '@/lib/redirects'
 import { createCsrfMiddleware, createMiddleware, createStart } from '@tanstack/react-start'
 import { getCookie } from '@tanstack/react-start/server'
 
-/** A redirect with a relative `Location`, as Next sent them. */
+/** A redirect with a relative `Location`, which keeps whichever host served the request. */
 function redirectTo(url: URL, pathname: string, status: 307 | 308) {
   return new Response(null, { status, headers: { Location: pathname + url.search } })
 }
@@ -14,7 +14,7 @@ function redirectTo(url: URL, pathname: string, status: 307 | 308) {
  * Sends `/studio` to the hosted Studio editing this build's dataset. The
  * Studio is served from its host's root, so the embedded Studio's deep links
  * (`/studio/structure/faq`) carry over without the prefix. Robots are kept out
- * (see `app/robots.ts`).
+ * (see `lib/robots.ts`).
  */
 function redirectToStudio(url: URL) {
   const dataset = env.VITE_SANITY_DATASET
@@ -34,14 +34,17 @@ function redirectToStudio(url: URL) {
   })
 }
 
-/** Paths the locale prefix never applies to: endpoints and files. */
+/**
+ * Paths the locale prefix never applies to: endpoints (`/api/…`, server
+ * functions under `/_serverFn/…`, Vite's `/@…` in dev) and files.
+ */
 function isUnlocalized(pathname: string) {
-  return /^\/(?:api|_|@)/.test(pathname) || pathname.split('/').at(-1)?.includes('.')
+  return /^\/(?:api(?:\/|$)|_|@)/.test(pathname) || pathname.split('/').at(-1)?.includes('.')
 }
 
 /**
- * Answers legacy URLs and unprefixed paths with a redirect before routing,
- * as `next.config.ts` redirects and next-intl's middleware did.
+ * Answers legacy URLs, trailing slashes, `/studio` and unprefixed paths with a
+ * redirect before routing; an unprefixed path goes to the visitor's language.
  */
 const routingMiddleware = createMiddleware().server(({ request, next }) => {
   const url = new URL(request.url)
@@ -78,17 +81,34 @@ const routingMiddleware = createMiddleware().server(({ request, next }) => {
   return negotiated
 })
 
-const testProxyMiddleware = createMiddleware().server(async ({ request, next }) => {
-  if (!__E2E_TEST_PROXY__) return next()
+/**
+ * What the zone's HSTS leaves out: no MIME sniffing, and only the site itself
+ * and the Studios' Presentation tool (hosted, in the Sanity dashboard, or
+ * `sanity dev`) may frame its pages. Browsers already default to the
+ * `strict-origin-when-cross-origin` referrer policy.
+ */
+const SECURITY_HEADERS = {
+  'X-Content-Type-Options': 'nosniff',
+  'Content-Security-Policy': `frame-ancestors ${[
+    "'self'",
+    ...Object.values(SANITY_STUDIO_HOSTS).map((host) => `https://${host}.sanity.studio`),
+    'https://www.sanity.io',
+    'http://localhost:3333'
+  ].join(' ')}`
+}
 
-  const { withTestProxy } = await import('@/lib/test-proxy.server')
-  return withTestProxy(request, next)
+const securityHeadersMiddleware = createMiddleware().server(async ({ next }) => {
+  const { response } = await next()
+  // A copy, since a response passed through from `fetch` has immutable headers.
+  const secured = new Response(response.body, response)
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) secured.headers.set(name, value)
+  return secured
 })
 
 export const startInstance = createStart(() => ({
   requestMiddleware: [
+    securityHeadersMiddleware,
     createCsrfMiddleware({ filter: (ctx) => ctx.handlerType === 'serverFn' }),
-    routingMiddleware,
-    testProxyMiddleware
+    routingMiddleware
   ]
 }))

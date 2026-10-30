@@ -11,6 +11,9 @@ export function isHouseIdentifier(value: unknown): value is HouseIdentifier {
 export const ContactTypeValues = ['tour', 'move-in', 'other'] as const
 export type ContactType = (typeof ContactTypeValues)[number]
 
+/** The houses' titles in the page's locale, in their navigation order (see the locale layout's loader). */
+export type HouseTitles = Array<{ slug: HouseIdentifier; title: string | null }>
+
 export function isContactType(value: unknown): value is ContactType {
   return typeof value === 'string' && ContactTypeValues.some((type) => type === value)
 }

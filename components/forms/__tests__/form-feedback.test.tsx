@@ -43,6 +43,21 @@ describe('form validation and feedback', () => {
     expect(email).toHaveAccessibleDescription(/^We reply to this address\. \S/)
   })
 
+  it('clears a field’s error once it is corrected, leaving the others', async () => {
+    renderForm(ContactForm)
+
+    setInput('Email', 'jo@')
+    submitIncomplete()
+
+    const email = screen.getByLabelText('Email')
+    await waitFor(() => expect(email).toHaveAttribute('aria-invalid', 'true'))
+
+    setInput('Email', 'someone@example.com')
+
+    await waitFor(() => expect(email).toHaveAttribute('aria-invalid', 'false'))
+    expect(screen.getByLabelText('Name')).toHaveAttribute('aria-invalid', 'true')
+  })
+
   it('marks the message optional only where it is', () => {
     const { unmount } = renderForm(TourForm)
     expect(screen.getByRole('textbox', { name: /^Message \(optional\)$/ })).toBeInTheDocument()

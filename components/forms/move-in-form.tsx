@@ -11,11 +11,11 @@ import { useMoveInFormSchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormFields } from '@/lib/schemas/contact-form'
 import type { ContactFormConfig } from '@/lib/types/components'
-import type { HousesTitlesQueryResult } from '@/sanity.types'
+import type { HouseTitles } from '@/lib/types'
 import { useTranslations } from 'use-intl'
 
 interface MoveInFormProps extends ContactFormConfig {
-  houseTitles: HousesTitlesQueryResult
+  houseTitles: HouseTitles
 }
 
 export function MoveInForm({ title, description, fields, houseTitles }: MoveInFormProps) {

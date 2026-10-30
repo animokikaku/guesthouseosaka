@@ -49,6 +49,7 @@ export const Route = createFileRoute('/$locale')({
     ])
     return { messages, ...layout }
   },
+  // The page's `Cache-Tag` adds up from its loaders' (see `setCacheHeaders`).
   headers: ({ loaderData }) => cacheHeaders(loaderData?.isDraftMode ?? false),
   head: ({ loaderData, params: { locale } }) => {
     const settings = stegaClean(loaderData?.settings)
@@ -82,7 +83,7 @@ export const Route = createFileRoute('/$locale')({
       ],
       links: [
         // The body font, requested with the HTML rather than once the CSS is
-        // parsed, as `next/font` did. Other subsets load on demand.
+        // parsed. Other subsets load on demand.
         { rel: 'preload', href: geistLatin, as: 'font', type: 'font/woff2', crossOrigin: '' },
         { rel: 'author', href: 'https://thibaultvieux.com' },
         { rel: 'icon', href: '/favicon.ico' },

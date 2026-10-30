@@ -14,7 +14,7 @@ export const Route = createFileRoute('/$locale/$house/gallery')({
   loader: ({ params: { locale, house } }) => getHouseGallery({ data: { locale, house } }),
   head: ({ loaderData, matches, params: { locale, house } }) => ({
     meta: houseHeadMeta({ locale, house, data: loaderData, matches }),
-    links: [canonicalLink({ pathname: '/[house]/gallery', params: { house } }, locale)]
+    links: [canonicalLink({ to: '/$locale/$house/gallery', params: { house } }, locale)]
   }),
   component: GalleryPage
 })

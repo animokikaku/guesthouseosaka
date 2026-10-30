@@ -1,12 +1,12 @@
 // @vitest-environment node
 
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
-import sitemap from '../sitemap'
+import { sitemapEntries, sitemapXml } from '../sitemap'
 
 const ORIGIN = 'https://guesthouseosaka.test'
 
 describe('sitemap', () => {
-  const entries = sitemap()
+  const entries = sitemapEntries()
   const urls = entries.map((entry) => entry.url.replace(ORIGIN, ''))
 
   it('lists every public page once, under the default locale', () => {
@@ -26,12 +26,18 @@ describe('sitemap', () => {
   it('points each page at its translation in every locale', () => {
     const house = entries.find((entry) => entry.url === `${ORIGIN}/en/orange`)
 
-    expect(house?.alternates?.languages).toEqual({
+    expect(house?.alternates).toEqual({
       en: `${ORIGIN}/en/orange`,
       ja: `${ORIGIN}/ja/orange`,
       fr: `${ORIGIN}/fr/orange`,
       'zh-CN': `${ORIGIN}/zh-cn/orange`,
       'zh-TW': `${ORIGIN}/zh-tw/orange`
     })
+  })
+
+  it('renders each page with its alternates, escaped', () => {
+    expect(sitemapXml()).toContain(
+      `<url>\n<loc>${ORIGIN}/en/faq</loc>\n<xhtml:link rel="alternate" hreflang="en" href="${ORIGIN}/en/faq" />`
+    )
   })
 })

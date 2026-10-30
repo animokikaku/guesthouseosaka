@@ -2,7 +2,7 @@ import { PageNavTabs, pageNavTabClass } from '@/components/page-nav'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
-import type { HousesTitlesQueryResult } from '@/sanity.types'
+import type { HouseTitles } from '@/lib/types'
 import { stegaClean } from '@sanity/client/stega'
 import { Link, useParams } from '@tanstack/react-router'
 import { useLocale } from 'use-intl'
@@ -11,7 +11,7 @@ export function HousesNav({
   houses,
   ...props
 }: React.ComponentProps<'div'> & {
-  houses: HousesTitlesQueryResult
+  houses: HouseTitles
 }) {
   const isMobile = useIsMobile()
   const locale = useLocale()

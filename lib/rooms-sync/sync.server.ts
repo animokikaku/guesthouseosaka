@@ -1,5 +1,7 @@
+import { properties, rooms as roomsTable, syncState } from '@/db/schema'
+import { and, count, eq, sql, type DrizzleD1Database } from 'void/db'
 import { parseListing, validateRooms } from './parse'
-import type { Room } from './room'
+import { dateInJapan, type Room } from './room'
 
 const TIMEOUT_MS = 15_000
 const ATTEMPTS = 3
@@ -46,38 +48,20 @@ export async function fetchListing(url: string): Promise<string> {
   throw new SyncError(`Failed to fetch ${url}`, { cause: lastError })
 }
 
-// Rewrites a room only when a field differs, so `updated_at` dates real changes.
-// `IS NOT` compares nulls as values.
-const UPSERT_ROOM = `
-  INSERT INTO rooms (property_id, room_number, status, available_from, area_m2, area_tatami, rent, deposit, common_fee, listed, updated_at)
-  VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, 1, ?10)
-  ON CONFLICT (property_id, room_number) DO UPDATE SET
-    status = excluded.status,
-    available_from = excluded.available_from,
-    area_m2 = excluded.area_m2,
-    area_tatami = excluded.area_tatami,
-    rent = excluded.rent,
-    deposit = excluded.deposit,
-    common_fee = excluded.common_fee,
-    listed = 1,
-    updated_at = excluded.updated_at
-  WHERE rooms.status IS NOT excluded.status
-    OR rooms.available_from IS NOT excluded.available_from
-    OR rooms.area_m2 IS NOT excluded.area_m2
-    OR rooms.area_tatami IS NOT excluded.area_tatami
-    OR rooms.rent IS NOT excluded.rent
-    OR rooms.deposit IS NOT excluded.deposit
-    OR rooms.common_fee IS NOT excluded.common_fee
-    OR rooms.listed = 0`
+/** The fields of a room the listing gives; a change to any of them moves its `updatedAt`. */
+const ROOM_FIELDS = [
+  'status',
+  'availableFrom',
+  'areaM2',
+  'areaTatami',
+  'rent',
+  'deposit',
+  'commonFee'
+] as const satisfies (keyof Room)[]
 
-const UNLIST_MISSING_ROOMS = `
-  UPDATE rooms SET listed = 0, updated_at = ?3
-  WHERE property_id = ?1 AND listed = 1
-    AND room_number NOT IN (SELECT value FROM json_each(?2))`
-
-const TOUCH_PROPERTY = `
-  INSERT INTO properties (property_id, url, checked_at) VALUES (?1, ?2, ?3)
-  ON CONFLICT (property_id) DO UPDATE SET url = excluded.url, checked_at = excluded.checked_at`
+/** `excluded.<column>`: the value an upsert tried to insert. */
+const excluded = (column: (typeof roomsTable)[(typeof ROOM_FIELDS)[number]]) =>
+  sql.raw(`excluded.${column.name}`)
 
 /**
  * Writes a listing's validated rooms in one transaction and unlists the rooms
@@ -86,51 +70,69 @@ const TOUCH_PROPERTY = `
  * @returns how many rooms changed.
  */
 export async function writeRooms(
-  db: D1Database,
+  db: DrizzleD1Database,
   url: string,
   propertyId: string,
   rooms: Room[],
   { now, force = false }: { now: string; force?: boolean }
 ) {
-  const listed = await db
-    .prepare('SELECT COUNT(*) AS count FROM rooms WHERE property_id = ? AND listed = 1')
-    .bind(propertyId)
-    .first<{ count: number }>()
+  const isListed = and(eq(roomsTable.propertyId, propertyId), eq(roomsTable.listed, 1))
+  const [listed] = await db.select({ count: count() }).from(roomsTable).where(isListed)
   if (!force && rooms.length * 2 < (listed?.count ?? 0)) {
     throw new SyncError(
       `Found ${rooms.length} rooms where ${listed?.count} are listed; sync with ?force=1 if the listing shrank`
     )
   }
 
-  const results = await db.batch([
+  const changed = { roomNumber: roomsTable.roomNumber }
+  const [, ...results] = await db.batch([
+    db
+      .insert(properties)
+      .values({ propertyId, url, checkedAt: now })
+      .onConflictDoUpdate({ target: properties.propertyId, set: { url, checkedAt: now } }),
+    // Unlists the rooms the page no longer shows, keeping their last known state.
+    db
+      .update(roomsTable)
+      .set({ listed: 0, updatedAt: now })
+      .where(
+        and(
+          isListed,
+          sql`${roomsTable.roomNumber} NOT IN (SELECT value FROM json_each(${JSON.stringify(rooms.map((room) => room.roomNumber))}))`
+        )
+      )
+      .returning(changed),
+    // Rewrites a room only when a field differs, so `updatedAt` dates real
+    // changes. `IS NOT` compares nulls as values.
     ...rooms.map((room) =>
       db
-        .prepare(UPSERT_ROOM)
-        .bind(
-          propertyId,
-          room.roomNumber,
-          room.status,
-          room.availableFrom,
-          room.areaM2,
-          room.areaTatami,
-          room.rent,
-          room.deposit,
-          room.commonFee,
-          now
-        )
-    ),
-    db
-      .prepare(UNLIST_MISSING_ROOMS)
-      .bind(propertyId, JSON.stringify(rooms.map((room) => room.roomNumber)), now),
-    db.prepare(TOUCH_PROPERTY).bind(propertyId, url, now)
+        .insert(roomsTable)
+        .values({ ...room, propertyId, listed: 1, updatedAt: now })
+        .onConflictDoUpdate({
+          target: [roomsTable.propertyId, roomsTable.roomNumber],
+          set: {
+            ...Object.fromEntries(ROOM_FIELDS.map((field) => [field, excluded(roomsTable[field])])),
+            listed: 1,
+            updatedAt: now
+          },
+          setWhere: sql.join(
+            [
+              ...ROOM_FIELDS.map(
+                (field) => sql`${roomsTable[field]} IS NOT ${excluded(roomsTable[field])}`
+              ),
+              sql`${roomsTable.listed} = 0`
+            ],
+            sql` OR `
+          )
+        })
+        .returning(changed)
+    )
   ])
-  // Every statement but the last touches rooms.
-  return results.slice(0, -1).reduce((changed, result) => changed + result.meta.changes, 0)
+  return results.reduce((total, rows) => total + rows.length, 0)
 }
 
 /** Fetches, parses, validates and stores one listing; throws `SyncError` without writing when any step fails. */
 export async function syncListing(
-  db: D1Database,
+  db: DrizzleD1Database,
   url: string,
   { now = new Date().toISOString(), force = false }: { now?: string; force?: boolean } = {}
 ) {
@@ -151,23 +153,20 @@ export async function syncListing(
   return { propertyId, rooms: rooms.length, changed }
 }
 
-/** The date in Japan, `YYYY-MM-DD`, at an ISO timestamp. */
-function dateInJapan(timestamp: string) {
-  return new Date(Date.parse(timestamp) + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
-}
-
 /**
  * Whether the cached pages that show rooms are out of date at `now`: never
  * purged, a room changed since the last purge (a failed purge isn't recorded,
  * so the next run retries it), or the last purge was on an earlier day in
  * Japan, where an upcoming room may since have become available.
  */
-export async function needsPurge(db: D1Database, now: string) {
-  const state = await db
-    .prepare(
-      'SELECT purged_at AS purgedAt, (SELECT MAX(updated_at) FROM rooms) AS changedAt FROM sync_state WHERE id = 1'
-    )
-    .first<{ purgedAt: string; changedAt: string | null }>()
+export async function needsPurge(db: DrizzleD1Database, now: string) {
+  const [state] = await db
+    .select({
+      purgedAt: syncState.purgedAt,
+      changedAt: sql<string | null>`(SELECT MAX(${roomsTable.updatedAt}) FROM ${roomsTable})`
+    })
+    .from(syncState)
+    .where(eq(syncState.id, 1))
   if (!state) return true
   return (
     (state.changedAt !== null && state.changedAt > state.purgedAt) ||
@@ -176,11 +175,9 @@ export async function needsPurge(db: D1Database, now: string) {
 }
 
 /** Records a purge that succeeded, taken at `at`: after the rooms it covers were written. */
-export async function recordPurge(db: D1Database, at: string) {
+export async function recordPurge(db: DrizzleD1Database, at: string) {
   await db
-    .prepare(
-      'INSERT INTO sync_state (id, purged_at) VALUES (1, ?1) ON CONFLICT (id) DO UPDATE SET purged_at = excluded.purged_at'
-    )
-    .bind(at)
-    .run()
+    .insert(syncState)
+    .values({ id: 1, purgedAt: at })
+    .onConflictDoUpdate({ target: syncState.id, set: { purgedAt: at } })
 }

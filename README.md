@@ -54,15 +54,17 @@ app/
       $house/         # House pages and galleries
       contact/        # Contact forms
       faq.tsx         # FAQ page
-    api/              # Draft mode
+    api/              # Draft mode, publish webhook, room sync
   actions/            # Server functions (contact form)
-  start.ts            # Request middleware (redirects, /studio)
+  start.ts            # Request middleware (security headers, redirects, /studio)
 
 components/           # UI, forms, gallery, house and map components
-lib/                  # Config, environment, metadata and helpers
+lib/                  # Config, environment, metadata, room sync and helpers
 sanity/
   schemaTypes/        # Document and object schemas
-  lib/                # GROQ queries and utilities
+  lib/                # GROQ queries, loaders and draft mode
+db/                   # Rooms database schema and migrations (D1)
+aws/                  # Hourly room sync schedule (CloudFormation)
 messages/             # Translations (en, ja, fr, zh-CN, zh-TW)
 ```
 

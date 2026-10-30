@@ -1,7 +1,13 @@
-import { cacheHeaders, SANITY_CACHE_TAG } from '@/lib/cache-control'
+import {
+  cacheHeaders,
+  cacheTags,
+  mergeCacheTags,
+  SANITY_CACHE_TAG,
+  sanityTypeTag
+} from '@/lib/cache-control'
 import { env as serverEnv } from '@/env'
 import type { QueryParams } from '@sanity/client'
-import { setResponseHeaders } from '@tanstack/react-start/server'
+import { getResponseHeader, setResponseHeaders } from '@tanstack/react-start/server'
 import { cache } from 'cloudflare:workers'
 import { client } from './client'
 import { getDraftPerspective, isDraftModeEnabled } from './draft-mode.server'
@@ -17,8 +23,7 @@ const draftClient = () =>
 
 /**
  * Runs a GROQ query for the current request: published content normally, the
- * selected drafts or releases with stega encoding in draft mode, as
- * `sanityFetch` from `next-sanity/live` did.
+ * selected drafts or releases with stega encoding in draft mode.
  */
 export async function sanityFetch<const QueryString extends string>({
   query,
@@ -36,16 +41,26 @@ export async function sanityFetch<const QueryString extends string>({
   return { data }
 }
 
-/** Sets {@link cacheHeaders} on a server function's response. */
-export function setCacheHeaders(extraTags?: string[]) {
-  setResponseHeaders(new Headers(cacheHeaders(isDraftModeEnabled(), extraTags)))
+/**
+ * Sets {@link cacheHeaders} on a server function's response, tagged with the
+ * document `types` it reads. While a page renders, its loaders' server
+ * functions share the page's response, so their tags add up: the page is
+ * purged whenever any of its data is.
+ */
+export function setCacheHeaders(types: readonly string[], extraTags?: readonly string[]) {
+  const headers = cacheHeaders(isDraftModeEnabled(), cacheTags(types, extraTags))
+  if (headers['Cache-Tag']) {
+    headers['Cache-Tag'] = mergeCacheTags(getResponseHeader('Cache-Tag'), headers['Cache-Tag'])
+  }
+  setResponseHeaders(new Headers(headers))
 }
 
 /**
- * Drops every page and server-function response Workers Cache holds from
- * published content, everywhere, so the next request renders fresh. Async so
- * that a runtime without Workers Cache rejects rather than throwing.
+ * Drops the page and server-function responses Workers Cache holds that read
+ * documents of `types`, everywhere, so the next request renders fresh; every
+ * published response without `types`. Async so that a runtime without Workers
+ * Cache rejects rather than throwing.
  */
-export async function purgePublishedResponses() {
-  return cache.purge({ tags: [SANITY_CACHE_TAG] })
+export async function purgePublishedResponses(types?: readonly string[]) {
+  return cache.purge({ tags: types ? types.map(sanityTypeTag) : [SANITY_CACHE_TAG] })
 }

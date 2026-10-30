@@ -6,8 +6,8 @@ export function getRouter() {
   return createRouter({
     routeTree,
     scrollRestoration: true,
-    // Hovering or focusing a link loads its route's code and data, as Next's
-    // `prefetch` did; client navigations then reuse that data for a minute.
+    // Hovering or focusing a link loads its route's code and data; client
+    // navigations then reuse that data for a minute.
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 60_000,
     defaultStaleTime: 60_000,
@@ -16,7 +16,7 @@ export function getRouter() {
     defaultViewTransition: true,
     // A reload or shared link of a masked gallery modal opens the full page.
     unmaskOnReload: true,
-    // Rendered inside the locale layout, like Next's `[locale]/error.tsx`.
+    // Rendered inside the locale layout, which keeps the header and translations.
     defaultErrorComponent: ({ reset }) => <ErrorPage reset={reset} />
   })
 }
