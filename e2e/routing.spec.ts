@@ -13,7 +13,6 @@ const redirects = [
   ['/en/banana', '/en'],
   ['/ja/melon/gallery', '/ja'],
   ['/en/blog', '/en'],
-  ['/en/wp-content/uploads/photo.jpg', '/en'],
   ['/en/reservation', '/en/contact']
 ] as const
 
@@ -57,7 +56,14 @@ test.describe('studio', () => {
 })
 
 test.describe('missing pages', () => {
-  for (const path of ['/en/pear', '/en/pear/gallery', '/en/contact/visit', '/fr/no-such-page']) {
+  // The old WordPress blog is gone rather than redirected (see lib/redirects.ts).
+  for (const path of [
+    '/en/pear',
+    '/en/pear/gallery',
+    '/en/contact/visit',
+    '/fr/no-such-page',
+    '/en/column/old-post'
+  ]) {
     test(`${path} answers 404 with the localized not-found page`, async ({ page }) => {
       const response = await page.goto(path)
 

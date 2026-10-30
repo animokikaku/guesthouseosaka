@@ -17,7 +17,6 @@ describe('resolveLegacyRedirect', () => {
     ['/en/banana', '/en'],
     ['/ja/melon/gallery', '/ja'],
     ['/en/blog', '/en'],
-    ['/en/wp-content/uploads/photo.jpg', '/en'],
     ['/en/reservation', '/en/contact'],
     ['/zh-cn/contact-us', '/zh-cn/contact']
   ])('sends %s to %s', (from, to) => {
@@ -25,12 +24,17 @@ describe('resolveLegacyRedirect', () => {
   })
 
   // Only whole segments match, and current pages are left alone.
-  it.each(['/en', '/en/orange', '/en/orange/gallery', '/en/contact', '/japan', '/en/blogger'])(
-    'leaves %s alone',
-    (pathname) => {
-      expect(resolveLegacyRedirect(pathname)).toBeUndefined()
-    }
-  )
+  it.each([
+    '/en',
+    '/en/orange',
+    '/en/orange/gallery',
+    '/en/contact',
+    '/japan',
+    '/en/blogger',
+    '/en/column/old-post'
+  ])('leaves %s alone', (pathname) => {
+    expect(resolveLegacyRedirect(pathname)).toBeUndefined()
+  })
 })
 
 describe('negotiateLocale', () => {
