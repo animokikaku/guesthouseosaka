@@ -50,7 +50,7 @@ const houses = (
     hotspot: null,
     crop: null,
     alt: null,
-    preview: null
+    blurHash: null
   },
   extraCosts: [
     { categoryId: 'deposit', value: portableText(deposit) },

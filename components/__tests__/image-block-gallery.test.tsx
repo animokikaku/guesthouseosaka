@@ -1,4 +1,5 @@
 import { galleryLink } from '@/components/house/gallery-link'
+import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
 import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
 import { render, screen } from '@testing-library/react'
 import { ImageBlockGallery } from '../image-block-gallery'
@@ -16,15 +17,12 @@ function photos(count: number) {
   )
 }
 
-function renderGallery(props: Partial<Parameters<typeof ImageBlockGallery>[0]> = {}) {
-  const galleryPreview = props.galleryPreview ?? photos(5)
+function renderGallery({
+  galleryImages = photos(5),
+  featuredImage
+}: { galleryImages?: GalleryItem[]; featuredImage?: FeaturedImage } = {}) {
   return render(
-    <ImageBlockGallery
-      href={href}
-      galleryPreview={galleryPreview}
-      galleryImageCount={galleryPreview.length}
-      {...props}
-    />
+    <ImageBlockGallery href={href} slides={buildGallerySlides({ featuredImage, galleryImages })} />
   )
 }
 
@@ -57,7 +55,7 @@ describe('ImageBlockGallery', () => {
   // The badge is decorative, so the link label carries the total.
   it('counts the photos beyond the grid on the last tile and in the link', async () => {
     renderGallery({
-      galleryImageCount: 59,
+      galleryImages: photos(59),
       featuredImage: createSanityImage({ alt: 'Featured' })
     })
 
@@ -68,14 +66,14 @@ describe('ImageBlockGallery', () => {
   it('fills the grid past photos that have no file yet', async () => {
     const draft = createGalleryItem({ image: createSanityImage({ asset: null }) })
 
-    renderGallery({ galleryPreview: [draft, ...photos(6)], galleryImageCount: 6 })
+    renderGallery({ galleryImages: [draft, ...photos(6)] })
 
     expect(tiles()).toEqual(['Photo 1', 'Photo 2', 'Photo 3', 'Photo 4', 'Photo 5'])
     expect(screen.getByText('+1')).toBeInTheDocument()
   })
 
   it('shows the empty state when fewer than five photos can be shown', async () => {
-    renderGallery({ galleryPreview: photos(4) })
+    renderGallery({ galleryImages: photos(4) })
 
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
     expect(screen.queryByRole('link')).not.toBeInTheDocument()

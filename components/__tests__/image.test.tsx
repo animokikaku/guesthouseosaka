@@ -1,72 +1,67 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { Image, type ImageLoader } from '../image'
 
 const loader: ImageLoader = ({ src, width, quality }) => `${src}?w=${width}&q=${quality ?? 75}`
-const lqip = 'data:image/jpeg;base64,AAAA'
+const blurHash = 'VDD]rFx[9vxv?w_NI[yDtR%gMv%MaKM|t78_s8r;t6Ri'
 
 describe('Image', () => {
   it('builds 1x and 2x candidates from a fixed width', () => {
     render(<Image src="https://cdn.test/a.jpg" alt="A" width={64} height={64} loader={loader} />)
 
     const img = screen.getByAltText('A')
-    expect(img).toHaveAttribute(
-      'srcset',
-      'https://cdn.test/a.jpg?w=64&q=75 1x, https://cdn.test/a.jpg?w=128&q=75 2x'
-    )
-    expect(img).toHaveAttribute('src', 'https://cdn.test/a.jpg?w=128&q=75')
-  })
-
-  it('offers only the widths a vw-sized image can use', () => {
-    render(<Image src="https://cdn.test/a.jpg" alt="A" fill sizes="50vw" loader={loader} />)
-
-    const widths = screen
-      .getByAltText('A')
-      .getAttribute('srcset')!
-      .split(', ')
-      .map((candidate) => candidate.split(' ')[1])
-    // Half of the smallest device width (480px) leaves out the icon sizes below 240px.
-    expect(widths).toEqual([
-      '256w',
-      '384w',
-      '480w',
-      '640w',
-      '750w',
-      '828w',
-      '1080w',
-      '1200w',
-      '1600w'
+    expect(img.getAttribute('srcset')?.split(/,\s*/)).toEqual([
+      'https://cdn.test/a.jpg?w=64&q=75 64w',
+      'https://cdn.test/a.jpg?w=128&q=75 128w'
     ])
+    expect(img).toHaveAttribute('sizes', '64px')
+    expect(img).toHaveAttribute('src', 'https://cdn.test/a.jpg?w=64&q=75')
+    expect(img).toHaveAttribute('width', '64')
   })
 
-  it('leaves inline sources to load as they are', () => {
-    render(<Image src={lqip} alt="A" width={64} height={64} loader={loader} />)
-
-    expect(screen.getByAltText('A')).toHaveAttribute('src', lqip)
-    expect(screen.getByAltText('A')).not.toHaveAttribute('srcset')
-  })
-
-  it('paints a blurred preview until the image has decoded', async () => {
+  it('offers every breakpoint to an image sized by `sizes`', () => {
     render(
       <Image
         src="https://cdn.test/a.jpg"
         alt="A"
-        width={400}
-        height={300}
-        placeholder="blur"
-        blurDataURL={lqip}
+        width={800}
+        height={600}
+        sizes="50vw"
+        loader={loader}
       />
     )
+
     const img = screen.getByAltText('A')
+    const widths = img
+      .getAttribute('srcset')!
+      .split(/,\s*/)
+      .map((candidate) => candidate.split(' ')[1])
+    expect(widths.at(0)).toBe('64w')
+    expect(widths.at(-1)).toBe('1600w')
+    expect(img).toHaveAttribute('sizes', '50vw')
+    // The intrinsic size stays on the element, so it reserves its space.
+    expect(img).toHaveAttribute('width', '800')
+  })
 
-    // The LQIP sits in an SVG blur filter, sized to the image.
-    expect(img.style.backgroundImage).toContain('feGaussianBlur')
-    expect(img.style.backgroundImage).toContain("viewBox='0 0 400 300'")
-    expect(img.style.backgroundImage).toContain(lqip)
+  it('leaves inline sources to load as they are', () => {
+    const inline = 'data:image/png;base64,AAAA'
+    render(<Image src={inline} alt="A" width={64} height={64} loader={loader} />)
 
-    Object.defineProperty(img, 'decode', { value: () => Promise.resolve() })
-    fireEvent.load(img)
+    expect(screen.getByAltText('A')).toHaveAttribute('src', inline)
+    expect(screen.getByAltText('A')).not.toHaveAttribute('srcset')
+  })
 
-    await waitFor(() => expect(img.style.backgroundImage).toBe(''))
+  it('paints the blurhash as CSS gradients behind the image', () => {
+    render(
+      <Image src="https://cdn.test/a.jpg" alt="A" width={400} height={300} blurHash={blurHash} />
+    )
+
+    expect(screen.getByAltText('A').style.backgroundImage).toContain('radial-gradient')
+  })
+
+  it('skips a blurhash that does not decode', () => {
+    render(<Image src="https://cdn.test/a.jpg" alt="A" width={400} height={300} blurHash="x" />)
+
+    expect(screen.getByAltText('A').style.backgroundImage).toBe('')
   })
 
   it('loads lazily unless preloaded', () => {

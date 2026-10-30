@@ -46,7 +46,7 @@ describe('toHouseNavItems', () => {
       description: 'Near the station',
       caption: 'Quiet street',
       icon: { alt: 'Apple house icon' },
-      background: { alt: 'Apple House front', blurDataURL: image.preview }
+      background: { alt: 'Apple House front', blurHash: image.blurHash }
     })
     expect([searchParams.get('w'), searchParams.get('h'), searchParams.get('fit')]).toEqual([
       '250',

@@ -24,7 +24,7 @@ export function toGalleryImages(images: GalleryWallImages): GalleryWallImage[] {
         _key: img._key,
         src: urlFor(img).width(size).height(size).fit('crop').url(),
         alt: img.alt,
-        blurDataURL: img.preview,
+        blurHash: img.blurHash,
         width: size,
         height: size,
         priority: slot.priority ?? false

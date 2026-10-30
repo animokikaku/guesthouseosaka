@@ -44,7 +44,7 @@ export function toHouseNavItems(houses: HousesNavQueryResult, locale: Locale): N
         ? {
             src: urlFor(image).width(250).height(150).fit('crop').url(),
             alt: image.alt ?? title ?? slug,
-            blurDataURL: image.preview ?? undefined
+            blurHash: image.blurHash ?? undefined
           }
         : undefined
     }))

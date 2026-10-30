@@ -35,8 +35,7 @@ export function GalleryWall({
                 width={image.width}
                 height={image.height}
                 sizes={slotSizes(slot)}
-                blurDataURL={image.blurDataURL || undefined}
-                placeholder={image.blurDataURL ? 'blur' : undefined}
+                blurHash={image.blurHash}
                 // The collage sits in the hero, so its largest tile is the
                 // likely LCP element; the rest stay lazy. Eager + high
                 // priority rather than `preload`: for an image this early in

@@ -4,27 +4,18 @@ import { defineQuery } from 'groq'
 // GROQ FRAGMENTS (static only - no dynamic functions for typegen compatibility)
 // =============================================================================
 
-// Image fields with asset reference, minus the preview (shared by the two variants below)
-const imageBaseFields = /* groq */ `
+// Image fields with asset reference, plus the blurhash that stands in for the
+// image while it loads: ~40 B, cheap enough to send with every image
+const imageRefFields = /* groq */ `
   asset,
   hotspot,
   crop,
-  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value)`
-
-// Image fields with asset reference, plus the LQIP that blurs in the image while it loads
-const imageRefFields = /* groq */ `${imageBaseFields},
-  "preview": asset->metadata.lqip
+  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),
+  "blurHash": asset->metadata.blurHash
 `
 
 // Wrapped image fragment
 const imageFields = /* groq */ `image{${imageRefFields}}`
-
-// Same shape as imageRefFields, minus the LQIP. The base64 preview is ~600 B
-// per image — 75% of a gallery item — so lists long enough to matter carry it
-// only where a blur placeholder is actually painted.
-const leanImageRefFields = /* groq */ `${imageBaseFields},
-  "preview": null
-`
 
 // Actions array (used in faqPage, contactPage)
 const actionsFields = /* groq */ `
@@ -122,7 +113,7 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   building,
   phone,
 
-  // Only read by urlFor for the page's JSON-LD image, so no alt or LQIP
+  // Only read by urlFor for the page's JSON-LD image, so no alt or blurhash
   image{
     asset,
     hotspot,
@@ -137,29 +128,17 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   // About Section
   "about": coalesce(about[language == $locale][0].value, about[language == "en"][0].value),
 
-  // Every gallery image, flattened from the sorted categories, so the mobile
-  // hero carousel can swipe the whole set. Lean: these slides lazy-load one at
-  // a time behind a swipe, and carrying an LQIP for each would cost more than
-  // the rest of the house document put together.
+  // Every gallery image, flattened from the sorted categories: the mobile hero
+  // carousel swipes the whole set, and ImageBlockGallery shows the first five
+  // and counts the rest.
   //
   // The asset filter runs inside the projection, not after it: the consumers
   // drop items that don't resolve to an image, and filtering downstream of a
   // slice would let an unfinished item eat a slot and push a renderable one out.
   "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{
     _key,
-    "image": image{${leanImageRefFields}}
-  }),
-
-  // The five tiles ImageBlockGallery paints above the fold, with their LQIP.
-  // Five covers the grid whether or not a featured image is prepended to it.
-  "galleryPreview": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{
-    _key,
     "image": image{${imageRefFields}}
-  })[0...5],
-
-  // Total behind the five-tile grid, for its "+N" overflow badge. Counts only
-  // items that resolve to a renderable image, matching what the grid drops.
-  "galleryImageCount": count(galleryCategories[].items[defined(image.asset)]),
+  }),
 
   // Amenities grouped by category (enables per-category drag-and-drop reordering)
   // Filter out empty categories at query level

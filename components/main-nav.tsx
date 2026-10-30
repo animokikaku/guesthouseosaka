@@ -35,8 +35,7 @@ function PreviewImageItem({ item: it, isActive }: PreviewImageItemProps) {
         <SanityImage
           src={it.background.src}
           alt={it.background.alt}
-          placeholder={it.background.blurDataURL ? 'blur' : undefined}
-          blurDataURL={it.background.blurDataURL}
+          blurHash={it.background.blurHash}
           loading={isActive ? 'eager' : 'lazy'}
           fill
           sizes="250px"

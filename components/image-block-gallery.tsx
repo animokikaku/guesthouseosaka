@@ -1,20 +1,15 @@
 import { GalleryEmptyState } from '@/components/gallery/gallery-empty-state'
 import { GalleryImageFrame } from '@/components/gallery/gallery-image-frame'
 import type { GalleryLink } from '@/components/house/gallery-link'
-import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
+import type { GallerySlide } from '@/lib/gallery'
 import { toGalleryImageProps, type GalleryImageProps } from '@/lib/gallery-image'
 import { Link } from '@tanstack/react-router'
 import { useTranslations } from 'use-intl'
 
-type GalleryImages = GalleryItem[] | null
-
 type ImageBlockGalleryProps = {
   href: GalleryLink
-  /** The five LQIP-bearing tiles from `houseQuery` — not the full gallery. */
-  galleryPreview: GalleryImages
-  /** Total images behind the five tiles, for the `+N` overflow badge. */
-  galleryImageCount: number
-  featuredImage?: FeaturedImage
+  /** The featured image and every gallery image, from `buildGallerySlides`. */
+  slides: GallerySlide[]
 }
 
 function GalleryGrid({
@@ -100,28 +95,16 @@ function GalleryGrid({
   )
 }
 
-export function ImageBlockGallery({
-  href,
-  galleryPreview,
-  galleryImageCount,
-  featuredImage
-}: ImageBlockGalleryProps) {
+export function ImageBlockGallery({ href, slides }: ImageBlockGalleryProps) {
   const t = useTranslations('ImageBlockGallery')
 
-  const slides = buildGallerySlides({
-    featuredImage,
-    galleryImages: galleryPreview ?? []
+  // Only photos with a file can be shown or counted; image props are built for
+  // the five tiles alone, however large the gallery.
+  const shown = slides.filter(({ image }) => image?.asset)
+  const images = shown.slice(0, 5).flatMap(({ image }) => {
+    const imageProps = image && toGalleryImageProps(image, { width: 560 })
+    return imageProps ? [imageProps] : []
   })
-
-  // The query hands over five tiles at most, so this stays bounded no matter
-  // how large the gallery is — the real total for the `+N` badge comes from
-  // `galleryImageCount` instead.
-  const images = slides
-    .flatMap(({ image }) => {
-      const imageProps = toGalleryImageProps(image, { width: 560 })
-      return imageProps ? [imageProps] : []
-    })
-    .slice(0, 5)
 
   if (images.length < 5) {
     return (
@@ -131,7 +114,7 @@ export function ImageBlockGallery({
     )
   }
 
-  const totalCount = galleryImageCount + (featuredImage?.asset ? 1 : 0)
+  const totalCount = shown.length
   const extraCount = Math.max(totalCount - images.length, 0)
 
   return (

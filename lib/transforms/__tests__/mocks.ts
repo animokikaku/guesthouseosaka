@@ -5,6 +5,9 @@ import type {
 } from '@/sanity.types'
 import { faker } from '@faker-js/faker'
 
+/** A blurhash as Sanity stores one in the image's metadata. */
+export const BLUR_HASH = 'VDD]rFx[9vxv?w_NI[yDtR%gMv%MaKM|t78_s8r;t6Ri'
+
 // A fixed seed keeps every run on the same data. Seeded here, where faker is
 // used, so the files that never build fixtures don't load it. Each test file
 // evaluates this module afresh, so every one starts from the same seed.
@@ -102,7 +105,7 @@ export function createMap(overrides: Partial<NonNullable<HouseMap>> = {}): NonNu
       },
       crop: null,
       alt: faker.lorem.words(3),
-      preview: `data:image/jpeg;base64,${faker.string.alphanumeric(20)}`
+      blurHash: BLUR_HASH
     },
     googleMapsUrl: `https://maps.app.goo.gl/${faker.string.alphanumeric(17)}`,
     address: {
@@ -161,7 +164,7 @@ export function createSanityImage(
     hotspot: null,
     crop: null,
     alt: faker.lorem.words(3),
-    preview: `data:image/jpeg;base64,${faker.string.alphanumeric(20)}`,
+    blurHash: BLUR_HASH,
     ...overrides
   }
 }

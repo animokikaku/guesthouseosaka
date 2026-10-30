@@ -2,6 +2,7 @@ import { HouseGallery } from '@/components/gallery/house-gallery'
 import { Lightbox } from '@/components/lightbox'
 import type { GalleryCategory } from '@/lib/gallery'
 import {
+  BLUR_HASH,
   createGalleryCategory,
   createGalleryItem,
   createSanityImage
@@ -24,8 +25,8 @@ function renderGallery(categories: GalleryCategory[], dataAttribute?: (path: str
   )
 }
 
-const photo = (key: string, alt: string | null, preview: string | null = null) =>
-  createGalleryItem({ _key: key, image: createSanityImage({ alt, preview }) })
+const photo = (key: string, alt: string | null, blurHash: string | null = null) =>
+  createGalleryItem({ _key: key, image: createSanityImage({ alt, blurHash }) })
 
 const bedroom = createGalleryCategory({
   _key: 'bedroom',
@@ -83,17 +84,17 @@ describe('HouseGallery', () => {
     expect(searchParams.has('h')).toBe(false)
   })
 
-  it('blurs a tile in only when the photo has a preview', () => {
+  it('paints a placeholder only when the photo has a blurhash', () => {
     renderGallery(
       toGalleryCategories([
         createGalleryCategory({
-          items: [photo('a', 'With', 'data:image/jpeg;base64,abc'), photo('b', 'Without')]
+          items: [photo('a', 'With', BLUR_HASH), photo('b', 'Without')]
         })
       ])
     )
 
-    expect(screen.getByAltText('With')).toHaveAttribute('data-placeholder', 'blur')
-    expect(screen.getByAltText('Without')).not.toHaveAttribute('data-placeholder')
+    expect(screen.getByAltText('With')).toHaveAttribute('data-blur-hash', BLUR_HASH)
+    expect(screen.getByAltText('Without')).not.toHaveAttribute('data-blur-hash')
   })
 
   it('skips items whose image is not uploaded yet', () => {

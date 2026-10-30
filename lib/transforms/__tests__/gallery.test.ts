@@ -35,7 +35,7 @@ describe('toGalleryImages', () => {
     expect(toGalleryImages([image])[0]).toMatchObject({
       _key: image._key,
       alt: image.alt,
-      blurDataURL: image.preview
+      blurHash: image.blurHash
     })
   })
 

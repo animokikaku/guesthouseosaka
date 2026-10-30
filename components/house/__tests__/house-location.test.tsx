@@ -42,7 +42,7 @@ const location: LocationData = {
 const map: MapData = {
   coordinates: { lat: 34.6655, lng: 135.5306 },
   placeId: 'ChIJA9KNRIL-AGARZtCjpPbTMCs',
-  placeImage: { asset: null, hotspot: null, crop: null, alt: null, preview: null },
+  placeImage: { asset: null, hotspot: null, crop: null, alt: null, blurHash: null },
   googleMapsUrl: 'https://maps.app.goo.gl/example'
 }
 

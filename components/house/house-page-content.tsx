@@ -26,8 +26,6 @@ export function HousePageContent({
   title,
   description,
   galleryImages,
-  galleryPreview,
-  galleryImageCount,
   featuredImage,
   amenityCategories,
   featuredAmenities,
@@ -44,11 +42,11 @@ export function HousePageContent({
 }) {
   const href = galleryLink(useLocale(), slug)
 
-  const mobileHeroImages = buildGallerySlides({ featuredImage, galleryImages })
+  const slides = buildGallerySlides({ featuredImage, galleryImages })
 
   return (
     <>
-      <MobileHeroImage href={href} images={mobileHeroImages} />
+      <MobileHeroImage href={href} images={slides} />
       <div className="bg-background relative z-10 -mt-8 rounded-t-3xl pt-8 sm:mt-0 sm:rounded-none sm:pt-0">
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading id={`${slug}-title`}>{title}</PageHeaderHeading>
@@ -69,12 +67,7 @@ export function HousePageContent({
             )}
           </PageNav>
           <div className="theme-container">
-            <ImageBlockGallery
-              href={href}
-              galleryPreview={galleryPreview}
-              galleryImageCount={galleryImageCount ?? 0}
-              featuredImage={featuredImage}
-            />
+            <ImageBlockGallery href={href} slides={slides} />
             <HouseProvider id={_id} type={_type} slug={slug}>
               <article id={slug} aria-labelledby={`${slug}-title`} className="space-y-12 pt-8">
                 <HouseAbout

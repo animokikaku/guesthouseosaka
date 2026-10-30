@@ -37,6 +37,11 @@ export type LightboxItem = {
   id?: string | number
   src: string
   thumb: string
+  /**
+   * Placeholder for the strip thumbnail only: on the slide it would paint over
+   * ramka's open-morph bridge.
+   */
+  thumbBlurHash?: string | null
   alt: string
   caption?: string
   width: number
@@ -546,6 +551,7 @@ function GalleryThumbnailStrip({
             <Image
               src={item.thumb}
               loader={sanityImageLoader}
+              blurHash={item.thumbBlurHash}
               alt={item.alt}
               width={LIGHTBOX_THUMBNAIL_SIZE}
               height={LIGHTBOX_THUMBNAIL_SIZE}
