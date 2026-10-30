@@ -1,33 +1,38 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignore": [
-    ".eloqnt/config.ts",
-    "global.ts",
-    "messages/*.d.json.ts",
-    "sanity.types.ts",
-    "components/ui/**"
-  ],
   "ignoreExportsUsedInFile": {
     "interface": true,
     "type": true
   },
-  "playwright": {
-    "config": ["playwright.config.ts", "playwright.components.config.ts"],
-    "entry": [
-      "e2e/**/*.spec.ts",
-      "playwright/components/**/*.spec.ts",
-      "playwright/gallery/{main,router,sanity-image,vite.config}.{ts,tsx,mts}",
-      "app/**/*.story.tsx",
-      "components/**/*.story.tsx"
-    ]
-  },
   "tags": ["-lintignore"],
-  "entry": [
-    "app/routes/**/*.{ts,tsx}",
-    "app/router.tsx",
-    "app/start.ts",
-    "db/schema.ts",
-    "void.config.ts"
-  ],
-  "ignoreDependencies": ["cloudflare"]
+  "workspaces": {
+    ".": {
+      "ignore": [
+        ".eloqnt/config.ts",
+        "global.ts",
+        "messages/*.d.json.ts",
+        "sanity.types.ts",
+        "components/ui/**"
+      ],
+      "playwright": {
+        "config": ["playwright.config.ts", "playwright.components.config.ts"],
+        "entry": [
+          "e2e/**/*.spec.ts",
+          "playwright/components/**/*.spec.ts",
+          "playwright/gallery/{main,router,sanity-image,vite.config}.{ts,tsx,mts}",
+          "app/**/*.story.tsx",
+          "components/**/*.story.tsx"
+        ]
+      },
+      "entry": [
+        "app/routes/**/*.{ts,tsx}",
+        "app/router.tsx",
+        "app/start.ts",
+        "db/schema.ts",
+        "void.config.ts"
+      ],
+      "ignoreDependencies": ["cloudflare"]
+    },
+    "studio": {}
+  }
 }

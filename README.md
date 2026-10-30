@@ -37,6 +37,7 @@ bun dev                      # http://localhost:3000
 | `bun run test:e2e`        | E2E tests against a local build (Playwright) |
 | `bun run test:components` | Component tests (Playwright)                 |
 | `bun run knip`            | Detect unused code and dependencies          |
+| `bun run studio:dev`      | Studio at localhost:3333 (`development`)     |
 | `bun run studio:deploy`   | Deploy the development Studio                |
 
 ## Deployment
@@ -60,9 +61,8 @@ app/
 
 components/           # UI, forms, gallery, house and map components
 lib/                  # Config, environment, metadata, room sync and helpers
-sanity/
-  schemaTypes/        # Document and object schemas
-  lib/                # GROQ queries, loaders and draft mode
+sanity/lib/           # GROQ queries, loaders and draft mode
+studio/               # Sanity Studio (Bun workspace): schemas, structure, plugins
 db/                   # Rooms database schema and migrations (D1)
 aws/                  # Hourly room sync schedule (CloudFormation)
 messages/             # Translations (en, ja, fr, zh-CN, zh-TW)

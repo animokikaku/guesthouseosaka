@@ -55,7 +55,7 @@ export interface AmenityCategoryData {
  * `label` is a string because the schema requires it and the query falls back
  * to English; `placeholder` and `description` are optional in the schema.
  *
- * @see sanity/schemaTypes/objects/form-field-config.ts
+ * @see studio/schemaTypes/objects/form-field-config.ts
  */
 export interface FormFieldConfig {
   label: string
@@ -81,7 +81,7 @@ export interface FormFieldsConfig {
 /**
  * `title` is a string because the schema requires it; `description` is optional.
  *
- * @see sanity/schemaTypes/documents/contact-type.ts
+ * @see studio/schemaTypes/documents/contact-type.ts
  */
 export interface ContactFormConfig {
   title: string

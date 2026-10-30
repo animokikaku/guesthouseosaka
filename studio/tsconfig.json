@@ -1,0 +1,7 @@
+{
+  // The site's settings, `@/` (the repository root) included: the Studio shares
+  // its config, locales, icons and types.
+  "extends": "../tsconfig.json",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", ".sanity", "dist"]
+}

@@ -1,6 +1,6 @@
 /**
- * Sanity Studio configuration, used by the Sanity CLI (`typegen`, `dev`, `deploy`).
- * This site no longer embeds the Studio.
+ * The Studio's configuration, hosted by Sanity (see docs/sanity-workflow.md).
+ * It shares the site's config, locales, icons and types through `@/`.
  */
 
 import { visionTool } from '@sanity/vision'
@@ -15,11 +15,11 @@ import { routing } from '@/i18n/routing'
 import { SANITY_API_VERSION, SANITY_PROJECT_ID } from '@/lib/config'
 import { env } from '@/lib/env'
 import { iconMap } from '@/lib/icons'
-import { lucideIconPicker } from '@/sanity/plugins/lucide-icon-picker'
-import { resolve } from '@/sanity/presentation/resolve'
-import { siteUrl } from '@/sanity/site-url'
-import { documentTypes, fixedSetTypes, protectedTypes, schema } from '@/sanity/schemaTypes'
-import { structure } from '@/sanity/structure'
+import { lucideIconPicker } from '@/studio/plugins/lucide-icon-picker'
+import { resolve } from '@/studio/presentation/resolve'
+import { siteUrl } from '@/studio/site-url'
+import { documentTypes, fixedSetTypes, protectedTypes, schema } from '@/studio/schemaTypes'
+import { structure } from '@/studio/structure'
 
 const languages = routing.locales.map((locale) => ({
   id: locale,
@@ -41,7 +41,7 @@ export default defineConfig({
   releases: {
     enabled: false
   },
-  // Add and edit the content schema in the './sanity/schemaTypes' folder
+  // Add and edit the content schema in the './schemaTypes' folder
   schema,
   document: {
     actions: (prev, context) => {
