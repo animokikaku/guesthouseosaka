@@ -67,10 +67,10 @@ export function toGalleryImageProps(
  * Sanity `fit=crop` URL. The destination `src` is the full-aspect Sanity CDN
  * URL (same `sanityImageLoader` pipeline as the trigger's `SanityImage`).
  *
- * No blurhash here on purpose: the lightbox image must not carry a
- * placeholder, because `Image` paints it as an inline background that covers
- * ramka's trigger-thumbnail bridge. The placeholder belongs on the trigger —
- * see `toGalleryImageProps`, which the grid tiles use.
+ * The blurhash goes to the strip thumbnail only: the lightbox image must not
+ * carry a placeholder, because `Image` paints it as an inline background that
+ * covers ramka's trigger-thumbnail bridge. The slide's placeholder is the
+ * trigger itself — see `toGalleryImageProps`, which the grid tiles use.
  */
 export function toGalleryLightboxItem(item: GalleryItem): LightboxItem | null {
   const { image, _key } = item
@@ -88,6 +88,7 @@ export function toGalleryLightboxItem(item: GalleryItem): LightboxItem | null {
       .height(LIGHTBOX_THUMBNAIL_SIZE)
       .fit('crop')
       .url(),
+    thumbBlurHash: image.blurHash,
     alt,
     caption: alt,
     width: dimensions.width,

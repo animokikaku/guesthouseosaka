@@ -96,12 +96,15 @@ describe('toGalleryLightboxItem', () => {
     expect(resizeOf(lightboxItem?.thumb)).toEqual({ w: '56', h: '56', fit: 'crop' })
   })
 
-  // The blur belongs on the trigger, not the lightbox image: `Image` paints
-  // the blurhash as an inline background that would cover ramka's thumbnail bridge.
-  it('carries no placeholder, even when the image has a blurhash', () => {
+  // The slide's placeholder is the trigger, not the lightbox image: `Image`
+  // paints the blurhash as an inline background that would cover ramka's
+  // thumbnail bridge. The strip thumbnail isn't bridged, so it gets one.
+  it('gives the blurhash to the strip thumbnail only', () => {
     const image = createSanityImage()
     expect(image.blurHash).toBeTruthy()
 
-    expect(toGalleryLightboxItem(createGalleryItem({ image }))).not.toHaveProperty('blurHash')
+    const item = toGalleryLightboxItem(createGalleryItem({ image }))
+    expect(item).not.toHaveProperty('blurHash')
+    expect(item?.thumbBlurHash).toBe(image.blurHash)
   })
 })
