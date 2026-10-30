@@ -4,7 +4,7 @@
  * docs/rooms.md).
  */
 import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
-import { serverEnv } from '@/lib/env.server'
+import { env as serverEnv } from '@/env'
 import { hasBearerToken } from '@/workers/rooms/src/auth'
 import { createFileRoute } from '@tanstack/react-router'
 import { cache } from 'cloudflare:workers'
@@ -19,7 +19,11 @@ export const Route = createFileRoute('/api/revalidate-rooms')({
           return new Response('Unauthorized', { status: 401, headers: NO_STORE })
         }
 
-        // Throws where there is no Workers Cache, as in local dev and preview.
+        // The dev server has no Workers Cache, so nothing to purge.
+        if (typeof cache?.purge !== 'function') {
+          return Response.json({ purged: false }, { headers: NO_STORE })
+        }
+
         const { success, errors } = await cache
           .purge({ tags: [ROOMS_CACHE_TAG] })
           .catch((error: unknown) => ({ success: false, errors: [error] }))

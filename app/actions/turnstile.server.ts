@@ -1,4 +1,4 @@
-import { serverEnv } from '@/lib/env.server'
+import { env as serverEnv } from '@/env'
 import { z } from '@/lib/zod'
 
 const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'

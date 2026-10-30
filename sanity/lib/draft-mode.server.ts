@@ -1,4 +1,4 @@
-import { serverEnv } from '@/lib/env.server'
+import { env as serverEnv } from '@/env'
 import { validateApiPerspective, type ClientPerspective } from '@sanity/client'
 import { perspectiveCookieName } from '@sanity/preview-url-secret/constants'
 import { deleteCookie, getCookie, setCookie } from '@tanstack/react-start/server'
@@ -9,13 +9,14 @@ import { createHash, timingSafeEqual } from 'node:crypto'
  * mint, holding a value derived from the read token so it can't be forged.
  */
 const DRAFT_MODE_COOKIE = '__sanity_draft_mode'
-const draftModeValue = createHash('sha256')
-  .update(`draft-mode:${serverEnv.SANITY_API_READ_TOKEN}`)
-  .digest('hex')
+
+// Derived on use: `env` can only be read while handling a request.
+const draftModeValue = () =>
+  createHash('sha256').update(`draft-mode:${serverEnv.SANITY_API_READ_TOKEN}`).digest('hex')
 
 export function isDraftModeEnabled() {
   const cookie = Buffer.from(getCookie(DRAFT_MODE_COOKIE) ?? '')
-  const expected = Buffer.from(draftModeValue)
+  const expected = Buffer.from(draftModeValue())
   // Constant-time, so response timing can't reveal how much of a guess matched.
   return cookie.length === expected.length && timingSafeEqual(cookie, expected)
 }
@@ -42,7 +43,7 @@ function cookieOptions(request: Request) {
 
 export function enableDraftMode(request: Request, perspective: string | undefined) {
   const options = cookieOptions(request)
-  setCookie(DRAFT_MODE_COOKIE, draftModeValue, options)
+  setCookie(DRAFT_MODE_COOKIE, draftModeValue(), options)
   if (perspective) setCookie(perspectiveCookieName, perspective, options)
 }
 

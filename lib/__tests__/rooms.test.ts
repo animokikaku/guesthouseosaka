@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { PROPERTY_IDS } from '../rooms.server'
 
-vi.mock('cloudflare:workers', () => ({ env: {} }))
+vi.mock('void/db', () => ({}))
 
 describe('PROPERTY_IDS', () => {
   it('names only listings the rooms Worker syncs', () => {

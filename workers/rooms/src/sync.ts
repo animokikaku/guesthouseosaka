@@ -30,9 +30,15 @@ export async function fetchListing(url: string): Promise<string> {
       })
       if (response.ok) return await response.text()
       // shares.house is behind Cloudflare: the ray ID ends with the data center
-      // that answered, which tells a refusal by location from one by the site.
-      const ray = response.headers.get('cf-ray')
-      lastError = new Error(`HTTP ${response.status}${ray ? ` (cf-ray ${ray})` : ''}`)
+      // that answered, and `cf-mitigated: challenge` marks its bot challenge,
+      // which a Worker can't pass, from any other refusal.
+      const details = ['cf-ray', 'cf-mitigated'].flatMap((name) => {
+        const value = response.headers.get(name)
+        return value ? [`${name} ${value}`] : []
+      })
+      lastError = new Error(
+        `HTTP ${response.status}${details.length ? ` (${details.join(', ')})` : ''}`
+      )
       if (!RETRYABLE_STATUSES.has(response.status)) break
     } catch (error) {
       lastError = error

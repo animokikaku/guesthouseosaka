@@ -52,18 +52,18 @@ export default defineConfig({
   //
   // Never reuse an existing server: a `bun run dev` already on this port has
   // neither variable, so the fixture's header is ignored and a submission
-  // reaches the real Resend API with the key from `.env.local`. The build is
+  // reaches the real Resend API with the key from `.env`. The build is
   // the cost of both defences actually being in place.
   //
   // `bun run test:e2e:preview` (E2E_REAL_EMAIL) builds the preview environment
-  // instead, without either defence: workerd runs the same bundle `wrangler
+  // instead, without either defence: workerd runs the same bundle `void
   // deploy` uploads, and `DEPLOY_ENV=preview` sends its one email to Resend's
-  // test inbox with the key from `.env.local`.
+  // test inbox with the key from `.env`.
   webServer: process.env.BASE_URL
     ? undefined
     : realEmail
       ? {
-          command: 'CLOUDFLARE_ENV=preview bun run build && bun run start',
+          command: 'DEPLOY_ENV=preview bun run build && bun run start',
           url: baseURL,
           timeout: 5 * 60 * 1000,
           reuseExistingServer: false

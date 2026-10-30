@@ -13,4 +13,6 @@ declare module 'use-intl' {
 declare global {
   /** Set by `vite.config.ts`: whether this build serves the Playwright suite. */
   const __E2E_TEST_PROXY__: boolean
+  /** Set by `vite.config.ts` from `DEPLOY_ENV`: which deployment this build is. */
+  const __DEPLOY_ENV__: 'development' | 'preview' | 'production'
 }

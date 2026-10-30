@@ -3,7 +3,7 @@
  * docs/sanity-workflow.md): purges the responses built from published content,
  * so a publish shows within seconds instead of once the cache expires.
  */
-import { serverEnv } from '@/lib/env.server'
+import { env as serverEnv } from '@/env'
 import { purgePublishedResponses } from '@/sanity/lib/fetch.server'
 import { isValidSignature, SIGNATURE_HEADER_NAME } from '@sanity/webhook'
 import { createFileRoute } from '@tanstack/react-router'

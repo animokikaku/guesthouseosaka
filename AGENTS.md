@@ -45,8 +45,8 @@ bun run format:check # Check formatting without modifying files
 - Formatting: run `bun run format:check`
 - Sanity schema or query changes: run `bun run typegen`
 - User-facing flow changes: run the relevant Playwright tests with `bun run test:e2e`
-- Run the local E2E suite only through its managed server (`bun run test:e2e`, no `BASE_URL`). Pointing `BASE_URL` at a server you started yourself skips the Resend mocks, so form tests send real emails with the key in `.env.local`
-- `bun run test:e2e:preview` sends one real email to Resend's test inbox (with the key in `.env.local`); run it only when asked, or when checking the Resend key or sending domain
+- Run the local E2E suite only through its managed server (`bun run test:e2e`, no `BASE_URL`). Pointing `BASE_URL` at a server you started yourself skips the Resend mocks, so form tests send real emails with the key in `.env`
+- `bun run test:e2e:preview` sends one real email to Resend's test inbox (with the key in `.env`); run it only when asked, or when checking the Resend key or sending domain
 - Stop a server you started by PID or port (`lsof -ti:<port> | xargs kill`), then check the port is free
 - Before a pull request: run `bun run build`
 
@@ -65,3 +65,12 @@ bun run format:check # Check formatting without modifying files
 - [Internationalization](docs/i18n.md)
 - [Testing](docs/testing.md)
 - [Room Availability](docs/rooms.md)
+
+<!--injected-by-void-v1.3.0-->
+
+## Void
+
+- This project uses [Void](https://void.cloud), a full-stack Vite framework for Cloudflare Workers with file-based API routing, server-rendered pages, and typed backend services.
+- Use Void's CLI and typed APIs. Before working with Void, read the relevant Markdown docs in `node_modules/void/docs/`; start with `guide/quickstart.md` for setup and `reference/cli.md` for commands.
+
+<!--/injected-by-void-->

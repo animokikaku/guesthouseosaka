@@ -29,7 +29,7 @@ export const CONTACT_EMAIL = `info@${CONTACT_EMAIL_DOMAIN}`
 
 /**
  * Cloudflare's always-passing Turnstile sitekey, which works on any hostname.
- * Local and CI builds set it with the matching test secret (`.env.example`,
+ * Local and CI builds set it with the matching test secret (`env.example`,
  * `ci.yml`); builds without a sitekey, like the component gallery, fall back to it.
  * @see https://developers.cloudflare.com/turnstile/troubleshooting/testing/
  */

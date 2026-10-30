@@ -31,8 +31,8 @@ const ROUTES = [
 type Route = (typeof ROUTES)[number]
 
 // Origin the app was built with: CI sets it in the environment (which wins),
-// local builds read it from .env.local.
-if (existsSync('.env.local')) process.loadEnvFile('.env.local')
+// local builds read it from .env.
+if (existsSync('.env')) process.loadEnvFile('.env')
 const APP_URL = process.env.VITE_APP_URL
 if (!APP_URL) throw new Error('VITE_APP_URL is required to check canonical links')
 

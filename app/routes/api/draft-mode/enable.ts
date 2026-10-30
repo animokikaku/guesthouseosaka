@@ -2,7 +2,7 @@
  * Lets Presentation put the app in draft mode, which loads Visual Editing and
  * queries draft content to preview it as it will appear once published.
  */
-import { serverEnv } from '@/lib/env.server'
+import { env as serverEnv } from '@/env'
 import { client } from '@/sanity/lib/client'
 import { enableDraftMode } from '@/sanity/lib/draft-mode.server'
 import { validatePreviewUrl } from '@sanity/preview-url-secret'

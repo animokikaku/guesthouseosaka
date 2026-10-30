@@ -4,7 +4,7 @@ const SITEVERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverif
 
 /**
  * Answers the server's Turnstile Siteverify call with `body`. Without it, the
- * check reaches Cloudflare, whose test secret (wrangler.jsonc) passes the test
+ * check reaches Cloudflare, whose test secret (`.env`) passes the test
  * sitekey's token.
  *
  * @see https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
