@@ -2,7 +2,9 @@
 
 One Sanity project (`SANITY_PROJECT_ID` in `lib/config.ts`) with two datasets: `production`,
 which guesthouseosaka.com reads, and `development`, which local builds and Worker Previews read.
-Each dataset has its own hosted Studio (`SANITY_STUDIO_HOSTS` in `lib/config.ts`):
+Each dataset has its own hosted Studio (`SANITY_STUDIO_HOSTS` in `lib/config.ts`), built from the
+`studio/` workspace, which has its own dependencies and shares the site's config, locales, icons and
+types through `@/`:
 
 | Studio                              | Edits         | Deployed                                          |
 | ----------------------------------- | ------------- | ------------------------------------------------- |
@@ -14,9 +16,9 @@ crawlers out of it.
 
 ## Changing the schema
 
-1. Edit the types in `sanity/schemaTypes/`
+1. Edit the types in `studio/schemaTypes/`
 2. Run `bun run typegen` to regenerate `sanity.types.ts`
-3. Try it locally: `bun dev` and `bunx sanity dev` open a Studio at `localhost:3333` that edits
+3. Try it locally: `bun dev` and `bun run studio:dev` open a Studio at `localhost:3333` that edits
    `development` and previews `localhost:3000`
 4. To show it in the hosted development Studio, run `bun run studio:deploy` from the branch.
    There is one development Studio, so the last deploy wins: a field another branch adds shows
@@ -30,7 +32,7 @@ Deploy Studio role.
 
 ## Upgrading Sanity
 
-Both Studios have auto-updates on (`deployment.autoUpdates` in `sanity.cli.ts`): they load the
+Both Studios have auto-updates on (`deployment.autoUpdates` in `studio/sanity.cli.ts`): they load the
 `sanity` package from Sanity's CDN, so upgrading it needs no deploy. Each Studio's channel is set
 in sanity.io/manage → Studios: `stable` for production, `latest` for development. A deployed
 Studio never runs a version older than the one it was built with. Plugins are bundled, so their
@@ -87,5 +89,5 @@ or GROQ. Set up the MCP server with `bunx sanity@latest mcp configure`.
 - **Always**: When a query starts reading another document type (directly or through `->`), add
   it to the loader's list in `sanity/lib/content-types.ts`, or publishes of that type won't
   refresh the page
-- **Ask first**: Before modifying `sanity.config.ts` or deleting schema files
+- **Ask first**: Before modifying `studio/sanity.config.ts` or deleting schema files
 - **Never**: Hardcode API tokens (read them from `env` in `@/env`)

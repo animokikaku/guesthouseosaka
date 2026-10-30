@@ -14,7 +14,7 @@
 
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
-// Source: schema.json
+// Source: ../schema.json
 export type FormFieldConfigNoPlaceholder = {
   _type: "formFieldConfigNoPlaceholder";
   label: InternationalizedArrayString;
@@ -618,7 +618,7 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: settingsQuery
 // Query: *[_type == "settings"][0]{  _id,  _type,  "siteName": coalesce(siteName[language == $locale][0].value, siteName[language == "en"][0].value),  "siteDescription": coalesce(siteDescription[language == $locale][0].value, siteDescription[language == "en"][0].value),  companyName,  email,  phone,  address,  "socialLinks": array::compact(socialLinks[]{    _key,    icon,    label,    url  })}
 export type SettingsQueryResult = {
@@ -638,7 +638,7 @@ export type SettingsQueryResult = {
   }> | null;
 } | null;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: homePageQuery
 // Query: {  "page": *[_type == "homePage"][0]{    _id,    _type,    "hero": hero{      "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value),      "ctaLabel": coalesce(ctaLabel[language == $locale][0].value, ctaLabel[language == "en"][0].value)    },    "galleryWall": array::compact(galleryWall[0...6]{      _key,  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": asset->metadata.lqip    }),    "collection": collection{      "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)    }  },  "houses": *[_type == "house"] | order(orderRank){    _id,    slug,    "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),    image{  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": asset->metadata.lqip}  }}
 export type HomePageQueryResult = {
@@ -710,7 +710,7 @@ export type HomePageQueryResult = {
   }>;
 };
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: houseQuery
 // Query: *[_type == "house" && slug == $slug][0]{  _id,  _type,  slug,  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),  building,  phone,  // Only read by urlFor for the page's JSON-LD image, so no alt or LQIP  image{    asset,    hotspot,    crop  },  // Featured Image (optional, prepended to gallery grids)  "featuredImage": select(    defined(featuredImage.asset) => featuredImage{  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": asset->metadata.lqip}  ),  // About Section  "about": coalesce(about[language == $locale][0].value, about[language == "en"][0].value),  // Every gallery image, flattened from the sorted categories, so the mobile  // hero carousel can swipe the whole set. Lean: these slides lazy-load one at  // a time behind a swipe, and carrying an LQIP for each would cost more than  // the rest of the house document put together.  //  // The asset filter runs inside the projection, not after it: the consumers  // drop items that don't resolve to an image, and filtering downstream of a  // slice would let an unfinished item eat a slot and push a renderable one out.  "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{    _key,    "image": image{  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": null}  }),  // The five tiles ImageBlockGallery paints above the fold, with their LQIP.  // Five covers the grid whether or not a featured image is prepended to it.  "galleryPreview": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{    _key,    "image": image{  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": asset->metadata.lqip}  })[0...5],  // Total behind the five-tile grid, for its "+N" overflow badge. Counts only  // items that resolve to a renderable image, matching what the grid drops.  "galleryImageCount": count(galleryCategories[].items[defined(image.asset)]),  // Amenities grouped by category (enables per-category drag-and-drop reordering)  // Filter out empty categories at query level  "amenityCategories": array::compact(amenityCategories[]{    _key,    "category": category->{      _id,      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),      icon    },    "items": array::compact(items[]{      _key,      note,      "label": coalesce(        customLabel[language == $locale][0].value,        amenity->label[language == $locale][0].value,        amenity->label[language == "en"][0].value      ),      "icon": amenity->icon    })  })[count(items) > 0],  // Featured amenities (pre-computed, max 10)  "featuredAmenities": array::compact(amenityCategories[].items[featured == true])[0...10]{    _key,    note,    "label": coalesce(      customLabel[language == $locale][0].value,      amenity->label[language == $locale][0].value,      amenity->label[language == "en"][0].value    ),    "icon": amenity->icon  },  // Location  "location": location{    "highlight": coalesce(highlight[language == $locale][0].value, highlight[language == "en"][0].value),    "details": coalesce(details[language == $locale][0].value, details[language == "en"][0].value)  },  // Map  "map": map{    googleMapsUrl,    placeId,    "placeImage": placeImage{  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": asset->metadata.lqip},    coordinates,    address  },  // Pricing  "pricing": array::compact(pricing[]{    _key,    "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),    "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)  })}
 export type HouseQueryResult = {
@@ -850,7 +850,7 @@ export type HouseQueryResult = {
   }> | null;
 } | null;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: houseGalleryQuery
 // Query: *[_type == "house" && slug == $slug][0]{  _id,  _type,  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),  "galleryCategories": array::compact(galleryCategories[]{    _key,    "category": category->{      _id,      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),      orderRank    },    "items": array::compact(items[]{      _key,      "image": image{  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": asset->metadata.lqip}    })  })[count(items) > 0] | order(category.orderRank)}
 export type HouseGalleryQueryResult = {
@@ -878,7 +878,7 @@ export type HouseGalleryQueryResult = {
   }> | null;
 } | null;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: housesNavQuery
 // Query: *[_type == "house"] | order(orderRank){  slug,  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),  "caption": coalesce(caption[language == $locale][0].value, caption[language == "en"][0].value),  image{  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": asset->metadata.lqip}}
 export type HousesNavQueryResult = Array<{
@@ -895,7 +895,7 @@ export type HousesNavQueryResult = Array<{
   };
 }>;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: housesBuildingQuery
 // Query: *[_type == "house"] | order(orderRank){  _id,  _type,  slug,  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),  "building": building{    rooms,    floors  },  phone,  image{  asset,  hotspot,  crop,  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),  "preview": asset->metadata.lqip},  "extraCosts": array::compact(extraCosts[]{    "categoryId": category->_id,    "value": coalesce(value[language == $locale][0].value, value[language == "en"][0].value)[]  })}
 export type HousesBuildingQueryResult = Array<{
@@ -938,7 +938,7 @@ export type HousesBuildingQueryResult = Array<{
   }> | null;
 }>;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: faqPageQuery
 // Query: *[_type == "faqPage"][0]{  _id,  _type,  "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),  "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value),  "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),    "actions": array::compact(actions[]{    _key,    icon,    "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),    href  }),  "contactSection": coalesce(contactSection[language == $locale][0].value, contactSection[language == "en"][0].value),  "contactNote": coalesce(contactNote[language == $locale][0].value, contactNote[language == "en"][0].value)}
 export type FaqPageQueryResult = {
@@ -991,7 +991,7 @@ export type FaqPageQueryResult = {
   contactNote: string | null;
 } | null;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: faqQuestionsQuery
 // Query: *[_type == "faqQuestion"] | order(orderRank) {    _id,    _type,    "question": coalesce(question[language == $locale][0].value, question[language == "en"][0].value),    "answer": coalesce(answer[language == $locale][0].value, answer[language == "en"][0].value),    componentKey  }
 export type FaqQuestionsQueryResult = Array<{
@@ -1019,7 +1019,7 @@ export type FaqQuestionsQueryResult = Array<{
   componentKey: "extra-costs" | "floors-and-rooms" | null;
 }>;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: contactPageQuery
 // Query: {  "page": *[_type == "contactPage"][0]{    _id,    _type,    "metaTitle": coalesce(metaTitle[language == $locale][0].value, metaTitle[language == "en"][0].value),    "metaDescription": coalesce(metaDescription[language == $locale][0].value, metaDescription[language == "en"][0].value),    "header": coalesce(header[language == $locale][0].value, header[language == "en"][0].value),      "actions": array::compact(actions[]{    _key,    icon,    "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),    href  })  },  // Read by the form tabs (toContactNavItems) and the contact index's list. No  // form field config here: contactTypeQuery carries the fields for the one  // contact type actually being rendered as a form.  "contactTypes": *[_type == "contactType"] | order(orderRank){    _id,    slug,    "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)  }}
 export type ContactPageQueryResult = {
@@ -1061,7 +1061,7 @@ export type ContactPageQueryResult = {
   }>;
 };
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: contactTypeQuery
 // Query: *[_type == "contactType" && slug == $slug][0]{  _id,  _type,  slug,  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),    "fields": {    "places": fields.places{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "date": fields.date{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "hour": fields.hour{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "stayDuration": fields.stayDuration{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "gender": fields.gender{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "age": fields.age{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "nationality": fields.nationality{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "phone": fields.phone{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "name": fields.name{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "email": fields.email{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)},    "message": fields.message{  "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),  "placeholder": coalesce(placeholder[language == $locale][0].value, placeholder[language == "en"][0].value),  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value)}  }}
 export type ContactTypeQueryResult = {
@@ -1129,7 +1129,7 @@ export type ContactTypeQueryResult = {
   };
 } | null;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: legalNoticeQuery
 // Query: *[_type == "legalNotice"][0]{  _id,  _type,  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),  lastUpdated,  "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)}
 export type LegalNoticeQueryResult = {
@@ -1157,7 +1157,7 @@ export type LegalNoticeQueryResult = {
   }> | null;
 } | null;
 
-// Source: sanity/lib/queries.ts
+// Source: ../sanity/lib/queries.ts
 // Variable: pricingCategoriesQuery
 // Query: *[_type == "pricingCategory"] | order(orderRank){  _id,  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value)}
 export type PricingCategoriesQueryResult = Array<{

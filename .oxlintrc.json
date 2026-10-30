@@ -62,7 +62,8 @@
     "components/ui/**",
     "sanity.types.ts",
     ".wrangler/**",
-    "dist/**",
-    ".sanity/**"
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/.sanity/**"
   ]
 }

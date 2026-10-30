@@ -1,4 +1,4 @@
-import { ImageField } from '@/sanity/schemaTypes/fields/image'
+import { ImageField } from '@/studio/schemaTypes/fields/image'
 import { HomeIcon } from 'lucide-react'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 

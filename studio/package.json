@@ -1,0 +1,28 @@
+{
+  "name": "@guesthouseosaka/studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "deploy": "sanity deploy --yes",
+    "typegen": "sanity schema extract --enforce-required-fields --force --path ../schema.json && sanity typegen generate"
+  },
+  "dependencies": {
+    "@portabletext/react": "^8.0.1",
+    "@sanity/icons": "^5.2.3",
+    "@sanity/orderable-document-list": "^2.0.28",
+    "@sanity/preview-url-secret": "^4.1.5",
+    "@sanity/ui": "^4.4.10",
+    "@sanity/vision": "^6.21.0",
+    "lucide-react": "^1.61.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sanity": "^6.21.0",
+    "sanity-plugin-internationalized-array": "^5.3.9",
+    "styled-components": "^6.6.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5"
+  }
+}

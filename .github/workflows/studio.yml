@@ -5,16 +5,14 @@ name: Studio
 # deployed by hand from the branch whose schema it should show, with
 # `bun run studio:deploy` (see docs/sanity-workflow.md).
 #
-# Both Studios auto-update the `sanity` package (`autoUpdates` in sanity.cli.ts),
+# Both Studios auto-update the `sanity` package (`autoUpdates` in studio/sanity.cli.ts),
 # so dependency bumps don't deploy; a plugin update goes out with the next deploy.
 on:
   push:
     branches: [main]
     paths:
-      - 'sanity/**'
-      - 'sanity.config.ts'
-      - 'sanity.cli.ts'
-      # What sanity.config.ts imports outside sanity/.
+      - 'studio/**'
+      # What the Studio imports from the site.
       - 'i18n/locales.ts'
       - 'i18n/routing.ts'
       - 'lib/assets.ts'
@@ -54,4 +52,4 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Deploy
-        run: bunx sanity deploy --yes
+        run: bun run studio:deploy
