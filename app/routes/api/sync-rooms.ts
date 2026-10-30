@@ -1,13 +1,13 @@
 /**
  * Keeps the `rooms` table in step with the houses' shares.house listings, on
  * `POST` with `Authorization: Bearer <SYNC_TOKEN>`, then purges the cached
- * responses that show availability. An EventBridge rule in AWS Tokyo calls it
- * on a schedule. See docs/rooms.md.
+ * responses that show availability when they're out of date. An EventBridge
+ * rule in AWS Tokyo calls it every hour. See docs/rooms.md.
  */
 import { env as serverEnv } from '@/env'
 import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
 import { hasBearerToken } from '@/lib/rooms-sync/auth'
-import { syncListing } from '@/lib/rooms-sync/sync.server'
+import { needsPurge, recordPurge, syncListing } from '@/lib/rooms-sync/sync.server'
 import { PROPERTY_IDS } from '@/lib/rooms.server'
 import { createFileRoute } from '@tanstack/react-router'
 import { cache, env, waitUntil } from 'cloudflare:workers'
@@ -51,26 +51,43 @@ async function syncAll(force: boolean): Promise<Result[]> {
   return results
 }
 
-/** Purges the responses that show availability; a failure leaves them up to a day old, until the next run's purge. */
-async function purge(): Promise<boolean> {
+/**
+ * Purges the responses that show availability when they're out of date (see
+ * `needsPurge`): on most days once or twice, though the sync runs hourly. A
+ * page rendered while D1 failed waits for the next purge or its cache expiry.
+ */
+async function purgeIfNeeded(): Promise<'purged' | 'skipped' | 'failed'> {
+  const now = new Date().toISOString()
+  // Purges when it can't tell.
+  const needed = await needsPurge(env.ROOMS_DB, now).catch((error: unknown) => {
+    log('error', 'purge_check_failed', { error: describe(error) })
+    return true
+  })
+  if (!needed) return 'skipped'
+
   // The dev server has no Workers Cache, so nothing to purge.
-  if (typeof cache?.purge !== 'function') return true
-  const { success, errors } = await cache
-    .purge({ tags: [ROOMS_CACHE_TAG] })
-    .catch((error: unknown) => ({ success: false, errors: [error] }))
-  if (!success) log('error', 'site_purge_failed', { error: describe(errors) })
-  return success
+  if (typeof cache?.purge === 'function') {
+    const { success, errors } = await cache
+      .purge({ tags: [ROOMS_CACHE_TAG] })
+      .catch((error: unknown) => ({ success: false, errors: [error] }))
+    if (!success) {
+      log('error', 'site_purge_failed', { error: describe(errors) })
+      return 'failed'
+    }
+  }
+  // Unrecorded, the purge is only tried again.
+  await recordPurge(env.ROOMS_DB, now).catch((error: unknown) =>
+    log('error', 'purge_record_failed', { error: describe(error) })
+  )
+  log('info', 'site_purged', {})
+  return 'purged'
 }
 
-/**
- * Syncs every listing, then purges, whatever changed: that also retries a purge
- * an earlier run missed, and replaces pages rendered from counts that have
- * since aged out (see `getRoomCounts`). `ok` is false when either step failed.
- */
+/** Syncs every listing, then purges if needed. `ok` is false when either step failed. */
 async function run(force: boolean) {
   const results = await syncAll(force)
-  const purged = await purge()
-  return { ok: results.every((result) => result.ok) && purged, results, purged }
+  const purge = await purgeIfNeeded()
+  return { ok: results.every((result) => result.ok) && purge !== 'failed', results, purge }
 }
 
 export const Route = createFileRoute('/api/sync-rooms')({
@@ -86,9 +103,9 @@ export const Route = createFileRoute('/api/sync-rooms')({
         // EventBridge gives up on a response after 5 s; the run finishes anyway.
         const running = run(force)
         waitUntil(running)
-        const { ok, results, purged } = await running
+        const { ok, results, purge } = await running
         // EventBridge retries a 5xx.
-        return Response.json({ results, purged }, { status: ok ? 200 : 502, headers: NO_STORE })
+        return Response.json({ results, purge }, { status: ok ? 200 : 502, headers: NO_STORE })
       }
     }
   }

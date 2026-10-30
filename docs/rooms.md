@@ -99,8 +99,8 @@ curl -X POST -H "Authorization: Bearer $SYNC_TOKEN" localhost:3000/api/sync-room
 curl -X POST -H "Authorization: Bearer $SYNC_TOKEN" https://guesthouseosaka.com/api/sync-rooms
 ```
 
-The route answers with each listing's result and whether the purge landed, and
-with 502 if anything failed. A listing that really lost more than half its rooms
+The route answers with each listing's result and its purge (`purged`,
+`skipped` or `failed`), and with 502 if anything failed. A listing that really lost more than half its rooms
 is refused as incomplete on every run until synced once with `?force=1`.
 
 ## Reading rooms in the site
@@ -115,10 +115,19 @@ fails.
 ## Cache
 
 House pages and their data responses are cached for a day (see
-`lib/cache-control.ts`) and tagged `rooms` as well as `sanity`. At the end of
-every run, the sync purges the `rooms` tag. Purging on every run rather than
-only on changes re-renders a few pages every hour, and in return a missed
-purge, a page rendered while D1 failed, or counts that have since aged out
-never last longer than one run. A failed purge fails the run.
+`lib/cache-control.ts`) and tagged `rooms` as well as `sanity`. After syncing,
+a run purges the `rooms` tag only when the cached pages may be out of date
+(`needsPurge` in `lib/rooms-sync/sync.server.ts`):
 
-The dev server has no Workers Cache, so locally there's nothing to purge.
+- No purge has been recorded yet.
+- A room changed since the last purge (its `updated_at` is later).
+- The last purge was on an earlier day in Japan. An upcoming room may have
+  become available since, so the first run after midnight in Japan purges.
+
+On most days that's once or twice, though the sync runs every hour. The time
+of each successful purge is kept in `sync_state`, in its one row. A failed
+purge isn't recorded, which fails the run (EventBridge retries it), and the
+next run purges again. A page rendered while D1 failed stays until the next
+purge or its cache expires.
+
+The dev server has no Workers Cache, so locally a purge only records its time.

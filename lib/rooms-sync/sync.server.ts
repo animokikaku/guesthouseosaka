@@ -150,3 +150,37 @@ export async function syncListing(
   const changed = await writeRooms(db, url, propertyId, rooms, { now, force })
   return { propertyId, rooms: rooms.length, changed }
 }
+
+/** The date in Japan, `YYYY-MM-DD`, at an ISO timestamp. */
+function dateInJapan(timestamp: string) {
+  return new Date(Date.parse(timestamp) + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
+}
+
+/**
+ * Whether the cached pages that show rooms are out of date at `now`: never
+ * purged, a room changed since the last purge (a failed purge isn't recorded,
+ * so the next run retries it), or the last purge was on an earlier day in
+ * Japan, where an upcoming room may since have become available.
+ */
+export async function needsPurge(db: D1Database, now: string) {
+  const state = await db
+    .prepare(
+      'SELECT purged_at AS purgedAt, (SELECT MAX(updated_at) FROM rooms) AS changedAt FROM sync_state WHERE id = 1'
+    )
+    .first<{ purgedAt: string; changedAt: string | null }>()
+  if (!state) return true
+  return (
+    (state.changedAt !== null && state.changedAt > state.purgedAt) ||
+    dateInJapan(state.purgedAt) < dateInJapan(now)
+  )
+}
+
+/** Records a purge that succeeded, taken at `at`: after the rooms it covers were written. */
+export async function recordPurge(db: D1Database, at: string) {
+  await db
+    .prepare(
+      'INSERT INTO sync_state (id, purged_at) VALUES (1, ?1) ON CONFLICT (id) DO UPDATE SET purged_at = excluded.purged_at'
+    )
+    .bind(at)
+    .run()
+}

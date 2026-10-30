@@ -22,6 +22,12 @@
     ]
   },
   "tags": ["-lintignore"],
-  "entry": ["app/routes/**/*.{ts,tsx}", "app/router.tsx", "app/start.ts", "void.config.ts"],
+  "entry": [
+    "app/routes/**/*.{ts,tsx}",
+    "app/router.tsx",
+    "app/start.ts",
+    "db/schema.ts",
+    "void.config.ts"
+  ],
   "ignoreDependencies": ["cloudflare"]
 }

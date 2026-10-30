@@ -1,10 +1,18 @@
 // @vitest-environment node
 
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { DatabaseSync, type SQLInputValue } from 'node:sqlite'
 import type { Room } from '../room'
-import { fetchListing, propertyIdOf, SyncError, syncListing, writeRooms } from '../sync.server'
+import {
+  fetchListing,
+  needsPurge,
+  propertyIdOf,
+  recordPurge,
+  SyncError,
+  syncListing,
+  writeRooms
+} from '../sync.server'
 
 const URL_10333 = 'https://shares.house/a_detail/q_10333/'
 
@@ -18,7 +26,12 @@ interface Statement {
 /** The parts of D1's binding the sync uses, over an in-memory SQLite database with the real migrations. */
 function createDatabase() {
   const sqlite = new DatabaseSync(':memory:')
-  sqlite.exec(readFileSync(join(__dirname, '../../../db/migrations/0001_create_rooms.sql'), 'utf8'))
+  const migrations = join(__dirname, '../../../db/migrations')
+  for (const file of readdirSync(migrations)
+    .filter((name) => name.endsWith('.sql'))
+    .toSorted()) {
+    sqlite.exec(readFileSync(join(migrations, file), 'utf8'))
+  }
 
   function statement(query: string, values: SQLInputValue[] = []): Statement {
     return {
@@ -275,5 +288,45 @@ describe('fetchListing', () => {
     await expect(fetchListing(URL_1)).rejects.toMatchObject({
       cause: { message: 'HTTP 403 (cf-ray a5241e5a9c47d4a2-NRT, cf-mitigated challenge)' }
     })
+  })
+})
+
+describe('needsPurge', () => {
+  const MORNING = '2026-10-30T01:00:00.000Z' // 10:00 in Japan
+
+  it('purges before any purge was recorded', async () => {
+    const { db } = createDatabase()
+    expect(await needsPurge(db, MORNING)).toBe(true)
+  })
+
+  it('skips when nothing changed since the last purge, the same day in Japan', async () => {
+    const { db } = createDatabase()
+    await writeRooms(db, URL_1, '1', [room('101')], { now: '2026-10-30T00:00:00.000Z' })
+    await recordPurge(db, MORNING)
+    expect(await needsPurge(db, '2026-10-30T14:59:00.000Z')).toBe(false)
+  })
+
+  it('purges when a room changed after the last purge', async () => {
+    const { db } = createDatabase()
+    await writeRooms(db, URL_1, '1', [room('101')], { now: '2026-10-30T00:00:00.000Z' })
+    await recordPurge(db, MORNING)
+    await writeRooms(db, URL_1, '1', [room('101', { status: 'available' })], {
+      now: '2026-10-30T02:00:00.000Z'
+    })
+    expect(await needsPurge(db, '2026-10-30T02:00:01.000Z')).toBe(true)
+  })
+
+  it('purges on the first run of a new day in Japan', async () => {
+    const { db } = createDatabase()
+    await recordPurge(db, MORNING)
+    // 00:07 on the 31st in Japan.
+    expect(await needsPurge(db, '2026-10-30T15:07:00.000Z')).toBe(true)
+  })
+
+  it('keeps one row, at the latest purge', async () => {
+    const { db } = createDatabase()
+    await recordPurge(db, MORNING)
+    await recordPurge(db, '2026-10-30T15:07:00.000Z')
+    expect(await needsPurge(db, '2026-10-30T16:00:00.000Z')).toBe(false)
   })
 })

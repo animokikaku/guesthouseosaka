@@ -1,6 +1,7 @@
 // The rooms synced from shares.house (see docs/rooms.md). The site reads them
-// through `db` from `void/db`; the sync writes them with raw D1 statements. Must match db/migrations, which create
-// both tables `STRICT` (Drizzle can't express it).
+// through `db` from `void/db`; the sync writes them with raw D1 statements.
+// Must match db/migrations, which create every table `STRICT` (Drizzle can't
+// express it).
 import { sql } from 'void/db'
 import { check, integer, primaryKey, real, sqliteTable, text } from 'void/schema-d1'
 
@@ -37,3 +38,16 @@ export const properties = sqliteTable('properties', {
   url: text('url').notNull(),
   checkedAt: text('checked_at').notNull()
 })
+
+/**
+ * The sync's own state, in its one row: when it last purged the cached pages
+ * that show rooms (see `needsPurge`).
+ */
+export const syncState = sqliteTable(
+  'sync_state',
+  {
+    id: integer('id').primaryKey(),
+    purgedAt: text('purged_at').notNull()
+  },
+  (table) => [check('sync_state_single_row', sql`${table.id} = 1`)]
+)

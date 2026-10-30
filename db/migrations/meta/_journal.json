@@ -8,6 +8,13 @@
       "when": 1779408000000,
       "tag": "0001_create_rooms",
       "breakpoints": false
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1793355027350,
+      "tag": "0002_create_sync_state",
+      "breakpoints": false
     }
   ]
 }
