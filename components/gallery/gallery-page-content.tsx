@@ -1,6 +1,6 @@
+import { CategoryGrid } from '@/components/gallery/gallery-category-grid'
 import { LightboxGallery } from '@/components/gallery/lightbox-gallery'
 import { Lightbox } from '@/components/ui/lightbox'
-import { HouseGallery } from '@/components/gallery/house-gallery'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
 import { useStickyNav } from '@/hooks/use-sticky-nav'
 import {
@@ -97,11 +97,18 @@ function GalleryPageBody({
           className="relative flex-1 overflow-y-auto scroll-smooth"
           aria-label={t('gallery_content_label')}
         >
-          <HouseGallery
-            categories={categories}
-            dataAttribute={dataAttribute}
-            indexByKey={indexByKey}
-          />
+          {/* The first section sits flush with the top so jumping to it leaves
+              nothing to scroll back up to. */}
+          <div className="pb-10">
+            {categories.map((category) => (
+              <CategoryGrid
+                key={category._id}
+                category={category}
+                dataAttribute={dataAttribute}
+                indexByKey={indexByKey}
+              />
+            ))}
+          </div>
         </main>
       </div>
 

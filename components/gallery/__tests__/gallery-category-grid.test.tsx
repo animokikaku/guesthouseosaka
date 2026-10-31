@@ -1,4 +1,4 @@
-import { HouseGallery } from '@/components/gallery/house-gallery'
+import { CategoryGrid } from '@/components/gallery/gallery-category-grid'
 import { Lightbox } from '@/components/ui/lightbox'
 import type { GalleryCategory } from '@/lib/gallery'
 import {
@@ -20,7 +20,14 @@ function renderGallery(categories: GalleryCategory[], dataAttribute?: (path: str
 
   return render(
     <Lightbox.Root>
-      <HouseGallery categories={categories} indexByKey={indexByKey} dataAttribute={dataAttribute} />
+      {categories.map((category) => (
+        <CategoryGrid
+          key={category._id}
+          category={category}
+          indexByKey={indexByKey}
+          dataAttribute={dataAttribute}
+        />
+      ))}
     </Lightbox.Root>
   )
 }
@@ -40,7 +47,7 @@ const kitchen = createGalleryCategory({
   items: [photo('stove', 'Stove')]
 })
 
-describe('HouseGallery', () => {
+describe('CategoryGrid', () => {
   it('shows each category in order with a photo count', () => {
     renderGallery(toGalleryCategories([bedroom, kitchen]))
 
@@ -116,8 +123,8 @@ describe('HouseGallery', () => {
     )
   })
 
-  it('renders nothing for an empty gallery', () => {
-    const { container } = renderGallery([])
+  it('renders nothing for a category without photos', () => {
+    const { container } = renderGallery(toGalleryCategories([createGalleryCategory({ items: [] })]))
 
     expect(container).toBeEmptyDOMElement()
   })
