@@ -1,4 +1,5 @@
-import { Lightbox, type LightboxItem } from '@/components/lightbox'
+import { LightboxGallery } from '@/components/gallery/lightbox-gallery'
+import { Lightbox } from '@/components/ui/lightbox'
 import { HouseGallery } from '@/components/gallery/house-gallery'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
 import { useStickyNav } from '@/hooks/use-sticky-nav'
@@ -7,7 +8,7 @@ import {
   type GalleryCategories,
   type GalleryCategoryData
 } from '@/lib/gallery'
-import { toGalleryLightboxItem } from '@/lib/gallery-image'
+import { toGalleryLightboxItem, type LightboxItem } from '@/lib/gallery-image'
 import { OptimisticArray } from '@/components/optimistic-array'
 import { toGalleryCategories } from '@/lib/transforms/gallery'
 import { useTranslations } from 'use-intl'
@@ -104,7 +105,7 @@ function GalleryPageBody({
         </main>
       </div>
 
-      <Lightbox.Gallery items={lightboxItems} ariaLabel={title || t('gallery_title')} />
+      <LightboxGallery items={lightboxItems} ariaLabel={title || t('gallery_title')} />
     </Lightbox.Root>
   )
 }

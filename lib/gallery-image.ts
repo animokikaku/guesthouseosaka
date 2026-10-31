@@ -1,4 +1,3 @@
-import type { LightboxItem } from '@/components/lightbox'
 import type { FeaturedImage, GalleryItem } from '@/lib/gallery'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions } from '@sanity/asset-utils'
@@ -14,6 +13,22 @@ export const LIGHTBOX_THUMBNAIL_SIZE = 56
 
 export type SanityGalleryImage = NonNullable<GalleryItem['image']> | NonNullable<FeaturedImage>
 export type GalleryImageProps = Omit<ImageProps, 'fill' | 'className' | 'loader'>
+
+/** Item shape for `LightboxGallery` — pass real intrinsic pixel size. */
+export type LightboxItem = {
+  id?: string | number
+  src: string
+  thumb: string
+  /**
+   * Placeholder for the strip thumbnail only: on the slide it would paint over
+   * ramka's open-morph bridge.
+   */
+  thumbBlurHash?: string | null
+  alt: string
+  caption?: string
+  width: number
+  height: number
+}
 
 type ToGalleryImagePropsOptions = {
   width?: number
@@ -60,7 +75,7 @@ export function toGalleryImageProps(
 }
 
 /**
- * Maps a gallery item to ramka's `LightboxItem` shape for `Lightbox.Gallery`.
+ * Maps a gallery item to ramka's `LightboxItem` shape for `LightboxGallery`.
  *
  * Trigger and destination must share the same photograph and aspect ratio —
  * square tiles are a CSS crop (`aspect-square` + `object-cover`), not a

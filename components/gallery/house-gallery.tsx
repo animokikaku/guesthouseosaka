@@ -6,7 +6,7 @@ type HouseGalleryProps = {
   categories: GalleryCategory[]
   /** Data attribute helper for Sanity visual editing */
   dataAttribute?: DataAttributeFn
-  /** Maps a gallery item key to its index in the flattened Lightbox.Gallery items array */
+  /** Maps a gallery item key to its index in the flattened LightboxGallery items array */
   indexByKey: Map<string, number>
 }
 

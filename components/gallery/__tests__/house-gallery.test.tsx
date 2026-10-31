@@ -1,5 +1,5 @@
 import { HouseGallery } from '@/components/gallery/house-gallery'
-import { Lightbox } from '@/components/lightbox'
+import { Lightbox } from '@/components/ui/lightbox'
 import type { GalleryCategory } from '@/lib/gallery'
 import {
   BLUR_HASH,
