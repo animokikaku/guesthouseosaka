@@ -6,11 +6,42 @@ import type { ComponentProps, ReactNode } from 'react'
  * links show their mask, as the router does) so tests assert on the URLs
  * users see; the hooks return controllable state.
  */
+type HistoryActionType = 'PUSH' | 'REPLACE' | 'BACK' | 'FORWARD' | 'GO'
+type HistoryListener = (event: {
+  location: { search: string }
+  action: { type: HistoryActionType }
+}) => void
+
+/**
+ * The router's history: the address bar's search, `back()` as a spy, and
+ * `traverse()` to move the address bar and tell subscribers, as Back, Forward
+ * or a navigation would.
+ */
+export function createRouterHistory() {
+  const listeners = new Set<HistoryListener>()
+  const history = {
+    location: { search: '' },
+    back: vi.fn(),
+    subscribe(listener: HistoryListener) {
+      listeners.add(listener)
+      return () => {
+        listeners.delete(listener)
+      }
+    },
+    traverse(search: string, type: HistoryActionType) {
+      history.location = { search }
+      for (const listener of listeners) listener({ location: history.location, action: { type } })
+    }
+  }
+  return history
+}
+
 export const routerState = {
   params: {} as Record<string, string>,
   pathname: '/en',
   navigate: vi.fn(),
-  invalidate: vi.fn()
+  invalidate: vi.fn(),
+  history: createRouterHistory()
 }
 
 type LinkTarget = {
@@ -65,7 +96,12 @@ export const routerMock = {
   Link,
   linkOptions: <T,>(options: T) => options,
   useNavigate: () => routerState.navigate,
-  useRouter: () => ({ invalidate: routerState.invalidate, navigate: routerState.navigate }),
+  useRouter: () => ({
+    invalidate: routerState.invalidate,
+    navigate: routerState.navigate,
+    history: routerState.history,
+    options: { parseSearch: (search: string) => Object.fromEntries(new URLSearchParams(search)) }
+  }),
   useParams: () => routerState.params,
   useLocation: <T,>(options?: { select?: (location: { pathname: string }) => T }) =>
     options?.select

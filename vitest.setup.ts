@@ -117,8 +117,8 @@ vi.mock('@tanstack/react-router', async () => {
 vi.mock('@marsidev/react-turnstile', () => import('@/components/forms/__tests__/utils/turnstile'))
 
 beforeEach(async () => {
-  const { routerState } = await import('@/lib/__tests__/utils/router')
-  Object.assign(routerState, { params: {}, pathname: '/en' })
+  const { createRouterHistory, routerState } = await import('@/lib/__tests__/utils/router')
+  Object.assign(routerState, { params: {}, pathname: '/en', history: createRouterHistory() })
   routerState.navigate.mockReset()
   routerState.invalidate.mockReset()
 })
