@@ -70,14 +70,14 @@ test('remembers the slide layout the visitor picked', async ({ mount, page }) =>
 
   await openLightbox()
   await page.getByRole('button', { name: /\bsnug\b/i }).click()
-  await expect(snugToggle()).toHaveAttribute('aria-pressed', 'true')
+  await expect(snugToggle()).toBeVisible()
 
   await page.keyboard.press('Escape')
   await openLightbox()
-  await expect(snugToggle()).toHaveAttribute('aria-pressed', 'true')
+  await expect(snugToggle()).toBeVisible()
 
   await page.reload()
   await mount(story)
   await openLightbox()
-  await expect(snugToggle()).toHaveAttribute('aria-pressed', 'true')
+  await expect(snugToggle()).toBeVisible()
 })

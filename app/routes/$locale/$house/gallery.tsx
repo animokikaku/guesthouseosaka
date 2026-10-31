@@ -46,12 +46,13 @@ function GalleryPage() {
         title={data.title ?? ''}
         backButton={<GalleryPageBackLink house={house} />}
         photo={photo}
-        onPhotoNavigate={(nextPhoto, { replace }) =>
+        onPhotoNavigate={(nextPhoto, { replace, state }) =>
           void navigate({
             to: '/$locale/$house/gallery',
             params: { locale, house },
             search: { photo: nextPhoto },
             replace,
+            state,
             resetScroll: false,
             // The lightbox runs its own transitions.
             viewTransition: false

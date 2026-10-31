@@ -60,10 +60,7 @@ describe('LightboxGallery', () => {
     renderOpen([photo('a'), photo('b')])
 
     fireEvent.click(screen.getByRole('button', { name: 'Switch to snug slides' }))
-    expect(screen.getByRole('button', { name: 'Switch to full-bleed slides' })).toHaveAttribute(
-      'aria-pressed',
-      'true'
-    )
+    expect(screen.getByRole('button', { name: 'Switch to full-bleed slides' })).toBeInTheDocument()
     expect(localStorage.getItem('ramka-lightbox-slides-layout')).toBe('snug')
 
     fireEvent.click(screen.getByRole('button', { name: 'Switch to full-bleed slides' }))

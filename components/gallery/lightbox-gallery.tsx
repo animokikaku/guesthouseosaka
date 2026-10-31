@@ -342,7 +342,6 @@ export function LightboxGallery({
           <button
             type="button"
             className={cn(controlClass, 'max-md:hidden [&_svg]:size-4.5')}
-            aria-pressed={snug}
             aria-label={snug ? t('switch_to_bleed_slides') : t('switch_to_snug_slides')}
             onClick={toggleSlidesLayout}
           >

@@ -46,7 +46,7 @@ function GalleryModalRoute() {
         title={data.title ?? ''}
         backButton={<GalleryModalCloseButton />}
         photo={photo}
-        onPhotoNavigate={(nextPhoto, { replace }) =>
+        onPhotoNavigate={(nextPhoto, { replace, state }) =>
           void navigate({
             to: '/$locale/$house/photos',
             params: { locale, house },
@@ -58,6 +58,7 @@ function GalleryModalRoute() {
               search: { photo: nextPhoto }
             },
             replace,
+            state,
             resetScroll: false,
             // The lightbox runs its own transitions.
             viewTransition: false

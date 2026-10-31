@@ -1,15 +1,25 @@
 import { validateGallerySearch } from '@/lib/gallery-search'
-import { useRouter } from '@tanstack/react-router'
+import { type HistoryLocation, type HistoryState, useRouter } from '@tanstack/react-router'
 import { useEffect, useEffectEvent, useRef, useState } from 'react'
 
+declare module '@tanstack/react-router' {
+  interface HistoryState {
+    /** Marks a photo entry the lightbox pushed, so Forward back onto it can still step off it on close. */
+    galleryPhotoPushed?: boolean
+  }
+}
+
 /** Moves the address bar to `photo`, or off any photo when `undefined`. */
-export type PhotoNavigate = (photo: string | undefined, options: { replace: boolean }) => void
+export type PhotoNavigate = (
+  photo: string | undefined,
+  options: { replace: boolean; state: HistoryState }
+) => void
 
 /**
  * Drives a controlled lightbox from the `photo` search param, so each photo has
  * its own URL. Opening pushes a history entry, moving between photos replaces
  * it, and closing steps back off it, so the browser's Back button closes the
- * viewer.
+ * viewer, including after Forward back onto a photo it opened.
  *
  * The lightbox reads React state, not the URL: its gesture callbacks must
  * update the controlled props synchronously to keep the open morph, and a
@@ -33,8 +43,12 @@ export function useLightboxUrlState({
     const index = key === undefined ? -1 : keys.indexOf(key)
     return index === -1 ? undefined : index
   }
-  const photoInUrl = (search: string) =>
-    validateGallerySearch(router.options.parseSearch(search)).photo
+  // Parsed by the router, which unwraps a masked entry (the house page's
+  // modal) to the location and state it stands for.
+  const parse = (location: HistoryLocation) => {
+    const { search, state } = router.parseLocation(location)
+    return { photo: validateGallerySearch(search).photo, state }
+  }
 
   const [initialIndex] = useState(() => indexOf(photo))
   const [open, setOpen] = useState(initialIndex !== undefined)
@@ -43,9 +57,10 @@ export function useLightboxUrlState({
   // step back off it instead of leaving it behind for Back to land on.
   const pushedRef = useRef(false)
 
-  const onTraverse = useEffectEvent((search: string) => {
-    pushedRef.current = false
-    const index = indexOf(photoInUrl(search))
+  const onTraverse = useEffectEvent((location: HistoryLocation) => {
+    const { photo: photoInUrl, state } = parse(location)
+    pushedRef.current = state.galleryPhotoPushed === true
+    const index = indexOf(photoInUrl)
     if (index === undefined) {
       setOpen(false)
     } else {
@@ -57,33 +72,38 @@ export function useLightboxUrlState({
   useEffect(
     () =>
       router.history.subscribe(({ location, action }) => {
-        if (action.type !== 'PUSH' && action.type !== 'REPLACE') onTraverse(location.search)
+        if (action.type !== 'PUSH' && action.type !== 'REPLACE') onTraverse(location)
       }),
     [router]
   )
 
-  const syncUrl = useEffectEvent((isOpen: boolean, index: number) => {
-    const current = photoInUrl(router.history.location.search)
-    const target = isOpen ? keys[index] : undefined
+  const syncUrl = useEffectEvent((isOpen: boolean, target: string | undefined) => {
+    const current = parse(router.history.location).photo
     if (target === current) return
 
     if (target === undefined) {
+      // Open on a photo a draft edit just removed: keep its URL until the
+      // lightbox moves to another.
+      if (isOpen) return
       if (pushedRef.current) {
         pushedRef.current = false
         router.history.back()
       } else {
         // A deep link, or a key no photo has: drop the param in place.
-        navigate(undefined, { replace: true })
+        navigate(undefined, { replace: true, state: {} })
       }
     } else if (current === undefined) {
       pushedRef.current = true
-      navigate(target, { replace: false })
+      navigate(target, { replace: false, state: { galleryPhotoPushed: true } })
     } else {
-      navigate(target, { replace: true })
+      navigate(target, { replace: true, state: { galleryPhotoPushed: pushedRef.current } })
     }
   })
 
-  useEffect(() => syncUrl(open, value), [open, value])
+  // Follows the photo's key rather than its index, which a draft edit to the
+  // gallery can point at another photo.
+  const activeKey = open ? keys[value] : undefined
+  useEffect(() => syncUrl(open, activeKey), [open, activeKey])
 
   return {
     open,

@@ -7,20 +7,21 @@ import type { ComponentProps, ReactNode } from 'react'
  * users see; the hooks return controllable state.
  */
 type HistoryActionType = 'PUSH' | 'REPLACE' | 'BACK' | 'FORWARD' | 'GO'
+type HistoryEntry = { search: string; state: Record<string, unknown> }
 type HistoryListener = (event: {
-  location: { search: string }
+  location: HistoryEntry
   action: { type: HistoryActionType }
 }) => void
 
 /**
- * The router's history: the address bar's search, `back()` as a spy, and
- * `traverse()` to move the address bar and tell subscribers, as Back, Forward
- * or a navigation would.
+ * The router's history: the current entry's search and state, `back()` as a
+ * spy, and `traverse()` to move to an entry and tell subscribers, as Back,
+ * Forward or a navigation would.
  */
 export function createRouterHistory() {
   const listeners = new Set<HistoryListener>()
   const history = {
-    location: { search: '' },
+    location: { search: '', state: {} },
     back: vi.fn(),
     subscribe(listener: HistoryListener) {
       listeners.add(listener)
@@ -28,8 +29,8 @@ export function createRouterHistory() {
         listeners.delete(listener)
       }
     },
-    traverse(search: string, type: HistoryActionType) {
-      history.location = { search }
+    traverse(search: string, type: HistoryActionType, state: Record<string, unknown> = {}) {
+      history.location = { search, state }
       for (const listener of listeners) listener({ location: history.location, action: { type } })
     }
   }
@@ -100,7 +101,11 @@ export const routerMock = {
     invalidate: routerState.invalidate,
     navigate: routerState.navigate,
     history: routerState.history,
-    options: { parseSearch: (search: string) => Object.fromEntries(new URLSearchParams(search)) }
+    // The real one also unwraps masked entries, which these never are.
+    parseLocation: (location: { search: string; state: Record<string, unknown> }) => ({
+      search: Object.fromEntries(new URLSearchParams(location.search)),
+      state: location.state
+    })
   }),
   useParams: () => routerState.params,
   useLocation: <T,>(options?: { select?: (location: { pathname: string }) => T }) =>

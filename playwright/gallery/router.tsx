@@ -72,11 +72,12 @@ export function useNavigate() {
 // The gallery's lightbox URL sync reads the address bar and listens for Back
 // and Forward; the sandbox has neither, so photos never reach a URL.
 const router = {
-  options: {
-    parseSearch: (search: string) => Object.fromEntries(new URLSearchParams(search))
-  },
+  parseLocation: (location: { search: string; state: Record<string, unknown> }) => ({
+    search: Object.fromEntries(new URLSearchParams(location.search)),
+    state: location.state
+  }),
   history: {
-    location: { search: '' },
+    location: { search: '', state: {} },
     subscribe: () => () => {},
     back: () => {}
   }

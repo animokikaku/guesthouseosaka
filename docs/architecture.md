@@ -54,7 +54,8 @@ public/                # Static assets only
   opening one pushes a history entry, swiping replaces it, and Back closes the lightbox. A photo
   link renders the lightbox open on the server, with that photo as its social card
 - Navigations crossfade with view transitions (`defaultViewTransition`), except search-only ones
-  like a photo URL; the gallery modal opts out, since its dialog and lightbox animate themselves
+  like a photo URL in browsers with view transition types (others crossfade those too); the
+  gallery modal opts out, since its dialog and lightbox animate themselves
 - Route folders use kebab-case
 
 ### Data
