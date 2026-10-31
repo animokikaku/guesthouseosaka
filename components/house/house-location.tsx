@@ -1,46 +1,11 @@
 import { HouseLocationModal } from '@/components/house/house-location-modal'
+import { HouseMapSkeleton } from '@/components/house/house-map-skeleton'
 import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
+import { useHasBeenNearViewport } from '@/hooks/use-has-been-near-viewport'
 import type { LocationData, MapData } from '@/lib/types/components'
 import { useTranslations } from 'use-intl'
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-
-function MapSkeleton() {
-  const t = useTranslations('HouseLocation')
-
-  return (
-    <div
-      aria-busy="true"
-      className="md:border-border flex min-h-[480px] flex-col gap-6 overflow-hidden md:flex-row md:gap-0 md:rounded-lg md:border"
-    >
-      {/* `output` (implicit role=status) announces the load politely. It only
-          accepts phrasing content, so it wraps the text rather than the
-          skeleton boxes below, which are decorative and expose no text. */}
-      <output className="sr-only">{t('loading_map')}</output>
-      {/* PlaceDetails skeleton */}
-      <div className="border-border flex min-h-[480px] flex-col overflow-hidden rounded-lg border bg-white md:w-1/3 md:shrink-0 md:rounded-none md:border-0 md:border-r dark:bg-[#131314]">
-        {/* Image skeleton - takes half the height, clipped by parent overflow */}
-        <Skeleton className="h-1/2 w-full rounded-none" />
-        <Separator />
-        {/* Text skeletons */}
-        <div className="flex flex-1 flex-col gap-3 p-4 md:p-6">
-          {/* Title */}
-          <Skeleton className="h-6 w-3/4" />
-          {/* 3 lines of text */}
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-5/6" />
-        </div>
-      </div>
-      {/* Map skeleton */}
-      <div className="md:w-2/3">
-        <Skeleton className="border-border h-[400px] w-full rounded-lg border md:h-full md:rounded-none md:border-0" />
-      </div>
-    </div>
-  )
-}
+import { lazy, Suspense } from 'react'
 
 // Only requested once the map nears the viewport (see `LazyHouseMap`), so it
 // never renders on the server.
@@ -49,38 +14,17 @@ const HouseMap = lazy(() =>
 )
 
 function LazyHouseMap({ map }: { map: MapData }) {
-  const [isVisible, setIsVisible] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.disconnect()
-        }
-      },
-      {
-        rootMargin: '400px', // Start loading 400px before viewport to allow Google Maps (~1.5MB) to load
-        threshold: 0
-      }
-    )
-
-    observer.observe(container)
-    return () => observer.disconnect()
-  }, [])
+  // Start loading 400px early to give Google Maps (~1.5MB) time to arrive.
+  const [ref, isNearViewport] = useHasBeenNearViewport<HTMLDivElement>('400px')
 
   return (
-    <div ref={containerRef}>
-      {isVisible ? (
-        <Suspense fallback={<MapSkeleton />}>
+    <div ref={ref}>
+      {isNearViewport ? (
+        <Suspense fallback={<HouseMapSkeleton />}>
           <HouseMap map={map} />
         </Suspense>
       ) : (
-        <MapSkeleton />
+        <HouseMapSkeleton />
       )}
     </div>
   )

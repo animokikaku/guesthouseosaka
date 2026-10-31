@@ -40,11 +40,13 @@
     "gallery_title": "Galerie de la maison"
   },
   "Lightbox": {
+    "carousel": "carrousel",
     "close": "Fermer",
     "counter": "{current} sur {total}",
     "full_size_images": "Images en taille réelle",
     "next": "Image suivante",
     "previous": "Image précédente",
+    "slide": "diapositive",
     "switch_to_bleed_slides": "Passer aux diapositives pleine largeur",
     "switch_to_snug_slides": "Passer aux diapositives compactes",
     "thumbnails": "Vignettes photo",

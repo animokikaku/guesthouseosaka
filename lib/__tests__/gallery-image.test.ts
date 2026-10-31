@@ -1,7 +1,16 @@
 // @vitest-environment node
 
-import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
-import { cleanGalleryAlt, toGalleryImageProps, toGalleryLightboxItem } from '../gallery-image'
+import {
+  createGalleryCategory,
+  createGalleryItem,
+  createSanityImage
+} from '@/lib/transforms/__tests__/mocks'
+import {
+  cleanGalleryAlt,
+  galleryPhotoOpenGraphImage,
+  toGalleryImageProps,
+  toGalleryLightboxItem
+} from '../gallery-image'
 
 /** The resize parameters a Sanity CDN URL asks for. */
 function resizeOf(url: unknown) {
@@ -106,5 +115,28 @@ describe('toGalleryLightboxItem', () => {
     const item = toGalleryLightboxItem(createGalleryItem({ image }))
     expect(item).not.toHaveProperty('blurHash')
     expect(item?.thumbBlurHash).toBe(image.blurHash)
+  })
+})
+
+describe('galleryPhotoOpenGraphImage', () => {
+  const categories = [
+    createGalleryCategory({
+      items: [
+        createGalleryItem({ _key: 'kitchen', image: createSanityImage() }),
+        createGalleryItem({ _key: 'draft', image: createSanityImage({ asset: null }) })
+      ]
+    })
+  ]
+
+  it('crops the linked photo to the social card size', () => {
+    expect(resizeOf(galleryPhotoOpenGraphImage(categories, 'kitchen'))).toEqual({
+      w: '1200',
+      h: '630',
+      fit: 'crop'
+    })
+  })
+
+  it.each([undefined, 'missing', 'draft'])('has no image for the photo key %s', (photo) => {
+    expect(galleryPhotoOpenGraphImage(categories, photo)).toBeUndefined()
   })
 })

@@ -13,19 +13,22 @@ export function houseHeadMeta({
   locale,
   house,
   data,
-  matches
+  matches,
+  image = assets.openGraph[house].src
 }: {
   locale: Locale
   house: HouseIdentifier
   data: { title: string | null; description: string | null } | null | undefined
   matches: ReadonlyArray<{ routeId: string }>
+  /** The social-card image; the house's own card by default. */
+  image?: string
 }) {
   if (!data) return []
 
   const { siteName } = getLocaleHeadData(matches)
   const { title, description } = stegaClean({ title: data.title, description: data.description })
   return [
-    ...openGraphMeta({ locale, image: assets.openGraph[house].src, siteName }),
+    ...openGraphMeta({ locale, image, siteName }),
     ...pageMeta({ title, description, siteName })
   ]
 }

@@ -6,11 +6,43 @@ import type { ComponentProps, ReactNode } from 'react'
  * links show their mask, as the router does) so tests assert on the URLs
  * users see; the hooks return controllable state.
  */
+type HistoryActionType = 'PUSH' | 'REPLACE' | 'BACK' | 'FORWARD' | 'GO'
+type HistoryEntry = { search: string; state: Record<string, unknown> }
+type HistoryListener = (event: {
+  location: HistoryEntry
+  action: { type: HistoryActionType }
+}) => void
+
+/**
+ * The router's history: the current entry's search and state, `back()` as a
+ * spy, and `traverse()` to move to an entry and tell subscribers, as Back,
+ * Forward or a navigation would.
+ */
+export function createRouterHistory() {
+  const listeners = new Set<HistoryListener>()
+  const history = {
+    location: { search: '', state: {} },
+    back: vi.fn(),
+    subscribe(listener: HistoryListener) {
+      listeners.add(listener)
+      return () => {
+        listeners.delete(listener)
+      }
+    },
+    traverse(search: string, type: HistoryActionType, state: Record<string, unknown> = {}) {
+      history.location = { search, state }
+      for (const listener of listeners) listener({ location: history.location, action: { type } })
+    }
+  }
+  return history
+}
+
 export const routerState = {
   params: {} as Record<string, string>,
   pathname: '/en',
   navigate: vi.fn(),
-  invalidate: vi.fn()
+  invalidate: vi.fn(),
+  history: createRouterHistory()
 }
 
 type LinkTarget = {
@@ -65,7 +97,16 @@ export const routerMock = {
   Link,
   linkOptions: <T,>(options: T) => options,
   useNavigate: () => routerState.navigate,
-  useRouter: () => ({ invalidate: routerState.invalidate, navigate: routerState.navigate }),
+  useRouter: () => ({
+    invalidate: routerState.invalidate,
+    navigate: routerState.navigate,
+    history: routerState.history,
+    // The real one also unwraps masked entries, which these never are.
+    parseLocation: (location: { search: string; state: Record<string, unknown> }) => ({
+      search: Object.fromEntries(new URLSearchParams(location.search)),
+      state: location.state
+    })
+  }),
   useParams: () => routerState.params,
   useLocation: <T,>(options?: { select?: (location: { pathname: string }) => T }) =>
     options?.select

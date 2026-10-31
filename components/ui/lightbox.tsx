@@ -1,17 +1,17 @@
 /**
- * Ramka lightbox primitives with this site's Tailwind skin, plus the composed
- * `Lightbox.Gallery` (bleed or snug slides, glass controls, desktop thumbnail
- * strip).
+ * Ramka lightbox primitives with this site's Tailwind skin. The composed
+ * viewer built from them is `LightboxGallery`
+ * (`components/gallery/lightbox-gallery.tsx`).
  *
  * Conventions:
  * - Variables named `--lightbox-*` are written by the ramka runtime (gesture
- *   progress, motion timing) — this file only reads them. Variables named
+ *   progress, motion timing) — the skin only reads them. Variables named
  *   `--lb-*` are this skin's own tokens, declared via arbitrary properties.
  * - Gesture-driven state rides on data attributes ramka sets on Content
  *   (`data-open`, `data-pulling`, `data-pull-dismissing`, `data-zoomed`),
- *   consumed here through the named `group/lb` on Content. All
- *   view-transition CSS (morph group, snapshots, crossfade) is injected by
- *   the library; the skin ships none of it.
+ *   consumed through the named `group/lb` on Content. All view-transition CSS
+ *   (morph group, snapshots, crossfade) is injected by the library; the skin
+ *   ships none of it.
  */
 
 import * as RamkaLightbox from '@ramka/react/lightbox'
@@ -19,69 +19,12 @@ import {
   ArrowLeftIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  GalleryHorizontalIcon,
-  RectangleHorizontalIcon,
   ZoomInIcon,
   ZoomOutIcon
 } from 'lucide-react'
-import { useTranslations } from 'use-intl'
-import { Image } from '@/components/image'
 import * as React from 'react'
 
-import { LIGHTBOX_THUMBNAIL_SIZE } from '@/lib/gallery-image'
-import { sanityImageLoader } from '@/lib/sanity-image-loader'
 import { cn } from '@/lib/utils'
-
-/** Item shape for `Lightbox.Gallery` — pass real intrinsic pixel size. */
-export type LightboxItem = {
-  id?: string | number
-  src: string
-  thumb: string
-  /**
-   * Placeholder for the strip thumbnail only: on the slide it would paint over
-   * ramka's open-morph bridge.
-   */
-  thumbBlurHash?: string | null
-  alt: string
-  caption?: string
-  width: number
-  height: number
-}
-
-type SlidesLayout = 'bleed' | 'snug'
-
-/** Inline styles that carry the `--lb-*`/`--lightbox-*` custom properties the skin reads/writes. */
-type CSSVarStyle = React.CSSProperties & Record<`--${string}`, string | number>
-
-/**
- * The snug/bleed choice is a user preference, so it survives across galleries
- * and visits. Guarded reads/writes: localStorage throws in some private modes,
- * and `window` doesn't exist during SSR (the portal renders nothing while
- * closed, so the pre-hydration value is never visible anyway).
- */
-const SLIDES_LAYOUT_STORAGE_KEY = 'ramka-lightbox-slides-layout'
-
-function readStoredSlidesLayout(): SlidesLayout | null {
-  if (typeof window === 'undefined') return null
-  try {
-    const value = window.localStorage.getItem(SLIDES_LAYOUT_STORAGE_KEY)
-    return value === 'snug' || value === 'bleed' ? value : null
-  } catch {
-    return null
-  }
-}
-
-function storeSlidesLayout(layout: SlidesLayout) {
-  try {
-    window.localStorage.setItem(SLIDES_LAYOUT_STORAGE_KEY, layout)
-  } catch {
-    // Storage unavailable — the toggle still works for this session.
-  }
-}
-
-function itemAspectRatio(item: LightboxItem): number {
-  return item.width / item.height
-}
 
 /* ── Shared class recipes ───────────────────────────────────────────────── */
 
@@ -94,7 +37,7 @@ function itemAspectRatio(item: LightboxItem): number {
  * Note `scale` in the transition list: Tailwind v4 scale utilities write the
  * `scale` property, not `transform`.
  */
-const controlClass = cn(
+export const controlClass = cn(
   'inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full',
   'border border-black/20 bg-white/55 text-neutral-900',
   'shadow-[0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
@@ -133,7 +76,7 @@ const backClass = cn(
  * chrome; segments (see `controlSegmentClass`) become flat, full-height hit
  * areas.
  */
-const controlGroupClass = cn(
+export const controlGroupClass = cn(
   'inline-flex items-stretch overflow-hidden rounded-full',
   'border border-black/20 bg-white/55',
   'shadow-[0_0.5px_1px_rgb(0_0_0/0.12),0_1px_2px_rgb(0_0_0/0.08),inset_0_0.5px_0_rgb(255_255_255/0.65)]',
@@ -148,7 +91,7 @@ const controlGroupClass = cn(
  * an inset focus ring (the pill clips outset rings). Each segment is as wide
  * as the pill is tall → a two-segment capsule is exactly 2:1.
  */
-const controlSegmentClass = cn(
+export const controlSegmentClass = cn(
   'relative h-auto w-9 rounded-none border-0 bg-transparent shadow-none',
   'backdrop-blur-none backdrop-saturate-100',
   'active:scale-100',
@@ -158,7 +101,7 @@ const controlSegmentClass = cn(
 )
 
 /** Hairline divider on the leading edge of a follow-up capsule segment. */
-const controlSegmentDividerClass =
+export const controlSegmentDividerClass =
   'before:absolute before:inset-y-[22%] before:left-0 before:w-px before:bg-black/15 dark:before:bg-white/20'
 
 /**
@@ -168,7 +111,7 @@ const controlSegmentDividerClass =
  * dismiss (and the dismiss animation) hides all gesture chrome; `starting:`
  * fades it in on open.
  */
-const chromeGestureHideClass = cn(
+export const chromeGestureHideClass = cn(
   'visible opacity-100 [transition:opacity_200ms,visibility_0s_linear_0s] starting:opacity-0',
   'group-data-pulling/lb:invisible group-data-pulling/lb:opacity-0',
   'group-data-pulling/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]',
@@ -177,13 +120,13 @@ const chromeGestureHideClass = cn(
 )
 
 /** Chrome that also hides while the media is zoomed. */
-const chromeZoomHideClass = cn(
+export const chromeZoomHideClass = cn(
   'group-data-zoomed/lb:invisible group-data-zoomed/lb:opacity-0',
   'group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
 )
 
 /** Same, mobile only — on desktop the top controls stay usable while zoomed. */
-const mobileChromeZoomHideClass = cn(
+export const mobileChromeZoomHideClass = cn(
   'max-md:group-data-zoomed/lb:invisible max-md:group-data-zoomed/lb:opacity-0',
   'max-md:group-data-zoomed/lb:[transition:opacity_200ms,visibility_0s_linear_200ms]'
 )
@@ -333,6 +276,8 @@ function Slides({ className, ...props }: React.ComponentProps<typeof RamkaLightb
       data-slot="lightbox-slides"
       className={cn(
         'flex-1 gap-5 md:gap-0 scrollbar-none [&::-webkit-scrollbar]:hidden',
+        // `ssrSlideShift` can't read the computed gap, so it gets a copy.
+        '[--lightbox-ssr-slide-gap:1.25rem] md:[--lightbox-ssr-slide-gap:0px]',
         className
       )}
       {...props}
@@ -449,6 +394,9 @@ function ThumbnailStrip({
         '[--lb-strip-mask:linear-gradient(to_right,rgb(0_0_0/0)_0,rgb(0_0_0/0.156)_calc(var(--lb-strip-fade)*0.25),rgb(0_0_0/0.5)_calc(var(--lb-strip-fade)*0.5),rgb(0_0_0/0.844)_calc(var(--lb-strip-fade)*0.75),#000_var(--lb-strip-fade),#000_calc(100%-var(--lb-strip-fade)),rgb(0_0_0/0.844)_calc(100%-var(--lb-strip-fade)*0.75),rgb(0_0_0/0.5)_calc(100%-var(--lb-strip-fade)*0.5),rgb(0_0_0/0.156)_calc(100%-var(--lb-strip-fade)*0.25),rgb(0_0_0/0)_100%)]',
         // pointer-events-auto counteracts the bottom band's click-through.
         'pointer-events-auto w-full min-w-0 self-stretch py-1',
+        // A server-rendered strip sits at offset 0 until ramka positions it;
+        // client-side opens are positioned before their first paint.
+        'not-data-positioned:invisible',
         '[-webkit-mask-image:var(--lb-strip-mask)] mask-(--lb-strip-mask)',
         className
       )}
@@ -483,306 +431,9 @@ function Thumbnail({ className, ...props }: React.ComponentProps<typeof RamkaLig
     />
   )
 }
-
-/* ── Snug layout (aspect-sized cards + peeking neighbors) ───────────────── */
-
-/*
- * Card width = the largest size that fits the letterbox at the item's aspect
- * ratio: min(scrollport width minus gutters, letterbox height × ratio). The
- * `--lb-snug-ratio*` values are per-item aspect ratios set inline by the
- * Gallery; cqw/cqh resolve against the Slides scrollport (the library makes
- * it a size container). -start/-end are the first/last item's ratios, needed
- * by the ::before/::after spacers so the first/last card can center in the
- * scrollport under scroll-snap.
- */
-const snugSlidesClass = cn(
-  '[--lb-snug-gap:1.25rem] gap-(--lb-snug-gap) md:gap-(--lb-snug-gap)',
-  '[--lb-snug-width-start:min(calc(100cqw-2*var(--lb-inset-inline)),calc((100cqh-var(--lb-inset-top)-var(--lb-inset-bottom))*var(--lb-snug-ratio-start,1)))]',
-  '[--lb-snug-width-end:min(calc(100cqw-2*var(--lb-inset-inline)),calc((100cqh-var(--lb-inset-top)-var(--lb-inset-bottom))*var(--lb-snug-ratio-end,1)))]',
-  'md:before:pointer-events-none md:before:flex-[0_0_calc((100cqw-var(--lb-snug-width-start))/2-var(--lb-snug-gap))]',
-  'md:after:pointer-events-none md:after:flex-[0_0_calc((100cqw-var(--lb-snug-width-end))/2-var(--lb-snug-gap))]'
-)
-
-const snugSlideClass = cn(
-  // No horizontal padding on the card itself — the gutter lives in the width
-  // formula only, so neighbors can peek right up to the card edge. z-0 is the
-  // stacking baseline for the zoomed-card promotion below.
-  'z-0 px-0',
-  '[--lb-snug-width:min(calc(100cqw-2*var(--lb-inset-inline)),calc((100cqh-var(--lb-inset-top)-var(--lb-inset-bottom))*var(--lb-snug-ratio)))]',
-  'md:w-(--lb-snug-width) md:min-w-0 md:flex-[0_0_auto]',
-  // The zoomed active card paints above the peeking neighbors.
-  'group-data-zoomed/lb:has-data-active:z-1'
-)
-
-/*
- * Neighbor cards dim as the active item is pulled to dismiss
- * (`--lightbox-pull-progress`) or zoomed (`--lightbox-zoom-progress`) — both
- * library-written, 0 → 1. `filter` tracks the gesture 1:1 (transitioning it
- * would lag the finger); `opacity` transitions so the pull snap-back resolves
- * on the same spring as the item.
- */
-const snugItemClass = cn(
-  'transition-opacity',
-  'duration-(--lightbox-pull-snap-duration,500ms)',
-  'ease-(--lightbox-pull-snap-easing,var(--lb-ease-out-expo))',
-  'not-data-active:[--lb-neighbor-dim:max(var(--lightbox-pull-progress,0),var(--lightbox-zoom-progress,0))]',
-  'not-data-active:opacity-[calc(1-var(--lightbox-pull-progress,0)*0.85)]',
-  'not-data-active:[filter:opacity(calc(1-var(--lb-neighbor-dim)))_blur(calc(var(--lb-neighbor-dim)*6px))]',
-  'group-data-pulling/lb:transition-none' // follow the finger
-)
-
-/* ── Composed Gallery (product chrome) ──────────────────────────────────── */
-
-function GalleryThumbnailStrip({
-  items,
-  thumbnailsLabel
-}: {
-  items: LightboxItem[]
-  thumbnailsLabel: string
-}) {
-  if (items.length <= 1) return null
-
-  return (
-    // The strip is desktop-only; mobile shows the counter instead.
-    <ThumbnailStrip className="max-md:hidden">
-      <ThumbnailStripTrack aria-label={thumbnailsLabel}>
-        {items.map((item, i) => (
-          <Thumbnail key={item.id ?? i} index={i}>
-            <Image
-              src={item.thumb}
-              loader={sanityImageLoader}
-              blurHash={item.thumbBlurHash}
-              alt={item.alt}
-              width={LIGHTBOX_THUMBNAIL_SIZE}
-              height={LIGHTBOX_THUMBNAIL_SIZE}
-              draggable={false}
-            />
-          </Thumbnail>
-        ))}
-      </ThumbnailStripTrack>
-      {/* Decorative ring over the active tab — the track scrolls under it. */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute top-1/2 left-1/2 size-[calc(var(--lb-thumb-size)+8px)] -translate-x-1/2 -translate-y-1/2 rounded-xl border-2 border-black dark:border-white"
-      />
-    </ThumbnailStrip>
-  )
-}
-
 /**
- * Default product chrome — Portal → Backdrop + Content → Slides/Zoom + glass
- * controls / caption + counter placard / desktop ThumbnailStrip. Supports bleed
- * (full-width) and snug (aspect-sized cards) via the top-right layout toggle.
- */
-function Gallery({ items, ariaLabel }: { items: LightboxItem[]; ariaLabel: string }) {
-  const t = useTranslations('Lightbox')
-  const [slidesLayout, setSlidesLayout] = React.useState<SlidesLayout>(
-    () => readStoredSlidesLayout() ?? 'bleed'
-  )
-  const snug = slidesLayout === 'snug'
-  // Single item → no thumbnail strip → solo layout (tighter, centered bottom band).
-  const solo = items.length <= 1
-
-  const toggleSlidesLayout = () => {
-    const next = snug ? 'bleed' : 'snug'
-    storeSlidesLayout(next)
-    setSlidesLayout(next)
-  }
-
-  const slidesStyle: CSSVarStyle | undefined =
-    snug && items.length > 0
-      ? {
-          '--lb-snug-ratio-start': itemAspectRatio(items[0]),
-          '--lb-snug-ratio-end': itemAspectRatio(items[items.length - 1])
-        }
-      : undefined
-
-  return (
-    <Portal>
-      <Backdrop />
-      <Content
-        aria-label={ariaLabel}
-        className={cn(
-          // Snug: the horizontal inset is a scrollport gutter consumed by the
-          // card width formula — not per-slide padding.
-          snug && 'md:[--lb-inset-inline:2rem]',
-          // Solo (single item — no thumbnail strip): only the caption placard
-          // sits below, so match the top inset and keep the letterbox symmetric.
-          solo && 'md:[--lb-inset-bottom:calc(4.5rem+env(safe-area-inset-bottom,0px))]'
-        )}
-        // Consumer-provided handlers on `Content` run before ramka's own Escape
-        // handling (see ramka's `mergeProps`), so stopping propagation here
-        // still lets ramka close the lightbox — it only keeps the keydown from
-        // reaching Base UI's document-level dismiss listener and closing an
-        // outer dialog (e.g. the route-intercept gallery modal) in the same
-        // keypress.
-        onKeyDown={(event) => {
-          if (event.key === 'Escape') event.stopPropagation()
-        }}
-      >
-        <Slides
-          key={slidesLayout}
-          aria-label={t('full_size_images')}
-          preload={2}
-          className={snug ? snugSlidesClass : undefined}
-          style={slidesStyle}
-        >
-          {items.map((item, i) => {
-            const ratio = itemAspectRatio(item)
-            const slideStyle: CSSVarStyle | undefined = snug
-              ? { '--lb-snug-ratio': ratio }
-              : undefined
-            return (
-              <Slide
-                key={item.id ?? i}
-                className={snug ? snugSlideClass : undefined}
-                style={slideStyle}
-              >
-                <Item
-                  index={i}
-                  caption={item.caption ?? item.alt}
-                  aria-label={t('counter', { current: String(i + 1), total: String(items.length) })}
-                  className={snug ? snugItemClass : undefined}
-                >
-                  <Zoom maxZoom={4}>
-                    <Media width={item.width} height={item.height}>
-                      <Image
-                        width={item.width}
-                        height={item.height}
-                        src={item.src}
-                        alt={item.alt}
-                        sizes="100vw"
-                        loader={sanityImageLoader}
-                        quality={90}
-                        // Only the initially-active slide preloads (the one
-                        // relevant to LCP on open); later slides stay lazy
-                        // even though `Slides` keeps a couple mounted for swipe.
-                        preload={i === 0}
-                        draggable={false}
-                      />
-                    </Media>
-                  </Zoom>
-                </Item>
-              </Slide>
-            )
-          })}
-        </Slides>
-
-        {/* 0.75rem/1rem insets match the gallery header's own padding, so the
-            back arrow lands where the page's back button sat. */}
-        <div
-          className={cn(
-            'absolute top-[calc(1rem+env(safe-area-inset-top,0px))] left-4 z-1',
-            chromeGestureHideClass,
-            mobileChromeZoomHideClass
-          )}
-        >
-          <Close aria-label={t('close')} />
-        </div>
-
-        {/* Desktop only — mobile already has swipe, and these would sit over
-            the pull-to-dismiss / pinch-zoom gesture surface. `top`/`bottom`
-            (not `inset-y-0`) span the media box, not the full dialog — the
-            insets are asymmetric (desktop reserves more room at the bottom
-            for the strip + caption), so centering on the viewport would drift
-            off the image's actual vertical center. */}
-        {!solo && (
-          <div
-            className={cn(
-              'absolute top-(--lb-inset-top) bottom-(--lb-inset-bottom) left-4 z-1 hidden items-center md:flex',
-              chromeGestureHideClass,
-              chromeZoomHideClass
-            )}
-          >
-            <Previous aria-label={t('previous')} />
-          </div>
-        )}
-
-        {!solo && (
-          <div
-            className={cn(
-              'absolute top-(--lb-inset-top) bottom-(--lb-inset-bottom) right-4 z-1 hidden items-center md:flex',
-              chromeGestureHideClass,
-              chromeZoomHideClass
-            )}
-          >
-            <Next aria-label={t('next')} />
-          </div>
-        )}
-
-        <div
-          className={cn(
-            'absolute top-[calc(0.75rem+env(safe-area-inset-top,0px))] right-3 z-1 flex gap-2',
-            chromeGestureHideClass,
-            // On mobile, zoom also hides the top controls — the media fills the screen.
-            mobileChromeZoomHideClass
-          )}
-        >
-          {/* Layout toggle: the icon is a miniature of the CURRENT layout —
-              snug shows a card with neighbours, bleed one wide slide. */}
-          <button
-            type="button"
-            className={cn(controlClass, 'max-md:hidden [&_svg]:size-4.5')}
-            aria-pressed={snug}
-            aria-label={snug ? t('switch_to_bleed_slides') : t('switch_to_snug_slides')}
-            onClick={toggleSlidesLayout}
-          >
-            {snug ? (
-              <GalleryHorizontalIcon strokeWidth={2.25} />
-            ) : (
-              <RectangleHorizontalIcon strokeWidth={2.25} />
-            )}
-          </button>
-          {/* Zoom −/+ share one capsule with a hairline divider. */}
-          <div className={cn(controlGroupClass, 'max-md:hidden')}>
-            <ZoomOut className={controlSegmentClass} aria-label={t('zoom_out')} />
-            <ZoomIn
-              className={cn(controlSegmentClass, controlSegmentDividerClass)}
-              aria-label={t('zoom_in')}
-            />
-          </div>
-        </div>
-
-        <div
-          className={cn(
-            // Click-through the inset band; caption opts back in for text selection.
-            'pointer-events-none absolute inset-x-0 bottom-0 z-1 flex flex-col items-center gap-3',
-            'px-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]',
-            chromeGestureHideClass,
-            // Zoom hides the bottom placard (the zoomed media pans under it).
-            chromeZoomHideClass,
-            // Solo (no strip): center the placard in the bottom inset band
-            // instead of pinning it to the viewport edge.
-            solo && 'min-h-(--lb-inset-bottom) justify-center pb-[env(safe-area-inset-bottom,0px)]'
-          )}
-        >
-          {/*
-            Caption under the media, placard-style. The counter is visible on
-            mobile where there's no strip to show position; on md+ the strip
-            covers that, so the counter collapses to sr-only and keeps only
-            its aria-live announcement role.
-          */}
-          <div className="flex max-w-full flex-col items-center text-center">
-            <Caption />
-            {/* "1 of 1" is noise — skip the counter for single-item galleries. */}
-            {solo ? null : (
-              <Counter>
-                {({ current, total }) =>
-                  t('counter', { current: String(current), total: String(total) })
-                }
-              </Counter>
-            )}
-          </div>
-          <GalleryThumbnailStrip items={items} thumbnailsLabel={t('thumbnails')} />
-        </div>
-      </Content>
-    </Portal>
-  )
-}
-
-/**
- * Styled Lightbox namespace — drop-in replacement for `import { Lightbox } from 'ramka'`
- * with this preset’s styles and composed Gallery.
+ * Styled Lightbox namespace — drop-in replacement for ramka's `Lightbox` with
+ * this site's styles.
  */
 export const Lightbox = {
   Root,
@@ -804,6 +455,5 @@ export const Lightbox = {
   ThumbnailStripTrack,
   Thumbnail,
   Previous,
-  Next,
-  Gallery
+  Next
 }

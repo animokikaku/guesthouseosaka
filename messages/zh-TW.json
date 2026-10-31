@@ -40,11 +40,13 @@
     "gallery_title": "房屋相簿"
   },
   "Lightbox": {
+    "carousel": "輪播",
     "close": "關閉",
     "counter": "{current} / {total}",
     "full_size_images": "完整尺寸圖片",
     "next": "下一張",
     "previous": "上一張",
+    "slide": "投影片",
     "switch_to_bleed_slides": "切換為滿版顯示",
     "switch_to_snug_slides": "切換為合適顯示",
     "thumbnails": "照片縮圖",

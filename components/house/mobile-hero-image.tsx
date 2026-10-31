@@ -1,4 +1,4 @@
-import { GalleryEmptyState } from '@/components/gallery/gallery-empty-state'
+import { GalleryEmptyState } from '@/components/house/gallery-empty-state'
 import { SanityImage } from '@/components/sanity-image'
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { useCarouselIndex } from '@/hooks/use-carousel-index'

@@ -1,5 +1,5 @@
 import { GalleryImageCaption } from '@/components/gallery/gallery-image-frame'
-import { Lightbox } from '@/components/lightbox'
+import { Lightbox } from '@/components/ui/lightbox'
 import { SanityImage } from '@/components/sanity-image'
 import type { GalleryItem } from '@/lib/gallery'
 import { toGalleryImageProps } from '@/lib/gallery-image'
@@ -10,7 +10,7 @@ type GalleryGridItemProps = {
   item: GalleryItem
   categoryKey: string
   dataAttribute?: DataAttributeFn
-  /** Index of this item in the flattened Lightbox.Gallery items array */
+  /** Index of this item in the flattened LightboxGallery items array */
   index: number | undefined
 }
 

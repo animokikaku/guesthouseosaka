@@ -1,5 +1,9 @@
-import type { LightboxItem } from '@/components/lightbox'
-import type { FeaturedImage, GalleryItem } from '@/lib/gallery'
+import {
+  flattenGalleryItems,
+  type FeaturedImage,
+  type GalleryCategories,
+  type GalleryItem
+} from '@/lib/gallery'
 import { urlFor } from '@/sanity/lib/image'
 import { getImageDimensions } from '@sanity/asset-utils'
 import { stegaClean } from '@sanity/client/stega'
@@ -14,6 +18,23 @@ export const LIGHTBOX_THUMBNAIL_SIZE = 56
 
 export type SanityGalleryImage = NonNullable<GalleryItem['image']> | NonNullable<FeaturedImage>
 export type GalleryImageProps = Omit<ImageProps, 'fill' | 'className' | 'loader'>
+
+/** Item shape for `LightboxGallery` — pass real intrinsic pixel size. */
+export type LightboxItem = {
+  /** The gallery item's `_key`, which the `photo` search param carries. */
+  id: string
+  src: string
+  thumb: string
+  /**
+   * Placeholder for the strip thumbnail only: on the slide it would paint over
+   * ramka's open-morph bridge.
+   */
+  thumbBlurHash?: string | null
+  alt: string
+  caption?: string
+  width: number
+  height: number
+}
 
 type ToGalleryImagePropsOptions = {
   width?: number
@@ -60,7 +81,7 @@ export function toGalleryImageProps(
 }
 
 /**
- * Maps a gallery item to ramka's `LightboxItem` shape for `Lightbox.Gallery`.
+ * Maps a gallery item to ramka's `LightboxItem` shape for `LightboxGallery`.
  *
  * Trigger and destination must share the same photograph and aspect ratio —
  * square tiles are a CSS crop (`aspect-square` + `object-cover`), not a
@@ -94,4 +115,18 @@ export function toGalleryLightboxItem(item: GalleryItem): LightboxItem | null {
     width: dimensions.width,
     height: dimensions.height
   }
+}
+
+/**
+ * The social-card image for a gallery photo URL (`?photo=<key>`): the photo
+ * cropped to the 1200×630 card. `undefined` when no photo has that key.
+ */
+export function galleryPhotoOpenGraphImage(
+  categories: GalleryCategories | null | undefined,
+  photo: string | undefined
+): string | undefined {
+  if (!photo) return undefined
+  const image = flattenGalleryItems(categories ?? null).find((item) => item._key === photo)?.image
+  if (!image?.asset) return undefined
+  return urlFor(image).width(1200).height(630).fit('crop').url()
 }

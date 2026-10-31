@@ -40,11 +40,13 @@
     "gallery_title": "房屋相册"
   },
   "Lightbox": {
+    "carousel": "轮播",
     "close": "关闭",
     "counter": "{current} / {total}",
     "full_size_images": "全尺寸图片",
     "next": "下一张",
     "previous": "上一张",
+    "slide": "幻灯片",
     "switch_to_bleed_slides": "切换为全幅显示",
     "switch_to_snug_slides": "切换为适应显示",
     "thumbnails": "照片缩略图",

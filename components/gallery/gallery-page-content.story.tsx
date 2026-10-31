@@ -1,5 +1,5 @@
-import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
-import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
+import { GalleryModalCloseButton } from '@/components/gallery/gallery-back-button'
+import { GalleryModal } from '@/components/gallery/gallery-modal'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import type { GalleryCategories } from '@/lib/gallery'
 import messages from '@/messages/en.json'
@@ -67,6 +67,8 @@ export function Default() {
           galleryCategories={galleryCategories}
           title="Orange House"
           backButton={<span>Back</span>}
+          photo={undefined}
+          onPhotoNavigate={() => {}}
         />
       </div>
     </IntlProvider>
@@ -79,15 +81,17 @@ export function Default() {
 export function WithModal() {
   return (
     <IntlProvider locale="en" messages={messages}>
-      <GalleryModalWrapper house="orange" title="Orange House">
+      <GalleryModal house="orange" title="Orange House">
         <GalleryPageContent
           documentId="house-1"
           documentType="house"
           galleryCategories={galleryCategories}
           title="Orange House"
           backButton={<GalleryModalCloseButton />}
+          photo={undefined}
+          onPhotoNavigate={() => {}}
         />
-      </GalleryModalWrapper>
+      </GalleryModal>
     </IntlProvider>
   )
 }
