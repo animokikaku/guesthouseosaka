@@ -196,7 +196,12 @@ export function LightboxGallery({
       setSlidesLayout(next)
       return
     }
-    document.startViewTransition(() => flushSync(() => setSlidesLayout(next)))
+    // Keeps named elements, like the site header, off the transition layer
+    // (see `app/globals.css`), as ramka does for its own morph.
+    const root = document.documentElement
+    root.setAttribute('data-lightbox-layout-switch', '')
+    const transition = document.startViewTransition(() => flushSync(() => setSlidesLayout(next)))
+    void transition.finished.finally(() => root.removeAttribute('data-lightbox-layout-switch'))
   }
 
   const slidesStyle: CSSVarStyle | undefined =

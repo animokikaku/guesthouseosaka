@@ -246,3 +246,10 @@
     animation: none !important;
   }
 }
+
+/* The lightbox's layout switch crossfades the whole document, which lifts any
+   named element (the site header) onto the transition layer, over the lightbox.
+   Unnamed, they stay in the root snapshot, under it. */
+:root[data-lightbox-layout-switch] * {
+  view-transition-name: none !important;
+}
