@@ -7,6 +7,7 @@
 import { GalleryHorizontalIcon, RectangleHorizontalIcon } from 'lucide-react'
 import { useTranslations } from 'use-intl'
 import * as React from 'react'
+import { flushSync } from 'react-dom'
 
 import { SanityImage } from '@/components/sanity-image'
 import {
@@ -162,7 +163,16 @@ export function LightboxGallery({
   const toggleSlidesLayout = () => {
     const next = snug ? 'bleed' : 'snug'
     storeSlidesLayout(next)
-    setSlidesLayout(next)
+    // Crossfade the remounted slides (`Slides` is keyed by layout) rather than
+    // swapping them in one frame.
+    if (
+      typeof document.startViewTransition !== 'function' ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      setSlidesLayout(next)
+      return
+    }
+    document.startViewTransition(() => flushSync(() => setSlidesLayout(next)))
   }
 
   const slidesStyle: CSSVarStyle | undefined =
@@ -199,6 +209,7 @@ export function LightboxGallery({
         <Lightbox.Slides
           key={slidesLayout}
           aria-label={t('full_size_images')}
+          aria-roledescription={t('carousel')}
           preload={2}
           className={snug ? snugSlidesClass : undefined}
           style={slidesStyle}
@@ -218,6 +229,7 @@ export function LightboxGallery({
                   index={i}
                   caption={item.caption ?? item.alt}
                   aria-label={t('counter', { current: String(i + 1), total: String(items.length) })}
+                  aria-roledescription={t('slide')}
                   className={snug ? snugItemClass : undefined}
                 >
                   <Lightbox.Zoom maxZoom={4}>
@@ -229,10 +241,10 @@ export function LightboxGallery({
                         alt={item.alt}
                         sizes="100vw"
                         quality={90}
-                        // Only the initially-active slide preloads (the one
-                        // relevant to LCP on open); later slides stay lazy
-                        // even though `Slides` keeps a couple mounted for swipe.
-                        preload={i === 0}
+                        // `Slides` only mounts the active slide and its
+                        // `preload` neighbours, so every mounted image is one
+                        // the visitor is about to see.
+                        loading="eager"
                         draggable={false}
                       />
                     </Lightbox.Media>

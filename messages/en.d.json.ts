@@ -43,11 +43,13 @@ declare const messages: {
     "gallery_title": "House Gallery"
   },
   "Lightbox": {
+    "carousel": "carousel",
     "close": "Close",
     "counter": "{current} of {total}",
     "full_size_images": "Full-size images",
     "next": "Next image",
     "previous": "Previous image",
+    "slide": "slide",
     "switch_to_bleed_slides": "Switch to full-bleed slides",
     "switch_to_snug_slides": "Switch to snug slides",
     "thumbnails": "Photo thumbnails",
