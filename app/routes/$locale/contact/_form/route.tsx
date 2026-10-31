@@ -1,4 +1,4 @@
-import { ContactNav } from '@/components/contact-nav'
+import { ContactNav } from '@/components/contact/contact-nav'
 import { LegalNoticeProvider } from '@/components/legal-notice-context'
 import { PageNav } from '@/components/page-nav'
 import { toContactNavItems } from '@/lib/transforms/nav'

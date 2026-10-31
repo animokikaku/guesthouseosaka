@@ -1,4 +1,4 @@
-import { GalleryEmptyState } from '@/components/gallery/gallery-empty-state'
+import { GalleryEmptyState } from '@/components/house/gallery-empty-state'
 import { GalleryImageFrame } from '@/components/gallery/gallery-image-frame'
 import type { GalleryLink } from '@/components/house/gallery-link'
 import type { GallerySlide } from '@/lib/gallery'

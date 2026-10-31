@@ -14,9 +14,12 @@ app/                   # TanStack Start source directory
 └── actions/           # Contact form server function
 
 components/
-├── ui/                # BaseUI shadcn primitives
-├── house/             # House/room feature components
-├── gallery/           # Gallery components
+├── ui/                # BaseUI shadcn primitives, plus the skinned Ramka lightbox
+├── home/              # Home page components
+├── house/             # House page components
+├── gallery/           # House gallery page and modal, and the lightbox viewer
+├── contact/           # Contact page components
+├── faq/               # FAQ page components
 ├── forms/             # Forms with @tanstack/react-form + Zod
 └── map/               # Map components
 

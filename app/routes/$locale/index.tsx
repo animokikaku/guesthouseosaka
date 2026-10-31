@@ -1,5 +1,5 @@
-import { Collection } from '@/components/collection'
-import { GalleryWall } from '@/components/gallery-wall'
+import { Collection } from '@/components/home/collection'
+import { GalleryWall } from '@/components/home/gallery-wall'
 import { PageEmptyState } from '@/components/page-empty-state'
 import {
   PageActions,
