@@ -1,4 +1,6 @@
-import { GoogleMaps, HouseMarker, MapProvider, PlaceDetails } from '@/components/map'
+import { GoogleMaps, MapProvider } from '@/components/map/google-maps'
+import { HouseMarker } from '@/components/map/house-marker'
+import { PlaceDetails } from '@/components/map/place-details'
 import type { MapData } from '@/lib/types/components'
 
 export function HouseMap({ map }: { map: MapData }) {
