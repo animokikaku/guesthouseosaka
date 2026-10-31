@@ -1,5 +1,5 @@
-import { GalleryModalCloseButton } from '@/components/gallery/gallery-modal-close-button'
-import { GalleryModalWrapper } from '@/components/gallery/gallery-modal-wrapper'
+import { GalleryModalCloseButton } from '@/components/gallery/gallery-back-button'
+import { GalleryModal } from '@/components/gallery/gallery-modal'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { PageEmptyStateSection } from '@/components/page-empty-state'
 import { getHouseGallery } from '@/sanity/lib/loaders.functions'
@@ -17,10 +17,10 @@ export const Route = createFileRoute('/$locale/$house/_house/photos')({
     }
   },
   loader: ({ params: { locale, house } }) => getHouseGallery({ data: { locale, house } }),
-  component: GalleryModal
+  component: GalleryModalRoute
 })
 
-function GalleryModal() {
+function GalleryModalRoute() {
   const { house } = Route.useParams()
   const data = Route.useLoaderData()
 
@@ -29,7 +29,7 @@ function GalleryModal() {
   }
 
   return (
-    <GalleryModalWrapper house={house} title={data.title ?? ''}>
+    <GalleryModal house={house} title={data.title ?? ''}>
       <GalleryPageContent
         documentId={data._id}
         documentType={data._type}
@@ -37,6 +37,6 @@ function GalleryModal() {
         title={data.title ?? ''}
         backButton={<GalleryModalCloseButton />}
       />
-    </GalleryModalWrapper>
+    </GalleryModal>
   )
 }

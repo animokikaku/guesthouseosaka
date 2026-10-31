@@ -1,13 +1,11 @@
+import { GalleryPageBackLink } from '@/components/gallery/gallery-back-button'
 import { GalleryPageContent } from '@/components/gallery/gallery-page-content'
 import { GalleryShell } from '@/components/gallery/gallery-shell'
 import { PageEmptyStateSection } from '@/components/page-empty-state'
-import { buttonVariants } from '@/components/ui/button'
 import { houseHeadMeta } from '@/lib/house-head'
 import { canonicalLink } from '@/lib/metadata'
 import { getHouseGallery } from '@/sanity/lib/loaders.functions'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeftIcon } from 'lucide-react'
-import { useTranslations } from 'use-intl'
+import { createFileRoute } from '@tanstack/react-router'
 
 /** The gallery as its own page, for direct visits; the house page opens it as a modal. */
 export const Route = createFileRoute('/$locale/$house/gallery')({
@@ -20,9 +18,8 @@ export const Route = createFileRoute('/$locale/$house/gallery')({
 })
 
 function GalleryPage() {
-  const params = Route.useParams()
+  const { house } = Route.useParams()
   const data = Route.useLoaderData()
-  const t = useTranslations('GalleryPage')
 
   if (!data) {
     return <PageEmptyStateSection />
@@ -35,20 +32,7 @@ function GalleryPage() {
         documentType={data._type}
         galleryCategories={data.galleryCategories}
         title={data.title ?? ''}
-        backButton={
-          <Link
-            to="/$locale/$house"
-            params={params}
-            className={buttonVariants({
-              variant: 'ghost',
-              size: 'icon',
-              className: 'shrink-0 rounded-full'
-            })}
-          >
-            <ArrowLeftIcon aria-hidden="true" className="size-6" />
-            <span className="sr-only">{t('close')}</span>
-          </Link>
-        }
+        backButton={<GalleryPageBackLink house={house} />}
       />
     </GalleryShell>
   )
