@@ -50,8 +50,11 @@ public/                # Static assets only
   the address bar shows `/gallery`, and a reload or shared link opens the full page
 - Legacy redirects and locale detection for unprefixed paths live in `lib/redirects.ts`,
   applied by the request middleware in `app/start.ts`
-- Navigations crossfade with view transitions (`defaultViewTransition`); the gallery modal
-  opts out, since its dialog and lightbox animate themselves
+- Each gallery photo has its own URL (`?photo=<key>`, see `components/gallery/use-lightbox-url-state.ts`):
+  opening one pushes a history entry, swiping replaces it, and Back closes the lightbox. A photo
+  link renders the lightbox open on the server, with that photo as its social card
+- Navigations crossfade with view transitions (`defaultViewTransition`), except search-only ones
+  like a photo URL; the gallery modal opts out, since its dialog and lightbox animate themselves
 - Route folders use kebab-case
 
 ### Data

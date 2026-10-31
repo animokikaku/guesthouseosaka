@@ -31,27 +31,44 @@ type CSSVarStyle = React.CSSProperties & Record<`--${string}`, string | number>
 /**
  * The snug/bleed choice is a user preference, so it survives across galleries
  * and visits. Guarded reads/writes: localStorage throws in some private modes,
- * and `window` doesn't exist during SSR (the portal renders nothing while
- * closed, so the pre-hydration value is never visible anyway).
+ * where the choice lasts for the session instead. The server always renders
+ * bleed, which a deep link's server-rendered viewer hydrates with before
+ * switching to the stored layout.
  */
 const SLIDES_LAYOUT_STORAGE_KEY = 'ramka-lightbox-slides-layout'
 
-function readStoredSlidesLayout(): SlidesLayout | null {
-  if (typeof window === 'undefined') return null
-  try {
-    const value = window.localStorage.getItem(SLIDES_LAYOUT_STORAGE_KEY)
-    return value === 'snug' || value === 'bleed' ? value : null
-  } catch {
-    return null
+let sessionSlidesLayout: SlidesLayout | null = null
+const slidesLayoutListeners = new Set<() => void>()
+
+function subscribeSlidesLayout(listener: () => void) {
+  slidesLayoutListeners.add(listener)
+  return () => {
+    slidesLayoutListeners.delete(listener)
   }
 }
 
-function storeSlidesLayout(layout: SlidesLayout) {
+function getSlidesLayout(): SlidesLayout {
+  if (sessionSlidesLayout) return sessionSlidesLayout
+  try {
+    const value = window.localStorage.getItem(SLIDES_LAYOUT_STORAGE_KEY)
+    return value === 'snug' ? 'snug' : 'bleed'
+  } catch {
+    return 'bleed'
+  }
+}
+
+function getServerSlidesLayout(): SlidesLayout {
+  return 'bleed'
+}
+
+function setSlidesLayout(layout: SlidesLayout) {
+  sessionSlidesLayout = layout
   try {
     window.localStorage.setItem(SLIDES_LAYOUT_STORAGE_KEY, layout)
   } catch {
     // Storage unavailable — the toggle still works for this session.
   }
+  for (const listener of slidesLayoutListeners) listener()
 }
 
 function itemAspectRatio(item: LightboxItem): number {
@@ -119,7 +136,7 @@ function LightboxThumbnails({
     <Lightbox.ThumbnailStrip className="max-md:hidden">
       <Lightbox.ThumbnailStripTrack aria-label={thumbnailsLabel}>
         {items.map((item, i) => (
-          <Lightbox.Thumbnail key={item.id ?? i} index={i}>
+          <Lightbox.Thumbnail key={item.id} index={i}>
             <SanityImage
               src={item.thumb}
               blurHash={item.thumbBlurHash}
@@ -147,14 +164,22 @@ function LightboxThumbnails({
  */
 export function LightboxGallery({
   items,
-  ariaLabel
+  ariaLabel,
+  inPlace = false,
+  captionFallback
 }: {
   items: LightboxItem[]
   ariaLabel: string
+  /** Renders the viewer where it sits instead of portalling it to `body`, so a server render can open it. */
+  inPlace?: boolean
+  /** The caption a server-rendered open viewer paints until its items register theirs. */
+  captionFallback?: React.ReactNode
 }) {
   const t = useTranslations('Lightbox')
-  const [slidesLayout, setSlidesLayout] = React.useState<SlidesLayout>(
-    () => readStoredSlidesLayout() ?? 'bleed'
+  const slidesLayout = React.useSyncExternalStore(
+    subscribeSlidesLayout,
+    getSlidesLayout,
+    getServerSlidesLayout
   )
   const snug = slidesLayout === 'snug'
   // Single item → no thumbnail strip → solo layout (tighter, centered bottom band).
@@ -162,7 +187,6 @@ export function LightboxGallery({
 
   const toggleSlidesLayout = () => {
     const next = snug ? 'bleed' : 'snug'
-    storeSlidesLayout(next)
     // Crossfade the remounted slides (`Slides` is keyed by layout) rather than
     // swapping them in one frame.
     if (
@@ -184,7 +208,7 @@ export function LightboxGallery({
       : undefined
 
   return (
-    <Lightbox.Portal>
+    <Lightbox.Portal container={inPlace ? null : undefined}>
       <Lightbox.Backdrop />
       <Lightbox.Content
         aria-label={ariaLabel}
@@ -211,6 +235,9 @@ export function LightboxGallery({
           aria-label={t('full_size_images')}
           aria-roledescription={t('carousel')}
           preload={2}
+          // A server-rendered open viewer paints the linked slide rather than
+          // the first. Snug cards differ in width, which the shift can't follow.
+          ssrSlideShift={!snug}
           className={snug ? snugSlidesClass : undefined}
           style={slidesStyle}
         >
@@ -221,7 +248,7 @@ export function LightboxGallery({
               : undefined
             return (
               <Lightbox.Slide
-                key={item.id ?? i}
+                key={item.id}
                 className={snug ? snugSlideClass : undefined}
                 style={slideStyle}
               >
@@ -350,7 +377,7 @@ export function LightboxGallery({
             its aria-live announcement role.
           */}
           <div className="flex max-w-full flex-col items-center text-center">
-            <Lightbox.Caption />
+            <Lightbox.Caption>{captionFallback}</Lightbox.Caption>
             {/* "1 of 1" is noise — skip the counter for single-item galleries. */}
             {solo ? null : (
               <Lightbox.Counter>

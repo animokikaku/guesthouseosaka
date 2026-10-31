@@ -276,6 +276,8 @@ function Slides({ className, ...props }: React.ComponentProps<typeof RamkaLightb
       data-slot="lightbox-slides"
       className={cn(
         'flex-1 gap-5 md:gap-0 scrollbar-none [&::-webkit-scrollbar]:hidden',
+        // `ssrSlideShift` can't read the computed gap, so it gets a copy.
+        '[--lightbox-ssr-slide-gap:1.25rem] md:[--lightbox-ssr-slide-gap:0px]',
         className
       )}
       {...props}
@@ -392,6 +394,9 @@ function ThumbnailStrip({
         '[--lb-strip-mask:linear-gradient(to_right,rgb(0_0_0/0)_0,rgb(0_0_0/0.156)_calc(var(--lb-strip-fade)*0.25),rgb(0_0_0/0.5)_calc(var(--lb-strip-fade)*0.5),rgb(0_0_0/0.844)_calc(var(--lb-strip-fade)*0.75),#000_var(--lb-strip-fade),#000_calc(100%-var(--lb-strip-fade)),rgb(0_0_0/0.844)_calc(100%-var(--lb-strip-fade)*0.75),rgb(0_0_0/0.5)_calc(100%-var(--lb-strip-fade)*0.5),rgb(0_0_0/0.156)_calc(100%-var(--lb-strip-fade)*0.25),rgb(0_0_0/0)_100%)]',
         // pointer-events-auto counteracts the bottom band's click-through.
         'pointer-events-auto w-full min-w-0 self-stretch py-1',
+        // A server-rendered strip sits at offset 0 until ramka positions it;
+        // client-side opens are positioned before their first paint.
+        'not-data-positioned:invisible',
         '[-webkit-mask-image:var(--lb-strip-mask)] mask-(--lb-strip-mask)',
         className
       )}

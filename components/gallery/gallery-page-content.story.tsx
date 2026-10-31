@@ -67,6 +67,8 @@ export function Default() {
           galleryCategories={galleryCategories}
           title="Orange House"
           backButton={<span>Back</span>}
+          photo={undefined}
+          onPhotoNavigate={() => {}}
         />
       </div>
     </IntlProvider>
@@ -86,6 +88,8 @@ export function WithModal() {
           galleryCategories={galleryCategories}
           title="Orange House"
           backButton={<GalleryModalCloseButton />}
+          photo={undefined}
+          onPhotoNavigate={() => {}}
         />
       </GalleryModal>
     </IntlProvider>

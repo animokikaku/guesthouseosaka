@@ -2,6 +2,10 @@ import { CategoryGrid } from '@/components/gallery/gallery-category-grid'
 import { LightboxGallery } from '@/components/gallery/lightbox-gallery'
 import { Lightbox } from '@/components/ui/lightbox'
 import { StickyCategoryNav } from '@/components/gallery/sticky-category-nav'
+import {
+  type PhotoNavigate,
+  useLightboxUrlState
+} from '@/components/gallery/use-lightbox-url-state'
 import { useStickyNav } from '@/hooks/use-sticky-nav'
 import {
   flattenGalleryItems,
@@ -32,6 +36,10 @@ type GalleryPageContentProps = {
   title: string
   /** Back button element (Link or Dialog.Close) */
   backButton: ReactNode
+  /** The `_key` of the photo the URL opens in the lightbox */
+  photo: string | undefined
+  /** Moves the route's URL to a photo, keeping its mask if it has one */
+  onPhotoNavigate: PhotoNavigate
 }
 
 export function GalleryPageContent(props: GalleryPageContentProps) {
@@ -55,7 +63,9 @@ function GalleryPageBody({
   documentType,
   galleryCategories,
   title,
-  backButton
+  backButton,
+  photo,
+  onPhotoNavigate
 }: GalleryPageContentProps) {
   const t = useTranslations('GalleryPageContent')
 
@@ -77,13 +87,28 @@ function GalleryPageBody({
     lightboxItems.push(lightboxItem)
   }
 
+  const lightbox = useLightboxUrlState({
+    photo,
+    keys: lightboxItems.map((item) => item.id),
+    navigate: onPhotoNavigate
+  })
+
   const { activeId } = useStickyNav({
     sectionIds,
     scrollContainerRef
   })
 
   return (
-    <Lightbox.Root scrollTriggerIntoView={SCROLL_TRIGGER_INTO_VIEW} awaitImageDecode={false}>
+    <Lightbox.Root
+      open={lightbox.open}
+      onOpenChange={lightbox.onOpenChange}
+      value={lightbox.value}
+      onValueChange={lightbox.onValueChange}
+      // Items register in effects, so a deep link's server render would count 0.
+      count={lightboxItems.length}
+      scrollTriggerIntoView={SCROLL_TRIGGER_INTO_VIEW}
+      awaitImageDecode={false}
+    >
       <div className="flex h-full flex-col">
         {/* Sits above the scroll container rather than over it, so it is opaque:
             nothing ever passes behind it to tint or blur. */}
@@ -112,7 +137,14 @@ function GalleryPageBody({
         </main>
       </div>
 
-      <LightboxGallery items={lightboxItems} ariaLabel={title || t('gallery_title')} />
+      <LightboxGallery
+        items={lightboxItems}
+        ariaLabel={title || t('gallery_title')}
+        // A deep link renders the viewer open on the server, where a portal
+        // can't render: keep it in place for this mount.
+        inPlace={lightbox.openedOnLoad}
+        captionFallback={lightbox.openedOnLoad ? lightboxItems[lightbox.value]?.caption : undefined}
+      />
     </Lightbox.Root>
   )
 }

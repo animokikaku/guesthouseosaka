@@ -68,3 +68,20 @@ export function useMatchRoute() {
 export function useNavigate() {
   return () => Promise.resolve()
 }
+
+// The gallery's lightbox URL sync reads the address bar and listens for Back
+// and Forward; the sandbox has neither, so photos never reach a URL.
+const router = {
+  options: {
+    parseSearch: (search: string) => Object.fromEntries(new URLSearchParams(search))
+  },
+  history: {
+    location: { search: '' },
+    subscribe: () => () => {},
+    back: () => {}
+  }
+}
+
+export function useRouter() {
+  return router
+}
