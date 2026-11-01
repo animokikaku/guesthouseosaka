@@ -70,6 +70,12 @@
     "rooms_upcoming": "{count, plural, one {# room opening soon} other {# rooms opening soon}}",
     "fully_booked": "Fully booked"
   },
+  "HouseRooms": {
+    "heading": "Room availability",
+    "room": "Room {number}",
+    "now": "Now",
+    "date_unknown": "Date TBC"
+  },
   "HouseBuilding": {
     "floors_label": "Floors",
     "min_rent_label": "Min rent",

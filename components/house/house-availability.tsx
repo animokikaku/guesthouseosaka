@@ -1,24 +1,44 @@
 import { Badge } from '@/components/ui/badge'
-import type { RoomCounts } from '@/lib/rooms.server'
-import { useTranslations } from 'use-intl'
+import type { RoomAvailability } from '@/lib/rooms.server'
+import type { HouseIdentifier } from '@/lib/types'
+import { Link } from '@tanstack/react-router'
+import { useLocale, useTranslations } from 'use-intl'
 
-/** The house's most useful availability fact: rooms free now, else rooms opening soon, else fully booked. */
+/**
+ * The house's most useful availability fact: rooms free now, else rooms
+ * opening soon, else fully booked. Links to the timeline (`#availability`)
+ * unless fully booked.
+ */
 export function HouseAvailability({
-  counts: { available, upcoming },
+  house,
+  rooms: { available, upcoming },
   className
 }: {
-  counts: RoomCounts
+  house: HouseIdentifier
+  rooms: RoomAvailability
   className?: string
 }) {
   const t = useTranslations('HouseAvailability')
+  const locale = useLocale()
 
-  let label = t('fully_booked')
-  if (available > 0) label = t('rooms_available', { count: available })
-  else if (upcoming > 0) label = t('rooms_upcoming', { count: upcoming })
+  // A fully booked house has no timeline to link to.
+  if (available.length === 0 && upcoming.length === 0) {
+    return (
+      <Badge variant="secondary" className={className}>
+        {t('fully_booked')}
+      </Badge>
+    )
+  }
 
   return (
-    <Badge variant="secondary" className={className}>
-      {label}
+    <Badge
+      variant="secondary"
+      className={className}
+      render={<Link to="/$locale/$house" params={{ locale, house }} hash="availability" />}
+    >
+      {available.length > 0
+        ? t('rooms_available', { count: available.length })
+        : t('rooms_upcoming', { count: upcoming.length })}
     </Badge>
   )
 }

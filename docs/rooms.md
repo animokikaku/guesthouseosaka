@@ -123,12 +123,15 @@ is refused as incomplete on every run until synced once with `?force=1`.
 
 ## Reading rooms in the site
 
-`getRoomCounts(house)` in `lib/rooms.server.ts` maps the house to its property
-ID and counts its available and upcoming rooms, which the house page shows as a
-badge (`components/house/house-availability.tsx`). It counts an upcoming room
-whose date has come (in Japan) as available, and returns null, hiding the
-badge, when the listing has never synced, last synced over two days ago, or D1
-fails.
+`getRoomAvailability(house)` in `lib/rooms.server.ts` maps the house to its
+property ID and reads its listed rooms that are available or upcoming (the site
+doesn't show occupied ones). The house page shows a badge with the counts
+(`components/house/house-availability.tsx`), linking to a timeline of when those
+rooms free up in its `#availability` section (`components/house/house-rooms.tsx`).
+A fully booked house has no timeline, and its "Fully booked" badge no link. It
+counts an upcoming room whose date has come (in Japan) as available, and returns
+null, hiding both, when the listing has never synced, last synced over two days
+ago, or D1 fails.
 
 ## Cache
 

@@ -29,13 +29,13 @@ export const Route = createFileRoute('/$locale/$house/_house')({
 const localeRoute = getRouteApi('/$locale')
 
 function HouseLayout() {
-  const { house, roomCounts } = Route.useLoaderData()
+  const { house, rooms } = Route.useLoaderData()
   const { houseTitles } = localeRoute.useLoaderData()
 
   return (
     <>
       {house ? (
-        <HousePageContent {...house} houses={houseTitles} roomCounts={roomCounts} />
+        <HousePageContent {...house} houses={houseTitles} rooms={rooms} />
       ) : (
         <PageEmptyStateSection />
       )}
