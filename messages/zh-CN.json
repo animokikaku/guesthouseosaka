@@ -70,6 +70,12 @@
     "rooms_upcoming": "{count}间房即将空出",
     "fully_booked": "已满房"
   },
+  "HouseRooms": {
+    "heading": "房间空置情况",
+    "room": "{number}号房",
+    "now": "现在",
+    "date_unknown": "日期待定"
+  },
   "HouseBuilding": {
     "floors_label": "楼层",
     "min_rent_label": "最低租金",

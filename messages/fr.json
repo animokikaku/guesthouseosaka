@@ -70,6 +70,12 @@
     "rooms_upcoming": "{count, plural, one {# chambre bientôt libre} other {# chambres bientôt libres}}",
     "fully_booked": "Complet"
   },
+  "HouseRooms": {
+    "heading": "Disponibilité des chambres",
+    "room": "Chambre {number}",
+    "now": "Maintenant",
+    "date_unknown": "Date à confirmer"
+  },
   "HouseBuilding": {
     "floors_label": "Étages",
     "min_rent_label": "Loyer min.",
