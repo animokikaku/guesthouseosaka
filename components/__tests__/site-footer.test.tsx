@@ -21,7 +21,8 @@ const settings: Settings = {
       label: 'Follow us on Instagram',
       url: 'https://instagram.com/example'
     }
-  ]
+  ],
+  showRoomAvailability: false
 }
 
 describe('SiteFooter', () => {
