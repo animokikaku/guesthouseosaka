@@ -38,10 +38,12 @@ export function mergeCacheTags(...values: (string | undefined)[]) {
  * would honor it and show a copy a purge can't reach.
  * @see https://developers.cloudflare.com/workers/cache/debugging/
  *
- * Cookies aren't part of the cache key, so `Vary: Cookie` keeps a cached
- * published copy from reaching a draft-mode visitor. The cost: a request with
- * any cookie (a language choice, Cloudflare's `cf_clearance` after a bot
- * challenge) gets its own copy, which per-visitor cookies make a miss.
+ * Published responses don't vary on `Cookie`: that would give every distinct
+ * cookie (a language choice, Cloudflare's `cf_clearance` after a bot
+ * challenge) its own copy, so per-visitor cookies would always miss. Instead
+ * the gateway skips the cache for a request with the draft mode cookie (see
+ * app/worker.ts), which keeps a cached published copy from reaching a
+ * draft-mode visitor.
  *
  * Without `tags`, the response carries no `Cache-Tag`: a page's tags come from
  * the loaders that render it (see `setCacheHeaders`).
@@ -55,7 +57,6 @@ export function cacheHeaders(
   return {
     'Cache-Control': 'public, max-age=0, s-maxage=86400',
     // Cloudflare strips it before the response reaches the browser.
-    ...(tags && { 'Cache-Tag': mergeCacheTags(...tags) }),
-    Vary: 'Cookie'
+    ...(tags && { 'Cache-Tag': mergeCacheTags(...tags) })
   }
 }

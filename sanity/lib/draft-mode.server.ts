@@ -10,7 +10,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto'
  * Presentation sets a fresh one each time it opens the site (see
  * `/api/draft-mode/enable`), and a page loaded past half its lifetime renews it.
  */
-const DRAFT_MODE_COOKIE = '__sanity_draft_mode'
+export const DRAFT_MODE_COOKIE = '__sanity_draft_mode'
 const DRAFT_MODE_TTL_MS = 24 * 60 * 60 * 1000
 
 // Keyed on use: `env` can only be read while handling a request.

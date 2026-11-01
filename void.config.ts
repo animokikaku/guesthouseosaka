@@ -27,10 +27,18 @@ export default defineConfig({
     routes: [{ pattern: 'guesthouseosaka.com', custom_domain: true }],
     workers_dev: false,
     preview_urls: true,
-    // Workers Cache: Cloudflare serves responses from its cache in front of the
-    // Worker, following their Cache-Control (see lib/cache-control.ts), so a
-    // cached page never starts the Worker. Each deployed version starts empty.
+    // A gateway that shapes the cache key, in front of the app (see app/worker.ts).
+    main: './app/worker.ts',
+    // Workers Cache: Cloudflare serves the app's responses from its cache,
+    // following their Cache-Control (see lib/cache-control.ts), so a cached
+    // page never starts the app. The gateway runs on every request, so it has
+    // no cache of its own; the app (`Site`) does. Each deployed version starts
+    // empty, and `bun run deploy` warms it (scripts/warm-cache.mts).
     cache: { enabled: true },
+    exports: {
+      default: { type: 'worker', cache: { enabled: false } },
+      Site: { type: 'worker', cache: { enabled: true } }
+    },
     observability: {
       enabled: true,
       traces: { enabled: true }

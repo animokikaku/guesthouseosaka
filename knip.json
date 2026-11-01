@@ -28,6 +28,8 @@
         "app/routes/**/*.{ts,tsx}",
         "app/router.tsx",
         "app/start.ts",
+        "app/worker.ts",
+        "scripts/*.mts",
         "db/schema.ts",
         "void.config.ts"
       ],

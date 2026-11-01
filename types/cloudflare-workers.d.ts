@@ -5,4 +5,9 @@ declare namespace Cloudflare {
     /** Rooms synced from shares.house (see void.config.ts). */
     ROOMS_DB: D1Database
   }
+
+  interface GlobalProps {
+    /** The Worker's entry, which types `ctx.exports` (see app/worker.ts). */
+    mainModule: typeof import('../app/worker')
+  }
 }

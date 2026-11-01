@@ -107,9 +107,15 @@ public/                # Static assets only
   Void reads (`env.example` is the template). Builds ignore `VITE_*` values from `.env`, so a
   deploy only gets them from the shell (Workers Builds' build variables); `bun run build` loads
   `.env` explicitly for local builds
-- Workers Cache (`cache.enabled` in `void.config.ts`) serves pages and server-function GETs
-  from Cloudflare's cache by their `Cache-Control`, without running the Worker; check
-  `Cf-Cache-Status`. Responses carry `Vary: Cookie` for draft mode (see `lib/cache-control.ts`)
+- Workers Cache (`cache` in `void.config.ts`) serves pages and server-function GETs
+  from Cloudflare's cache by their `Cache-Control`, without rendering them; check
+  `Cf-Cache-Status`. Zone Cache Rules don't apply to it, so the Worker's entry
+  (`app/worker.ts`) is an uncached gateway in front of the cached `Site` entrypoint that renders
+  the app. The gateway drops tracking parameters (`utm_*`, `fbclid`, `gclid`…, see
+  `lib/cache-key.ts`) before rendering, so campaign links share the cached page, and adds them
+  back to the site's own redirects. It also skips the cache for requests with the draft mode
+  cookie, so published responses don't need `Vary: Cookie`. Each deploy starts with an empty
+  cache; `bun run deploy` warms every page in every locale afterwards (`bun run cache:warm`)
 - Responses built from published content are tagged with the Sanity document types they read
   (`sanity-<type>`, listed per loader in `sanity/lib/content-types.ts`), plus `sanity` on all of
   them. A page adds up its loaders' tags. Sanity's publish webhook purges the published type's

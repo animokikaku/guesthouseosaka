@@ -6,8 +6,7 @@ describe('cacheHeaders', () => {
   it('shares published responses for a day, tagged with every Sanity type they read', () => {
     expect(cacheHeaders(false, cacheTags(['faqPage', 'house'], ['rooms']))).toEqual({
       'Cache-Control': 'public, max-age=0, s-maxage=86400',
-      'Cache-Tag': 'sanity,sanity-faqPage,sanity-house,rooms',
-      Vary: 'Cookie'
+      'Cache-Tag': 'sanity,sanity-faqPage,sanity-house,rooms'
     })
   })
 
@@ -16,6 +15,11 @@ describe('cacheHeaders', () => {
       'Cache-Control': 'private, no-store',
       Vary: 'Cookie'
     })
+  })
+
+  // Draft mode skips the cache in the gateway instead (see app/worker.ts).
+  it('doesn’t vary published responses on cookies', () => {
+    expect(cacheHeaders(false)).not.toHaveProperty('Vary')
   })
 
   // A page's tags come from its loaders (see `setCacheHeaders`).
