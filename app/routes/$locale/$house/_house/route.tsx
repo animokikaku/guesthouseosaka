@@ -30,12 +30,17 @@ const localeRoute = getRouteApi('/$locale')
 
 function HouseLayout() {
   const { house, rooms } = Route.useLoaderData()
-  const { houseTitles } = localeRoute.useLoaderData()
+  const { houseTitles, settings } = localeRoute.useLoaderData()
 
   return (
     <>
       {house ? (
-        <HousePageContent {...house} houses={houseTitles} rooms={rooms} />
+        <HousePageContent
+          {...house}
+          houses={houseTitles}
+          rooms={rooms}
+          showRoomTimeline={settings?.showRoomAvailability ?? false}
+        />
       ) : (
         <PageEmptyStateSection />
       )}

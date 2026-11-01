@@ -46,6 +46,15 @@ export const settings = defineType({
       group: 'site',
       components: { input: RoomSyncInput }
     }),
+    defineField({
+      name: 'showRoomAvailability',
+      title: 'Show Room Availability Timeline',
+      type: 'boolean',
+      description:
+        'Shows when rooms free up on the house pages, and links the availability badge to it. Preview it in Presentation before publishing.',
+      group: 'site',
+      initialValue: false
+    }),
 
     // Organization group (JSON-LD schema)
     defineField({

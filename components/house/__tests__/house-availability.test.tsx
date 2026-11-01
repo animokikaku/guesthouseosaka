@@ -17,7 +17,7 @@ function rooms(available: number, upcoming: number): RoomAvailability {
 
 describe('HouseAvailability', () => {
   it('links the rooms free now to the timeline', () => {
-    render(<HouseAvailability house="orange" rooms={rooms(2, 3)} />)
+    render(<HouseAvailability house="orange" rooms={rooms(2, 3)} linked />)
 
     expect(screen.getByRole('link', { name: '2 rooms available now' })).toHaveAttribute(
       'href',
@@ -26,7 +26,7 @@ describe('HouseAvailability', () => {
   })
 
   it('links the rooms opening soon when none is free now', () => {
-    render(<HouseAvailability house="orange" rooms={rooms(0, 1)} />)
+    render(<HouseAvailability house="orange" rooms={rooms(0, 1)} linked />)
 
     expect(screen.getByRole('link', { name: '1 room opening soon' })).toHaveAttribute(
       'href',
@@ -35,9 +35,16 @@ describe('HouseAvailability', () => {
   })
 
   it('shows a fully booked house without a link, as it has no timeline', () => {
-    render(<HouseAvailability house="lemon" rooms={rooms(0, 0)} />)
+    render(<HouseAvailability house="lemon" rooms={rooms(0, 0)} linked />)
 
     expect(screen.getByText('Fully booked')).toBeInTheDocument()
+    expect(screen.queryByRole('link')).not.toBeInTheDocument()
+  })
+
+  it('does not link when Site Settings hide the timeline', () => {
+    render(<HouseAvailability house="orange" rooms={rooms(2, 3)} linked={false} />)
+
+    expect(screen.getByText('2 rooms available now')).toBeInTheDocument()
     expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })
 })

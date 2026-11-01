@@ -69,7 +69,8 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
     icon,
     label,
     url
-  })
+  }),
+  "showRoomAvailability": showRoomAvailability == true
 }`)
 
 // =============================================================================
