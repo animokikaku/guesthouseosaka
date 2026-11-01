@@ -128,7 +128,10 @@ property ID and reads its listed rooms that are available or upcoming (the site
 doesn't show occupied ones). The house page shows a badge with the counts
 (`components/house/house-availability.tsx`), linking to a timeline of when those
 rooms free up in its `#availability` section (`components/house/house-rooms.tsx`).
-A fully booked house has no timeline, and its "Fully booked" badge no link. It
+A fully booked house has no timeline, and its "Fully booked" badge no link.
+The timeline shows only when **Show Room Availability Timeline** is on in Site
+Settings (under **Sync now**), so it can be previewed in Presentation from a
+draft before publishing; while it's off, the badge shows without a link. It
 counts an upcoming room whose date has come (in Japan) as available, and returns
 null, hiding both, when the listing has never synced, last synced over two days
 ago, or D1 fails.
