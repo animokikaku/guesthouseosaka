@@ -11,7 +11,8 @@ house pages. Nothing else stores rooms.
 (`lib/rooms.server.ts`), then purges the cached pages. An EventBridge rule in
 AWS Tokyo calls it every hour (see [Schedule](#schedule)).
 
-The **Room Availability** switch in Site Settings turns the feature on and off.
+Site Settings' **Room Availability** field turns the feature on and off, from
+its "…" menu (**Show on the site** / **Hide from the site**).
 While it's off in the published Site Settings, the house pages show no rooms,
 and the hourly call does nothing (it answers `{"skipped": true}`). If it can't
 read Site Settings, it syncs anyway, which does no harm. The Studio's **Sync
@@ -106,15 +107,19 @@ menu (`studio/actions/room-availability-actions.ts`, ahead of the Studio's
 copy and paste) has:
 
 - **Show on the site / Hide from the site:** sets the field in the draft, so
-  Presentation previews it before it's published.
+  Presentation previews it before it's published. Showing also syncs when a
+  house's rooms are over two days old (see below).
 - **Sync now,** on or off: syncs before the next hourly run, even if the
-  published field is off, so a draft previews fresh rooms. After a long time
-  off, sync before previewing or publishing.
+  published field is off, so a draft previews fresh rooms. A draft left
+  unpublished over two days needs it again: the schedule still skips.
 
 A card under the header lists each house as the Studio lists
 documents: its hero image and title, its listed rooms, and a dot whose tooltip
-says when it last synced; clicking a house opens it. The dot is red when the site hides the house's rooms
-(never synced, or over two days ago). The list comes from a public
+says when it last synced; clicking a house opens it. The dot is red when the
+house never synced or last synced over two days ago, which hides its rooms; it
+tells only the sync's age, so it stays green while Room Availability is off.
+The statuses reload when the editor comes back to the tab. They come from a
+public
 `GET /api/sync-rooms` (`{"houses": [{"house", "syncedAt", "rooms", "fresh"}]}`).
 After a sync, each house also shows what changed, or why it failed
 (`studio/components/room-sync.ts` holds that sync's state).

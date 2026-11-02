@@ -30,6 +30,30 @@ const syncResponseSchema = z.object({
 
 export type SyncResult = z.infer<typeof syncResponseSchema>['results'][number]
 
+/**
+ * What `GET /api/sync-rooms` answers: each house's last sync, and whether it's
+ * recent enough for the site to show its rooms (`fresh`).
+ */
+const statusesSchema = z.object({
+  houses: z.array(
+    z.object({
+      house: z.string(),
+      syncedAt: z.nullable(z.string()),
+      rooms: z.number(),
+      fresh: z.boolean()
+    })
+  )
+})
+
+export type HouseStatus = z.infer<typeof statusesSchema>['houses'][number]
+
+/** Each house's sync status; undefined when the site can't say. */
+export function loadStatuses(): Promise<HouseStatus[] | undefined> {
+  return fetch(new URL('/api/sync-rooms', siteUrl))
+    .then(async (response) => statusesSchema.parse(await response.json()).houses)
+    .catch(() => undefined)
+}
+
 export type SyncState =
   | { status: 'idle' }
   | { status: 'syncing' }
@@ -52,6 +76,16 @@ function subscribe(listener: () => void) {
 /** The last sync this editor ran in this tab, if any. */
 export function useRoomSync() {
   return useSyncExternalStore(subscribe, () => state)
+}
+
+/**
+ * Syncs every house if the site hides any's rooms, synced too long ago, or
+ * can't say: what the schedule skipped while room availability was off.
+ */
+export async function syncRoomsIfStale(client: SanityClient, userId: string | undefined) {
+  const statuses = await loadStatuses()
+  if (statuses?.every((status) => status.fresh)) return
+  await syncRooms(client, userId)
 }
 
 /** Syncs every house now; `useRoomSync` follows it. */
