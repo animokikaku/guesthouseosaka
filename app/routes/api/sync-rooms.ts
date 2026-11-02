@@ -10,8 +10,8 @@ import { env as serverEnv } from '@/env'
 import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
 import { SANITY_STUDIO_HOSTS } from '@/lib/config'
 import { hasBearerToken } from '@/lib/rooms-sync/auth'
-import { needsPurge, recordPurge, syncListing } from '@/lib/rooms-sync/sync.server'
-import { PROPERTY_IDS } from '@/lib/rooms.server'
+import { listingStatuses, needsPurge, recordPurge, syncListing } from '@/lib/rooms-sync/sync.server'
+import { isFresh, PROPERTY_IDS } from '@/lib/rooms.server'
 import { HouseIdentifierValues, type HouseIdentifier } from '@/lib/types'
 import { client } from '@/sanity/lib/client'
 import { roomAvailabilityQuery } from '@/sanity/lib/queries'
@@ -157,17 +157,44 @@ async function isRoomAvailabilityOn() {
   }
 }
 
+/** The Studio's origin may read the response, when it's one of the Studios. */
+function corsHeaders(request: Request) {
+  const origin = request.headers.get('Origin')
+  return {
+    ...NO_STORE,
+    Vary: 'Origin',
+    ...(origin && STUDIO_ORIGINS.has(origin) && { 'Access-Control-Allow-Origin': origin })
+  }
+}
+
 export const Route = createFileRoute('/api/sync-rooms')({
   server: {
     handlers: {
+      // Each house's last sync, listed rooms, and whether the site shows them
+      // (`fresh`), which the Studio lists under its switch. Public: the house
+      // pages show as much, and it costs one small D1 read.
+      GET: async ({ request }) => {
+        const headers = corsHeaders(request)
+        try {
+          const statuses = await listingStatuses(db, Object.values(PROPERTY_IDS))
+          const houses = HouseIdentifierValues.map((house) => {
+            const status = statuses.get(PROPERTY_IDS[house])
+            return {
+              house,
+              syncedAt: status?.checkedAt ?? null,
+              rooms: status?.rooms ?? 0,
+              fresh: status ? isFresh(status.checkedAt) : false
+            }
+          })
+          return Response.json({ houses }, { headers })
+        } catch (error) {
+          log('error', 'last_sync_read_failed', { error: describe(error) })
+          return Response.json({ error: 'D1 failed' }, { status: 502, headers })
+        }
+      },
       // A text body and no custom header make the Studio's request simple: no preflight.
       POST: async ({ request }) => {
-        const origin = request.headers.get('Origin')
-        const headers = {
-          ...NO_STORE,
-          Vary: 'Origin',
-          ...(origin && STUDIO_ORIGINS.has(origin) && { 'Access-Control-Allow-Origin': origin })
-        }
+        const headers = corsHeaders(request)
         const from = await caller(request)
         if (!from) {
           return new Response('Unauthorized', { status: 401, headers })
