@@ -120,7 +120,8 @@ house never synced or last synced over two days ago, which hides its rooms; it
 tells only the sync's age, so it stays green while Room Availability is off.
 The statuses reload when the editor comes back to the tab. They come from a
 public
-`GET /api/sync-rooms` (`{"houses": [{"house", "syncedAt", "rooms", "fresh"}]}`).
+`GET /api/sync-rooms` (`{"houses": [{"house", "syncedAt", "rooms"}]}`); the Studio tells the age
+with `isFresh` (`lib/rooms-sync/room.ts`), as the site does.
 After a sync, each house also shows what changed, or why it failed
 (`studio/components/room-sync.ts` holds that sync's state).
 

@@ -11,7 +11,7 @@ import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
 import { SANITY_STUDIO_HOSTS } from '@/lib/config'
 import { hasBearerToken } from '@/lib/rooms-sync/auth'
 import { listingStatuses, needsPurge, recordPurge, syncListing } from '@/lib/rooms-sync/sync.server'
-import { isFresh, PROPERTY_IDS } from '@/lib/rooms.server'
+import { PROPERTY_IDS } from '@/lib/rooms.server'
 import { HouseIdentifierValues, type HouseIdentifier } from '@/lib/types'
 import { client } from '@/sanity/lib/client'
 import { roomAvailabilityQuery } from '@/sanity/lib/queries'
@@ -170,10 +170,9 @@ function corsHeaders(request: Request) {
 export const Route = createFileRoute('/api/sync-rooms')({
   server: {
     handlers: {
-      // Each house's last sync, listed rooms, and whether that sync is recent
-      // enough for the site to show them (`fresh`, whatever Site Settings say),
-      // which Site Settings list. Public: the house pages show as much, and it
-      // costs one small D1 read.
+      // Each house's last sync and listed rooms, which Site Settings list; they
+      // tell the sync's age themselves, as it changes. Public: the house pages
+      // show as much, and it costs one small D1 read.
       GET: async ({ request }) => {
         const headers = corsHeaders(request)
         try {
@@ -183,8 +182,7 @@ export const Route = createFileRoute('/api/sync-rooms')({
             return {
               house,
               syncedAt: status?.checkedAt ?? null,
-              rooms: status?.rooms ?? 0,
-              fresh: status ? isFresh(status.checkedAt) : false
+              rooms: status?.rooms ?? 0
             }
           })
           return Response.json({ houses }, { headers })
