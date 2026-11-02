@@ -37,23 +37,25 @@ export const settings = defineType({
       group: 'site',
       of: [defineArrayMember({ type: 'socialLink' })]
     }),
+    defineField({
+      name: 'roomAvailability',
+      title: 'Room Availability',
+      type: 'boolean',
+      description:
+        'Shows which rooms are free or freeing up on the house pages, from shares.house, synced every hour while on. Preview it in Presentation before publishing.',
+      group: 'site',
+      initialValue: false
+    }),
     // A button, not content: its input never sets a value.
     defineField({
       name: 'roomSync',
-      title: 'Room Availability',
+      title: 'Room Sync',
       type: 'string',
-      description: 'The house pages show room availability from shares.house, synced every hour.',
-      group: 'site',
-      components: { input: RoomSyncInput }
-    }),
-    defineField({
-      name: 'showRoomAvailability',
-      title: 'Show Room Availability Timeline',
-      type: 'boolean',
       description:
-        'Shows when rooms free up on the house pages, and links the availability badge to it. Preview it in Presentation before publishing.',
+        'Syncs room availability from shares.house now, rather than at the next hourly run.',
       group: 'site',
-      initialValue: false
+      hidden: ({ document }) => document?.roomAvailability !== true,
+      components: { input: RoomSyncInput }
     }),
 
     // Organization group (JSON-LD schema)
