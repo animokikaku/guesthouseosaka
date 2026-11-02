@@ -38,8 +38,8 @@ function HouseLayout() {
         <HousePageContent
           {...house}
           houses={houseTitles}
-          rooms={rooms}
-          showRoomTimeline={settings?.showRoomAvailability ?? false}
+          // Site Settings' switch for room availability, which draft mode previews.
+          rooms={settings?.roomAvailability ? rooms : null}
         />
       ) : (
         <PageEmptyStateSection />

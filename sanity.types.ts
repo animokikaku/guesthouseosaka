@@ -326,8 +326,8 @@ export type Settings = {
       _key: string;
     } & SocialLink
   >;
+  roomAvailability?: boolean;
   roomSync?: string;
-  showRoomAvailability?: boolean;
   companyName: string;
   email: string;
   phone: string;
@@ -621,7 +621,7 @@ export type AllSanitySchemaTypes =
 
 // Source: ../sanity/lib/queries.ts
 // Variable: settingsQuery
-// Query: *[_type == "settings"][0]{  _id,  _type,  "siteName": coalesce(siteName[language == $locale][0].value, siteName[language == "en"][0].value),  "siteDescription": coalesce(siteDescription[language == $locale][0].value, siteDescription[language == "en"][0].value),  companyName,  email,  phone,  address,  "socialLinks": array::compact(socialLinks[]{    _key,    icon,    label,    url  }),  "showRoomAvailability": showRoomAvailability == true}
+// Query: *[_type == "settings"][0]{  _id,  _type,  "siteName": coalesce(siteName[language == $locale][0].value, siteName[language == "en"][0].value),  "siteDescription": coalesce(siteDescription[language == $locale][0].value, siteDescription[language == "en"][0].value),  companyName,  email,  phone,  address,  "socialLinks": array::compact(socialLinks[]{    _key,    icon,    label,    url  }),  "roomAvailability": roomAvailability == true}
 export type SettingsQueryResult = {
   _id: string;
   _type: "settings";
@@ -637,8 +637,13 @@ export type SettingsQueryResult = {
     label: string;
     url: string;
   }> | null;
-  showRoomAvailability: boolean | false;
+  roomAvailability: boolean | false;
 } | null;
+
+// Source: ../sanity/lib/queries.ts
+// Variable: roomAvailabilityQuery
+// Query: *[_type == "settings"][0].roomAvailability == true
+export type RoomAvailabilityQueryResult = boolean | false;
 
 // Source: ../sanity/lib/queries.ts
 // Variable: homePageQuery
@@ -1159,7 +1164,8 @@ export type PricingCategoriesQueryResult = Array<{
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '*[_type == "settings"][0]{\n  _id,\n  _type,\n  "siteName": coalesce(siteName[language == $locale][0].value, siteName[language == "en"][0].value),\n  "siteDescription": coalesce(siteDescription[language == $locale][0].value, siteDescription[language == "en"][0].value),\n  companyName,\n  email,\n  phone,\n  address,\n  "socialLinks": array::compact(socialLinks[]{\n    _key,\n    icon,\n    label,\n    url\n  }),\n  "showRoomAvailability": showRoomAvailability == true\n}': SettingsQueryResult;
+    '*[_type == "settings"][0]{\n  _id,\n  _type,\n  "siteName": coalesce(siteName[language == $locale][0].value, siteName[language == "en"][0].value),\n  "siteDescription": coalesce(siteDescription[language == $locale][0].value, siteDescription[language == "en"][0].value),\n  companyName,\n  email,\n  phone,\n  address,\n  "socialLinks": array::compact(socialLinks[]{\n    _key,\n    icon,\n    label,\n    url\n  }),\n  "roomAvailability": roomAvailability == true\n}': SettingsQueryResult;
+    '*[_type == "settings"][0].roomAvailability == true': RoomAvailabilityQueryResult;
     '{\n  "page": *[_type == "homePage"][0]{\n    _id,\n    _type,\n    "hero": hero{\n      "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value),\n      "ctaLabel": coalesce(ctaLabel[language == $locale][0].value, ctaLabel[language == "en"][0].value)\n    },\n    "galleryWall": array::compact(galleryWall[0...6]{\n      _key,\n  asset,\n  hotspot,\n  crop,\n  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),\n  "blurHash": asset->metadata.blurHash\n\n    }),\n    "collection": collection{\n      "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)\n    }\n  },\n  "houses": *[_type == "house"] | order(orderRank){\n    _id,\n    slug,\n    "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),\n    "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),\n    image{\n  asset,\n  hotspot,\n  crop,\n  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),\n  "blurHash": asset->metadata.blurHash\n}\n  }\n}': HomePageQueryResult;
     '*[_type == "house" && slug == $slug][0]{\n  _id,\n  _type,\n  slug,\n  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),\n  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),\n  building,\n  phone,\n\n  // Only read by urlFor for the page\'s JSON-LD image, so no alt or blurhash\n  image{\n    asset,\n    hotspot,\n    crop\n  },\n\n  // Featured Image (optional, prepended to gallery grids)\n  "featuredImage": select(\n    defined(featuredImage.asset) => featuredImage{\n  asset,\n  hotspot,\n  crop,\n  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),\n  "blurHash": asset->metadata.blurHash\n}\n  ),\n\n  // About Section\n  "about": coalesce(about[language == $locale][0].value, about[language == "en"][0].value),\n\n  // Every gallery image, flattened from the sorted categories: the mobile hero\n  // carousel swipes the whole set, and ImageBlockGallery shows the first five\n  // and counts the rest.\n  //\n  // The asset filter runs inside the projection, not after it: the consumers\n  // drop items that don\'t resolve to an image, and filtering downstream of a\n  // slice would let an unfinished item eat a slot and push a renderable one out.\n  "galleryImages": array::compact((galleryCategories | order(category->orderRank))[].items[defined(image.asset)]{\n    _key,\n    "image": image{\n  asset,\n  hotspot,\n  crop,\n  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),\n  "blurHash": asset->metadata.blurHash\n}\n  }),\n\n  // Amenities grouped by category (enables per-category drag-and-drop reordering)\n  // Filter out empty categories at query level\n  "amenityCategories": array::compact(amenityCategories[]{\n    _key,\n    "category": category->{\n      _id,\n      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),\n      icon\n    },\n    "items": array::compact(items[]{\n      _key,\n      note,\n      "label": coalesce(\n        customLabel[language == $locale][0].value,\n        amenity->label[language == $locale][0].value,\n        amenity->label[language == "en"][0].value\n      ),\n      "icon": amenity->icon\n    })\n  })[count(items) > 0],\n\n  // Featured amenities (pre-computed, max 10)\n  "featuredAmenities": array::compact(amenityCategories[].items[featured == true])[0...10]{\n    _key,\n    note,\n    "label": coalesce(\n      customLabel[language == $locale][0].value,\n      amenity->label[language == $locale][0].value,\n      amenity->label[language == "en"][0].value\n    ),\n    "icon": amenity->icon\n  },\n\n  // Location\n  "location": location{\n    "highlight": coalesce(highlight[language == $locale][0].value, highlight[language == "en"][0].value),\n    "details": coalesce(details[language == $locale][0].value, details[language == "en"][0].value)\n  },\n\n  // Map\n  "map": map{\n    googleMapsUrl,\n    placeId,\n    "placeImage": placeImage{\n  asset,\n  hotspot,\n  crop,\n  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),\n  "blurHash": asset->metadata.blurHash\n},\n    coordinates,\n    address\n  },\n\n  // Pricing\n  "pricing": array::compact(pricing[]{\n    _key,\n    "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),\n    "content": coalesce(content[language == $locale][0].value, content[language == "en"][0].value)\n  })\n}': HouseQueryResult;
     '*[_type == "house" && slug == $slug][0]{\n  _id,\n  _type,\n  "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),\n  "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),\n  "galleryCategories": array::compact(galleryCategories[]{\n    _key,\n    "category": category->{\n      _id,\n      "label": coalesce(label[language == $locale][0].value, label[language == "en"][0].value),\n      orderRank\n    },\n    "items": array::compact(items[]{\n      _key,\n      "image": image{\n  asset,\n  hotspot,\n  crop,\n  "alt": coalesce(alt[language == $locale][0].value, alt[language == "en"][0].value),\n  "blurHash": asset->metadata.blurHash\n}\n    })\n  })[count(items) > 0] | order(category.orderRank)\n}': HouseGalleryQueryResult;
