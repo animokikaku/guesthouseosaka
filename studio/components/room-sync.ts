@@ -6,6 +6,7 @@
  * Studio holds no token.
  */
 import { z } from '@/lib/zod'
+import { isFresh } from '@/lib/rooms-sync/room'
 import { siteUrl } from '@/studio/site-url'
 import { createPreviewSecret } from '@sanity/preview-url-secret/create-secret'
 import { useSyncExternalStore } from 'react'
@@ -31,16 +32,15 @@ const syncResponseSchema = z.object({
 export type SyncResult = z.infer<typeof syncResponseSchema>['results'][number]
 
 /**
- * What `GET /api/sync-rooms` answers: each house's last sync, and whether it's
- * recent enough for the site to show its rooms (`fresh`).
+ * What `GET /api/sync-rooms` answers: each house's last sync and its room
+ * count. The Studio derives freshness from `syncedAt`, with `isFresh`.
  */
 const statusesSchema = z.object({
   houses: z.array(
     z.object({
       house: z.string(),
       syncedAt: z.nullable(z.string()),
-      rooms: z.number(),
-      fresh: z.boolean()
+      rooms: z.number()
     })
   )
 })
@@ -84,7 +84,7 @@ export function useRoomSync() {
  */
 export async function syncRoomsIfStale(client: SanityClient, userId: string | undefined) {
   const statuses = await loadStatuses()
-  if (statuses?.every((status) => status.fresh)) return
+  if (statuses?.every(({ syncedAt }) => syncedAt !== null && isFresh(syncedAt))) return
   await syncRooms(client, userId)
 }
 

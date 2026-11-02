@@ -5,6 +5,7 @@
  * on or off (see docs/rooms.md).
  */
 import { SANITY_API_VERSION } from '@/lib/config'
+import { isFresh } from '@/lib/rooms-sync/room'
 import { DotIcon } from '@sanity/icons/Dot'
 import { HomeIcon } from '@sanity/icons/Home'
 import { Box, Card, Flex, Stack, Text } from '@sanity/ui'
@@ -40,7 +41,7 @@ function timeAgo(date: Date) {
   return 'just now'
 }
 
-/** Renders again every minute, so a time ago stays right while the Studio is open. */
+/** Renders again every minute, so the times ago and dots stay right while the Studio is open. */
 function useMinuteTick() {
   const [, setTick] = useState(0)
   useEffect(() => {
@@ -68,8 +69,8 @@ const housesQuery = `*[_type == "house"]{
 interface Houses {
   /** From the site; undefined when it can't say. */
   statuses: HouseStatus[] | undefined
-  /** From the dataset; empty when it fails, and the rows show the IDs, capitalized, and an icon. */
-  previews: HousePreviews
+  /** From the dataset; undefined when it fails, and the rows show the IDs, capitalized, and an icon. */
+  previews: HousePreviews | undefined
 }
 
 async function loadHouses(client: SanityClient): Promise<Houses> {
@@ -79,7 +80,7 @@ async function loadHouses(client: SanityClient): Promise<Houses> {
       .withConfig({ perspective: 'published' })
       .fetch<Array<HousePreview & { slug: string }>>(housesQuery)
       .then((rows) => Object.fromEntries(rows.map(({ slug, ...preview }) => [slug, preview])))
-      .catch(() => ({}))
+      .catch(() => undefined)
   ])
   return { statuses, previews }
 }
@@ -94,7 +95,7 @@ function useHouses(client: SanityClient, syncedAt: Date | undefined) {
   const latest = useRef(0)
   const load = useEffectEvent(() => {
     const id = ++latest.current
-    // The titles and images rarely change: they load once, the statuses each time.
+    // The titles and images rarely change: they load once (until they do), the statuses each time.
     const previews = houses?.previews
     const loading = previews
       ? loadStatuses().then((statuses) => ({ statuses, previews }))
@@ -148,7 +149,6 @@ function StatusDot({ ok, label }: { ok: boolean; label?: string }) {
 
 /** As the document lists show a document's state: a dot, and on hover, the state and when. */
 function SyncStatus({ ok, label, at }: { ok: boolean; label: string; at: Date | null }) {
-  useMinuteTick()
   return (
     // The Studio's own tooltip spacing: the card's and the content's, 4px each.
     <Tooltip
@@ -183,10 +183,14 @@ function SyncStatus({ ok, label, at }: { ok: boolean; label: string; at: Date | 
  */
 function describeHouse(
   status: HouseStatus,
-  result: SyncResult | undefined,
+  syncResult: SyncResult | undefined,
   finishedAt: Date | undefined
 ) {
   const syncedAt = status.syncedAt === null ? null : new Date(status.syncedAt)
+  const fresh = status.syncedAt !== null && isFresh(status.syncedAt)
+  // A failure that a later sync (the schedule's) superseded no longer applies.
+  const superseded = syncResult?.ok === false && syncedAt && finishedAt && syncedAt > finishedAt
+  const result = superseded ? undefined : syncResult
   const rooms = `${status.rooms} rooms`
   if (result && !result.ok) {
     return {
@@ -197,15 +201,15 @@ function describeHouse(
   if (result) {
     return {
       subtitle: `${rooms}, ${result.changed === 0 ? 'no changes' : `${result.changed} changed`}`,
-      dot: { ok: status.fresh, label: 'Synced', at: syncedAt }
+      dot: { ok: fresh, label: 'Synced', at: syncedAt }
     }
   }
   if (!syncedAt) {
     return { subtitle: 'Not synced yet', dot: { ok: false, label: 'Never synced', at: null } }
   }
   // The site hides rooms last synced over two days ago.
-  const label = status.fresh ? 'Synced' : 'Out of date, hidden on the site'
-  return { subtitle: rooms, dot: { ok: status.fresh, label, at: syncedAt } }
+  const label = fresh ? 'Synced' : 'Out of date, hidden on the site'
+  return { subtitle: rooms, dot: { ok: fresh, label, at: syncedAt } }
 }
 
 /**
@@ -273,6 +277,7 @@ export function RoomAvailabilityInput({
   const sync = useRoomSync()
   const done = sync.status === 'done' ? sync : undefined
   const houses = useHouses(client, done?.finishedAt)
+  useMinuteTick()
   const {
     actions,
     focused,
@@ -280,7 +285,11 @@ export function RoomAvailabilityInput({
     __internal_slot: slot
   } = useFieldActions()
 
-  const card = Boolean(houses?.statuses || sync.status === 'error' || done?.purge === 'failed')
+  // Without the statuses, the failed houses still show, on their own.
+  const failed = houses?.statuses ? [] : (done?.results.flatMap((r) => (r.ok ? [] : [r])) ?? [])
+  const card = Boolean(
+    houses?.statuses || failed.length > 0 || sync.status === 'error' || done?.purge === 'failed'
+  )
 
   return (
     // The Studio's own header, with presence, comments and the "…" menu.
@@ -331,13 +340,25 @@ export function RoomAvailabilityInput({
                     <HouseRow
                       key={status.house}
                       house={status.house}
-                      preview={houses.previews[status.house]}
+                      preview={houses.previews?.[status.house]}
                       subtitle={subtitle}
                       dot={dot}
                     />
                   )
                 })}
               </Stack>
+            )}
+
+            {failed.length > 0 && (
+              <Card padding={3} tone="critical">
+                <Stack gap={3}>
+                  {failed.map((result) => (
+                    <Text key={result.house} size={1}>
+                      {houseName(result.house)}: {describeError(result.error)}
+                    </Text>
+                  ))}
+                </Stack>
+              </Card>
             )}
 
             {sync.status === 'error' && (

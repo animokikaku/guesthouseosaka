@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { properties, rooms } from '@/db/schema'
-import { dateInJapan, type Room } from '@/lib/rooms-sync/room'
+import { dateInJapan, isFresh, type Room } from '@/lib/rooms-sync/room'
 import type { HouseIdentifier } from '@/lib/types'
 import { and, eq, ne } from 'drizzle-orm'
 
@@ -15,13 +15,6 @@ export const PROPERTY_IDS: Record<HouseIdentifier, string> = {
 }
 
 // The sync runs every hour; past this, its rooms are too old to show.
-const MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000
-
-/** Whether a listing last synced at `checkedAt` is recent enough for the site to show its rooms. */
-export function isFresh(checkedAt: string) {
-  return Date.now() - Date.parse(checkedAt) <= MAX_AGE_MS
-}
-
 /** What the house page shows of a room. */
 export type ListedRoom = Pick<Room, 'roomNumber' | 'availableFrom' | 'rent'>
 
