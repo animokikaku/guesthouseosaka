@@ -4,7 +4,8 @@
  * docs/rooms.md). Turning it on or off edits the draft, so Presentation
  * previews it before it's published.
  */
-import { syncRooms, useRoomSync } from '@/studio/components/room-sync'
+import { SANITY_API_VERSION } from '@/lib/config'
+import { syncRooms, syncRoomsIfStale, useRoomSync } from '@/studio/components/room-sync'
 import { EyeClosedIcon } from '@sanity/icons/EyeClosed'
 import { EyeOpenIcon } from '@sanity/icons/EyeOpen'
 import { SyncIcon } from '@sanity/icons/Sync'
@@ -42,10 +43,14 @@ const toggleRoomAvailability = defineDocumentFieldAction({
   useAction(props) {
     const enabled = useEnabled(props)
     const { patch } = useDocumentOperation(props.documentId, props.documentType)
-    const onAction = useCallback(
-      () => patch.execute([{ set: { [FIELD]: !enabled } }]),
-      [patch, enabled]
-    )
+    const client = useClient({ apiVersion: SANITY_API_VERSION })
+    const user = useCurrentUser()
+    const onAction = useCallback(() => {
+      patch.execute([{ set: { [FIELD]: !enabled } }])
+      // While it was off, the schedule skipped: rooms over two days old would
+      // stay hidden until its next run.
+      if (!enabled) void syncRoomsIfStale(client, user?.id)
+    }, [patch, enabled, client, user?.id])
     return {
       type: 'action',
       hidden: !isRoomAvailability(props),
@@ -59,7 +64,7 @@ const toggleRoomAvailability = defineDocumentFieldAction({
 const syncRoomsNow = defineDocumentFieldAction({
   name: 'roomAvailability/sync',
   useAction(props) {
-    const client = useClient({ apiVersion: '2025-02-19' })
+    const client = useClient({ apiVersion: SANITY_API_VERSION })
     const user = useCurrentUser()
     const syncing = useRoomSync().status === 'syncing'
     const onAction = useCallback(() => void syncRooms(client, user?.id), [client, user?.id])

@@ -4,13 +4,12 @@
  * hide the rooms and sync them now. A card lists each house's sync status,
  * on or off (see docs/rooms.md).
  */
-import { z } from '@/lib/zod'
-import { siteUrl } from '@/studio/site-url'
+import { SANITY_API_VERSION } from '@/lib/config'
 import { DotIcon } from '@sanity/icons/Dot'
 import { HomeIcon } from '@sanity/icons/Home'
 import { Box, Card, Flex, Stack, Text } from '@sanity/ui'
 import { Tooltip } from '@sanity/ui/tooltip'
-import { useEffect, useState, type ComponentProps } from 'react'
+import { useEffect, useEffectEvent, useRef, useState, type ComponentProps } from 'react'
 import { useIntentLink } from 'sanity/router'
 import {
   DefaultPreview,
@@ -21,23 +20,9 @@ import {
   type BooleanInputProps,
   type SanityClient
 } from 'sanity'
-import { useRoomSync, type SyncResult } from './room-sync'
+import { loadStatuses, useRoomSync, type HouseStatus, type SyncResult } from './room-sync'
 
 const SHARES_HOUSE = 'shares.house'
-
-/** What `GET /api/sync-rooms` answers: each house's last sync, and whether the site shows its rooms. */
-const statusesSchema = z.object({
-  houses: z.array(
-    z.object({
-      house: z.string(),
-      syncedAt: z.nullable(z.string()),
-      rooms: z.number(),
-      fresh: z.boolean()
-    })
-  )
-})
-
-type HouseStatus = z.infer<typeof statusesSchema>['houses'][number]
 
 const relativeTime = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
 
@@ -89,9 +74,7 @@ interface Houses {
 
 async function loadHouses(client: SanityClient): Promise<Houses> {
   const [statuses, previews] = await Promise.all([
-    fetch(new URL('/api/sync-rooms', siteUrl))
-      .then(async (response) => statusesSchema.parse(await response.json()).houses)
-      .catch(() => undefined),
+    loadStatuses(),
     client
       .withConfig({ perspective: 'published' })
       .fetch<Array<HousePreview & { slug: string }>>(housesQuery)
@@ -101,17 +84,33 @@ async function loadHouses(client: SanityClient): Promise<Houses> {
   return { statuses, previews }
 }
 
-/** The houses. Set them again after a sync. */
-function useHouses(client: SanityClient) {
+/**
+ * The houses, loaded again once a sync this editor started finishes, and when
+ * the editor comes back to the tab, as the hourly sync may have run since.
+ */
+function useHouses(client: SanityClient, syncedAt: Date | undefined) {
   const [houses, setHouses] = useState<Houses>()
+  // Only the latest load sets the houses: an older one may finish after it.
+  const latest = useRef(0)
+  const load = useEffectEvent(() => {
+    const id = ++latest.current
+    // The titles and images rarely change: they load once, the statuses each time.
+    const previews = houses?.previews
+    const loading = previews
+      ? loadStatuses().then((statuses) => ({ statuses, previews }))
+      : loadHouses(client)
+    void loading.then((loaded) => id === latest.current && setHouses(loaded))
+  })
   useEffect(() => {
-    let current = true
-    void loadHouses(client).then((loaded) => current && setHouses(loaded))
-    return () => {
-      current = false
-    }
-  }, [client])
-  return [houses, setHouses] as const
+    load()
+    const onVisible = () => document.visibilityState === 'visible' && load()
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [])
+  useEffect(() => {
+    if (syncedAt) load()
+  }, [syncedAt])
+  return houses
 }
 
 function houseName(house: string) {
@@ -147,31 +146,17 @@ function StatusDot({ ok, label }: { ok: boolean; label?: string }) {
   )
 }
 
-/** A tooltip with the Studio's own spacing: the card's and the content's, 4px each. */
-function StudioTooltip({
-  content,
-  placement,
-  children
-}: {
-  content: React.ReactNode
-  placement: 'top' | 'left'
-  children: React.ReactElement
-}) {
-  return (
-    <Tooltip portal padding={1} placement={placement} content={<Box padding={1}>{content}</Box>}>
-      {children}
-    </Tooltip>
-  )
-}
-
 /** As the document lists show a document's state: a dot, and on hover, the state and when. */
 function SyncStatus({ ok, label, at }: { ok: boolean; label: string; at: Date | null }) {
   useMinuteTick()
   return (
-    <StudioTooltip
+    // The Studio's own tooltip spacing: the card's and the content's, 4px each.
+    <Tooltip
+      portal
+      padding={1}
       placement="left"
       content={
-        <Flex align="center" gap={2}>
+        <Flex align="center" gap={2} padding={1}>
           <StatusDot ok={ok} />
           <Text size={1}>
             {label}
@@ -188,7 +173,7 @@ function SyncStatus({ ok, label, at }: { ok: boolean; label: string; at: Date | 
       <Flex>
         <StatusDot ok={ok} label={label} />
       </Flex>
-    </StudioTooltip>
+    </Tooltip>
   )
 }
 
@@ -284,9 +269,10 @@ export function RoomAvailabilityInput({
   validation
 }: BooleanInputProps) {
   const { ref: focusRef, onFocus, onBlur } = elementProps
-  const client = useClient({ apiVersion: '2025-02-19' })
+  const client = useClient({ apiVersion: SANITY_API_VERSION })
   const sync = useRoomSync()
-  const [houses, setHouses] = useHouses(client)
+  const done = sync.status === 'done' ? sync : undefined
+  const houses = useHouses(client, done?.finishedAt)
   const {
     actions,
     focused,
@@ -294,18 +280,6 @@ export function RoomAvailabilityInput({
     __internal_slot: slot
   } = useFieldActions()
 
-  // Reloads the houses once a sync this editor started finishes.
-  const finishedAt = sync.status === 'done' ? sync.finishedAt : undefined
-  useEffect(() => {
-    if (!finishedAt) return
-    let current = true
-    void loadHouses(client).then((loaded) => current && setHouses(loaded))
-    return () => {
-      current = false
-    }
-  }, [client, finishedAt, setHouses])
-
-  const done = sync.status === 'done' ? sync : undefined
   const card = Boolean(houses?.statuses || sync.status === 'error' || done?.purge === 'failed')
 
   return (
