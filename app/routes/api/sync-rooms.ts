@@ -170,9 +170,10 @@ function corsHeaders(request: Request) {
 export const Route = createFileRoute('/api/sync-rooms')({
   server: {
     handlers: {
-      // Each house's last sync, listed rooms, and whether the site shows them
-      // (`fresh`), which the Studio lists under its switch. Public: the house
-      // pages show as much, and it costs one small D1 read.
+      // Each house's last sync, listed rooms, and whether that sync is recent
+      // enough for the site to show them (`fresh`, whatever Site Settings say),
+      // which Site Settings list. Public: the house pages show as much, and it
+      // costs one small D1 read.
       GET: async ({ request }) => {
         const headers = corsHeaders(request)
         try {
@@ -200,8 +201,8 @@ export const Route = createFileRoute('/api/sync-rooms')({
           return new Response('Unauthorized', { status: 401, headers })
         }
         // The schedule skips while Site Settings turn room availability off. The
-        // Studio's "Sync now" shows only while it's on, if only in a draft, so it
-        // always runs: a draft previews fresh rooms before it's published.
+        // Studio's "Sync now" always runs: it keeps Site Settings' list current,
+        // and a draft that turns it on previews fresh rooms.
         if (from === 'schedule' && !(await isRoomAvailabilityOn())) {
           log('info', 'sync_skipped', { reason: 'room_availability_off' })
           return Response.json({ skipped: true }, { headers })

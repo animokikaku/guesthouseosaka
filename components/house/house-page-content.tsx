@@ -42,7 +42,7 @@ export function HousePageContent({
   houses: HouseTitles
   /** Null hides the badge and the timeline: when D1 has nothing recent, or Site Settings turn them off. */
   rooms: RoomAvailability | null
-  /** Site Settings' switch, for Presentation to open from the badge and the timeline. */
+  /** Site Settings' Room Availability field, for Presentation to open from the badge and the timeline. */
   roomsDataSanity?: string
 }) {
   const href = galleryLink(useLocale(), slug)
