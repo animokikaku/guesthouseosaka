@@ -36,13 +36,11 @@ export function HousePageContent({
   about,
   building,
   houses,
-  rooms,
-  showRoomTimeline
+  rooms
 }: NonNullable<HouseQueryResult> & {
   houses: HouseTitles
+  /** Null hides the badge and the timeline: when D1 has nothing recent, or Site Settings turn them off. */
   rooms: RoomAvailability | null
-  /** Site Settings' switch for the room timeline, so it can be previewed in draft mode first. */
-  showRoomTimeline: boolean
 }) {
   const href = galleryLink(useLocale(), slug)
 
@@ -55,14 +53,7 @@ export function HousePageContent({
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading id={`${slug}-title`}>{title}</PageHeaderHeading>
           <PageHeaderDescription>{description}</PageHeaderDescription>
-          {rooms && (
-            <HouseAvailability
-              house={slug}
-              rooms={rooms}
-              linked={showRoomTimeline}
-              className="sm:hidden"
-            />
-          )}
+          {rooms && <HouseAvailability house={slug} rooms={rooms} className="sm:hidden" />}
           <div
             className={cn('mx-auto mt-6 h-1 w-24', HOUSE_COLORS[slug].divider)}
             aria-hidden="true"
@@ -74,12 +65,7 @@ export function HousePageContent({
           <PageNav id="tabs">
             <HousesNav houses={houses} />
             {rooms && (
-              <HouseAvailability
-                house={slug}
-                rooms={rooms}
-                linked={showRoomTimeline}
-                className="hidden sm:inline-flex"
-              />
+              <HouseAvailability house={slug} rooms={rooms} className="hidden sm:inline-flex" />
             )}
           </PageNav>
           <div className="theme-container">
@@ -93,7 +79,7 @@ export function HousePageContent({
                   // `HousePricing` renders nothing without rows.
                   hasPricing={Boolean(pricing?.length)}
                 >
-                  {rooms && showRoomTimeline && <HouseRooms rooms={rooms} />}
+                  {rooms && <HouseRooms rooms={rooms} />}
                 </HouseAbout>
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}

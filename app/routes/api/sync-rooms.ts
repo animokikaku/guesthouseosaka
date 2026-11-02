@@ -14,6 +14,7 @@ import { needsPurge, recordPurge, syncListing } from '@/lib/rooms-sync/sync.serv
 import { PROPERTY_IDS } from '@/lib/rooms.server'
 import { HouseIdentifierValues, type HouseIdentifier } from '@/lib/types'
 import { client } from '@/sanity/lib/client'
+import { roomAvailabilityQuery } from '@/sanity/lib/queries'
 import { urlSearchParamPreviewSecret, validatePreviewUrl } from '@sanity/preview-url-secret'
 import { createFileRoute } from '@tanstack/react-router'
 import { cache, waitUntil } from 'cloudflare:workers'
@@ -115,31 +116,45 @@ async function run(force: boolean) {
 }
 
 /**
- * The schedule's bearer token, or the Studio's preview secret as the body: one
- * a signed-in Studio user created in the dataset, which only the read token can
- * see, valid for an hour. In the body rather than the URL, it stays out of logs.
+ * Who's asking: the schedule, with its bearer token, or the Studio, with a
+ * preview secret as the body: one a signed-in Studio user created in the
+ * dataset, which only the read token can see, valid for an hour. In the body
+ * rather than the URL, it stays out of logs. Null for anyone else.
  */
-async function isAuthorized(request: Request) {
+async function caller(request: Request): Promise<'schedule' | 'studio' | null> {
   if (await hasBearerToken(request, serverEnv.SYNC_TOKEN)) {
     // EventBridge sends its event as the body. Left unread, the gateway would
     // forward it to `Site` after the response, which throws ("Can't read from
     // request stream after response has been sent").
     await request.arrayBuffer()
-    return true
+    return 'schedule'
   }
   // Checked before reading the body or asking Sanity, so a stranger's request
   // costs neither. A browser always sends a string body's length.
   const length = Number(request.headers.get('Content-Length'))
-  if (!(length > 0 && length <= MAX_SECRET_LENGTH)) return false
+  if (!(length > 0 && length <= MAX_SECRET_LENGTH)) return null
   const secret = (await request.text()).trim()
-  if (!PREVIEW_SECRET.test(secret)) return false
+  if (!PREVIEW_SECRET.test(secret)) return null
   const url = new URL(request.url)
   url.searchParams.set(urlSearchParamPreviewSecret, secret)
   const { isValid } = await validatePreviewUrl(
     client.withConfig({ token: serverEnv.SANITY_API_READ_TOKEN }),
     url.toString()
   )
-  return isValid
+  return isValid ? 'studio' : null
+}
+
+/**
+ * Whether the published Site Settings turn room availability on. Syncs when it
+ * can't tell, which does no harm.
+ */
+async function isRoomAvailabilityOn() {
+  try {
+    return await client.fetch(roomAvailabilityQuery, {}, { perspective: 'published' })
+  } catch (error) {
+    log('error', 'settings_check_failed', { error: describe(error) })
+    return true
+  }
 }
 
 export const Route = createFileRoute('/api/sync-rooms')({
@@ -153,8 +168,16 @@ export const Route = createFileRoute('/api/sync-rooms')({
           Vary: 'Origin',
           ...(origin && STUDIO_ORIGINS.has(origin) && { 'Access-Control-Allow-Origin': origin })
         }
-        if (!(await isAuthorized(request))) {
+        const from = await caller(request)
+        if (!from) {
           return new Response('Unauthorized', { status: 401, headers })
+        }
+        // The schedule skips while Site Settings turn room availability off. The
+        // Studio's "Sync now" shows only while it's on, if only in a draft, so it
+        // always runs: a draft previews fresh rooms before it's published.
+        if (from === 'schedule' && !(await isRoomAvailabilityOn())) {
+          log('info', 'sync_skipped', { reason: 'room_availability_off' })
+          return Response.json({ skipped: true }, { headers })
         }
 
         // `?force=1` writes a listing that shrank by more than half (see `writeRooms`).

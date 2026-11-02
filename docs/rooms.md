@@ -11,6 +11,12 @@ house pages. Nothing else stores rooms.
 (`lib/rooms.server.ts`), then purges the cached pages. An EventBridge rule in
 AWS Tokyo calls it every hour (see [Schedule](#schedule)).
 
+The **Room Availability** switch in Site Settings turns the feature on and off.
+While it's off in the published Site Settings, the house pages show no rooms,
+and the hourly call does nothing (it answers `{"skipped": true}`). If it can't
+read Site Settings, it syncs anyway, which does no harm. The Studio's **Sync
+now** always syncs (see [Running it](#running-it)).
+
 The schedule lives in AWS rather than a Cloudflare cron because shares.house
 answers 403 unless the run was started from Japan, wherever the Worker runs: a
 cron trigger is refused even when it reaches shares.house through Tokyo.
@@ -94,9 +100,12 @@ add `STRICT` to any new table in the generated SQL.
 
 ## Running it
 
-In the Studio, **Site Settings** has a **Sync now** button under the social
-links (`studio/components/room-sync-input.tsx`), for showing a change before
-the next hourly run. It's the input of a `roomSync` field that never stores a
+In the Studio, **Site Settings** has a **Sync now** button under the **Room
+Availability** switch (`studio/components/room-sync-input.tsx`), for showing a
+change before the next hourly run. It shows only while the switch is on, even
+just in a draft. It syncs even if the published switch is off, so a draft
+previews fresh rooms: the site ignores rooms last synced over two days ago, so
+after a long time off, sync before previewing or publishing. It's the input of a `roomSync` field that never stores a
 value. The Studio can't hold `SYNC_TOKEN`, so the button works like
 Presentation: the signed-in user creates a preview secret in the dataset
 (valid for an hour), and sends it as the request's text body. The route checks
@@ -129,10 +138,9 @@ doesn't show occupied ones). The house page shows a badge with the counts
 (`components/house/house-availability.tsx`), linking to a timeline of when those
 rooms free up in its `#availability` section (`components/house/house-rooms.tsx`).
 A fully booked house has no timeline, and its "Fully booked" badge no link.
-The timeline shows only when **Show Room Availability Timeline** is on in Site
-Settings (under **Sync now**), so it can be previewed in Presentation from a
-draft before publishing; while it's off, the badge shows without a link. It
-counts an upcoming room whose date has come (in Japan) as available, and returns
+Both show only while **Room Availability** is on in Site Settings, which the
+house route reads with the layout's settings, so Presentation previews it from a
+draft before publishing. It counts an upcoming room whose date has come (in Japan) as available, and returns
 null, hiding both, when the listing has never synced, last synced over two days
 ago, or D1 fails.
 
