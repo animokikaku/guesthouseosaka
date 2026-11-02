@@ -1,5 +1,5 @@
 import { CogIcon } from '@sanity/icons/Cog'
-import { RoomSyncInput } from '@/studio/components/room-sync-input'
+import { RoomAvailabilityInput } from '@/studio/components/room-availability-input'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
 export const settings = defineType({
@@ -41,21 +41,10 @@ export const settings = defineType({
       name: 'roomAvailability',
       title: 'Room Availability',
       type: 'boolean',
-      description:
-        'Shows which rooms are free or freeing up on the house pages, from shares.house, synced every hour while on. Preview it in Presentation before publishing.',
+      description: 'Shows rooms on the house pages, synced hourly from shares.house.',
       group: 'site',
-      initialValue: false
-    }),
-    // A button, not content: its input never sets a value.
-    defineField({
-      name: 'roomSync',
-      title: 'Room Sync',
-      type: 'string',
-      description:
-        'Syncs room availability from shares.house now, rather than at the next hourly run.',
-      group: 'site',
-      hidden: ({ document }) => document?.roomAvailability !== true,
-      components: { input: RoomSyncInput }
+      initialValue: false,
+      components: { input: RoomAvailabilityInput }
     }),
 
     // Organization group (JSON-LD schema)

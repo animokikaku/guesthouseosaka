@@ -327,7 +327,6 @@ export type Settings = {
     } & SocialLink
   >;
   roomAvailability?: boolean;
-  roomSync?: string;
   companyName: string;
   email: string;
   phone: string;

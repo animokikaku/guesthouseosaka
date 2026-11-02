@@ -12,11 +12,13 @@ import { useLocale, useTranslations } from 'use-intl'
 export function HouseAvailability({
   house,
   rooms: { available, upcoming },
-  className
+  className,
+  'data-sanity': dataSanity
 }: {
   house: HouseIdentifier
   rooms: RoomAvailability
   className?: string
+  'data-sanity'?: string
 }) {
   const t = useTranslations('HouseAvailability')
   const locale = useLocale()
@@ -31,6 +33,7 @@ export function HouseAvailability({
     <Badge
       variant="secondary"
       className={className}
+      data-sanity={dataSanity}
       render={
         hasTimeline ? (
           <Link to="/$locale/$house" params={{ locale, house }} hash="availability" />

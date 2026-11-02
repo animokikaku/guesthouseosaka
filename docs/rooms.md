@@ -100,13 +100,26 @@ add `STRICT` to any new table in the generated SQL.
 
 ## Running it
 
-In the Studio, **Site Settings** has a **Sync now** button under the **Room
-Availability** switch (`studio/components/room-sync-input.tsx`), for showing a
-change before the next hourly run. It shows only while the switch is on, even
-just in a draft. It syncs even if the published switch is off, so a draft
-previews fresh rooms: the site ignores rooms last synced over two days ago, so
-after a long time off, sync before previewing or publishing. It's the input of a `roomSync` field that never stores a
-value. The Studio can't hold `SYNC_TOKEN`, so the button works like
+In the Studio, **Site Settings** heads the **Room Availability** field as it
+heads the others (`studio/components/room-availability-input.tsx`). Its **…**
+menu (`studio/actions/room-availability-actions.ts`, ahead of the Studio's
+copy and paste) has:
+
+- **Show on the site / Hide from the site:** sets the field in the draft, so
+  Presentation previews it before it's published.
+- **Sync now,** on or off: syncs before the next hourly run, even if the
+  published field is off, so a draft previews fresh rooms. After a long time
+  off, sync before previewing or publishing.
+
+A card under the header lists each house as the Studio lists
+documents: its hero image and title, its listed rooms, and a dot whose tooltip
+says when it last synced; clicking a house opens it. The dot is red when the site hides the house's rooms
+(never synced, or over two days ago). The list comes from a public
+`GET /api/sync-rooms` (`{"houses": [{"house", "syncedAt", "rooms", "fresh"}]}`).
+After a sync, each house also shows what changed, or why it failed
+(`studio/components/room-sync.ts` holds that sync's state).
+
+The Studio can't hold `SYNC_TOKEN`, so the button works like
 Presentation: the signed-in user creates a preview secret in the dataset
 (valid for an hour), and sends it as the request's text body. The route checks
 the body's length and shape first, then the secret with `validatePreviewUrl`

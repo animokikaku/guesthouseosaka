@@ -17,6 +17,11 @@ export const PROPERTY_IDS: Record<HouseIdentifier, string> = {
 // The sync runs every hour; past this, its rooms are too old to show.
 const MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000
 
+/** Whether a listing last synced at `checkedAt` is recent enough for the site to show its rooms. */
+export function isFresh(checkedAt: string) {
+  return Date.now() - Date.parse(checkedAt) <= MAX_AGE_MS
+}
+
 /** What the house page shows of a room. */
 export type ListedRoom = Pick<Room, 'roomNumber' | 'availableFrom' | 'rent'>
 
@@ -68,7 +73,7 @@ export async function getRoomAvailability(
           and(eq(rooms.propertyId, propertyId), eq(rooms.listed, 1), ne(rooms.status, 'occupied'))
         )
     ])
-    if (!property || Date.now() - Date.parse(property.checkedAt) > MAX_AGE_MS) return null
+    if (!property || !isFresh(property.checkedAt)) return null
 
     // An upcoming room whose date has come counts as available, by Japan's date.
     const today = dateInJapan()

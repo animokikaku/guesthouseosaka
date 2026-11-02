@@ -18,13 +18,24 @@ import { useFormatter, useTranslations } from 'use-intl'
  * as a timeline under its description: rooms free now, then the rest by date.
  * Nothing when it's fully booked. The badge links to `#availability`.
  */
-export function HouseRooms({ rooms }: { rooms: RoomAvailability }) {
+export function HouseRooms({
+  rooms,
+  'data-sanity': dataSanity
+}: {
+  rooms: RoomAvailability
+  'data-sanity'?: string
+}) {
   const t = useTranslations('HouseRooms')
 
   if (rooms.available.length + rooms.upcoming.length === 0) return null
 
   return (
-    <section id="availability" aria-label={t('heading')} className="scroll-mt-24 pt-4">
+    <section
+      id="availability"
+      aria-label={t('heading')}
+      data-sanity={dataSanity}
+      className="scroll-mt-24 pt-4"
+    >
       {/*
        * When its steps don't fit, it scrolls sideways with no scrollbar: an edge
        * with more steps past it fades out (Base UI sets how far each edge is from

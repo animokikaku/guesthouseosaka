@@ -36,11 +36,14 @@ export function HousePageContent({
   about,
   building,
   houses,
-  rooms
+  rooms,
+  roomsDataSanity
 }: NonNullable<HouseQueryResult> & {
   houses: HouseTitles
   /** Null hides the badge and the timeline: when D1 has nothing recent, or Site Settings turn them off. */
   rooms: RoomAvailability | null
+  /** Site Settings' switch, for Presentation to open from the badge and the timeline. */
+  roomsDataSanity?: string
 }) {
   const href = galleryLink(useLocale(), slug)
 
@@ -53,7 +56,14 @@ export function HousePageContent({
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading id={`${slug}-title`}>{title}</PageHeaderHeading>
           <PageHeaderDescription>{description}</PageHeaderDescription>
-          {rooms && <HouseAvailability house={slug} rooms={rooms} className="sm:hidden" />}
+          {rooms && (
+            <HouseAvailability
+              house={slug}
+              rooms={rooms}
+              data-sanity={roomsDataSanity}
+              className="sm:hidden"
+            />
+          )}
           <div
             className={cn('mx-auto mt-6 h-1 w-24', HOUSE_COLORS[slug].divider)}
             aria-hidden="true"
@@ -65,7 +75,12 @@ export function HousePageContent({
           <PageNav id="tabs">
             <HousesNav houses={houses} />
             {rooms && (
-              <HouseAvailability house={slug} rooms={rooms} className="hidden sm:inline-flex" />
+              <HouseAvailability
+                house={slug}
+                rooms={rooms}
+                data-sanity={roomsDataSanity}
+                className="hidden sm:inline-flex"
+              />
             )}
           </PageNav>
           <div className="theme-container">
@@ -79,7 +94,7 @@ export function HousePageContent({
                   // `HousePricing` renders nothing without rows.
                   hasPricing={Boolean(pricing?.length)}
                 >
-                  {rooms && <HouseRooms rooms={rooms} />}
+                  {rooms && <HouseRooms rooms={rooms} data-sanity={roomsDataSanity} />}
                 </HouseAbout>
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
