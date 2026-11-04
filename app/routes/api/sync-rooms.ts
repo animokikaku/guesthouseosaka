@@ -120,7 +120,13 @@ async function run(force: boolean) {
  * see, valid for an hour. In the body rather than the URL, it stays out of logs.
  */
 async function isAuthorized(request: Request) {
-  if (await hasBearerToken(request, serverEnv.SYNC_TOKEN)) return true
+  if (await hasBearerToken(request, serverEnv.SYNC_TOKEN)) {
+    // EventBridge sends its event as the body. Left unread, the gateway would
+    // forward it to `Site` after the response, which throws ("Can't read from
+    // request stream after response has been sent").
+    await request.arrayBuffer()
+    return true
+  }
   // Checked before reading the body or asking Sanity, so a stranger's request
   // costs neither. A browser always sends a string body's length.
   const length = Number(request.headers.get('Content-Length'))
