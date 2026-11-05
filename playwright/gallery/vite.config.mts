@@ -15,8 +15,15 @@ export default defineConfig({
     react(),
     cn({ content: ['{app,components,lib}/**/*.{ts,tsx}'], out: 'generated/cn-tables.ts' })
   ],
+  // Pre-bundle everything up front: a dependency found later, while a test is
+  // mounting its story, makes Vite reload the page and destroys the test's context.
   optimizeDeps: {
-    entries: ['app/**/*.story.tsx', 'components/**/*.story.tsx']
+    entries: ['playwright/gallery/main.tsx', 'app/**/*.story.tsx', 'components/**/*.story.tsx']
+  },
+  // CI runs the production build alongside this server, and `root` is the repo:
+  // its output would otherwise reload every open page.
+  server: {
+    watch: { ignored: ['**/.cloudflare/**', '**/dist/**'] }
   },
   resolve: {
     alias: [
