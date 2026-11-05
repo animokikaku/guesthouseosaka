@@ -45,13 +45,10 @@ export default defineConfig({
     },
     // Secrets and public settings are declared in env.ts; the deployment
     // (`DEPLOY_ENV`) is built in (see vite.config.ts).
-    d1_databases: [roomsDb],
     // Worker Previews (`bun run deploy:preview`) don't inherit the Worker's
-    // bindings or secrets: their secrets are set with
-    // `wrangler preview base-config secret put`. Only the preview build carries
-    // this, since `void deploy` can't convert `previews` and refuses to deploy.
-    ...(process.env.DEPLOY_ENV === 'preview' && {
-      previews: { d1_databases: [roomsDb] }
-    })
+    // bindings or secrets: scripts/add-preview-config.mts gives them these
+    // databases, and their secrets are set with
+    // `wrangler preview base-config secret put`.
+    d1_databases: [roomsDb]
   }
 })

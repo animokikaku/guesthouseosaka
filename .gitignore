@@ -44,3 +44,6 @@ backup/
 # void: generated state and Cloudflare config (void.lock.json is committed)
 /.void/
 .void-wrangler.jsonc
+
+# Cloudflare build output, written by Void's Vite plugin
+/.cloudflare/

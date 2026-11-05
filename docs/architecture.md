@@ -95,8 +95,9 @@ public/                # Static assets only
   run the server in workerd. `void.lock.json` records Void's resource state; commit it
 - `bun run deploy` runs `void deploy` with `DEPLOY_ENV=production`, which builds and deploys the
   `guesthouseosaka` Worker on the animokikaku account, checking the new version before it gets
-  traffic; `bun run deploy:preview` builds with `DEPLOY_ENV=preview` and creates a Worker Preview,
-  which Workers Builds runs for every other branch. Void has no named Wrangler environments, so
+  traffic; `bun run deploy:preview` builds with `DEPLOY_ENV=preview`, adds the `previews` block
+  Void can't carry to the built config (`scripts/add-preview-config.mts`) and creates a Worker
+  Preview, which Workers Builds runs for every other branch. Void has no named Wrangler environments, so
   `vite.config.ts` reads `DEPLOY_ENV` from the shell (unset is `development`) and builds it in as
   `__DEPLOY_ENV__`. Only
   `DEPLOY_ENV=production` lets the contact form email the houses' inboxes; `preview` sends to

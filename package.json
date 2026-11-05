@@ -29,7 +29,7 @@
     "cache:warm": "bun scripts/warm-cache.mts",
     "rooms:schedule:deploy": "bun --env-file=.env run rooms:schedule:cfn",
     "rooms:schedule:cfn": "aws cloudformation deploy --region ap-northeast-1 --stack-name guesthouseosaka-rooms-sync --template-file aws/rooms-sync.yaml --capabilities CAPABILITY_IAM --no-fail-on-empty-changeset --parameter-overrides SyncToken=$SYNC_TOKEN",
-    "deploy:preview": "DEPLOY_ENV=preview vite build && wrangler preview -c dist/server/wrangler.json",
+    "deploy:preview": "DEPLOY_ENV=preview vite build && bun scripts/add-preview-config.mts && wrangler preview -c dist/server/wrangler.json",
     "postinstall": "cn build --content '{app,components,lib}/**/*.{ts,tsx}' --out generated/cn-tables.ts --quiet"
   },
   "dependencies": {
