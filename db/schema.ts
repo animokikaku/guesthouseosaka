@@ -1,9 +1,9 @@
 // The rooms synced from shares.house (see docs/rooms.md), read and written
-// through `db` from `void/db`.
+// through `createDb` from `db/index.ts`.
 // Must match db/migrations, which create every table `STRICT` (Drizzle can't
 // express it).
-import { sql } from 'void/db'
-import { check, integer, primaryKey, real, sqliteTable, text } from 'void/schema-d1'
+import { sql } from 'drizzle-orm'
+import { check, integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 /**
  * The latest state of each room shares.house lists. `updatedAt` moves only when

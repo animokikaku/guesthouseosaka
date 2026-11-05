@@ -1,0 +1,62 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "guesthouseosaka",
+  "account_id": "5f8fd45c341a983aff5d6b8b01f88ee1",
+  // A gateway that shapes the cache key, in front of the app (see app/worker.ts).
+  "main": "./app/worker.ts",
+  "compatibility_date": "2026-10-25",
+  // `node:async_hooks` and `node:crypto`.
+  "compatibility_flags": ["nodejs_compat"],
+  // Production answers only on guesthouseosaka.com; Worker Previews keep their
+  // workers.dev URLs. Attaching the custom domain fails while another DNS record
+  // uses the hostname. `www` redirects here through a Cloudflare Redirect Rule.
+  "routes": [{ "pattern": "guesthouseosaka.com", "custom_domain": true }],
+  "workers_dev": false,
+  "preview_urls": true,
+  // Workers Cache: Cloudflare serves the app's responses from its cache,
+  // following their Cache-Control (see lib/cache-control.ts), so a cached page
+  // never starts the app. The gateway runs on every request, so it has no cache
+  // of its own; the app (`Site`) does. Each deployed version starts empty, and
+  // `bun run deploy` warms it (scripts/warm-cache.mts).
+  "cache": { "enabled": true },
+  "exports": {
+    "default": { "type": "worker", "cache": { "enabled": false } },
+    "Site": { "type": "worker", "cache": { "enabled": true } }
+  },
+  "observability": {
+    "enabled": true,
+    "traces": { "enabled": true }
+  },
+  // `wrangler deploy` refuses to ship while one of these is missing, and local
+  // runs pass only these from `.env`. Set with `wrangler secret put`.
+  "secrets": {
+    "required": [
+      "SANITY_API_READ_TOKEN",
+      "RESEND_API_KEY",
+      "TURNSTILE_SECRET_KEY",
+      "SANITY_WEBHOOK_SECRET",
+      "SYNC_TOKEN"
+    ]
+  },
+  // Rooms synced from shares.house (see docs/rooms.md and db/index.ts).
+  "d1_databases": [
+    {
+      "binding": "ROOMS_DB",
+      "database_name": "guesthouseosaka-rooms",
+      "database_id": "0924c651-cb96-42e8-9789-692c06b7baef",
+      "migrations_dir": "db/migrations"
+    }
+  ],
+  // Worker Previews (`bun run deploy:preview`) don't inherit the Worker's
+  // bindings or secrets: this repeats the database, and their secrets are set
+  // with `wrangler preview base-config secret put`.
+  "previews": {
+    "d1_databases": [
+      {
+        "binding": "ROOMS_DB",
+        "database_name": "guesthouseosaka-rooms",
+        "database_id": "0924c651-cb96-42e8-9789-692c06b7baef"
+      }
+    ]
+  }
+}

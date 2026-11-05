@@ -54,7 +54,7 @@ export default defineConfig({
   // API. The build is the cost of that defence actually being in place.
   //
   // `bun run test:e2e:preview` (E2E_REAL_EMAIL) builds the preview environment
-  // instead, without the stand-in: workerd runs the same bundle `void deploy`
+  // instead, without the stand-in: workerd runs the same bundle `wrangler deploy`
   // uploads, and `DEPLOY_ENV=preview` sends its one email to Resend's test
   // inbox with the key from `.env`.
   webServer: process.env.BASE_URL

@@ -5,6 +5,7 @@
  * `Authorization: Bearer <SYNC_TOKEN>`, and the Studio's Site Settings on demand,
  * with a preview secret its user just created. See docs/rooms.md.
  */
+import { createDb } from '@/db'
 import { env as serverEnv } from '@/env'
 import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
 import { SANITY_STUDIO_HOSTS } from '@/lib/config'
@@ -16,7 +17,8 @@ import { client } from '@/sanity/lib/client'
 import { urlSearchParamPreviewSecret, validatePreviewUrl } from '@sanity/preview-url-secret'
 import { createFileRoute } from '@tanstack/react-router'
 import { cache, waitUntil } from 'cloudflare:workers'
-import { db } from 'void/db'
+
+type Db = ReturnType<typeof createDb>
 
 const NO_STORE = { 'Cache-Control': 'no-store' }
 
@@ -52,7 +54,7 @@ function describe(error: unknown): string {
 }
 
 /** Syncs every house's listing in turn; one failing leaves the others, and its own stored rooms, untouched. */
-async function syncAll(force: boolean): Promise<Result[]> {
+async function syncAll(db: Db, force: boolean): Promise<Result[]> {
   const results: Result[] = []
   for (const house of HouseIdentifierValues) {
     const id = PROPERTY_IDS[house]
@@ -80,7 +82,7 @@ async function syncAll(force: boolean): Promise<Result[]> {
  * `needsPurge`): on most days once or twice, though the sync runs hourly. A
  * page rendered while D1 failed waits for the next purge or its cache expiry.
  */
-async function purgeIfNeeded(): Promise<'purged' | 'skipped' | 'failed'> {
+async function purgeIfNeeded(db: Db): Promise<'purged' | 'skipped' | 'failed'> {
   const now = new Date().toISOString()
   // Purges when it can't tell.
   const needed = await needsPurge(db, now).catch((error: unknown) => {
@@ -109,8 +111,9 @@ async function purgeIfNeeded(): Promise<'purged' | 'skipped' | 'failed'> {
 
 /** Syncs every listing, then purges if needed. `ok` is false when either step failed. */
 async function run(force: boolean) {
-  const results = await syncAll(force)
-  const purge = await purgeIfNeeded()
+  const db = createDb()
+  const results = await syncAll(db, force)
+  const purge = await purgeIfNeeded(db)
   return { ok: results.every((result) => result.ok) && purge !== 'failed', results, purge }
 }
 

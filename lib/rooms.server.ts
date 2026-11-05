@@ -1,7 +1,8 @@
+import { createDb } from '@/db'
 import { properties, rooms } from '@/db/schema'
 import { dateInJapan } from '@/lib/rooms-sync/room'
 import type { HouseIdentifier } from '@/lib/types'
-import { and, db, eq, sql } from 'void/db'
+import { and, eq, sql } from 'drizzle-orm'
 
 /**
  * Each house's shares.house property ID, whose listing the room sync reads
@@ -30,7 +31,7 @@ export async function getRoomCounts(house: HouseIdentifier): Promise<RoomCounts 
   try {
     // An upcoming room whose date has come counts as available, by Japan's date.
     const today = dateInJapan()
-    const [row] = await db
+    const [row] = await createDb()
       .select({
         checkedAt: properties.checkedAt,
         available: sql<number>`COUNT(CASE WHEN ${rooms.status} = 'available' OR (${rooms.status} = 'upcoming' AND ${rooms.availableFrom} <= ${today}) THEN 1 END)`,

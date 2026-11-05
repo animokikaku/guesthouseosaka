@@ -90,25 +90,23 @@ public/                # Static assets only
 
 ### Hosting
 
-- Cloudflare Workers, through [Void](https://void.cloud) (`voidPlugin()` in `vite.config.ts`,
-  configured by `void.config.ts`): `bun dev` and `bun run start` (a preview of the build) both
-  run the server in workerd. `void.lock.json` records Void's resource state; commit it
-- `bun run deploy` runs `void deploy` with `DEPLOY_ENV=production`, which builds and deploys the
-  `guesthouseosaka` Worker on the animokikaku account, checking the new version before it gets
-  traffic; `bun run deploy:preview` builds with `DEPLOY_ENV=preview`, adds the `previews` block
-  Void can't carry to the built config (`scripts/add-preview-config.mts`) and creates a Worker
-  Preview, which Workers Builds runs for every other branch. Void has no named Wrangler environments, so
+- Cloudflare Workers, through `@cloudflare/vite-plugin` (in `vite.config.ts`), configured by
+  `wrangler.jsonc`: `bun dev` and `bun run start` (a preview of the build) both run the server in
+  workerd
+- `bun run deploy` builds with `DEPLOY_ENV=production`, applies the D1 migrations and deploys the
+  `guesthouseosaka` Worker on the animokikaku account with Wrangler, then warms the cache;
+  `bun run deploy:preview` builds with `DEPLOY_ENV=preview` and creates a Worker Preview, which
+  Workers Builds runs for every other branch. `wrangler.jsonc` is the same for every deployment, so
   `vite.config.ts` reads `DEPLOY_ENV` from the shell (unset is `development`) and builds it in as
   `__DEPLOY_ENV__`. Only
   `DEPLOY_ENV=production` lets the contact form email the houses' inboxes; `preview` sends to
   Resend's test inbox
 - `guesthouseosaka.com` is the Worker's custom domain. Cloudflare attaches it only while no other
   DNS record uses the hostname; production has no workers.dev address, Worker Previews keep theirs
-- Secrets are set with `bunx void secret put`; locally they come from `.env`, the only env file
-  Void reads (`env.example` is the template). Builds ignore `VITE_*` values from `.env`, so a
-  deploy only gets them from the shell (Workers Builds' build variables); `bun run build` loads
-  `.env` explicitly for local builds
-- Workers Cache (`cache` in `void.config.ts`) serves pages and server-function GETs
+- Secrets are set with `bunx wrangler secret put`; locally they come from `.env` (`env.example`
+  is the template). A production build refuses `VITE_*` values from `.env`, so a deploy only gets
+  them from the shell (Workers Builds' build variables)
+- Workers Cache (`cache` in `wrangler.jsonc`) serves pages and server-function GETs
   from Cloudflare's cache by their `Cache-Control`, without rendering them; check
   `Cf-Cache-Status`. Zone Cache Rules don't apply to it, so the Worker's entry
   (`app/worker.ts`) is an uncached gateway in front of the cached `Site` entrypoint that renders
@@ -130,10 +128,9 @@ public/                # Static assets only
   the zone
 - Static assets are served without the Worker, so their headers come from a Response Header
   Transform Rule on the zone: `Cache-Control: public, max-age=31536000, immutable` for a 200 under
-  `/assets/` (file names carry a content hash) and `nosniff` on every response. A `_headers` file
-  would do nothing: Void's Cloudflare deploy doesn't upload one written by hand
+  `/assets/` (file names carry a content hash) and `nosniff` on every response
 - `bun run test:e2e:preview` builds the `preview` environment locally and sends one real
-  contact email to Resend's test inbox: workerd runs the bundle `void deploy` uploads, so
+  contact email to Resend's test inbox: workerd runs the bundle `wrangler deploy` uploads, so
   this checks the Resend key and sending domain without deploying. It runs locally with
   Turnstile's test keys; a deployed Preview runs the real challenge, which stops the automated
   browser, so check one by submitting its contact form by hand
@@ -146,16 +143,16 @@ public/                # Static assets only
 
 ### Environment
 
-- `env.ts` declares every setting for Void (`void/env`): the build checks the public ones,
-  `void deploy` refuses to ship while a required secret is missing on the Worker, and the Worker
-  checks each value when first read. An empty value counts as unset
-- Server code reads secrets through `env` from `@/env`, and only while handling a request: outside
-  one (at module load) Void can't reach the Worker's env yet and throws
-- Public settings (`VITE_*`) are inlined by Vite at build time and read from `lib/env.ts`, through
-  `import.meta.env`, so the Studio and the component gallery, which build without Void, share them
-  and no validator ships to the browser
-- Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, and optionally
-  `SANITY_WEBHOOK_SECRET` and `SYNC_TOKEN`
+- `secrets.required` in `wrangler.jsonc` lists the Worker's secrets: `wrangler deploy` refuses to
+  ship while one is missing, and local runs pass only those from `.env`, so add a new one there
+  and to `types/cloudflare-workers.d.ts`
+- Server code reads secrets through `env` from `@/env`, which re-exports `cloudflare:workers`
+- Public settings (`VITE_*`) are checked by `validatePublicEnv` in `vite.config.ts` when building,
+  inlined by Vite and read from `lib/env.ts`, through `import.meta.env`, so the Studio and the
+  component gallery, which build without the Worker, share them and no validator ships to the
+  browser
+- Server: `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `TURNSTILE_SECRET_KEY`, `SANITY_WEBHOOK_SECRET`
+  and `SYNC_TOKEN`. The last two can stay empty locally: the webhook and the sync are then refused
 - Client: `VITE_GOOGLE_MAPS_API_KEY`, `VITE_TURNSTILE_SITE_KEY`, and optionally `VITE_APP_URL`,
   which defaults to `SITE_URL`. The Sanity project, API version and assets host are constants in
   `lib/config.ts`

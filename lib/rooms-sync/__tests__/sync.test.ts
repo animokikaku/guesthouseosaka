@@ -3,7 +3,7 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { DatabaseSync, type SQLInputValue } from 'node:sqlite'
-import { createDb } from 'void/db'
+import { drizzle } from 'drizzle-orm/d1'
 import type { Room } from '../room'
 import {
   fetchListing,
@@ -43,7 +43,6 @@ function createDatabase() {
   }
 
   const d1 = {
-    withSession: () => d1,
     prepare: (query: string) => statement(query),
     async batch(statements: ReturnType<typeof statement>[]) {
       sqlite.exec('BEGIN')
@@ -59,7 +58,7 @@ function createDatabase() {
     }
   } as unknown as D1Database
   const rows = () => sqlite.prepare('SELECT * FROM rooms ORDER BY room_number').all()
-  return { db: createDb(d1), rows }
+  return { db: drizzle(d1), rows }
 }
 
 function room(roomNumber: string, overrides: Partial<Room> = {}): Room {

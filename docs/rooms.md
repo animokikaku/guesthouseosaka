@@ -66,7 +66,7 @@ bun run rooms:schedule:deploy
 ```
 
 It deploys from `.env`'s `SYNC_TOKEN`, which must match the site's secret
-(`bunx void secret put SYNC_TOKEN`). Worker Previews don't have that secret, so
+(`bunx wrangler secret put SYNC_TOKEN`). Worker Previews don't have that secret, so
 they refuse to sync. To remove the schedule:
 `aws cloudformation delete-stack --region ap-northeast-1 --stack-name guesthouseosaka-rooms-sync`.
 
@@ -83,9 +83,13 @@ metric in CloudWatch.
 ## Schema
 
 The site owns the database's schema: `db/schema.ts` (Drizzle; the site reads
-and the sync writes through `db` from `void/db`) and the SQL in
-`db/migrations/`, which `void deploy` applies to production and `bun dev` to
-the local database. Production records them in `d1_migrations`.
+and the sync writes through `createDb` from `db/index.ts`, in a D1 session so
+reads can use the nearest replica) and the SQL in `db/migrations/`, which
+`bun run deploy` applies to production and `bun dev` to the local database.
+Wrangler records them in `d1_migrations`.
+
+To change the schema, edit `db/schema.ts` and run `bun run db:generate`, then
+add `STRICT` to any new table in the generated SQL.
 
 ## Running it
 
@@ -105,7 +109,7 @@ editor's browser, so like any sync it only gets through from Japan.
 From a terminal:
 
 ```bash
-bun dev  # Then, with SYNC_TOKEN from .env (writes the local database in .void/):
+bun dev  # Then, with SYNC_TOKEN from .env (writes the local database in .wrangler/):
 curl -X POST -H "Authorization: Bearer $SYNC_TOKEN" localhost:3000/api/sync-rooms
 
 # Deployed, on demand (from Japan):

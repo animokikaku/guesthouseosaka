@@ -1,5 +1,5 @@
 /**
- * The Worker's entry (`cloudflare.main` in void.config.ts): a gateway that
+ * The Worker's entry (`main` in wrangler.jsonc): a gateway that
  * picks how each request uses Workers Cache, then hands it to `Site`, the
  * entrypoint that renders the app and whose responses are cached.
  *
