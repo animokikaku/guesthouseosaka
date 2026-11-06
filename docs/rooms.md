@@ -83,8 +83,9 @@ metric in CloudWatch.
 ## Schema
 
 The site owns the database's schema: `db/schema.ts` (Drizzle; the site reads
-and the sync writes through `createDb` from `db/index.ts`, in a D1 session so
-reads can use the nearest replica) and the SQL in `db/migrations/`, which
+and the sync writes through `db` from `db/index.ts`, which always uses the
+primary, so a page rendered after a purge can't cache rooms from a replica
+that hasn't caught up) and the SQL in `db/migrations/`, which
 `bun run deploy` applies to production and `bun dev` to the local database.
 Wrangler records them in `d1_migrations`.
 

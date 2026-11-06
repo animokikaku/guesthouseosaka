@@ -1,4 +1,4 @@
-import { createDb } from '@/db'
+import { db } from '@/db'
 import { properties, rooms } from '@/db/schema'
 import { dateInJapan } from '@/lib/rooms-sync/room'
 import type { HouseIdentifier } from '@/lib/types'
@@ -31,7 +31,7 @@ export async function getRoomCounts(house: HouseIdentifier): Promise<RoomCounts 
   try {
     // An upcoming room whose date has come counts as available, by Japan's date.
     const today = dateInJapan()
-    const [row] = await createDb()
+    const [row] = await db
       .select({
         checkedAt: properties.checkedAt,
         available: sql<number>`COUNT(CASE WHEN ${rooms.status} = 'available' OR (${rooms.status} = 'upcoming' AND ${rooms.availableFrom} <= ${today}) THEN 1 END)`,

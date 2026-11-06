@@ -1,5 +1,5 @@
 // The rooms synced from shares.house (see docs/rooms.md), read and written
-// through `createDb` from `db/index.ts`.
+// through `db` from `db/index.ts`.
 // Must match db/migrations, which create every table `STRICT` (Drizzle can't
 // express it).
 import { sql } from 'drizzle-orm'
