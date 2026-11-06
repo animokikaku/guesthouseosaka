@@ -11,6 +11,13 @@ house pages. Nothing else stores rooms.
 (`lib/rooms.server.ts`), then purges the cached pages. An EventBridge rule in
 AWS Tokyo calls it every hour (see [Schedule](#schedule)).
 
+Site Settings' **Room Availability** field turns the feature on and off, from
+its "…" menu (**Show on the site** / **Hide from the site**).
+While it's off in the published Site Settings, the house pages show no rooms,
+and the hourly call does nothing (it answers `{"skipped": true}`). If it can't
+read Site Settings, it syncs anyway, which does no harm. The Studio's **Sync
+now** always syncs (see [Running it](#running-it)).
+
 The schedule lives in AWS rather than a Cloudflare cron because shares.house
 answers 403 unless the run was started from Japan, wherever the Worker runs: a
 cron trigger is refused even when it reaches shares.house through Tokyo.
@@ -94,10 +101,31 @@ add `STRICT` to any new table in the generated SQL.
 
 ## Running it
 
-In the Studio, **Site Settings** has a **Sync now** button under the social
-links (`studio/components/room-sync-input.tsx`), for showing a change before
-the next hourly run. It's the input of a `roomSync` field that never stores a
-value. The Studio can't hold `SYNC_TOKEN`, so the button works like
+In the Studio, **Site Settings** heads the **Room Availability** field as it
+heads the others (`studio/components/room-availability-input.tsx`). Its **…**
+menu (`studio/actions/room-availability-actions.ts`, ahead of the Studio's
+copy and paste) has:
+
+- **Show on the site / Hide from the site:** sets the field in the draft, so
+  Presentation previews it before it's published. Showing also syncs when a
+  house's rooms are over two days old (see below).
+- **Sync now,** on or off: syncs before the next hourly run, even if the
+  published field is off, so a draft previews fresh rooms. A draft left
+  unpublished over two days needs it again: the schedule still skips.
+
+A card under the header lists each house as the Studio lists
+documents: its hero image and title, its listed rooms, and a dot whose tooltip
+says when it last synced; clicking a house opens it. The dot is red when the
+house never synced or last synced over two days ago, which hides its rooms; it
+tells only the sync's age, so it stays green while Room Availability is off.
+The statuses reload when the editor comes back to the tab. They come from a
+public
+`GET /api/sync-rooms` (`{"houses": [{"house", "syncedAt", "rooms"}]}`); the Studio tells the age
+with `isFresh` (`lib/rooms-sync/room.ts`), as the site does.
+After a sync, each house also shows what changed, or why it failed
+(`studio/components/room-sync.ts` holds that sync's state).
+
+The Studio can't hold `SYNC_TOKEN`, so the button works like
 Presentation: the signed-in user creates a preview secret in the dataset
 (valid for an hour), and sends it as the request's text body. The route checks
 the body's length and shape first, then the secret with `validatePreviewUrl`
@@ -123,12 +151,17 @@ is refused as incomplete on every run until synced once with `?force=1`.
 
 ## Reading rooms in the site
 
-`getRoomCounts(house)` in `lib/rooms.server.ts` maps the house to its property
-ID and counts its available and upcoming rooms, which the house page shows as a
-badge (`components/house/house-availability.tsx`). It counts an upcoming room
-whose date has come (in Japan) as available, and returns null, hiding the
-badge, when the listing has never synced, last synced over two days ago, or D1
-fails.
+`getRoomAvailability(house)` in `lib/rooms.server.ts` maps the house to its
+property ID and reads its listed rooms that are available or upcoming (the site
+doesn't show occupied ones). The house page shows a badge with the counts
+(`components/house/house-availability.tsx`), linking to a timeline of when those
+rooms free up in its `#availability` section (`components/house/house-rooms.tsx`).
+A fully booked house has no timeline, and its "Fully booked" badge no link.
+Both show only while **Room Availability** is on in Site Settings, which the
+house route reads with the layout's settings, so Presentation previews it from a
+draft before publishing. It counts an upcoming room whose date has come (in Japan) as available, and returns
+null, hiding both, when the listing has never synced, last synced over two days
+ago, or D1 fails.
 
 ## Cache
 

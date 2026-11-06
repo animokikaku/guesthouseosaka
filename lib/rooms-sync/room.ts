@@ -1,3 +1,13 @@
+const MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000
+
+/**
+ * Whether a listing last synced at `checkedAt` is recent enough for the site
+ * to show its rooms. The Studio's Site Settings tell the same.
+ */
+export function isFresh(checkedAt: string) {
+  return Date.now() - Date.parse(checkedAt) <= MAX_AGE_MS
+}
+
 /** What a room's listing says about it: free now, free from `availableFrom`, or taken. */
 export type RoomStatus = 'available' | 'upcoming' | 'occupied'
 
