@@ -1,3 +1,4 @@
+import { cloudflare } from '@cloudflare/vite-plugin'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
@@ -8,17 +9,17 @@ import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { parseEnv } from 'node:util'
 import { defineConfig, type Plugin } from 'vite'
-import { voidPlugin } from 'void'
+import { z } from 'zod'
 
 const deployEnvs = ['development', 'preview', 'production'] as const
 type DeployEnv = (typeof deployEnvs)[number]
 
 /**
  * Which deployment this build is, from the shell (see the `deploy` scripts);
- * unset is `development`. Void deploys a single Cloudflare config, without
- * Wrangler's named environments, so the build carries it: as `__DEPLOY_ENV__`,
- * and as the Sanity dataset, `production` only for production builds. Set in
- * `process.env` before Vite loads `.env`, where a `VITE_*` there would lose.
+ * unset is `development`. `wrangler.jsonc` is the same for every deployment, so
+ * the build carries it: as `__DEPLOY_ENV__`, and as the Sanity dataset,
+ * `production` only for production builds. Set in `process.env` before Vite
+ * loads `.env`, where a `VITE_*` there would lose.
  */
 function readDeployEnv(): DeployEnv {
   const value = process.env.DEPLOY_ENV || 'development'
@@ -57,6 +58,31 @@ function rejectLocalPublicEnv(deployEnv: DeployEnv): Plugin {
         throw new Error(
           `A production build took ${fromDotenv.join(', ')} from .env. Set the production values in the shell.`
         )
+      }
+    }
+  }
+}
+
+/** The public settings Vite inlines, as plain constants the browser can't check. */
+const publicEnvSchema = z.object({
+  VITE_APP_URL: z.url({ protocol: /^https?$/ }).optional(),
+  VITE_GOOGLE_MAPS_API_KEY: z.string().min(1),
+  VITE_TURNSTILE_SITE_KEY: z.string().min(1),
+  VITE_SANITY_DATASET: z.enum(['production', 'development'])
+})
+
+/** Fails a build on missing or malformed public settings. */
+function validatePublicEnv(): Plugin {
+  return {
+    name: 'validate-public-env',
+    apply: 'build',
+    configResolved({ env }) {
+      const result = publicEnvSchema.safeParse(env)
+      if (!result.success) {
+        const issues = result.error.issues.map(
+          (issue) => `  ${issue.path.join('.')}: ${issue.message}`
+        )
+        throw new Error(`Invalid public environment variables:\n${issues.join('\n')}`)
       }
     }
   }
@@ -214,10 +240,11 @@ export default defineConfig(() => {
       ]
     },
     plugins: [
-      // Builds and runs the server in workerd, configured by void.config.ts; it
-      // must come before Start's.
       rejectLocalPublicEnv(deployEnv),
-      voidPlugin(),
+      validatePublicEnv(),
+      // Builds and runs the server in workerd, configured by wrangler.jsonc; it
+      // must come before Start's.
+      cloudflare({ viteEnvironment: { name: 'ssr' } }),
       precompileMessages(),
       tailwindcss(),
       cn({ content: ['{app,components,lib}/**/*.{ts,tsx}'], out: 'generated/cn-tables.ts' }),

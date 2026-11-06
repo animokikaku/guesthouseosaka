@@ -21,10 +21,9 @@ export default defineConfig({
     entries: ['playwright/gallery/main.tsx', 'app/**/*.story.tsx', 'components/**/*.story.tsx']
   },
   // CI runs the production build alongside this server, and `root` is the repo:
-  // its output would otherwise reload every open page, as would Void writing
-  // `.void/tsconfig.json`, which a fresh checkout doesn't have yet.
+  // its output would otherwise reload every open page.
   server: {
-    watch: { ignored: ['**/.cloudflare/**', '**/.void/**', '**/dist/**'] }
+    watch: { ignored: ['**/.cloudflare/**', '**/dist/**'] }
   },
   resolve: {
     alias: [

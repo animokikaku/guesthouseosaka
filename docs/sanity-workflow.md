@@ -44,16 +44,16 @@ Pages are cached by Workers Cache for a day. A GROQ-powered webhook on the `prod
 purges the ones that read the published document's type, so changes show within seconds and the
 rest of the site stays cached. It is set up in sanity.io/manage → API → Webhooks:
 
-| Field           | Value                                                    |
-| --------------- | -------------------------------------------------------- |
-| URL             | `https://guesthouseosaka.com/api/revalidate`             |
-| Dataset         | `production`                                             |
-| Trigger on      | Create, Update, Delete                                   |
-| Filter          | Empty (any document)                                     |
-| Projection      | `{_id, _type}` (the purge reads `_type`)                 |
-| HTTP method     | `POST`                                                   |
-| Drafts/Versions | Off                                                      |
-| Secret          | The Worker's `SANITY_WEBHOOK_SECRET` (`void secret put`) |
+| Field           | Value                                                        |
+| --------------- | ------------------------------------------------------------ |
+| URL             | `https://guesthouseosaka.com/api/revalidate`                 |
+| Dataset         | `production`                                                 |
+| Trigger on      | Create, Update, Delete                                       |
+| Filter          | Empty (any document)                                         |
+| Projection      | `{_id, _type}` (the purge reads `_type`)                     |
+| HTTP method     | `POST`                                                       |
+| Drafts/Versions | Off                                                          |
+| Secret          | The Worker's `SANITY_WEBHOOK_SECRET` (`wrangler secret put`) |
 
 The endpoint checks the signature against `SANITY_WEBHOOK_SECRET`, answers `401` without it,
 and `503` (which Sanity retries) when the purge fails. It purges the `sanity-<type>` tag, which

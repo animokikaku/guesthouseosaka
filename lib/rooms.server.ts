@@ -1,7 +1,8 @@
+import { db } from '@/db'
 import { properties, rooms } from '@/db/schema'
 import { dateInJapan } from '@/lib/rooms-sync/room'
 import type { HouseIdentifier } from '@/lib/types'
-import { and, db, eq, sql } from 'void/db'
+import { and, eq, sql } from 'drizzle-orm'
 
 /**
  * Each house's shares.house property ID, whose listing the room sync reads

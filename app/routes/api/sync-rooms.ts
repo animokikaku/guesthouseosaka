@@ -5,6 +5,7 @@
  * `Authorization: Bearer <SYNC_TOKEN>`, and the Studio's Site Settings on demand,
  * with a preview secret its user just created. See docs/rooms.md.
  */
+import { db } from '@/db'
 import { env as serverEnv } from '@/env'
 import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
 import { SANITY_STUDIO_HOSTS } from '@/lib/config'
@@ -16,7 +17,6 @@ import { client } from '@/sanity/lib/client'
 import { urlSearchParamPreviewSecret, validatePreviewUrl } from '@sanity/preview-url-secret'
 import { createFileRoute } from '@tanstack/react-router'
 import { cache, waitUntil } from 'cloudflare:workers'
-import { db } from 'void/db'
 
 const NO_STORE = { 'Cache-Control': 'no-store' }
 

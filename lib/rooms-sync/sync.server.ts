@@ -1,6 +1,7 @@
 import { properties, rooms as roomsTable, syncState } from '@/db/schema'
+import { and, count, eq, sql } from 'drizzle-orm'
+import type { DrizzleD1Database } from 'drizzle-orm/d1'
 import ky, { HTTPError } from 'ky'
-import { and, count, eq, sql, type DrizzleD1Database } from 'void/db'
 import { parseListing, validateRooms } from './parse'
 import { dateInJapan, type Room } from './room'
 

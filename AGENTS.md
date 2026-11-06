@@ -13,7 +13,9 @@ bun install          # Install dependencies
 bun dev              # Dev server at localhost:3000
 bun run build        # Production build (run before PRs)
 bun run start        # Preview the build in workerd at localhost:3000
-bun run deploy       # Build and deploy the production Worker (Cloudflare)
+bun run deploy       # Build, migrate D1 and deploy the production Worker (Cloudflare)
+bun run db:generate  # Write a D1 migration after changing db/schema.ts
+bun run db:migrate   # Apply D1 migrations locally (bun dev does this itself)
 bun run rooms:schedule:deploy # Create or update the hourly room sync schedule (AWS EventBridge, Tokyo)
 bun run studio:dev   # Studio at localhost:3333 (the studio/ workspace)
 bun run typegen      # Regenerate Sanity types after schema changes
@@ -65,12 +67,3 @@ bun run format:check # Check formatting without modifying files
 - [Internationalization](docs/i18n.md)
 - [Testing](docs/testing.md)
 - [Room Availability](docs/rooms.md)
-
-<!--injected-by-void-v1.3.0-->
-
-## Void
-
-- This project uses [Void](https://void.cloud), a full-stack Vite framework for Cloudflare Workers with file-based API routing, server-rendered pages, and typed backend services.
-- Use Void's CLI and typed APIs. Before working with Void, read the relevant Markdown docs in `node_modules/void/docs/`; start with `guide/quickstart.md` for setup and `reference/cli.md` for commands.
-
-<!--/injected-by-void-->

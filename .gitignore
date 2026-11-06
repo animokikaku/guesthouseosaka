@@ -19,7 +19,7 @@
 .DS_Store
 *.pem
 
-# env files (Void reads only .env; env.example is the committed template)
+# env files (env.example is the committed template)
 .env*
  
 # typescript
@@ -41,9 +41,8 @@ backup/
 # vitest artifacts (reports, blob reports, attachments)
 /.vitest/
 
-# void: generated state and Cloudflare config (void.lock.json is committed)
+# void: leftover local state from before Wrangler
 /.void/
-.void-wrangler.jsonc
 
-# Cloudflare build output, written by Void's Vite plugin
+# Cloudflare build output, written by its Vite plugin
 /.cloudflare/

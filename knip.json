@@ -30,8 +30,7 @@
         "app/start.ts",
         "app/worker.ts",
         "scripts/*.mts",
-        "db/schema.ts",
-        "void.config.ts"
+        "db/schema.ts"
       ],
       "ignoreDependencies": ["cloudflare"]
     },

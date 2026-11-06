@@ -1,10 +1,10 @@
 import { SITE_URL, TURNSTILE_TEST_SITE_KEY } from './config'
 
 /**
- * Public settings, inlined by Vite at build time once Void has checked them
- * against `env.ts`. Read through `import.meta.env` so the Studio and the
- * component gallery, which build without Void, can share them. Server secrets
- * are read from `env.ts`.
+ * Public settings, inlined by Vite at build time once `validatePublicEnv` in
+ * vite.config.ts has checked them. Read through `import.meta.env` so the Studio
+ * and the component gallery, which build without the Worker, can share them.
+ * Server secrets are read from `env.ts`.
  */
 export const env = {
   VITE_APP_URL: import.meta.env.VITE_APP_URL || SITE_URL,
