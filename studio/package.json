@@ -15,7 +15,7 @@
     "@sanity/preview-url-secret": "^4.1.5",
     "@sanity/ui": "^4.4.10",
     "@sanity/vision": "^6.22.0",
-    "lucide-react": "^1.69.0",
+    "lucide-react": "^1.70.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "sanity": "^6.22.0",
