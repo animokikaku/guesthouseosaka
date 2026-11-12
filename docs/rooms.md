@@ -113,17 +113,18 @@ copy and paste) has:
   published field is off, so a draft previews fresh rooms. A draft left
   unpublished over two days needs it again: the schedule still skips.
 
-A card under the header lists each house as the Studio lists
-documents: its hero image and title, its listed rooms, and a dot whose tooltip
-says when it last synced; clicking a house opens it. The dot is red when the
-house never synced or last synced over two days ago, which hides its rooms; it
-tells only the sync's age, so it stays green while Room Availability is off.
-The statuses reload when the editor comes back to the tab. They come from a
-public
-`GET /api/sync-rooms` (`{"houses": [{"house", "syncedAt", "rooms"}]}`); the Studio tells the age
-with `isFresh` (`lib/rooms-sync/room.ts`), as the site does.
-After a sync, each house also shows what changed, or why it failed
-(`studio/components/room-sync.ts` holds that sync's state).
+A card under the header lists each house as the Studio lists documents: its
+hero image and title, its listed rooms, and a dot whose tooltip says when it
+last synced; clicking a house opens it. The dot is red when the house never
+synced or last synced over two days ago, which hides its rooms; it tells only
+the sync's age, so it stays green while Room Availability is off. The statuses
+reload when the editor comes back to the tab. They come from a public
+`GET /api/sync-rooms` (`{"houses": [{"house", "syncedAt", "rooms"}]}`); the
+Studio tells the age with `isFresh` (`lib/rooms-sync/room.ts`), as the site
+does. After a sync, each house also shows what changed, or why it failed
+(`studio/components/room-sync.ts` holds that sync's state, and
+`studio/components/room-status.ts` words each row). The route and the Studio
+share both responses' shapes (`lib/rooms-sync/api.ts`).
 
 The Studio can't hold `SYNC_TOKEN`, so the button works like
 Presentation: the signed-in user creates a preview secret in the dataset
@@ -153,15 +154,19 @@ is refused as incomplete on every run until synced once with `?force=1`.
 
 `getRoomAvailability(house)` in `lib/rooms.server.ts` maps the house to its
 property ID and reads its listed rooms that are available or upcoming (the site
-doesn't show occupied ones). The house page shows a badge with the counts
+doesn't show occupied ones). `toRoomAvailability` (`lib/rooms.ts`) splits them
+into rooms free now and rooms free later, counting an upcoming room whose date
+has come (in Japan) as free now. `getRoomAvailability` returns null when the
+listing has never synced, last synced over two days ago, or D1 fails.
+
+The house page shows a badge with the counts
 (`components/house/house-availability.tsx`), linking to a timeline of when those
-rooms free up in its `#availability` section (`components/house/house-rooms.tsx`).
-A fully booked house has no timeline, and its "Fully booked" badge no link.
-Both show only while **Room Availability** is on in Site Settings, which the
-house route reads with the layout's settings, so Presentation previews it from a
-draft before publishing. It counts an upcoming room whose date has come (in Japan) as available, and returns
-null, hiding both, when the listing has never synced, last synced over two days
-ago, or D1 fails.
+rooms free up in its `#availability` section
+(`components/house/house-rooms.tsx`). A fully booked house has no timeline, and
+its "Fully booked" badge no link. Null hides both. Both also show only while
+**Room Availability** is on in Site Settings, which the house route reads with
+the layout's settings, so Presentation previews it from a draft before
+publishing.
 
 ## Cache
 

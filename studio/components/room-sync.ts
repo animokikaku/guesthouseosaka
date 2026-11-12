@@ -5,47 +5,17 @@
  * preview secret the signed-in user creates, as Presentation does, so the
  * Studio holds no token.
  */
-import { z } from '@/lib/zod'
+import {
+  statusesSchema,
+  syncResponseSchema,
+  type HouseStatus,
+  type SyncResponse
+} from '@/lib/rooms-sync/api'
 import { isFresh } from '@/lib/rooms-sync/room'
 import { siteUrl } from '@/studio/site-url'
 import { createPreviewSecret } from '@sanity/preview-url-secret/create-secret'
 import { useSyncExternalStore } from 'react'
 import type { SanityClient } from 'sanity'
-
-/** What `POST /api/sync-rooms` answers, with 200 or 502. */
-const syncResponseSchema = z.object({
-  results: z.array(
-    z.union([
-      z.object({
-        house: z.string(),
-        url: z.string(),
-        ok: z.literal(true),
-        rooms: z.number(),
-        changed: z.number()
-      }),
-      z.object({ house: z.string(), url: z.string(), ok: z.literal(false), error: z.string() })
-    ])
-  ),
-  purge: z.enum(['purged', 'skipped', 'failed'])
-})
-
-export type SyncResult = z.infer<typeof syncResponseSchema>['results'][number]
-
-/**
- * What `GET /api/sync-rooms` answers: each house's last sync and its room
- * count. The Studio derives freshness from `syncedAt`, with `isFresh`.
- */
-const statusesSchema = z.object({
-  houses: z.array(
-    z.object({
-      house: z.string(),
-      syncedAt: z.nullable(z.string()),
-      rooms: z.number()
-    })
-  )
-})
-
-export type HouseStatus = z.infer<typeof statusesSchema>['houses'][number]
 
 /** Each house's sync status; undefined when the site can't say. */
 export function loadStatuses(): Promise<HouseStatus[] | undefined> {
@@ -57,7 +27,7 @@ export function loadStatuses(): Promise<HouseStatus[] | undefined> {
 export type SyncState =
   | { status: 'idle' }
   | { status: 'syncing' }
-  | ({ status: 'done'; finishedAt: Date } & z.infer<typeof syncResponseSchema>)
+  | ({ status: 'done'; finishedAt: Date } & SyncResponse)
   | { status: 'error'; message: string }
 
 let state: SyncState = { status: 'idle' }
@@ -84,7 +54,7 @@ export function useRoomSync() {
  */
 export async function syncRoomsIfStale(client: SanityClient, userId: string | undefined) {
   const statuses = await loadStatuses()
-  if (statuses?.every(({ syncedAt }) => syncedAt !== null && isFresh(syncedAt))) return
+  if (statuses?.every(({ syncedAt }) => isFresh(syncedAt))) return
   await syncRooms(client, userId)
 }
 

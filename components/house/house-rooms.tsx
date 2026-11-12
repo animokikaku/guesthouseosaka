@@ -10,7 +10,7 @@ import {
   TimelineSeparator,
   TimelineTitle
 } from '@/components/reui/timeline'
-import type { ListedRoom, RoomAvailability } from '@/lib/rooms.server'
+import { hasRooms, type ListedRoom, type RoomAvailability } from '@/lib/rooms'
 import { useFormatter, useTranslations } from 'use-intl'
 
 /**
@@ -27,7 +27,7 @@ export function HouseRooms({
 }) {
   const t = useTranslations('HouseRooms')
 
-  if (rooms.available.length + rooms.upcoming.length === 0) return null
+  if (!hasRooms(rooms)) return null
 
   return (
     <section
@@ -113,17 +113,10 @@ function RoomDate({ date, today }: { date: string | null; today: string }) {
   const t = useTranslations('HouseRooms')
   const formatter = useFormatter()
 
-  if (date === 'now') {
+  if (date === 'now' || date === null) {
     return (
       <TimelineDate render={<span />} className={DATE_CLASS}>
-        {t('now')}
-      </TimelineDate>
-    )
-  }
-  if (date === null) {
-    return (
-      <TimelineDate render={<span />} className={DATE_CLASS}>
-        {t('date_unknown')}
+        {date === 'now' ? t('now') : t('date_unknown')}
       </TimelineDate>
     )
   }
