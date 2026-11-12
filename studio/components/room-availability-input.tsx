@@ -5,12 +5,12 @@
  * on or off (see docs/rooms.md).
  */
 import { SANITY_API_VERSION } from '@/lib/config'
-import { isFresh } from '@/lib/rooms-sync/room'
+import type { HouseStatus } from '@/lib/rooms-sync/api'
 import { DotIcon } from '@sanity/icons/Dot'
 import { HomeIcon } from '@sanity/icons/Home'
 import { Box, Card, Flex, Stack, Text } from '@sanity/ui'
 import { Tooltip } from '@sanity/ui/tooltip'
-import { useEffect, useEffectEvent, useRef, useState, type ComponentProps } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { useIntentLink } from 'sanity/router'
 import {
   DefaultPreview,
@@ -21,7 +21,8 @@ import {
   type BooleanInputProps,
   type SanityClient
 } from 'sanity'
-import { loadStatuses, useRoomSync, type HouseStatus, type SyncResult } from './room-sync'
+import { describeError, describeHouse, type SyncDot } from './room-status'
+import { loadStatuses, useRoomSync } from './room-sync'
 
 const SHARES_HOUSE = 'shares.house'
 
@@ -118,13 +119,6 @@ function houseName(house: string) {
   return house.charAt(0).toUpperCase() + house.slice(1)
 }
 
-function describeError(error: string) {
-  // shares.house refuses requests that don't come from Japan.
-  return error.includes('HTTP 403')
-    ? `shares.house refused the request (${error}). It only answers from Japan; the hourly sync will try again.`
-    : error
-}
-
 /**
  * A green or red dot, drawn as the Studio draws a document's state: its dot
  * icon at small text size. `label` names it for screen readers; without, it's
@@ -148,7 +142,7 @@ function StatusDot({ ok, label }: { ok: boolean; label?: string }) {
 }
 
 /** As the document lists show a document's state: a dot, and on hover, the state and when. */
-function SyncStatus({ ok, label, at }: { ok: boolean; label: string; at: Date | null }) {
+function SyncStatus({ ok, label, at }: SyncDot) {
   return (
     // The Studio's own tooltip spacing: the card's and the content's, 4px each.
     <Tooltip
@@ -178,41 +172,6 @@ function SyncStatus({ ok, label, at }: { ok: boolean; label: string; at: Date | 
 }
 
 /**
- * What a house's row says: its listed rooms (with what changed, or why it
- * failed, when this editor just synced), and its dot.
- */
-function describeHouse(
-  status: HouseStatus,
-  syncResult: SyncResult | undefined,
-  finishedAt: Date | undefined
-) {
-  const syncedAt = status.syncedAt === null ? null : new Date(status.syncedAt)
-  const fresh = status.syncedAt !== null && isFresh(status.syncedAt)
-  // A failure that a later sync (the schedule's) superseded no longer applies.
-  const superseded = syncResult?.ok === false && syncedAt && finishedAt && syncedAt > finishedAt
-  const result = superseded ? undefined : syncResult
-  const rooms = `${status.rooms} rooms`
-  if (result && !result.ok) {
-    return {
-      subtitle: describeError(result.error),
-      dot: { ok: false, label: 'Failed', at: finishedAt ?? null }
-    }
-  }
-  if (result) {
-    return {
-      subtitle: `${rooms}, ${result.changed === 0 ? 'no changes' : `${result.changed} changed`}`,
-      dot: { ok: fresh, label: 'Synced', at: syncedAt }
-    }
-  }
-  if (!syncedAt) {
-    return { subtitle: 'Not synced yet', dot: { ok: false, label: 'Never synced', at: null } }
-  }
-  // The site hides rooms last synced over two days ago.
-  const label = fresh ? 'Synced' : 'Out of date, hidden on the site'
-  return { subtitle: rooms, dot: { ok: fresh, label, at: syncedAt } }
-}
-
-/**
  * A house's row, as the Studio lists documents: image, title, subtitle and
  * state, opening the house when clicked (once its document is known).
  */
@@ -225,7 +184,7 @@ function HouseRow({
   house: string
   preview: HousePreview | undefined
   subtitle: string
-  dot: ComponentProps<typeof SyncStatus>
+  dot: SyncDot
 }) {
   const { href, onClick } = useIntentLink({
     intent: 'edit',

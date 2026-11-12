@@ -1,4 +1,4 @@
-import type { ListedRoom, RoomAvailability } from '@/lib/rooms.server'
+import type { ListedRoom, RoomAvailability } from '@/lib/rooms'
 import { render, screen } from '@testing-library/react'
 import { HouseAvailability } from '../house-availability'
 

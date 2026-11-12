@@ -13,7 +13,7 @@ import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/componen
 import { PageNav } from '@/components/page-nav'
 import { buildGallerySlides } from '@/lib/gallery'
 import { HOUSE_COLORS } from '@/lib/house-theme'
-import type { RoomAvailability } from '@/lib/rooms.server'
+import type { RoomAvailability } from '@/lib/rooms'
 import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
 import { cn } from '@/lib/utils'
 import type { HouseTitles } from '@/lib/types'
