@@ -34,9 +34,11 @@ interface HouseAboutProps {
   title: string | null
   building: BuildingData | null
   hasPricing: boolean
+  /** Shown after the description, such as the room availability. */
+  children?: React.ReactNode
 }
 
-export function HouseAbout({ about, title, building, hasPricing }: HouseAboutProps) {
+export function HouseAbout({ about, title, building, hasPricing, children }: HouseAboutProps) {
   const t = useTranslations('HouseAbout')
 
   return (
@@ -47,6 +49,7 @@ export function HouseAbout({ about, title, building, hasPricing }: HouseAboutPro
       <HouseSectionContent className="space-y-4">
         <HouseBuilding building={building} hasPricing={hasPricing} />
         {about ? <PortableText value={about} components={portableTextComponents} /> : null}
+        {children}
       </HouseSectionContent>
     </section>
   )

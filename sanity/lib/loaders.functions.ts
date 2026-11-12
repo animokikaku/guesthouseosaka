@@ -1,6 +1,6 @@
 import { routing } from '@/i18n/routing'
 import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
-import { getRoomCounts } from '@/lib/rooms.server'
+import { getRoomAvailability } from '@/lib/rooms.server'
 import { toHouseNavItems } from '@/lib/transforms/nav'
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import { z } from '@/lib/zod'
@@ -121,11 +121,11 @@ export const getHousePage = createServerFn({ method: 'GET' })
   .middleware([cacheable(TYPES.housePage, [ROOMS_CACHE_TAG])])
   .validator(byHouse)
   .handler(async ({ data: { locale, house } }) => {
-    const [page, roomCounts] = await Promise.all([
+    const [page, rooms] = await Promise.all([
       sanityFetch({ query: houseQuery, params: { locale, slug: house } }),
-      getRoomCounts(house)
+      getRoomAvailability(house)
     ])
-    return { house: page.data, roomCounts }
+    return { house: page.data, rooms }
   })
 
 export const getHouseGallery = createServerFn({ method: 'GET' })

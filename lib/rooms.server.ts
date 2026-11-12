@@ -1,8 +1,9 @@
 import { db } from '@/db'
 import { properties, rooms } from '@/db/schema'
-import { dateInJapan } from '@/lib/rooms-sync/room'
+import { toRoomAvailability, type RoomAvailability } from '@/lib/rooms'
+import { dateInJapan, isFresh } from '@/lib/rooms-sync/room'
 import type { HouseIdentifier } from '@/lib/types'
-import { and, eq, sql } from 'drizzle-orm'
+import { and, eq, ne } from 'drizzle-orm'
 
 /**
  * Each house's shares.house property ID, whose listing the room sync reads
@@ -14,37 +15,39 @@ export const PROPERTY_IDS: Record<HouseIdentifier, string> = {
   lemon: '10333'
 }
 
-// The sync runs every hour; past this, its counts are too old to show.
-const MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000
-
-export interface RoomCounts {
-  available: number
-  upcoming: number
-}
-
 /**
- * How many of a house's listed rooms are free now and opening soon, or null
- * when they aren't known: never synced, last synced too long ago, or D1 failed.
- * Null hides the badge rather than showing a wrong "Fully booked".
+ * A house's free and upcoming rooms (the site doesn't show occupied ones), or
+ * null when they aren't known: never synced, last synced too long ago, or D1
+ * failed. Null hides the badge and the timeline rather than showing a wrong
+ * "Fully booked".
  */
-export async function getRoomCounts(house: HouseIdentifier): Promise<RoomCounts | null> {
+export async function getRoomAvailability(
+  house: HouseIdentifier
+): Promise<RoomAvailability | null> {
   try {
-    // An upcoming room whose date has come counts as available, by Japan's date.
-    const today = dateInJapan()
-    const [row] = await db
-      .select({
-        checkedAt: properties.checkedAt,
-        available: sql<number>`COUNT(CASE WHEN ${rooms.status} = 'available' OR (${rooms.status} = 'upcoming' AND ${rooms.availableFrom} <= ${today}) THEN 1 END)`,
-        upcoming: sql<number>`COUNT(CASE WHEN ${rooms.status} = 'upcoming' AND (${rooms.availableFrom} IS NULL OR ${rooms.availableFrom} > ${today}) THEN 1 END)`
-      })
-      .from(properties)
-      .leftJoin(rooms, and(eq(rooms.propertyId, properties.propertyId), eq(rooms.listed, 1)))
-      .where(eq(properties.propertyId, PROPERTY_IDS[house]))
-      .groupBy(properties.propertyId)
-    if (!row || Date.now() - Date.parse(row.checkedAt) > MAX_AGE_MS) return null
-    return { available: row.available, upcoming: row.upcoming }
+    const propertyId = PROPERTY_IDS[house]
+    const [[property], listed] = await Promise.all([
+      db
+        .select({ checkedAt: properties.checkedAt })
+        .from(properties)
+        .where(eq(properties.propertyId, propertyId)),
+      db
+        .select({
+          roomNumber: rooms.roomNumber,
+          status: rooms.status,
+          availableFrom: rooms.availableFrom,
+          rent: rooms.rent
+        })
+        .from(rooms)
+        .where(
+          and(eq(rooms.propertyId, propertyId), eq(rooms.listed, 1), ne(rooms.status, 'occupied'))
+        )
+    ])
+    if (!property || !isFresh(property.checkedAt)) return null
+
+    return toRoomAvailability(listed, dateInJapan())
   } catch (error) {
-    console.error('Failed to read room counts', error)
+    console.error('Failed to read room availability', error)
     return null
   }
 }

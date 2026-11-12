@@ -7,6 +7,7 @@ import { drizzle } from 'drizzle-orm/d1'
 import type { Room } from '../room'
 import {
   fetchListing,
+  listingStatuses,
   needsPurge,
   propertyIdOf,
   recordPurge,
@@ -77,6 +78,7 @@ function room(roomNumber: string, overrides: Partial<Room> = {}): Room {
 }
 
 const URL_1 = 'https://shares.house/a_detail/q_1/'
+const URL_3 = 'https://shares.house/a_detail/q_3/'
 
 describe('propertyIdOf', () => {
   it('reads the ID from Japanese and English URLs', () => {
@@ -324,5 +326,19 @@ describe('needsPurge', () => {
     await recordPurge(db, MORNING)
     await recordPurge(db, '2026-10-30T15:07:00.000Z')
     expect(await needsPurge(db, '2026-10-30T16:00:00.000Z')).toBe(false)
+  })
+})
+
+describe('listingStatuses', () => {
+  it("gives each synced listing's last sync and listed rooms, and leaves out the others", async () => {
+    const { db } = createDatabase()
+    await writeRooms(db, URL_1, '1', [room('101'), room('102')], { now: 'T1' })
+    await writeRooms(db, URL_1, '1', [room('101')], { now: 'T2', force: true })
+    await writeRooms(db, URL_3, '3', [room('301'), room('302'), room('303')], { now: 'T3' })
+
+    const statuses = await listingStatuses(db, ['1', '2', '3'])
+    expect(statuses.get('1')).toEqual({ checkedAt: 'T2', rooms: 1 })
+    expect(statuses.has('2')).toBe(false)
+    expect(statuses.get('3')).toEqual({ checkedAt: 'T3', rooms: 3 })
   })
 })

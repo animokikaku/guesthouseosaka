@@ -1,5 +1,5 @@
 import { properties, rooms as roomsTable, syncState } from '@/db/schema'
-import { and, count, eq, sql } from 'drizzle-orm'
+import { and, count, eq, inArray, sql } from 'drizzle-orm'
 import type { DrizzleD1Database } from 'drizzle-orm/d1'
 import ky, { HTTPError } from 'ky'
 import { parseListing, validateRooms } from './parse'
@@ -188,4 +188,25 @@ export async function recordPurge(db: DrizzleD1Database, at: string) {
     .insert(syncState)
     .values({ id: 1, purgedAt: at })
     .onConflictDoUpdate({ target: syncState.id, set: { purgedAt: at } })
+}
+
+/**
+ * Each listing's last successful sync and how many rooms it lists, by property
+ * ID; a listing that never synced is missing.
+ */
+export async function listingStatuses(db: DrizzleD1Database, propertyIds: string[]) {
+  const rows = await db
+    .select({
+      propertyId: properties.propertyId,
+      checkedAt: properties.checkedAt,
+      rooms: count(roomsTable.roomNumber)
+    })
+    .from(properties)
+    .leftJoin(
+      roomsTable,
+      and(eq(roomsTable.propertyId, properties.propertyId), eq(roomsTable.listed, 1))
+    )
+    .where(inArray(properties.propertyId, propertyIds))
+    .groupBy(properties.propertyId)
+  return new Map(rows.map(({ propertyId, ...status }) => [propertyId, status]))
 }
