@@ -3,19 +3,20 @@
   "extends": ["config:recommended"],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
+  "prHourlyLimit": 0,
   "automergeType": "pr",
   "platformAutomerge": true,
   "timezone": "Asia/Tokyo",
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["before 4am on tuesday"],
+    "schedule": ["* 0-11 * * 2"],
     "automerge": true
   },
   "packageRules": [
     {
       "description": "Update and auto-merge non-major dependencies weekly",
       "matchUpdateTypes": ["patch", "minor"],
-      "schedule": ["before 4am on monday"],
+      "schedule": ["* 0-11 * * 1"],
       "automerge": true
     },
     {
