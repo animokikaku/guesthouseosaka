@@ -133,8 +133,8 @@ export const mobileChromeZoomHideClass = cn(
 
 /* ── Styled primitives (design-system re-exports) ───────────────────────── */
 
-function Root({ license = 'gpl', ...props }: React.ComponentProps<typeof RamkaLightbox.Root>) {
-  return <RamkaLightbox.Root license={license} {...props} />
+function Root(props: React.ComponentProps<typeof RamkaLightbox.Root>) {
+  return <RamkaLightbox.Root {...props} />
 }
 
 function Trigger({ className, ...props }: React.ComponentProps<typeof RamkaLightbox.Trigger>) {

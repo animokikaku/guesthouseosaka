@@ -42,7 +42,7 @@
     "@lucide/lab": "^0.14.0",
     "@marsidev/react-turnstile": "^1.6.3",
     "@portabletext/react": "^8.0.1",
-    "@ramka/react": "https://pkg.pr.new/arturbien/ramka/@ramka/react@d1cea80",
+    "@ramka/react": "^0.0.2",
     "@sanity/asset-utils": "^2.3.0",
     "@sanity/client": "^8.16.0",
     "@sanity/image-url": "^2.2.0",
