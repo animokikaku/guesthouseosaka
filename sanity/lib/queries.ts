@@ -69,8 +69,14 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
     icon,
     label,
     url
-  })
+  }),
+  "roomAvailability": roomAvailability == true
 }`)
+
+/** Whether Site Settings turn room availability on, for the hourly sync. */
+export const roomAvailabilityQuery = defineQuery(
+  `*[_type == "settings"][0].roomAvailability == true`
+)
 
 // =============================================================================
 // HOME PAGE

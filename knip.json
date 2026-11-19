@@ -12,7 +12,8 @@
         "global.ts",
         "messages/*.d.json.ts",
         "sanity.types.ts",
-        "components/ui/**"
+        "components/ui/**",
+        "components/reui/**"
       ],
       "playwright": {
         "config": ["playwright.config.ts", "playwright.components.config.ts"],

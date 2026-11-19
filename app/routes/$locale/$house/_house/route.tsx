@@ -6,6 +6,7 @@ import { canonicalLink, getCanonicalUrl } from '@/lib/metadata'
 import { houseJsonLd } from '@/lib/structured-data'
 import { getHousePage } from '@/sanity/lib/loaders.functions'
 import { stegaClean } from '@sanity/client/stega'
+import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 import { createFileRoute, getRouteApi, Outlet } from '@tanstack/react-router'
 
 /**
@@ -29,13 +30,24 @@ export const Route = createFileRoute('/$locale/$house/_house')({
 const localeRoute = getRouteApi('/$locale')
 
 function HouseLayout() {
-  const { house, roomCounts } = Route.useLoaderData()
-  const { houseTitles } = localeRoute.useLoaderData()
+  const { house, rooms } = Route.useLoaderData()
+  const { houseTitles, settings } = localeRoute.useLoaderData()
 
   return (
     <>
       {house ? (
-        <HousePageContent {...house} houses={houseTitles} roomCounts={roomCounts} />
+        <HousePageContent
+          {...house}
+          houses={houseTitles}
+          // Site Settings' Room Availability field, which draft mode previews.
+          rooms={settings?.roomAvailability ? rooms : null}
+          // Presentation opens the field from the badge or the timeline.
+          roomsDataSanity={
+            settings
+              ? createDataAttribute({ id: settings._id, type: settings._type })('roomAvailability')
+              : undefined
+          }
+        />
       ) : (
         <PageEmptyStateSection />
       )}

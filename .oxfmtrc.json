@@ -7,6 +7,7 @@
   "sortTailwindcss": {},
   "ignorePatterns": [
     "components/ui/**",
+    "components/reui/**",
     "messages/en.d.json.ts",
     ".agents/**",
     ".claude/**",
