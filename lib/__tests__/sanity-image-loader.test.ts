@@ -1,6 +1,6 @@
 // @vitest-environment node
 
-import { sanityImageLoader } from '../sanity-image-loader'
+import { sanityImageLoader, sanitySourceWidth } from '../sanity-image-loader'
 
 const SRC = 'https://cdn.sanity.io/images/test/image.jpg?w=400&h=400&fit=crop'
 
@@ -34,5 +34,34 @@ describe('sanityImageLoader', () => {
     })
 
     expect(result).toBe('https://cdn.sanity.io/images/test/image.jpg?w=640&auto=format&q=75')
+  })
+})
+
+describe('sanitySourceWidth', () => {
+  const asset = 'https://cdn.sanity.io/images/test/production/abc-663x1000.jpg'
+
+  it('reads the width from the asset file name', () => {
+    expect(sanitySourceWidth(`${asset}?fit=max`)).toBe(663)
+  })
+
+  it('narrows to the rect the hotspot or crop selects', () => {
+    expect(sanitySourceWidth(`${asset}?rect=20,301,600,360&w=640&h=384&fit=crop`)).toBe(600)
+  })
+
+  it('counts only the part of the source a crop to another aspect ratio fills', () => {
+    // A 2:1 crop of a 663x1000 portrait fills its width; a square one of a
+    // 1000x657 landscape only its height.
+    expect(sanitySourceWidth(`${asset}?w=800&h=400&fit=crop`)).toBe(663)
+    expect(
+      sanitySourceWidth(
+        'https://cdn.sanity.io/images/test/production/abc-1000x657.jpg?w=800&h=800&fit=crop'
+      )
+    ).toBe(657)
+  })
+
+  it('is unknown for a source without a size', () => {
+    expect(sanitySourceWidth('https://cdn.sanity.io/images/test/image.jpg?w=400')).toBeUndefined()
+    expect(sanitySourceWidth('data:image/svg+xml,%3Csvg/%3E')).toBeUndefined()
+    expect(sanitySourceWidth('/local.png')).toBeUndefined()
   })
 })

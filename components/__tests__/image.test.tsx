@@ -42,6 +42,27 @@ describe('Image', () => {
     expect(img).toHaveAttribute('width', '800')
   })
 
+  it('offers no candidate wider than the source', () => {
+    render(
+      <Image
+        src="https://cdn.test/a.jpg"
+        alt="A"
+        fill
+        sizes="100vw"
+        maxWidth={663}
+        loader={loader}
+      />
+    )
+
+    const img = screen.getByAltText('A')
+    const widths = img
+      .getAttribute('srcset')!
+      .split(/,\s*/)
+      .map((candidate) => candidate.split(' ')[1])
+    expect(widths.slice(-2)).toEqual(['640w', '663w'])
+    expect(img).toHaveAttribute('src', 'https://cdn.test/a.jpg?w=663&q=75')
+  })
+
   it('leaves inline sources to load as they are', () => {
     const inline = 'data:image/png;base64,AAAA'
     render(<Image src={inline} alt="A" width={64} height={64} loader={loader} />)

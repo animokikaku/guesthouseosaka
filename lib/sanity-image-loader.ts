@@ -29,3 +29,33 @@ export const sanityImageLoader: ImageLoader = ({ src, width, quality }) => {
 
   return url.toString()
 }
+
+/**
+ * How wide Sanity can serve `src` without scaling it up, or `undefined` for a
+ * URL that doesn't say. Asset file names end in their pixel size
+ * (`…-663x1000.jpg`), `rect` narrows it to the hotspot or Studio crop, and a
+ * `fit=crop` to another aspect ratio only uses the part of that area it fills.
+ *
+ * Wider candidates gain nothing: `fit=crop` scales the source up, for a
+ * heavier file with no more detail, and `fit=max` answers with the same image
+ * under one more URL.
+ */
+export function sanitySourceWidth(src: string): number | undefined {
+  let url: URL
+  try {
+    url = new URL(src)
+  } catch {
+    return undefined
+  }
+
+  const [, , rectWidth, rectHeight] = url.searchParams.get('rect')?.split(',').map(Number) ?? []
+  const [, fileWidth, fileHeight] = /-(\d+)x(\d+)\.\w+$/.exec(url.pathname)?.map(Number) ?? []
+  const sourceWidth = rectWidth > 0 && rectHeight > 0 ? rectWidth : fileWidth
+  const sourceHeight = rectWidth > 0 && rectHeight > 0 ? rectHeight : fileHeight
+  if (!(sourceWidth > 0 && sourceHeight > 0)) return undefined
+
+  const width = Number(url.searchParams.get('w'))
+  const height = Number(url.searchParams.get('h'))
+  if (url.searchParams.get('fit') !== 'crop' || !(width > 0 && height > 0)) return sourceWidth
+  return Math.min(sourceWidth, Math.round((sourceHeight * width) / height))
+}

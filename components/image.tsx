@@ -21,6 +21,11 @@ export type ImageProps = Omit<ComponentProps<'img'>, 'src' | 'width' | 'height' 
   quality?: number
   /** Painted as a CSS gradient behind the image until it covers it. */
   blurHash?: string | null
+  /**
+   * The source's width in pixels. A `sizes`-driven image offers no candidate
+   * wider than it: the CDN would only scale the source up.
+   */
+  maxWidth?: number
   /** Loads the image eagerly and preloads it from the document head. */
   preload?: boolean
   loading?: 'eager' | 'lazy'
@@ -40,8 +45,8 @@ type Transformer = (url: string | URL, operations: { width?: number }) => string
 
 /**
  * The `src`, `srcset` and `sizes` unpic builds: a fixed `width` without
- * `sizes` gets its 1x and 2x, `sizes` or `fill` gets every breakpoint for the
- * browser to pick from.
+ * `sizes` gets its 1x and 2x, `sizes` or `fill` gets every breakpoint up to
+ * `maxWidth` for the browser to pick from.
  */
 function responsiveAttributes({
   src,
@@ -49,7 +54,8 @@ function responsiveAttributes({
   width,
   height,
   sizes,
-  fill
+  fill,
+  maxWidth
 }: {
   src: string
   transformer: Transformer
@@ -57,6 +63,7 @@ function responsiveAttributes({
   height?: number
   sizes?: string
   fill?: boolean
+  maxWidth?: number
 }) {
   const shared = { src, transformer, unstyled: true }
   const attributes =
@@ -65,7 +72,10 @@ function responsiveAttributes({
       : transformBaseImageProps({
           ...shared,
           layout: 'fullWidth',
-          breakpoints: BREAKPOINTS,
+          // The source itself is the largest candidate, at its full size.
+          breakpoints: maxWidth
+            ? [...BREAKPOINTS.filter((breakpoint) => breakpoint < maxWidth), maxWidth]
+            : BREAKPOINTS,
           sizes: sizes ?? '100vw'
         })
   return {
@@ -91,6 +101,7 @@ export function Image({
   quality,
   sizes,
   blurHash,
+  maxWidth,
   preload,
   loading,
   fetchPriority,
@@ -103,12 +114,13 @@ export function Image({
       ? (url, { width: candidate }) =>
           loader({
             src: url.toString(),
-            width: candidate ?? BREAKPOINTS[BREAKPOINTS.length - 1],
+            // The fallback `src` asks for no width: it gets the largest.
+            width: candidate ?? maxWidth ?? BREAKPOINTS[BREAKPOINTS.length - 1],
             quality
           })
       : undefined
   const responsive =
-    transformer && responsiveAttributes({ src, transformer, width, height, sizes, fill })
+    transformer && responsiveAttributes({ src, transformer, width, height, sizes, fill, maxWidth })
   const resolvedSrc = responsive?.src ?? src
   const resolvedSizes = responsive?.sizes ?? sizes
 
