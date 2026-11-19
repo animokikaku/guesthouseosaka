@@ -2,7 +2,9 @@ import { timeZone } from '@/i18n/formats'
 import { HouseIdentifierValues } from '@/lib/types'
 import { z } from '@/lib/zod'
 import type { Messages } from 'use-intl'
-import { isMobilePhone } from 'validator'
+// The one validator, as an ES module: the package's entry is CommonJS, which
+// would bundle every validator it has with the contact forms.
+import isMobilePhone from 'validator/es/lib/isMobilePhone'
 
 type ValidationMessageKey = keyof Messages['forms']['validation']
 
