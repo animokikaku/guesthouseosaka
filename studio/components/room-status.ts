@@ -33,23 +33,19 @@ export function describeHouse(
   // A failure that a later sync (the schedule's) superseded no longer applies.
   const superseded = syncResult?.ok === false && syncedAt && finishedAt && syncedAt > finishedAt
   const result = superseded ? undefined : syncResult
-  const rooms = `${status.rooms} rooms`
   if (result && !result.ok) {
     return {
       subtitle: describeError(result.error),
       dot: { ok: false, label: 'Failed', at: finishedAt ?? null }
     }
   }
-  if (result) {
-    return {
-      subtitle: `${rooms}, ${result.changed === 0 ? 'no changes' : `${result.changed} changed`}`,
-      dot: { ok: fresh, label: 'Synced', at: syncedAt }
-    }
-  }
   if (!syncedAt) {
     return { subtitle: 'Not synced yet', dot: { ok: false, label: 'Never synced', at: null } }
   }
+  const rooms = `${status.rooms} ${status.rooms === 1 ? 'room' : 'rooms'}`
+  let changes = ''
+  if (result) changes = result.changed === 0 ? ', no changes' : `, ${result.changed} changed`
   // The site hides rooms last synced over two days ago.
   const label = fresh ? 'Synced' : 'Out of date, hidden on the site'
-  return { subtitle: rooms, dot: { ok: fresh, label, at: syncedAt } }
+  return { subtitle: rooms + changes, dot: { ok: fresh, label, at: syncedAt } }
 }

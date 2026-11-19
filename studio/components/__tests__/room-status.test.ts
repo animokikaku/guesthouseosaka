@@ -53,6 +53,17 @@ describe('describeHouse', () => {
     expect(describeHouse(status(AN_HOUR_AGO), synced(0), NOW).subtitle).toBe('12 rooms, no changes')
   })
 
+  it('says one room in the singular', () => {
+    expect(describeHouse(status(AN_HOUR_AGO, 1), undefined, undefined).subtitle).toBe('1 room')
+  })
+
+  it('turns the dot red once the sync this editor ran is out of date', () => {
+    expect(describeHouse(status(THREE_DAYS_AGO), synced(2), new Date(THREE_DAYS_AGO))).toEqual({
+      subtitle: '12 rooms, 2 changed',
+      dot: { ok: false, label: 'Out of date, hidden on the site', at: new Date(THREE_DAYS_AGO) }
+    })
+  })
+
   it('gives why the sync this editor ran failed, and when', () => {
     expect(describeHouse(status(AN_HOUR_AGO), failed('Timed out'), NOW)).toEqual({
       subtitle: 'Timed out',

@@ -7,8 +7,7 @@ import {
   TimelineHeader,
   TimelineIndicator,
   TimelineItem,
-  TimelineSeparator,
-  TimelineTitle
+  TimelineSeparator
 } from '@/components/reui/timeline'
 import { hasRooms, type ListedRoom, type RoomAvailability } from '@/lib/rooms'
 import { useFormatter, useTranslations } from 'use-intl'
@@ -72,6 +71,8 @@ function toSteps({ available, upcoming }: RoomAvailability): Step[] {
 
 /** The "now" step, when there is one, is the timeline's reached step. */
 function RoomTimeline({ rooms }: { rooms: RoomAvailability }) {
+  const t = useTranslations('HouseRooms')
+  const formatter = useFormatter()
   const steps = toSteps(rooms)
 
   return (
@@ -93,8 +94,13 @@ function RoomTimeline({ rooms }: { rooms: RoomAvailability }) {
           <TimelineContent render={<ul />} className="space-y-2">
             {step.rooms.map((room) => (
               <li key={room.roomNumber} className="flex items-center gap-2 whitespace-nowrap">
-                <RoomTitle room={room} />
-                <RoomRent room={room} />
+                <span>{t('room', { number: room.roomNumber })}</span>
+                {/* Monthly; some listings give none. */}
+                {room.rent !== null && (
+                  <Badge variant="outline" className="tabular-nums">
+                    {formatter.number(room.rent, 'currency')}
+                  </Badge>
+                )}
               </li>
             ))}
           </TimelineContent>
@@ -130,28 +136,5 @@ function RoomDate({ date, today }: { date: string | null; today: string }) {
         year: sameYear ? undefined : 'numeric'
       })}
     </TimelineDate>
-  )
-}
-
-function RoomTitle({ room }: { room: ListedRoom }) {
-  const t = useTranslations('HouseRooms')
-
-  return (
-    // A label, not a heading: the date heads each step.
-    <TimelineTitle render={<span />} className="text-muted-foreground font-normal">
-      {t('room', { number: room.roomNumber })}
-    </TimelineTitle>
-  )
-}
-
-/** The room's monthly rent. */
-function RoomRent({ room }: { room: ListedRoom }) {
-  const formatter = useFormatter()
-
-  if (room.rent === null) return null
-  return (
-    <Badge variant="outline" className="tabular-nums">
-      {formatter.number(room.rent, 'currency')}
-    </Badge>
   )
 }

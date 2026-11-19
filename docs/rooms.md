@@ -126,13 +126,13 @@ does. After a sync, each house also shows what changed, or why it failed
 `studio/components/room-status.ts` words each row). The route and the Studio
 share both responses' shapes (`lib/rooms-sync/api.ts`).
 
-The Studio can't hold `SYNC_TOKEN`, so the button works like
+The Studio can't hold `SYNC_TOKEN`, so **Sync now** works like
 Presentation: the signed-in user creates a preview secret in the dataset
 (valid for an hour), and sends it as the request's text body. The route checks
 the body's length and shape first, then the secret with `validatePreviewUrl`
 and the read token. A text body with no custom header needs no CORS preflight,
-and the route lets the hosted Studios and `sanity dev` read its answer. The
-button calls the site that shows the Studio's dataset: production, or
+and the route lets the hosted Studios and `sanity dev` read its answer.
+**Sync now** calls the site that shows the Studio's dataset: production, or
 `localhost:3000` for the development Studio. The request starts in the
 editor's browser, so like any sync it only gets through from Japan.
 

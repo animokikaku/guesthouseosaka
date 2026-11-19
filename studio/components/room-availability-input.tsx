@@ -18,6 +18,7 @@ import {
   PreviewCard,
   useClient,
   useFieldActions,
+  useRelativeTime,
   type BooleanInputProps,
   type SanityClient
 } from 'sanity'
@@ -26,23 +27,16 @@ import { loadStatuses, useRoomSync } from './room-sync'
 
 const SHARES_HOUSE = 'shares.house'
 
-const relativeTime = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
+const TIME_AGO = { useTemporalPhrase: true }
 
-/** "5 minutes ago", "2 hours ago", "yesterday"… */
-function timeAgo(date: Date) {
-  const seconds = (date.getTime() - Date.now()) / 1000
-  const units = [
-    ['day', 86_400],
-    ['hour', 3600],
-    ['minute', 60]
-  ] as const
-  for (const [unit, size] of units) {
-    if (Math.abs(seconds) >= size) return relativeTime.format(Math.round(seconds / size), unit)
-  }
-  return 'just now'
+/** "5 minutes ago", "2 hours ago", "yesterday"…, as the Studio words it, current while it shows. */
+function TimeAgo({ at }: { at: Date }) {
+  return (
+    <span style={{ color: 'var(--card-muted-fg-color)' }}>{useRelativeTime(at, TIME_AGO)}</span>
+  )
 }
 
-/** Renders again every minute, so the times ago and dots stay right while the Studio is open. */
+/** Renders again every minute, so a dot turns red when its sync gets too old while the Studio is open. */
 function useMinuteTick() {
   const [, setTick] = useState(0)
   useEffect(() => {
@@ -157,7 +151,7 @@ function SyncStatus({ ok, label, at }: SyncDot) {
             {at && (
               <>
                 {' - '}
-                <span style={{ color: 'var(--card-muted-fg-color)' }}>{timeAgo(at)}</span>
+                <TimeAgo at={at} />
               </>
             )}
           </Text>
