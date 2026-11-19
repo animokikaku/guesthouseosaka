@@ -1,4 +1,5 @@
 import { HouseBuilding } from '@/components/house/house-building'
+import { houseListItemComponents } from '@/components/house/portable-text-list'
 import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import type { BuildingData, HousePortableTextContent } from '@/lib/types/components'
 import type { PortableTextComponents } from '@portabletext/react'
@@ -18,15 +19,7 @@ const portableTextComponents: PortableTextComponents = {
       <ol className="text-foreground mt-4 list-decimal space-y-2 pl-5">{children}</ol>
     )
   },
-  listItem: {
-    bullet: ({ children }: { children?: React.ReactNode }) => (
-      <li className="flex items-start gap-3">
-        <div className="bg-primary mt-2 size-2 shrink-0 rounded-full" />
-        <span className="text-foreground">{children}</span>
-      </li>
-    ),
-    number: ({ children }) => <li>{children}</li>
-  }
+  listItem: houseListItemComponents
 }
 
 interface HouseAboutProps {
