@@ -111,10 +111,11 @@ function RoomTimeline({ house, rooms }: { house: HouseIdentifier; rooms: RoomAva
           key={step.date ?? 'unknown'}
           step={index + 1}
           render={<li />}
-          // As wide as its rooms, with the same gap before the next step however
-          // many there are, rather than each an equal share of the row. The last
-          // one keeps its last badge's border in view.
-          className="min-w-max flex-none group-data-[orientation=horizontal]/timeline:not-last:pe-14 last:pe-1"
+          // An equal share of the row each, spreading the steps along it: never
+          // narrower than its rooms and the gap before the next step, and no wider
+          // than 16rem, so two dates don't sit half a page apart. The last one
+          // keeps its last badge's border in view.
+          className="max-w-64 min-w-max group-data-[orientation=horizontal]/timeline:not-last:pe-14 last:pe-1"
         >
           <TimelineHeader>
             <StepLabel date={step.date} today={rooms.today} />

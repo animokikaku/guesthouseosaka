@@ -1,6 +1,6 @@
 import { expect, test } from './fixtures'
 
-test('lists the rooms on a timeline of icons, a step as wide as its rooms', async ({
+test('lists the rooms on a timeline of icons, its steps spread along the row', async ({
   mount,
   page
 }) => {
@@ -24,8 +24,9 @@ test('lists the rooms on a timeline of icons, a step as wide as its rooms', asyn
   await expect(icon.locator('svg')).toBeVisible()
   await expect(icon).toHaveCSS('border-top-width', '0px')
 
-  // Steps keep to their rooms' width, the same gap apart, rather than sharing the row.
-  await expect(steps.nth(0)).toHaveCSS('flex-grow', '0')
+  // Steps share the row, up to a width, and are never closer than their gap.
+  await expect(steps.nth(0)).toHaveCSS('flex-grow', '1')
+  await expect(steps.nth(0)).toHaveCSS('max-width', '256px')
   await expect(steps.nth(0)).toHaveCSS('padding-right', '56px')
 
   const link = section.getByRole('link', { name: /Room 208/ })
