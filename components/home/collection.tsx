@@ -46,45 +46,46 @@ export function Collection({ houses, rooms, roomsDataSanity, className }: Collec
             role="listitem"
             className="h-full flex-col items-start p-0"
           >
-            <Link
-              aria-label={house.title ? stegaClean(house.title) : house.slug}
-              to="/$locale/$house"
-              params={{ locale, house: house.slug }}
-              className="group ring-offset-background focus-visible:ring-ring/50 block w-full rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-            >
-              <ItemHeader className="relative overflow-hidden rounded-sm">
-                <CollectionImage image={house.image} />
-                <div
-                  className={cn(
-                    'pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 pointer-fine:group-hover:opacity-100 group-focus-visible:opacity-100',
-                    HOUSE_COLORS[house.slug].accent
-                  )}
-                >
-                  {/* Lazy, not eager: the overlay is opacity-0 until hover, and
+            {/* Holds the badge over the photo's corner, beside the photo's link rather than in it. */}
+            <div className="relative w-full">
+              <Link
+                aria-label={house.title ? stegaClean(house.title) : house.slug}
+                to="/$locale/$house"
+                params={{ locale, house: house.slug }}
+                className="group ring-offset-background focus-visible:ring-ring/50 block w-full rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+              >
+                <ItemHeader className="relative overflow-hidden rounded-sm">
+                  <CollectionImage image={house.image} />
+                  <div
+                    className={cn(
+                      'pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 pointer-fine:group-hover:opacity-100 group-focus-visible:opacity-100',
+                      HOUSE_COLORS[house.slug].accent
+                    )}
+                  >
+                    {/* Lazy, not eager: the overlay is opacity-0 until hover, and
                     the collection sits a full viewport below the hero — so
                     eager loading cost three requests during the initial load
                     for art nobody had asked to see. the browser starts these as
                     the section scrolls into view, well ahead of any hover. */}
-                  <Image
-                    {...assets[house.slug].icon}
-                    className="size-12 object-contain opacity-90 drop-shadow-lg"
-                  />
-                </div>
-              </ItemHeader>
-            </Link>
+                    <Image
+                      {...assets[house.slug].icon}
+                      className="size-12 object-contain opacity-90 drop-shadow-lg"
+                    />
+                  </div>
+                </ItemHeader>
+              </Link>
+              {houseRooms && (
+                <HouseAvailability
+                  house={house.slug}
+                  rooms={houseRooms}
+                  data-sanity={roomsDataSanity}
+                  className="absolute top-2 right-2 shadow-sm"
+                />
+              )}
+            </div>
             <ItemContent className="self-start">
               <ItemTitle className="text-lg">{house.title}</ItemTitle>
               <ItemDescription className="text-start">{house.description}</ItemDescription>
-              {houseRooms && (
-                // At the card's foot, so the badges line up when a description wraps.
-                <div className="mt-auto pt-1">
-                  <HouseAvailability
-                    house={house.slug}
-                    rooms={houseRooms}
-                    data-sanity={roomsDataSanity}
-                  />
-                </div>
-              )}
             </ItemContent>
           </Item>
         )
