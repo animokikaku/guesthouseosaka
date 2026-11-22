@@ -73,8 +73,13 @@ export function Collection({ houses, rooms, roomsDataSanity, className }: Collec
               </ItemHeader>
             </Link>
             <ItemContent className="w-full">
-              {/* The badge faces the title from the row's far end, and drops under it in a card too narrow for both. */}
-              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+              {/*
+               * The badge faces the title from the row's far end once the cards
+               * are at their widest, where the longest badge fits beside any
+               * title. Narrower, it goes under the title in every card, rather
+               * than only in those where it doesn't fit.
+               */}
+              <div className="flex flex-col items-start gap-1 xl:flex-row xl:flex-wrap xl:items-center xl:justify-between xl:gap-x-3">
                 <ItemTitle className="text-lg">{house.title}</ItemTitle>
                 {houseRooms && (
                   <HouseAvailability

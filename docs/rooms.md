@@ -182,8 +182,9 @@ previews it from a draft before publishing:
   the other sections' are. A fully booked house's section says so
   in place of the timeline, and its "Fully booked" badge links nowhere. Null
   hides both.
-- **The home page** shows the same badge at the end of each house's title row
-  (`components/home/collection.tsx`); a house whose rooms are null has none.
+- **The home page** shows the same badge with each house's title
+  (`components/home/collection.tsx`): at the end of the title's row at full
+  width, under the title below that. A house whose rooms are null has none.
 - **The move-in form** has an optional "Rooms" field
   (`components/forms/fields/rooms-field.tsx`) offering the rooms of the houses
   selected in "Places": a combobox on a wide screen, a sheet from the bottom on
