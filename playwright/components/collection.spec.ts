@@ -2,7 +2,7 @@ import { expect, test } from './fixtures'
 
 const story = 'components/home/collection/WithRooms'
 
-test('shows each house’s availability at the end of its title’s row', async ({ mount, page }) => {
+test('shows each house’s availability right after its title', async ({ mount, page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   const component = await mount(story)
   const houses = component.getByRole('listitem')
@@ -15,13 +15,12 @@ test('shows each house’s availability at the end of its title’s row', async 
   await expect(houses.nth(2).getByText('Fully booked')).toBeVisible()
   await expect(houses.nth(2).getByRole('link', { name: 'Fully booked' })).toHaveCount(0)
 
-  // On the title's line, flush with the photo's right edge.
-  const card = await houses.nth(0).locator('[data-slot=item-header]').boundingBox()
+  // On the title's line, a small gap after it.
   const title = await houses.nth(0).getByText('Orange House', { exact: true }).boundingBox()
-  const corner = await badge.boundingBox()
-  expect(corner!.x + corner!.width).toBeCloseTo(card!.x + card!.width, 0)
-  expect(corner!.y).toBeGreaterThan(title!.y)
-  expect(corner!.y + corner!.height).toBeLessThan(title!.y + title!.height)
+  const beside = await badge.boundingBox()
+  expect(beside!.x - (title!.x + title!.width)).toBeCloseTo(8, 0)
+  expect(beside!.y).toBeGreaterThan(title!.y)
+  expect(beside!.y + beside!.height).toBeLessThan(title!.y + title!.height)
 })
 
 test('puts every badge under its title below the widest layout', async ({ mount, page }) => {
