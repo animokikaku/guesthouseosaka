@@ -22,7 +22,8 @@ const settings: Settings = {
       url: 'https://instagram.com/example'
     }
   ],
-  roomAvailability: false
+  roomAvailability: false,
+  roomAvailabilityNote: null
 }
 
 describe('SiteFooter', () => {

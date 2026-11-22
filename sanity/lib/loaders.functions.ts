@@ -1,6 +1,6 @@
 import { routing } from '@/i18n/routing'
 import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
-import { getRoomAvailability } from '@/lib/rooms.server'
+import { getRoomAvailability, getRoomsByHouse } from '@/lib/rooms.server'
 import { toHouseNavItems } from '@/lib/transforms/nav'
 import { ContactTypeValues, HouseIdentifierValues } from '@/lib/types'
 import { z } from '@/lib/zod'
@@ -67,11 +67,14 @@ export const getLocaleLayout = createServerFn({ method: 'GET' })
   })
 
 export const getHomePage = createServerFn({ method: 'GET' })
-  .middleware([cacheable(TYPES.homePage)])
+  .middleware([cacheable(TYPES.homePage, [ROOMS_CACHE_TAG])])
   .validator(byLocale)
   .handler(async ({ data: { locale } }) => {
-    const { data } = await sanityFetch({ query: homePageQuery, params: { locale } })
-    return data
+    const [{ data }, rooms] = await Promise.all([
+      sanityFetch({ query: homePageQuery, params: { locale } }),
+      getRoomsByHouse()
+    ])
+    return { ...data, rooms }
   })
 
 export const getFaqPage = createServerFn({ method: 'GET' })
@@ -110,11 +113,17 @@ export const getLegalNotice = createServerFn({ method: 'GET' })
   })
 
 export const getContactType = createServerFn({ method: 'GET' })
-  .middleware([cacheable(TYPES.contactType)])
+  // Only the move-in form offers rooms, but a function's tags are the same
+  // whatever it's asked for: a room sync purges the other two forms as well.
+  .middleware([cacheable(TYPES.contactType, [ROOMS_CACHE_TAG])])
   .validator(byContactType)
   .handler(async ({ data: { locale, slug } }) => {
-    const { data } = await sanityFetch({ query: contactTypeQuery, params: { locale, slug } })
-    return data
+    const [{ data: contactType }, rooms] = await Promise.all([
+      sanityFetch({ query: contactTypeQuery, params: { locale, slug } }),
+      // The rooms a visitor can ask to move into.
+      slug === 'move-in' ? getRoomsByHouse() : null
+    ])
+    return { contactType, rooms }
   })
 
 export const getHousePage = createServerFn({ method: 'GET' })

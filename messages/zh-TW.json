@@ -71,10 +71,14 @@
     "fully_booked": "已滿房"
   },
   "HouseRooms": {
-    "heading": "房間空置情況",
+    "heading": "空房資訊",
     "room": "{number}號房",
-    "now": "現在",
-    "date_unknown": "日期待定"
+    "now": "即可入住",
+    "from_date": "{date}起",
+    "available_from": "{date}起可入住",
+    "date_unknown": "日期待定",
+    "price": "{price}起",
+    "fully_booked": "目前已滿房"
   },
   "HouseBuilding": {
     "floors_label": "樓層",
@@ -167,6 +171,14 @@
         "optional": "（選填）"
       },
       "privacy_policy_agreement": "送出此表單即表示您同意<link>隱私權政策</link>。",
+      "rooms": {
+        "label": "房間",
+        "choose": "選擇房間",
+        "empty": "找不到房間。",
+        "done": "完成",
+        "remove": "移除{room}",
+        "optional": "（選填）"
+      },
       "stay_duration": {
         "options": {
           "long_term": "長期",

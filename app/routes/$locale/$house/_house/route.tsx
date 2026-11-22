@@ -41,6 +41,7 @@ function HouseLayout() {
           houses={houseTitles}
           // Site Settings' Room Availability field, which draft mode previews.
           rooms={settings?.roomAvailability ? rooms : null}
+          roomsNote={settings?.roomAvailabilityNote}
           // Presentation opens the field from the badge or the timeline.
           roomsDataSanity={
             settings

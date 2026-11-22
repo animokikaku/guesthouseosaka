@@ -31,7 +31,7 @@ const inquiry = {
 
 // Far enough ahead that "today or later" never depends on the clock.
 const tour = { ...inquiry, date: '2099-01-15', hour: '14:00' } as const
-const moveIn = { ...inquiry, date: '2099-01-15', stayDuration: '3-months' } as const
+const moveIn = { ...inquiry, rooms: [], date: '2099-01-15', stayDuration: '3-months' } as const
 
 const forms = [
   { name: 'tour', schema: createTourFormSchema(t), valid: tour },
@@ -132,6 +132,22 @@ describe('tour form', () => {
 describe('move-in form', () => {
   const schema = createMoveInFormSchema(t)
 
+  it('keeps the rooms of the selected houses, and drops the others', () => {
+    const rooms = ['orange-208', 'apple-402', 'orange-10A']
+
+    expect(schema.parse({ ...moveIn, rooms }).rooms).toEqual(['orange-208', 'orange-10A'])
+    expect(schema.parse({ ...moveIn, places: ['orange', 'apple'], rooms }).rooms).toEqual(rooms)
+  })
+
+  it.each([
+    ['of an unknown house', 'mango-208'],
+    ['without a room number', 'orange-'],
+    ['with anything but a room number', 'orange-<b>208</b>'],
+    ['with a room number too long', 'orange-12345678901']
+  ])('rejects a room %s', (_name, room) => {
+    expect(schema.safeParse({ ...moveIn, rooms: [room] }).success).toBe(false)
+  })
+
   it.each(['1-month', '3-months', 'long-term'])('accepts a %s stay', (stayDuration) => {
     expect(schema.safeParse({ ...moveIn, stayDuration }).success).toBe(true)
   })
@@ -165,6 +181,19 @@ describe('contactFormPayloadSchema', () => {
     ['other', inquiry]
   ])('accepts a %s submission', (type, data) => {
     expect(contactFormPayloadSchema.safeParse({ type, data }).success).toBe(true)
+  })
+
+  it('takes a move-in submission without rooms, from a page older than the field', () => {
+    const { rooms: _rooms, ...data } = moveIn
+    const parsed = contactFormPayloadSchema.parse({ type: 'move-in', data })
+
+    expect(parsed).toMatchObject({ type: 'move-in', data: { rooms: [] } })
+  })
+
+  it('still checks the rooms a move-in submission gives', () => {
+    const data = { ...moveIn, rooms: ['orange-<b>208</b>'] }
+
+    expect(contactFormPayloadSchema.safeParse({ type: 'move-in', data }).success).toBe(false)
   })
 
   // The server re-validates against the schema the type names, so a request

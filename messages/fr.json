@@ -71,10 +71,14 @@
     "fully_booked": "Complet"
   },
   "HouseRooms": {
-    "heading": "Disponibilité des chambres",
+    "heading": "Chambres bientôt disponibles",
     "room": "Chambre {number}",
-    "now": "Maintenant",
-    "date_unknown": "Date à confirmer"
+    "now": "Disponible maintenant",
+    "from_date": "{date}",
+    "available_from": "Disponible à partir du {date}",
+    "date_unknown": "Date à confirmer",
+    "price": "dès {price}",
+    "fully_booked": "Actuellement complet"
   },
   "HouseBuilding": {
     "floors_label": "Étages",
@@ -167,6 +171,14 @@
         "optional": "(facultatif)"
       },
       "privacy_policy_agreement": "En soumettant ce formulaire, vous acceptez la <link>Politique de confidentialité</link>.",
+      "rooms": {
+        "label": "Chambres",
+        "choose": "Choisir des chambres",
+        "empty": "Aucune chambre trouvée.",
+        "done": "Terminé",
+        "remove": "Retirer {room}",
+        "optional": "(facultatif)"
+      },
       "stay_duration": {
         "options": {
           "long_term": "Long séjour",

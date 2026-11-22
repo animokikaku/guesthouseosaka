@@ -6,8 +6,8 @@ import { useLocale, useTranslations } from 'use-intl'
 
 /**
  * The house's most useful availability fact: rooms free now, else rooms
- * opening soon, else fully booked. Links to the timeline (`#availability`)
- * unless the house is fully booked, which has none.
+ * opening soon, else fully booked. Links to the house's "Upcoming Vacancies"
+ * section (`#availability`) unless it's fully booked, with no rooms to list.
  */
 export function HouseAvailability({
   house,

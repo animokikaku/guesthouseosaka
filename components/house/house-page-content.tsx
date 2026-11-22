@@ -37,12 +37,15 @@ export function HousePageContent({
   building,
   houses,
   rooms,
+  roomsNote,
   roomsDataSanity
 }: NonNullable<HouseQueryResult> & {
   houses: HouseTitles
-  /** Null hides the badge and the timeline: when D1 has nothing recent, or Site Settings turn them off. */
+  /** Null hides the badge and the "Upcoming Vacancies" section: when D1 has nothing recent, or Site Settings turn them off. */
   rooms: RoomAvailability | null
-  /** Site Settings' Room Availability field, for Presentation to open from the badge and the timeline. */
+  /** Site Settings' note under the section's title, saying what the prices include. */
+  roomsNote?: string | null
+  /** Site Settings' Room Availability field, for Presentation to open from the badge and the section. */
   roomsDataSanity?: string
 }) {
   const href = galleryLink(useLocale(), slug)
@@ -93,9 +96,15 @@ export function HousePageContent({
                   building={building}
                   // `HousePricing` renders nothing without rows.
                   hasPricing={Boolean(pricing?.length)}
-                >
-                  {rooms && <HouseRooms rooms={rooms} data-sanity={roomsDataSanity} />}
-                </HouseAbout>
+                />
+                {rooms && (
+                  <HouseRooms
+                    house={slug}
+                    rooms={rooms}
+                    note={roomsNote}
+                    data-sanity={roomsDataSanity}
+                  />
+                )}
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
                   featuredAmenities={featuredAmenities?.map(toAmenityItem) ?? []}

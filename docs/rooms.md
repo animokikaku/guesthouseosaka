@@ -2,7 +2,9 @@
 
 The site copies the room tables of the houses' shares.house listings into a D1
 database, `guesthouseosaka-rooms` (bound as `ROOMS_DB`), and shows them on the
-house pages. Nothing else stores rooms.
+house pages, the home page and the move-in form (see
+[Reading rooms in the site](#reading-rooms-in-the-site)). Nothing else stores
+rooms.
 
 ## How a sync works
 
@@ -11,9 +13,10 @@ house pages. Nothing else stores rooms.
 (`lib/rooms.server.ts`), then purges the cached pages. An EventBridge rule in
 AWS Tokyo calls it every hour (see [Schedule](#schedule)).
 
-Site Settings' **Room Availability** field turns the feature on and off, from
-its "…" menu (**Show on the site** / **Hide from the site**).
-While it's off in the published Site Settings, the house pages show no rooms,
+Site Settings' **Room Availability** field, in the **Vacancies** tab, turns the
+feature on and off, from its "…" menu (**Show on the site** / **Hide from the
+site**).
+While it's off in the published Site Settings, the site shows no rooms,
 and the hourly call does nothing (it answers `{"skipped": true}`). If it can't
 read Site Settings, it syncs anyway, which does no harm. The Studio's **Sync
 now** always syncs (see [Running it](#running-it)).
@@ -101,8 +104,9 @@ add `STRICT` to any new table in the generated SQL.
 
 ## Running it
 
-In the Studio, **Site Settings** heads the **Room Availability** field as it
-heads the others (`studio/components/room-availability-input.tsx`). Its **…**
+In the Studio, **Site Settings** heads the **Room Availability** field, in its
+**Vacancies** tab, as it heads the others
+(`studio/components/room-availability-input.tsx`). Its **…**
 menu (`studio/actions/room-availability-actions.ts`, ahead of the Studio's
 copy and paste) has:
 
@@ -154,24 +158,47 @@ is refused as incomplete on every run until synced once with `?force=1`.
 
 `getRoomAvailability(house)` in `lib/rooms.server.ts` maps the house to its
 property ID and reads its listed rooms that are available or upcoming (the site
-doesn't show occupied ones). `toRoomAvailability` (`lib/rooms.ts`) splits them
-into rooms free now and rooms free later, counting an upcoming room whose date
-has come (in Japan) as free now. `getRoomAvailability` returns null when the
-listing has never synced, last synced over two days ago, or D1 fails.
+doesn't show occupied ones). `getRoomsByHouse()` reads every house's in one go,
+for the pages that show them all. `toRoomAvailability` (`lib/rooms.ts`) splits a
+house's rooms into those free now and those free later, counting an upcoming
+room whose date has come (in Japan) as free now, and prices each at its rent
+plus its management and common fee (no price when the listing gives either
+none). A house's rooms are null when its listing has never synced, last synced
+over two days ago, or D1 fails.
 
-The house page shows a badge with the counts
-(`components/house/house-availability.tsx`), linking to a timeline of when those
-rooms free up in its `#availability` section
-(`components/house/house-rooms.tsx`). A fully booked house has no timeline, and
-its "Fully booked" badge no link. Null hides both. Both also show only while
-**Room Availability** is on in Site Settings, which the house route reads with
-the layout's settings, so Presentation previews it from a draft before
-publishing.
+Three places show them, each only while **Room Availability** is on in Site
+Settings, which their routes read with the layout's settings, so Presentation
+previews it from a draft before publishing:
+
+- **The house page** has a badge with the counts
+  (`components/house/house-availability.tsx`), linking to its "Upcoming
+  Vacancies" section, `#availability` (`components/house/house-rooms.tsx`): a
+  timeline of when the rooms free up, one step per date, each step headed by an
+  icon and "Available now" or the date. Under the title, a sentence says what
+  the prices include: Site Settings' **Note** (`roomAvailabilityNote`, in the
+  **Vacancies** tab), required there, one per language, English standing in for
+  a language without one. The site has no wording of its own for it: until a
+  note is published, the title stands alone. The title itself is the site's, as
+  the other sections' are. A fully booked house's section says so
+  in place of the timeline, and its "Fully booked" badge links nowhere. Null
+  hides both.
+- **The home page** shows the same badge under each house
+  (`components/home/collection.tsx`); a house whose rooms are null has none.
+- **The move-in form** has an optional "Rooms" field
+  (`components/forms/fields/rooms-field.tsx`) offering the rooms of the houses
+  selected in "Places": a combobox on a wide screen, a sheet from the bottom on
+  a phone. It's hidden when those houses have no rooms to offer. Each room on a
+  house page's timeline links to the form as `?room=orange-208` (`roomKey`),
+  which selects the house and the room, and sets the move-in date to the room's
+  when it isn't free yet; a room that isn't on offer is ignored. The form sends
+  the chosen rooms as keys, without those of a house unselected since, and the
+  staff email lists them (`MoveInRequestEmail`).
 
 ## Cache
 
-House pages and their data responses are cached for a day (see
-`lib/cache-control.ts`) and tagged `rooms` as well as with their Sanity types. After syncing,
+The house pages, the home page and the contact forms, and their data responses,
+are cached for a day (see `lib/cache-control.ts`) and tagged `rooms` as well as
+with their Sanity types. After syncing,
 a run purges the `rooms` tag only when the cached pages may be out of date
 (`needsPurge` in `lib/rooms-sync/sync.server.ts`):
 

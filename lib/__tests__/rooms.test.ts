@@ -3,8 +3,13 @@ import type { RoomStatus } from '../rooms-sync/room'
 
 const TODAY = '2026-11-02'
 
-function room(roomNumber: string, status: RoomStatus, availableFrom: string | null = null) {
-  return { roomNumber, status, availableFrom, rent: 46000 }
+function room(
+  roomNumber: string,
+  status: RoomStatus,
+  availableFrom: string | null = null,
+  fees: { rent: number | null; commonFee: number | null } = { rent: 46000, commonFee: 12000 }
+) {
+  return { roomNumber, status, availableFrom, ...fees }
 }
 
 /** The room numbers of each list, in order. */
@@ -59,9 +64,22 @@ describe('toRoomAvailability', () => {
   it('gives the rooms without their status, and the day it split them on', () => {
     expect(toRoomAvailability([room('101', 'available')], TODAY)).toEqual({
       today: TODAY,
-      available: [{ roomNumber: '101', availableFrom: null, rent: 46000 }],
+      available: [{ roomNumber: '101', availableFrom: null, price: 58000 }],
       upcoming: []
     })
+  })
+
+  it('prices a room at its rent plus its common fee, or not at all without either', () => {
+    const { available } = toRoomAvailability(
+      [
+        room('101', 'available', null, { rent: 41000, commonFee: 12000 }),
+        room('102', 'available', null, { rent: 41000, commonFee: null }),
+        room('103', 'available', null, { rent: null, commonFee: 12000 })
+      ],
+      TODAY
+    )
+
+    expect(available.map(({ price }) => price)).toEqual([53000, null, null])
   })
 })
 

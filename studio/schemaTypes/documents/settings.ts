@@ -9,6 +9,7 @@ export const settings = defineType({
   icon: CogIcon,
   groups: [
     { name: 'site', title: 'Site', default: true },
+    { name: 'vacancies', title: 'Vacancies' },
     { name: 'organization', title: 'Organization' }
   ],
   fields: [
@@ -37,14 +38,25 @@ export const settings = defineType({
       group: 'site',
       of: [defineArrayMember({ type: 'socialLink' })]
     }),
+
+    // Vacancies group (see docs/rooms.md)
     defineField({
       name: 'roomAvailability',
       title: 'Room Availability',
       type: 'boolean',
-      description: 'Shows rooms on the house pages, synced hourly from shares.house.',
-      group: 'site',
+      description: 'Shows rooms on the site, synced hourly from shares.house.',
+      group: 'vacancies',
       initialValue: false,
       components: { input: RoomAvailabilityInput }
+    }),
+    defineField({
+      name: 'roomAvailabilityNote',
+      title: 'Note',
+      type: 'internationalizedArrayString',
+      description:
+        'Shown under the “Upcoming Vacancies” title on the house pages, to say what the prices include.',
+      group: 'vacancies',
+      validation: (rule) => rule.required()
     }),
 
     // Organization group (JSON-LD schema)

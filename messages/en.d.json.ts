@@ -74,10 +74,14 @@ declare const messages: {
     "fully_booked": "Fully booked"
   },
   "HouseRooms": {
-    "heading": "Room availability",
+    "heading": "Upcoming Vacancies",
     "room": "Room {number}",
-    "now": "Now",
-    "date_unknown": "Date TBC"
+    "now": "Available now",
+    "from_date": "{date}",
+    "available_from": "Available from {date}",
+    "date_unknown": "Date TBC",
+    "price": "{price}~",
+    "fully_booked": "Currently fully booked"
   },
   "HouseBuilding": {
     "floors_label": "Floors",
@@ -170,6 +174,14 @@ declare const messages: {
         "optional": "(optional)"
       },
       "privacy_policy_agreement": "By submitting this form, you agree to the <link>Privacy Policy</link>.",
+      "rooms": {
+        "label": "Rooms",
+        "choose": "Choose rooms",
+        "empty": "No rooms found.",
+        "done": "Done",
+        "remove": "Remove {room}",
+        "optional": "(optional)"
+      },
       "stay_duration": {
         "options": {
           "long_term": "Long term",

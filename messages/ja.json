@@ -74,7 +74,11 @@
     "heading": "空室状況",
     "room": "{number}号室",
     "now": "即入居可",
-    "date_unknown": "日付未定"
+    "from_date": "{date}〜",
+    "available_from": "{date}から入居可",
+    "date_unknown": "日付未定",
+    "price": "{price}〜",
+    "fully_booked": "現在、満室です"
   },
   "HouseBuilding": {
     "floors_label": "階数",
@@ -167,6 +171,14 @@
         "optional": "（任意）"
       },
       "privacy_policy_agreement": "このフォームを送信することで、<link>プライバシーポリシー</link>に同意することになります。",
+      "rooms": {
+        "label": "部屋",
+        "choose": "部屋を選ぶ",
+        "empty": "該当する部屋がありません",
+        "done": "完了",
+        "remove": "{room}を削除",
+        "optional": "（任意）"
+      },
       "stay_duration": {
         "options": {
           "long_term": "長期",

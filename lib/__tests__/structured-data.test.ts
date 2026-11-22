@@ -34,7 +34,8 @@ describe('organizationJsonLd', () => {
     socialLinks: [
       { _key: 'ig', icon: 'instagram', label: 'Instagram', url: 'https://instagram.com/x' }
     ],
-    roomAvailability: false
+    roomAvailability: false,
+    roomAvailabilityNote: null
   }
 
   it('describes the business with the contact details from the settings', () => {

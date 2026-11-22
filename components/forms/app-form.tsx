@@ -2,6 +2,7 @@ import { default as InputField } from '@/components/forms/fields/input-field'
 import { default as InputGroupField } from '@/components/forms/fields/input-group-field'
 import { default as MessageField } from '@/components/forms/fields/message-field'
 import { default as PrivacyPolicyField } from '@/components/forms/fields/privacy-policy-field'
+import { default as RoomsField } from '@/components/forms/fields/rooms-field'
 import { default as SelectField } from '@/components/forms/fields/select-field'
 import { default as ToggleGroupField } from '@/components/forms/fields/toggle-group-field'
 import { createFormHook } from '@tanstack/react-form'
@@ -17,6 +18,7 @@ const { useAppForm, defineAppFieldGroup } = createFormHook({
     InputGroupField,
     MessageField,
     PrivacyPolicyField,
+    RoomsField,
     SelectField,
     ToggleGroupField
   },

@@ -4,15 +4,9 @@ import { TourForm } from '@/components/forms/tour-form'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { canonicalLink } from '@/lib/metadata'
 import { toContactFormConfig } from '@/lib/transforms/form'
-import { isContactType, type ContactType } from '@/lib/types'
+import { isContactType } from '@/lib/types'
 import { getContactType } from '@/sanity/lib/loaders.functions'
 import { createFileRoute, getRouteApi } from '@tanstack/react-router'
-
-const FORM_BY_SLUG = {
-  tour: TourForm,
-  'move-in': MoveInForm,
-  other: ContactForm
-} as const satisfies Record<ContactType, typeof TourForm>
 
 export const Route = createFileRoute('/$locale/contact/_form/$slug')({
   // An unknown contact type doesn't match, so the locale layout's 404 renders.
@@ -20,6 +14,10 @@ export const Route = createFileRoute('/$locale/contact/_form/$slug')({
     parse: ({ slug }) => (isContactType(slug) ? { slug } : false),
     stringify: ({ slug }) => ({ slug })
   },
+  // `?room=orange-208` (see `roomKey`): the room a house page's link asks to
+  // move into. The move-in form checks it against the rooms on offer.
+  validateSearch: (search: Record<string, unknown>): { room?: string } =>
+    typeof search.room === 'string' ? { room: search.room } : {},
   loader: ({ params: { locale, slug } }) => getContactType({ data: { locale, slug } }),
   head: ({ params: { locale, slug } }) => ({
     links: [canonicalLink({ to: '/$locale/contact/$slug', params: { slug } }, locale)]
@@ -31,13 +29,29 @@ const localeRoute = getRouteApi('/$locale')
 
 function ContactTypePage() {
   const { slug } = Route.useParams()
-  const contactType = Route.useLoaderData()
-  const { houseTitles } = localeRoute.useLoaderData()
+  const { room } = Route.useSearch()
+  const { contactType, rooms } = Route.useLoaderData()
+  const { houseTitles, settings } = localeRoute.useLoaderData()
 
   if (!contactType || houseTitles.length === 0) {
     return <PageEmptyState />
   }
 
-  const Form = FORM_BY_SLUG[slug]
-  return <Form {...toContactFormConfig(contactType)} houseTitles={houseTitles} />
+  const config = toContactFormConfig(contactType)
+  switch (slug) {
+    case 'tour':
+      return <TourForm {...config} houseTitles={houseTitles} />
+    case 'move-in':
+      return (
+        <MoveInForm
+          {...config}
+          houseTitles={houseTitles}
+          // Site Settings' Room Availability field, which draft mode previews.
+          rooms={settings?.roomAvailability ? rooms : null}
+          room={room}
+        />
+      )
+    case 'other':
+      return <ContactForm {...config} houseTitles={houseTitles} />
+  }
 }

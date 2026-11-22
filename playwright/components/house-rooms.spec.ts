@@ -1,0 +1,52 @@
+import { expect, test } from './fixtures'
+
+test('lists the rooms on a timeline of icons, a step as wide as its rooms', async ({
+  mount,
+  page
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  const component = await mount('components/house/house-rooms/WithRooms')
+  const section = component.getByRole('region', { name: 'Upcoming Vacancies' })
+
+  await expect(
+    section.getByText('Monthly prices include management and common fees.')
+  ).toBeVisible()
+  const steps = section.locator('ol > li')
+  await expect(steps).toHaveCount(4)
+  await expect(steps.nth(0)).toContainText('Available now')
+  await expect(steps.nth(1)).toContainText('Dec 8')
+  await expect(steps.nth(1).getByRole('link')).toHaveCount(2)
+  await expect(steps.nth(2)).toContainText('Feb 1, 2027')
+  await expect(steps.nth(3)).toContainText('Date TBC')
+
+  // The step's icon stands where the timeline's dot would, without its ring.
+  const icon = steps.nth(1).locator('[data-slot=timeline-indicator]')
+  await expect(icon.locator('svg')).toBeVisible()
+  await expect(icon).toHaveCSS('border-top-width', '0px')
+
+  // Steps keep to their rooms' width, the same gap apart, rather than sharing the row.
+  await expect(steps.nth(0)).toHaveCSS('flex-grow', '0')
+  await expect(steps.nth(0)).toHaveCSS('padding-right', '56px')
+
+  await expect(section.getByRole('link', { name: /Room 208/ })).toHaveAttribute(
+    'href',
+    '/en/contact/move-in?room=orange-208#tabs'
+  )
+})
+
+test('scrolls sideways on a phone', async ({ mount, page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  const component = await mount('components/house/house-rooms/WithRooms')
+  const viewport = component.locator('[data-slot=scroll-area-viewport]')
+
+  await expect(component.getByText('Available now')).toBeVisible()
+  expect(await viewport.evaluate((element) => element.scrollWidth > element.clientWidth)).toBe(true)
+})
+
+test('says a fully booked house is', async ({ mount }) => {
+  const component = await mount('components/house/house-rooms/FullyBooked')
+  const section = component.getByRole('region', { name: 'Upcoming Vacancies' })
+
+  await expect(section.getByText('Currently fully booked')).toBeVisible()
+  await expect(section.getByRole('list')).toHaveCount(0)
+})

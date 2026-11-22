@@ -70,7 +70,8 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
     label,
     url
   }),
-  "roomAvailability": roomAvailability == true
+  "roomAvailability": roomAvailability == true,
+  "roomAvailabilityNote": coalesce(roomAvailabilityNote[language == $locale][0].value, roomAvailabilityNote[language == "en"][0].value)
 }`)
 
 /** Whether Site Settings turn room availability on, for the hourly sync. */

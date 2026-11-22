@@ -1,3 +1,4 @@
+import { HouseAvailability } from '@/components/house/house-availability'
 import { SanityImage } from '@/components/sanity-image'
 import {
   Item,
@@ -11,6 +12,7 @@ import { assets } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 import { HOUSE_COLORS } from '@/lib/house-theme'
 import { toGalleryImageProps } from '@/lib/gallery-image'
+import type { RoomsByHouse } from '@/lib/rooms'
 import type { HomePageQueryResult } from '@/sanity.types'
 import { stegaClean } from '@sanity/client/stega'
 import { Link } from '@tanstack/react-router'
@@ -21,54 +23,72 @@ type House = NonNullable<HomePageQueryResult['houses']>[number]
 
 type CollectionProps = {
   houses: House[]
+  /** Null hides every house's badge: when Site Settings turn room availability off. */
+  rooms: RoomsByHouse | null
+  /** Site Settings' Room Availability field, for Presentation to open from a badge. */
+  roomsDataSanity?: string
   className?: string
 }
 
-export function Collection({ houses, className }: CollectionProps) {
+export function Collection({ houses, rooms, roomsDataSanity, className }: CollectionProps) {
   const locale = useLocale()
 
   return (
     <ItemGroup className={cn('grid gap-8 md:grid-cols-3', className)}>
-      {houses.map((house) => (
-        <Item
-          key={house._id}
-          variant="default"
-          // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
-          role="listitem"
-          className="h-full flex-col items-start p-0"
-        >
-          <Link
-            aria-label={house.title ? stegaClean(house.title) : house.slug}
-            to="/$locale/$house"
-            params={{ locale, house: house.slug }}
-            className="group ring-offset-background focus-visible:ring-ring/50 block w-full rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+      {houses.map((house) => {
+        // A house whose rooms aren't known has no badge (see `getRoomAvailability`).
+        const houseRooms = rooms?.[house.slug]
+        return (
+          <Item
+            key={house._id}
+            variant="default"
+            // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
+            role="listitem"
+            className="h-full flex-col items-start p-0"
           >
-            <ItemHeader className="relative overflow-hidden rounded-sm">
-              <CollectionImage image={house.image} />
-              <div
-                className={cn(
-                  'pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 pointer-fine:group-hover:opacity-100 group-focus-visible:opacity-100',
-                  HOUSE_COLORS[house.slug].accent
-                )}
-              >
-                {/* Lazy, not eager: the overlay is opacity-0 until hover, and
+            <Link
+              aria-label={house.title ? stegaClean(house.title) : house.slug}
+              to="/$locale/$house"
+              params={{ locale, house: house.slug }}
+              className="group ring-offset-background focus-visible:ring-ring/50 block w-full rounded-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            >
+              <ItemHeader className="relative overflow-hidden rounded-sm">
+                <CollectionImage image={house.image} />
+                <div
+                  className={cn(
+                    'pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 pointer-fine:group-hover:opacity-100 group-focus-visible:opacity-100',
+                    HOUSE_COLORS[house.slug].accent
+                  )}
+                >
+                  {/* Lazy, not eager: the overlay is opacity-0 until hover, and
                     the collection sits a full viewport below the hero — so
                     eager loading cost three requests during the initial load
                     for art nobody had asked to see. the browser starts these as
                     the section scrolls into view, well ahead of any hover. */}
-                <Image
-                  {...assets[house.slug].icon}
-                  className="size-12 object-contain opacity-90 drop-shadow-lg"
-                />
-              </div>
-            </ItemHeader>
-          </Link>
-          <ItemContent className="self-start">
-            <ItemTitle className="text-lg">{house.title}</ItemTitle>
-            <ItemDescription className="text-start">{house.description}</ItemDescription>
-          </ItemContent>
-        </Item>
-      ))}
+                  <Image
+                    {...assets[house.slug].icon}
+                    className="size-12 object-contain opacity-90 drop-shadow-lg"
+                  />
+                </div>
+              </ItemHeader>
+            </Link>
+            <ItemContent className="self-start">
+              <ItemTitle className="text-lg">{house.title}</ItemTitle>
+              <ItemDescription className="text-start">{house.description}</ItemDescription>
+              {houseRooms && (
+                // At the card's foot, so the badges line up when a description wraps.
+                <div className="mt-auto pt-1">
+                  <HouseAvailability
+                    house={house.slug}
+                    rooms={houseRooms}
+                    data-sanity={roomsDataSanity}
+                  />
+                </div>
+              )}
+            </ItemContent>
+          </Item>
+        )
+      })}
     </ItemGroup>
   )
 }

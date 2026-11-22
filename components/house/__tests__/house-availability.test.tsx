@@ -6,7 +6,7 @@ function rooms(available: number, upcoming: number): RoomAvailability {
   const room = (index: number): ListedRoom => ({
     roomNumber: `${100 + index}`,
     availableFrom: null,
-    rent: 46000
+    price: 58000
   })
   return {
     today: '2026-11-02',
@@ -34,7 +34,7 @@ describe('HouseAvailability', () => {
     )
   })
 
-  it('shows a fully booked house without a link, as it has no timeline', () => {
+  it('shows a fully booked house without a link, as it has no rooms to list', () => {
     render(<HouseAvailability house="lemon" rooms={rooms(0, 0)} />)
 
     expect(screen.getByText('Fully booked')).toBeInTheDocument()

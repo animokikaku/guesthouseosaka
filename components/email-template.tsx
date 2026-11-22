@@ -1,3 +1,4 @@
+import { parseRoomKey } from '@/lib/rooms'
 import type { ContactFormFields } from '@/lib/schemas/contact-form'
 import type { HouseIdentifier } from '@/lib/types'
 import { Body, Container, Head, Heading, Hr, Html, Preview, Section, Text } from 'react-email'
@@ -44,8 +45,20 @@ export function TourRequestEmail({ data }: TourRequestEmailProps) {
 // --- Move-in Request Email ---
 
 interface MoveInRequestEmailProps {
-  data: Pick<ContactFormFields, 'places' | 'date' | 'stayDuration' | 'account' | 'message'>
+  data: Pick<
+    ContactFormFields,
+    'places' | 'rooms' | 'date' | 'stayDuration' | 'account' | 'message'
+  >
 }
+
+/** "オレンジハウス 208号室, …" for the rooms the visitor chose (see `roomKey`). */
+const formatRooms = (rooms: string[]) =>
+  rooms
+    .flatMap((key) => {
+      const room = parseRoomKey(key)
+      return room ? [`${formatPlaces([room.house])} ${room.roomNumber}号室`] : []
+    })
+    .join(', ')
 
 const stayDurationLabels: Record<ContactFormFields['stayDuration'], string> = {
   '1-month': '1ヶ月以上',
@@ -60,6 +73,11 @@ export function MoveInRequestEmail({ data }: MoveInRequestEmailProps) {
       heading="入居希望"
       data={data}
     >
+      {data.rooms.length > 0 && (
+        <Text style={text}>
+          <strong>希望部屋:</strong> {formatRooms(data.rooms)}
+        </Text>
+      )}
       <Text style={text}>
         <strong>希望日:</strong> {formatDate(data.date)}
       </Text>

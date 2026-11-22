@@ -1,4 +1,5 @@
 import { timeZone } from '@/i18n/formats'
+import { parseRoomKey } from '@/lib/rooms'
 import { HouseIdentifierValues } from '@/lib/types'
 import { z } from '@/lib/zod'
 import type { Messages } from 'use-intl'
@@ -40,6 +41,9 @@ function isContactHour(value: string) {
   return totalMinutes >= 10 * 60 && totalMinutes <= 20 * 60
 }
 
+/** A room as the move-in form holds it (see `roomKey`): a house, then a room number as the listings write them. */
+const ROOM_KEY = new RegExp(`^(${HouseIdentifierValues.join('|')})-[\\dA-Za-z-]{1,10}$`)
+
 /** The longest message the forms accept, which the message field counts down from. */
 export const MESSAGE_MAX_LENGTH = 3000
 
@@ -50,6 +54,8 @@ export function createContactFormSchema(messages?: ValidationMessages) {
     places: z
       .array(z.enum(HouseIdentifierValues))
       .check(z.minLength(1, m('places_min')), z.maxLength(3, m('places_max'))),
+    // The rooms the visitor is interested in, if any. No messages: the field only offers valid ones.
+    rooms: z.array(z.string().check(z.regex(ROOM_KEY))).check(z.maxLength(30)),
     account: z.object({
       name: z.string().check(z.minLength(2, m('name_min')), z.maxLength(100, m('name_max'))),
       age: z.string().check(z.refine(isPositiveNumberString, error(m('age_positive')))),
@@ -82,14 +88,27 @@ export function createTourFormSchema(messages?: ValidationMessages) {
 }
 
 export function createMoveInFormSchema(messages?: ValidationMessages) {
-  return z.pick(createContactFormSchema(messages), {
+  const fields = z.pick(createContactFormSchema(messages), {
     places: true,
+    rooms: true,
     date: true,
     stayDuration: true,
     account: true,
     message: true,
     privacyPolicy: true
   })
+  // The form keeps the rooms of a house the visitor unselects, in case they
+  // select it again, and shows them only while it is selected. They aren't sent.
+  return z.pipe(
+    fields,
+    z.transform(({ rooms, ...data }) => ({
+      ...data,
+      rooms: rooms.filter((key) => {
+        const room = parseRoomKey(key)
+        return room !== null && data.places.includes(room.house)
+      })
+    }))
+  )
 }
 
 export function createGeneralInquirySchema(messages?: ValidationMessages) {
@@ -117,7 +136,15 @@ export const contactFormPayloadSchema = z.discriminatedUnion('type', [
   }),
   z.object({
     type: z.literal('move-in'),
-    data: createMoveInFormSchema()
+    // A page loaded before the form had its "Rooms" field sends none.
+    data: z.pipe(
+      z.transform((data) =>
+        typeof data === 'object' && data !== null && !('rooms' in data)
+          ? { ...data, rooms: [] }
+          : data
+      ),
+      createMoveInFormSchema()
+    )
   }),
   z.object({
     type: z.literal('other'),
