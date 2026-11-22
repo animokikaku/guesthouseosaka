@@ -23,7 +23,26 @@ test('shows each house’s availability right after its title', async ({ mount, 
   expect(beside!.y + beside!.height).toBeLessThan(title!.y + title!.height)
 })
 
-test('puts every badge under its title below the widest layout', async ({ mount, page }) => {
+test('keeps the badge after its title with one card across', async ({ mount, page }) => {
+  // A tablet upright: the cards stack, each as wide as the page.
+  await page.setViewportSize({ width: 600, height: 900 })
+  const component = await mount(story)
+  const houses = component.getByRole('listitem')
+
+  for (const [index, name, label] of [
+    [0, 'Orange House', '1 room available now'],
+    [1, 'Apple House', '1 room opening soon'],
+    [2, 'Lemon House', 'Fully booked']
+  ] as const) {
+    const title = await houses.nth(index).getByText(name, { exact: true }).boundingBox()
+    const badge = await houses.nth(index).getByText(label).boundingBox()
+    expect(badge!.x - (title!.x + title!.width)).toBeCloseTo(8, 0)
+    expect(badge!.y).toBeGreaterThan(title!.y)
+    expect(badge!.y + badge!.height).toBeLessThan(title!.y + title!.height)
+  }
+})
+
+test('puts every badge under its title with three narrow cards across', async ({ mount, page }) => {
   // Three cards across, each narrower than at full width.
   await page.setViewportSize({ width: 1024, height: 800 })
   const component = await mount(story)

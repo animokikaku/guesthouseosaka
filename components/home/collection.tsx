@@ -74,12 +74,13 @@ export function Collection({ houses, rooms, roomsDataSanity, className }: Collec
             </Link>
             <ItemContent className="w-full">
               {/*
-               * The badge follows the title on its line once the cards are at
-               * their widest, where the longest badge fits beside any title.
-               * Narrower, it goes under the title in every card, rather than
-               * only in those where it doesn't fit.
+               * The badge follows the title on its line where a card has the
+               * width for it: one card across (a phone too narrow for both puts
+               * the badge under), and three across at their widest. Between the
+               * two, three narrow cards across, it goes under the title in every
+               * card, rather than only in those where it doesn't fit.
                */}
-              <div className="flex flex-col items-start gap-1 xl:flex-row xl:items-center xl:gap-2">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 md:flex-col md:items-start xl:flex-row xl:items-center">
                 <ItemTitle className="text-lg">{house.title}</ItemTitle>
                 {houseRooms && (
                   <HouseAvailability
