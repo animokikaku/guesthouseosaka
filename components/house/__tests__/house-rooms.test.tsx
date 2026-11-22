@@ -22,32 +22,35 @@ function section() {
   return screen.getByRole('region', { name: 'Upcoming Vacancies' })
 }
 
-/** Each timeline step's text as shown, e.g. `['Available now', 'Room 106', '¥53,000']`. */
-function steps() {
+/** Each room as shown: its name, when it's free, and its price if it has one. */
+function items() {
   return within(section())
     .getAllByRole('listitem')
-    .filter((item) => item.parentElement?.tagName === 'OL')
-    .map((step) => {
-      const label = step.querySelector('[data-slot=timeline-date]')
+    .map((item) => {
+      const when = item.querySelector('[data-slot=item-description]')
       return [
-        // A date's label also holds its sentence for screen readers.
-        label?.querySelector('[aria-hidden]') ?? label,
-        ...step.querySelectorAll('ul > li > a > :not(svg)')
-      ].map((element) => element?.textContent)
+        // The title holds the price after the name.
+        item.querySelector('[data-slot=item-title]')?.firstChild,
+        // A date also holds its sentence for screen readers.
+        when?.querySelector('[aria-hidden]:not(svg)') ?? when,
+        ...item.querySelectorAll('[data-slot=room-price]')
+      ].map((node) => node?.textContent)
     })
 }
 
 describe('HouseRooms', () => {
-  it('puts rooms free now first, then one step per date, undated last', () => {
+  it('lists rooms free now first, then the others as given, each with when it is free', () => {
     renderRooms({
       available: [room('106', null, 53000), room('201', null)],
       upcoming: [room('208', '2026-12-11'), room('209', '2026-12-11'), room('309', null)]
     })
 
-    expect(steps()).toEqual([
-      ['Available now', 'Room 106', '¥53,000', 'Room 201', '¥58,000'],
-      ['Dec 11', 'Room 208', '¥58,000', 'Room 209', '¥58,000'],
-      ['Date TBC', 'Room 309', '¥58,000']
+    expect(items()).toEqual([
+      ['Room 106', 'Available now', '¥53,000'],
+      ['Room 201', 'Available now', '¥58,000'],
+      ['Room 208', 'Dec 11', '¥58,000'],
+      ['Room 209', 'Dec 11', '¥58,000'],
+      ['Room 309', 'Date TBC', '¥58,000']
     ])
   })
 
@@ -57,27 +60,27 @@ describe('HouseRooms', () => {
     expect(within(section()).getByText(NOTE)).toBeInTheDocument()
   })
 
-  it.each([null, ''])('has only its title over the timeline without a note (%j)', (note) => {
+  it.each([null, ''])('has only its title over the rooms without a note (%j)', (note) => {
     renderRooms({ available: [room('106', null)] }, note)
 
-    expect(section().querySelector('p')).not.toBeInTheDocument()
-    expect(steps()).toEqual([['Available now', 'Room 106', '¥58,000']])
+    expect(section().querySelector(':scope > div > p')).not.toBeInTheDocument()
+    expect(items()).toEqual([['Room 106', 'Available now', '¥58,000']])
   })
 
   it('gives the year only for a date in another year', () => {
     renderRooms({ upcoming: [room('204', '2026-12-22'), room('309', '2027-02-01')] })
 
-    expect(steps().map(([date]) => date)).toEqual(['Dec 22', 'Feb 1, 2027'])
+    expect(items().map(([, when]) => when)).toEqual(['Dec 22', 'Feb 1, 2027'])
   })
 
-  it('tells screen readers a date is when the rooms free up', () => {
+  it('tells screen readers a date is when the room frees up', () => {
     renderRooms({ upcoming: [room('309', '2027-02-01')] })
 
     const date = screen.getByText('Available from Feb 1, 2027').closest('time')
     expect(date).toHaveAttribute('datetime', '2027-02-01')
   })
 
-  it('links each room to the move-in form, asking for that room', () => {
+  it('makes each room a link to the move-in form, asking for that room', () => {
     renderRooms({ upcoming: [room('208', '2026-12-11')] })
 
     expect(screen.getByRole('link', { name: /Room 208/ })).toHaveAttribute(
@@ -89,10 +92,10 @@ describe('HouseRooms', () => {
   it('leaves out a price the listing does not give', () => {
     renderRooms({ upcoming: [room('204', '2026-12-22', null)] })
 
-    expect(steps()).toEqual([['Dec 22', 'Room 204']])
+    expect(items()).toEqual([['Room 204', 'Dec 22']])
   })
 
-  it('says a fully booked house is, in place of the timeline and the note', () => {
+  it('says a fully booked house is, in place of the rooms and the note', () => {
     renderRooms({}, NOTE)
 
     expect(within(section()).getByText('Currently fully booked')).toBeInTheDocument()

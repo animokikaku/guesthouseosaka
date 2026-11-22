@@ -173,15 +173,16 @@ previews it from a draft before publishing:
 - **The house page** has a badge with the counts
   (`components/house/house-availability.tsx`), linking to its "Upcoming
   Vacancies" section, `#availability` (`components/house/house-rooms.tsx`): a
-  timeline of when the rooms free up, one step per date, each step headed by an
-  icon and "Available now" or the date. Under the title, a sentence says what
-  the prices include: Site Settings' **Note** (`roomAvailabilityNote`, in the
-  **Vacancies** tab), required there, one per language, English standing in for
-  a language without one. The site has no wording of its own for it: until a
-  note is published, the title stands alone. The title itself is the site's, as
-  the other sections' are. A fully booked house's section says so
-  in place of the timeline, and its "Fully booked" badge links nowhere. Null
-  hides both.
+  list of the rooms, those free now first, then the rest by date, as many
+  across as fit. Each is its name, then its price, and under them an icon with
+  "Available now" or its date, and links to the move-in form. Under the title, a
+  sentence says what the prices include: Site Settings' **Note**
+  (`roomAvailabilityNote`, in the **Vacancies** tab), required there, one per
+  language, English standing in for a language without one. The site has no
+  wording of its own for it: until a note is published, the rooms follow the
+  title. The title itself is the site's, as the other sections' are. A fully
+  booked house's section says so in place of the rooms, and its "Fully booked"
+  badge links nowhere. Null hides both.
 - **The home page** shows the same badge with each house's title
   (`components/home/collection.tsx`): right after the title at full width,
   under the title below that. A house whose rooms are null has none.
