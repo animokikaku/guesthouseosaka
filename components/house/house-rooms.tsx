@@ -1,4 +1,4 @@
-import { HouseSectionHeading } from '@/components/house/house-section'
+import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import { formatRoomDate } from '@/components/house/room-date'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -14,7 +14,7 @@ import {
 import { hasRooms, roomKey, type ListedRoom, type RoomAvailability } from '@/lib/rooms'
 import type { HouseIdentifier } from '@/lib/types'
 import { Link } from '@tanstack/react-router'
-import { CalendarClockIcon, CalendarIcon, ChevronRightIcon, CircleCheckIcon } from 'lucide-react'
+import { CalendarClockIcon, CalendarIcon, CircleCheckIcon } from 'lucide-react'
 import { useFormatter, useLocale, useTranslations } from 'use-intl'
 
 /**
@@ -44,13 +44,11 @@ export function HouseRooms({
       data-sanity={dataSanity}
       className="scroll-mt-24"
     >
+      <HouseSectionHeading id="availability-title">{t('heading')}</HouseSectionHeading>
       {hasRooms(rooms) ? (
-        <>
-          {/* The note is required in the Studio; until one is published, the title stands alone. */}
-          <HouseSectionHeading id="availability-title" className={note ? 'mb-1' : undefined}>
-            {t('heading')}
-          </HouseSectionHeading>
-          {note && <p className="text-muted-foreground mb-6 text-sm">{note}</p>}
+        <HouseSectionContent>
+          {/* The note is required in the Studio; until one is published, the timeline follows the title. */}
+          {note && <p className={TEXT_CLASS}>{note}</p>}
           {/*
            * When its steps don't fit, it scrolls sideways with no scrollbar: an edge
            * with more steps past it fades out (Base UI sets how far each edge is from
@@ -60,16 +58,16 @@ export function HouseRooms({
             <RoomTimeline house={house} rooms={rooms} />
             <ScrollBar orientation="horizontal" className="invisible" />
           </ScrollArea>
-        </>
+        </HouseSectionContent>
       ) : (
-        <>
-          <HouseSectionHeading id="availability-title">{t('heading')}</HouseSectionHeading>
-          <p className="text-muted-foreground text-sm">{t('fully_booked')}</p>
-        </>
+        <p className={TEXT_CLASS}>{t('fully_booked')}</p>
       )}
     </section>
   )
 }
+
+// The section's text, as the location section writes its own under its title.
+const TEXT_CLASS = 'text-foreground text-base leading-relaxed'
 
 /** A timeline step: the rooms free from the same day. */
 interface Step {
@@ -128,15 +126,17 @@ function RoomTimeline({ house, rooms }: { house: HouseIdentifier; rooms: RoomAva
                   params={{ locale, slug: 'move-in' }}
                   search={{ room: roomKey(house, room.roomNumber) }}
                   hash="tabs"
-                  className="group/room hover:text-foreground focus-visible:ring-ring/50 inline-flex items-center gap-2 rounded-sm whitespace-nowrap outline-none focus-visible:ring-3"
+                  className="group/room focus-visible:ring-ring/50 inline-flex items-center gap-2 rounded-sm whitespace-nowrap outline-none focus-visible:ring-3"
                 >
-                  <span>{t('room', { number: room.roomNumber })}</span>
+                  {/* The room's name alone answers the pointer; its price stays as it is. */}
+                  <span className="group-hover/room:text-foreground transition-colors">
+                    {t('room', { number: room.roomNumber })}
+                  </span>
                   {room.price !== null && (
-                    <Badge variant="outline" className="group-hover/room:bg-muted tabular-nums">
+                    <Badge variant="outline" className="tabular-nums">
                       {t('price', { price: formatter.number(room.price, 'currency') })}
                     </Badge>
                   )}
-                  <ChevronRightIcon className="-ml-1 size-3.5" aria-hidden="true" />
                 </Link>
               </li>
             ))}
