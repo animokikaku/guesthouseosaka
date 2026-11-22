@@ -13,6 +13,7 @@ import {
 } from '@/components/reui/timeline'
 import { hasRooms, roomKey, type ListedRoom, type RoomAvailability } from '@/lib/rooms'
 import type { HouseIdentifier } from '@/lib/types'
+import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
 import { CalendarClockIcon, CalendarIcon, CircleCheckIcon } from 'lucide-react'
 import { useFormatter, useLocale, useTranslations } from 'use-intl'
@@ -52,9 +53,10 @@ export function HouseRooms({
           {/*
            * When its steps don't fit, it scrolls sideways with no scrollbar: an edge
            * with more steps past it fades out (Base UI sets how far each edge is from
-           * the content's).
+           * the content's). It reaches a little past the section on every side, which
+           * the timeline's padding takes back, for the rooms' hover boxes.
            */}
-          <ScrollArea className="[&_[data-slot=scroll-area-viewport]]:[mask-image:linear-gradient(to_right,transparent,#000_min(4rem,var(--scroll-area-overflow-x-start,0px)),#000_calc(100%_-_min(4rem,var(--scroll-area-overflow-x-end,0px))),transparent)]">
+          <ScrollArea className="-m-2 [&_[data-slot=scroll-area-viewport]]:[mask-image:linear-gradient(to_right,transparent,#000_min(4rem,var(--scroll-area-overflow-x-start,0px)),#000_calc(100%_-_min(4rem,var(--scroll-area-overflow-x-end,0px))),transparent)]">
             <RoomTimeline house={house} rooms={rooms} />
             <ScrollBar orientation="horizontal" className="invisible" />
           </ScrollArea>
@@ -98,7 +100,12 @@ function RoomTimeline({ house, rooms }: { house: HouseIdentifier; rooms: RoomAva
   const steps = toSteps(rooms)
 
   return (
-    <Timeline value={rooms.available.length > 0 ? 1 : 0} orientation="horizontal" render={<ol />}>
+    <Timeline
+      value={rooms.available.length > 0 ? 1 : 0}
+      orientation="horizontal"
+      render={<ol />}
+      className="p-2"
+    >
       {steps.map((step, index) => (
         <TimelineItem
           key={step.date ?? 'unknown'}
@@ -119,21 +126,27 @@ function RoomTimeline({ house, rooms }: { house: HouseIdentifier; rooms: RoomAva
           <TimelineSeparator />
           <TimelineContent render={<ul />}>
             {step.rooms.map((room) => (
-              <li key={room.roomNumber}>
+              // A step's rooms each answer the pointer along their own row.
+              <li key={room.roomNumber} className={step.rooms.length > 1 ? 'relative' : undefined}>
                 {/*
-                 * To the move-in form, with the house and the room chosen. The link
-                 * is its whole row, and the rows' spacing is its padding, so no gap
-                 * between them is dead and none of it hangs out of the list (which
-                 * would give the timeline a second, vertical scroll). Swiping the
-                 * timeline sideways from a row scrolls it: the browser only follows
-                 * a link on a tap.
+                 * To the move-in form, with the house and the room chosen. The rows'
+                 * spacing is the links' padding, so nothing hangs out of the list
+                 * (which would give the timeline a second, vertical scroll).
+                 * Swiping the timeline sideways from a room scrolls it: the browser
+                 * only follows a link on a tap.
                  */}
                 <Link
                   to="/$locale/contact/$slug"
                   params={{ locale, slug: 'move-in' }}
                   search={{ room: roomKey(house, room.roomNumber) }}
                   hash="tabs"
-                  className="group/room focus-visible:ring-ring/50 flex items-center gap-2 rounded-sm py-1 whitespace-nowrap outline-none focus-visible:ring-3"
+                  className={cn(
+                    'group/room flex items-center gap-2 py-1 whitespace-nowrap outline-none',
+                    // What the pointer, a finger or the focus ring gets: a box wider than the link's words.
+                    'after:absolute after:rounded-lg after:transition-colors',
+                    'hover:after:bg-foreground/5 focus-visible:after:ring-ring/50 focus-visible:after:ring-3',
+                    hitBox(step.rooms.length === 1, index === steps.length - 1)
+                  )}
                 >
                   {/* The room's name alone answers the pointer; its price stays as it is. */}
                   <span className="group-hover/room:text-foreground transition-colors">
@@ -152,6 +165,21 @@ function RoomTimeline({ house, rooms }: { house: HouseIdentifier; rooms: RoomAva
       ))}
     </Timeline>
   )
+}
+
+/**
+ * Where a room's link answers, as its `after` box. A step's only room takes
+ * the whole step, from its icon to the next step's; one of several takes its
+ * row, across the step. The timeline's padding leaves the boxes room past the
+ * first, the last and the tallest step, and the last step has no gap after it.
+ */
+function hitBox(alone: boolean, last: boolean) {
+  if (alone)
+    return cn(
+      'after:-top-10 after:-bottom-2 after:-left-2',
+      last ? 'after:-right-2' : 'after:right-2'
+    )
+  return cn('after:inset-y-0 after:-left-2', last ? 'after:-right-2' : 'after:-right-12')
 }
 
 /** A check for rooms free now, a calendar for a date, a calendar with a clock for a date to come. */
