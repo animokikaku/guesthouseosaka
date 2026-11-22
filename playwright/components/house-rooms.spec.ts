@@ -30,6 +30,10 @@ test('lists the rooms on a timeline of icons, a step as wide as its rooms', asyn
 
   const link = section.getByRole('link', { name: /Room 208/ })
   await expect(link).toHaveAttribute('href', '/en/contact/move-in?room=orange-208#tabs')
+  // Nothing hangs out of the timeline: it scrolls sideways only, never in itself.
+  const viewport = section.locator('[data-slot=scroll-area-viewport]')
+  expect(await viewport.evaluate((element) => element.scrollHeight - element.clientHeight)).toBe(0)
+
   // The whole row is the link, not only its words.
   const row = await steps.nth(1).locator('ul > li').first().boundingBox()
   const target = await link.boundingBox()

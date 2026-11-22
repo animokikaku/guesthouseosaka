@@ -117,21 +117,23 @@ function RoomTimeline({ house, rooms }: { house: HouseIdentifier; rooms: RoomAva
             <StepIcon date={step.date} />
           </TimelineIndicator>
           <TimelineSeparator />
-          <TimelineContent render={<ul />} className="space-y-2">
+          <TimelineContent render={<ul />}>
             {step.rooms.map((room) => (
               <li key={room.roomNumber}>
                 {/*
                  * To the move-in form, with the house and the room chosen. The link
-                 * is its whole row, reaching halfway to the rows above and below so
-                 * no gap between them is dead. Swiping the timeline sideways from a
-                 * row scrolls it: the browser only follows a link on a tap.
+                 * is its whole row, and the rows' spacing is its padding, so no gap
+                 * between them is dead and none of it hangs out of the list (which
+                 * would give the timeline a second, vertical scroll). Swiping the
+                 * timeline sideways from a row scrolls it: the browser only follows
+                 * a link on a tap.
                  */}
                 <Link
                   to="/$locale/contact/$slug"
                   params={{ locale, slug: 'move-in' }}
                   search={{ room: roomKey(house, room.roomNumber) }}
                   hash="tabs"
-                  className="group/room focus-visible:ring-ring/50 -my-1 flex items-center gap-2 rounded-sm py-1 whitespace-nowrap outline-none focus-visible:ring-3"
+                  className="group/room focus-visible:ring-ring/50 flex items-center gap-2 rounded-sm py-1 whitespace-nowrap outline-none focus-visible:ring-3"
                 >
                   {/* The room's name alone answers the pointer; its price stays as it is. */}
                   <span className="group-hover/room:text-foreground transition-colors">
@@ -161,7 +163,7 @@ function StepIcon({ date }: { date: Step['date'] }) {
 
 // The component's small label, larger and in full color: when a room frees up
 // matters more than which room it is.
-const LABEL_CLASS = 'text-foreground mb-2 text-sm'
+const LABEL_CLASS = 'text-foreground mb-1 text-sm'
 
 /**
  * "Available now" (`now`), "Date TBC" (null), or the date (in Japan), with the
