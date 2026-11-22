@@ -73,8 +73,8 @@ describe('the move-in form’s rooms', () => {
     openRooms()
 
     expect(screen.getAllByRole('option').map((option) => option.textContent)).toEqual([
-      'Room 103Available now¥53,000~',
-      'Room 208Dec 8¥58,000~'
+      'Room 103Available now¥53,000',
+      'Room 208Dec 8¥58,000'
     ])
     expect(screen.getByRole('group', { name: 'Orange House' })).toBeInTheDocument()
   })

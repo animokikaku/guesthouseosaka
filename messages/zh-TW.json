@@ -74,10 +74,8 @@
     "heading": "空房資訊",
     "room": "{number}號房",
     "now": "即可入住",
-    "from_date": "{date}起",
     "available_from": "{date}起可入住",
     "date_unknown": "日期待定",
-    "price": "{price}起",
     "fully_booked": "目前已滿房"
   },
   "HouseBuilding": {

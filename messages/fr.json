@@ -74,10 +74,8 @@
     "heading": "Chambres bientôt disponibles",
     "room": "Chambre {number}",
     "now": "Disponible maintenant",
-    "from_date": "{date}",
     "available_from": "Disponible à partir du {date}",
     "date_unknown": "Date à confirmer",
-    "price": "dès {price}",
     "fully_booked": "Actuellement complet"
   },
   "HouseBuilding": {

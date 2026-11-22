@@ -265,7 +265,7 @@ function RoomDetails({ room }: { room: RoomOption }) {
     when = t('now')
     Icon = CircleCheckIcon
   } else if (room.availableFrom !== null) {
-    when = t('from_date', { date: formatRoomDate(formatter, room.availableFrom, room.today) })
+    when = formatRoomDate(formatter, room.availableFrom, room.today)
     Icon = CalendarIcon
   }
 
@@ -278,7 +278,7 @@ function RoomDetails({ room }: { room: RoomOption }) {
       </span>
       {room.price !== null && (
         <Badge variant="outline" className="tabular-nums">
-          {t('price', { price: formatter.number(room.price, 'currency') })}
+          {formatter.number(room.price, 'currency')}
         </Badge>
       )}
     </>

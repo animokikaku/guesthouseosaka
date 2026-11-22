@@ -22,7 +22,7 @@ function section() {
   return screen.getByRole('region', { name: 'Upcoming Vacancies' })
 }
 
-/** Each timeline step's text as shown, e.g. `['Available now', 'Room 106', '¥53,000~']`. */
+/** Each timeline step's text as shown, e.g. `['Available now', 'Room 106', '¥53,000']`. */
 function steps() {
   return within(section())
     .getAllByRole('listitem')
@@ -45,9 +45,9 @@ describe('HouseRooms', () => {
     })
 
     expect(steps()).toEqual([
-      ['Available now', 'Room 106', '¥53,000~', 'Room 201', '¥58,000~'],
-      ['Dec 11', 'Room 208', '¥58,000~', 'Room 209', '¥58,000~'],
-      ['Date TBC', 'Room 309', '¥58,000~']
+      ['Available now', 'Room 106', '¥53,000', 'Room 201', '¥58,000'],
+      ['Dec 11', 'Room 208', '¥58,000', 'Room 209', '¥58,000'],
+      ['Date TBC', 'Room 309', '¥58,000']
     ])
   })
 
@@ -61,7 +61,7 @@ describe('HouseRooms', () => {
     renderRooms({ available: [room('106', null)] }, note)
 
     expect(section().querySelector('p')).not.toBeInTheDocument()
-    expect(steps()).toEqual([['Available now', 'Room 106', '¥58,000~']])
+    expect(steps()).toEqual([['Available now', 'Room 106', '¥58,000']])
   })
 
   it('gives the year only for a date in another year', () => {

@@ -120,13 +120,18 @@ function RoomTimeline({ house, rooms }: { house: HouseIdentifier; rooms: RoomAva
           <TimelineContent render={<ul />} className="space-y-2">
             {step.rooms.map((room) => (
               <li key={room.roomNumber}>
-                {/* To the move-in form, with the house and the room chosen. */}
+                {/*
+                 * To the move-in form, with the house and the room chosen. The link
+                 * is its whole row, reaching halfway to the rows above and below so
+                 * no gap between them is dead. Swiping the timeline sideways from a
+                 * row scrolls it: the browser only follows a link on a tap.
+                 */}
                 <Link
                   to="/$locale/contact/$slug"
                   params={{ locale, slug: 'move-in' }}
                   search={{ room: roomKey(house, room.roomNumber) }}
                   hash="tabs"
-                  className="group/room focus-visible:ring-ring/50 inline-flex items-center gap-2 rounded-sm whitespace-nowrap outline-none focus-visible:ring-3"
+                  className="group/room focus-visible:ring-ring/50 -my-1 flex items-center gap-2 rounded-sm py-1 whitespace-nowrap outline-none focus-visible:ring-3"
                 >
                   {/* The room's name alone answers the pointer; its price stays as it is. */}
                   <span className="group-hover/room:text-foreground transition-colors">
@@ -134,7 +139,7 @@ function RoomTimeline({ house, rooms }: { house: HouseIdentifier; rooms: RoomAva
                   </span>
                   {room.price !== null && (
                     <Badge variant="outline" className="tabular-nums">
-                      {t('price', { price: formatter.number(room.price, 'currency') })}
+                      {formatter.number(room.price, 'currency')}
                     </Badge>
                   )}
                 </Link>
@@ -178,7 +183,7 @@ function StepLabel({ date, today }: { date: Step['date']; today: string }) {
   const formatted = formatRoomDate(formatter, date, today)
   return (
     <TimelineDate dateTime={date} className={LABEL_CLASS}>
-      <span aria-hidden="true">{t('from_date', { date: formatted })}</span>
+      <span aria-hidden="true">{formatted}</span>
       <span className="sr-only">{t('available_from', { date: formatted })}</span>
     </TimelineDate>
   )

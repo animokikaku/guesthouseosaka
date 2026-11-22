@@ -28,10 +28,14 @@ test('lists the rooms on a timeline of icons, a step as wide as its rooms', asyn
   await expect(steps.nth(0)).toHaveCSS('flex-grow', '0')
   await expect(steps.nth(0)).toHaveCSS('padding-right', '56px')
 
-  await expect(section.getByRole('link', { name: /Room 208/ })).toHaveAttribute(
-    'href',
-    '/en/contact/move-in?room=orange-208#tabs'
-  )
+  const link = section.getByRole('link', { name: /Room 208/ })
+  await expect(link).toHaveAttribute('href', '/en/contact/move-in?room=orange-208#tabs')
+  // The whole row is the link, not only its words.
+  const row = await steps.nth(1).locator('ul > li').first().boundingBox()
+  const target = await link.boundingBox()
+  expect(target!.width).toBeCloseTo(row!.width, 0)
+  // Taller than its text, so it meets the rows above and below.
+  expect(target!.height).toBe(28)
 })
 
 test('scrolls sideways on a phone', async ({ mount, page }) => {

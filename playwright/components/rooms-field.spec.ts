@@ -14,9 +14,9 @@ test('chooses rooms from a list under the field on a wide screen', async ({ moun
   await expect(list.getByRole('group', { name: 'Orange House' })).toBeVisible()
   await expect(list.getByRole('group', { name: 'Apple House' })).toBeVisible()
   await expect(list.getByRole('option')).toHaveText([
-    'Room 103Available now¥53,000~',
-    'Room 208Dec 8¥58,000~',
-    'Room 402Mar 15, 2027¥63,000~'
+    'Room 103Available now¥53,000',
+    'Room 208Dec 8¥58,000',
+    'Room 402Mar 15, 2027¥63,000'
   ])
   await expect(list.getByRole('option', { name: /Room 208/ })).toHaveAttribute(
     'aria-selected',
@@ -28,7 +28,7 @@ test('chooses rooms from a list under the field on a wide screen', async ({ moun
 
   // Typing narrows the list.
   await input.fill('103')
-  await expect(list.getByRole('option')).toHaveText(['Room 103Available now¥53,000~'])
+  await expect(list.getByRole('option')).toHaveText(['Room 103Available now¥53,000'])
   await page.keyboard.press('Escape')
 
   await component.getByRole('button', { name: 'Remove Room 208' }).click()
