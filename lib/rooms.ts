@@ -57,7 +57,7 @@ export function toRoomAvailability(
 
 /**
  * Whether the house has rooms to list: a fully booked house's badge links
- * nowhere, and its section says so in place of the timeline.
+ * nowhere, and its section says so in place of the rooms.
  */
 export function hasRooms({ available, upcoming }: RoomAvailability) {
   return available.length + upcoming.length > 0

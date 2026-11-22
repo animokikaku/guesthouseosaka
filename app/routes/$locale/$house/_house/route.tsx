@@ -42,7 +42,7 @@ function HouseLayout() {
           // Site Settings' Room Availability field, which draft mode previews.
           rooms={settings?.roomAvailability ? rooms : null}
           roomsNote={settings?.roomAvailabilityNote}
-          // Presentation opens the field from the badge or the timeline.
+          // Presentation opens the field from the badge or the rooms.
           roomsDataSanity={
             settings
               ? createDataAttribute({ id: settings._id, type: settings._type })('roomAvailability')

@@ -60,7 +60,6 @@
     ".tanstack/**",
     "app/routeTree.gen.ts",
     "components/ui/**",
-    "components/reui/**",
     "sanity.types.ts",
     ".wrangler/**",
     "**/node_modules/**",

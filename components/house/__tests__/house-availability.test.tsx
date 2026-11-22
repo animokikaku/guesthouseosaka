@@ -16,7 +16,7 @@ function rooms(available: number, upcoming: number): RoomAvailability {
 }
 
 describe('HouseAvailability', () => {
-  it('links the rooms free now to the timeline', () => {
+  it('links the rooms free now to their section', () => {
     render(<HouseAvailability house="orange" rooms={rooms(2, 3)} />)
 
     expect(screen.getByRole('link', { name: '2 rooms available now' })).toHaveAttribute(

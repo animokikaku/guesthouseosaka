@@ -189,8 +189,8 @@ previews it from a draft before publishing:
 - **The move-in form** has an optional "Rooms" field
   (`components/forms/fields/rooms-field.tsx`) offering the rooms of the houses
   selected in "Places": a combobox on a wide screen, a sheet from the bottom on
-  a phone. It's hidden when those houses have no rooms to offer. Each room on a
-  house page's timeline links to the form as `?room=orange-208` (`roomKey`),
+  a phone. It's hidden when those houses have no rooms to offer. Each room in a
+  house page's list links to the form as `?room=orange-208` (`roomKey`),
   which selects the house and the room, and sets the move-in date to the room's
   when it isn't free yet; a room that isn't on offer is ignored. The form sends
   the chosen rooms as keys, without those of a house unselected since, and the
