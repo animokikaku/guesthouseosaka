@@ -22,6 +22,7 @@
     "typegen": "bun run --cwd studio typegen",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
+    "gallery:dev": "vite --config playwright/gallery/vite.config.mts --host 127.0.0.1 --port 3100 --strictPort",
     "test:components": "playwright test --config=playwright.components.config.ts",
     "test:e2e": "playwright test --project=local",
     "test:e2e:preview": "E2E_REAL_EMAIL=1 playwright test --project=preview",

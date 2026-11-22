@@ -38,6 +38,9 @@ schema.json
 dist/
 backup/
 
+# design sketches: throwaway stories, see "Design Exploration" in AGENTS.md
+/components/sketches/
+
 # vitest artifacts (reports, blob reports, attachments)
 /.vitest/
 
