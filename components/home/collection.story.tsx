@@ -40,7 +40,7 @@ const rooms: RoomsByHouse = {
   lemon: { today: '2026-11-22', available: [], upcoming: [] }
 }
 
-/** The home page's houses, each with its availability over its photo's corner. */
+/** The home page's houses, each with its availability beside its title. */
 export function WithRooms() {
   return (
     <IntlProvider locale="en" messages={messages}>
