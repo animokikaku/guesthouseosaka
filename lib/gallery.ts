@@ -18,7 +18,7 @@ export interface GalleryCategory {
   items: GalleryItem[]
 }
 
-/** The featured image (when it has an asset) followed by the gallery images. */
+/** The featured image, which the house query gives only once it has an asset, followed by the gallery images. */
 export function buildGallerySlides({
   featuredImage,
   galleryImages
@@ -26,7 +26,7 @@ export function buildGallerySlides({
   featuredImage?: FeaturedImage
   galleryImages: GalleryItem[] | null
 }): GallerySlide[] {
-  return featuredImage?.asset
+  return featuredImage
     ? [{ _key: 'featured', image: featuredImage }, ...(galleryImages ?? [])]
     : (galleryImages ?? [])
 }

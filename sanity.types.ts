@@ -737,7 +737,7 @@ export type HouseQueryResult = {
     crop: SanityImageCrop | null;
   };
   featuredImage: {
-    asset: SanityImageAssetReference | null;
+    asset: SanityImageAssetReference;
     hotspot: SanityImageHotspot | null;
     crop: SanityImageCrop | null;
     alt: string | null;
