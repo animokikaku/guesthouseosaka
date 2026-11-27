@@ -4,7 +4,7 @@ import { TourForm } from '@/components/forms/tour-form'
 import { PageEmptyState } from '@/components/page-empty-state'
 import { canonicalLink } from '@/lib/metadata'
 import { toContactFormConfig } from '@/lib/transforms/form'
-import { isContactType } from '@/lib/types'
+import { isContactType, isHouseIdentifier, type HouseIdentifier } from '@/lib/types'
 import { getContactType } from '@/sanity/lib/loaders.functions'
 import { createFileRoute, getRouteApi } from '@tanstack/react-router'
 
@@ -16,8 +16,14 @@ export const Route = createFileRoute('/$locale/contact/_form/$slug')({
   },
   // `?room=orange-208` (see `roomKey`): the room a house page's link asks to
   // move into. The move-in form checks it against the rooms on offer.
-  validateSearch: (search: Record<string, unknown>): { room?: string } =>
-    typeof search.room === 'string' ? { room: search.room } : {},
+  // `?house=lemon`: the house a fully booked house's page asks about, chosen
+  // from the start in the general inquiry form.
+  validateSearch: (
+    search: Record<string, unknown>
+  ): { room?: string; house?: HouseIdentifier } => ({
+    ...(typeof search.room === 'string' && { room: search.room }),
+    ...(isHouseIdentifier(search.house) && { house: search.house })
+  }),
   loader: ({ params: { locale, slug } }) => getContactType({ data: { locale, slug } }),
   head: ({ params: { locale, slug } }) => ({
     links: [canonicalLink({ to: '/$locale/contact/$slug', params: { slug } }, locale)]
@@ -29,7 +35,7 @@ const localeRoute = getRouteApi('/$locale')
 
 function ContactTypePage() {
   const { slug } = Route.useParams()
-  const { room } = Route.useSearch()
+  const { room, house } = Route.useSearch()
   const { contactType, rooms } = Route.useLoaderData()
   const { houseTitles, settings } = localeRoute.useLoaderData()
 
@@ -52,6 +58,6 @@ function ContactTypePage() {
         />
       )
     case 'other':
-      return <ContactForm {...config} houseTitles={houseTitles} />
+      return <ContactForm {...config} houseTitles={houseTitles} house={house} />
   }
 }
