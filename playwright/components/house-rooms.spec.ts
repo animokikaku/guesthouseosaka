@@ -107,7 +107,7 @@ test('says a fully booked house is', async ({ mount }) => {
   await expect(section.getByText('Currently fully booked')).toBeVisible()
   await expect(section.getByRole('link', { name: 'Contact us' })).toHaveAttribute(
     'href',
-    '/en/contact'
+    '/en/contact/other?house=orange#tabs'
   )
   await expect(section.getByRole('list')).toHaveCount(0)
 })

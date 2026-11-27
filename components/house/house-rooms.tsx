@@ -21,7 +21,7 @@ import { useFormatter, useLocale, useTranslations } from 'use-intl'
  * The house's "Upcoming Vacancies" section (see docs/rooms.md): its free and
  * upcoming rooms, those free now first, then the rest by date, each a link to
  * ask to move into it. A fully booked house says so instead, with a way to
- * ask about the rooms to come. The badge links to `#availability`.
+ * ask about the rooms to come: the general inquiry form, with the house chosen. The badge links to `#availability`.
  */
 export function HouseRooms({
   house,
@@ -91,8 +91,10 @@ export function HouseRooms({
           </EmptyHeader>
           <EmptyContent>
             <Link
-              to="/$locale/contact"
-              params={{ locale }}
+              to="/$locale/contact/$slug"
+              params={{ locale, slug: 'other' }}
+              search={{ house }}
+              hash="tabs"
               className={buttonVariants({ variant: 'outline' })}
             >
               {t('contact')}

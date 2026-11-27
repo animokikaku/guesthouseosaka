@@ -10,16 +10,19 @@ import { FormCard } from '@/components/forms/form-card'
 import { useGeneralInquirySchema } from '@/components/forms/schema'
 import { FieldSeparator } from '@/components/ui/field'
 import type { ContactFormConfig } from '@/lib/types/components'
-import type { HouseTitles } from '@/lib/types'
+import type { HouseIdentifier, HouseTitles } from '@/lib/types'
 
 interface ContactFormProps extends ContactFormConfig {
   houseTitles: HouseTitles
+  /** The house a fully booked house's page asks about, chosen from the start. */
+  house?: HouseIdentifier
 }
 
-export function ContactForm({ title, description, fields, houseTitles }: ContactFormProps) {
+export function ContactForm({ title, description, fields, houseTitles, house }: ContactFormProps) {
   const schema = useGeneralInquirySchema()
   const { onSubmitInvalid, createOnSubmit, turnstile } = useFormSubmit()
-  const { places, account, message, privacyPolicy } = contactFormDefaultValues
+  const { account, message, privacyPolicy } = contactFormDefaultValues
+  const places = house ? [house] : contactFormDefaultValues.places
 
   const form = useAppForm({
     defaultValues: { places, account, message, privacyPolicy },

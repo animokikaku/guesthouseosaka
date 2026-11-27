@@ -108,3 +108,19 @@ describe.each(forms)('$type form', ({ type, Form, fill, data }) => {
     expect(submitContactForm).not.toHaveBeenCalled()
   })
 })
+
+describe('other form', () => {
+  it('starts from the house a fully booked house’s link asked about', () => {
+    const AboutLemon: typeof ContactForm = (props) => <ContactForm {...props} house="lemon" />
+    renderForm(AboutLemon)
+
+    expect(screen.getByRole('button', { name: 'Lemon House' })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    )
+    expect(screen.getByRole('button', { name: 'Orange House' })).toHaveAttribute(
+      'aria-pressed',
+      'false'
+    )
+  })
+})
