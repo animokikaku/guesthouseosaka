@@ -73,6 +73,7 @@
   "HouseRooms": {
     "heading": "Chambres bientôt disponibles",
     "room": "Chambre {number}",
+    "price_from": "dès {price}",
     "now": "Disponible maintenant",
     "available_from": "Disponible à partir du {date}",
     "date_unknown": "Date à confirmer",

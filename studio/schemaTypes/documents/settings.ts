@@ -49,15 +49,6 @@ export const settings = defineType({
       initialValue: false,
       components: { input: RoomAvailabilityInput }
     }),
-    defineField({
-      name: 'roomAvailabilityNote',
-      title: 'Note',
-      type: 'internationalizedArrayString',
-      description:
-        'Shown under the “Upcoming Vacancies” title on the house pages, to say what the prices include.',
-      group: 'vacancies',
-      validation: (rule) => rule.required()
-    }),
 
     // Organization group (JSON-LD schema)
     defineField({

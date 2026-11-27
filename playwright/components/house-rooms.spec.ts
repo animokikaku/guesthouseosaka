@@ -7,9 +7,7 @@ test('lists every room as a link, as many across as fit', async ({ mount, page }
   const component = await mount(story)
   const section = component.getByRole('region', { name: 'Upcoming Vacancies' })
 
-  await expect(
-    section.getByText('Monthly prices include management and common fees.')
-  ).toBeVisible()
+  await expect(section.getByText('Rent + management and common fees')).toBeVisible()
   const rooms = section.getByRole('listitem')
   // A date is followed by its sentence for screen readers, out of sight.
   await expect(rooms).toHaveText([
@@ -50,7 +48,7 @@ test('keeps a long answer on one line, and every item as tall as the next', asyn
   mount,
   page
 }) => {
-  // French says "Available now" at its longest, and prices as "53 000 JPY".
+  // French says "Available now" at its longest, and starting prices as "dès 53 000 JPY".
   await page.setViewportSize({ width: 1280, height: 800 })
   const component = await mount('components/house/house-rooms/French')
   const rooms = component.getByRole('listitem')
@@ -64,9 +62,30 @@ test('keeps a long answer on one line, and every item as tall as the next', asyn
   const later = await rooms.nth(1).locator('[data-slot=item-description]').boundingBox()
   expect(when!.height).toBe(later!.height)
   // The name and its price share one line too.
-  await expect(rooms.nth(1).locator('[data-slot=item-title]')).toHaveText('Chambre 20858 000 JPY')
+  await expect(rooms.nth(1).locator('[data-slot=item-title]')).toHaveText(
+    'Chambre 208dès 58 000 JPY'
+  )
   const title = await rooms.nth(1).locator('[data-slot=item-title]').boundingBox()
   expect(title!.height).toBeLessThan(24)
+})
+
+test('fits the longest name and starting price in the narrowest item', async ({ mount, page }) => {
+  // Two across at their narrowest, in French.
+  await page.setViewportSize({ width: 504, height: 800 })
+  const component = await mount('components/house/house-rooms/French')
+  const rooms = component.getByRole('listitem')
+
+  const first = await rooms.nth(0).boundingBox()
+  const second = await rooms.nth(1).boundingBox()
+  expect(second!.y).toBe(first!.y)
+  expect(second!.width).toBeLessThan(226)
+  const overflow = await rooms.nth(1).evaluate((item) => {
+    const range = document.createRange()
+    range.selectNodeContents(item.querySelector('[data-slot=item-title]')!)
+    return range.getBoundingClientRect().right - item.getBoundingClientRect().right
+  })
+  // Inside the item's padding.
+  expect(overflow).toBeLessThanOrEqual(-12)
 })
 
 test('stacks the rooms on a phone, with nothing to scroll sideways', async ({ mount, page }) => {

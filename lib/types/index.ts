@@ -11,8 +11,16 @@ export function isHouseIdentifier(value: unknown): value is HouseIdentifier {
 export const ContactTypeValues = ['tour', 'move-in', 'other'] as const
 export type ContactType = (typeof ContactTypeValues)[number]
 
-/** The houses' titles in the page's locale, in their navigation order (see the locale layout's loader). */
-export type HouseTitles = Array<{ slug: HouseIdentifier; title: string | null }>
+/**
+ * The houses' titles in the page's locale, in their navigation order (see the
+ * locale layout's loader), each with whether its rooms' prices are starting
+ * prices, for the move-in form's rooms.
+ */
+export type HouseTitles = Array<{
+  slug: HouseIdentifier
+  title: string | null
+  roomPricesFrom?: boolean
+}>
 
 export function isContactType(value: unknown): value is ContactType {
   return typeof value === 'string' && ContactTypeValues.some((type) => type === value)

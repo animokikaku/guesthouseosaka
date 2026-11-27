@@ -104,6 +104,7 @@ export function MoveInForm({
                     {
                       house: house.slug,
                       title: house.title ?? house.slug,
+                      pricesFrom: house.roomPricesFrom,
                       rooms: options.find((option) => option.house === house.slug)?.rooms ?? []
                     }
                   ]

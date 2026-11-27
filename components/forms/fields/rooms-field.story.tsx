@@ -25,7 +25,9 @@ export function TwoHouses() {
   const form = useAppForm({ defaultValues: { rooms: ['orange-208'] } })
   const groups = toRoomOptions(rooms, ['orange', 'apple']).map((group) => ({
     ...group,
-    title: titles[group.house === 'apple' ? 'apple' : 'orange']
+    title: titles[group.house === 'apple' ? 'apple' : 'orange'],
+    // Apple House's prices depend on the contract.
+    pricesFrom: group.house === 'apple'
   }))
 
   return (

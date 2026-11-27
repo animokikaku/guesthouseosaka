@@ -73,6 +73,7 @@
   "HouseRooms": {
     "heading": "空室状況",
     "room": "{number}号室",
+    "price_from": "{price}〜",
     "now": "即入居可",
     "available_from": "{date}から入居可",
     "date_unknown": "日付未定",

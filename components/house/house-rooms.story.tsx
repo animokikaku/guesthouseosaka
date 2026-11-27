@@ -37,20 +37,16 @@ function Page({ children, locale = 'en' }: { children: React.ReactNode; locale?:
 export function WithRooms() {
   return (
     <Page>
-      <HouseRooms
-        house="orange"
-        rooms={rooms}
-        note="Monthly prices include management and common fees."
-      />
+      <HouseRooms house="orange" rooms={rooms} note="Rent + management and common fees" />
     </Page>
   )
 }
 
-/** In French, whose "Available now" and prices are the longest. */
+/** In French, whose "Available now" and prices are the longest, as starting prices. */
 export function French() {
   return (
     <Page locale="fr">
-      <HouseRooms house="orange" rooms={rooms} />
+      <HouseRooms house="orange" rooms={rooms} pricesFrom />
     </Page>
   )
 }

@@ -59,8 +59,12 @@ export const getLocaleLayout = createServerFn({ method: 'GET' })
       settings,
       // Transformed here to keep the work off the client.
       houseItems: toHouseNavItems(houses, locale),
-      // For the house pages' tabs and the contact forms' house choice.
-      houseTitles: houses.map(({ slug, title }) => ({ slug, title })),
+      // For the house pages' tabs and the contact forms' house choice and rooms.
+      houseTitles: houses.map(({ slug, title, roomPricesFrom }) => ({
+        slug,
+        title,
+        roomPricesFrom
+      })),
       isDraftMode: isDraftModeEnabled(),
       year: new Date().getFullYear()
     }

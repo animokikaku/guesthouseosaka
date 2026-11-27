@@ -2,6 +2,7 @@ import { fieldComponent } from '@/components/forms/field-brand'
 import { FieldControlHeader, useFieldControl } from '@/components/forms/fields/field-control'
 import { HouseIcon } from '@/components/house-icon'
 import { formatRoomDate } from '@/components/house/room-date'
+import { useRoomPrice } from '@/components/house/room-price'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -44,6 +45,8 @@ export interface RoomGroup {
   house: HouseIdentifier
   title: string
   rooms: RoomOption[]
+  /** Whether the house's prices are starting prices (see `useRoomPrice`). */
+  pricesFrom?: boolean
 }
 
 interface RoomsFieldProps {
@@ -157,7 +160,7 @@ function RoomsCombobox({ groups, chosen, onChoose, controlProps }: ControlProps)
               <ComboboxCollection>
                 {(room: RoomOption) => (
                   <ComboboxItem key={room.key} value={room}>
-                    <RoomDetails room={room} />
+                    <RoomDetails room={room} pricesFrom={group.pricesFrom} />
                   </ComboboxItem>
                 )}
               </ComboboxCollection>
@@ -236,7 +239,7 @@ function RoomsSheet({ groups, chosen, onChoose, controlProps }: ControlProps) {
                     checked={isChosen(room)}
                     onChange={() => onChoose(isChosen(room) ? without(room) : [...chosen, room])}
                   />
-                  <RoomDetails room={room} />
+                  <RoomDetails room={room} pricesFrom={group.pricesFrom} />
                   <CheckIcon
                     className={cn('size-4.5 shrink-0', !isChosen(room) && 'invisible')}
                     aria-hidden="true"
@@ -255,9 +258,10 @@ function RoomsSheet({ groups, chosen, onChoose, controlProps }: ControlProps) {
 }
 
 /** A room's row in either list: its name, when it's free, and what it costs a month. */
-function RoomDetails({ room }: { room: RoomOption }) {
+function RoomDetails({ room, pricesFrom }: { room: RoomOption; pricesFrom?: boolean }) {
   const t = useTranslations('HouseRooms')
   const formatter = useFormatter()
+  const roomPrice = useRoomPrice()
 
   let when = t('date_unknown')
   let Icon = CalendarClockIcon
@@ -278,7 +282,7 @@ function RoomDetails({ room }: { room: RoomOption }) {
       </span>
       {room.price !== null && (
         <Badge variant="outline" className="tabular-nums">
-          {formatter.number(room.price, 'currency')}
+          {roomPrice(room.price, pricesFrom)}
         </Badge>
       )}
     </>

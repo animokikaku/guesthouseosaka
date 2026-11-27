@@ -38,13 +38,12 @@ export function HousePageContent({
   houses,
   rooms,
   roomsNote,
+  roomPricesFrom,
   roomsDataSanity
 }: NonNullable<HouseQueryResult> & {
   houses: HouseTitles
   /** Null hides the badge and the "Upcoming Vacancies" section: when D1 has nothing recent, or Site Settings turn them off. */
   rooms: RoomAvailability | null
-  /** Site Settings' note under the section's title, saying what the prices include. */
-  roomsNote?: string | null
   /** Site Settings' Room Availability field, for Presentation to open from the badge and the section. */
   roomsDataSanity?: string
 }) {
@@ -102,6 +101,7 @@ export function HousePageContent({
                     house={slug}
                     rooms={rooms}
                     note={roomsNote}
+                    pricesFrom={roomPricesFrom}
                     data-sanity={roomsDataSanity}
                   />
                 )}

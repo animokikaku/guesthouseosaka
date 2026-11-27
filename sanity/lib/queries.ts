@@ -70,8 +70,7 @@ export const settingsQuery = defineQuery(`*[_type == "settings"][0]{
     label,
     url
   }),
-  "roomAvailability": roomAvailability == true,
-  "roomAvailabilityNote": coalesce(roomAvailabilityNote[language == $locale][0].value, roomAvailabilityNote[language == "en"][0].value)
+  "roomAvailability": roomAvailability == true
 }`)
 
 /** Whether Site Settings turn room availability on, for the hourly sync. */
@@ -119,6 +118,10 @@ export const houseQuery = defineQuery(`*[_type == "house" && slug == $slug][0]{
   "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
   building,
   phone,
+
+  // Upcoming Vacancies (see docs/rooms.md)
+  "roomsNote": coalesce(roomsNote[language == $locale][0].value, roomsNote[language == "en"][0].value),
+  "roomPricesFrom": roomPricesFrom == true,
 
   // Only read by urlFor for the page's JSON-LD image, so no alt or blurhash
   image{
@@ -232,6 +235,7 @@ export const housesNavQuery = defineQuery(`*[_type == "house"] | order(orderRank
   "title": coalesce(title[language == $locale][0].value, title[language == "en"][0].value),
   "description": coalesce(description[language == $locale][0].value, description[language == "en"][0].value),
   "caption": coalesce(caption[language == $locale][0].value, caption[language == "en"][0].value),
+  "roomPricesFrom": roomPricesFrom == true,
   ${imageFields}
 }`)
 

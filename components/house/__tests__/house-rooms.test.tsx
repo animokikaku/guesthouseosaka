@@ -2,18 +2,19 @@ import type { ListedRoom, RoomAvailability } from '@/lib/rooms'
 import { render, screen, within } from '@testing-library/react'
 import { HouseRooms } from '../house-rooms'
 
-const NOTE = 'Monthly prices include management and common fees.'
+const NOTE = 'Rent + management and common fees (6-month contract)'
 
 function room(roomNumber: string, availableFrom: string | null, price: number | null = 58000) {
   return { roomNumber, availableFrom, price } satisfies ListedRoom
 }
 
-function renderRooms(rooms: Partial<RoomAvailability>, note?: string | null) {
+function renderRooms(rooms: Partial<RoomAvailability>, note?: string | null, pricesFrom = false) {
   return render(
     <HouseRooms
       house="orange"
       rooms={{ today: '2026-11-02', available: [], upcoming: [], ...rooms }}
       note={note}
+      pricesFrom={pricesFrom}
     />
   )
 }
@@ -54,7 +55,16 @@ describe('HouseRooms', () => {
     ])
   })
 
-  it('says what the prices include, in Site Settings’ words', () => {
+  it('writes starting prices in a house where they depend on the contract', () => {
+    renderRooms({ available: [room('402', null, 63000), room('403', null, null)] }, NOTE, true)
+
+    expect(items()).toEqual([
+      ['Room 402', 'Available now', 'from ¥63,000'],
+      ['Room 403', 'Available now']
+    ])
+  })
+
+  it('says what the prices include, in the house’s words', () => {
     renderRooms({ available: [room('106', null)] }, NOTE)
 
     expect(within(section()).getByText(NOTE)).toBeInTheDocument()

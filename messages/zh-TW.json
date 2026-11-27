@@ -73,6 +73,7 @@
   "HouseRooms": {
     "heading": "空房資訊",
     "room": "{number}號房",
+    "price_from": "{price}起",
     "now": "即可入住",
     "available_from": "{date}起可入住",
     "date_unknown": "日期待定",

@@ -19,7 +19,8 @@ export const house = defineType({
     { name: 'content', title: 'Content' },
     { name: 'amenities', title: 'Amenities' },
     { name: 'location', title: 'Location' },
-    { name: 'business', title: 'Pricing & Contact' }
+    { name: 'business', title: 'Pricing & Contact' },
+    { name: 'vacancies', title: 'Vacancies' }
   ],
   fields: [
     // Hidden field for @sanity/orderable-document-list
@@ -188,6 +189,28 @@ export const house = defineType({
       type: 'housePhone',
       group: 'business',
       validation: (rule) => rule.required()
+    }),
+
+    // ============================================
+    // VACANCIES GROUP (see docs/rooms.md)
+    // ============================================
+    defineField({
+      name: 'roomsNote',
+      title: 'Note',
+      type: 'internationalizedArrayString',
+      group: 'vacancies',
+      description:
+        'Shown under the “Upcoming Vacancies” title on this house’s page, to say what the prices include.',
+      validation: (rule) => rule.required()
+    }),
+    defineField({
+      name: 'roomPricesFrom',
+      title: 'Starting prices',
+      type: 'boolean',
+      group: 'vacancies',
+      description:
+        'Turn on when a room’s price depends on the contract: each price is then written as a starting price (“¥63,000～”).',
+      initialValue: false
     })
   ],
   preview: {

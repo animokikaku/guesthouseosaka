@@ -1,5 +1,6 @@
 import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import { formatRoomDate } from '@/components/house/room-date'
+import { useRoomPrice } from '@/components/house/room-price'
 import { Item, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import { hasRooms, roomKey, type ListedRoom, type RoomAvailability } from '@/lib/rooms'
 import type { HouseIdentifier } from '@/lib/types'
@@ -17,12 +18,15 @@ export function HouseRooms({
   house,
   rooms,
   note,
+  pricesFrom = false,
   'data-sanity': dataSanity
 }: {
   house: HouseIdentifier
   rooms: RoomAvailability
-  /** What the prices include: Site Settings' note, in the page's language or English. */
+  /** What the prices include: the house's note, in the page's language or English. */
   note?: string | null
+  /** Whether the prices are starting prices, as the house's depend on the contract. */
+  pricesFrom?: boolean
   'data-sanity'?: string
 }) {
   const t = useTranslations('HouseRooms')
@@ -41,15 +45,28 @@ export function HouseRooms({
           {note && <p className={TEXT_CLASS}>{note}</p>}
           {/*
            * As many across as fit, the rest below: every room shows, however many
-           * there are. The narrowest an item gets still fits the longest "Available
-           * now" on one line (French's).
+           * there are. The narrowest an item gets still fits the longest name and
+           * starting price on one line (French's "Chambre 208 dès 58 000 JPY").
            */}
-          <ul className="grid grid-cols-[repeat(auto-fill,minmax(12.5rem,1fr))] gap-2">
+          <ul className="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-2">
             {rooms.available.map((room) => (
-              <RoomItem key={room.roomNumber} house={house} room={room} free today={rooms.today} />
+              <RoomItem
+                key={room.roomNumber}
+                house={house}
+                room={room}
+                pricesFrom={pricesFrom}
+                free
+                today={rooms.today}
+              />
             ))}
             {rooms.upcoming.map((room) => (
-              <RoomItem key={room.roomNumber} house={house} room={room} today={rooms.today} />
+              <RoomItem
+                key={room.roomNumber}
+                house={house}
+                room={room}
+                pricesFrom={pricesFrom}
+                today={rooms.today}
+              />
             ))}
           </ul>
         </HouseSectionContent>
@@ -72,17 +89,19 @@ const TEXT_CLASS = 'text-foreground text-base leading-relaxed'
 function RoomItem({
   house,
   room,
+  pricesFrom,
   free = false,
   today
 }: {
   house: HouseIdentifier
   room: ListedRoom
+  pricesFrom: boolean
   /** Free now, rather than from `availableFrom` (null: from a date to come). */
   free?: boolean
   today: string
 }) {
   const t = useTranslations('HouseRooms')
-  const formatter = useFormatter()
+  const roomPrice = useRoomPrice()
   const locale = useLocale()
 
   return (
@@ -109,7 +128,7 @@ function RoomItem({
                 data-slot="room-price"
                 className="text-muted-foreground font-normal tabular-nums"
               >
-                {formatter.number(room.price, 'currency')}
+                {roomPrice(room.price, pricesFrom)}
               </span>
             )}
           </ItemTitle>

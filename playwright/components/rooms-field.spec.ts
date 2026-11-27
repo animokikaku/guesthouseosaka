@@ -16,7 +16,7 @@ test('chooses rooms from a list under the field on a wide screen', async ({ moun
   await expect(list.getByRole('option')).toHaveText([
     'Room 103Available now¥53,000',
     'Room 208Dec 8¥58,000',
-    'Room 402Mar 15, 2027¥63,000'
+    'Room 402Mar 15, 2027from ¥63,000'
   ])
   await expect(list.getByRole('option', { name: /Room 208/ })).toHaveAttribute(
     'aria-selected',

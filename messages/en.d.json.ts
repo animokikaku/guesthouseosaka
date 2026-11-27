@@ -76,6 +76,7 @@ declare const messages: {
   "HouseRooms": {
     "heading": "Upcoming Vacancies",
     "room": "Room {number}",
+    "price_from": "from {price}",
     "now": "Available now",
     "available_from": "Available from {date}",
     "date_unknown": "Date TBC",
