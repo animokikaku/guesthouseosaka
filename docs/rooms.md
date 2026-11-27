@@ -184,8 +184,8 @@ previews it from a draft before publishing:
   contract has **Starting prices** on (`roomPricesFrom`, same tab): its prices
   are then written as starting prices, "from ¥63,000" or 「¥63,000〜」
   (`useRoomPrice`), here and in the move-in form. A fully booked house's
-  section says so in place of the rooms, and its "Fully booked" badge links
-  nowhere. Null hides both.
+  section says so in place of the rooms, with a button to the contact page,
+  and its "Fully booked" badge links nowhere. Null hides both.
 - **The home page** shows the same badge with each house's title
   (`components/home/collection.tsx`): right after the title with one card
   across or three wide ones, under the title with three narrow ones. A house

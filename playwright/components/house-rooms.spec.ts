@@ -105,5 +105,9 @@ test('says a fully booked house is', async ({ mount }) => {
   const section = component.getByRole('region', { name: 'Upcoming Vacancies' })
 
   await expect(section.getByText('Currently fully booked')).toBeVisible()
+  await expect(section.getByRole('link', { name: 'Contact us' })).toHaveAttribute(
+    'href',
+    '/en/contact'
+  )
   await expect(section.getByRole('list')).toHaveCount(0)
 })

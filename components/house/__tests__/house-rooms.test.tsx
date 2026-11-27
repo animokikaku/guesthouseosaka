@@ -109,6 +109,10 @@ describe('HouseRooms', () => {
     renderRooms({}, NOTE)
 
     expect(within(section()).getByText('Currently fully booked')).toBeInTheDocument()
+    expect(within(section()).getByRole('link', { name: 'Contact us' })).toHaveAttribute(
+      'href',
+      '/en/contact'
+    )
     expect(screen.queryByRole('list')).not.toBeInTheDocument()
     expect(screen.queryByText(NOTE)).not.toBeInTheDocument()
   })

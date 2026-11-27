@@ -77,7 +77,9 @@
     "now": "即可入住",
     "available_from": "{date}起可入住",
     "date_unknown": "日期待定",
-    "fully_booked": "目前已满房"
+    "fully_booked": "目前已满房",
+    "fully_booked_description": "如需了解后续空房信息，请联系我们。",
+    "contact": "联系我们"
   },
   "HouseBuilding": {
     "floors_label": "楼层",

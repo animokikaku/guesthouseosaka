@@ -1,18 +1,27 @@
 import { HouseSectionContent, HouseSectionHeading } from '@/components/house/house-section'
 import { formatRoomDate } from '@/components/house/room-date'
 import { useRoomPrice } from '@/components/house/room-price'
+import { buttonVariants } from '@/components/ui/button'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle
+} from '@/components/ui/empty'
 import { Item, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import { hasRooms, roomKey, type ListedRoom, type RoomAvailability } from '@/lib/rooms'
 import type { HouseIdentifier } from '@/lib/types'
 import { Link } from '@tanstack/react-router'
-import { CalendarClockIcon, CalendarIcon, CircleCheckIcon } from 'lucide-react'
+import { CalendarClockIcon, CalendarIcon, CircleCheckIcon, DoorClosedIcon } from 'lucide-react'
 import { useFormatter, useLocale, useTranslations } from 'use-intl'
 
 /**
  * The house's "Upcoming Vacancies" section (see docs/rooms.md): its free and
  * upcoming rooms, those free now first, then the rest by date, each a link to
- * ask to move into it. A fully booked house says so instead. The badge links
- * to `#availability`.
+ * ask to move into it. A fully booked house says so instead, with a way to
+ * ask about the rooms to come. The badge links to `#availability`.
  */
 export function HouseRooms({
   house,
@@ -30,6 +39,7 @@ export function HouseRooms({
   'data-sanity'?: string
 }) {
   const t = useTranslations('HouseRooms')
+  const locale = useLocale()
 
   return (
     <section
@@ -71,7 +81,24 @@ export function HouseRooms({
           </ul>
         </HouseSectionContent>
       ) : (
-        <p className={TEXT_CLASS}>{t('fully_booked')}</p>
+        <Empty className="border border-dashed p-8 sm:p-12">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <DoorClosedIcon aria-hidden="true" />
+            </EmptyMedia>
+            <EmptyTitle>{t('fully_booked')}</EmptyTitle>
+            <EmptyDescription>{t('fully_booked_description')}</EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Link
+              to="/$locale/contact"
+              params={{ locale }}
+              className={buttonVariants({ variant: 'outline' })}
+            >
+              {t('contact')}
+            </Link>
+          </EmptyContent>
+        </Empty>
       )}
     </section>
   )

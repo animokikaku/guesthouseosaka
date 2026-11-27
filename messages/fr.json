@@ -77,7 +77,9 @@
     "now": "Disponible maintenant",
     "available_from": "Disponible à partir du {date}",
     "date_unknown": "Date à confirmer",
-    "fully_booked": "Actuellement complet"
+    "fully_booked": "Actuellement complet",
+    "fully_booked_description": "Contactez-nous pour connaître les prochaines disponibilités.",
+    "contact": "Nous contacter"
   },
   "HouseBuilding": {
     "floors_label": "Étages",

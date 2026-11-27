@@ -77,7 +77,9 @@
     "now": "即入居可",
     "available_from": "{date}から入居可",
     "date_unknown": "日付未定",
-    "fully_booked": "現在、満室です"
+    "fully_booked": "現在、満室です",
+    "fully_booked_description": "今後の空室については、お問い合わせください。",
+    "contact": "お問い合わせ"
   },
   "HouseBuilding": {
     "floors_label": "階数",
