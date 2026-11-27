@@ -54,8 +54,10 @@ export function createContactFormSchema(messages?: ValidationMessages) {
     places: z
       .array(z.enum(HouseIdentifierValues))
       .check(z.minLength(1, m('places_min')), z.maxLength(3, m('places_max'))),
-    // The rooms the visitor is interested in, if any. No messages: the field only offers valid ones.
-    rooms: z.array(z.string().check(z.regex(ROOM_KEY))).check(z.maxLength(30)),
+    // The rooms the visitor is interested in, if any. No messages: the field only
+    // offers valid ones. The limit is over every house's rooms together, as the
+    // form also holds those of houses unselected since (see `createMoveInFormSchema`).
+    rooms: z.array(z.string().check(z.regex(ROOM_KEY))).check(z.maxLength(100)),
     account: z.object({
       name: z.string().check(z.minLength(2, m('name_min')), z.maxLength(100, m('name_max'))),
       age: z.string().check(z.refine(isPositiveNumberString, error(m('age_positive')))),

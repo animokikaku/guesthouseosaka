@@ -18,7 +18,9 @@ export const PROPERTY_IDS: Record<HouseIdentifier, string> = {
 /** The rooms of `houses`, by house, each null when they aren't known; throws when D1 fails. */
 async function readRooms(houses: readonly HouseIdentifier[]) {
   const propertyIds = houses.map((house) => PROPERTY_IDS[house])
-  const [synced, listed] = await Promise.all([
+  // One batch, so both tables are read as a sync's batch left them: never the
+  // rooms from before it with the listing's date from after.
+  const [synced, listed] = await db.batch([
     db
       .select({ propertyId: properties.propertyId, checkedAt: properties.checkedAt })
       .from(properties)

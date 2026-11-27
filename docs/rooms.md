@@ -187,8 +187,9 @@ previews it from a draft before publishing:
   section says so in place of the rooms, and its "Fully booked" badge links
   nowhere. Null hides both.
 - **The home page** shows the same badge with each house's title
-  (`components/home/collection.tsx`): right after the title at full width,
-  under the title below that. A house whose rooms are null has none.
+  (`components/home/collection.tsx`): right after the title with one card
+  across or three wide ones, under the title with three narrow ones. A house
+  whose rooms are null has none.
 - **The move-in form** has an optional "Rooms" field
   (`components/forms/fields/rooms-field.tsx`) offering the rooms of the houses
   selected in "Places": a combobox on a wide screen, a sheet from the bottom on
