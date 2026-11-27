@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toast'
 import type { ContactFormConfig } from '@/lib/types/components'
 import type { HouseTitles } from '@/lib/types'
 import { fireEvent, render, screen } from '@testing-library/react'
+import type { ComponentProps } from 'react'
 
 /**
  * Shared by the contact form suites, which are split so they run in parallel:
@@ -48,6 +49,25 @@ export function renderForm(Form: Form) {
   return render(
     <LegalNoticeProvider data={null}>
       <Form title="Contact us" description={null} fields={fields} houseTitles={houseTitles} />
+      <Toaster />
+    </LegalNoticeProvider>
+  )
+}
+
+/** The move-in form with the rooms it offers, and the room a house page's link asked for. */
+export function renderMoveInForm(
+  props: Pick<ComponentProps<typeof MoveInForm>, 'rooms' | 'room'>,
+  Form: typeof MoveInForm
+) {
+  return render(
+    <LegalNoticeProvider data={null}>
+      <Form
+        title="Contact us"
+        description={null}
+        fields={fields}
+        houseTitles={houseTitles}
+        {...props}
+      />
       <Toaster />
     </LegalNoticeProvider>
   )

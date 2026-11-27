@@ -73,6 +73,17 @@ declare const messages: {
     "rooms_upcoming": "{count, plural, one {# room opening soon} other {# rooms opening soon}}",
     "fully_booked": "Fully booked"
   },
+  "HouseRooms": {
+    "heading": "Upcoming Vacancies",
+    "room": "Room {number}",
+    "price_from": "from {price}",
+    "now": "Available now",
+    "available_from": "Available from {date}",
+    "date_unknown": "Date TBC",
+    "fully_booked": "Currently fully booked",
+    "fully_booked_description": "Contact us to ask about upcoming vacancies.",
+    "contact": "Contact us"
+  },
   "HouseBuilding": {
     "floors_label": "Floors",
     "min_rent_label": "Min rent",
@@ -164,6 +175,14 @@ declare const messages: {
         "optional": "(optional)"
       },
       "privacy_policy_agreement": "By submitting this form, you agree to the <link>Privacy Policy</link>.",
+      "rooms": {
+        "label": "Rooms",
+        "choose": "Choose rooms",
+        "empty": "No rooms found.",
+        "done": "Done",
+        "remove": "Remove {room}",
+        "optional": "(optional)"
+      },
       "stay_duration": {
         "options": {
           "long_term": "Long term",

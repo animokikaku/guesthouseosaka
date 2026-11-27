@@ -48,15 +48,17 @@ export const routerState = {
 type LinkTarget = {
   to?: string
   params?: Record<string, string>
+  search?: Record<string, string>
   hash?: string
 }
 
-function buildHref({ to = '', params = {}, hash }: LinkTarget) {
+function buildHref({ to = '', params = {}, search, hash }: LinkTarget) {
   const path = to.replace(/\$(\w+)/g, (_, name: string) =>
     // Locales are served under their lowercase code, as `localeToPrefix` does.
     name === 'locale' ? (params.locale ?? '').toLowerCase() : (params[name] ?? '')
   )
-  return hash ? `${path}#${hash}` : path
+  const query = search ? `?${new URLSearchParams(search).toString()}` : ''
+  return `${path}${query}${hash ? `#${hash}` : ''}`
 }
 
 type LinkProps = LinkTarget &
@@ -75,6 +77,7 @@ type LinkProps = LinkTarget &
 function Link({
   to,
   params,
+  search,
   hash,
   mask,
   preload: _preload,
@@ -87,7 +90,7 @@ function Link({
   ...props
 }: LinkProps) {
   return (
-    <a href={buildHref(mask ?? { to, params, hash })} {...props}>
+    <a href={buildHref(mask ?? { to, params, search, hash })} {...props}>
       {children}
     </a>
   )

@@ -11,14 +11,17 @@ import { buttonVariants } from '@/components/ui/button'
 import { canonicalLink } from '@/lib/metadata'
 import { toGalleryImages } from '@/lib/transforms/gallery'
 import { getHomePage } from '@/sanity/lib/loaders.functions'
+import { createDataAttribute } from '@sanity/visual-editing/create-data-attribute'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, getRouteApi, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/$locale/')({
   loader: ({ params: { locale } }) => getHomePage({ data: { locale } }),
   head: ({ params: { locale } }) => ({ links: [canonicalLink({ to: '/$locale' }, locale)] }),
   component: HomePage
 })
+
+const localeRoute = getRouteApi('/$locale')
 
 const heroComponents: PortableTextComponents = {
   block: {
@@ -48,7 +51,8 @@ const collectionComponents: PortableTextComponents = {
 
 function HomePage() {
   const { locale } = Route.useParams()
-  const { page, houses } = Route.useLoaderData()
+  const { page, houses, rooms } = Route.useLoaderData()
+  const { settings } = localeRoute.useLoaderData()
 
   // Check for actual content, not just existence of the document
   const hasContent = houses && houses.length > 0
@@ -97,7 +101,20 @@ function HomePage() {
             <PortableText value={collection.content} components={collectionComponents} />
           )}
           <PageActions>
-            <Collection houses={houses} className="w-full pt-4" />
+            <Collection
+              houses={houses}
+              // Site Settings' Room Availability field, which draft mode previews.
+              rooms={settings?.roomAvailability ? rooms : null}
+              // Presentation opens the field from a house's badge.
+              roomsDataSanity={
+                settings
+                  ? createDataAttribute({ id: settings._id, type: settings._type })(
+                      'roomAvailability'
+                    )
+                  : undefined
+              }
+              className="w-full pt-4"
+            />
           </PageActions>
         </PageHeader>
       </section>

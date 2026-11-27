@@ -1,6 +1,10 @@
 import { galleryLink } from '@/components/house/gallery-link'
 import { buildGallerySlides, type FeaturedImage, type GalleryItem } from '@/lib/gallery'
-import { createGalleryItem, createSanityImage } from '@/lib/transforms/__tests__/mocks'
+import {
+  createFeaturedImage,
+  createGalleryItem,
+  createSanityImage
+} from '@/lib/transforms/__tests__/mocks'
 import { render, screen } from '@testing-library/react'
 import { ImageBlockGallery } from '../image-block-gallery'
 
@@ -47,7 +51,7 @@ describe('ImageBlockGallery', () => {
   })
 
   it('leads with the featured image', async () => {
-    renderGallery({ featuredImage: createSanityImage({ alt: 'Featured' }) })
+    renderGallery({ featuredImage: createFeaturedImage({ alt: 'Featured' }) })
 
     expect(tiles()).toEqual(['Featured', 'Photo 1', 'Photo 2', 'Photo 3', 'Photo 4'])
   })
@@ -56,7 +60,7 @@ describe('ImageBlockGallery', () => {
   it('counts the photos beyond the grid on the last tile and in the link', async () => {
     renderGallery({
       galleryImages: photos(59),
-      featuredImage: createSanityImage({ alt: 'Featured' })
+      featuredImage: createFeaturedImage({ alt: 'Featured' })
     })
 
     expect(screen.getByText('+55')).toBeInTheDocument()

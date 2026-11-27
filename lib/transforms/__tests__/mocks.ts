@@ -3,6 +3,7 @@ import type {
   HouseGalleryQueryResult,
   HouseQueryResult
 } from '@/sanity.types'
+import type { FeaturedImage } from '@/lib/gallery'
 import { faker } from '@faker-js/faker'
 
 /** A blurhash as Sanity stores one in the image's metadata. */
@@ -165,6 +166,18 @@ export function createSanityImage(
     crop: null,
     alt: faker.lorem.words(3),
     blurHash: BLUR_HASH,
+    ...overrides
+  }
+}
+
+/** A house's featured image: the house query gives none until it has an asset. */
+export function createFeaturedImage(
+  overrides: Partial<NonNullable<FeaturedImage>> = {}
+): NonNullable<FeaturedImage> {
+  const { asset, ...image } = createSanityImage()
+  return {
+    ...image,
+    asset: asset ?? { _ref: 'image-featured-1920x1080-jpg', _type: 'reference' },
     ...overrides
   }
 }

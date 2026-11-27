@@ -9,11 +9,13 @@ import { db } from '@/db'
 import { env as serverEnv } from '@/env'
 import { ROOMS_CACHE_TAG } from '@/lib/cache-control'
 import { SANITY_STUDIO_HOSTS } from '@/lib/config'
+import type { HouseStatus, SyncResponse, SyncResult } from '@/lib/rooms-sync/api'
 import { hasBearerToken } from '@/lib/rooms-sync/auth'
-import { needsPurge, recordPurge, syncListing } from '@/lib/rooms-sync/sync.server'
+import { listingStatuses, needsPurge, recordPurge, syncListing } from '@/lib/rooms-sync/sync.server'
 import { PROPERTY_IDS } from '@/lib/rooms.server'
-import { HouseIdentifierValues, type HouseIdentifier } from '@/lib/types'
+import { HouseIdentifierValues } from '@/lib/types'
 import { client } from '@/sanity/lib/client'
+import { roomAvailabilityQuery } from '@/sanity/lib/queries'
 import { urlSearchParamPreviewSecret, validatePreviewUrl } from '@sanity/preview-url-secret'
 import { createFileRoute } from '@tanstack/react-router'
 import { cache, waitUntil } from 'cloudflare:workers'
@@ -30,17 +32,6 @@ const STUDIO_ORIGINS = new Set([
 const MAX_SECRET_LENGTH = 128
 const PREVIEW_SECRET = /^[\w-]+$/
 
-type Result =
-  | {
-      house: HouseIdentifier
-      url: string
-      ok: true
-      propertyId: string
-      rooms: number
-      changed: number
-    }
-  | { house: HouseIdentifier; url: string; ok: false; error: string }
-
 // One JSON object per line, which Workers Logs indexes by field.
 function log(level: 'info' | 'error', event: string, fields: Record<string, unknown>) {
   console[level](JSON.stringify({ event, ...fields }))
@@ -52,8 +43,8 @@ function describe(error: unknown): string {
 }
 
 /** Syncs every house's listing in turn; one failing leaves the others, and its own stored rooms, untouched. */
-async function syncAll(force: boolean): Promise<Result[]> {
-  const results: Result[] = []
+async function syncAll(force: boolean): Promise<SyncResult[]> {
+  const results: SyncResult[] = []
   for (const house of HouseIdentifierValues) {
     const id = PROPERTY_IDS[house]
     // The Japanese page: its dates are numeric, the English page's typed by hand.
@@ -80,7 +71,7 @@ async function syncAll(force: boolean): Promise<Result[]> {
  * `needsPurge`): on most days once or twice, though the sync runs hourly. A
  * page rendered while D1 failed waits for the next purge or its cache expiry.
  */
-async function purgeIfNeeded(): Promise<'purged' | 'skipped' | 'failed'> {
+async function purgeIfNeeded(): Promise<SyncResponse['purge']> {
   const now = new Date().toISOString()
   // Purges when it can't tell.
   const needed = await needsPurge(db, now).catch((error: unknown) => {
@@ -115,46 +106,94 @@ async function run(force: boolean) {
 }
 
 /**
- * The schedule's bearer token, or the Studio's preview secret as the body: one
- * a signed-in Studio user created in the dataset, which only the read token can
- * see, valid for an hour. In the body rather than the URL, it stays out of logs.
+ * Who's asking: the schedule, with its bearer token, or the Studio, with a
+ * preview secret as the body: one a signed-in Studio user created in the
+ * dataset, which only the read token can see, valid for an hour. In the body
+ * rather than the URL, it stays out of logs. Null for anyone else.
  */
-async function isAuthorized(request: Request) {
+async function caller(request: Request): Promise<'schedule' | 'studio' | null> {
   if (await hasBearerToken(request, serverEnv.SYNC_TOKEN)) {
     // EventBridge sends its event as the body. Left unread, the gateway would
     // forward it to `Site` after the response, which throws ("Can't read from
     // request stream after response has been sent").
     await request.arrayBuffer()
-    return true
+    return 'schedule'
   }
   // Checked before reading the body or asking Sanity, so a stranger's request
   // costs neither. A browser always sends a string body's length.
   const length = Number(request.headers.get('Content-Length'))
-  if (!(length > 0 && length <= MAX_SECRET_LENGTH)) return false
+  if (!(length > 0 && length <= MAX_SECRET_LENGTH)) return null
   const secret = (await request.text()).trim()
-  if (!PREVIEW_SECRET.test(secret)) return false
+  if (!PREVIEW_SECRET.test(secret)) return null
   const url = new URL(request.url)
   url.searchParams.set(urlSearchParamPreviewSecret, secret)
   const { isValid } = await validatePreviewUrl(
     client.withConfig({ token: serverEnv.SANITY_API_READ_TOKEN }),
     url.toString()
   )
-  return isValid
+  return isValid ? 'studio' : null
+}
+
+/**
+ * Whether the published Site Settings turn room availability on. Syncs when it
+ * can't tell, which does no harm.
+ */
+async function isRoomAvailabilityOn() {
+  try {
+    return await client.fetch(roomAvailabilityQuery, {}, { perspective: 'published' })
+  } catch (error) {
+    log('error', 'settings_check_failed', { error: describe(error) })
+    return true
+  }
+}
+
+/** The Studio's origin may read the response, when it's one of the Studios. */
+function corsHeaders(request: Request) {
+  const origin = request.headers.get('Origin')
+  return {
+    ...NO_STORE,
+    Vary: 'Origin',
+    ...(origin && STUDIO_ORIGINS.has(origin) && { 'Access-Control-Allow-Origin': origin })
+  }
 }
 
 export const Route = createFileRoute('/api/sync-rooms')({
   server: {
     handlers: {
+      // Each house's last sync and listed rooms, which Site Settings list; they
+      // tell the sync's age themselves, as it changes. Public: the house pages
+      // show as much, and it costs one small D1 read.
+      GET: async ({ request }) => {
+        const headers = corsHeaders(request)
+        try {
+          const statuses = await listingStatuses(db, Object.values(PROPERTY_IDS))
+          const houses = HouseIdentifierValues.map((house): HouseStatus => {
+            const status = statuses.get(PROPERTY_IDS[house])
+            return {
+              house,
+              syncedAt: status?.checkedAt ?? null,
+              rooms: status?.rooms ?? 0
+            }
+          })
+          return Response.json({ houses }, { headers })
+        } catch (error) {
+          log('error', 'last_sync_read_failed', { error: describe(error) })
+          return Response.json({ error: 'D1 failed' }, { status: 502, headers })
+        }
+      },
       // A text body and no custom header make the Studio's request simple: no preflight.
       POST: async ({ request }) => {
-        const origin = request.headers.get('Origin')
-        const headers = {
-          ...NO_STORE,
-          Vary: 'Origin',
-          ...(origin && STUDIO_ORIGINS.has(origin) && { 'Access-Control-Allow-Origin': origin })
-        }
-        if (!(await isAuthorized(request))) {
+        const headers = corsHeaders(request)
+        const from = await caller(request)
+        if (!from) {
           return new Response('Unauthorized', { status: 401, headers })
+        }
+        // The schedule skips while Site Settings turn room availability off. The
+        // Studio's "Sync now" always runs: it keeps Site Settings' list current,
+        // and a draft that turns it on previews fresh rooms.
+        if (from === 'schedule' && !(await isRoomAvailabilityOn())) {
+          log('info', 'sync_skipped', { reason: 'room_availability_off' })
+          return Response.json({ skipped: true }, { headers })
         }
 
         // `?force=1` writes a listing that shrank by more than half (see `writeRooms`).
@@ -164,7 +203,8 @@ export const Route = createFileRoute('/api/sync-rooms')({
         waitUntil(running)
         const { ok, results, purge } = await running
         // EventBridge retries a 5xx.
-        return Response.json({ results, purge }, { status: ok ? 200 : 502, headers })
+        const body: SyncResponse = { results, purge }
+        return Response.json(body, { status: ok ? 200 : 502, headers })
       }
     }
   }

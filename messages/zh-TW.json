@@ -70,6 +70,17 @@
     "rooms_upcoming": "{count}間房即將空出",
     "fully_booked": "已滿房"
   },
+  "HouseRooms": {
+    "heading": "空房資訊",
+    "room": "{number}號房",
+    "price_from": "{price}起",
+    "now": "即可入住",
+    "available_from": "{date}起可入住",
+    "date_unknown": "日期待定",
+    "fully_booked": "目前已滿房",
+    "fully_booked_description": "如需了解後續空房資訊，請聯絡我們。",
+    "contact": "聯絡我們"
+  },
   "HouseBuilding": {
     "floors_label": "樓層",
     "min_rent_label": "最低租金",
@@ -161,6 +172,14 @@
         "optional": "（選填）"
       },
       "privacy_policy_agreement": "送出此表單即表示您同意<link>隱私權政策</link>。",
+      "rooms": {
+        "label": "房間",
+        "choose": "選擇房間",
+        "empty": "找不到房間。",
+        "done": "完成",
+        "remove": "移除{room}",
+        "optional": "（選填）"
+      },
       "stay_duration": {
         "options": {
           "long_term": "長期",

@@ -1,9 +1,9 @@
 // @vitest-environment node
 
 import {
+  createFeaturedImage,
   createGalleryCategory,
-  createGalleryItem,
-  createSanityImage
+  createGalleryItem
 } from '@/lib/transforms/__tests__/mocks'
 import { buildGallerySlides, flattenGalleryItems } from '../gallery'
 import { toGalleryCategories } from '../transforms/gallery'
@@ -12,7 +12,7 @@ describe('buildGallerySlides', () => {
   const gallery = [createGalleryItem({ _key: 'a' }), createGalleryItem({ _key: 'b' })]
 
   it('leads with the featured image, then the gallery', () => {
-    const featuredImage = createSanityImage()
+    const featuredImage = createFeaturedImage()
 
     expect(buildGallerySlides({ featuredImage, galleryImages: gallery })).toEqual([
       { _key: 'featured', image: featuredImage },
@@ -20,10 +20,8 @@ describe('buildGallerySlides', () => {
     ])
   })
 
-  it('skips a featured image that has no asset yet', () => {
-    const featuredImage = createSanityImage({ asset: null })
-
-    expect(buildGallerySlides({ featuredImage, galleryImages: gallery })).toEqual(gallery)
+  it('has only the gallery without a featured image', () => {
+    expect(buildGallerySlides({ featuredImage: null, galleryImages: gallery })).toEqual(gallery)
   })
 
   it('handles a house with no gallery', () => {

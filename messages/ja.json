@@ -70,6 +70,17 @@
     "rooms_upcoming": "{count}室がまもなく空室",
     "fully_booked": "満室"
   },
+  "HouseRooms": {
+    "heading": "空室状況",
+    "room": "{number}号室",
+    "price_from": "{price}〜",
+    "now": "即入居可",
+    "available_from": "{date}から入居可",
+    "date_unknown": "日付未定",
+    "fully_booked": "現在、満室です",
+    "fully_booked_description": "今後の空室については、お問い合わせください。",
+    "contact": "お問い合わせ"
+  },
   "HouseBuilding": {
     "floors_label": "階数",
     "min_rent_label": "最低賃料",
@@ -161,6 +172,14 @@
         "optional": "（任意）"
       },
       "privacy_policy_agreement": "このフォームを送信することで、<link>プライバシーポリシー</link>に同意することになります。",
+      "rooms": {
+        "label": "部屋",
+        "choose": "部屋を選ぶ",
+        "empty": "該当する部屋がありません",
+        "done": "完了",
+        "remove": "{room}を削除",
+        "optional": "（任意）"
+      },
       "stay_duration": {
         "options": {
           "long_term": "長期",

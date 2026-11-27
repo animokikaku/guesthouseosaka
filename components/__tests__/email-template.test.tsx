@@ -67,11 +67,29 @@ describe('inquiry emails', () => {
 
   it('adds the move-in date and length of stay to a move-in request', async () => {
     const lines = await text(
-      <MoveInRequestEmail data={{ ...base, date: '2099-03-01', stayDuration: '3-months' }} />
+      <MoveInRequestEmail
+        data={{ ...base, rooms: [], date: '2099-03-01', stayDuration: '3-months' }}
+      />
     )
 
     expect(lines).toEqual(
       expect.arrayContaining(['入居希望', '希望日: 2099年3月1日', '滞在期間: 3ヶ月以上'])
     )
+    expect(lines.some((line) => line.startsWith('希望部屋'))).toBe(false)
+  })
+
+  it('names the rooms a move-in request asks for, each with its house', async () => {
+    const lines = await text(
+      <MoveInRequestEmail
+        data={{
+          ...base,
+          rooms: ['orange-208', 'apple-402'],
+          date: '2099-03-01',
+          stayDuration: '3-months'
+        }}
+      />
+    )
+
+    expect(lines).toContain('希望部屋: オレンジハウス 208号室, アップルハウス 402号室')
   })
 })

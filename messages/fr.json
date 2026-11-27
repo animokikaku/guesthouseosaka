@@ -70,6 +70,17 @@
     "rooms_upcoming": "{count, plural, one {# chambre bientôt libre} other {# chambres bientôt libres}}",
     "fully_booked": "Complet"
   },
+  "HouseRooms": {
+    "heading": "Chambres bientôt disponibles",
+    "room": "Chambre {number}",
+    "price_from": "dès {price}",
+    "now": "Disponible maintenant",
+    "available_from": "Disponible à partir du {date}",
+    "date_unknown": "Date à confirmer",
+    "fully_booked": "Actuellement complet",
+    "fully_booked_description": "Contactez-nous pour connaître les prochaines disponibilités.",
+    "contact": "Nous contacter"
+  },
   "HouseBuilding": {
     "floors_label": "Étages",
     "min_rent_label": "Loyer min.",
@@ -161,6 +172,14 @@
         "optional": "(facultatif)"
       },
       "privacy_policy_agreement": "En soumettant ce formulaire, vous acceptez la <link>Politique de confidentialité</link>.",
+      "rooms": {
+        "label": "Chambres",
+        "choose": "Choisir des chambres",
+        "empty": "Aucune chambre trouvée.",
+        "done": "Terminé",
+        "remove": "Retirer {room}",
+        "optional": "(facultatif)"
+      },
       "stay_duration": {
         "options": {
           "long_term": "Long séjour",

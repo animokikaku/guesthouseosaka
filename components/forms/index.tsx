@@ -31,6 +31,7 @@ export interface ContactFormDraft extends Omit<
  */
 export const contactFormDefaultValues: ContactFormDraft = {
   places: [],
+  rooms: [],
   account: userAccountDefaultValues,
   message: '',
   date: '',

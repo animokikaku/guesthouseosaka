@@ -10,7 +10,7 @@ import { stegaClean } from '@sanity/client/stega'
 const portableTextComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
-      <p className="text-foreground max-w-prose text-base leading-relaxed">{children}</p>
+      <p className="text-foreground text-base leading-relaxed">{children}</p>
     )
   },
   list: {

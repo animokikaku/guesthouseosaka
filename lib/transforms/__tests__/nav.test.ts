@@ -12,6 +12,7 @@ function house(overrides: Partial<NavHouse> = {}): NavHouse {
     title: 'Apple House',
     description: 'Near the station',
     caption: 'Quiet street',
+    roomPricesFrom: false,
     image: createSanityImage({ alt: 'Apple House front' }),
     ...overrides
   }

@@ -72,6 +72,7 @@ const successfulSubmissionCases = [
       type: 'move-in',
       data: {
         ...payload.data,
+        rooms: [],
         date: '2030-01-15',
         stayDuration: '1-month'
       }

@@ -3,15 +3,21 @@ import type { ComponentProps, MouseEvent } from 'react'
 // Stub for `@tanstack/react-router` in the story sandbox, which runs without a
 // router: no route params, as on the site's root page.
 
-type LinkTarget = { to?: string; params?: Record<string, string>; hash?: string }
+type LinkTarget = {
+  to?: string
+  params?: Record<string, string>
+  search?: Record<string, string>
+  hash?: string
+}
 
 /** The public path the real `Link` renders, e.g. `/$locale/$house` → `/en/orange`. */
-function buildHref({ to = '', params = {}, hash }: LinkTarget) {
+function buildHref({ to = '', params = {}, search, hash }: LinkTarget) {
   const path = to.replace(/\$(\w+)/g, (_, name: string) =>
     // Locales are served under their lowercase code, as `localeToPrefix` does.
     name === 'locale' ? (params.locale ?? '').toLowerCase() : (params[name] ?? '')
   )
-  return hash ? `${path}#${hash}` : path
+  const query = search ? `?${new URLSearchParams(search).toString()}` : ''
+  return `${path}${query}${hash ? `#${hash}` : ''}`
 }
 
 type LinkProps = LinkTarget &
@@ -31,6 +37,7 @@ type LinkProps = LinkTarget &
 export function Link({
   to,
   params,
+  search,
   hash,
   mask,
   preload: _preload,
@@ -44,7 +51,7 @@ export function Link({
   return (
     <a
       {...props}
-      href={buildHref(mask ?? { to, params, hash })}
+      href={buildHref(mask ?? { to, params, search, hash })}
       onClick={(event: MouseEvent<HTMLAnchorElement>) => {
         onClick?.(event)
         event.preventDefault()

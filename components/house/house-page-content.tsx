@@ -5,6 +5,7 @@ import { HouseAvailability } from '@/components/house/house-availability'
 import { HouseProvider } from '@/components/house/house-context'
 import { HouseLocation } from '@/components/house/house-location'
 import { HousePricing } from '@/components/house/house-pricing'
+import { HouseRooms } from '@/components/house/house-rooms'
 import { MobileHeroImage } from '@/components/house/mobile-hero-image'
 import { HousesNav } from '@/components/house/houses-nav'
 import { ImageBlockGallery } from '@/components/house/image-block-gallery'
@@ -12,7 +13,7 @@ import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/componen
 import { PageNav } from '@/components/page-nav'
 import { buildGallerySlides } from '@/lib/gallery'
 import { HOUSE_COLORS } from '@/lib/house-theme'
-import type { RoomCounts } from '@/lib/rooms.server'
+import type { RoomAvailability } from '@/lib/rooms'
 import { toAmenityCategories, toAmenityItem, toMapData } from '@/lib/transforms/house'
 import { cn } from '@/lib/utils'
 import type { HouseTitles } from '@/lib/types'
@@ -35,10 +36,16 @@ export function HousePageContent({
   about,
   building,
   houses,
-  roomCounts
+  rooms,
+  roomsNote,
+  roomPricesFrom,
+  roomsDataSanity
 }: NonNullable<HouseQueryResult> & {
   houses: HouseTitles
-  roomCounts: RoomCounts | null
+  /** Null hides the badge and the "Upcoming Vacancies" section: when D1 has nothing recent, or Site Settings turn them off. */
+  rooms: RoomAvailability | null
+  /** Site Settings' Room Availability field, for Presentation to open from the badge and the section. */
+  roomsDataSanity?: string
 }) {
   const href = galleryLink(useLocale(), slug)
 
@@ -51,7 +58,14 @@ export function HousePageContent({
         <PageHeader className="pt-0 sm:pt-8">
           <PageHeaderHeading id={`${slug}-title`}>{title}</PageHeaderHeading>
           <PageHeaderDescription>{description}</PageHeaderDescription>
-          {roomCounts && <HouseAvailability counts={roomCounts} className="sm:hidden" />}
+          {rooms && (
+            <HouseAvailability
+              house={slug}
+              rooms={rooms}
+              data-sanity={roomsDataSanity}
+              className="sm:hidden"
+            />
+          )}
           <div
             className={cn('mx-auto mt-6 h-1 w-24', HOUSE_COLORS[slug].divider)}
             aria-hidden="true"
@@ -62,8 +76,13 @@ export function HousePageContent({
         <div className="container max-w-6xl">
           <PageNav id="tabs">
             <HousesNav houses={houses} />
-            {roomCounts && (
-              <HouseAvailability counts={roomCounts} className="hidden sm:inline-flex" />
+            {rooms && (
+              <HouseAvailability
+                house={slug}
+                rooms={rooms}
+                data-sanity={roomsDataSanity}
+                className="hidden sm:inline-flex"
+              />
             )}
           </PageNav>
           <div className="theme-container">
@@ -77,6 +96,15 @@ export function HousePageContent({
                   // `HousePricing` renders nothing without rows.
                   hasPricing={Boolean(pricing?.length)}
                 />
+                {rooms && (
+                  <HouseRooms
+                    house={slug}
+                    rooms={rooms}
+                    note={roomsNote}
+                    pricesFrom={roomPricesFrom}
+                    data-sanity={roomsDataSanity}
+                  />
+                )}
                 <HouseAmenities
                   amenityCategories={toAmenityCategories(amenityCategories)}
                   featuredAmenities={featuredAmenities?.map(toAmenityItem) ?? []}

@@ -46,6 +46,7 @@ const forms = [
     },
     data: {
       places: ['orange'],
+      rooms: [],
       date: '2099-01-15',
       stayDuration: '3-months',
       account,

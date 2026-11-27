@@ -74,8 +74,9 @@ test.describe('Contact forms', () => {
     const form = await gotoContactForm(page, 'move-in')
 
     await form.locator('input[type="date"]').fill(tomorrow())
-    // Stay duration comes before the account group's gender select
-    await form.getByRole('combobox').first().click()
+    // By the field name SelectField bakes into its id: the form has other
+    // comboboxes (gender, and the rooms once a house with vacancies is selected).
+    await form.locator('[role="combobox"][id$="stayDuration"]').click()
     await page.getByRole('option').first().click()
     const fields = await fillAccountFields(page, form, { email })
     await fields.checkbox.click()

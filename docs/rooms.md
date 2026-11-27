@@ -2,7 +2,9 @@
 
 The site copies the room tables of the houses' shares.house listings into a D1
 database, `guesthouseosaka-rooms` (bound as `ROOMS_DB`), and shows them on the
-house pages. Nothing else stores rooms.
+house pages, the home page and the move-in form (see
+[Reading rooms in the site](#reading-rooms-in-the-site)). Nothing else stores
+rooms.
 
 ## How a sync works
 
@@ -10,6 +12,14 @@ house pages. Nothing else stores rooms.
 `Authorization: Bearer <SYNC_TOKEN>`, syncs every house in `PROPERTY_IDS`
 (`lib/rooms.server.ts`), then purges the cached pages. An EventBridge rule in
 AWS Tokyo calls it every hour (see [Schedule](#schedule)).
+
+Site Settings' **Room Availability** field, in the **Vacancies** tab, turns the
+feature on and off, from its "…" menu (**Show on the site** / **Hide from the
+site**).
+While it's off in the published Site Settings, the site shows no rooms,
+and the hourly call does nothing (it answers `{"skipped": true}`). If it can't
+read Site Settings, it syncs anyway, which does no harm. The Studio's **Sync
+now** always syncs (see [Running it](#running-it)).
 
 The schedule lives in AWS rather than a Cloudflare cron because shares.house
 answers 403 unless the run was started from Japan, wherever the Worker runs: a
@@ -94,16 +104,39 @@ add `STRICT` to any new table in the generated SQL.
 
 ## Running it
 
-In the Studio, **Site Settings** has a **Sync now** button under the social
-links (`studio/components/room-sync-input.tsx`), for showing a change before
-the next hourly run. It's the input of a `roomSync` field that never stores a
-value. The Studio can't hold `SYNC_TOKEN`, so the button works like
+In the Studio, **Site Settings** heads the **Room Availability** field, in its
+**Vacancies** tab, as it heads the others
+(`studio/components/room-availability-input.tsx`). Its **…**
+menu (`studio/actions/room-availability-actions.ts`, ahead of the Studio's
+copy and paste) has:
+
+- **Show on the site / Hide from the site:** sets the field in the draft, so
+  Presentation previews it before it's published. Showing also syncs when a
+  house's rooms are over two days old (see below).
+- **Sync now,** on or off: syncs before the next hourly run, even if the
+  published field is off, so a draft previews fresh rooms. A draft left
+  unpublished over two days needs it again: the schedule still skips.
+
+A card under the header lists each house as the Studio lists documents: its
+hero image and title, its listed rooms, and a dot whose tooltip says when it
+last synced; clicking a house opens it. The dot is red when the house never
+synced or last synced over two days ago, which hides its rooms; it tells only
+the sync's age, so it stays green while Room Availability is off. The statuses
+reload when the editor comes back to the tab. They come from a public
+`GET /api/sync-rooms` (`{"houses": [{"house", "syncedAt", "rooms"}]}`); the
+Studio tells the age with `isFresh` (`lib/rooms-sync/room.ts`), as the site
+does. After a sync, each house also shows what changed, or why it failed
+(`studio/components/room-sync.ts` holds that sync's state, and
+`studio/components/room-status.ts` words each row). The route and the Studio
+share both responses' shapes (`lib/rooms-sync/api.ts`).
+
+The Studio can't hold `SYNC_TOKEN`, so **Sync now** works like
 Presentation: the signed-in user creates a preview secret in the dataset
 (valid for an hour), and sends it as the request's text body. The route checks
 the body's length and shape first, then the secret with `validatePreviewUrl`
 and the read token. A text body with no custom header needs no CORS preflight,
-and the route lets the hosted Studios and `sanity dev` read its answer. The
-button calls the site that shows the Studio's dataset: production, or
+and the route lets the hosted Studios and `sanity dev` read its answer.
+**Sync now** calls the site that shows the Studio's dataset: production, or
 `localhost:3000` for the development Studio. The request starts in the
 editor's browser, so like any sync it only gets through from Japan.
 
@@ -123,17 +156,55 @@ is refused as incomplete on every run until synced once with `?force=1`.
 
 ## Reading rooms in the site
 
-`getRoomCounts(house)` in `lib/rooms.server.ts` maps the house to its property
-ID and counts its available and upcoming rooms, which the house page shows as a
-badge (`components/house/house-availability.tsx`). It counts an upcoming room
-whose date has come (in Japan) as available, and returns null, hiding the
-badge, when the listing has never synced, last synced over two days ago, or D1
-fails.
+`getRoomAvailability(house)` in `lib/rooms.server.ts` maps the house to its
+property ID and reads its listed rooms that are available or upcoming (the site
+doesn't show occupied ones). `getRoomsByHouse()` reads every house's in one go,
+for the pages that show them all. `toRoomAvailability` (`lib/rooms.ts`) splits a
+house's rooms into those free now and those free later, counting an upcoming
+room whose date has come (in Japan) as free now, and prices each at its rent
+plus its management and common fee (no price when the listing gives either
+none). A house's rooms are null when its listing has never synced, last synced
+over two days ago, or D1 fails.
+
+Three places show them, each only while **Room Availability** is on in Site
+Settings, which their routes read with the layout's settings, so Presentation
+previews it from a draft before publishing:
+
+- **The house page** has a badge with the counts
+  (`components/house/house-availability.tsx`), linking to its "Upcoming
+  Vacancies" section, `#availability` (`components/house/house-rooms.tsx`): a
+  list of the rooms, those free now first, then the rest by date, as many
+  across as fit. Each is its name, then its price, and under them an icon with
+  "Available now" or its date, and links to the move-in form. Under the title, a
+  sentence says what the prices include: the house's **Note** (`roomsNote`, in
+  its **Vacancies** tab), required there, one per language, English standing in
+  for a language without one. The site has no wording of its own for it: until a
+  note is published, the rooms follow the title. The title itself is the
+  site's, as the other sections' are. A house whose price depends on the
+  contract has **Starting prices** on (`roomPricesFrom`, same tab): its prices
+  are then written as starting prices, "from ¥63,000" or 「¥63,000〜」
+  (`useRoomPrice`), here and in the move-in form. A fully booked house's
+  section says so in place of the rooms, with a button to the contact page,
+  and its "Fully booked" badge links nowhere. Null hides both.
+- **The home page** shows the same badge with each house's title
+  (`components/home/collection.tsx`): right after the title with one card
+  across or three wide ones, under the title with three narrow ones. A house
+  whose rooms are null has none.
+- **The move-in form** has an optional "Rooms" field
+  (`components/forms/fields/rooms-field.tsx`) offering the rooms of the houses
+  selected in "Places": a combobox on a wide screen, a sheet from the bottom on
+  a phone. It's hidden when those houses have no rooms to offer. Each room in a
+  house page's list links to the form as `?room=orange-208` (`roomKey`),
+  which selects the house and the room, and sets the move-in date to the room's
+  when it isn't free yet; a room that isn't on offer is ignored. The form sends
+  the chosen rooms as keys, without those of a house unselected since, and the
+  staff email lists them (`MoveInRequestEmail`).
 
 ## Cache
 
-House pages and their data responses are cached for a day (see
-`lib/cache-control.ts`) and tagged `rooms` as well as with their Sanity types. After syncing,
+The house pages, the home page and the contact forms, and their data responses,
+are cached for a day (see `lib/cache-control.ts`) and tagged `rooms` as well as
+with their Sanity types. After syncing,
 a run purges the `rooms` tag only when the cached pages may be out of date
 (`needsPurge` in `lib/rooms-sync/sync.server.ts`):
 

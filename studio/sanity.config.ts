@@ -15,6 +15,7 @@ import { routing } from '@/i18n/routing'
 import { SANITY_API_VERSION, SANITY_PROJECT_ID } from '@/lib/config'
 import { env } from '@/lib/env'
 import { iconMap } from '@/lib/icons'
+import { roomAvailabilityActions } from '@/studio/actions/room-availability-actions'
 import { lucideIconPicker } from '@/studio/plugins/lucide-icon-picker'
 import { resolve } from '@/studio/presentation/resolve'
 import { siteUrl } from '@/studio/site-url'
@@ -59,6 +60,9 @@ export default defineConfig({
 
       return actions
     },
+    // Site Settings' Room Availability field: show or hide, and sync now
+    unstable_fieldActions: (prev, context) =>
+      context.documentType === 'settings' ? [...roomAvailabilityActions, ...prev] : prev,
     // Hide certain types from the "Create new document" menu
     newDocumentOptions: (prev) => {
       return prev.filter(({ templateId }) => !fixedSetTypes.some((type) => type === templateId))
