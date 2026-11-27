@@ -19,6 +19,7 @@ bun run db:migrate   # Apply D1 migrations locally (bun dev does this itself)
 bun run rooms:schedule:deploy # Create or update the hourly room sync schedule (AWS EventBridge, Tokyo)
 bun run studio:dev   # Studio at localhost:3333 (the studio/ workspace)
 bun run typegen      # Regenerate Sanity types after schema changes
+bun run gallery:dev  # Story gallery at 127.0.0.1:3100, for design sketches
 bun run test --run   # Run tests once without watch mode
 bun run knip         # Detect unused deps/exports
 bun run check        # TypeScript checks and lint
@@ -51,6 +52,17 @@ bun run format:check # Check formatting without modifying files
 - `bun run test:e2e:preview` sends one real email to Resend's test inbox (with the key in `.env`); run it only when asked, or when checking the Resend key or sending domain
 - Stop a server you started by PID or port (`lsof -ti:<port> | xargs kill`), then check the port is free
 - Before a pull request: run `bun run build`
+
+## Design Exploration
+
+When the user asks for a sketch, or to try or explore a design, the goal is a quick look, not production code:
+
+- Write the design as a throwaway story in `components/sketches/<name>.story.tsx` (gitignored), with variants as separate exports or side by side in one export
+- Hardcode English strings and mock data, and write new markup freely instead of reusing or changing existing components
+- Skip the Key Rules, the Validation steps and the design skills: no message files, tests, `bun run check` or formatting
+- Start `bun run gallery:dev` if port 3100 is free, and give the user the URL: `http://127.0.0.1:3100/playwright/gallery/index.html?story=components/sketches/<name>/<Export>`. Edits hot-reload
+- Check spacing, sizes and colors by reading computed styles and bounding boxes with `playwright-cli`; take a screenshot only for overall composition
+- Once the user picks a variant, implement it under the normal rules and delete the sketch
 
 ## Skills
 

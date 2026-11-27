@@ -1,0 +1,4 @@
+@import '../../app/globals.css';
+
+/* Sketches are gitignored, and Tailwind skips ignored files unless they are named here. */
+@source '../../components/sketches';

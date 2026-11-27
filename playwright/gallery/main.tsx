@@ -1,4 +1,4 @@
-import '@/app/globals.css'
+import './gallery.css'
 
 import { StrictMode, type ComponentType } from 'react'
 import { flushSync } from 'react-dom'
@@ -61,4 +61,14 @@ window.mount = async ({ story, props = {} }: MountParams) => {
 window.unmount = async () => {
   root?.unmount()
   root = undefined
+}
+
+// Opening the gallery with `?story=<id>` mounts that story for a person to look at.
+// Tests load the page without it and call `window.mount` themselves.
+const requestedStory = new URLSearchParams(window.location.search).get('story')
+
+if (requestedStory) {
+  window.mount({ story: requestedStory }).catch((error: unknown) => {
+    rootElement.textContent = error instanceof Error ? error.message : String(error)
+  })
 }
